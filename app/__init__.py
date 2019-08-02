@@ -104,7 +104,11 @@ def create_app():
     # set up jwt
     app.config['JWT_HEADER_TYPE'] = 'JWT'
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=365)
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'error'
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
+    app.config['JWT_REFRESH_COOKIE_PATH'] = '/api/v1/auth/token/refresh'
+    app.config['JWT_SESSION_COOKIE'] = False
     _jwt = JWTManager(app)
     _jwt.user_loader_callback_loader(jwt_user_loader)
 

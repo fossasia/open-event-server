@@ -7,7 +7,7 @@ from functools import wraps
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
-from flask_jwt_extended import jwt_required, current_user, create_access_token
+from flask_jwt_extended import jwt_required, current_user, create_access_token, create_refresh_token, set_refresh_cookies
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -58,11 +58,18 @@ def login():
 
     identity = jwt_authenticate(username, password)
 
-    if identity:
-        access_token = create_access_token(identity.id, fresh=True)
-        return jsonify(access_token=access_token)
-    else:
+    if not identity:
         return jsonify(error='Invalid Credentials'), 401
+    
+    access_token = create_access_token(identity.id, fresh=True)
+    refresh_token = create_refresh_token(identity.id)
+
+    response = jsonify(access_token=access_token, refresh_token=refresh_token)
+
+    set_refresh_cookies(response, refresh_token)
+
+    return response
+
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
