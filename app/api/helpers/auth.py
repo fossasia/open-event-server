@@ -1,8 +1,12 @@
+import datetime
+
+import pytz
 import flask_login as login
 from flask_login import current_user
 
 from app.models import db
 from app.models.user import User
+from app.models.user_token_blacklist import UserTokenBlackListTime
 
 
 class AuthManager:
@@ -40,3 +44,21 @@ class AuthManager:
             if user and user.is_correct_password(password) and user.is_admin:
                 return True
         return False
+
+
+def blacklist_token(user):
+    blacklist_time = UserTokenBlackListTime.query.filter_by(user_id=user.id).first()
+    if blacklist_time:
+        blacklist_time.blacklist_time = datetime.datetime.now(pytz.utc)
+    else:
+        blacklist_time = UserTokenBlackListTime(user.id)
+    
+    db.session.add(blacklist_time)
+    db.session.commit()
+
+
+def is_token_blacklisted(token):
+    blacklist_time = UserTokenBlackListTime.query.filter_by(user_id=token['identity']).first()
+    if not blacklist_time:
+        return False
+    return token['iat'] < blacklist_time.blacklist_time.timestamp()

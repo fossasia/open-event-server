@@ -9,10 +9,10 @@ import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
 from flask_jwt_extended import (
     jwt_required, jwt_refresh_token_required, 
+    fresh_jwt_required, unset_jwt_cookies,
     current_user, create_access_token, 
     create_refresh_token, set_refresh_cookies,
-    get_jwt_identity, get_csrf_token,
-    unset_jwt_cookies)
+    get_jwt_identity, get_csrf_token)
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -21,7 +21,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app import get_settings
 from app import limiter
 from app.api.helpers.db import save_to_db, get_count, safe_query
-from app.api.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager, blacklist_token
 from app.api.helpers.jwt import jwt_authenticate
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
@@ -104,9 +104,15 @@ def refresh_token():
 
 @auth_routes.route('/logout', methods=['POST'])
 def logout():
-    resp = jsonify({'logout': True})
     unset_jwt_cookies(resp)
-    return resp, 200
+    return jsonify({'success': True})
+
+
+@auth_routes.route('/blacklist', methods=['POST'])
+@jwt_required
+def blacklist_token_rquest():
+    blacklist_token(current_user)
+    return jsonify({'success': True})
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -334,7 +340,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@jwt_required
+@fresh_jwt_required
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']

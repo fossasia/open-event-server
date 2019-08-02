@@ -30,7 +30,7 @@ from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from app.api.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \
     expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due
@@ -109,8 +109,11 @@ def create_app():
     app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/v1/auth/token/refresh'
     app.config['JWT_SESSION_COOKIE'] = False
+    app.config['JWT_BLACKLIST_ENABLED'] = True
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
     _jwt = JWTManager(app)
     _jwt.user_loader_callback_loader(jwt_user_loader)
+    _jwt.token_in_blacklist_loader(is_token_blacklisted)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
