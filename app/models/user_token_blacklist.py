@@ -10,14 +10,14 @@ class UserTokenBlackListTime(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now(), nullable=False)
-    blacklist_time = db.Column(db.DateTime(timezone=True), default=sql_func.now(), nullable=False)
+    blacklisted_at = db.Column(db.DateTime(timezone=True), default=sql_func.now(), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     user = db.relationship("User", backref="token_blacklist_times", foreign_keys=[user_id])
 
-    def __init__(self, user_id=None, created_at=None, blacklist_time=None):
+    def __init__(self, user_id=None, created_at=None, blacklisted_at=None):
         self.user_id = user_id
         self.created_at = created_at
-        self.blacklist_time = blacklist_time
+        self.blacklisted_at = blacklisted_at
 
     def __str__(self):
-        return '<TokenBlackListTime User %s blacklisted at %s>' % (self.user, self.blacklist_time)
+        return '<TokenBlackListTime User %s blacklisted at %s>' % (self.user, self.blacklisted_at)

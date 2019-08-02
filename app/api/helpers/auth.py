@@ -49,7 +49,7 @@ class AuthManager:
 def blacklist_token(user):
     blacklist_time = UserTokenBlackListTime.query.filter_by(user_id=user.id).first()
     if blacklist_time:
-        blacklist_time.blacklist_time = datetime.datetime.now(pytz.utc)
+        blacklist_time.blacklisted_at = datetime.datetime.now(pytz.utc)
     else:
         blacklist_time = UserTokenBlackListTime(user.id)
 
@@ -61,4 +61,4 @@ def is_token_blacklisted(token):
     blacklist_time = UserTokenBlackListTime.query.filter_by(user_id=token['identity']).first()
     if not blacklist_time:
         return False
-    return token['iat'] < blacklist_time.blacklist_time.timestamp()
+    return token['iat'] < blacklist_time.blacklisted_at.timestamp()
