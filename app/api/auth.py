@@ -1,8 +1,8 @@
 import base64
-import base64
 import logging
 import random
 import string
+from datetime import timedelta
 from functools import wraps
 
 import requests
@@ -63,12 +63,14 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     if not identity or (existing_identity and identity != existing_identity): # For fresh login, credentials should match existing user
         return jsonify(error='Invalid Credentials'), 401
     
-    access_token = create_access_token(identity.id, fresh=True)
-    response_data = {'access_token': access_token}
-
     remember_me = data.get('remember-me')
     include_in_response = data.get('include-in-response')
     add_refresh_token = allow_refresh_token and remember_me
+
+    expiry_time = timedelta(minutes=90) if add_refresh_token else None
+    access_token = create_access_token(identity.id, fresh=True, expires_delta=expiry_time)
+    response_data = {'access_token': access_token}
+
     if add_refresh_token:
         refresh_token = create_refresh_token(identity.id)
         if include_in_response:
