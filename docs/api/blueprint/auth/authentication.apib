@@ -1,0 +1,26 @@
+# Group Authentication
+
+The API uses JWT Authentication to authenticate users to the server. For authentication, you need to be a registered user. Once you have registered yourself as an user, you can send a request to get the access_token. This access_token you need to then use in Authorization header while sending a request in the following manner: `Authorization: JWT <access_token>`
+
+## JWT Authentication [/auth/session]
+
+### Authenticate and generate token [POST]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "email": "email@example.com",
+                "password": "password"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNDk2OTU2ODMwLCJuYmYiOjE0OTY5NTY4MzAsImV4cCI6MTQ5NzA0MzIzMH0.bjl0"
+        }

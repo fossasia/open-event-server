@@ -1,0 +1,179 @@
+# Group Favourite Events
+
+This Group's APIs can be used for adding a particular event to the favourite list of the user.
+
+## Favourite Events Collection [/v1/user-favourite-events]
+
+### List All Favourite Events [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-event",
+                    "id": "1",
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/event",
+                                "related": "/v1/user-favourite-events/1/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/user",
+                                "related": "/v1/favourite-events/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-events/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Create a Favourite Event [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+            {
+                "data": {
+                    "type": "user-favourite-event",
+                    "relationships": {
+                        "event": {
+                            "data": {
+                                "id": "1",
+                                "type": "event"
+                            }
+                        }
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-favourite-event",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/user",
+                            "related": "/v1/favourite-events/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/event",
+                            "related": "/v1/user-favourite-events/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Events Detail [/v1/user-favourite-events/{event_id}]
++ Parameters
+    + event_id: 1 (integer) - ID of the Event in the form of an integer
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "data": {
+                "type": "user-favourite-event",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                },
+                "id": "1",
+                "attributes": {
+                    "deleted-at": null
+                },
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "related": "/v1/favourite-events/1/user",
+                            "self": "/v1/user-favourite-events/1/relationships/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "related": "/v1/user-favourite-events/1/event",
+                            "self": "/v1/user-favourite-events/1/relationships/event"
+                        }
+                    }
+                }
+            }
+        }
+
+### Delete Favourite Event [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

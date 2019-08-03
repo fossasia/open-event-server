@@ -28,7 +28,7 @@ from app.settings import get_settings
 def send_after_event_mail():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(state='published', deleted_at=None).all()
         upcoming_events = get_upcoming_events()
         upcoming_event_links = "<ul>"
         for upcoming_event in upcoming_events:
@@ -70,7 +70,7 @@ def change_session_state_on_event_completion():
 def send_event_fee_notification():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
             latest_invoice = EventInvoice.query.filter_by(
                 event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
@@ -177,7 +177,7 @@ def event_invoices_mark_due():
 def send_monthly_event_invoice():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
             # calculate net & gross revenues
             currency = event.payment_currency

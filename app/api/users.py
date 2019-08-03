@@ -1,7 +1,7 @@
 import base64
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt_extended import current_user
+from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.error
@@ -241,6 +241,7 @@ class UserDetail(ResourceDetail):
             try:
                 db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
+                verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
                 raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
