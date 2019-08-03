@@ -1,0 +1,458 @@
+# Group Attendees
+Related to ticket holders(attendees) of an event (free, paid, donation) to the event.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `firstname`  | First name of the Attendee | string | **yes** |
+| `lastname` | Last name of the Attendee | string | **yes** |
+| `email` | Email of the Attendee | string | - |
+| `address` | Address of the Attendee | float | - |
+| `city` | City of the Attendee | integer | - |
+| `state` | State of the Attendee | string | - |
+| `country` | Country of the Attendee | string | - |
+| `is-checked-in` | If the attendee is checked in | boolean | - |
+| `checkin-times` | Comma separated checkin times | string | - |
+| `is-checked-out` | If the attendee has checked out | boolean | - |
+| `attendee-notes` | Comma separated attendee notes | string | - |
+| `pdf-url` | pdf url of the Attendee | url | - |
+
+## Send order receipts [v1/attendees/send-receipt]
+
+### Send email receipts to attendees [POST]
+Send order receipts to attendees via email (requires organizer access).
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "order-identifier": "xyz789"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "message": "receipt sent to attendees"
+        }
+
+## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### Create Attendee [POST]
+Create a new attendee.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "email": "johndoe@example.com",
+                    "address": "address",
+                    "city": "example",
+                    "state": "example",
+                    "country": "IN",
+                    "is-checked-in": "false",
+                    "attendee-notes": "example",
+                    "pdf-url": "http://example.com"
+                },
+                "type": "attendee",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  },
+                  "ticket": {
+                    "data": {
+                      "id": "1",
+                      "type": "ticket"
+                    }
+                  }
+                }
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+         {
+          "data": {
+            "relationships": {
+              "ticket": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/ticket",
+                  "related": "/v1/attendees/1/ticket"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/event",
+                  "related": "/v1/attendees/1/event"
+                }
+              },
+              "order": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/order",
+                  "related": "/v1/attendees/1/order"
+                }
+              }
+            },
+            "attributes": {
+                "facebook": null,
+                "address": "address",
+                "ticket-id": "31",
+                "is-checked-out": null,
+                "checkout-times": null,
+                "job-title": null,
+                "deleted-at": null,
+                "work-address": null,
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
+            },
+            "type": "attendee",
+            "id": "1",
+            "links": {
+              "self": "/v1/attendees/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/attendees/1"
+          }
+        }
+
+## List Attendees under an order [/v1/orders/{order_identifier}/attendees]
++ Parameters
+    + order_identifier: 7201904e (string) - Identifier of the order
+
+### List All Attendees under an order [GET]
+Get a list of attendees of an order.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "ticket": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/ticket",
+                    "related": "/v1/attendees/1/ticket"
+                  }
+                },
+                "order": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/order",
+                    "related": "/v1/attendees/1/order"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/event",
+                    "related": "/v1/attendees/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/user",
+                    "related": "/v1/attendees/1/user"
+                  }
+                }
+              },
+              "attributes": {
+                "facebook": null,
+                "address": "address",
+                "ticket-id": "31",
+                "is-checked-out": null,
+                "checkout-times": null,
+                "job-title": null,
+                "deleted-at": null,
+                "work-address": null,
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
+              },
+              "type": "attendee",
+              "id": "1",
+              "links": {
+                "self": "/v1/attendees/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/7201904e-c695-4251-a30a-61765a37ff24/attendees"
+          }
+        }
+
+## Attendee Details [/v1/attendees/{attendee_id}]
++ Parameters
+    + attendee_id: 1 (integer) - ID of the attendee in the form of an integer
+
+### Attendee Details [GET]
+Get a single attendee.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "ticket": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/ticket",
+                            "related": "/v1/attendees/1/ticket"
+                        }
+                    },
+                    "order": {
+                        "links": {
+                          "self": "/v1/attendees/1/relationships/order",
+                          "related": "/v1/attendees/1/order"
+                        }
+                    }
+                },
+                "attributes": {
+                    "facebook": null,
+                    "address": "address",
+                    "ticket-id": "31",
+                    "is-checked-out": null,
+                    "checkout-times": null,
+                    "job-title": null,
+                    "deleted-at": null,
+                    "work-address": null,
+                    "checkin-times": null,
+                    "state": "example",
+                    "country": "IN",
+                    "lastname": "UnDoe",
+                    "city": "example",
+                    "phone": null,
+                    "company": null,
+                    "is-checked-in": false,
+                    "gender": null,
+                    "shipping-address": null,
+                    "blog": null,
+                    "firstname": "John",
+                    "website": null,
+                    "billing-address": null,
+                    "pdf-url": null,
+                    "tax-business-info": null,
+                    "home-address": null,
+                    "work-phone": null,
+                    "birth-date": null,
+                    "github": null,
+                    "twitter": null,
+                    "email": "johndoe@example.com",
+                    "attendee-notes": null
+                },
+                "type": "attendee",
+                "id": "1",
+                "links": {
+                    "self": "/v1/attendees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees/1"
+            }
+        }
+
+
+### Update Attendee [PATCH]
+Update a single attendee by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "email": "johndoe@example.com",
+                    "address": "address",
+                    "city": "example",
+                    "state": "example",
+                    "country": "IN",
+                    "is-checked-in": "true",
+                    "checkin-times": "2017-12-13T22:59:59.123456+00:00",
+                    "attendee-notes": "example",
+                    "pdf-url": "http://example.com"
+                },
+                "type": "attendee",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "ticket": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/ticket",
+                            "related": "/v1/attendees/1/ticket"
+                        }
+                    }
+                },
+                "attributes": {
+                    "facebook": null,
+                    "address": "address",
+                    "ticket-id": "31",
+                    "is-checked-out": null,
+                    "checkout-times": null,
+                    "job-title": null,
+                    "deleted-at": null,
+                    "work-address": null,
+                    "checkin-times": null,
+                    "state": "example",
+                    "country": "IN",
+                    "lastname": "UnDoe",
+                    "city": "example",
+                    "phone": null,
+                    "company": null,
+                    "is-checked-in": false,
+                    "gender": null,
+                    "shipping-address": null,
+                    "blog": null,
+                    "firstname": "John",
+                    "website": null,
+                    "billing-address": null,
+                    "pdf-url": null,
+                    "tax-business-info": null,
+                    "home-address": null,
+                    "work-phone": null,
+                    "birth-date": null,
+                    "github": null,
+                    "twitter": null,
+                    "email": "johndoe@example.com",
+                    "attendee-notes": null
+                },
+                "type": "attendee",
+                "id": "1",
+                "links": {
+                    "self": "/v1/attendees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees/1"
+            }
+        }
+
+### Delete Attendee [DELETE]
+Delete a single attendee.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

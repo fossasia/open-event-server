@@ -1,0 +1,389 @@
+# Group Tax
+Related to any tax related information that might be related with the tickets for the event.
+
+| Parameter | Description | Type | Required | Public |
+|:----------|-------------|------|----------|--------|
+| `country`  | Country of Tax | string | - | - |
+| `name` | Name of the Tax | string | **yes** | **yes** |
+| `rate` | Tax charges rate | float(0-100) | **yes** | **yes** |
+| `tax-id` | A string based ID | string | **yes** | - |
+| `registered-company` | Registered Company Name | string | - | - |
+| `address` | Address of the comapany | string | - | - |
+| `city` | City of the company | string | - | - |
+| `state` | State of the company | string | - | - |
+| `zip` | Zip Code of the company | integer | - | - |
+| `invoice-footer` | A text to add on the footer | string | - |
+| `is-invoice-sent` | Yes/No whether invoice already sent or not | boolean (default: `false`) | - | - |
+| `is-tax-included-in-price` | Yes/No for whether tax included | boolean (default: `false`) | - | **yes** |
+| `should-send-invoice` | Yes/No for whether to send invoice or not | boolean (default: `false`) | - | - |
+
+## Tax Collection [/v1/taxes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+
+### List all Taxes [GET]
+Get a list of Taxes
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/taxes/1/relationships/event",
+                    "related": "/v1/tax/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "city": "example",
+                "name": "Service Tax",
+                "zip": 123456,
+                "should-send-invoice": false,
+                "country": "IN",
+                "address": "example",
+                "state": "example",
+                "invoice-footer": "example",
+                "rate": 1.23456789,
+                "is-tax-included-in-price": false,
+                "deleted-at": null,
+                "registered-company": "fossasia",
+                "tax-id": "1",
+                "is-invoice-sent": false
+              },
+              "type": "tax",
+              "id": "1",
+              "links": {
+                "self": "/v1/taxes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/taxes"
+          }
+        }
+
+
+### Create Tax [POST]
+Create a new tax using an event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
+                "attributes": {
+                    "city": "example",
+                    "zip": "123456",
+                    "country": "IN",
+                    "is-tax-included-in-price": false,
+                    "invoice-footer": "example",
+                    "state": "example",
+                    "tax-id": "123456789",
+                    "name": "Service Tax",
+                    "registered-company": "fossasia",
+                    "address": "example",
+                    "rate": "1.23456789",
+                    "should-send-invoice": false,
+                    "is-invoice-sent": false
+                  },
+                "type": "tax"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": "example",
+               "zip": "123456",
+               "country": "IN",
+               "is-tax-included-in-price": false,
+               "invoice-footer": "example",
+               "state": "example",
+               "tax-id": "123456789",
+               "name": "Service Tax",
+               "registered-company": "fossasia",
+               "address": "example",
+               "rate": "1.23456789",
+               "deleted-at": null,
+               "should-send-invoice": false,
+               "is-invoice-sent": false
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+
+
+## Tax Details [/v1/taxes/{tax_id}]
++ Parameters
+    + tax_id: 1 (integer) - ID of the Tax in the form of an integer
+
+### Tax Details [GET]
+Get a single tax.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": "example",
+              "zip": "123456",
+              "country": "IN",
+              "is-tax-included-in-price": false,
+              "invoice-footer": "example",
+              "state": "example",
+              "tax-id": "123456789",
+              "name": "Service Tax",
+              "registered-company": "fossasia",
+              "address": "example",
+              "rate": "1.23456789",
+              "deleted-at": null,
+              "should-send-invoice": false,
+              "is-invoice-sent": false
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+
+
+### Update Tax [PATCH]
+Update a single tax by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "city": "example1",
+                  "zip": "123457",
+                  "country": "IN",
+                  "is-tax-included-in-price": false,
+                  "invoice-footer": "example1",
+                  "state": "example1",
+                  "tax-id": "123456799",
+                  "name": "GST",
+                  "registered-company": "open event",
+                  "address": "example1",
+                  "rate": "2.3456789",
+                  "should-send-invoice": false,
+                  "is-invoice-sent": false
+                },
+                "type": "tax",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": "example1",
+              "zip": "123457",
+              "country": "IN",
+              "is-tax-included-in-price": false,
+              "invoice-footer": "example1",
+              "state": "example1",
+              "tax-id": "123456799",
+              "name": "GST",
+              "deleted-at": null,
+              "registered-company": "open event",
+              "address": "example1",
+              "rate": "2.3456789",
+              "should-send-invoice": false,
+              "is-invoice-sent": false
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+
+### Delete Tax [DELETE]
+Delete a single tax.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get Tax details under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Get Tax details under an Event [GET]
+Get tax details for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "tax",
+                "attributes": {
+                    "rate": 1.23456789,
+                    "tax-id": "123456789",
+                    "is-invoice-sent": false,
+                    "zip": 123456,
+                    "city": "example",
+                    "name": "Service Tax",
+                    "should-send-invoice": false,
+                    "invoice-footer": "example",
+                    "address": "example",
+                    "registered-company": "fossasia",
+                    "is-tax-included-in-price": false,
+                    "deleted-at": null,
+                    "country": "IN",
+                    "state": "example"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/taxes/1/relationships/event",
+                            "related": "/v1/tax/1/event"
+                        }
+                    }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/taxes/1"
+                }
+            },
+            "links": {
+                "self": "/v1/taxes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

@@ -19,6 +19,7 @@ before-install:
   - npm -g install npm@latest
 
 install:
+  - npm install -g aglio
   - npm install -g dredd@4.0.0
   - pip3 install -r requirements/tests.txt
 
@@ -30,6 +31,7 @@ before_script:
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
+  - aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
   - dredd
   
 script:
