@@ -1,4 +1,5 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask import jsonify, request
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
@@ -10,6 +11,12 @@ from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.user import User
+from app.api.helpers.payment import PayPalPaymentsManager
+from app.api.helpers.errors import BadRequestError
+
+
+from app.api.helpers.permissions import jwt_required
+from app.api.orders import order_misc_routes
 
 
 class EventInvoiceList(ResourceList):
@@ -127,3 +134,59 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
                   'methods': {
                       'before_get_object': before_get_object
                   }}
+
+
+@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/create-paypal-payment', methods=['POST'])
+@jwt_required
+def create_paypal_payment_invoice(invoice_identifier):
+    """
+    Create a paypal payment.
+    :return: The payment id of the created payment.
+    """
+    try:
+        return_url = request.json['data']['attributes']['return-url']
+        cancel_url = request.json['data']['attributes']['cancel-url']
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+
+    event_invoice = safe_query(db, EventInvoice, 'identifier', invoice_identifier, 'identifier')
+    status, response = PayPalPaymentsManager.create_payment(event_invoice, return_url, cancel_url)
+
+    if status:
+        return jsonify(status=True, payment_id=response)
+    else:
+        return jsonify(status=False, error=response)
+
+
+@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/charge', methods=['POST'])
+@jwt_required
+def charge_paypal_payment_invoice(invoice_identifier):
+    """
+    Create a paypal payment.
+    :return: The payment id of the created payment.
+    """
+    try:
+        paypal_payment_id = request.json['data']['attributes']['paypal_payment_id']
+        paypal_payer_id = request.json['data']['attributes']['paypal_payer_id']
+    except:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+    event_invoice = safe_query(db, EventInvoice, 'identifier', invoice_identifier, 'identifier')
+    # save the paypal payment_id with the order
+    event_invoice.paypal_token = paypal_payment_id
+    save_to_db(event_invoice)
+
+    # create the transaction.
+    status, error = PayPalPaymentsManager.execute_payment(paypal_payer_id, paypal_payment_id)
+
+    if status:
+        # successful transaction hence update the order details.
+        event_invoice.paid_via = 'paypal'
+        event_invoice.status = 'completed'
+        event_invoice.transaction_id = paypal_payment_id
+        event_invoice.completed_at = datetime.utcnow()
+        save_to_db(event_invoice)
+
+        return True, 'Charge successful'
+    else:
+        # return the error message from Paypal
+        return False, error
