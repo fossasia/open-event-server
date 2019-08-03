@@ -1,0 +1,145 @@
+# Group Order Statistics
+
+**First order fields**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `identifier`  | Identifier of the event | String |
+| `orders`  | Contains info about no. of orders | Nested object |
+| `tickets`  | Contains info about no. of tickets | Nested object |
+| `sales`  | Contains info about sales amount | Nested object |
+
+
+**Nested fields**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `total`  | total orders/tickets/sales | Integer |
+| `draft`  | total orders/tickets/sales with this order status | Integer |
+| `cancelled`  | total orders/tickets/sales with this order status | Integer |
+| `pending`  | total orders/tickets/sales with this order status | Integer |
+| `placed`  | total orders/tickets/sales with this order status | Integer |
+| `completed`  | total orders/tickets/sales with this order status | Integer |
+
+## Order Statistics Details By Event [/v1/events/{event_identifier}/order-statistics]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Show Order Statistics By Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "attributes": {
+                    "tickets": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0,
+                        "completed": 0
+                    },
+                    "identifier": "09d9a4f1",
+                    "orders": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0,
+                        "completed": 0
+                    },
+                    "sales": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0,
+                        "completed": 0
+                    }
+                },
+                "type": "order-statistics-event",
+                "id": "1",
+                "links": {
+                    "self": "/v1/events/1/order-statistics"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/order-statistics"
+            }
+        }
+
+
+## Order Statistics Details By Ticket [/v1/tickets/{ticket_id}/order-statistics]
++ Parameters
+    + ticket_id: 1 (string) - id of the ticket resource.
+
+### Show Order Statistics By Ticket [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "attributes": {
+                    "tickets": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0
+                    },
+                    "orders": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0
+                    },
+                    "sales": {
+                        "placed": 0,
+                        "draft": 0,
+                        "cancelled": 0,
+                        "total": 0,
+                        "expired": 0,
+                        "pending": 0
+                    }
+                },
+                "type": "order-statistics-ticket",
+                "id": "1",
+                "links": {
+                    "self": "/v1/tickets/1/order-statistics"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tickets/1/order-statistics"
+            }
+        }
