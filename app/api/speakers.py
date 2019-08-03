@@ -42,8 +42,9 @@ class SpeakerListPost(ResourceList):
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
             raise ForbiddenException({'pointer': ''}, "Speakers are disabled for this Event")
 
-        if get_count(db.session.query(Speaker).filter_by(event_id=int(data['event']), email=data['email'],
-                                                         deleted_at=None)) > 0:
+        if not data.get('is_email_overridden') and \
+            get_count(db.session.query(Speaker).filter_by(event_id=int(data['event']), email=data['email'],
+                                                          deleted_at=None)) > 0:
             raise ForbiddenException({'pointer': ''}, 'Speaker with this Email ID already exists')
 
         if data.get('is_email_overriden') and not has_access('is_organizer', event_id=data['event']):
