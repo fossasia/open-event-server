@@ -435,6 +435,22 @@ Delete a single Order.
           }
         }
 
+## Get Order Invoice for an order [/v1/orders/invoices/{order_identifier}]
++ Parameters
+    + order_identifier: 7201904e (string) - Identifier of the order
+
+### Get an order invoice for an order [GET]
+
++ Request
+
+    + Headers
+
+            Content-Disposition: attachment
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/pdf)
+
 ## Create Order with on site Attendees [/v1/orders?onsite=true]
 
 ### Create Order with on site Attendees [POST]

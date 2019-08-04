@@ -1,6 +1,7 @@
 import factory
 
 from app.factories.event import EventFactoryBasic
+from app.factories.user import UserFactory
 from app.models.order import Order
 from app.models.ticket import db
 
@@ -11,6 +12,7 @@ class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
+    user = factory.RelatedFactory(UserFactory)
     event_id = 1
     payment_mode = 'free'
     status = 'initializing'

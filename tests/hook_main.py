@@ -4135,6 +4135,24 @@ def create_paypal_payment(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Get Invoice for an Order")
+def get_invoice_from_order(transaction):
+    """
+    GET /v1/orders/invoices/{identifier}
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        order.ticket_holders = [attendee]
+        db.session.add(order)
+        db.session.commit()
+
+
 @hooks.before("Event Copy > Create Event Copy > Create Copy")
 def create_event_copy(transaction):
     """
