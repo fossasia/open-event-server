@@ -1,0 +1,29 @@
+# Group Email Verification
+
+This Group's APIs are used for verifying user registrations
+
+## Resend Email Verification [/v1/auth/resend-verification-email]
+Get the email containing verification token again.
+
+### Get User Verification Token Again [POST]
+Sends the token to verify the account associated with the provided email id via email.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "email": "open_event_test_user@fossasia.org"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+          "message": "Verification email resent"
+        }

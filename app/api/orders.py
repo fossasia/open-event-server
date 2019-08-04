@@ -1,4 +1,5 @@
 import logging
+import pytz
 from datetime import datetime
 
 import omise
@@ -121,21 +122,20 @@ class OrdersListPost(ResourceList):
         if not data.get('amount'):
             data['amount'] = 0
         # Apply discount only if the user is not event admin
-        if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+        if data.get('discount_code') and not has_access('is_coorganizer', event_id=data['event']):
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount_code'],
                                                                     'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
-                now = datetime.utcnow()
-                valid_from = datetime.strptime(discount_code.valid_from, '%Y-%m-%d %H:%M:%S')
-                valid_till = datetime.strptime(discount_code.valid_till, '%Y-%m-%d %H:%M:%S')
+                now = pytz.utc.localize(datetime.utcnow())
+                valid_from = discount_code.valid_from
+                valid_till = discount_code.valid_till
                 if not (valid_from <= now <= valid_till):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
                 if not TicketingManager.match_discount_quantity(discount_code, data['ticket_holders']):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, 'Discount Usage Exceeded')
-
-            if discount_code.event.id != data['event'] and discount_code.user_for == TICKET:
+            if discount_code.event.id != int(data['event']):
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
 
     def after_create_object(self, order, data, view_kwargs):

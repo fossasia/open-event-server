@@ -57,28 +57,73 @@ class EventInvoiceDetail(ResourceDetail):
     """
     Event Invoice detail by id
     """
+
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('event_invoice_identifier'):
+            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                       'event_invoice_identifier')
+            view_kwargs['id'] = event_invoice.id
+
     decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
-                  'model': EventInvoice}
+                  'model': EventInvoice,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class EventInvoiceRelationshipRequired(ResourceRelationship):
     """
     Event Invoice Relationship for required entities
     """
+
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('event_invoice_identifier'):
+            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                       'event_invoice_identifier')
+            view_kwargs['id'] = event_invoice.id
+
     decorators = (is_admin,)
     methods = ['GET', 'PATCH']
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
-                  'model': EventInvoice}
+                  'model': EventInvoice,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class EventInvoiceRelationshipOptional(ResourceRelationship):
     """
     Event Invoice Relationship
     """
+
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('event_invoice_identifier'):
+            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                       'event_invoice_identifier')
+            view_kwargs['id'] = event_invoice.id
+
     decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
-                  'model': EventInvoice}
+                  'model': EventInvoice,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}

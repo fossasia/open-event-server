@@ -1,0 +1,795 @@
+# Group Orders
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `amount`  | Total Amount of Order | Float | - |
+| `address` | Address Of Purchaser | string | - |
+| `city` | City of Purchaser | string | - |
+| `state` | If the custom form is included | boolean | - |
+| `country` | Country of the purchaser | boolean | - |
+| `zipcode` | Zipcode of the address | string | - |
+| `company` | Company for Billing Info | string | - |
+| `tax-business-info` | Tax Business details for Billing Info | string | - |
+| `is-billing-enabled` | Yes/No to signify if Billing Info is enabled or not | boolean (default: `false`) | - |
+| `payment-mode` | Mode of payment (free,stripe,paypal) | string | - |
+| `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
+| `discount_code_id` | ID of the discount code | string | - |
+| `order-notes` | Notes associated with Order | string | - |
+| `pdf-url` | URL to download the tickets | string | - |
+
+## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All Orders [GET]
+Get a list of all orders
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 0
+          },
+          "data": [],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders"
+          }
+        }
+
+### Create Order [POST]
+Create a new Order
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "payment-mode": "paypal",
+                  "country": "India",
+                  "status": "pending",
+                  "amount": "10",
+                  "order-notes": "example"
+                },
+                "type": "order",
+                "relationships": {
+                  "attendees": {
+                    "data": [
+                      {
+                        "id": "1",
+                        "type": "attendee"
+                      }
+                    ]
+                  },
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "included": [
+            {
+              "relationships": {
+                "ticket": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/ticket",
+                    "related": "/v1/attendees/1/ticket"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/event",
+                    "related": "/v1/attendees/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "city": null,
+                "firstname": "Open Event User",
+                "lastname": null,
+                "ticket-id": "1",
+                "is-checked-in": false,
+                "checkin-times": null,
+                "is-checked-out": null,
+                "checkout-times": null,
+                "state": null,
+                "address": null,
+                "pdf-url": "http://example.com",
+                "country": null,
+                "email": null,
+                "created-at": "2018-07-08T01:05:09.904696+00:00",
+                "order-notes": "example"
+              },
+              "type": "attendee",
+              "id": "1",
+              "links": {
+                "self": "/v1/attendees/1"
+              }
+            }
+          ],
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
+              "payment-mode": "paypal",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
+          }
+        }
+
+## Order Detail [/v1/orders/{identifier}]
++ Parameters
+    + identifier: 1 - the identifier of the order.
+
+### Get Order Detail [GET]
+Get a single Order detail.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/ticket",
+                  "related": "/v1/orders/1/tickets"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/attendee",
+                  "related": "/v1/orders/1/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "confirmed",
+              "city": null,
+              "identifier": "ab25a170-f36d-4dd6-b99c-9c202e693afc",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
+              "payment-mode": "paypal",
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "1",
+            "links": {
+              "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+          }
+        }
+
+
+### Update Order [PATCH]
+Update a single custom form with `id`.
+
++ `id` (integer) - Identifier of the order record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "status": "confirmed",
+                  "order-notes": "example"
+                },
+                "type": "order",
+                "id": "ab25a170-f36d-4dd6-b99c-9c202e693afc"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/ticket",
+                  "related": "/v1/orders/1/tickets"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/attendee",
+                  "related": "/v1/orders/1/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "confirmed",
+              "city": null,
+              "identifier": "ab25a170-f36d-4dd6-b99c-9c202e693afc",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
+              "payment-mode": "paypal",
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "sample,example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "1",
+            "links": {
+              "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+          }
+        }
+
+### Delete Order [DELETE]
+Delete a single Order.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+## Create Order with on site Attendees [/v1/orders?onsite=true]
+
+### Create Order with on site Attendees [POST]
+Create a new Order with on site attendees
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "payment-mode": "free",
+                  "country": "India",
+                  "status": "pending",
+                  "amount": null,
+                  "order-notes": "example",
+                  "on-site-tickets":  [
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "1",
+                                  "quantity": "2"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        },
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "2",
+                                  "quantity": "3"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        }
+                    ]
+                },
+                "type": "order",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
+              "payment-mode": "free",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": null,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
+          }
+        }
+
+## Charge [/v1/orders/{order_identifier}/charge]
++ Parameters
+    + order_identifier: 1 (Integer) - Identifier of the order in the form of an integer.
+
+### Charge for an Order [POST]
+Receive payments for an order
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "stripe": "stripe_token",
+                  "paypal_payer_id": null,
+                  "paypal_payment_id": null
+                },
+                "type": "charge"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "charge",
+                "id": "1",
+                "attributes": {
+                    "message": "success/failure message",
+                    "status": true
+                },
+                "links": {
+                    "self": "/v1/orders/1/charge"
+                }
+            },
+            "links": {
+                "self": "/v1/orders/1/charge"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Orders under an Event [/v1/events/{event_identifier}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `payment-mode`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Orders under an Event [GET]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "id": "4",
+                    "type": "order",
+                    "relationships": {
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/attendee",
+                                "related": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/attendees"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/user"
+                            }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/ticket",
+                                "related": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/tickets"
+                            }
+                        },
+                        "marketer": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/marketer"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/event",
+                                "related": "/v1/events/3"
+                            }
+                        },
+                        "discount-code": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/discount-code"
+                            }
+                        }
+                    },
+                    "links": {
+                        "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2"
+                    },
+                    "attributes": {
+                        "last4": null,
+                        "brand": null,
+                        "exp-year": null,
+                        "paid-via": null,
+                        "cancel-note": null,
+                        "state": null,
+                        "exp-month": null,
+                        "status": "pending",
+                        "completed-at": null,
+                        "payment-mode": "stripe",
+                        "transaction-id": null,
+                        "amount": 10,
+                        "address": null,
+                        "city": null,
+                        "country": "India",
+                        "identifier": "070abac6-44a7-423d-830f-f5f0ef4e83f2",
+                        "zipcode": null,
+                        "company": null,
+                        "tax-business-info": null,
+                        "is-billing-enabled": false,
+                        "discount-code-id": null,
+                        "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/orders"
+            }
+        }
+
+## Orders under a User [/v1/users/{user_id}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the user in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Orders under a User [GET]
+Get a list of all orders
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 0
+          },
+          "data": [],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders"
+          }
+        }
+
+
+## Create Paypal payment [/orders/{order_identifier}/create-paypal-payment]
++ Parameters
+    + order_identifier: example (string) - Identifier of the order in the form of a String.
+
+### Create Paypal payment for an Order [POST]
+Create paypal payment
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "return_url": "https://localhost:5000/return_url",
+                  "cancel_url": "https://localhost:5000/cancel_url"
+                },
+                "type": "paypal-payment"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "status": "true",
+            "payment_id": "example",
+            "error": null
+        }
