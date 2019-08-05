@@ -42,10 +42,7 @@ def send_email(to, action, subject, html, attachments=None):
     if not string_empty(to):
         email_service = get_settings()['email_service']
         email_from_name = get_settings()['email_from_name']
-        if email_service == 'smtp':
-            email_from = email_from_name + '<' + get_settings()['email_from'] + '>'
-        else:
-            email_from = get_settings()['email_from']
+        email_from = email_from_name + '<' + get_settings()['email_from'] + '>'
         payload = {
             'to': to,
             'from': email_from,
