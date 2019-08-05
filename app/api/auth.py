@@ -293,6 +293,19 @@ def resend_verification_email():
         return make_response(jsonify(message="Verification email resent"), 200)
 
 
+@auth_routes.route('/remove-profile-picture/<user_id>', methods=['POST', 'GET'])
+def remove_profile_picture(user_id):
+    try:
+        user = User.query.filter_by(id=user_id).one()
+        user.avatar_url = None
+        save_to_db(user)
+        return make_response(jsonify(message="Removed profile picture successfully"), 200)
+    except NoResultFound:
+        return UnprocessableEntityError(
+                    {'source': ''}, 'User with id: ' + user_id + ' not found.').respond()
+
+
+
 @auth_routes.route('/reset-password', methods=['POST'])
 @limiter.limit(
     '3/hour', key_func=lambda: request.json['data']['email'], error_message='Limit for this action exceeded'
