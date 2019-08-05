@@ -179,11 +179,6 @@ class AttendeeDetail(ResourceDetail):
                 raise UnprocessableEntity(
                     {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
                 )
-            if not user.is_verified and ticket.price == 0:
-                raise UnprocessableEntity(
-                    {'pointer': '/data/relationships/ticket'},
-                    "Unverified user cannot buy free tickets"
-                )
 
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
