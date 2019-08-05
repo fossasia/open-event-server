@@ -41,6 +41,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     paypal_token = fields.Str(allow_none=True)
     status = fields.Str(validate=validate.OneOf(
         choices=["expired", "deleted", "initialized" "completed", "placed", "pending", "cancelled"]), allow_none=True)
+    status = fields.Str(validate=validate.OneOf(choices=["paid", "due"]), allow_none=True)
     invoice_pdf_url = fields.Url(allow_none=True)
     user = Relationship(attribute='user',
                         self_view='v1.event_invoice_user',
