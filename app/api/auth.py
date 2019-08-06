@@ -1,13 +1,18 @@
 import base64
-import base64
 import logging
 import random
 import string
+from datetime import timedelta
 from functools import wraps
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
-from flask_jwt_extended import jwt_required, current_user, create_access_token
+from flask_jwt_extended import (
+    jwt_required, jwt_refresh_token_required,
+    fresh_jwt_required, unset_jwt_cookies,
+    current_user, create_access_token,
+    create_refresh_token, set_refresh_cookies,
+    get_jwt_identity)
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -16,7 +21,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app import get_settings
 from app import limiter
 from app.api.helpers.db import save_to_db, get_count, safe_query
-from app.api.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager, blacklist_token
 from app.api.helpers.jwt import jwt_authenticate
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
@@ -45,9 +50,7 @@ ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
-@authorised_blueprint.route('/auth/session', methods=['POST'])
-@auth_routes.route('/login', methods=['POST'])
-def login():
+def authenticate(allow_refresh_token=False, existing_identity=None):
     data = request.get_json()
     username = data.get('email', data.get('username'))
     password = data.get('password')
@@ -57,12 +60,63 @@ def login():
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
-
-    if identity:
-        access_token = create_access_token(identity.id, fresh=True)
-        return jsonify(access_token=access_token)
-    else:
+    if not identity or (existing_identity and identity != existing_identity):
+        # For fresh login, credentials should match existing user
         return jsonify(error='Invalid Credentials'), 401
+
+    remember_me = data.get('remember-me')
+    include_in_response = data.get('include-in-response')
+    add_refresh_token = allow_refresh_token and remember_me
+
+    expiry_time = timedelta(minutes=90) if add_refresh_token else None
+    access_token = create_access_token(identity.id, fresh=True, expires_delta=expiry_time)
+    response_data = {'access_token': access_token}
+
+    if add_refresh_token:
+        refresh_token = create_refresh_token(identity.id)
+        if include_in_response:
+            response_data['refresh_token'] = refresh_token
+
+    response = jsonify(response_data)
+
+    if add_refresh_token and not include_in_response:
+        set_refresh_cookies(response, refresh_token)
+
+    return response
+
+
+@authorised_blueprint.route('/auth/session', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
+def login():
+    return authenticate(allow_refresh_token=True)
+
+
+@auth_routes.route('/fresh-login', methods=['POST'])
+@jwt_required
+def fresh_login():
+    return authenticate(existing_identity=current_user)
+
+
+@auth_routes.route('/token/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh_token():
+    current_user = get_jwt_identity()
+    new_token = create_access_token(identity=current_user, fresh=False)
+    return jsonify({'access_token': new_token})
+
+
+@auth_routes.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify({'success': True})
+    unset_jwt_cookies(response)
+    return response
+
+
+@auth_routes.route('/blacklist', methods=['POST'])
+@jwt_required
+def blacklist_token_rquest():
+    blacklist_token(current_user)
+    return jsonify({'success': True})
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -290,7 +344,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@jwt_required
+@fresh_jwt_required
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']
