@@ -83,6 +83,8 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
+    stripe_test_secret_key = db.Column(db.String)
+    stripe_test_publishable_key = db.Column(db.String)
 
     # AliPay Keys - Stripe Sources
     alipay_secret_key = db.Column(db.String)
@@ -183,6 +185,7 @@ class Setting(db.Model):
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
                  stripe_client_id=None,
                  stripe_secret_key=None, stripe_publishable_key=None,
+                 stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
@@ -271,6 +274,8 @@ class Setting(db.Model):
         self.stripe_client_id = stripe_client_id
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
+        self.stripe_test_publishable_key = stripe_test_publishable_key
+        self.stripe_test_secret_key = stripe_test_secret_key
         self.web_app_url = web_app_url
         self.android_app_url = android_app_url
         self.email_service = email_service
