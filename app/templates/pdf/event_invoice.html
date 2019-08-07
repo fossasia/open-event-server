@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ event.identifier }}</title>
+</head>
+
+<body>
+	<table width="100%">
+		<tbody>
+			<tr class="padded">
+				<td><br>
+					{% if user.billing_contact_name %}
+						{{ user.billing_contact_name }}
+					{% endif %}<br>
+					{{ user.company }}<br>
+					{{ user.billing_address }}<br>
+					{{ user.billing_city }} {{ user.billing_state }}<br>
+					{{ user.billing_country }}<br>
+				</td>
+
+				<td><br>
+					{% if admin_info.admin_billing_contact_name %}
+						{{ admin_info.admin_billing_contact_name }}
+					{% endif %}<br>
+					{{ admin_info.admin_company }}<br>
+					{{ admin_info.admin_billing_address }}<br>
+					{{ admin_info.admin_billing_city }}  {{ admin_info.admin_billing_state }}<br>
+					{{ admin_info.admin_billing_country }}<br>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr>
+	<h3>{{ ("Event Invoice") }}</h3>
+	Event Name : {{ event.name }}<br>
+	<hr>
+	Dear
+	{% if user.first_name %}
+		{{ user.first_name }}
+	{% elif user.billing_contact_name %}
+		{{ user.billing_contact_name }}
+	{% endif %},<br>
+	Thank you for using Eventyay to ticket your event. Please find below the invoice for the Eventyay services you recieved for the event 
+	" {{ event.name }}" between {{ event.starts_at | datetime }} and {{ event.ends_at | datetime }} .<br>
+
+	For your event, Eventyay platform charges {{ ticket_fee_object.service_fee }} % on each completed order (maximum fees can be {{ currency }} {{ ticket_fee_object.maximum_fee }}) 
+
+	<table class="table" width="100%">
+		<thead class="black white-text">
+			<tr>
+				<th scope="col">Tickets Sold</th>
+				<th scope="col">Gross Revenue</th>
+				<th scope="col">Net Revenue</th>
+				<th scope="col">Amount Payable</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td style="text-align:center">{{ payment_details.tickets_sold }}</td>
+				<td style="text-align:center">{{ currency }} {{ payment_details.gross_revenue }}</td>
+				<td style="text-align:center">{{ currency }} {{ payment_details.net_revenue }}</td>
+				<td style="text-align:center">{{ currency }} {{ payment_details.amount_payable }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>

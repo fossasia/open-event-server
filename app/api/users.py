@@ -1,7 +1,7 @@
 import base64
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt_extended import current_user
+from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.error
@@ -108,7 +108,6 @@ class UserDetail(ResourceDetail):
     """
 
     def before_get(self, args, kwargs):
-
         if current_user.is_admin or current_user.is_super_admin or current_user:
             self.schema = UserSchema
         else:
@@ -147,6 +146,14 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') is not None:
             event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+            if event_invoice.user_id is not None:
+                view_kwargs['id'] = event_invoice.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('event_invoice_identifier') is not None:
+            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                       'event_invoice_identifier')
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
             else:
@@ -241,6 +248,7 @@ class UserDetail(ResourceDetail):
             try:
                 db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
+                verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
                 raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")

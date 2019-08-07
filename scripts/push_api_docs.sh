@@ -14,8 +14,6 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-
     exit 0
 fi
 
-npm install -g aglio
-
 # set ssh
 openssl aes-256-cbc -K $encrypted_512f7587e087_key -iv $encrypted_512f7587e087_iv -in ./scripts/opev_orga.enc -out deploy_key -d
 chmod 600 deploy_key

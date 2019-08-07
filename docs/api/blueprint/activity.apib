@@ -1,0 +1,96 @@
+# Group Activity
+
+*ADMIN**
+
+To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `actor`  | One who performs the activity | string | - |
+| `time` | Time of the activity | ISO 8601 (tz-aware) | - |
+| `action` | Action performed in the activity  | string | - |
+
+
+## Activity Collection [/v1/activities{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `actor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Activities [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "action": "action",
+                        "actor": "actor",
+                        "time": "2017-07-19T18:44:14.208218+00:00"
+                    },
+                    "type": "activity",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/activities/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/activities"
+            }
+        }
+
+
+## Activity Details [/v1/activities/{activity_id}]
++ Parameters
+    + activity_id: 1 (integer) - ID of the activity in the form of an integer
+
+### Get Activity Details [GET]
+Get a single activity.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "action": "action",
+                    "actor": "actor",
+                    "time": "2017-07-19T18:44:14.208218+00:00"
+                },
+                "type": "activity",
+                "id": "1",
+                "links": {
+                    "self": "/v1/activities/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/activities/1"
+            }
+        }

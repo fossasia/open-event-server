@@ -337,6 +337,14 @@ def get_id(view_kwargs):
         else:
             view_kwargs['id'] = None
 
+    if view_kwargs.get('event_invoice_identifier') is not None:
+        event_invoice = safe_query(db, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                   'event_invoice_identifier')
+        if event_invoice.event_id is not None:
+            view_kwargs['id'] = event_invoice.event_id
+        else:
+            view_kwargs['id'] = None
+
     if view_kwargs.get('discount_code_id') is not None:
         discount_code = safe_query(db, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
         if discount_code.event_id is not None:
