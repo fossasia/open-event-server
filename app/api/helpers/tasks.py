@@ -10,7 +10,7 @@ from marrow.mailer import Mailer, Message
 from app import get_settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
-    Mail, Attachment, FileContent, FileName,
+    Mail, Attachment, FileContent, FileName, From,
     FileType, Disposition)
 
 from app import make_celery
@@ -55,7 +55,7 @@ celery = make_celery()
 @celery.task(name='send.email.post.sendgrid')
 def send_email_task_sendgrid(payload, headers, smtp_config):
     try:
-        message = Mail(from_email=payload['from'],
+        message = Mail(from_email=From(payload['from'], payload['fromname']),
                        to_emails=payload['to'],
                        subject=payload['subject'],
                        html_content=payload["html"])
