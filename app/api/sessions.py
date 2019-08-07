@@ -89,22 +89,24 @@ class SessionList(ResourceList):
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
             track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
-            query_ = query_.join(Track).filter(Track.id == track.id)
+            query_ = query_.join(Track).filter(Track.id == track.id, Session.state == "accepted")
         if view_kwargs.get('session_type_id') is not None:
             session_type = safe_query(self, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
-            query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
+            query_ = query_.join(SessionType).filter(SessionType.id == session_type.id, Session.state == "accepted")
         if view_kwargs.get('microlocation_id') is not None:
             microlocation = safe_query(self, Microlocation, 'id', view_kwargs['microlocation_id'], 'microlocation_id')
-            query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
+            query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id,
+                                                       Session.state == "accepted")
         if view_kwargs.get('user_id') is not None:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User)\
-                .join(Speaker).filter((User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)))
+                .join(Speaker).filter((User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)),
+                                      Session.state == "accepted")
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             # session-speaker :: many-to-many relationship
-            query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
+            query_ = Session.query.filter(Session.speakers.any(id=speaker.id), Session.state == "accepted")
 
         return query_
 
