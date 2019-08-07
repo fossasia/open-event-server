@@ -98,6 +98,7 @@
                                 Quantity        :<br>
                                 Total Amount    :<br>
                                 Payment Mode    :<br>
+                                Date            :<br>
                                 Discount Code   :<br>
                         </td>
 
@@ -130,6 +131,7 @@
                                 {% else %}
                                     {{ ('Payment pending') }}
                                 {% endif %}<br>
+                                {{ order.created_at | datetime }}<br>
                                 {% if order.discount_code %}
                                     {{ order.discount_code.code }}<br>
                                 {% else %}
