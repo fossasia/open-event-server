@@ -314,37 +314,31 @@ class OrderDetail(ResourceDetail):
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
             raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
-        if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
+        if has_access('is_coorganizer', event_id=order.event_id):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
+                updatable_fields = get_updatable_fields() + ['deleted_at']
                 for element in data:
-                    if data[element]:
-                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
-                                != getattr(order, element, None) and element not in get_updatable_fields():
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of an order".format(element))
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+                    if data[element] and data[element]\
+                            != getattr(order, element, None) and element not in updatable_fields:
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of an order".format(element))
 
             else:
                 # Order created from the public pages.
                 for element in data:
-                    if data[element]:
-                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
-                                != getattr(order, element, None):
-                            if element != 'status' and element != 'deleted_at':
-                                raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                         "You cannot update {} of an order".format(element))
-                            elif element == 'status' and order.amount and order.status == 'completed':
-                                # Since we don't have a refund system.
-                                raise ForbiddenException({'pointer': 'data/status'},
-                                                         "You cannot update the status of a completed paid order")
-                            elif element == 'status' and order.status == 'cancelled':
-                                # Since the tickets have been unlocked and we can't revert it.
-                                raise ForbiddenException({'pointer': 'data/status'},
-                                                         "You cannot update the status of a cancelled order")
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+                    if data[element] and data[element] != getattr(order, element, None):
+                        if element not in ['status', 'deleted_at']:
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        elif element == 'status' and order.amount and order.status == 'completed':
+                            # Since we don't have a refund system.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a completed paid order")
+                        elif element == 'status' and order.status == 'cancelled':
+                            # Since the tickets have been unlocked and we can't revert it.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
