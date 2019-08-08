@@ -68,7 +68,7 @@ def check_billing_info(data):
         raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
                                   "Billing information is mandatory for paid orders")
     if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') and data.get('city') and
-                                               data.get('zip') and data.get('country')):
+                                               data.get('zipcode') and data.get('country')):
         raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
                                   "Billing information incomplete")
 
@@ -106,7 +106,8 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        check_billing_info(data)
+        if data.get('amount') > 0 and not data.get('is_billing_enabled'):
+            data['is_billing_enabled'] = True
 
         free_ticket_quantity = 0
 
@@ -401,7 +402,7 @@ class OrderDetail(ResourceDetail):
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
