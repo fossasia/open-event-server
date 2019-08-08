@@ -396,10 +396,19 @@ class Event(SoftDeletionModel):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    @property
+    def tickets_sold_object(self):
+        obj = db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)
+        return obj
+
     def calc_tickets_sold_count(self):
         """Calculate total number of tickets sold for the event"""
-        return db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)\
-            .count()
+        return self.tickets_sold_object.count()
+
+    def calc_tickets_sold_prev_month(self):
+        """Calculate tickets sold in the previous month"""
+        previous_month = datetime.datetime.now().month - 1
+        return self.tickets_sold.filter_by(completed_at=previous_month).count()
 
     def calc_total_tickets_count(self):
         """Calculate total available tickets for all types of tickets"""
