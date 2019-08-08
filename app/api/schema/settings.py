@@ -82,6 +82,8 @@ class SettingSchemaNonAdmin(SettingSchemaPublic):
     # Stripe Keys
     stripe_client_id = fields.Str(allow_none=True)
     stripe_publishable_key = fields.Str(allow_none=True)
+    stripe_test_secret_key = fields.Str(allow_none=True)
+    stripe_test_publishable_key = fields.Str(allow_none=True)
 
     #
     # Generators

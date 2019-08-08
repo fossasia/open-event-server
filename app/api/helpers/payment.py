@@ -40,9 +40,13 @@ class StripePaymentsManager(object):
         """
         if not event:
             settings = get_settings()
-            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
-                'stripe_secret_key'] != "" and \
-                    settings["stripe_publishable_key"] != "":
+            if settings['app_environment'] == 'development' and settings['stripe_test_secret_key'] and \
+                    settings['stripe_test_publishable_key']:
+                return {
+                    'SECRET_KEY': settings['stripe_test_secret_key'],
+                    'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"]
+                }
+            elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
