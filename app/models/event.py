@@ -417,12 +417,9 @@ class Event(SoftDeletionModel):
 
     def calc_monthly_revenue(self):
         """Returns revenue of current month. Invoice sent every 1st of the month for the previous month"""
-        previous_month = datetime.datetime.now().month - 1
-        monthly_revenue = db.session.query(func.sum(Order.amount)).filter(Order.event_id == self.id,
-                                                                          Order.completed_at.month == previous_month,
-                                                                          Order.status == 'completed').scalar()
-        if monthly_revenue is None:
-            monthly_revenue = 0
+        previous_month = datetime.now().month - 1
+        orders = Order.query.filter_by(event_id=self.id, status='completed').all()
+        monthly_revenue = sum([o.amount for o in orders if o.completed_at and o.completed_at.month == previous_month])
         return monthly_revenue
 
     @property
