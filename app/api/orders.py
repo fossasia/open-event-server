@@ -401,7 +401,7 @@ class OrderDetail(ResourceDetail):
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
