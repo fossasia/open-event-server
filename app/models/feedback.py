@@ -5,6 +5,8 @@ from app.models.base import SoftDeletionModel
 class Feedback(SoftDeletionModel):
     """Feedback model class"""
     __tablename__ = 'feedback'
+    __table_args__ = (db.UniqueConstraint('session_id', 'user_id', name='session_user_uc'),)
+
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Float, nullable=False)
     comment = db.Column(db.String, nullable=True)
