@@ -211,6 +211,9 @@ class OrdersListPost(ResourceList):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.identifier)
+            for coorganizer in order.event.coorganizers:
+                send_notif_ticket_purchase_organizer(coorganizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
             if order.event.owner:
                 send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
                                                      order.event.name, order.identifier)
