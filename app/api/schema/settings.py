@@ -58,6 +58,7 @@ class SettingSchemaPublic(Schema):
     #
     # Online Payment Flags
     #
+    is_paytm_activated = fields.Bool(dump_only=True, allow_none=False, default=False)
     is_paypal_activated = fields.Bool(dump_only=True)
     is_stripe_activated = fields.Bool(dump_only=True)
     is_omise_activated = fields.Bool(dump_only=True)
@@ -185,6 +186,12 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     alipay_publishable_key = fields.Str(allow_none=True)
     alipay_secret_key = fields.Str(allow_none=True)
 
+    # payTM credentials
+    paytm_mode = fields.Str(allow_none=True)
+    paytm_live_merchant = fields.Str(allow_none=True)
+    paytm_live_secret = fields.Str(allow_none=True)
+    paytm_sandbox_merchant = fields.Str(allow_none=True)
+    paytm_sandbox_secret = fields.Str(allow_none=True)
     #
     # EMAIL
     #

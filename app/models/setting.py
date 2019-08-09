@@ -104,6 +104,14 @@ class Setting(db.Model):
     omise_test_public = db.Column(db.String)
     omise_test_secret = db.Column(db.String)
 
+    # payTM credentials
+    is_paytm_activated = db.column(db.Boolean)
+    paytm_mode = db.Column(db.String)
+    paytm_live_merchant = db.Column(db.String)
+    paytm_live_secret = db.Column(db.String)
+    paytm_sandbox_merchant = db.Column(db.String)
+    paytm_sandbox_secret = db.Column(db.String)
+
     #
     # EMAIL
     #
@@ -222,6 +230,11 @@ class Setting(db.Model):
                  omise_live_secret=None,
                  alipay_publishable_key=None,
                  alipay_secret_key=None,
+                 paytm_mode=None,
+                 paytm_live_merchant=None,
+                 paytm_live_secret=None,
+                 paytm_sandbox_merchant=None,
+                 paytm_sandbox_secret=None,
                  invoice_sending_day=None,
                  invoice_sending_timezone=None,
                  admin_billing_contact_name=None,
@@ -297,6 +310,7 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
+
         # Omise Credentials
         self.omise_mode = omise_mode
         self.omise_test_public = omise_test_public
@@ -307,6 +321,13 @@ class Setting(db.Model):
         # AliPay Credentails
         self.alipay_publishable_key = alipay_publishable_key
         self.alipay_secret_key = alipay_secret_key
+
+        # payTM Credentials
+        self.paytm_mode = paytm_mode
+        self.paytm_live_merchant = paytm_live_merchant
+        self.paytm_live_secret = paytm_live_secret
+        self.paytm_sandbox_merchant = paytm_sandbox_merchant
+        self.paytm_sandbox_secret = paytm_sandbox_secret
 
         # Event Invoice settings
         self.invoice_sending_timezone = invoice_sending_timezone
@@ -361,3 +382,4 @@ class Setting(db.Model):
             return True
         else:
             return False
+
