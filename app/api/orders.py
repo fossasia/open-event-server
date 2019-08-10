@@ -1,6 +1,9 @@
 import logging
+import json
 import pytz
 from datetime import datetime
+import requests
+
 
 import omise
 from flask import request, jsonify, Blueprint, url_for, redirect
@@ -10,6 +13,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.settings import get_settings
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
@@ -22,7 +26,7 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
     create_pdf_tickets_for_holder, create_onsite_attendees_for_order
-from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager, PaytmPaymentsManager
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -606,3 +610,45 @@ def omise_checkout(order_identifier):
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
         return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+def initiate_transaction(order_identifier):
+    """
+    Initiating a PayTM transaction to obtain the txn token
+    :param order_identifier:
+    :return: JSON response containing the signature & txn token
+    """
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    paytm_mode = get_settings()['paytm_mode']
+    paytm_params = {}
+    # body parameters
+    paytm_params["body"] = {
+        "requestType": "Payment",
+        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'sandbox'
+                else get_settings()['paytm_live_merchant']),
+        "websiteName": "eventyay",
+        "orderId": order.id,
+        "callbackUrl": "",
+        "txnAmount": {
+            "value": order.amount,
+            "currency": order.event.payment_currency,
+        },
+        "userInfo": {
+            "custId": order.user.id,
+        },
+    }
+    checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
+    # head parameters
+    paytm_params["head"] = {
+        "signature"	: checksum
+    }
+    post_data = json.dumps(paytm_params)
+    if paytm_mode == 'sandbox':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+              format(get_settings()['paytm_sandbox_merchant'], order.id)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+              format(get_settings()['paytm_sandbox_merchant'], order.id)
+    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"})
+    return response.json()
