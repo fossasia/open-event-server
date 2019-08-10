@@ -105,7 +105,7 @@ class Setting(db.Model):
     omise_test_secret = db.Column(db.String)
 
     # payTM credentials
-    is_paytm_activated = db.column(db.Boolean)
+    is_paytm_activated = db.Column(db.Boolean, default=False, nullable=False)
     paytm_mode = db.Column(db.String)
     paytm_live_merchant = db.Column(db.String)
     paytm_live_secret = db.Column(db.String)
@@ -230,6 +230,7 @@ class Setting(db.Model):
                  omise_live_secret=None,
                  alipay_publishable_key=None,
                  alipay_secret_key=None,
+                 is_paytm_activated=False,
                  paytm_mode=None,
                  paytm_live_merchant=None,
                  paytm_live_secret=None,
@@ -323,6 +324,7 @@ class Setting(db.Model):
         self.alipay_secret_key = alipay_secret_key
 
         # payTM Credentials
+        self.is_paytm_activated = is_paytm_activated
         self.paytm_mode = paytm_mode
         self.paytm_live_merchant = paytm_live_merchant
         self.paytm_live_secret = paytm_live_secret
@@ -382,4 +384,3 @@ class Setting(db.Model):
             return True
         else:
             return False
-
