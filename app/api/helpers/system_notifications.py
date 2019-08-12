@@ -392,7 +392,7 @@ NOTIFS = {
     },
     EVENT_ROLE: {
         'title': u'Invitation to be {role_name} at {event_name}',
-        'message': u"You've been invited to be one of the <strong>{role_name}</strong>s" +
+        'message': u"You've been invited to be one of the <strong>{role_name}s</strong>" +
                    u" at <strong>{event_name}</strong>.",
         'recipient': 'User',
     },
