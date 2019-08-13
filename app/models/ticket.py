@@ -172,6 +172,9 @@ class TicketTag(SoftDeletionModel):
     Tags to group tickets
     """
     __tablename__ = 'ticket_tag'
+    __table_args__ = (
+        db.UniqueConstraint('name', 'event_id', name='unique_ticket_tag'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
