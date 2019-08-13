@@ -99,13 +99,14 @@ class Event(SoftDeletionModel):
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
     is_billing_info_mandatory = db.Column(db.Boolean, default=False)
-    can_pay_by_paypal = db.Column(db.Boolean, default=False)
-    can_pay_by_stripe = db.Column(db.Boolean, default=False)
-    can_pay_by_cheque = db.Column(db.Boolean, default=False)
-    can_pay_by_bank = db.Column(db.Boolean, default=False)
-    can_pay_onsite = db.Column(db.Boolean, default=False)
-    can_pay_by_omise = db.Column(db.Boolean, default=False)
-    can_pay_by_alipay = db.Column(db.Boolean, default=False)
+    can_pay_by_paypal = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_stripe = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_cheque = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_bank = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_onsite = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_omise = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_alipay = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_paytm = db.Column(db.Boolean, default=False, nullable=False)
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
@@ -219,15 +220,16 @@ class Event(SoftDeletionModel):
                  payment_currency=None,
                  paypal_email=None,
                  speakers_call=None,
-                 can_pay_by_paypal=None,
-                 can_pay_by_stripe=None,
-                 can_pay_by_cheque=None,
-                 can_pay_by_omise=None,
-                 can_pay_by_alipay=None,
+                 can_pay_by_paypal=False,
+                 can_pay_by_stripe=False,
+                 can_pay_by_cheque=False,
+                 can_pay_by_omise=False,
+                 can_pay_by_alipay=False,
+                 can_pay_by_paytm=False,
                  identifier=None,
-                 can_pay_by_bank=None,
+                 can_pay_by_bank=False,
                  is_featured=False,
-                 can_pay_onsite=None,
+                 can_pay_onsite=False,
                  cheque_details=None,
                  bank_details=None,
                  pentabarf_url=None,
@@ -290,6 +292,7 @@ class Event(SoftDeletionModel):
         self.can_pay_onsite = can_pay_onsite
         self.can_pay_by_omise = can_pay_by_omise
         self.can_pay_by_alipay = can_pay_by_alipay
+        self.can_pay_by_paytm = can_pay_by_paytm
         self.is_donation_enabled = is_donation_enabled
         self.is_featured = is_featured
         self.is_ticket_form_enabled = is_ticket_form_enabled
@@ -361,7 +364,7 @@ class Event(SoftDeletionModel):
 
     def is_payment_enabled(self):
         return self.can_pay_by_paypal or self.can_pay_by_stripe or self.can_pay_by_omise or self.can_pay_by_alipay \
-            or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite
+            or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite or self.can_pay_by_paytm
 
     @property
     def average_rating(self):
