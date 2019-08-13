@@ -85,7 +85,7 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
         raise IOError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
-    if im.format is not 'JPEG':
+    if im.format != 'JPEG':
         img = im.convert('RGB')
     else:
         img = im
@@ -213,7 +213,7 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
         raise IOError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
-    if im.format is not 'JPEG':
+    if im.format != 'JPEG':
         img = im.convert('RGB')
     else:
         img = im
