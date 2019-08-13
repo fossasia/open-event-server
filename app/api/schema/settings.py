@@ -80,12 +80,6 @@ class SettingSchemaNonAdmin(SettingSchemaPublic):
 
     id = fields.Str(dump_only=True)
 
-    # Stripe Keys
-    stripe_client_id = fields.Str(allow_none=True)
-    stripe_publishable_key = fields.Str(allow_none=True)
-    stripe_test_secret_key = fields.Str(allow_none=True)
-    stripe_test_publishable_key = fields.Str(allow_none=True)
-
     #
     # Generators
     #
@@ -165,8 +159,13 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     # Payment Gateway
     #
 
-    # Stripe secret key
+    # Stripe Credantials
+    stripe_client_id = fields.Str(allow_none=True)
+    stripe_publishable_key = fields.Str(allow_none=True)
     stripe_secret_key = fields.Str(allow_none=True)
+    stripe_test_client_id = fields.Str(allow_none=True)
+    stripe_test_secret_key = fields.Str(allow_none=True)
+    stripe_test_publishable_key = fields.Str(allow_none=True)
 
     # PayPal Credentials
     paypal_mode = fields.Str(allow_none=True)
@@ -182,7 +181,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     omise_live_public = fields.Str(allow_none=True)
     omise_live_secret = fields.Str(allow_none=True)
 
-    #
+    # Alipay Credentials
     alipay_publishable_key = fields.Str(allow_none=True)
     alipay_secret_key = fields.Str(allow_none=True)
 

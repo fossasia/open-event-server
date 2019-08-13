@@ -83,6 +83,7 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
+    stripe_test_client_id = db.Column(db.String)
     stripe_test_secret_key = db.Column(db.String)
     stripe_test_publishable_key = db.Column(db.String)
 
@@ -191,7 +192,7 @@ class Setting(db.Model):
                  is_google_recaptcha_enabled=False, google_recaptcha_secret=None, google_recaptcha_site=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
-                 stripe_client_id=None,
+                 stripe_client_id=None, stripe_test_client_id = None,
                  stripe_secret_key=None, stripe_publishable_key=None,
                  stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
@@ -288,6 +289,7 @@ class Setting(db.Model):
         self.stripe_client_id = stripe_client_id
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
+        self.stripe_test_client_id = stripe_test_client_id
         self.stripe_test_publishable_key = stripe_test_publishable_key
         self.stripe_test_secret_key = stripe_test_secret_key
         self.web_app_url = web_app_url
