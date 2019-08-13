@@ -70,7 +70,7 @@ from app.factories.user_favourite_events import UserFavouriteEventFactory
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
 api_password = "fossasia"
-api_uri = "http://localhost:5000/auth/session"
+api_uri = "http://localhost:5000/v1/auth/login"
 
 
 def obtain_token():
@@ -130,9 +130,11 @@ def after_each(transaction):
 
 # ------------------------- Authentication -------------------------
 @hooks.before("Authentication > JWT Authentication > Authenticate and generate token")
+@hooks.before("Authentication > JWT Authentication > Authenticate with remember me")
+@hooks.before("Authentication > JWT Authentication > Authenticate with remember me for mobile")
 def skip_auth(transaction):
     """
-    POST /auth/session
+    POST /v1/auth/login
     :param transaction:
     :return:
     """
@@ -143,6 +145,17 @@ def skip_auth(transaction):
         db.session.commit()
         print('User Created')
 
+
+@hooks.before("Authentication > Re-Authentication > Generate fresh token")
+@hooks.before("Authentication > Token Refresh > Access Token Refresh for Web")
+@hooks.before("Authentication > Token Refresh > Access Token Refresh for mobile")
+def skip_token_refresh(transaction):
+    """
+    POST /v1/auth/token/refresh
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 # ------------------------- Users -------------------------
 @hooks.before("Users > Users Collection > List All Users")

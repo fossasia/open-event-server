@@ -1,0 +1,169 @@
+# Group Message Settings
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `action`  | Action of the message | string | - |
+| `mail-status`  | Status of Mail | boolean | - |
+| `notification-status`  | Status of Notification | boolean | - |
+| `user-control-status`  | Status of User Control | boolean | - |
+| `email-message`  | Message of the Email | string | - |
+| `notification-message`  | Message of the Notification | string | - |
+
+## Message Setting Collection [/v1/message-settings{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Message Settings [GET]
+Get a list of Message Settings.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "mail-status": true,
+                        "notification-status": true,
+                        "user-control-status": true,
+                        "action": "After Event",
+                        "recipient": "Organizer, Speaker",
+                        "email-subject": "Event {event_name} is over",
+                        "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                        "notification-title": "Event {event_name} completed",
+                        "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                        "sent-at": "2018-07-15T10:59:43.063672+00:00"
+                    },
+                    "type": "message-settings",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/message-settings/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/message-settings"
+            }
+        }
+
+
+## Message Setting Details [/v1/message-settings/{message_settings_id}]
++ Parameters
+    + message_settings_id: 1 (integer) - ID of the message setting in the form of an integer
+
+### Get Message Setting Details [GET]
+Get a single message setting.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "mail-status": true,
+                "notification-status": true,
+                "user-control-status": true,
+                "action": "After Event",
+                "recipient": "Organizer, Speaker",
+                "email-subject": "Event {event_name} is over",
+                "notification-title": "Event {event_name} completed",
+                "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                "sent-at": "2018-07-15T10:59:43.063672+00:00"
+            },
+            "type": "message-setting",
+            "id": "1",
+            "links": {
+              "self": "/v1/message-settings/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/message-settings/1"
+          }
+        }
+
+
+### Update Message Setting [PATCH]
+Update a single message setting by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "mail-status": true,
+                  "notification-status": true,
+                  "user-control-status": true,
+                  "action": "After Event"
+            },
+                "id": "1",
+                "type": "message-setting"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "mail-status": true,
+                        "notification-status": true,
+                        "user-control-status": true,
+                        "action": "After Event",
+                        "recipient": "Organizer, Speaker",
+                        "email-subject": "Event {event_name} is over",
+                        "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                        "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                        "notification-title": "Event {event_name} completed",
+                        "sent-at": "2018-07-15T10:59:43.063672+00:00"
+                    },
+                    "type": "message-setting",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/message-settings/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/message-settings/1"
+                }
+            }

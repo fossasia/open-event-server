@@ -1,0 +1,300 @@
+# Group Email Notifications
+
+To turn Email Notifications ON/OFF related to the various events, session approval etc.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `next-event`  | Next event email notification | boolean (default=`false`) | - |
+| `new-paper` | New paper email notification | boolean (default=`false`) | - |
+| `session-accept-reject` | Session Accept/Reject email notification | boolean (default=`false`) | - |
+| `session-schedule` | Session schedule email notification | boolean (default=`false`) | - |
+| `after-ticket-purchase` | Email notification after ticket purchase | boolean (default=`true`) | - |
+| `event-id` | Event specific notification preferences | integer | - |
+
+
+## Email Notifications Admin Collection [/v1/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `next-event`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Email Notifications [GET]
+Get a list of Notifications.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/user",
+                                "related": "/v1/email-notifications/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/event",
+                                "related": "/v1/email-notifications/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "next-event": false,
+                        "new-paper": false,
+                        "session-accept-reject": false,
+                        "session-schedule": true,
+                        "deleted-at": null,
+                        "after-ticket-purchase": true,
+                        "event-id": 1
+                    },
+                    "type": "email-notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/email-notifications/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications"
+            }
+        }
+
+
+## Email Notifications Collection [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 2 (integer) - ID of the specific user in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `next-event`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Email Notifications [GET]
+Get a list of Notifications.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/user",
+                                "related": "/v1/email-notifications/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/event",
+                                "related": "/v1/email-notifications/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "next-event": false,
+                        "new-paper": false,
+                        "session-accept-reject": false,
+                        "session-schedule": true,
+                        "deleted-at": null,
+                        "after-ticket-purchase": true,
+                        "event-id": 1
+                    },
+                    "type": "email-notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/email-notifications/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/2/email-notifications"
+            }
+        }
+
+
+## Email Notification Detail [/v1/email-notifications/{email_notification_id}]
++ Parameters
+    + email_notification_id: 1 (integer) - ID of the email_notifcaiton in the form of an integer
+
+### Email Notification Detail [GET]
+Get a single email notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": false,
+                    "new-paper": false,
+                    "session-accept-reject": false,
+                    "session-schedule": true,
+                    "deleted-at": null,
+                    "after-ticket-purchase": true,
+                    "event-id": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+
+### Update Email Notification [PATCH]
+Update a single email notification with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "next-event": false,
+                  "new-paper": false,
+                  "session-accept-reject": false,
+                  "session-schedule": true,
+                  "after-ticket-purchase": true,
+                  "event-id": 1
+                },
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
+                    }
+                  }
+                },
+                "type": "email-notification",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": false,
+                    "new-paper": false,
+                    "session-accept-reject": false,
+                    "session-schedule": true,
+                    "deleted-at": null,
+                    "after-ticket-purchase": true,
+                    "event-id": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+### Delete Email Notification [DELETE]
+Delete a single email notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

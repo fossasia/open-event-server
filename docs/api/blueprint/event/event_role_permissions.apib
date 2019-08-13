@@ -1,0 +1,191 @@
+# Group Event Role Permission
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `can-create`  | Permission of role to create a service | boolean | **yes** |
+| `can-read`  | Permission of role to read a service | boolean | **yes** |
+| `can-update`  | Permission of role to update a service | boolean | **yes** |
+| `can-delete`  | Permission of role to delete a service | boolean | **yes** |
+
+## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Event Role Permissions [GET]
+Get a list of Event Role Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "can-delete": true,
+                        "can-read": true,
+                        "can-create": true,
+                        "can-update": true
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-role-permissions"
+            }
+        }
+
+
+## Event Role Permission Details [/v1/event-role-permissions/{event_role_permissions_id}]
++ Parameters
+    + event_role_permissions_id: 1 (integer) - ID of the events role permission in the form of an integer
+
+### Get Event Role Permission Details [GET]
+Get a single event role permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "can-delete": true,
+              "can-create": true,
+              "can-update": true,
+              "can-read": true
+            },
+            "relationships": {
+                "role": {
+                    "links": {
+                        "related": "/v1/roles/1",
+                        "self": "/v1/event-role-permissions/1/relationships/role"
+                    }
+                },
+                "service": {
+                    "links": {
+                        "related": "/v1/services/1",
+                        "self": "/v1/event-role-permissions/1/relationships/service"
+                    }
+                }
+            },
+            "type": "event-role-permissions",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-role-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-role-permissions/1"
+          }
+        }
+
+
+### Update Event Role Permission [PATCH]
+Update a single event role permission by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "can-delete": false,
+                  "can-create": true,
+                  "can-update": false,
+                  "can-read": false
+                },
+                "id": "1",
+                "type": "event-role-permissions"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-delete": false,
+                        "can-create": true,
+                        "can-update": false,
+                        "can-read": false
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-role-permissions/1"
+                }
+            }

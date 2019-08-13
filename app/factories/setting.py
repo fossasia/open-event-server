@@ -63,6 +63,8 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_client_id = common.string_
     stripe_secret_key = common.string_
     stripe_publishable_key = common.string_
+    stripe_test_secret_key = common.string_
+    stripe_test_publishable_key = common.string_
     # PayPal Credentials
     paypal_mode = 'development'
     paypal_client = common.string_

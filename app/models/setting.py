@@ -83,6 +83,8 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
+    stripe_test_secret_key = db.Column(db.String)
+    stripe_test_publishable_key = db.Column(db.String)
 
     # AliPay Keys - Stripe Sources
     alipay_secret_key = db.Column(db.String)
@@ -101,6 +103,14 @@ class Setting(db.Model):
     omise_live_secret = db.Column(db.String)
     omise_test_public = db.Column(db.String)
     omise_test_secret = db.Column(db.String)
+
+    # payTM credentials
+    is_paytm_activated = db.Column(db.Boolean, default=False, nullable=False)
+    paytm_mode = db.Column(db.String)
+    paytm_live_merchant = db.Column(db.String)
+    paytm_live_secret = db.Column(db.String)
+    paytm_sandbox_merchant = db.Column(db.String)
+    paytm_sandbox_secret = db.Column(db.String)
 
     #
     # EMAIL
@@ -183,6 +193,7 @@ class Setting(db.Model):
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
                  stripe_client_id=None,
                  stripe_secret_key=None, stripe_publishable_key=None,
+                 stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
@@ -219,6 +230,12 @@ class Setting(db.Model):
                  omise_live_secret=None,
                  alipay_publishable_key=None,
                  alipay_secret_key=None,
+                 is_paytm_activated=False,
+                 paytm_mode=None,
+                 paytm_live_merchant=None,
+                 paytm_live_secret=None,
+                 paytm_sandbox_merchant=None,
+                 paytm_sandbox_secret=None,
                  invoice_sending_day=None,
                  invoice_sending_timezone=None,
                  admin_billing_contact_name=None,
@@ -271,6 +288,8 @@ class Setting(db.Model):
         self.stripe_client_id = stripe_client_id
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
+        self.stripe_test_publishable_key = stripe_test_publishable_key
+        self.stripe_test_secret_key = stripe_test_secret_key
         self.web_app_url = web_app_url
         self.android_app_url = android_app_url
         self.email_service = email_service
@@ -292,6 +311,7 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
+
         # Omise Credentials
         self.omise_mode = omise_mode
         self.omise_test_public = omise_test_public
@@ -302,6 +322,14 @@ class Setting(db.Model):
         # AliPay Credentails
         self.alipay_publishable_key = alipay_publishable_key
         self.alipay_secret_key = alipay_secret_key
+
+        # payTM Credentials
+        self.is_paytm_activated = is_paytm_activated
+        self.paytm_mode = paytm_mode
+        self.paytm_live_merchant = paytm_live_merchant
+        self.paytm_live_secret = paytm_live_secret
+        self.paytm_sandbox_merchant = paytm_sandbox_merchant
+        self.paytm_sandbox_secret = paytm_sandbox_secret
 
         # Event Invoice settings
         self.invoice_sending_timezone = invoice_sending_timezone

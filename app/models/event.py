@@ -98,6 +98,7 @@ class Event(SoftDeletionModel):
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
+    is_billing_info_mandatory = db.Column(db.Boolean, default=False)
     can_pay_by_paypal = db.Column(db.Boolean, default=False)
     can_pay_by_stripe = db.Column(db.Boolean, default=False)
     can_pay_by_cheque = db.Column(db.Boolean, default=False)
@@ -235,6 +236,7 @@ class Event(SoftDeletionModel):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
+                 is_billing_info_mandatory=False,
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
@@ -301,6 +303,7 @@ class Event(SoftDeletionModel):
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
+        self.is_billing_info_mandatory = is_billing_info_mandatory
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
         self.tax = tax
@@ -393,10 +396,19 @@ class Event(SoftDeletionModel):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    @property
+    def tickets_sold_object(self):
+        obj = db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)
+        return obj
+
     def calc_tickets_sold_count(self):
         """Calculate total number of tickets sold for the event"""
-        return db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)\
-            .count()
+        return self.tickets_sold_object.count()
+
+    def calc_tickets_sold_prev_month(self):
+        """Calculate tickets sold in the previous month"""
+        previous_month = datetime.datetime.now().month - 1
+        return self.tickets_sold_object.filter_by(completed_at=previous_month).count()
 
     def calc_total_tickets_count(self):
         """Calculate total available tickets for all types of tickets"""
@@ -414,12 +426,9 @@ class Event(SoftDeletionModel):
 
     def calc_monthly_revenue(self):
         """Returns revenue of current month. Invoice sent every 1st of the month for the previous month"""
-        previous_month = datetime.datetime.now().month - 1
-        monthly_revenue = db.session.query(func.sum(Order.amount)).filter(Order.event_id == self.id,
-                                                                          Order.completed_at.month == previous_month,
-                                                                          Order.status == 'completed').scalar()
-        if monthly_revenue is None:
-            monthly_revenue = 0
+        previous_month = datetime.now().month - 1
+        orders = Order.query.filter_by(event_id=self.id, status='completed').all()
+        monthly_revenue = sum([o.amount for o in orders if o.completed_at and o.completed_at.month == previous_month])
         return monthly_revenue
 
     @property

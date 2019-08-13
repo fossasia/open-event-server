@@ -82,6 +82,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     revenue = fields.Float(dump_only=True)
     paypal_email = fields.Str(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
+    is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
@@ -277,6 +278,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='UserSchemaPublic',
                                 type_='user',
                                 many=True)
+    stripe_authorization = Relationship(attribute='stripe_authorization',
+                                        self_view='v1.stripe_authorization_event',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.stripe_authorization_detail',
+                                        related_view_kwargs={'event_id': '<id>'},
+                                        schema='StripeAuthorizationSchema',
+                                        type_='stripe-authorization')
 
 
 class EventSchema(EventSchemaPublic):
@@ -354,10 +362,3 @@ class EventSchema(EventSchemaPublic):
                              schema='AttendeeSchema',
                              many=True,
                              type_='attendee')
-    stripe_authorization = Relationship(attribute='stripe_authorization',
-                                        self_view='v1.stripe_authorization_event',
-                                        self_view_kwargs={'id': '<id>'},
-                                        related_view='v1.stripe_authorization_detail',
-                                        related_view_kwargs={'event_id': '<id>'},
-                                        schema='StripeAuthorizationSchema',
-                                        type_='stripe-authorization')
