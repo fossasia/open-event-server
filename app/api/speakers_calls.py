@@ -86,27 +86,18 @@ class SpeakersCallDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier'],
-                                                            privacy='public').one()
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_identifier'},
                                      "Event: {} not found".format(view_kwargs['event_identifier']))
             else:
                 view_kwargs['event_id'] = event.id
 
-        elif view_kwargs.get('event_id'):
+        if view_kwargs.get('event_id'):
             try:
-                speakers_call = self.session.query(SpeakersCall).filter_by(event_id=view_kwargs['event_id'],
-                                                                           privacy='public').one()
+                speakers_call = self.session.query(SpeakersCall).filter_by(event_id=view_kwargs['event_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_identifier'}, "Object: not found")
-            view_kwargs['id'] = speakers_call.id
-
-        else:
-            try:
-                speakers_call = self.session.query(SpeakersCall).filter_by(id=view_kwargs['id'], privacy='public').one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'speaker_call_id'}, "Object: not found")
             view_kwargs['id'] = speakers_call.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
