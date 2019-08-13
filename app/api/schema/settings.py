@@ -58,7 +58,7 @@ class SettingSchemaPublic(Schema):
     #
     # Online Payment Flags
     #
-    is_paytm_activated = fields.Bool(dump_only=True, allow_none=False, default=False)
+    is_paytm_activated = fields.Bool(default=False)
     is_paypal_activated = fields.Bool(dump_only=True)
     is_stripe_activated = fields.Bool(dump_only=True)
     is_omise_activated = fields.Bool(dump_only=True)
