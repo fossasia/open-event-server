@@ -1,3 +1,4 @@
+import datetime
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask import jsonify, request
 
@@ -13,6 +14,7 @@ from app.models.event_invoice import EventInvoice
 from app.models.user import User
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.errors import BadRequestError
+from app.api.helpers.db import save_to_db
 
 
 from app.api.helpers.permissions import jwt_required
@@ -136,7 +138,7 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
                   }}
 
 
-@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/create-paypal-payment', methods=['POST'])
+@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/create-paypal-payment', methods=['POST','GET'])
 @jwt_required
 def create_paypal_payment_invoice(invoice_identifier):
     """
@@ -158,7 +160,7 @@ def create_paypal_payment_invoice(invoice_identifier):
         return jsonify(status=False, error=response)
 
 
-@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/charge', methods=['POST'])
+@order_misc_routes.route('/event-invoices/<string:invoice_identifier>/charge',  methods=['POST','GET'])
 @jwt_required
 def charge_paypal_payment_invoice(invoice_identifier):
     """
@@ -181,12 +183,12 @@ def charge_paypal_payment_invoice(invoice_identifier):
     if status:
         # successful transaction hence update the order details.
         event_invoice.paid_via = 'paypal'
-        event_invoice.status = 'completed'
+        event_invoice.status = 'paid'
         event_invoice.transaction_id = paypal_payment_id
-        event_invoice.completed_at = datetime.utcnow()
+        event_invoice.completed_at = datetime.datetime.now()
         save_to_db(event_invoice)
 
-        return True, 'Charge successful'
+        return jsonify(status="Charge Successful", payment_id=paypal_payment_id)
     else:
         # return the error message from Paypal
-        return False, error
+        return jsonify(status="Charge Unsuccessful", error=error)
