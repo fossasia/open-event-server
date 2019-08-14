@@ -503,6 +503,22 @@ def create_paypal_payment(order_identifier):
         return jsonify(status=False, error=response)
 
 
+@order_misc_routes.route('/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST'])
+@jwt_required
+def verify_mobile_paypal_payment(order_identifier):
+    """
+    Verify paypal payment made on mobile client
+    :return: The status of order verification
+    """
+    try:
+        payment_id = request.json['data']['attributes']['payment-id']
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
+    return jsonify(status=status, error=error)
+
+
 @alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
 def create_source(order_identifier):
     """

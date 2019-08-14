@@ -11,7 +11,7 @@ from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.models import db
 from app.models.order import Order
 
@@ -199,6 +199,47 @@ class PayPalPaymentsManager(object):
             return True, payment.id
         else:
             return False, payment.error
+
+    @staticmethod
+    def verify_payment(payment_id, order):
+        """
+        Verify Paypal payment one more time for paying with Paypal in mobile client
+        """
+        try:
+            payment_server = paypalrestsdk.Payment.find(payment_id)
+            if payment_server.state != 'approved':
+                return False, 'Payment has not been approved yet. Status is ' + payment_server.state + '.'
+
+            # Get the most recent transaction
+            transaction = payment_server.transactions[0]
+            amount_server = transaction.amount.total
+            currency_server = transaction.amount.currency
+            sale_state = transaction.related_resources[0].sale.state
+
+            if amount_server != order.amount:
+                return False, 'Payment amount does not match order'
+            elif currency_server != order.event.payment_currency:
+                return False, 'Payment currency does not match order'
+            if sale_state != 'completed':
+                return False, 'Sale not completed'
+            elif PayPalPaymentsManager.used_payment(payment_id, order):
+                return False, 'Payment already been verified'
+            else:
+                return True, None
+        except paypalrestsdk.ResourceNotFound:
+            return False, 'Payment Not Found'
+
+    @staticmethod
+    def used_payment(payment_id, order):
+        """
+        Function to check for recycling of payment IDs
+        """
+        if Order.query.filter(Order.paypal_token == payment_id).first() is None:
+            order.paypal_token = payment_id
+            save_to_db(order)
+            return False
+        else:
+            return True
 
     @staticmethod
     def execute_payment(paypal_payer_id, paypal_payment_id):
