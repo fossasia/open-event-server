@@ -1,6 +1,7 @@
 import logging
 import traceback
 
+from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
@@ -66,7 +67,11 @@ def safe_query(self, model, column_name, value, parameter_name):
     :return:
     """
     try:
-        record = self.session.query(model).filter(getattr(model, column_name) == value, model.deleted_at is None).one()
+        if request.args.get('get_trashed') == 'true':
+            record = self.session.query(model).filter(getattr(model, column_name) == value).one()
+        else:
+            record = self.session.query(model).filter(getattr(model, column_name) == value,
+                                                      model.deleted_at == None).one()
     except NoResultFound:
         raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
                              "{}: {} not found".format(model.__name__, value))
