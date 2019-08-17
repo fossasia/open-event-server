@@ -13,11 +13,7 @@ reporter: apiary
 output: []
 header: []
 sorted: false
-user: null
-inline-errors: false
-details: false
 method: []
-color: true
 loglevel: warning
 path: []
 hooks-worker-timeout: 15000

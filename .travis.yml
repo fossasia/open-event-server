@@ -20,7 +20,7 @@ before-install:
 
 install:
   - npm install -g aglio
-  - npm install -g dredd@11.0.0
+  - npm install -g dredd
   - pip3 install -r requirements/tests.txt
 
 env:
