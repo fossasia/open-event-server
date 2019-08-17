@@ -18,7 +18,7 @@ inline-errors: false
 details: false
 method: []
 color: true
-loglevel: info
+loglevel: warning
 path: []
 hooks-worker-timeout: 15000
 hooks-worker-connect-timeout: 10000
