@@ -1,7 +1,6 @@
 dry-run: null
 hookfiles: ./tests/hook_main.py
 language: python
-# sandbox: false
 server: python manage.py runserver
 server-wait: 2
 init: false
