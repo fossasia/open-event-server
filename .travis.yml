@@ -17,10 +17,11 @@ cache: pip
 
 before-install:
   - npm -g install npm@latest
+  - cache: npm
 
 install:
-  - npm install -g aglio
-  - npm install -g dredd
+  - npx install -g aglio
+  - npx install -g dredd
   - pip3 install -r requirements/tests.txt
 
 env:
