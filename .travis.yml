@@ -40,3 +40,8 @@ script:
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
+
+branches:
+  only:
+    - master
+    - development
