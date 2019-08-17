@@ -20,8 +20,8 @@ before-install:
   - cache: npm
 
 install:
-  - npx install -g aglio
-  - npx install -g dredd
+  - npx install aglio
+  - npx install dredd
   - pip3 install -r requirements/tests.txt
 
 env:
