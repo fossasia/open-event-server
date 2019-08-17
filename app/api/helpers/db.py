@@ -68,10 +68,9 @@ def safe_query(self, model, column_name, value, parameter_name):
     """
     try:
         record = self.session.query(model).filter(getattr(model, column_name) == value)
-        if request.args.get('get_trashed') == 'true':
-            record = record.one()
-        else:
-            record = record.filter(model.deleted_at == None).one()
+        if request.args.get('get_trashed') != 'true':
+            record = record.filter(model.deleted_at == None)
+        record = record.one()
     except NoResultFound:
         raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
                              "{}: {} not found".format(model.__name__, value))
