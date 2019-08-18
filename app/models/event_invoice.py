@@ -79,7 +79,8 @@ class EventInvoice(SoftDeletionModel):
                  last4=None,
                  stripe_token=None,
                  paypal_token=None,
-                 deleted_at=None
+                 deleted_at=None,
+                 status='due'
                  ):
         self.identifier = get_new_identifier()
         self.amount = amount
@@ -94,7 +95,7 @@ class EventInvoice(SoftDeletionModel):
         self.paid_via = paid_via
         self.created_at = datetime.utcnow()
         self.discount_code_id = discount_code_id
-        self.status = 'pending'
+        self.status = status
         self.invoice_pdf_url = invoice_pdf_url
         self.payment_mode = payment_mode
         self.brand = brand
