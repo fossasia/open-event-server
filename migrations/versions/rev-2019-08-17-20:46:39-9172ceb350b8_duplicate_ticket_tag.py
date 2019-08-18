@@ -17,7 +17,7 @@ down_revision = '246b5b6123af'
 
 
 def upgrade():
-    op.execute("UPDATE ticket_tag SET deleted_at = current_timestamp, name = concat(name, '.deleted') where name not in (SELECT DISTINCT name FROM (SELECT DISTINCT name, event_id FROM ticket_tag)as name);",
+    op.execute("UPDATE ticket_tag SET deleted_at = current_timestamp, name = concat(name, '.deleted') where id in (SELECT ticket_tag.id FROM ticket_tag LEFT OUTER JOIN (SELECT MIN(id) as id, name, event_id FROM ticket_tag GROUP BY name, event_id) as KeepRows ON ticket_tag.id = KeepRows.id WHERE KeepRows.id IS NULL);",
                execution_options=None)
 
 
