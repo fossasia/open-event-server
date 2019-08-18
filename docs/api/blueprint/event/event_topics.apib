@@ -1,0 +1,373 @@
+# Group Event Topics
+
+Event Topics for Events. Can only be edited and entered by admins.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event topic | string | - |
+| `slug` | Slug of the event topic | string | - |
+| `system-image-url` | Url of system image of event topic | string | - |
+
+
+## Event Topics Collection [/v1/event-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
+### List All Event Topics [GET]
+Get a list of Event Topics.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-topics/1/relationships/events",
+                    "related": "/v1/event-topics/1/events"
+                  }
+                },
+                "event-sub-topics": {
+                  "links": {
+                    "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                    "related": "/v1/event-topics/1/event-sub-topics"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "Travel & Outdoor",
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+              },
+              "type": "event-topic",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-topics/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-topics"
+          }
+        }
+
+
+### Create Event Topic [POST]
+Create a new event topic with name.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                },
+                "type": "event-topic"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-topics/1/relationships/events",
+                    "related": "/v1/event-topics/1/events"
+                  }
+                },
+                "event-sub-topics": {
+                  "links": {
+                    "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                    "related": "/v1/event-topics/1/event-sub-topics"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "Travel & Outdoor",
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+              },
+              "type": "event-topic",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-topics/1"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/event-topics/1"
+            }
+          }
+
+## Event Topic Details [/v1/event-topics/{event_topic_id}]
++ Parameters
+    + event_topic_id: 1 (integer) - ID of the event topic in the form of an integer
+
+### Event Topic Details [GET]
+Get a single event topic.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/1/relationships/events",
+                  "related": "/v1/event-topics/1/events"
+                }
+              },
+              "event-sub-topics": {
+                "links": {
+                  "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                  "related": "/v1/event-topics/1/event-sub-topics"
+                }
+              }
+            },
+            "attributes": {
+              "name": "Travel & Outdoor",
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+            },
+            "type": "event-topic",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-topics/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-topics/1"
+          }
+        }
+
+
+### Update Event Topic [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single event topic by setting name.
+
+Authorized user must be admin.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                },
+                "type": "event-topic",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/1/relationships/events",
+                  "related": "/v1/event-topics/1/events"
+                }
+              },
+              "event-sub-topics": {
+                "links": {
+                  "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                  "related": "/v1/event-topics/1/event-sub-topics"
+                }
+              }
+            },
+            "attributes": {
+              "name": "Travel & Outdoor",
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+            },
+            "type": "event-type",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-topics/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-topics/1"
+          }
+        }
+
+### Delete Event Topic [DELETE]
+Delete a single event topic.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Event Topic of an Event  [/v1/events/{event_identifier}/event-topic]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Event Topic Details of an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-topics/1/events"
+                        }
+                    },
+                    "event-sub-topics": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                            "related": "/v1/event-topics/1/event-sub-topics"
+                        }
+                    }
+                },
+                "attributes": {
+                    "slug": "travel-outdoor",
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                },
+                "type": "event-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-topics/1"
+            }
+        }
+
+
+## Event Topic of a Sub Topic  [/v1/event-sub-topics/{event_sub_topic_id}/event-topic]
++ Parameters
+    + event_sub_topic_id: 1 (integer) - ID of the event sub topic in the form of an integer
+
+### Event Topic Details of a Sub Topic [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-topics/1/events"
+                        }
+                    },
+                    "event-sub-topics": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                            "related": "/v1/event-topics/1/event-sub-topics"
+                        }
+                    }
+                },
+                "attributes": {
+                    "slug": "travel-outdoor",
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                },
+                "type": "event-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-topics/1"
+            }
+        }

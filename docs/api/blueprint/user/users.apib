@@ -1,0 +1,1485 @@
+# Group Users
+
+For using the API you need(mostly) to register as an user. Registering gives you access to all non admin API endpoints. After registration, you need to create your JWT access token to send requests to the API endpoints.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the user | string | - |
+| `password` | Password of the user | string | **yes** |
+| `email` | Email of the user | string | **yes** |
+
+
+## Users Collection [/v1/users{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `email`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter(optional, string, ``) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Users [GET]
+Get a list of Users.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "events": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/events",
+                                "related": "/v1/users/3/events"
+                            }
+                        },
+                        "alternate-emails": {
+                            "links": {
+                                "self": "/v1/users/1/relationships/alternate-emails",
+                                "related": "/v1/users/1/alternate-emails"
+                            }
+                        },
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/attendees",
+                                "related": "/v1/users/3/attendees"
+                            }
+                        },
+                        "orders": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/orders",
+                                "related": "/v1/users/2/orders"
+                            }
+                        },
+                        "email-notifications": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/email-notifications",
+                                "related": "/v1/users/2/email-notifications"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/discount-codes",
+                                "related": "/v1/users/2/discount-codes"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sessions",
+                                "related": "/v1/users/2/sessions"
+                            }
+                        },
+                        "coorganizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/coorganizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "speakers": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/speakers",
+                                "related": "/v1/users/2/speakers"
+                            }
+                        },
+                        "moderator-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/moderator-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "notifications": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/notifications",
+                                "related": "/v1/users/2/notifications"
+                            }
+                        },
+                        "track-organizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/track-organizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "marketer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/marketer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "sales-admin-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sales-admin-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "access-codes": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/access-codes",
+                                "related": "/v1/users/2/access-codes"
+                            }
+                        },
+                        "organizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/organizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "registrar-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/registrar-events",
+                                "related": "/v1/events"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "is-admin": false,
+                        "last-name": "Doe",
+                        "instagram-url": "http://instagram.com/instagram",
+                        "is-super-admin": false,
+                        "is-sales-admin": false,
+                        "is-marketer": false,
+                        "thumbnail-image-url": "http://example.com/example.png",
+                        "created-at": "2017-06-21T20:33:33.186358+00:00",
+                        "last-accessed-at": null,
+                        "email": "example@example.com",
+                        "icon-image-url": "http://example.com/example.png",
+                        "contact": "example",
+                        "deleted-at": null,
+                        "small-image-url": "http://example.com/example.png",
+                        "facebook-url": "http://facebook.com/facebook",
+                        "details": "example",
+                        "is-verified": false,
+                        "first-name": "John",
+                        "avatar-url": "http://example.com/example.png",
+                        "twitter-url": "http://twitter.com/twitter",
+                        "google-plus-url": "http://plus.google.com/plus.google",
+                        "facebook-id": "12345678",
+                        "was-registered-with-order": false,
+                        "is-user-owner": false,
+                        "is-user-organizer": false,
+                        "is-user-coorganizer": false,
+                        "is-user-track-organizer": false,
+                        "is-user-moderator": false,
+                        "is-user-registrar": false,
+                        "is-user-attendee": false
+                    },
+                    "type": "user",
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/users/2"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users"
+            }
+        }
+
+
+### Create User [POST]
+Create a new user using an email, password and an optional name.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+    + Body
+
+            {
+              "data":
+              {
+                "attributes":
+                {
+                  "email": "email@example.com",
+                  "password": "password",
+                  "avatar_url": "http://example.com/example.png",
+                  "first-name": "John",
+                  "last-name": "Doe",
+                  "details": "example",
+                  "contact": "example",
+                  "facebook-url": "http://facebook.com/facebook",
+                  "twitter-url": "http://twitter.com/twitter",
+                  "instagram-url": "http://instagram.com/instagram",
+                  "google-plus-url": "http://plus.google.com/plus.google",
+                  "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg"
+                },
+                "type": "user"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": false,
+                    "last-name": "Doe",
+                    "instagram-url": "http://instagram.com/instagram",
+                    "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": "http://example.com/example.png",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
+                    "last-accessed-at": null,
+                    "email": "example@example.com",
+                    "icon-image-url": "http://example.com/example.png",
+                    "contact": "example",
+                    "deleted-at": null,
+                    "small-image-url": "http://example.com/example.png",
+                    "facebook-url": "http://facebook.com/facebook",
+                    "details": "example",
+                    "is-verified": false,
+                    "first-name": "John",
+                    "avatar-url": "http://example.com/example.png",
+                    "twitter-url": "http://twitter.com/twitter",
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": null,
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "2",
+                "links": {
+                    "self": "/v1/users/2"
+                }
+            }
+        }
+
+## User Details [/v1/users/{user_id}]
++ Parameters
+    + user_id: 2 (integer) - ID of the user in the form of an integer
+
+### Get Details [GET]
+Get a single user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": false,
+                    "last-name": "Doe",
+                    "instagram-url": "http://instagram.com/instagram",
+                    "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": "http://example.com/example.png",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
+                    "last-accessed-at": null,
+                    "email": "example@example.com",
+                    "icon-image-url": "http://example.com/example.png",
+                    "contact": "example",
+                    "deleted-at": null,
+                    "small-image-url": "http://example.com/example.png",
+                    "facebook-url": "http://facebook.com/facebook",
+                    "details": "example",
+                    "is-verified": false,
+                    "first-name": "John",
+                    "avatar-url": "http://example.com/example.png",
+                    "twitter-url": "http://twitter.com/twitter",
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "2",
+                "links": {
+                    "self": "/v1/users/2"
+                }
+            }
+        }
+
+
+### Update User [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single user by setting the email, email and/or name.
+
+Authorized user should be same as user in request body or must be admin.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "password": "password",
+                  "avatar_url": "http://example.com/example.png",
+                  "first-name": "John",
+                  "last-name": "Doe",
+                  "details": "example1",
+                  "contact": "example1",
+                  "facebook-url": "http://facebook.com/facebook",
+                  "twitter-url": "http://twitter.com/twitter",
+                  "instagram-url": "http://instagram.com/instagram",
+                  "google-plus-url": "http://plus.google.com/plus.google",
+                  "thumbnail-image-url": "http://example.com/example.png",
+                  "small-image-url": "http://example.com/example.png",
+                  "icon-image-url": "http://example.com/example.png"
+                },
+                "type": "user",
+                "id": "2"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": false,
+                    "last-name": "Doe",
+                    "instagram-url": "http://instagram.com/instagram",
+                    "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": "http://example.com/example.png",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
+                    "last-accessed-at": null,
+                    "email": "example@example.com",
+                    "icon-image-url": "http://example.com/example.png",
+                    "contact": "example",
+                    "deleted-at": null,
+                    "small-image-url": "http://example.com/example.png",
+                    "facebook-url": "http://facebook.com/facebook",
+                    "details": "example",
+                    "is-verified": false,
+                    "first-name": "John",
+                    "avatar-url": "http://example.com/example.png",
+                    "twitter-url": "http://twitter.com/twitter",
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "2",
+                "links": {
+                    "self": "/v1/users/2"
+                }
+            }
+        }
+
+### Delete User [DELETE]
+Delete a single user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get User Details for a Notification [/v1/notifications/{notification_id}/user]
++ Parameters
+    + notification_id: 1 (integer) - ID of the notification in the form of an integer
+
+
+### Get User Details for a Notification [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+
+## Get User Details for an Event Invoice [/v1/event-invoices/{event_invoice_id}/user]
++ Parameters
+    + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
+
+
+### Get User Details for an Event Invoice [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+
+## Get User Details for a Speaker [/v1/speakers/{speaker_id}/user]
++ Parameters
+    + speaker_id: 1 (integer) - ID of the speaker in the form of an integer
+
+
+### Get User Details for a Speaker [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+
+## Get User Details for an Access Code [/v1/access-codes/{access_code_id}/marketer]
++ Parameters
+    + access_code_id: 1 (integer) - ID of the access code in the form of an integer
+
+
+### Get User Details for an Access Code [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+
+## Get User Details for an Email Notification [/v1/email-notifications/{email_notification_id}/user]
++ Parameters
+    + email_notification_id : 1 (integer) - ID of the email notification in the form of an integer
+
+
+### Get User Details for an Email Notification [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+
+## Get User Details for a Discount Code [/v1/discount-codes/{discount_code_id}/marketer]
++ Parameters
+    + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
+
+
+### Get User Details for a Discount Code [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456",
+                    "was-registered-with-order": false,
+                    "is-user-owner": false,
+                    "is-user-organizer": false,
+                    "is-user-coorganizer": false,
+                    "is-user-track-organizer": false,
+                    "is-user-moderator": false,
+                    "is-user-registrar": false,
+                    "is-user-attendee": false
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
+## Check if the email is available [/v1/users/checkEmail]
+Check if the email passed is available or not. True is returned if the email is available, false otherwise.
+
+
+### Check if email is available [POST]
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "email": "test@example.com"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "result": "True"
+        }

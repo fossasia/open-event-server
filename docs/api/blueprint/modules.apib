@@ -1,0 +1,98 @@
+# Group Modules
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `donation-include`  | Enable/Disable donation module | Boolean | **no** |
+| `payment-include`  | Enable/Disable payment module | Boolean | **no** |
+| `ticket-include`  | Enable/Disable ticket module | Boolean | **no** |
+
+**ADMIN**
+
+Switch on and off the modules. Admin access required.
+
+
+## Modules Details [/v1/modules{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Show Modules[GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "donation-include": false,
+                    "ticket-include": true,
+                    "payment-include": true
+                },
+                "type": "module",
+                "id": "1",
+                "links": {
+                    "self": "/v1/modules/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/modules/1"
+            }
+        }
+
+
+### Update Modules [PATCH]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                        "donation-include": "false",
+                        "ticket-include": "true",
+                        "payment-include": "true"
+                    },
+                    "type": "module",
+                    "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "donation-include": false,
+                    "ticket-include": true,
+                    "payment-include": true
+                },
+                "type": "module",
+                "id": "1",
+                "links": {
+                    "self": "/v1/modules/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/modules/1"
+            }
+        }

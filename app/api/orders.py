@@ -1,4 +1,5 @@
 import logging
+import pytz
 from datetime import datetime
 
 import omise
@@ -54,6 +55,24 @@ def check_event_user_ticket_holders(order, data, element):
                                      "You cannot update {} of an order".format(element))
 
 
+def is_payment_valid(order, mode):
+    if mode == 'stripe':
+        return (order.paid_via == 'stripe') and order.brand and order.transaction_id \
+            and order.exp_year and order.last4 and order.exp_month
+    elif mode == 'paypal':
+        return (order.paid_via == 'paypal') and order.transaction_id
+
+
+def check_billing_info(data):
+    if data.get('amount') and data.get('amount') > 0 and not data.get('is_billing_enabled'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
+                                  "Billing information is mandatory for paid orders")
+    if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') and data.get('city') and
+                                               data.get('zipcode') and data.get('country')):
+        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
+                                  "Billing information incomplete")
+
+
 class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
@@ -87,6 +106,8 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if data.get('amount') > 0 and not data.get('is_billing_enabled'):
+            data['is_billing_enabled'] = True
 
         free_ticket_quantity = 0
 
@@ -121,21 +142,20 @@ class OrdersListPost(ResourceList):
         if not data.get('amount'):
             data['amount'] = 0
         # Apply discount only if the user is not event admin
-        if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+        if data.get('discount_code') and not has_access('is_coorganizer', event_id=data['event']):
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount_code'],
                                                                     'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
-                now = datetime.utcnow()
-                valid_from = datetime.strptime(discount_code.valid_from, '%Y-%m-%d %H:%M:%S')
-                valid_till = datetime.strptime(discount_code.valid_till, '%Y-%m-%d %H:%M:%S')
+                now = pytz.utc.localize(datetime.utcnow())
+                valid_from = discount_code.valid_from
+                valid_till = discount_code.valid_till
                 if not (valid_from <= now <= valid_till):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
                 if not TicketingManager.match_discount_quantity(discount_code, data['ticket_holders']):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, 'Discount Usage Exceeded')
-
-            if discount_code.event.id != data['event'] and discount_code.user_for == TICKET:
+            if discount_code.event.id != int(data['event']):
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
 
     def after_create_object(self, order, data, view_kwargs):
@@ -190,6 +210,9 @@ class OrdersListPost(ResourceList):
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
+            for coorganizer in order.event.coorganizers:
+                send_notif_ticket_purchase_organizer(coorganizer, order.invoice_number, order_url, order.event.name,
                                                      order.identifier)
             if order.event.owner:
                 send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
@@ -291,6 +314,8 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('amount') or data.get('is_billing_enabled'):
+            check_billing_info(data)
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
             raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
@@ -348,6 +373,18 @@ class OrderDetail(ResourceDetail):
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
                 data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
+        if data.get('payment_mode') == 'free' and data.get('amount') > 0:
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "payment-mode cannot be free for order with amount > 0")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'stripe' and \
+                not is_payment_valid(order, 'stripe'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify stripe payment")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'paypal' and \
+                not is_payment_valid(order, 'paypal'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify paypal payment")
+
     def after_update_object(self, order, data, view_kwargs):
         """
         :param order:
@@ -369,7 +406,7 @@ class OrderDetail(ResourceDetail):
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)

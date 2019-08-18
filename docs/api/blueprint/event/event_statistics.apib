@@ -1,0 +1,62 @@
+# Group Event Statistics
+
+**General:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `id`  | Event Id | Integer |
+| `identifier`  | Event identifier | String |
+| `speakers`  | No. of speakers | Integer |
+| `sponsors`  | No. of sponsors | Integer |
+| `sessions`  | No. of sessions | Integer |
+| `sessions_draft`  | No. of draft sessions | Integer |
+| `sessions_submitted`  | No. of submitted sessions | Integer |
+| `sessions_accepted`  | No. of accepted sessions | Integer |
+| `sessions_confirmed`  | No. of confirmed sessions | Integer |
+| `sessions_pending`  | No. of pending sessions | Integer |
+| `sessions_rejected`  | No. of rejected sessions | Integer |
+
+
+## Event Statistics Details [/v1/events/{event_identifier}/general-statistics]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Show Event Statistics General [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "speakers": 60,
+                    "sessions": 60,
+                    "sessions-pending": 10,
+                    "sponsors": 441,
+                    "sessions-submitted": 10,
+                    "sessions-rejected": 10,
+                    "sessions-confirmed": 10,
+                    "identifier": "e03a8a32",
+                    "sessions-accepted": 10,
+                    "sessions-draft": 10
+                },
+                "type": "event-statistics-general",
+                "id": "1",
+                "links": {
+                    "self": "/v1/events/1/statistics/general"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/statistics/general"
+            }
+        }

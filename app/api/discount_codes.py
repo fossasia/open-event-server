@@ -276,6 +276,14 @@ class DiscountCodeDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_identifier') and has_access('is_admin'):
+            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                       'event_invoice_identifier')
+            if event_invoice.discount_code_id:
+                view_kwargs['id'] = event_invoice.discount_code_id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('id'):
             try:
                 discount = self.session.query(

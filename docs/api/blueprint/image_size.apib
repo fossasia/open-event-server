@@ -1,0 +1,237 @@
+# Group Image Size
+
+**ADMIN**
+
+To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. Image sizes basically stores the configuration for the width, height and aspect ratio for full size, thumbnail and icon version of various images that is uploaded to the server.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `full-width`  | Full width of the image | integer | - |
+| `full-height` | Full height of the image  | integer | - |
+| `full-quality` | Full quality of the image  | integer | - |
+| `full-aspect` | To maintain aspect ratio of the image or not | boolean (default: `false`) | - |
+| `icon-width`  | Width of the icon | integer | - |
+| `icon-height` | Height of the icon  | integer | - |
+| `icon-quality` | Quality of the icon  | integer | - |
+| `icon-aspect` | To maintain aspect ratio of the icon or not | boolean (default: `false`) | - |
+| `thumbnail-width`  | Width of the thumbnail | integer | - |
+| `thumbnail-height` | Height of the thumbnail  | integer | - |
+| `thumbnail-quality` | Quality of the thumbnail  | integer | - |
+| `thumbnail-aspect` | To maintain aspect ratio of the thumbnail or not | boolean (default: `false`) | - |
+| `logo-width` | Width of te logo  | integer | - |
+| `logo-height` | Height of the logo | integer | - |
+| `type` | Type of the image | string | - |
+
+## Event Image Size Details [/v1/event-image-sizes]
+
+### Get Event Image Size Details [GET]
+Get a single Event image size.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "full-width": 1300,
+              "full-height": 500,
+              "full-aspect": null,
+              "full-quality": 80,
+              "icon-width": 75,
+              "icon-height": 30,
+              "icon-aspect": null,
+              "icon-quality": 80,
+              "thumbnail-width": 500,
+              "thumbnail-height": 200,
+              "thumbnail-aspect": null,
+              "thumbnail-quality": 80,
+              "logo-width": null,
+              "logo-height": null,
+              "type": "event-image"
+            },
+            "type": "event-image-size",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-image-sizes/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-image-sizes/1"
+          }
+        }
+
+
+### Update Event Image Size [PATCH]
+Update a single Event image size
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "full-width": 1300,
+                  "full-height": 500,
+                  "full-aspect": false,
+                  "full-quality": 80,
+                  "icon-width": 75,
+                  "icon-height": 30,
+                  "icon-aspect": true,
+                  "icon-quality": 80,
+                  "thumbnail-width": 500,
+                  "thumbnail-height": 200,
+                  "thumbnail-aspect": true,
+                  "thumbnail-quality": 80,
+                  "logo-width": 32,
+                  "logo-height": 32,
+                  "type": "event-image"
+                },
+                "id": "1",
+                "type": "event-image-size"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "full-aspect": false,
+                        "thumbnail-height": 200,
+                        "thumbnail-aspect": true,
+                        "icon-height": 30,
+                        "icon-aspect": true,
+                        "type": "event-image",
+                        "icon-width": 75,
+                        "icon-quality": 80,
+                        "logo-width": 32,
+                        "full-width": 1300,
+                        "thumbnail-width": 500,
+                        "thumbnail-quality": 80,
+                        "full-height": 500,
+                        "logo-height": 32,
+                        "full-quality": 80
+                    },
+                    "type": "event-image-size",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-image-sizes/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-image-sizes/1"
+                }
+            }
+
+## Speaker Image Size Details [/v1/speaker-image-sizes]
+
+### Get Speaker Image Size Details [GET]
+Get a single Speaker image size.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
+          }
+        }
+
+
+### Update Speaker Image Size [PATCH]
+Update a single Speaker image size
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "icon-size-quality": 80,
+                  "small-size-width-height": 50,
+                  "thumbnail-size-quality": null,
+                  "icon-size-width-height": 35,
+                  "type": "speaker-image",
+                  "thumbnail-size-width-height": 500,
+                  "small-size-quality": 80
+                },
+                "id": "2",
+                "type": "speaker-image-size"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
+          }
+        }
