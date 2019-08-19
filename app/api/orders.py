@@ -127,8 +127,8 @@ class OrdersListPost(ResourceList):
                 free_ticket_quantity += 1
 
         if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
-            raise UnprocessableEntity(
-                {'pointer': '/data/relationships/order'},
+            raise ForbiddenException(
+                {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders"
             )
 
