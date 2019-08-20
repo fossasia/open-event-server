@@ -13,7 +13,7 @@ from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query
 from app.models import db
 from app.models.order import Order
 
@@ -324,10 +324,27 @@ class PaytmPaymentsManager(object):
     Class to manage PayTM payments
     """
 
+    @property
+    def paytm_endpoint(self):
+        if get_settings()['paytm_mode'] == 'test':
+            url = "https://securegw-stage.paytm.in/theia/api/v1/"
+        else:
+            url = "https://securegw.paytm.in/theia/api/v1/"
+        return url
+
     @staticmethod
     def generate_checksum(paytm_params):
-        if get_settings()['paytm_mode'] == 'sandbox':
+        if get_settings()['paytm_mode'] == 'test':
             merchant_key = get_settings()['paytm_sandbox_secret']
         else:
             merchant_key = get_settings()['paytm_live_secret']
         return checksum.generate_checksum_by_str(json.dumps(paytm_params["body"]), merchant_key)
+
+    @staticmethod
+    def hit_paytm_endpoint(url, head, body=None):
+        paytm_params = {}
+        paytm_params["body"] = body
+        paytm_params["head"] = head
+        post_data = json.dumps(paytm_params)
+        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+        return response
