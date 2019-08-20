@@ -766,3 +766,30 @@ def process_transaction(order_identifier, txn_token):
 
     response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
     return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/transaction-status', methods=['GET'])
+def get_transaction_status(order_identifier):
+    paytm_params = dict()
+    paytm_checksum_params = dict()
+    url = ""
+    paytm_mode = get_settings()['paytm_mode']
+    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                   else get_settings()['paytm_live_merchant'])
+    paytm_checksum_params["body"] = {
+        "mid": merchant_id,
+        "orderId": order_identifier
+    }
+    checksum = PaytmPaymentsManager.generate_checksum(paytm_checksum_params)
+
+    paytm_params["MID"] = merchant_id
+    paytm_params["ORDERID"] = order_identifier
+    paytm_params["CHECKSUMHASH"] = checksum
+    post_data = json.dumps(paytm_params)
+
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/order/status"
+    else:
+        url = "https://securegw.paytm.in/order/status"
+    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+    return response
