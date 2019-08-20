@@ -7,6 +7,8 @@ import omise
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
+from app.settings import get_settings
+from app.api.helpers import checksum
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
@@ -315,3 +317,17 @@ class OmisePaymentsManager(object):
                 },
                 )
         return charge
+
+
+class PaytmPaymentsManager(object):
+    """
+    Class to manage PayTM payments
+    """
+
+    @staticmethod
+    def generate_checksum(paytm_params):
+        if get_settings()['paytm_mode'] == 'sandbox':
+            merchant_key = get_settings()['paytm_sandbox_secret']
+        else:
+            merchant_key = get_settings()['paytm_live_secret']
+        return checksum.generate_checksum_by_str(json.dumps(paytm_params["body"]), merchant_key)
