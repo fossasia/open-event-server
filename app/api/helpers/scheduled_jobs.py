@@ -128,14 +128,14 @@ def send_event_fee_notification():
 def send_event_fee_notification_followup():
     from app import current_app as app
     with app.app_context():
-        incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
+        incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'paid').all()
         for incomplete_invoice in incomplete_invoices:
             if incomplete_invoice.amount > 0:
                 prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime(
                     "%b %Y")  # Displayed as Aug 2016
                 app_name = get_settings()['app_name']
                 frontend_url = get_settings()['frontend_url']
-                link = '{}/invoices/{}'.format(frontend_url,
+                link = '{}/event-invoice/{}/review'.format(frontend_url,
                                                incomplete_invoice.identifier)
                 send_followup_email_for_monthly_fee_payment(incomplete_invoice.user.email,
                                                             incomplete_invoice.event.name,
