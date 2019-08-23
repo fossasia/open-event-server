@@ -19,22 +19,20 @@ class TestEventInvoices(OpenEventTestCase):
         with app.test_request_context():
 
             event_invoice1 = EventInvoiceFactory()
-            event_invoice1.created_at = datetime.datetime.now() - datetime.timedelta(days=45)
-            event_invoice1.paid_via = None
+            event_invoice1.status = "due"
             save_to_db(event_invoice1)
 
             event_invoice2 = EventInvoiceFactory()
-            event_invoice2.created_at = datetime.datetime.now() - datetime.timedelta(minutes=15)
-            event_invoice2.paid_via = None
+            event_invoice2.status = "paid"
             save_to_db(event_invoice2)
 
             event_invoice3 = EventInvoiceFactory()
-            event_invoice3.paid_via = 'alipay'
+            event_invoice3.status = "upcoming"
             save_to_db(event_invoice3)
 
-            self.assertEqual([event_invoice1], fetch_event_invoices('due'))
-            self.assertEqual([event_invoice2], fetch_event_invoices('upcoming'))
-            self.assertEqual([event_invoice3], fetch_event_invoices('paid'))
+            self.assertEqual(event_invoice1, fetch_event_invoices('due')[0])
+            self.assertEqual(event_invoice2, fetch_event_invoices('upcoming')[0])
+            self.assertEqual(event_invoice3, fetch_event_invoices('paid')[0])
 
 
 if __name__ == '__main__':
