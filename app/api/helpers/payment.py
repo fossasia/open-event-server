@@ -223,7 +223,7 @@ class PayPalPaymentsManager(object):
             currency_server = transaction.amount.currency
             sale_state = transaction.related_resources[0].sale.state
 
-            if amount_server != order.amount:
+            if float(amount_server) != order.amount:
                 return False, 'Payment amount does not match order'
             elif currency_server != order.event.payment_currency:
                 return False, 'Payment currency does not match order'
