@@ -211,6 +211,7 @@ class PayPalPaymentsManager(object):
         """
         Verify Paypal payment one more time for paying with Paypal in mobile client
         """
+        PayPalPaymentsManager.configure_paypal()
         try:
             payment_server = paypalrestsdk.Payment.find(payment_id)
             if payment_server.state != 'approved':
@@ -222,11 +223,11 @@ class PayPalPaymentsManager(object):
             currency_server = transaction.amount.currency
             sale_state = transaction.related_resources[0].sale.state
 
-            if amount_server != order.amount:
+            if float(amount_server) != order.amount:
                 return False, 'Payment amount does not match order'
             elif currency_server != order.event.payment_currency:
                 return False, 'Payment currency does not match order'
-            if sale_state != 'completed':
+            elif sale_state != 'completed':
                 return False, 'Sale not completed'
             elif PayPalPaymentsManager.used_payment(payment_id, order):
                 return False, 'Payment already been verified'
