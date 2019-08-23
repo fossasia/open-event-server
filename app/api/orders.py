@@ -629,6 +629,7 @@ def omise_checkout(order_identifier):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+@jwt_required
 def initiate_transaction(order_identifier):
     """
     Initiating a PayTM transaction to obtain the txn token
@@ -671,6 +672,7 @@ def initiate_transaction(order_identifier):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>')
+@jwt_required
 def fetch_payment_options(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     if paytm_mode == 'test':
@@ -691,6 +693,7 @@ def fetch_payment_options(order_identifier, txn_token):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>', methods=['POST'])
+@jwt_required
 def send_otp(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     if paytm_mode == 'test':
@@ -734,6 +737,7 @@ def validate_otp(order_identifier, txn_token):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>')
+@jwt_required
 def process_transaction(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
