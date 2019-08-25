@@ -1,8 +1,11 @@
 import logging
+import json
 import pytz
-from datetime import datetime
-
+import time
 import omise
+import requests
+
+from datetime import datetime
 from flask import request, jsonify, Blueprint, url_for, redirect
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -10,6 +13,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.settings import get_settings
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
@@ -22,7 +26,7 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
     create_pdf_tickets_for_holder, create_onsite_attendees_for_order
-from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager, PaytmPaymentsManager
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -36,6 +40,7 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
@@ -127,8 +132,8 @@ class OrdersListPost(ResourceList):
                 free_ticket_quantity += 1
 
         if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
-            raise UnprocessableEntity(
-                {'pointer': '/data/relationships/order'},
+            raise ForbiddenException(
+                {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders"
             )
 
@@ -539,7 +544,6 @@ def create_paypal_payment(order_identifier):
     else:
         return jsonify(status=False, error=response)
 
-
 @order_misc_routes.route('/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST'])
 @jwt_required
 def verify_mobile_paypal_payment(order_identifier):
@@ -622,3 +626,143 @@ def omise_checkout(order_identifier):
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
         return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+@jwt_required
+def initiate_transaction(order_identifier):
+    """
+    Initiating a PayTM transaction to obtain the txn token
+    :param order_identifier:
+    :return: JSON response containing the signature & txn token
+    """
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    paytm_mode = get_settings()['paytm_mode']
+    paytm_params = {}
+    # body parameters
+    paytm_params["body"] = {
+        "requestType": "Payment",
+        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                else get_settings()['paytm_live_merchant']),
+        "websiteName": "eventyay",
+        "orderId": order_identifier,
+        "callbackUrl": "",
+        "txnAmount": {
+            "value": order.amount,
+            "currency": "INR",
+        },
+        "userInfo": {
+            "custId": order.user.id,
+        },
+    }
+    checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
+    # head parameters
+    paytm_params["head"] = {
+        "signature"	: checksum
+    }
+    post_data = json.dumps(paytm_params)
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"})
+    return response.json()
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>')
+@jwt_required
+def fetch_payment_options(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>', methods=['POST'])
+@jwt_required
+def send_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"mobileNumber": request.json['data']['phone']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/validate_otp/<string:txn_token>', methods=['POST'])
+def validate_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"otp": request.json['data']['otp']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>')
+@jwt_required
+def process_transaction(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                   else get_settings()['paytm_live_merchant'])
+
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+
+    body = {
+        "requestType": "NATIVE",
+        "mid": merchant_id,
+        "orderId": order_identifier,
+        "paymentMode": "BALANCE"
+    }
+
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
