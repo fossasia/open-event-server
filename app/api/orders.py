@@ -1,11 +1,11 @@
 import logging
 import json
 import pytz
-from datetime import datetime
+import time
+import omise
 import requests
 
-
-import omise
+from datetime import datetime
 from flask import request, jsonify, Blueprint, url_for, redirect
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -40,6 +40,7 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
@@ -543,7 +544,6 @@ def create_paypal_payment(order_identifier):
     else:
         return jsonify(status=False, error=response)
 
-
 @order_misc_routes.route('/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST'])
 @jwt_required
 def verify_mobile_paypal_payment(order_identifier):
@@ -629,6 +629,7 @@ def omise_checkout(order_identifier):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+@jwt_required
 def initiate_transaction(order_identifier):
     """
     Initiating a PayTM transaction to obtain the txn token
@@ -641,14 +642,14 @@ def initiate_transaction(order_identifier):
     # body parameters
     paytm_params["body"] = {
         "requestType": "Payment",
-        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'sandbox'
+        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
                 else get_settings()['paytm_live_merchant']),
         "websiteName": "eventyay",
-        "orderId": order.id,
+        "orderId": order_identifier,
         "callbackUrl": "",
         "txnAmount": {
             "value": order.amount,
-            "currency": order.event.payment_currency,
+            "currency": "INR",
         },
         "userInfo": {
             "custId": order.user.id,
@@ -660,11 +661,108 @@ def initiate_transaction(order_identifier):
         "signature"	: checksum
     }
     post_data = json.dumps(paytm_params)
-    if paytm_mode == 'sandbox':
+    if paytm_mode == 'test':
         url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
-              format(get_settings()['paytm_sandbox_merchant'], order.id)
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
     else:
         url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
-              format(get_settings()['paytm_sandbox_merchant'], order.id)
+            format(get_settings()['paytm_live_merchant'], order_identifier)
     response = requests.post(url, data=post_data, headers={"Content-type": "application/json"})
     return response.json()
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>')
+@jwt_required
+def fetch_payment_options(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>', methods=['POST'])
+@jwt_required
+def send_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"mobileNumber": request.json['data']['phone']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/validate_otp/<string:txn_token>', methods=['POST'])
+def validate_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"otp": request.json['data']['otp']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>')
+@jwt_required
+def process_transaction(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                   else get_settings()['paytm_live_merchant'])
+
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+
+    body = {
+        "requestType": "NATIVE",
+        "mid": merchant_id,
+        "orderId": order_identifier,
+        "paymentMode": "BALANCE"
+    }
+
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
