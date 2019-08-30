@@ -158,7 +158,7 @@ class OrdersListPost(ResourceList):
                 valid_till = discount_code.valid_till
                 if not (valid_from <= now <= valid_till):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
-                if not TicketingManager.match_discount_quantity(discount_code, data['ticket_holders']):
+                if not TicketingManager.match_discount_quantity(discount_code, None, data['ticket_holders']):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, 'Discount Usage Exceeded')
             if discount_code.event.id != int(data['event']):
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
