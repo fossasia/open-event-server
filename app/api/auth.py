@@ -29,16 +29,18 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
-from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.order import create_pdf_tickets_for_holder, calculate_order_amount
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
+from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
+from app.models.discount_code import DiscountCode
 from app.models.order import Order
 from app.models.user import User
 from app.models.event_invoice import EventInvoice
@@ -503,3 +505,18 @@ def resend_emails():
                                             "Only placed and completed orders have confirmation").respond()
     else:
         return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
+
+
+@ticket_blueprint.route('/orders/calculate-amount', methods=['POST'])
+@jwt_required
+def calculate_amount():
+    data = request.get_json()
+    tickets = data['tickets']
+    discount_code = None
+    if 'discount-code' in data:
+        discount_code_id = data['discount-code']
+        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
+        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
+            return UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
+
+    return jsonify(calculate_order_amount(tickets, discount_code))
