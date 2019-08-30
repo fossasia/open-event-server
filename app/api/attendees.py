@@ -56,8 +56,9 @@ class AttendeeListPost(ResourceList):
                 "Ticket belongs to a different Event"
             )
         # Check if the ticket is already sold out or not.
-        if get_count(db.session.query(TicketHolder.id).
-                     filter_by(ticket_id=int(data['ticket']), deleted_at=None)) >= ticket.quantity:
+        if get_count(db.session.query(TicketHolder).
+                     filter(TicketHolder.pdf_url != "", TicketHolder.ticket_id == int(data['ticket']),
+                            TicketHolder.deleted_at is not None)) >= ticket.quantity:
             raise ConflictException(
                 {'pointer': '/data/attributes/ticket_id'},
                 "Ticket already sold out"
