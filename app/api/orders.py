@@ -561,6 +561,7 @@ def verify_mobile_paypal_payment(order_identifier):
 
 
 @alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
+@jwt_required
 def create_source(order_identifier):
     """
     Create a source object for alipay payments.
@@ -600,6 +601,7 @@ def alipay_return_uri(order_identifier):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET'])
+@jwt_required
 def omise_checkout(order_identifier):
     """
     Charging the user and returning payment response for Omise Gateway
