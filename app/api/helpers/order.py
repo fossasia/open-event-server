@@ -11,6 +11,7 @@ from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.ticket import Ticket
+from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
 
@@ -64,7 +65,7 @@ def create_pdf_tickets_for_holder(order):
             if (not holder.user) or holder.user.id != order.user_id:
                 # holder is not the order buyer.
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
-                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
+                                      UPLOAD_PATHS['pdf']['tickets_all'],
                                       dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
             else:
                 # holder is the order buyer.
@@ -131,3 +132,86 @@ def create_onsite_attendees_for_order(data):
 
     # delete from the data.
     del data['on_site_tickets']
+
+
+def calculate_order_amount(tickets, discount_code):
+    event = tax = tax_included = fees = None
+    total_amount = total_tax = total_discount = 0.0
+    ticket_list = []
+    for ticket_info in tickets:
+        tax_amount = tax_percent = 0.0
+        tax_data = {}
+        discount_amount = discount_percent = 0.0
+        discount_data = {}
+        sub_total = ticket_fee = 0.0
+
+        ticket_identifier = ticket_info['id']
+        quantity = ticket_info['quantity']
+        ticket = safe_query_without_soft_deleted_entries(db, Ticket, 'id', ticket_identifier, 'id')
+        if not event:
+            event = ticket.event
+            fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
+        elif ticket.event.id != event.id:
+            raise UnprocessableEntity({'source': 'data/tickets'}, "Invalid Ticket")
+
+        if not tax and event.tax:
+            tax = event.tax
+            tax_included = tax.is_tax_included_in_price
+
+        if ticket.type == 'donation':
+            price = ticket_info.get('price')
+            if not price or price > ticket.max_price or price < ticket.min_price:
+                raise UnprocessableEntity({'source': 'data/tickets'}, "Price for donation ticket invalid")
+        else:
+            price = ticket.price
+
+        if discount_code:
+            for code in ticket.discount_codes:
+                if discount_code.id == code.id:
+                    if code.type == 'amount':
+                        discount_amount = code.value
+                        discount_percent = (discount_amount / price) * 100
+                    else:
+                        discount_amount = (price * code.value)/100
+                        discount_percent = code.value
+                    discount_data = {
+                        'code': discount_code.code,
+                        'percent': round(discount_percent, 2),
+                        'amount': round(discount_amount, 2)
+                    }
+
+        if tax:
+            if not tax_included:
+                tax_amount = ((price - discount_amount) * tax.rate)/100
+                tax_percent = tax.rate
+            else:
+                tax_amount = ((price - discount_amount) * tax.rate)/(100 + tax.rate)
+                tax_percent = tax.rate
+            tax_data = {
+                'percent': round(tax_percent, 2),
+                'amount': round(tax_amount, 2),
+            }
+
+        total_tax = total_tax + tax_amount * quantity
+        total_discount = total_discount + discount_amount*quantity
+        if fees and not ticket.is_fee_absorbed:
+            ticket_fee = fees.service_fee * (price * quantity) / 100
+            if ticket_fee > fees.maximum_fee:
+                ticket_fee = fees.maximum_fee
+        if tax_included:
+            sub_total = ticket_fee + (price - discount_amount)*quantity
+        else:
+            sub_total = ticket_fee + (price + tax_amount - discount_amount)*quantity
+        total_amount = total_amount + sub_total
+        ticket_list.append({
+            'id': ticket.id,
+            'name': ticket.name,
+            'price': price,
+            'quantity': quantity,
+            'discount': discount_data,
+            'tax': tax_data,
+            'ticket_fee': round(ticket_fee, 2),
+            'sub_total': round(sub_total, 2)
+        })
+    return dict(tax_included=tax_included, total_amount=round(total_amount, 2), total_tax=round(total_tax, 2),
+                total_discount=round(total_discount, 2), tickets=ticket_list)

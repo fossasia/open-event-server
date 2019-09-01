@@ -19,7 +19,7 @@ class TestStorage(OpenEventTestCase):
     @patch('app.api.helpers.storage.get_settings', return_value={'static_domain': 'https://next.eventyay.com'})
     @patch('app.api.helpers.storage.UploadedFile')
     def test_upload_local(self, uploadedfile_object, settings, generated_hash, uploadlocal):
-        expected_response = 'https://next.eventyay.com/media/upload_key/hash/test.pdf'
+        expected_response = 'https://next.eventyay.com/static/media/upload_key/hash/test.pdf'
         uploadedfile_object.filename = 'test.pdf'
 
         with app.test_request_context():

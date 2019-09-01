@@ -1,8 +1,11 @@
 import logging
+import json
 import pytz
-from datetime import datetime
-
+import time
 import omise
+import requests
+
+from datetime import datetime
 from flask import request, jsonify, Blueprint, url_for, redirect
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -10,6 +13,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.settings import get_settings
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
@@ -22,7 +26,7 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
     create_pdf_tickets_for_holder, create_onsite_attendees_for_order
-from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager, PaytmPaymentsManager
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -36,6 +40,7 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
@@ -53,6 +58,24 @@ def check_event_user_ticket_holders(order, data, element):
         if data[element] != ticket_holders and element not in get_updatable_fields():
             raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                      "You cannot update {} of an order".format(element))
+
+
+def is_payment_valid(order, mode):
+    if mode == 'stripe':
+        return (order.paid_via == 'stripe') and order.brand and order.transaction_id \
+            and order.exp_year and order.last4 and order.exp_month
+    elif mode == 'paypal':
+        return (order.paid_via == 'paypal') and order.transaction_id
+
+
+def check_billing_info(data):
+    if data.get('amount') and data.get('amount') > 0 and not data.get('is_billing_enabled'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
+                                  "Billing information is mandatory for paid orders")
+    if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') and data.get('city') and
+                                               data.get('zipcode') and data.get('country')):
+        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
+                                  "Billing information incomplete")
 
 
 class OrdersListPost(ResourceList):
@@ -88,6 +111,8 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if data.get('amount') > 0 and not data.get('is_billing_enabled'):
+            data['is_billing_enabled'] = True
 
         free_ticket_quantity = 0
 
@@ -107,8 +132,8 @@ class OrdersListPost(ResourceList):
                 free_ticket_quantity += 1
 
         if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
-            raise UnprocessableEntity(
-                {'pointer': '/data/relationships/order'},
+            raise ForbiddenException(
+                {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders"
             )
 
@@ -133,7 +158,7 @@ class OrdersListPost(ResourceList):
                 valid_till = discount_code.valid_till
                 if not (valid_from <= now <= valid_till):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
-                if not TicketingManager.match_discount_quantity(discount_code, data['ticket_holders']):
+                if not TicketingManager.match_discount_quantity(discount_code, None, data['ticket_holders']):
                     raise UnprocessableEntity({'source': 'discount_code_id'}, 'Discount Usage Exceeded')
             if discount_code.event.id != int(data['event']):
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
@@ -190,6 +215,9 @@ class OrdersListPost(ResourceList):
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
+            for coorganizer in order.event.coorganizers:
+                send_notif_ticket_purchase_organizer(coorganizer, order.invoice_number, order_url, order.event.name,
                                                      order.identifier)
             if order.event.owner:
                 send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
@@ -291,6 +319,8 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('amount') or data.get('is_billing_enabled'):
+            check_billing_info(data)
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
             raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
@@ -348,6 +378,18 @@ class OrderDetail(ResourceDetail):
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
                 data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
+        if data.get('payment_mode') == 'free' and data.get('amount') > 0:
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "payment-mode cannot be free for order with amount > 0")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'stripe' and \
+                not is_payment_valid(order, 'stripe'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify stripe payment")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'paypal' and \
+                not is_payment_valid(order, 'paypal'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify paypal payment")
+
     def after_update_object(self, order, data, view_kwargs):
         """
         :param order:
@@ -369,7 +411,7 @@ class OrderDetail(ResourceDetail):
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
@@ -502,8 +544,24 @@ def create_paypal_payment(order_identifier):
     else:
         return jsonify(status=False, error=response)
 
+@order_misc_routes.route('/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST'])
+@jwt_required
+def verify_mobile_paypal_payment(order_identifier):
+    """
+    Verify paypal payment made on mobile client
+    :return: The status of order verification
+    """
+    try:
+        payment_id = request.json['data']['attributes']['payment-id']
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
+    return jsonify(status=status, error=error)
+
 
 @alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
+@jwt_required
 def create_source(order_identifier):
     """
     Create a source object for alipay payments.
@@ -543,6 +601,7 @@ def alipay_return_uri(order_identifier):
 
 
 @order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET'])
+@jwt_required
 def omise_checkout(order_identifier):
     """
     Charging the user and returning payment response for Omise Gateway
@@ -569,3 +628,170 @@ def omise_checkout(order_identifier):
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
         return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+@jwt_required
+def initiate_transaction(order_identifier):
+    """
+    Initiating a PayTM transaction to obtain the txn token
+    :param order_identifier:
+    :return: JSON response containing the signature & txn token
+    """
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    paytm_mode = get_settings()['paytm_mode']
+    paytm_params = {}
+    # body parameters
+    paytm_params["body"] = {
+        "requestType": "Payment",
+        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                else get_settings()['paytm_live_merchant']),
+        "websiteName": "eventyay",
+        "orderId": order_identifier,
+        "callbackUrl": "",
+        "txnAmount": {
+            "value": order.amount,
+            "currency": "INR",
+        },
+        "userInfo": {
+            "custId": order.user.id,
+        },
+    }
+    checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
+    # head parameters
+    paytm_params["head"] = {
+        "signature"	: checksum
+    }
+    post_data = json.dumps(paytm_params)
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"})
+    return response.json()
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>')
+@jwt_required
+def fetch_payment_options(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>', methods=['POST'])
+@jwt_required
+def send_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"mobileNumber": request.json['data']['phone']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/validate_otp/<string:txn_token>', methods=['POST'])
+def validate_otp(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+    head = {
+        "clientId": "C11",
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+    body = {"otp": request.json['data']['otp']}
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>')
+@jwt_required
+def process_transaction(order_identifier, txn_token):
+    paytm_mode = get_settings()['paytm_mode']
+    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                   else get_settings()['paytm_live_merchant'])
+
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+    else:
+        url = "https://securegw.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
+            format(get_settings()['paytm_live_merchant'], order_identifier)
+
+    head = {
+        "version": "v1",
+        "requestTimestamp": str(int(time.time())),
+        "channelId": "WEB",
+        "txnToken": txn_token
+    }
+
+    body = {
+        "requestType": "NATIVE",
+        "mid": merchant_id,
+        "orderId": order_identifier,
+        "paymentMode": "BALANCE"
+    }
+
+    response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
+    return response
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/paytm/transaction-status', methods=['GET'])
+def get_transaction_status(order_identifier):
+    paytm_params = dict()
+    paytm_checksum_params = dict()
+    url = ""
+    paytm_mode = get_settings()['paytm_mode']
+    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
+                   else get_settings()['paytm_live_merchant'])
+    paytm_checksum_params["body"] = {
+        "mid": merchant_id,
+        "orderId": order_identifier
+    }
+    checksum = PaytmPaymentsManager.generate_checksum(paytm_checksum_params)
+
+    paytm_params["MID"] = merchant_id
+    paytm_params["ORDERID"] = order_identifier
+    paytm_params["CHECKSUMHASH"] = checksum
+    post_data = json.dumps(paytm_params)
+
+    if paytm_mode == 'test':
+        url = "https://securegw-stage.paytm.in/order/status"
+    else:
+        url = "https://securegw.paytm.in/order/status"
+    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+    return response

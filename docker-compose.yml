@@ -1,25 +1,20 @@
 version: '3.5'
 
 x-environment-vars: &environment-vars
+  POSTGRES_HOST: postgres
   DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-  ELASTICSEARCH_HOST: elastic:9200
   REDIS_URL: redis://redis:6379/0
   ADMIN_EMAIL: "@{ADMIN_EMAIL}"
   ADMIN_PASSWORD: "@{ADMIN_PASSWORD}"
 
 x-defaults: &defaults
-  build: .
+  image: eventyay/open-event-server
   restart: unless-stopped
   environment:
     <<: *environment-vars
   depends_on:
     - postgres
     - redis
-    - elastic
-  links:
-    - postgres:postgres
-    - redis:redis
-    - elastic:elastic
   volumes:
     - ./static:/data/app/static
 
@@ -44,18 +39,6 @@ services:
     volumes:
       - rd:/var/lib/redis/data
 
-  elastic:
-    image: elasticsearch:5.6.12-alpine
-    container_name: opev-elastic-search
-    restart: unless-stopped
-    environment:
-        - discovery.type=single-node
-    volumes:
-        - es:/usr/share/elasticsearch/data
-    ports:
-        - 9200:9200
-        - 9300:9300
-
   web:
     <<: *defaults
     container_name: opev-web
@@ -73,4 +56,3 @@ services:
 volumes:
     pg:
     rd:
-    es:

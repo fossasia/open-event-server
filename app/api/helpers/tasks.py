@@ -10,7 +10,7 @@ from marrow.mailer import Mailer, Message
 from app import get_settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
-    Mail, Attachment, FileContent, FileName,
+    Mail, Attachment, FileContent, FileName, From,
     FileType, Disposition)
 
 from app import make_celery
@@ -52,10 +52,18 @@ import base64
 celery = make_celery()
 
 
+def empty_attachments_send(mail_client, message):
+    """
+    Empty attachments and send mail
+    """
+    logging.warning("Attachments could not be sent. Sending confirmation mail without attachments...")
+    message.attachments = []
+    mail_client.send(message)
+
 @celery.task(name='send.email.post.sendgrid')
 def send_email_task_sendgrid(payload, headers, smtp_config):
     try:
-        message = Mail(from_email=payload['from'],
+        message = Mail(from_email=From(payload['from'], payload['fromname']),
                        to_emails=payload['to'],
                        subject=payload['subject'],
                        html_content=payload["html"])
@@ -79,6 +87,8 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
         if e.code == 429:
             logging.warning("Sendgrid quota has exceeded")
             send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+        elif e.code == 554:
+            empty_attachments_send(sendgrid_client, message)
         else:
             logging.exception("The following error has occurred with sendgrid-{}".format(str(e)))
 
@@ -96,17 +106,21 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
             }
         }
 
-    mailer = Mailer(mailer_config)
-    mailer.start()
-    message = Message(author=payload['from'], to=payload['to'])
-    message.subject = payload['subject']
-    message.plain = strip_tags(payload['html'])
-    message.rich = payload['html']
-    if payload['attachments'] is not None:
-        for attachment in payload['attachments']:
-            message.attach(name=attachment)
-    mailer.send(message)
-    logging.info('Message sent via SMTP')
+    try:
+        mailer = Mailer(mailer_config)
+        mailer.start()
+        message = Message(author=payload['from'], to=payload['to'])
+        message.subject = payload['subject']
+        message.plain = strip_tags(payload['html'])
+        message.rich = payload['html']
+        if payload['attachments'] is not None:
+            for attachment in payload['attachments']:
+                message.attach(name=attachment)
+        mailer.send(message)
+        logging.info('Message sent via SMTP')
+    except urllib.error.HTTPError as e:
+        if e.code == 554:
+            empty_attachments_send(mailer, message)
     mailer.stop()
 
 @celery.task(base=RequestContextTask, name='resize.event.images', bind=True)

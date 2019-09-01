@@ -86,7 +86,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
 
         DiscountCodeSchemaEvent.quantity_validation_helper(data)
 
-        if 'tickets_number' in data and 'max_quantity' in data:
+        if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
@@ -149,7 +149,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
 
         DiscountCodeSchemaTicket.quantity_validation_helper(data)
 
-        if 'tickets_number' in data and 'max_quantity' in data:
+        if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
