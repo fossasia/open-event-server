@@ -16,6 +16,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
     AttendeeRelationshipRequired, AttendeeListPost
 from app.api.bootstrap import api
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
+from app.api.custom_form_options import CustomFormOptionList, CustomFormOptionDetail, CustomFormOptionRelationship
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail, CustomSystemRoleRelationship
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
@@ -575,9 +576,16 @@ api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
 api.route(CustomFormListPost, 'custom_form_list_post', '/custom-forms')
 api.route(CustomFormList, 'custom_form_list', '/events/<int:event_id>/custom-forms',
           '/events/<event_identifier>/custom-forms')
-api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
+api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>',
+          '/custom-form-options/<int:custom_form_option_id>/custom-form')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
           '/custom-forms/<int:id>/relationships/event')
+
+# custom form options
+api.route(CustomFormOptionList, 'custom_form_option_list', '/custom-forms/<int:custom_form_id>/custom-form-options')
+api.route(CustomFormOptionDetail, 'custom_form_option_detail', '/custom-form-options/<int:id>')
+api.route(CustomFormOptionRelationship, 'custom_form_option_form',
+          '/custom-form-options/<int:id>/relationships/custom-form')
 
 # FAQ
 api.route(FaqListPost, 'faq_list_post', '/faqs')

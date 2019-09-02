@@ -27,8 +27,10 @@ class CustomFormSchema(SoftDeletionSchema):
     type = fields.Str(default="text", validate=validate.OneOf(
         choices=["text", "checkbox", "select", "file", "image", "email",
                  "number"]))
+    description = fields.Str(allow_none=True)
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
+    is_complex = fields.Boolean(default=False)
     is_fixed = fields.Boolean(default=False)
     event = Relationship(attribute='event',
                          self_view='v1.custom_form_event',
