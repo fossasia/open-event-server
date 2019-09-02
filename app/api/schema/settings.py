@@ -30,6 +30,9 @@ class SettingSchemaPublic(Schema):
     # Order Expiry Time
     order_expiry_time = fields.Integer(allow_none=False, default=15, validate=lambda n: 1 <= n <= 60)
 
+    # Maximum number of complex custom fields allowed for a given form
+    max_complex_custom_fields = fields.Integer(allow_none=False, default=30, validate=lambda n: 1 <= n <= 30)
+
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 
@@ -156,7 +159,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     in_client_secret = fields.Str(allow_none=True)
 
     #
-    # Payment Gateway
+    # Payment Gateways
     #
 
     # Stripe Credantials

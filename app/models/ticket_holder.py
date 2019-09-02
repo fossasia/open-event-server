@@ -46,6 +46,7 @@ class TicketHolder(SoftDeletionModel):
     checkout_times = db.Column(db.String)
     attendee_notes = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    complex_field_values = db.Column(db.JSON)
     user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
                            backref='attendees')
 
@@ -83,7 +84,8 @@ class TicketHolder(SoftDeletionModel):
                  order_id=None,
                  pdf_url=None,
                  event_id=None,
-                 deleted_at=None):
+                 deleted_at=None,
+                 complex_field_values=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -118,6 +120,7 @@ class TicketHolder(SoftDeletionModel):
         self.pdf_url = pdf_url
         self.event_id = event_id
         self.deleted_at = deleted_at
+        self.complex_field_values = complex_field_values
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id
