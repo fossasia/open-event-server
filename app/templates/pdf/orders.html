@@ -91,7 +91,7 @@
                                 {{ order.status | capitalize }}
                             {% endif %}<br>
                             {{ order.tickets_count }}<br>
-                            {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
+                            {{ event.payment_currency }}{{ order.amount | money }}<br>
                             {% if order.status == 'completed' %}
                                 {{ order.paid_via | capitalize }}
                             {% else %}
