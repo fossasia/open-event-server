@@ -84,40 +84,6 @@ def create_services():
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
 
-    if current_app.config['DEVELOPMENT']:
-        # get the stripe keys from the env file and save it in the settings.
-        env.read_envfile()
-        stripe_secret_key = env('STRIPE_SECRET_KEY', default=None)
-        stripe_publishable_key = env('STRIPE_PUBLISHABLE_KEY', default=None)
-        stripe_client_id = env('STRIPE_CLIENT_ID', default=None)
-        paypal_sandbox_client = env('PAYPAL_SANDBOX_CLIENT', default=None)
-        paypal_sandbox_secret = env('PAYPAL_SANDBOX_SECRET', default=None)
-        fb_client_id = env('FACEBOOK_CLIENT_ID', default=None)
-        fb_client_secret = env('FACEBOOK_CLIENT_SECRET', default=None)
-        google_client_id = env('GOOGLE_CLIENT_ID', default=None)
-        google_client_secret = env('GOOGLE_CLIENT_SECRET', default=None)
-        tw_consumer_key = env('TWITTER_CONSUMER_KEY', default=None)
-        tw_consumer_secret = env('TWITTER_CONSUMER_SECRET', default=None)
-        in_client_id = env('INSTAGRAM_CLIENT_ID', default=None)
-        in_client_secret = env('INSTAGRAM_CLIENT_SECRET', default=None)
-
-        setting, _ = get_or_create(Setting, app_name='Open Event')
-        setting.stripe_client_id = stripe_client_id
-        setting.stripe_publishable_key = stripe_publishable_key
-        setting.stripe_secret_key = stripe_secret_key
-        setting.paypal_sandbox_client = paypal_sandbox_client
-        setting.paypal_sandbox_secret = paypal_sandbox_secret
-        setting.fb_client_id = fb_client_id
-        setting.fb_client_secret = fb_client_secret
-        setting.google_client_id = google_client_id
-        setting.google_client_secret = google_client_secret
-        setting.tw_consumer_key = tw_consumer_key
-        setting.tw_consumer_secret = tw_consumer_secret
-        setting.in_client_id = in_client_id
-        setting.in_client_secret = in_client_secret
-        save_to_db(setting)
-
-
 def create_event_image_sizes():
     get_or_create(
         ImageSizes, type='event-image', full_width=1300,
