@@ -7,6 +7,7 @@ from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
+from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.speaker import Speaker
 from app.api.helpers.jwt import get_identity
@@ -405,6 +406,13 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         except NoResultFound:
             return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
         view_kwargs['event_id'] = event.id
+
+    if view_kwargs.get('event_invoice_identifier') is not None:
+        try:
+            event_invoice = EventInvoice.query.filter_by(identifier=view_kwargs['event_invoice_identifier']).one()
+        except NoResultFound:
+            return NotFoundError({'parameter': 'event_invoice_identifier'}, 'Event Invoice not found').respond()
+        view_kwargs['id'] = event_invoice.id
 
     # Only for events API
     if 'identifier' in view_kwargs:

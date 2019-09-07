@@ -16,6 +16,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
     AttendeeRelationshipRequired, AttendeeListPost
 from app.api.bootstrap import api
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
+from app.api.custom_form_options import CustomFormOptionList, CustomFormOptionDetail, CustomFormOptionRelationship
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail, CustomSystemRoleRelationship
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
@@ -89,11 +90,12 @@ from app.api.users import UserList, UserDetail, UserRelationship
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
+          '/event-invoices/<int:event_invoice_id>/user', '/event-invoices/<event_invoice_identifier>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
           '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user', '/events/<int:event_id>/owner',
-          '/alternate-emails/<int:user_email_id>/user', '/favourite-events/<int:user_favourite_event_id>/user')
+          '/alternate-emails/<int:user_email_id>/user', '/favourite-events/<int:user_favourite_event_id>/user',
+          '/speakers/<int:speaker_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -261,14 +263,14 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/speakers-calls/<int:speakers_call_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyrights/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
-          '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
+          '/event-invoices/<int:event_invoice_id>/event', '/event-invoices/<event_invoice_identifier>/event',
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
           '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event',
-          '/user-favourite-events/<int:user_favourite_event_id>/event')
+          '/user-favourite-events/<int:user_favourite_event_id>/event', '/discount-codes/<int:discount_code_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -465,15 +467,20 @@ api.route(TaxRelationship, 'tax_event', '/taxes/<int:id>/relationships/event')
 # event invoices
 api.route(EventInvoiceList, 'event_invoice_list', '/event-invoices', '/events/<int:event_id>/event-invoices',
           '/events/<event_identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
-api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>')
+api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>',
+          '/event-invoices/<event_invoice_identifier>')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_user',
-          '/event-invoices/<int:id>/relationships/user')
+          '/event-invoices/<int:id>/relationships/user',
+          '/event-invoices/<event_invoice_identifier>/relationships/user')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_event',
-          '/event-invoices/<int:id>/relationships/event')
+          '/event-invoices/<int:id>/relationships/event',
+          '/event-invoices/<event_invoice_identifier>/relationships/event')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_order',
-          '/event-invoices/<int:id>/relationships/order')
+          '/event-invoices/<int:id>/relationships/order',
+          '/event-invoices/<event_invoice_identifier>/relationships/order')
 api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
-          '/event-invoices/<int:id>/relationships/discount-code')
+          '/event-invoices/<int:id>/relationships/discount-code',
+          '/event-invoices/<event_invoice_identifier>/relationships/discount-code')
 
 # discount codes
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
@@ -483,6 +490,7 @@ api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discou
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code',
           '/events/<int:discount_event_id>/discount-codes/<code>',
+          '/event-invoices/<event_invoice_identifier>/discount-code',
           '/events/<discount_event_identifier>/discount-codes/<code>')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
@@ -568,9 +576,16 @@ api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
 api.route(CustomFormListPost, 'custom_form_list_post', '/custom-forms')
 api.route(CustomFormList, 'custom_form_list', '/events/<int:event_id>/custom-forms',
           '/events/<event_identifier>/custom-forms')
-api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
+api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>',
+          '/custom-form-options/<int:custom_form_option_id>/custom-form')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
           '/custom-forms/<int:id>/relationships/event')
+
+# custom form options
+api.route(CustomFormOptionList, 'custom_form_option_list', '/custom-forms/<int:custom_form_id>/custom-form-options')
+api.route(CustomFormOptionDetail, 'custom_form_option_detail', '/custom-form-options/<int:id>')
+api.route(CustomFormOptionRelationship, 'custom_form_option_form',
+          '/custom-form-options/<int:id>/relationships/custom-form')
 
 # FAQ
 api.route(FaqListPost, 'faq_list_post', '/faqs')

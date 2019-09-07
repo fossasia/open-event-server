@@ -30,7 +30,7 @@ from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from app.api.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \
     expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due
@@ -104,9 +104,16 @@ def create_app():
     # set up jwt
     app.config['JWT_HEADER_TYPE'] = 'JWT'
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=365)
     app.config['JWT_ERROR_MESSAGE_KEY'] = 'error'
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
+    app.config['JWT_REFRESH_COOKIE_PATH'] = '/v1/auth/token/refresh'
+    app.config['JWT_SESSION_COOKIE'] = False
+    app.config['JWT_BLACKLIST_ENABLED'] = True
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
     _jwt = JWTManager(app)
     _jwt.user_loader_callback_loader(jwt_user_loader)
+    _jwt.token_in_blacklist_loader(is_token_blacklisted)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
@@ -240,7 +247,7 @@ if app.config['ENABLE_ELASTICSEARCH']:
 
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+scheduler.add_job(send_event_fee_notification_followup, 'cron', day=1, month='1-12')
 scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
 scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
 scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')

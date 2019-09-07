@@ -1,0 +1,83 @@
+# Group Event Locations
+
+Event Locations for Events.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event type | string | - |
+| `slug` | Slug of the event type | string | - |
+
+
+## Event Locations Collection [/v1/event-locations{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
+### List All Event Locations [GET]
+Get a list of Event Locations.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "india",
+                "name": "India"
+              },
+              "id": "1"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "singapore",
+                "name": "Singapore"
+              },
+              "id": "2"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "berlin",
+                "name": "Berlin"
+              },
+              "id": "3"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "new-york",
+                "name": "New York"
+              },
+              "id": "4"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "hong-kong",
+                "name": "Hong Kong"
+              },
+              "id": "5"
+            }
+          ],
+          "links": {
+            "self": "/v1/event-locations"
+          },
+          "meta": {
+            "count": 5
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

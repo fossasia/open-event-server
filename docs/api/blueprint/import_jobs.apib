@@ -1,0 +1,58 @@
+# Group Import Jobs
+
+This Group's APIs are used for getting info of import jobs
+
+## Import Jobs Collection [/v1/import-jobs{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+
+### List All Import Jobs [GET]
+Get a list of all import jobs
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "import-job",
+                    "attributes": {
+                        "starts-at": "2019-03-26T07:34:23.061153+00:00",
+                        "result": "1",
+                        "task": "a8e8b899-7537-4d09-bcd5-fd250a3efc06",
+                        "result-status": "SUCCESS"
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/import-jobs/1"
+                    }
+                },
+                {
+                    "type": "import-job",
+                    "attributes": {
+                        "starts-at": "2019-03-26T07:47:31.285576+00:00",
+                        "result": "2",
+                        "task": "788ae813-1fcf-4c47-ab4a-80ff33abd097",
+                        "result-status": "SUCCESS"
+                    },
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/import-jobs/2"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/import-jobs"
+            },
+            "meta": {
+                "count": 2
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

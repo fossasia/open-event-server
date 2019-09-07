@@ -28,7 +28,7 @@ from app.settings import get_settings
 def send_after_event_mail():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(state='published', deleted_at=None).all()
         upcoming_events = get_upcoming_events()
         upcoming_event_links = "<ul>"
         for upcoming_event in upcoming_events:
@@ -70,7 +70,7 @@ def change_session_state_on_event_completion():
 def send_event_fee_notification():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
             latest_invoice = EventInvoice.query.filter_by(
                 event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
@@ -128,14 +128,14 @@ def send_event_fee_notification():
 def send_event_fee_notification_followup():
     from app import current_app as app
     with app.app_context():
-        incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
+        incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'paid').all()
         for incomplete_invoice in incomplete_invoices:
             if incomplete_invoice.amount > 0:
                 prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime(
                     "%b %Y")  # Displayed as Aug 2016
                 app_name = get_settings()['app_name']
                 frontend_url = get_settings()['frontend_url']
-                link = '{}/invoices/{}'.format(frontend_url,
+                link = '{}/event-invoice/{}/review'.format(frontend_url,
                                                incomplete_invoice.identifier)
                 send_followup_email_for_monthly_fee_payment(incomplete_invoice.user.email,
                                                             incomplete_invoice.event.name,
@@ -177,22 +177,31 @@ def event_invoices_mark_due():
 def send_monthly_event_invoice():
     from app import current_app as app
     with app.app_context():
-        events = Event.query.all()
+        events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
             # calculate net & gross revenues
+            user = event.owner
+            admin_info = get_settings()
             currency = event.payment_currency
             ticket_fee_object = db.session.query(TicketFees).filter_by(currency=currency).one()
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
             gross_revenue = event.calc_monthly_revenue()
-            ticket_fees = event.tickets_sold * ticket_fee_percentage
+            ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
             if ticket_fees > ticket_fee_maximum:
                 ticket_fees = ticket_fee_maximum
             net_revenue = gross_revenue - ticket_fees
+            payment_details = {
+                'tickets_sold': event.tickets_sold,
+                'gross_revenue': gross_revenue,
+                'net_revenue': net_revenue,
+                'amount_payable': ticket_fees
+            }
             # save invoice as pdf
-            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders,
-                                  ticket_fee_object=ticket_fee_object, gross_revenue=gross_revenue,
+            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders, user=user,
+                                  admin_info=admin_info, currency=currency, event=event,
+                                  ticket_fee_object=ticket_fee_object, payment_details=payment_details,
                                   net_revenue=net_revenue), UPLOAD_PATHS['pdf']['event_invoice'],
                                   dir_path='/static/uploads/pdf/event_invoices/', identifier=event.identifier)
             # save event_invoice info to DB

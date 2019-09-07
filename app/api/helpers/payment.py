@@ -7,11 +7,13 @@ import omise
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
+from app.settings import get_settings
+from app.api.helpers import checksum
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.models import db
 from app.models.order import Order
 
@@ -40,9 +42,13 @@ class StripePaymentsManager(object):
         """
         if not event:
             settings = get_settings()
-            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
-                'stripe_secret_key'] != "" and \
-                    settings["stripe_publishable_key"] != "":
+            if settings['app_environment'] == 'development' and settings['stripe_test_secret_key'] and \
+                    settings['stripe_test_publishable_key']:
+                return {
+                    'SECRET_KEY': settings['stripe_test_secret_key'],
+                    'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"]
+                }
+            elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
@@ -201,6 +207,48 @@ class PayPalPaymentsManager(object):
             return False, payment.error
 
     @staticmethod
+    def verify_payment(payment_id, order):
+        """
+        Verify Paypal payment one more time for paying with Paypal in mobile client
+        """
+        PayPalPaymentsManager.configure_paypal()
+        try:
+            payment_server = paypalrestsdk.Payment.find(payment_id)
+            if payment_server.state != 'approved':
+                return False, 'Payment has not been approved yet. Status is ' + payment_server.state + '.'
+
+            # Get the most recent transaction
+            transaction = payment_server.transactions[0]
+            amount_server = transaction.amount.total
+            currency_server = transaction.amount.currency
+            sale_state = transaction.related_resources[0].sale.state
+
+            if float(amount_server) != order.amount:
+                return False, 'Payment amount does not match order'
+            elif currency_server != order.event.payment_currency:
+                return False, 'Payment currency does not match order'
+            elif sale_state != 'completed':
+                return False, 'Sale not completed'
+            elif PayPalPaymentsManager.used_payment(payment_id, order):
+                return False, 'Payment already been verified'
+            else:
+                return True, None
+        except paypalrestsdk.ResourceNotFound:
+            return False, 'Payment Not Found'
+
+    @staticmethod
+    def used_payment(payment_id, order):
+        """
+        Function to check for recycling of payment IDs
+        """
+        if Order.query.filter(Order.paypal_token == payment_id).first() is None:
+            order.paypal_token = payment_id
+            save_to_db(order)
+            return False
+        else:
+            return True
+
+    @staticmethod
     def execute_payment(paypal_payer_id, paypal_payment_id):
         """
         Execute payemnt and charge the user.
@@ -270,3 +318,34 @@ class OmisePaymentsManager(object):
                 },
                 )
         return charge
+
+
+class PaytmPaymentsManager(object):
+    """
+    Class to manage PayTM payments
+    """
+
+    @property
+    def paytm_endpoint(self):
+        if get_settings()['paytm_mode'] == 'test':
+            url = "https://securegw-stage.paytm.in/theia/api/v1/"
+        else:
+            url = "https://securegw.paytm.in/theia/api/v1/"
+        return url
+
+    @staticmethod
+    def generate_checksum(paytm_params):
+        if get_settings()['paytm_mode'] == 'test':
+            merchant_key = get_settings()['paytm_sandbox_secret']
+        else:
+            merchant_key = get_settings()['paytm_live_secret']
+        return checksum.generate_checksum_by_str(json.dumps(paytm_params["body"]), merchant_key)
+
+    @staticmethod
+    def hit_paytm_endpoint(url, head, body=None):
+        paytm_params = {}
+        paytm_params["body"] = body
+        paytm_params["head"] = head
+        post_data = json.dumps(paytm_params)
+        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+        return response
