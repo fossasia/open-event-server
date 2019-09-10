@@ -77,18 +77,6 @@ def set_settings(**kwargs):
         current_app.secret_key = env('SECRET')
         stripe.api_key = setting.stripe_secret_key
 
-        if not current_app.config['DEVELOPMENT']:
-            current_app.config.from_object('config.DevelopmentConfig')
-
-        if not current_app.config['STAGING']:
-            current_app.config.from_object('config.StagingConfig')
-
-        if not current_app.config['PRODUCTION']:
-            current_app.config.from_object('config.ProductionConfig')
-
-        if not current_app.config['TESTING']:
-            current_app.config.from_object('config.TestingConfig')
-
         current_app.config['custom_settings'] = make_dict(setting)
 
 
