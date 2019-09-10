@@ -5,7 +5,6 @@ import logging
 
 from app import current_app as app, celery
 from app.models import db
-from app.models.setting import Environment
 from app.settings import set_settings
 from populate_db import populate
 
@@ -23,7 +22,7 @@ class Setup(object):
         with app.test_request_context():
             db.create_all()
             populate()
-            set_settings(secret='super secret key', app_name='Open Event', app_environment=Environment.TESTING)
+            set_settings(secret='super secret key', app_name='Open Event')
 
         return app.test_client()
 

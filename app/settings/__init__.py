@@ -1,9 +1,13 @@
+from envparse import env
+
 import stripe
 from flask import current_app
 from sqlalchemy import desc
 
 from app.models.ticket_fee import TicketFees
-from app.models.setting import Setting, Environment
+from app.models.setting import Setting
+
+env.read_envfile()
 
 
 def get_settings(from_db=False):
@@ -13,13 +17,12 @@ def get_settings(from_db=False):
     if not from_db and 'custom_settings' in current_app.config:
         return current_app.config['custom_settings']
     s = Setting.query.order_by(desc(Setting.id)).first()
-    app_environment = current_app.config.get('ENV', 'production')
     if s is None:
-        set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
+        set_settings(secret='super secret key', app_name='Open Event')
     else:
         current_app.config['custom_settings'] = make_dict(s)
         if not current_app.config['custom_settings'].get('secret'):
-            set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
+            set_settings(secret='super secret key', app_name='Open Event')
     return current_app.config['custom_settings']
 
 
@@ -71,19 +74,19 @@ def set_settings(**kwargs):
                 setattr(setting, key, value)
         from app.api.helpers.db import save_to_db
         save_to_db(setting, 'Setting saved')
-        current_app.secret_key = setting.secret
+        current_app.secret_key = env('SECRET')
         stripe.api_key = setting.stripe_secret_key
 
-        if setting.app_environment == Environment.DEVELOPMENT and not current_app.config['DEVELOPMENT']:
+        if not current_app.config['DEVELOPMENT']:
             current_app.config.from_object('config.DevelopmentConfig')
 
-        if setting.app_environment == Environment.STAGING and not current_app.config['STAGING']:
+        if not current_app.config['STAGING']:
             current_app.config.from_object('config.StagingConfig')
 
-        if setting.app_environment == Environment.PRODUCTION and not current_app.config['PRODUCTION']:
+        if not current_app.config['PRODUCTION']:
             current_app.config.from_object('config.ProductionConfig')
 
-        if setting.app_environment == Environment.TESTING and not current_app.config['TESTING']:
+        if not current_app.config['TESTING']:
             current_app.config.from_object('config.TestingConfig')
 
         current_app.config['custom_settings'] = make_dict(setting)

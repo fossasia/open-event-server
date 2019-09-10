@@ -21,13 +21,10 @@ class Setting(db.Model):
     # General
     #
 
-    app_environment = db.Column(db.String, default=Environment.PRODUCTION)
     # Name of the application. (Eg. Event Yay!, Open Event)
     app_name = db.Column(db.String)
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = db.Column(db.String)
-    # App secret
-    secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
     # Order Expiry Time in Minutes
@@ -184,7 +181,6 @@ class Setting(db.Model):
     cookie_policy_link = db.Column(db.String, default="https://next.eventyay.com/cookie-policy")
 
     def __init__(self,
-                 app_environment=Environment.PRODUCTION,
                  aws_key=None,
                  aws_secret=None,
                  aws_bucket_name=None,
@@ -200,7 +196,7 @@ class Setting(db.Model):
                  stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
-                 secret=None, storage_place=None,
+                 storage_place=None,
                  app_name=None,
                  static_domain=None,
                  tagline=None,
@@ -256,7 +252,6 @@ class Setting(db.Model):
                  order_expiry_time=None,
                  max_complex_custom_fields=30
                  ):
-        self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
@@ -283,7 +278,6 @@ class Setting(db.Model):
         self.app_name = app_name
         self.static_domain = static_domain
         self.tagline = tagline
-        self.secret = secret
         self.storage_place = storage_place
         self.google_url = google_url
         self.github_url = github_url

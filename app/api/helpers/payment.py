@@ -1,4 +1,5 @@
 import json
+from envparse import env
 
 import paypalrestsdk
 import requests
@@ -7,15 +8,16 @@ import omise
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
-from app.settings import get_settings
 from app.api.helpers import checksum
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
-from app.settings import get_settings, Environment
+from app.settings import get_settings
 from app.api.helpers.db import safe_query, save_to_db
 from app.models import db
 from app.models.order import Order
+
+env.read_envfile()
 
 
 @cache.memoize(5)
@@ -42,7 +44,7 @@ class StripePaymentsManager(object):
         """
         if not event:
             settings = get_settings()
-            if settings['app_environment'] == 'development' and settings['stripe_test_secret_key'] and \
+            if env('APP_CONFIG') == 'config.DevelopmentConfig' and settings['stripe_test_secret_key'] and \
                     settings['stripe_test_publishable_key']:
                 return {
                     'SECRET_KEY': settings['stripe_test_secret_key'],
@@ -149,7 +151,7 @@ class PayPalPaymentsManager(object):
         settings = get_settings()
         # Use Sandbox by default.
         paypal_mode = settings.get('paypal_mode',
-                                   'live' if (settings['app_environment'] == Environment.PRODUCTION) else 'sandbox')
+                                   'live' if (env('APP_CONFIG') == "config.ProductionConfig") else 'sandbox')
         paypal_key = None
         if paypal_mode == 'sandbox':
             paypal_key = 'paypal_sandbox'
@@ -301,7 +303,7 @@ class OmisePaymentsManager(object):
 
     @staticmethod
     def charge_payment(order_identifier, token):
-        if get_settings()['app_environment'] == Environment.PRODUCTION:
+        if env('APP_CONFIG') == "config.ProductionConfig":
             omise.api_secret = get_settings()['omise_test_secret']
             omise.api_public = get_settings()['omise_test_public']
         else:

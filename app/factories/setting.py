@@ -10,7 +10,6 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = Setting
         sqlalchemy_session = db.session
 
-    app_environment = common.environment_
     # Name of the application. (Eg. Event Yay!, Open Event)
     app_name = common.string_
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)

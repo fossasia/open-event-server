@@ -2,7 +2,6 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
-from app.settings import Environment
 from utils.common import use_defaults
 
 
@@ -109,10 +108,6 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     # General
     #
 
-    app_environment = fields.Str(default=Environment.PRODUCTION)
-
-    # App secret
-    secret = fields.Str(allow_none=True)
     # Static domain
     static_domain = fields.Str(allow_none=True)
 
