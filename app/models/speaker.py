@@ -31,6 +31,7 @@ class Speaker(SoftDeletionModel):
     gender = db.Column(db.String)
     heard_from = db.Column(db.String)
     sponsorship_required = db.Column(db.Text)
+    complex_field_values = db.Column(db.JSON)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
 
@@ -61,7 +62,8 @@ class Speaker(SoftDeletionModel):
                  sponsorship_required=None,
                  event_id=None,
                  user_id=None,
-                 deleted_at=None):
+                 deleted_at=None,
+                 complex_field_values=None):
         self.name = name
         self.photo_url = photo_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -88,7 +90,8 @@ class Speaker(SoftDeletionModel):
         self.sponsorship_required = sponsorship_required
         self.event_id = event_id
         self.user_id = user_id
-        self.deleted_at = deleted_at
+        self.deleted_at = deleted_at,
+        self.complex_field_values = complex_field_values
 
     @staticmethod
     def get_service_name():
