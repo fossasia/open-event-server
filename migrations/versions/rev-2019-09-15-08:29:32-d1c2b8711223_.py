@@ -23,7 +23,7 @@ def upgrade():
                nullable=False)
     op.alter_column('orders', 'is_billing_enabled',
                existing_type=sa.BOOLEAN(),
-               server_default=false,
+               server_default='False',
                nullable=False)
     # ### end Alembic commands ###
 
