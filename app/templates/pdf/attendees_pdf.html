@@ -123,7 +123,7 @@
                         {{ holder.email }}<br>
                     </strong>
                     {% if holder.ticket.price %}
-                        {{ holder.event.payment_currency | currency_symbol }}{{ holder.ticket.price | money }}
+                        {{ holder.event.payment_currency }}{{ holder.ticket.price | money }}
                     {% else %}
                         {{ "Free Ticket" }}
                     {% endif %}<br>

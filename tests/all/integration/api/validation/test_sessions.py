@@ -29,7 +29,7 @@ class TestSessionValidation(OpenEventTestCase):
             'starts_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
             'ends_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
-        SessionSchema.validate_date(schema, data, original_data)
+        SessionSchema.validate_fields(schema, data, original_data)
 
     def test_date_start_gt_end(self):
         """
@@ -45,7 +45,7 @@ class TestSessionValidation(OpenEventTestCase):
             'ends_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         with self.assertRaises(UnprocessableEntity):
-            SessionSchema.validate_date(schema, data, original_data)
+            SessionSchema.validate_fields(schema, data, original_data)
 
     def test_date_db_populate(self):
         """
@@ -63,7 +63,7 @@ class TestSessionValidation(OpenEventTestCase):
                 }
             }
             data = {}
-            SessionSchema.validate_date(schema, data, original_data)
+            SessionSchema.validate_fields(schema, data, original_data)
 
 
 if __name__ == '__main__':

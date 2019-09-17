@@ -33,6 +33,9 @@ class Setting(db.Model):
     # Order Expiry Time in Minutes
     order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
 
+    # Maximum number of complex custom fields allowed for a given form
+    max_complex_custom_fields = db.Column(db.Integer, default=30, nullable=False)
+
     #
     #  STORAGE
     #
@@ -250,7 +253,9 @@ class Setting(db.Model):
                  admin_billing_state=None,
                  admin_billing_zip=None,
                  admin_billing_additional_info=None,
-                 order_expiry_time=None):
+                 order_expiry_time=None,
+                 max_complex_custom_fields=30
+                 ):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -313,7 +318,6 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
-
         # Omise Credentials
         self.omise_mode = omise_mode
         self.omise_test_public = omise_test_public
@@ -351,6 +355,8 @@ class Setting(db.Model):
 
         # Order Expiry Time in Minutes
         self.order_expiry_time = order_expiry_time
+
+        self.max_complex_custom_fields = max_complex_custom_fields
 
     @hybrid_property
     def is_paypal_activated(self):
