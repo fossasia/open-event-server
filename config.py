@@ -28,7 +28,7 @@ LANGUAGES = {
 }
 
 
-class Config(object):
+class Config:
     """
     The base configuration option. Contains the defaults.
     """

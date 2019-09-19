@@ -7,7 +7,7 @@ from app.settings import get_settings
 from app.api.helpers.files import make_frontend_url
 
 
-class GoogleOAuth(object):
+class GoogleOAuth:
     """Google Credentials"""
 
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
@@ -42,7 +42,7 @@ class GoogleOAuth(object):
         return cls.USER_INFO
 
 
-class FbOAuth(object):
+class FbOAuth:
     """Facebook Credentials"""
     Fb_AUTH_URI = 'https://www.facebook.com/dialog/oauth'
     Fb_TOKEN_URI = 'https://graph.facebook.com/oauth/access_token'
@@ -77,7 +77,7 @@ class FbOAuth(object):
         return cls.Fb_USER_INFO
 
 
-class TwitterOAuth(object):
+class TwitterOAuth:
     """Twitter Credentials"""
     TW_AUTH_URI = 'https://api.twitter.com/oauth/authorize'
     TW_REQUEST_TOKEN_URI = 'https://api.twitter.com/oauth/request_token'
@@ -126,7 +126,7 @@ class TwitterOAuth(object):
         return oauth2.Client(self.get_consumer(), token), access_token
 
 
-class InstagramOAuth(object):
+class InstagramOAuth:
     """Instagram Credentials"""
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
     INSTAGRAM_TOKEN_URI = "https://api.instagram.com/oauth/access_token"
