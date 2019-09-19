@@ -115,5 +115,5 @@ image_link = 'https://www.gstatic.com/webp/gallery/1.jpg'
 TASK_RESULTS = {}
 
 
-class EmptyObject(object):
+class EmptyObject:
     pass
