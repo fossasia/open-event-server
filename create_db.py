@@ -20,13 +20,26 @@ def create_default_user(email, password):
                 print('\nInvalid email address\n')
                 continue
             ask_email = False
+            
+            
+    """
+    Additional step in accepting passwords. 
+    
+    """
     if not password:
         ask_password = True
+        password_wrongformat=True
         while ask_password:
-            password = getpass.getpass("Enter password for super_admin : ")
-            if len(password) < 8:
-                print('\nPassword should have minimum 8 characters')
-                continue
+            while password_wrongformat = True:
+                password = getpass.getpass("Enter password for super_admin : ")
+                if len(password) < 8:
+                    print('\nPassword should have minimum 8 characters')
+                    continue
+                else:
+                    passw="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/"
+                    if(re.match(passw,password)):
+                        password_wrongformat= False
+                    print('\n password between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character")
             repassword = getpass.getpass("Enter your password again to confirm : ")
             if password != repassword:
                 print('\nPassword did not match')
