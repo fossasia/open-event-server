@@ -16,7 +16,7 @@ template: |
   ## Changes
 
   $CHANGES
-  
+  ## Corresponding [FE](https://github.com/fossasia/open-event-server) version at the time of release  
   ## Contributors
   
   Thanks a lot to our contributors for making this release possible:
