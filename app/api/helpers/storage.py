@@ -91,7 +91,7 @@ UPLOAD_PATHS = {
 # HELPER CLASSES
 ################
 
-class UploadedFile(object):
+class UploadedFile:
     """
     Helper for a disk-file to replicate request.files[ITEM] class
     """
@@ -111,7 +111,7 @@ class UploadedFile(object):
         self.file.close()
 
 
-class UploadedMemory(object):
+class UploadedMemory:
     """
     Helper for a memory file to replicate request.files[ITEM] class
     """

@@ -14,7 +14,7 @@ from app.models.order import Order
 from flask_jwt_extended import current_user
 
 
-class TicketingManager(object):
+class TicketingManager:
     """All ticketing and orders related helper functions"""
 
     @staticmethod
