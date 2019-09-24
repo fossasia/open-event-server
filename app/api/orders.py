@@ -68,11 +68,17 @@ def is_payment_valid(order, mode):
         return (order.paid_via == 'paypal') and order.transaction_id
 
 
-def check_billing_info(data, order):
-    if order.event.is_billing_info_mandatory and data.get('amount') and data.get('amount') > 0 and not (data.get('company')
-                            and data.get('address') and data.get('city') and data.get('zipcode') and data.get('country')):
+def is_billing_info(data, order):
+    if order.event.is_billing_info_mandatory and data.get('amount') and data.get('amount') > 0 
+                                                    and not data.get('is_billing_enabled'):
         raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
-                                  "Billing information incomplete")
+                                  "Billing information is mandatory for this order.")
+
+def check_billing_info(data, order):
+	if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') 
+	                and data.get('city') and data.get('zipcode') and data.get('country')):
+		raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
+                                  "Billing information is incomplete.")
 
 
 class OrdersListPost(ResourceList):
@@ -316,7 +322,8 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('amount') or data.get('is_billing_enabled'):
+        if data.get('amount') or data.get('is_billing_enabled') or order.event.is_billing_info_mandatory:
+            is_billing_info(data, order)
             check_billing_info(data, order)
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
             raise ForbiddenException({'pointer': ''}, "Access Forbidden")
