@@ -69,8 +69,7 @@ def is_payment_valid(order, mode):
 
 
 def is_billing_info(data, order):
-    if order.event.is_billing_info_mandatory and data.get('amount') and data.get('amount') > 0 
-                                                    and not data.get('is_billing_enabled'):
+    if order.event.is_billing_info_mandatory and data.get('amount') and data.get('amount') > 0 and not data.get('is_billing_enabled'):
         raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
                                   "Billing information is mandatory for this order.")
 
