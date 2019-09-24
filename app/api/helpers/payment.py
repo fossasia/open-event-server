@@ -27,7 +27,7 @@ def forex(from_currency, to_currency, amount):
         return amount
 
 
-class StripePaymentsManager(object):
+class StripePaymentsManager:
     """
     Class to manage payments through Stripe.
     """
@@ -135,7 +135,7 @@ class StripePaymentsManager(object):
             raise ConflictException({'pointer': ''}, str(e))
 
 
-class PayPalPaymentsManager(object):
+class PayPalPaymentsManager:
     """
     Class to manage payment through Paypal REST API.
     """
@@ -265,7 +265,7 @@ class PayPalPaymentsManager(object):
             return False, payment.error
 
 
-class AliPayPaymentsManager(object):
+class AliPayPaymentsManager:
     """
     Class to manage AliPay Payments
     """
@@ -294,7 +294,7 @@ class AliPayPaymentsManager(object):
         return charge
 
 
-class OmisePaymentsManager(object):
+class OmisePaymentsManager:
     """
     Class to manage Omise Payments
     """
@@ -320,7 +320,7 @@ class OmisePaymentsManager(object):
         return charge
 
 
-class PaytmPaymentsManager(object):
+class PaytmPaymentsManager:
     """
     Class to manage PayTM payments
     """
