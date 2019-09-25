@@ -1,7 +1,10 @@
 language: python
 
+dist: xenial
+
 services:
   - docker
+  - postgresql
 
 addons:
   apt:
@@ -9,11 +12,8 @@ addons:
       - python3-dev
       - libssl-dev
       - libffi-dev
-matrix:
-    include:
-        - python: 3.7
-          dist: xenial
-          sudo: true
+
+python: 3.7
 
 cache: pip
 
