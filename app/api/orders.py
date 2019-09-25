@@ -74,7 +74,7 @@ def is_billing_info(data, order):
                                   "Billing information is mandatory for this order.")
 
 def check_billing_info(data, order):
-	if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') 
+	if data.get('is_billing_enabled') and not (data.get('company') and data.get('address')
 	                and data.get('city') and data.get('zipcode') and data.get('country')):
 		raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
                                   "Billing information is incomplete.")
