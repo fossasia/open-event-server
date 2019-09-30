@@ -1,0 +1,49 @@
+name: Open Event Server
+
+on:
+  push:
+    branches:
+    - master
+    - development
+  pull_request:
+    branches:
+    - master
+    - development
+
+jobs:
+  dredd:
+
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        # will assign a random free host port
+        - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/tests.txt
+    - name: Install Node Dependencies
+      run: yarn global add aglio dredd@11.0.0
+    - name: Create API blueprint
+      run: aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
+    - name: Test API Doc
+      run: dredd
+      env:
+        APP_CONFIG: config.TestingConfig
+        TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
