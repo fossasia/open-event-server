@@ -8,7 +8,7 @@ jobs:
             DATABASE_URL: postgresql://postgres@localhost/test
             TEST_DATABASE_URL: postgresql://postgres@localhost/test
       # Services
-      - image: circleci/postgres:11.5-alpine
+      - image: circleci/postgres:11.5-alpine-ram
         environment:
             POSTGRES_USER: postgres
             POSTGRES_DB: test
@@ -22,9 +22,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}
+            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.2-dependencies-
+            - v1.3-dependencies-
 
       - run:
           name: Install Python Dependencies
@@ -35,7 +35,7 @@ jobs:
       
       - run:
           name: Install Node Dependencies
-          command: yarn add aglio dredd@4 
+          command: yarn
 
       - save_cache:
           paths:
@@ -43,7 +43,7 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}
+          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
 
       - run:
           name: Create API blueprint
