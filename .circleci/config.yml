@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  dredd:
+  build:
     docker:
       - image: circleci/python:3.7.4-node
         envirinment:
