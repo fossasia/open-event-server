@@ -43,7 +43,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/tests.txt
     - name: Install Node Dependencies
-      run: npm i aglio dredd@11.0.0
+      run: npm i aglio dredd@4
     - name: Create API blueprint
       run: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
     - name: Test API Doc
