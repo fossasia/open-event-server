@@ -50,4 +50,5 @@ jobs:
       run: npx dredd
       env:
         APP_CONFIG: config.TestingConfig
+        DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
         TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
