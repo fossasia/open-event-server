@@ -617,12 +617,11 @@ def omise_checkout(order_identifier):
     save_to_db(order)
     try:
         charge = OmisePaymentsManager.charge_payment(order_identifier, token)
-        print(charge.status)
     except omise.errors.BaseError as e:
-        logging.error(f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors""")
+        logging.exception(f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors""")
         return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
     except Exception as e:
-        logging.error(repr(e))
+        logging.exception('Error while charging omise')
     if charge.failure_code is not None:
         logging.warning("Omise Failure Message: {} ({})".format(charge.failure_message, charge.failure_code))
         return jsonify(status=False, error="Omise Failure Message: {} ({})".

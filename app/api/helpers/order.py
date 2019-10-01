@@ -27,7 +27,7 @@ def delete_related_attendees_for_order(order):
         try:
             db.session.commit()
         except Exception as e:
-            logging.error('DB Exception! %s' % e)
+            logging.exception('DB Exception!')
             db.session.rollback()
 
 
@@ -114,7 +114,7 @@ def create_onsite_attendees_for_order(data):
                 try:
                     db.session.commit()
                 except Exception as e:
-                    logging.error('DB Exception! %s' % e)
+                    logging.exception('DB Exception!')
                     db.session.rollback()
 
             raise ConflictException(
