@@ -47,6 +47,6 @@ jobs:
           name: Create API blueprint
           command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
       
-      - run:
-          name: Test API Doc
-          command: . venv/bin/activate && npx dredd
+#       - run:
+#           name: Test API Doc
+#           command: . venv/bin/activate && npx dredd
