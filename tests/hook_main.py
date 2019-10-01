@@ -106,6 +106,12 @@ def before_all(transaction):
 
 @hooks.before_each
 def before_each(transaction):
+    import subprocess
+    process = subprocess.Popen('df -h'.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+
+    print(output.decode('utf-8'))
+
     with stash['app'].app_context():
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
