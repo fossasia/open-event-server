@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  dredd:
+    docker:
+      - image: circleci/python:3.7.4-node
+        envirinment:
+            DATABASE_URL: postgresql://postgres@localhost/test?sslmode=disable
+      # Services
+      - image: circleci/postgres:11.5-alpine
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_DB: test
+      - image: circleci/redis:5.0.6-alpine
+
+    working_directory: ~/code
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements/tests.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Install Python Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements/tests.txt
+      
+      - run:
+          name: Install Node Dependencies
+          command: npm i aglio dredd@4
+
+      - save_cache:
+          paths:
+            - ./venv
+            - ./node_modules
+          key: v1-dependencies-{{ checksum "requirements/tests.txt" }}
+
+      - run:
+          name: Create API blueprint
+          command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
+      
+      - run:
+          name: Test API Doc
+          command: npx dredd
