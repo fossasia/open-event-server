@@ -43,11 +43,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/tests.txt
     - name: Install Node Dependencies
-      run: yarn global add aglio dredd@11.0.0
+      run: npm i -g aglio dredd@11.0.0
     - name: Create API blueprint
-      run: aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
+      run: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
     - name: Test API Doc
-      run: dredd
+      run: npx dredd
       env:
         APP_CONFIG: config.TestingConfig
         TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
