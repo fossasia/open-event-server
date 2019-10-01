@@ -22,7 +22,7 @@ jobs:
           keys:
             - v1.2-dependencies-{{ checksum "requirements/tests.txt" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.1-dependencies-
+            # - v1.1-dependencies-
 
       - run:
           name: Install Python Dependencies
