@@ -49,6 +49,7 @@ from app.api.helpers.files import create_save_pdf
 import urllib.error
 import base64
 
+logger = logging.getLogger(__name__)
 celery = make_celery()
 
 
@@ -269,7 +270,7 @@ def export_ical_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in ical download')
+        logger.exception('Error in ical download')
 
     return result
 
@@ -304,7 +305,7 @@ def export_xcal_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in xcal download')
+        logger.exception('Error in xcal download')
 
     return result
 
@@ -339,7 +340,7 @@ def export_pentabarf_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in pentabarf download')
+        logger.exception('Error in pentabarf download')
 
     return result
 
@@ -369,7 +370,7 @@ def export_order_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting as CSV')
+        logger.exception('Error in exporting as CSV')
 
     return result
 
@@ -389,7 +390,7 @@ def export_order_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting order as pdf')
+        logger.exception('Error in exporting order as pdf')
 
     return result
 
@@ -418,7 +419,7 @@ def export_attendees_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting attendees list as CSV')
+        logger.exception('Error in exporting attendees list as CSV')
 
 
     return result
@@ -436,7 +437,7 @@ def export_attendees_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting attendees list as PDF')
+        logger.exception('Error in exporting attendees list as PDF')
 
 
 
@@ -467,7 +468,7 @@ def export_sessions_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting sessions as CSV')
+        logging.exception('Error in exporting sessions as CSV')
 
     return result
 
@@ -496,7 +497,7 @@ def export_speakers_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting speakers list as CSV')
+        logger.exception('Error in exporting speakers list as CSV')
 
     return result
 
@@ -513,7 +514,7 @@ def export_sessions_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting sessions as PDF')
+        logger.exception('Error in exporting sessions as PDF')
 
     return result
 
@@ -530,7 +531,7 @@ def export_speakers_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.error('Error in exporting speakers as PDF')
+        logger.exception('Error in exporting speakers as PDF')
 
     return result
 
@@ -540,4 +541,4 @@ def delete_translations(self, zip_file_path):
     try:
         os.remove(zip_file_path)
     except:
-        logging.exception('Error while deleting translations zip file')
+        logger.exception('Error while deleting translations zip file')

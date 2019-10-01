@@ -68,7 +68,7 @@ def export_sessions_csv(sessions):
             column.append(session.level)
             column.append(session.state)
             column.append(session.session_type if session.session_type else '')
-            column.append(len(session.long_abstract))
+            column.append(len(session.long_abstract) if session.long_abstract else None)
             rows.append(column)
 
     return rows
