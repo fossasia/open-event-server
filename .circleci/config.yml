@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/python:3.7.4-node
         environment:
-            DATABASE_URL: postgresql://postgres@localhost:5432/test
+            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
       # Services
       - image: circleci/postgres:11.5-alpine
         environment:
@@ -20,9 +20,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.2-dependencies-{{ checksum "requirements/tests.txt" }}
+            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}
             # fallback to using the latest cache if no exact match is found
-            # - v1.1-dependencies-
+            - v1.2-dependencies-
 
       - run:
           name: Install Python Dependencies
@@ -40,7 +40,8 @@ jobs:
             - ./venv
             - ./node_modules
             - ~/.cache/yarn
-          key: v1.2-dependencies-{{ checksum "requirements/tests.txt" }}
+            - ~/.yarn/bin
+          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}
 
       - run:
           name: Create API blueprint
