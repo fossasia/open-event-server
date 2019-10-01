@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/python:3.7.4-node
         environment:
-            DATABASE_URL: postgresql://postgres@localhost/test?sslmode=disable
+            DATABASE_URL: postgresql://postgres@localhost:5432/test
       # Services
       - image: circleci/postgres:11.5-alpine
         environment:
