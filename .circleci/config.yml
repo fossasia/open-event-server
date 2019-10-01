@@ -33,18 +33,20 @@ jobs:
       
       - run:
           name: Install Node Dependencies
-          command: npm i aglio dredd@4
+          command: yarn global add aglio dredd@4
 
       - save_cache:
           paths:
             - ./venv
             - ./node_modules
+            - /usr/local/lib/node_modules
+            - ~/.cache/yarn
           key: v1-dependencies-{{ checksum "requirements/tests.txt" }}
 
       - run:
           name: Create API blueprint
-          command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
+          command: aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
       
       - run:
           name: Test API Doc
-          command: npx dredd
+          command: . venv/bin/activate && dredd
