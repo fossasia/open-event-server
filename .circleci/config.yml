@@ -4,7 +4,9 @@ jobs:
     docker:
       - image: circleci/python:3.7.4-node
         environment:
-            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
+            APP_CONFIG: config.TestingConfig
+            DATABASE_URL: postgresql://postgres@localhost/test
+            TEST_DATABASE_URL: postgresql://postgres@localhost/test
       # Services
       - image: circleci/postgres:11.5-alpine
         environment:
@@ -47,6 +49,6 @@ jobs:
           name: Create API blueprint
           command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
       
-#       - run:
-#           name: Test API Doc
-#           command: . venv/bin/activate && npx dredd
+      - run:
+          name: Test API Doc
+          command: . venv/bin/activate && npx dredd
