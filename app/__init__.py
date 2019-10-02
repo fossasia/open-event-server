@@ -59,7 +59,7 @@ limiter = Limiter(app)
 env.read_envfile()
 
 
-class ReverseProxied(object):
+class ReverseProxied:
     """
     ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
     """
