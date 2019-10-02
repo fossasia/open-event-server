@@ -10,6 +10,8 @@ x-environment-vars: &environment-vars
 x-defaults: &defaults
   image: eventyay/open-event-server
   restart: unless-stopped
+  env_file:
+    - .env
   environment:
     <<: *environment-vars
   depends_on:
