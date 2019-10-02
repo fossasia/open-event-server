@@ -1,8 +1,7 @@
-FROM python:3.6-alpine as base
+FROM python:3.7-alpine as base
 LABEL maintainer="Niranjan Rajendran <me@niranjan.io>"
 
-##
-##
+####
 
 FROM base as builder
 
@@ -18,13 +17,11 @@ ADD requirements /requirements/
 
 RUN wget https://bootstrap.pypa.io/ez_setup.py && python ez_setup.py
 
-ENV PYTHONPATH /install/lib/python3.6/site-packages
+ENV PYTHONPATH /install/lib/python3.7/site-packages
 RUN pip install --install-option="--prefix=/install" setuptools && \
     LIBRARY_PATH=/lib:/usr/lib pip install --install-option="--prefix=/install" -r /requirements.txt
 
-
-##
-##
+####
 
 FROM base
 
