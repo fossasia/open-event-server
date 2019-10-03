@@ -55,3 +55,6 @@ src
 
 #tickets
 generated/
+
+docker-compose.override.yml
+celerybeat-schedule.*
