@@ -46,7 +46,7 @@ pytz
 diff-match-patch
 blinker~=1.4
 envparse~=0.2
---exists-action wipe -e git+https://github.com/fossasia/flask-rest-jsonapi@error-fix#egg=flask-rest-jsonapi
+--e wipe -e git+https://github.com/fossasia/flask-rest-jsonapi@error-fix#egg=flask-rest-jsonapi
 wtforms~=2.2
 flask-admin~=1.5
 google-compute-engine~=2.8
