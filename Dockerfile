@@ -27,7 +27,7 @@ FROM base
 
 COPY --from=builder /install /usr/local
 RUN apk --no-cache add postgresql-dev ca-certificates libxslt jpeg zlib file libxml2 git && \
-    pip install git+https://github.com/fossasia/flask-rest-jsonapi.git@shubhamp-master#egg=flask-rest-jsonapi
+    pip install git+https://github.com/fossasia/flask-rest-jsonapi.git@0.12.6.1#egg=flask-rest-jsonapi
 
 WORKDIR /data/app
 ADD . .
