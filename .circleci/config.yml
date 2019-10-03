@@ -31,7 +31,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements/tests.txt
+            pip install --exists-action w -r requirements/tests.txt
       
       - run:
           name: Install Node Dependencies
