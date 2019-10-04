@@ -24,13 +24,11 @@ def add_engine_pidguard(engine):
 
     @event.listens_for(engine, "connect")
     def connect(dbapi_connection, connection_record):
-        print(f'connected to pid { os.getpid() }')
         connection_record.info['pid'] = os.getpid()
 
     @event.listens_for(engine, "checkout")
     def checkout(dbapi_connection, connection_record, connection_proxy):
         pid = os.getpid()
-        print(f'checkout pid {pid}')
         if connection_record.info['pid'] != pid:
             # substitute log.debug() or similar here as desired
             warnings.warn(
