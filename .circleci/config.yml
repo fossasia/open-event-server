@@ -5,8 +5,8 @@ jobs:
       - image: circleci/python:3.7.4-node
         environment:
             APP_CONFIG: config.TestingConfig
-            DATABASE_URL: postgresql://postgres@localhost/test
-            TEST_DATABASE_URL: postgresql://postgres@localhost/test
+            DATABASE_URL: sqlite://
+            TEST_DATABASE_URL: sqlite://
       # Services
       - image: circleci/postgres:11.5-alpine-ram
         environment:
