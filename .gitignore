@@ -58,3 +58,4 @@ generated/
 
 docker-compose.override.yml
 celerybeat-schedule.*
+.coverage
