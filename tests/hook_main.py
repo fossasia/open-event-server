@@ -8,11 +8,10 @@ import requests
 # placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 
-from flask_migrate import Migrate, stamp
+from flask_migrate import Migrate
 from flask import Flask
 from app.models import db
 from app.models.user import OWNER
-from populate_db import populate_without_print
 
 # imports from factories
 
@@ -111,9 +110,7 @@ def before_each(transaction):
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
         db.create_all()
-        # stamp()
         create_super_admin(api_username, api_password)
-        # populate_without_print()
 
     if 'token' in stash:
         print('adding a token')
