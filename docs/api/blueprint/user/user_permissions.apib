@@ -11,7 +11,7 @@ To create or modify any data of this data layer, you will need admin access. How
 | `unverified-user` | allow for unverified user if set to true  | boolean | - |
 | `anonymous-user` | allow for ananymous user if set to true | boolean | **yes** |
 
-## User permission Collection [/v1/user-permissions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## User Permission Collection [/v1/user-permissions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -106,7 +106,7 @@ To create or modify any data of this data layer, you will need admin access. How
                 "anonymous-user": "false"
               },
             "type": "user-permission",
-            "id": "3",
+            "id": "1",
             "links": {
               "self": "/v1/user-permissions/3"
             }
@@ -122,7 +122,7 @@ To create or modify any data of this data layer, you will need admin access. How
 
 ## User Permission Details [/v1/user-permissions/{id}]
 + Parameters
-    + id: 3 (integer) - ID of the page in the form of an integer
+    + id: 1 (integer) - ID of the page in the form of an integer
 
 ### Get User Permission Details [GET]
 Get a single resource.
@@ -147,16 +147,16 @@ Get a single resource.
                 "anonymous-user": "false"
               },
             "type": "user-permission",
-            "id": "3",
+            "id": "1",
             "links": {
-              "self": "/v1/user-permissions/3"
+              "self": "/v1/user-permissions/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/user-permissions/3"
+            "self": "/v1/user-permissions/1"
           }
         }
 
@@ -183,7 +183,7 @@ Update a single resource by `id`.
                     "anonymous-user": "false"
                  },
                 "type": "user-permission",
-                "id": "3"
+                "id": "1"
               }
             }
 
@@ -201,14 +201,14 @@ Update a single resource by `id`.
             "type": "user-permission",
             "id": "3",
             "links": {
-              "self": "/v1/user-permissions/3"
+              "self": "/v1/user-permissions/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/user-permissions/3"
+            "self": "/v1/user-permissions/1"
           }
         }
 
