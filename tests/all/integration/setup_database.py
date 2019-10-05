@@ -22,7 +22,7 @@ class Setup(object):
         celery.conf.update(app.config)
         with app.test_request_context():
             db.create_all()
-            populate()
+            # populate()
             set_settings(secret='super secret key', app_name='Open Event', app_environment=Environment.TESTING)
 
         return app.test_client()
