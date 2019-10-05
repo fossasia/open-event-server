@@ -1,5 +1,6 @@
 from unittest import TestCase
 from app.api.helpers.errors import ErrorResponse
+import pytest
 
 
 class TestErrorDetails(TestCase):
@@ -13,4 +14,4 @@ class TestErrorDetails(TestCase):
                          'source': error_response.source,
                          'title': error_response.title,
                          'detail': error_response.detail}
-        self.assertEqual(error_response.to_dict(), expected_dict)
+        assert error_response.to_dict() == expected_dict
