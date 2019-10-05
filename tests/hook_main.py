@@ -110,7 +110,7 @@ def before_each(transaction):
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
         db.create_all()
-        stamp()
+        # stamp()
         create_super_admin(api_username, api_password)
         # populate_without_print()
 
