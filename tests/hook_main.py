@@ -112,7 +112,7 @@ def before_each(transaction):
         db.create_all()
         stamp()
         create_super_admin(api_username, api_password)
-        populate_without_print()
+        # populate_without_print()
 
     if 'token' in stash:
         print('adding a token')
