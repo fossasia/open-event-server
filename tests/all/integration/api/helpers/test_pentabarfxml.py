@@ -23,6 +23,20 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_original = fromstring(pentabarf_string)
             self.assertEqual(fromstring(tostring(pentabarf_original))[0][0].text, "example")
             self.assertEqual(fromstring(tostring(pentabarf_original))[0][1].text, "2099-12-13")
+    
+    def test_export_with_nonetype(self):
+        """Test to check event contents in pentabarfxml format"""
+        with app.test_request_context():
+            test_event = EventFactoryBasic()
+            test_event.starts_at = None
+            test_event.ends_at = None
+            save_to_db(test_event)
+            pentabarf_export = PentabarfExporter()
+            pentabarf_string = pentabarf_export.export(test_event.id)
+            pentabarf_original = fromstring(pentabarf_string)
+            print(pentabarf_original)
+            self.assertEqual(fromstring(tostring(pentabarf_original))[0][0].text, "example")
+            self.assertEqual(fromstring(tostring(pentabarf_original))[0][3].text, "Not set")
 
 
 if __name__ == '__main__':
