@@ -58,10 +58,14 @@ class PentabarfExporter:
                     room = Room(name=microlocation.name)
                     for session in sessions:
 
+                        if session.ends_at is None or session.starts_at is None:
+                            duration = "Not set"
+                        else:
+                            duration = str(session.ends_at - session.starts_at) + "00:00"
                         session_event = Event(id=session.id,
                                               date=session.starts_at,
                                               start=session.starts_at,
-                                              duration=str(session.ends_at - session.starts_at) + "00:00",
+                                              duration=duration,
                                               track=session.track.name,
                                               abstract=session.short_abstract,
                                               title=session.title,
