@@ -16,16 +16,17 @@ class TestScheduledJobs(OpenEventTestCase):
         with app.test_request_context():
             event_invoice_new = EventInvoiceFactory(event__ends_at=datetime.datetime(2019, 7, 20))
             event_invoice_paid = EventInvoiceFactory(status="paid")
-            event_invoice_future = EventInvoiceFactory(created_at=datetime.datetime(2099, 12, 14))
-            
+            event_invoice_future = EventInvoiceFactory()
+            event_invoice_future.created_at = datetime.datetime(2099, 12, 14)
+
             db.session.commit()
-            
+
             event_invoice_new_id = event_invoice_new.id
             event_invoice_paid_id = event_invoice_paid.id
             event_invoice_future_id = event_invoice_future.id
-            
+
             event_invoices_mark_due()
-            
+
             status_new = EventInvoice.query.get(event_invoice_new_id).status
             status_paid = EventInvoice.query.get(event_invoice_paid_id).status
             status_future = EventInvoice.query.get(event_invoice_future_id).status
