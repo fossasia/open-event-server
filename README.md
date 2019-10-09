@@ -142,7 +142,7 @@ The event data and the sessions can be exported in various formats.
 
 ## Roles
 
-The system has two kinds of role type.
+The system has two kinds of role type:
 
 1. System roles are related to the Open Event organization and operator of the application.
 2. Event Roles are related to the users of the system with their different permissions.
