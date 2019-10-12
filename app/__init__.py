@@ -31,7 +31,7 @@ import sqlalchemy as sa
 
 import stripe
 from app.settings import get_settings
-from app.models import db
+from app.models import db, add_engine_pidguard
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
@@ -167,6 +167,8 @@ def create_app():
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
+
+        add_engine_pidguard(db.engine)
 
     sa.orm.configure_mappers()
 
