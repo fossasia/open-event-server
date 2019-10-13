@@ -65,7 +65,8 @@ brew install libmagic
 Open a terminal and enter the following commands to setup a virtual environment
 
 ```sh
-virtualenv -p python3 venv
+sudo apt-get install python3.7
+virtualenv -p python3.7 venv
 . venv/bin/activate
 ```
 
@@ -82,7 +83,7 @@ Using pipenv, you will not need to set up virtualenv. It will do it automaticall
 To setup a virtual environment and install the dependices, enter in a terminal
 
 ```sh
-pipenv install
+pipenv --python 3.7.3 install
 ```
 
 Now to activate the virtual environemnt, type
