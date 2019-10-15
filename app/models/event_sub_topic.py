@@ -1,5 +1,6 @@
 import uuid
 
+from dataclasses import dataclass
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -14,6 +15,7 @@ def get_new_slug(name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
+@dataclass(init=True, repr=True, unsafe_hash=True)
 class EventSubTopic(SoftDeletionModel):
     """Event sub topic object table"""
 
