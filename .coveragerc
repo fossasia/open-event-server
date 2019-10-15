@@ -1,5 +1,0 @@
-[report]
-omit =
-    */migrations/*
-    */site-packages/*
-    */vintage/*

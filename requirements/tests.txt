@@ -1,4 +1,0 @@
--r dev.txt
-
-coverage~=4.5
-dredd_hooks~=0.2

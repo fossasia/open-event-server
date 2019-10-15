@@ -1,5 +1,0 @@
--r common.txt
-
-nose~=1.3
-pylint~=2.4
-pep8~=1.7
