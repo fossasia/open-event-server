@@ -134,7 +134,7 @@ def create_app():
 
     # development api
     with app.app_context():
-        from app.server_version import server_version_route
+        from app.api.server_version import server_version_route
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
         from app.api.attendees import attendee_misc_routes
