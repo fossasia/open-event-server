@@ -14,7 +14,6 @@ class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
-    session = factory.RelatedFactory(SessionFactory)
     name = common.string_
     email = common.email_
     photo_url = common.url_
@@ -38,5 +37,3 @@ class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
     gender = common.string_
     heard_from = common.string_
     sponsorship_required = common.string_
-    event_id = 1
-    user_id = 2
