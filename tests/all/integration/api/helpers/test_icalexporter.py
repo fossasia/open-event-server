@@ -1,12 +1,11 @@
 import unittest
 import icalendar
+
 from app import current_app as app
-
-
-from tests.all.integration.utils import OpenEventTestCase
 from app.factories.session import SessionFactory
 from app.factories.speaker import SpeakerFactory
 from app.api.helpers.ICalExporter import ICalExporter
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestICalExporter(OpenEventTestCase):
@@ -30,7 +29,7 @@ class TestICalExporter(OpenEventTestCase):
             test_session.speakers = [speaker]
 
             test_cal = icalendar.Calendar.from_ical(ICalExporter().export(test_session.event_id))
-            
+
             cal_content_lines = test_cal.content_lines()
             self.assertIn('URL:http://localhost/v1/events?identifier={}'.format(test_session.event.identifier),
                           cal_content_lines)
