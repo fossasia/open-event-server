@@ -27,8 +27,8 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_original = fromstring(pentabarf_string)
             self.assertEqual(pentabarf_original.find('conference/title').text, "example")
             self.assertEqual(pentabarf_original.find('conference/start').text, "2099-12-13")
-    
-    def test_export_with_nonetype(self):
+
+    def test_export_with_none_ends(self):
         """Test to check event with session with none ends in pentabarfxml format"""
         with app.test_request_context():
             session = SessionFactory(title='Cool Session', ends_at=None)
@@ -37,8 +37,8 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_string = pentabarf_export.export(session.event.id)
             pentabarf_original = fromstring(pentabarf_string)
             self.assertEqual(pentabarf_original.find('day/room/event/duration').text, None)
-    
-    def test_export_with_nonetype(self):
+
+    def test_export_with_none_starts(self):
         """Test to check event with session with none starts in pentabarfxml format"""
         with app.test_request_context():
             session = SessionFactory(title='Cool Session', starts_at=None, ends_at=None)
@@ -47,7 +47,7 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_string = pentabarf_export.export(session.event.id)
             pentabarf_original = fromstring(pentabarf_string)
             self.assertEqual(pentabarf_original.find('day/room/event'), None)
-    
+
     def test_export_with_multiple_sessions(self):
         """Test to check event with sessions in pentabarfxml format"""
         with app.test_request_context():
@@ -68,7 +68,7 @@ class TestPentabarfXML(OpenEventTestCase):
                 title='Hot Session',
                 starts_at=datetime(2019, 10, 15, 11, 30, 00),
                 ends_at=datetime(2019, 10, 15, 12, 00, 54))
-            
+
             future_session = SessionFactoryBase(
                 title='Future Session',
                 starts_at=datetime(2019, 10, 16, 9, 15, 30),
