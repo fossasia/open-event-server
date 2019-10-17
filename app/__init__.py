@@ -31,7 +31,8 @@ import sqlalchemy as sa
 
 import stripe
 from app.settings import get_settings
-from app.models import db, add_engine_pidguard
+from app.models import db
+from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
@@ -169,6 +170,9 @@ def create_app():
         app.register_blueprint(admin_misc_routes)
 
         add_engine_pidguard(db.engine)
+
+        if app.config['SQLALCHEMY_DATABASE_URI'].startswith("sqlite://"):
+            sqlite_datetime_fix()
 
     sa.orm.configure_mappers()
 
