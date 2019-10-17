@@ -134,7 +134,7 @@ def create_app():
 
     # development api
     with app.app_context():
-        from app.api.server_version import server_version_route
+        from app.api.server_version import info_route
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
         from app.api.attendees import attendee_misc_routes
@@ -159,7 +159,7 @@ def create_app():
         app.register_blueprint(import_routes)
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
-        app.register_blueprint(server_version_route)
+        app.register_blueprint(info_route)
         app.register_blueprint(event_statistics)
         app.register_blueprint(user_misc_routes)
         app.register_blueprint(attendee_misc_routes)

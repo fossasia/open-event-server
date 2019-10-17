@@ -1,13 +1,15 @@
 from flask import jsonify, Blueprint
+from datetime import datetime
 
+SERVER_VERSION = '2.2.3-SNAPSHOT'
 
-SERVER_VERSION = '1.0'
-
-server_version_route = Blueprint('server_version', __name__, url_prefix='/v1')
+info_route = Blueprint('info', __name__, url_prefix='/v1')
+_build = {'time': str(datetime.now()), 'version': SERVER_VERSION}
 
 
 class ServerVersion:
+
     @staticmethod
-    @server_version_route.route('/server_version')
+    @info_route.route('/info')
     def version():
-        return jsonify(server_version=SERVER_VERSION)
+        return jsonify(build=_build)
