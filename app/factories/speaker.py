@@ -7,14 +7,11 @@ from app.factories.user import UserFactory
 from app.models.speaker import db, Speaker
 
 
-class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SpeakerFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Speaker
         sqlalchemy_session = db.session
 
-    event = factory.RelatedFactory(EventFactoryBasic)
-    user = factory.RelatedFactory(UserFactory)
-    session = factory.RelatedFactory(SessionFactory)
     name = common.string_
     email = common.email_
     photo_url = common.url_
@@ -40,3 +37,9 @@ class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
     sponsorship_required = common.string_
     event_id = 1
     user_id = 2
+
+
+class SpeakerFactory(SpeakerFactoryBase):
+    event = factory.RelatedFactory(EventFactoryBasic)
+    user = factory.RelatedFactory(UserFactory)
+    session = factory.RelatedFactory(SessionFactory)
