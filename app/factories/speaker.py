@@ -38,6 +38,7 @@ class SpeakerFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     event_id = 1
     user_id = 2
 
+
 class SpeakerFactory(SpeakerFactoryBase):
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)

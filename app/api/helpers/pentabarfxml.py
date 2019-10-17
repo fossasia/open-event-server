@@ -1,4 +1,3 @@
-import datetime
 from pentabarf.Conference import Conference
 from pentabarf.Day import Day
 from pentabarf.Event import Event
@@ -36,7 +35,7 @@ class PentabarfExporter:
                                 days=diff.days if diff.days > 0 else 1,
                                 day_change="00:00", timeslot_duration="00:15",
                                 venue=event.location_name)
-        dates = (db.session.query(func.date(Session.starts_at, type_=Date)) # type_ needed for sqlite
+        dates = (db.session.query(func.date(Session.starts_at, type_=Date))  # type_ needed for sqlite
                  .filter_by(event_id=event_id)
                  .filter_by(state='accepted')
                  .filter(Session.deleted_at.is_(None))
@@ -46,7 +45,7 @@ class PentabarfExporter:
             date = date[0]
 
             if date is None:
-                continue # Cannot continue if date is missing
+                continue  # Cannot continue if date is missing
 
             day = Day(date=date)
             microlocation_ids = list(db.session.query(Session.microlocation_id)

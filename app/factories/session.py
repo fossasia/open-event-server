@@ -35,6 +35,7 @@ class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     track_id = 1
     microlocation_id = 1
 
+
 class SessionFactory(SessionFactoryBase):
 
     event = factory.RelatedFactory(EventFactoryBasic)
