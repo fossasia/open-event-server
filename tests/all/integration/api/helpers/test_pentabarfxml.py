@@ -13,6 +13,7 @@ from app.factories.event import EventFactoryBasic
 from app.factories.microlocation import MicrolocationFactoryBase
 from app.factories.session import SessionFactory, SessionFactoryBase
 from app.factories.speaker import SpeakerFactoryBase
+from app.factories.user import UserFactory
 
 
 class TestPentabarfXML(OpenEventTestCase):
@@ -61,8 +62,9 @@ class TestPentabarfXML(OpenEventTestCase):
                 event__starts_at=datetime(2019, 10, 15),
                 event__ends_at=datetime(2019, 10, 16, 13, 30, 00))
 
-            mario = SpeakerFactoryBase.build(name='Mario Behling')
-            keynote.speakers = [mario, SpeakerFactoryBase.build(name='Hong Phuc Dang')]
+            UserFactory()
+            mario = SpeakerFactoryBase.build(name='Mario Behling', user_id=1)
+            keynote.speakers = [mario, SpeakerFactoryBase.build(name='Hong Phuc Dang', user_id=1)]
 
             SessionFactoryBase(
                 title='Hot Session',
@@ -74,7 +76,7 @@ class TestPentabarfXML(OpenEventTestCase):
                 starts_at=datetime(2019, 10, 16, 9, 15, 30),
                 ends_at=datetime(2019, 10, 16, 10, 30, 45))
 
-            future_session.speakers = [SpeakerFactoryBase.build(name='Pranav Mistry')]
+            future_session.speakers = [SpeakerFactoryBase.build(name='Pranav Mistry', user_id=1)]
 
             MicrolocationFactoryBase(name='Assembly Hall')
             end_session = SessionFactoryBase(
