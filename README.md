@@ -67,7 +67,7 @@ Please get familiar with the components of the project in order to be able to co
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
 
-Note that open-event-server **works with Python 3.6** at the moment.
+Note that open-event-server **works with Python 3.7** at the moment.
 
 ### External Service Dependencies
 
