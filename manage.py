@@ -6,6 +6,7 @@ from app import manager
 from app import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
+from app.models.module import Module
 from populate_db import populate
 from flask_migrate import stamp
 from sqlalchemy.engine import reflection
@@ -34,6 +35,26 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.option('-n', '--name', dest='name', default='all')
+@manager.option('-s', '--switch', dest='switch', default='off')
+def module(name, switch):
+    keys = [i.name for i in Module.__table__.columns][1:]
+    convey = {"on": True, "off": False}
+    if switch not in ['on', 'off']:
+        print("Choose either state On/Off")
+
+    elif name == 'all':
+        for key in keys:
+            setattr(Module.query.first(), key, convey[switch])
+            print("Module %s turned %s" % (key, switch))
+    elif name in keys:
+        setattr(Module.query.first(), name, convey[switch])
+        print("Module %s turned %s" % (name, switch))
+    else:
+        print("Invalid module selected")
+    db.session.commit()
 
 
 @manager.option('-e', '--event', help='Event ID. Eg. 1')
