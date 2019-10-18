@@ -90,7 +90,7 @@ class Speaker(SoftDeletionModel):
         self.sponsorship_required = sponsorship_required
         self.event_id = event_id
         self.user_id = user_id
-        self.deleted_at = deleted_at,
+        self.deleted_at = deleted_at
         self.complex_field_values = complex_field_values
 
     @staticmethod
