@@ -133,7 +133,6 @@ def create_app():
 
     # development api
     with app.app_context():
-        from app.api.server_version import info_route
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
         from app.api.attendees import attendee_misc_routes
@@ -150,12 +149,12 @@ def create_app():
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
         from app.api.settings import admin_misc_routes
+        from app.api.server_version import info_route
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
         app.register_blueprint(upload_routes)
         app.register_blueprint(export_routes)
-        app.register_blueprint(import_routes)
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
         app.register_blueprint(info_route)
@@ -169,6 +168,7 @@ def create_app():
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
+        app.register_blueprint(import_routes)
 
         add_engine_pidguard(db.engine)
 
