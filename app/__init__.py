@@ -48,7 +48,6 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
-from app.api.server_version import ServerVersion
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
