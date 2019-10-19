@@ -4,7 +4,7 @@
 
 - No Changes
 
-##### v1.7.0 (2019-19-19):
+##### v1.7.0 (2019-10-19):
 
 - ** BREAKING ** Requires Python 3.7
 - Add info endpoint to get server version
