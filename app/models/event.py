@@ -97,6 +97,7 @@ class Event(SoftDeletionModel):
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
+    organizer_email = db.Column(db.String,nullable=False)
     is_tax_enabled = db.Column(db.Boolean, default=False)
     is_billing_info_mandatory = db.Column(db.Boolean, default=False)
     can_pay_by_paypal = db.Column(db.Boolean, default=False, nullable=False)
@@ -219,6 +220,7 @@ class Event(SoftDeletionModel):
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
+                 organizer_email=None,
                  speakers_call=None,
                  can_pay_by_paypal=False,
                  can_pay_by_stripe=False,
@@ -284,6 +286,7 @@ class Event(SoftDeletionModel):
         self.payment_country = payment_country
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
+        self.organizer_email=organizer_email
         self.speakers_call = speakers_call
         self.can_pay_by_paypal = can_pay_by_paypal
         self.can_pay_by_stripe = can_pay_by_stripe

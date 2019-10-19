@@ -33,6 +33,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     payment_country = common.country_
     payment_currency = common.currency_
     paypal_email = common.email_
+    organizer_email = common.email_
     is_tax_enabled = True
     can_pay_by_paypal = True
     can_pay_by_stripe = True
