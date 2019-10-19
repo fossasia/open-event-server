@@ -25,10 +25,7 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         db.session.commit()
         return True
     except Exception as e:
-        if print_error:
-            print(e)
-            traceback.print_exc()
-        logging.error('DB Exception! %s' % e)
+        logging.exception('DB Exception!')
         db.session.rollback()
         return False
 

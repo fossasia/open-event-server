@@ -53,6 +53,9 @@ class Config:
     SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True
+    }
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SENTRY_DSN = env('SENTRY_DSN', default=None)
@@ -132,7 +135,7 @@ class TestingConfig(Config):
     ENV = 'testing'
     TESTING = True
     CELERY_TASK_ALWAYS_EAGER = True
-    CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+    CELERY_TASK_EAGER_PROPAGATES = True
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False
     BROKER_BACKEND = 'memory'

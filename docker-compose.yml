@@ -10,6 +10,8 @@ x-environment-vars: &environment-vars
 x-defaults: &defaults
   image: eventyay/open-event-server
   restart: unless-stopped
+  env_file:
+    - .env
   environment:
     <<: *environment-vars
   depends_on:
@@ -17,6 +19,7 @@ x-defaults: &defaults
     - redis
   volumes:
     - ./static:/data/app/static
+    - ./generated:/data/app/generated # Workaround for #6155
 
 services:
 

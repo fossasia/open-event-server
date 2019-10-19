@@ -37,14 +37,30 @@ class TestExportCSV(OpenEventTestCase):
             self.assertEqual(field_data[1][3], common.string_)
             self.assertEqual(field_data[1][5], 'user0@example.com')
 
+    def _test_export_session_csv(self, test_session=None):
+        with app.test_request_context():
+            if not test_session:
+                test_session = SessionFactory()
+            field_data = export_sessions_csv([test_session])
+            session_row = field_data[1]
+
+            self.assertEqual(session_row[0], 'example (accepted)')
+            self.assertEqual(session_row[7], 'accepted')
+
     def test_export_sessions_csv(self):
         """Method to check sessions data export"""
 
         with app.test_request_context():
+            self._test_export_session_csv()
+    
+    def test_export_sessions_none_csv(self):
+        """Method to check sessions data export with no abstract"""
+
+        with app.test_request_context():
             test_session = SessionFactory()
-            field_data = export_sessions_csv([test_session])
-            self.assertEqual(field_data[1][6], common.int_)
-            self.assertEqual(field_data[1][7], 'accepted')
+            test_session.long_abstract = None
+            test_session.level = None
+            self._test_export_session_csv(test_session)
 
     def test_export_speakers_csv(self):
         """Method to check speakers data export"""

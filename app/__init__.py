@@ -6,6 +6,12 @@ from envparse import env
 import sys
 from flask import Flask, json, make_response
 from flask_celeryext import FlaskCeleryExt
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -26,6 +32,7 @@ import sqlalchemy as sa
 import stripe
 from app.settings import get_settings
 from app.models import db
+from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
@@ -42,8 +49,6 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
-import sentry_sdk
-from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -164,6 +169,11 @@ def create_app():
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
 
+        add_engine_pidguard(db.engine)
+
+        if app.config['SQLALCHEMY_DATABASE_URI'].startswith("sqlite://"):
+            sqlite_datetime_fix()
+
     sa.orm.configure_mappers()
 
     if app.config['SERVE_STATIC']:
@@ -173,7 +183,8 @@ def create_app():
 
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
-        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration()])
+        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration(), RedisIntegration(),
+                                                                CeleryIntegration(), SqlalchemyIntegration()])
 
     # redis
     redis_store.init_app(app)
