@@ -2,10 +2,11 @@
 
 ![Open Event Server](/docs/images/open-event-server.png)
 
-[![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/fossasia/open-event-server.svg)](https://github.com/fossasia/open-event-server/releases/latest)
 [![Build Status](https://travis-ci.org/fossasia/open-event-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-server)
+[![CircleCI Build Staus Badge](https://img.shields.io/circleci/build/github/fossasia/open-event-server?label=CircleCI%20Build)](https://www.circleci.com/gh/fossasia/open-event-server)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-server)
-[![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-server)
+[![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/development/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/open-event)
@@ -66,7 +67,7 @@ Please get familiar with the components of the project in order to be able to co
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
 
-Note that open-event-server **works with Python 3.6** at the moment.
+Note that open-event-server **works with Python 3.7** at the moment.
 
 ### External Service Dependencies
 
@@ -191,6 +192,34 @@ Clone the repo and set up the server according to the steps listed. Make sure yo
 
 ```
 pip3 install -r requirements/tests.txt
+```
+
+#### Enable/Disable modules
+
+-   Enable/Disable a specific module
+
+```
+python manage.py module --name module_name --switch on/off
+```
+
+**_Example :_**
+
+```
+python manage.py module --name ticket_include --switch on
+python manage.py module -n ticket_include -s off
+```
+
+-   Enable/Disable all modules
+
+```
+python manage.py module --name module_name --switch on/off
+```
+
+**_Example :_**
+
+```
+python manage.py module --name all --switch on
+python manage.py module -n all -s off
 ```
 
 #### Running unit tests

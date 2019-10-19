@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "aglio": "^2.3.0",
+    "dredd": "4"
+  }
+}

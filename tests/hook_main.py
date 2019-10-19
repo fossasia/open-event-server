@@ -8,10 +8,10 @@ import requests
 # placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 
-from flask_migrate import Migrate, stamp
+from flask_migrate import Migrate
 from flask import Flask
 from app.models import db
-from populate_db import populate_without_print
+from app.models.user import OWNER
 
 # imports from factories
 
@@ -110,9 +110,7 @@ def before_each(transaction):
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
         db.create_all()
-        stamp()
         create_super_admin(api_username, api_password)
-        populate_without_print()
 
     if 'token' in stash:
         print('adding a token')
@@ -338,8 +336,7 @@ def event_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
+        RoleFactory(name=OWNER) # TODO: Change to get_or_create in event after_created
         db.session.commit()
 
 
@@ -2279,7 +2276,7 @@ def event_image_size_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Update Event Image Size")
+@hooks.before("Image Size > Event Image Size Details > Update Event Image Size")
 def event_image_size_patch(transaction):
     """
     PATCH /event-image-sizes
@@ -2300,12 +2297,12 @@ def speaker_image_size_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        speaker_image_size = SpeakerImageSizeFactory()
-        db.session.add(speaker_image_size)
+        EventImageSizeFactory()
+        SpeakerImageSizeFactory()
         db.session.commit()
 
 
-@hooks.before("Image Size > Speaker Size Details > Update Speaker Image Size")
+@hooks.before("Image Size > Speaker Image Size Details > Update Speaker Image Size")
 def speaker_size_patch(transaction):
     """
     PATCH /speaker-image-sizes
@@ -2313,8 +2310,8 @@ def speaker_size_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        speaker_image_size = SpeakerImageSizeFactory()
-        db.session.add(speaker_image_size)
+        EventImageSizeFactory()
+        SpeakerImageSizeFactory()
         db.session.commit()
 
 
@@ -3242,8 +3239,8 @@ def role_invite_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        role_invite = RoleInviteFactory()
-        db.session.add(role_invite)
+        RoleFactory()
+        EventFactoryBasic()
         db.session.commit()
 
 
@@ -3268,8 +3265,7 @@ def role_invite_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        role_invite = RoleInviteFactory()
-        db.session.add(role_invite)
+        RoleInviteFactory()
         db.session.commit()
 
 
@@ -3676,7 +3672,7 @@ def event_sub_topic_custom_placeholder_get_detail(transaction):
         event_sub_topic = EventSubTopicFactory()
         db.session.add(event_sub_topic)
 
-        custom_placeholder = CustomPlaceholderFactory()
+        custom_placeholder = CustomPlaceholderFactory(event_sub_topic_id=1)
         db.session.add(custom_placeholder)
         db.session.commit()
 
@@ -3686,19 +3682,6 @@ def event_sub_topic_custom_placeholder_get_detail(transaction):
 def user_permission_get_list(transaction):
     """
     GET /user-permissions
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        user_permission = UserPermissionFactory()
-        db.session.add(user_permission)
-        db.session.commit()
-
-
-@hooks.before("User Permissions > User Permission Collection > Create User Permission")
-def user_permission_post(transaction):
-    """
-    POST /user-permissions
     :param transaction:
     :return:
     """
@@ -4192,7 +4175,7 @@ def reset_password_patch(transaction):
 
 # ------------------------- Custom System Role -------------------------
 
-@hooks.before("Custom System Roles > Custom System Roles Collection > List All Custom System Roles")
+@hooks.before("Custom System Roles > Custom System Roles Collections > List All Custom System Roles")
 def custom_system_roles_get_list(transaction):
     """
     GET /custom-system-roles
@@ -4205,23 +4188,10 @@ def custom_system_roles_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Custom System Roles > Custom System Roles Collection > Create Custom System Role")
-def custom_system_roles_post(transaction):
-    """
-    POST /custom-system-roles
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        custom_system_role = CustomSysRoleFactory()
-        db.session.add(custom_system_role)
-        db.session.commit()
-
-
 @hooks.before("Custom System Roles > Custom System Roles Details > Get Details")
 def custom_system_role_get_detail(transaction):
     """
-    GET /custom-system-roles/2
+    GET /custom-system-roles/1
     :param transaction:
     :return:
     """
@@ -4234,7 +4204,7 @@ def custom_system_role_get_detail(transaction):
 @hooks.before("Custom System Roles > Custom System Roles Details > Update Custom System Role")
 def custom_system_role_patch(transaction):
     """
-    PATCH /custom-system-roles/2
+    PATCH /custom-system-roles/1
     :param transaction:
     :return:
     """
@@ -4244,10 +4214,10 @@ def custom_system_role_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("Custom System Roles > Custom System Roles Details > Delete Custom System Role")
+@hooks.before("Custom System Roles > Custom System Roles Details > Delete Custom Systen Role")
 def custom_system_role_delete(transaction):
     """
-    DELETE /custom-system-roles/2
+    DELETE /custom-system-roles/1
     :param transaction:
     :return:
     """
@@ -4257,8 +4227,9 @@ def custom_system_role_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Custom System Roles > Custom System Role Details for a Panel Permission >"
-                " Custom System Role Details for a Panel Permission")
+@hooks.before(
+    "Custom System Roles > Get Custom System Role Details for a Panel Permission > "
+    "Get Custom System Role Details for a Panel Permission")
 def custom_system_roles_panel_permission(transaction):
     """
     GET /panel-permissions/1/custom-system-roles
@@ -4274,7 +4245,7 @@ def custom_system_roles_panel_permission(transaction):
 # ------------------------- Panel Permission -------------------------
 
 
-@hooks.before("Panel Permissions > Panel Permissions Collection > List All Panel Permissions")
+@hooks.before("Panel Permissions > Panel Permissions Collections > List All Panel Permissions")
 def panel_permission_get_list(transaction):
     """
     GET /panel-permissions
@@ -4287,23 +4258,10 @@ def panel_permission_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Panel Permissions > Panel Permissions Collection > Create Panel Permissions")
-def panel_permission_post(transaction):
-    """
-    POST /panel-permissions
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        panel_permission = PanelPermissionFactory()
-        db.session.add(panel_permission)
-        db.session.commit()
-
-
 @hooks.before("Panel Permissions > Panel Permission Details > Get Details")
 def panel_permission_get_detail(transaction):
     """
-    GET /panel-permissions/10
+    GET /panel-permissions/1
     :param transaction:
     :return:
     """
@@ -4316,7 +4274,7 @@ def panel_permission_get_detail(transaction):
 @hooks.before("Panel Permissions > Panel Permission Details > Update Panel Permission")
 def panel_permission_patch(transaction):
     """
-    PATCH /panel-permissions/10
+    PATCH /panel-permissions/1
     :param transaction:
     :return:
     """
@@ -4329,7 +4287,7 @@ def panel_permission_patch(transaction):
 @hooks.before("Panel Permissions > Panel Permission Details > Delete Panel Permission")
 def panel_permission_delete(transaction):
     """
-    DELETE /panel-permissions/10
+    DELETE /panel-permissions/1
     :param transaction:
     :return:
     """
@@ -4340,8 +4298,8 @@ def panel_permission_delete(transaction):
 
 
 @hooks.before(
-    "Panel Permissions > Panel Permission Details for a Custom System Role > "
-    "Panel Permission Details for a Custom System Role")
+    "Panel Permissions > Get Panel Permission Details for a Custom System Role > "
+    "Get Panel Permission Details for a Custom System Role")
 def panel_permissions_custom_system_role(transaction):
     """
     GET /custom-system-roles/1/panel-permissions
@@ -4349,8 +4307,8 @@ def panel_permissions_custom_system_role(transaction):
     :return:
     """
     with stash['app'].app_context():
-        panel_permission = PanelPermissionFactory()
-        db.session.add(panel_permission)
+        CustomSysRoleFactory()
+        PanelPermissionFactory()
         db.session.commit()
 
 # ------------------------- User Favourite Events -------------------------

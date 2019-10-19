@@ -121,7 +121,7 @@ Create a new custom system role using a name.
 
 ## Custom System Roles Details [/v1/custom-system-roles/{custom_system_role_id}]
 + Parameters
-    + custom_system_role_id: 2 (integer) - ID of the custom system role in the form of an integer.
+    + custom_system_role_id: 1 (integer) - ID of the custom system role in the form of an integer.
 
 ### Get Details [GET]
 Get a single custom system role.
@@ -141,25 +141,25 @@ Get a single custom system role.
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/custom-system-roles/2"
+                "self": "/v1/custom-system-roles/1"
             },
             "data": {
                 "relationships": {
                     "panel-permissions": {
                         "links": {
-                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
-                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                            "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/1/panel-permissions"
                         }
                     }
                 },
                 "type": "custom-system-role",
                 "links": {
-                    "self": "/v1/custom-system-roles/2"
+                    "self": "/v1/custom-system-roles/1"
                 },
                 "attributes": {
                     "name": "Marketer"
                 },
-                "id": "2"
+                "id": "1"
             }
         }
 
@@ -183,7 +183,7 @@ Update a single custom system role.
                         "name": "Manager"
                     },
                     "type": "custom-system-role",
-                    "id": "2"
+                    "id": "1"
                 }
             }
 + Response 200 (application/vnd.api+json)
@@ -193,25 +193,25 @@ Update a single custom system role.
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/custom-system-roles/2"
+                "self": "/v1/custom-system-roles/1"
             },
             "data": {
                 "relationships": {
                     "panel-permissions": {
                         "links": {
-                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
-                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                            "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/1/panel-permissions"
                         }
                     }
                 },
                 "type": "custom-system-role",
                 "links": {
-                    "self": "/v1/custom-system-roles/2"
+                    "self": "/v1/custom-system-roles/1"
                 },
                 "attributes": {
                     "name": "Manager"
                 },
-                "id": "2"
+                "id": "1"
             }
         }
 

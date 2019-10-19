@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 3
+* Python 3.7
 * Postgres
 ```sh
 sudo apt-get update
