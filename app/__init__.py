@@ -158,7 +158,6 @@ def create_app():
         app.register_blueprint(import_routes)
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
-        app.register_blueprint(info_route)
         app.register_blueprint(event_statistics)
         app.register_blueprint(user_misc_routes)
         app.register_blueprint(attendee_misc_routes)
@@ -169,6 +168,7 @@ def create_app():
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
+        app.register_blueprint(info_route)
 
         add_engine_pidguard(db.engine)
 
