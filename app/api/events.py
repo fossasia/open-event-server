@@ -578,10 +578,7 @@ class EventDetail(ResourceDetail):
             else:
                 event.deleted_at = data.get('deleted_at')
 
-        deleted_tickets = 0
-        for ticket in event.tickets:
-            if ticket.deleted_at:
-                deleted_tickets += 1
+        deleted_tickets = event.tickets.filter(Ticket.deleted_at != None).count()
 
         if 'is_event_online' not in data and event.is_event_online \
                 or 'is_event_online' in data and not data['is_event_online']:
@@ -589,7 +586,7 @@ class EventDetail(ResourceDetail):
                 if not data.get('location_name', None):
                     raise ConflictException({'pointer': '/data/attributes/location-name'},
                                             "Location is required to publish the event")
-                if deleted_tickets == len(event.tickets):
+                if deleted_tickets or not event.tickets.count():
                     raise ConflictException({'pointer': '/data/attributes/tickets'},
                                             "Tickets are required to publish an event")
 

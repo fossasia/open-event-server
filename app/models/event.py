@@ -71,7 +71,7 @@ class Event(SoftDeletionModel):
     session = db.relationship('Session', backref="event")
     speaker = db.relationship('Speaker', backref="event")
     sponsor = db.relationship('Sponsor', backref="event")
-    tickets = db.relationship('Ticket', backref="event_")
+    tickets = db.relationship('Ticket', backref="event_", lazy='dynamic')
     tags = db.relationship('TicketTag', backref='events')
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
