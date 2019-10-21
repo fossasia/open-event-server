@@ -230,7 +230,7 @@ with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
-#Health-check for celery
+# Health-check for celery
 health = HealthCheck(current_app, "/celery-check")
 health.add_check(health_check_celery)
 
