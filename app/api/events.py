@@ -1,4 +1,4 @@
-from flask import request, current_app
+from flask import request
 from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -57,8 +57,8 @@ def validate_event(user, modules, data):
         raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
     elif data.get('is_ticketing_enabled', True) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
+        raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                 "Ticketing is not enabled in the system")
     if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
         data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
         if not modules.payment_include:
@@ -114,6 +114,7 @@ def validate_date(event, data):
         else:
             raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
                                       "starts-at should be after current date-time")
+
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -577,11 +578,21 @@ class EventDetail(ResourceDetail):
             else:
                 event.deleted_at = data.get('deleted_at')
 
+        deleted_tickets = 0
+        for ticket in event.tickets:
+            if ticket.deleted_at:
+                deleted_tickets += 1
+
         if 'is_event_online' not in data and event.is_event_online \
-                or 'is_event_online' in data and not data['is_event_online']:
-            if data.get('state', None) == 'published' and not data.get('location_name', None):
-                raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                        "Location is required to publish the event")
+            or 'is_event_online' in data and not data['is_event_online']:
+            if data.get('state', None) == 'published':
+                if not data.get('location_name', None):
+                    raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                            "Location is required to publish the event")
+                if deleted_tickets == len(event.tickets):
+                    raise ConflictException({'pointer': '/data/attributes/tickets'},
+                                            "Tickets are required to publish an event")
+
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             start_image_resizing_tasks(event, data['original_image_url'])
 
