@@ -1,4 +1,4 @@
-FROM python:3.7-alpine as base
+FROM python:3.7.4-alpine as base
 LABEL maintainer="Niranjan Rajendran <me@niranjan.io>"
 
 ####
