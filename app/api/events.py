@@ -584,7 +584,7 @@ class EventDetail(ResourceDetail):
                 deleted_tickets += 1
 
         if 'is_event_online' not in data and event.is_event_online \
-            or 'is_event_online' in data and not data['is_event_online']:
+                or 'is_event_online' in data and not data['is_event_online']:
             if data.get('state', None) == 'published':
                 if not data.get('location_name', None):
                     raise ConflictException({'pointer': '/data/attributes/location-name'},
