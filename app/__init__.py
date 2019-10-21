@@ -223,13 +223,16 @@ def make_celery(app=None):
     return ext.celery
 
 
-# Health-check
+# Health-check for db and migrations
 health = HealthCheck(current_app, "/health-check")
-health.add_check(health_check_celery)
 health.add_check(health_check_db)
 with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
+
+#Health-check for celery
+health = HealthCheck(current_app, "/celery-check")
+health.add_check(health_check_celery)
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
