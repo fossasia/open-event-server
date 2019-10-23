@@ -39,7 +39,7 @@ python-dotenv~=0.10.3
 python-geoip~=1.2
 marrow.mailer~=4.0
 flask-cors~=3.0.8
-python-pentabarf-xml==0.19  # leave versions untouched.
+python-pentabarf-xml==0.20  # leave versions untouched.
 python-geoip-geolite2
 pycountry
 pytz
