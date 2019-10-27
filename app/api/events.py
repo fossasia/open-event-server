@@ -57,8 +57,8 @@ def validate_event(user, modules, data):
         raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
     elif data.get('is_ticketing_enabled', True) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
+        raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                 "Ticketing is not enabled in the system")
     if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
         data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
         if not modules.payment_include:
@@ -114,6 +114,7 @@ def validate_date(event, data):
         else:
             raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
                                       "starts-at should be after current date-time")
+
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -238,8 +239,9 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         validate_event(user, modules, data)
-        if data['state'] != 'draft':
-            validate_date(None, data)
+        if data['state'] == 'published':
+            data['state'] = 'draft'
+        validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
