@@ -9,8 +9,6 @@ from tests.all.integration.setup_database import Setup
 class TestFiltersHelperValidation(OpenEventTestCase):
     """Contains tests for filters helpers"""
 
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_json_to_rest_filter_list(self):
         """

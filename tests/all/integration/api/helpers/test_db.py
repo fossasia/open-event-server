@@ -13,8 +13,6 @@ from tests.all.integration.setup_database import Setup
 
 
 class TestDBHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_save_to_db(self):
         """Method to test the function save_to_db"""

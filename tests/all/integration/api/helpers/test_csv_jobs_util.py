@@ -15,8 +15,6 @@ import unittest
 
 class TestExportCSV(OpenEventTestCase):
 
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_export_orders_csv(self):
         """Method to check the orders data export"""

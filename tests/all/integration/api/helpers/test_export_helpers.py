@@ -14,8 +14,6 @@ from flask_login import login_user
 
 
 class TestExportJobHelpers(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_create_export_job(self):
         """Method to test export job before creation"""

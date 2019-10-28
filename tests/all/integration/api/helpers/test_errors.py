@@ -11,8 +11,6 @@ from app import current_app as app
 
 
 class TestErrorsHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_error_response_base_respond(self):
         """Method to test base error response methods"""

@@ -15,8 +15,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestOrderUtilities(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_should_expire_outdated_order(self):
         """Method to test expiration of outdated orders"""
