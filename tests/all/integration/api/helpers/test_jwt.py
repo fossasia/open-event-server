@@ -13,8 +13,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestJWTHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_jwt_authenticate(self):
         """Method to test jwt authentication"""
