@@ -10,8 +10,6 @@ from tests.all.integration.setup_database import Setup
 import datetime
 
 class TestAccessCodeValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_quantity_pass(self):
         """

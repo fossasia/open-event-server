@@ -6,8 +6,6 @@ from tests.all.integration.setup_database import Setup
 
 
 class TestExceptionsHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_exceptions(self):
         """Method to test all exceptions."""
