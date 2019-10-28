@@ -11,8 +11,6 @@ from tests.all.integration.setup_database import Setup
 
 
 class TestUserUtilitiesHelper(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_modify_email_for_user_to_be_deleted(self):
         """Method to test modification of email for user to be deleted"""

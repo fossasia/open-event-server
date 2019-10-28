@@ -23,8 +23,6 @@ from app.models.notification import NotificationAction
 
 
 class TestSystemNotificationHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_event_exported(self):
         """Method to test the actions associated with a notification about an event being successfully exported."""
