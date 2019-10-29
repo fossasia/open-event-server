@@ -300,3 +300,55 @@ Delete a single role invite.
             "version": "1.0"
           }
         }
+
+## User Email Details By Role Invite [/v1/role_invites/user]
+
+### Get User Email Detail By Role Invite Token [POST]
+Get a single user email by sending role invite hash.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "token": "149889783495332276669212664484219865405"
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "email": "user0@example.com"
+        }
+
+
+## Accept Role Invite [/v1/role_invites/accept-invite]
+
+### Accept Role Invite using Token [POST]
+Accept Role Invitation by role invite hash
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "token": "149889783495332276669212664484219865405"
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "email": "user0@example.com",
+          "event": 1,
+          "name": "example",
+          "role": "organizer"
+        }
