@@ -51,9 +51,9 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 
-One-click Heroku and Docker deployments are also available:
+One-click Heroku deployment is also available:
 
-[![Deploy to Docker Cloud](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Docker_%28container_engine%29_logo.svg/150px-Docker_%28container_engine%29_logo.svg.png)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
 ## Technology Stack
