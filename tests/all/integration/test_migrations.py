@@ -6,8 +6,6 @@ from populate_db import populate
 
 
 class TestMigrations(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_migrations(self):
         """Method to test the database migrations"""
