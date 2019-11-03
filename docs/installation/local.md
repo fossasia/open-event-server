@@ -93,7 +93,7 @@ pipenv shell
 ```
 
 
-* **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
+* **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
 
 ```sh
 # For linux users
