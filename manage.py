@@ -37,6 +37,15 @@ def add_event_identifier():
         save_to_db(event)
 
 
+@manager.command
+def fix_digit_identifier():
+    events = Event.query.all()
+    for event in events:
+        if event.identifier.isdigit():
+            event.identifier = event.identifier + 'ref'
+            save_to_db(event)
+
+
 @manager.option('-n', '--name', dest='name', default='all')
 @manager.option('-s', '--switch', dest='switch', default='off')
 def module(name, switch):
