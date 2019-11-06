@@ -2,7 +2,7 @@
 
 ##### v1.8.0 (Unreleased):
 
-- No Changes
+- Run `python manage.py fix_digit_identifier` to correct all digit identifiers
 
 ##### v1.7.0 (2019-10-19):
 
