@@ -28,10 +28,7 @@ from app.models.ticket_holder import TicketHolder
 
 def get_new_event_identifier(length=8):
     identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    if identifier.isdigit():
-        return get_new_event_identifier(length)
-    count = get_count(Event.query.filter_by(identifier=identifier))
-    if count == 0:
+    if not identifier.isdigit() and get_count(Event.query.filter_by(identifier=identifier)) == 0:
         return identifier
     else:
         return get_new_event_identifier(length)
