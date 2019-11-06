@@ -39,11 +39,11 @@ def add_event_identifier():
 
 @manager.command
 def fix_digit_identifier():
-    events = Event.query.all()
+    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
     for event in events:
-        if event.identifier.isdigit():
-            event.identifier = event.identifier + 'ref'
-            save_to_db(event)
+        event.identifier = get_new_event_identifier()
+        db.session.add(event)
+    db.session.commit()
 
 
 @manager.option('-n', '--name', dest='name', default='all')
