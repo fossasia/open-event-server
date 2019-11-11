@@ -14,6 +14,8 @@ categories:
 change-template: '- $TITLE (#$NUMBER) - @$AUTHOR'
 template: |
   ## Changes
+  
+  ## Corresponding [FE](https://github.com/fossasia/open-event-frontend) version at the time of release
 
   $CHANGES
   
