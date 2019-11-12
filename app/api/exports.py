@@ -2,9 +2,10 @@ import os
 
 from flask import send_file, make_response, jsonify, url_for, \
     current_app, request, Blueprint
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import current_user
 
 from app.api.helpers.export_helpers import export_event_json, create_export_job
+from app.api.helpers.permissions import is_coorganizer
 from app.api.helpers.utilities import TASK_RESULTS
 from app.models import db
 from app.models.event import Event
@@ -19,8 +20,8 @@ EXPORT_SETTING = {
 }
 
 
-@export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'], endpoint='export_event')
+@is_coorganizer
 def export_event(event_identifier):
     from .helpers.tasks import export_event_task
 
@@ -53,8 +54,8 @@ def export_event(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_id>/exports/<path:path>')
-@jwt_required
+@export_routes.route('/events/<string:event_id>/exports/<path:path>', endpoint='export_download')
+@is_coorganizer
 def export_download(event_id, path):
     if not path.startswith('/'):
         path = '/' + path
@@ -65,8 +66,8 @@ def export_download(event_id, path):
     return response
 
 
-@export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'], endpoint='export_event_xcal')
+@is_coorganizer
 def export_event_xcal(event_identifier):
 
     if not event_identifier.isdigit():
@@ -94,8 +95,8 @@ def event_export_task_base(event_id, settings):
     return path
 
 
-@export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'], endpoint='export_event_ical')
+@is_coorganizer
 def export_event_ical(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -114,8 +115,9 @@ def export_event_ical(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/pentabarf', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/pentabarf', methods=['GET'],
+                     endpoint='export_event_pentabarf')
+@is_coorganizer
 def export_event_pentabarf(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -134,8 +136,9 @@ def export_event_pentabarf(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/orders/csv', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/orders/csv', methods=['GET'],
+                     endpoint='export_orders_csv')
+@is_coorganizer
 def export_orders_csv(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -154,8 +157,9 @@ def export_orders_csv(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/orders/pdf', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/orders/pdf', methods=['GET'],
+                     endpoint='export_orders_pdf')
+@is_coorganizer
 def export_orders_pdf(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -174,8 +178,9 @@ def export_orders_pdf(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/attendees/csv', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/attendees/csv', methods=['GET'],
+                     endpoint='export_attendees_csv')
+@is_coorganizer
 def export_attendees_csv(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -194,8 +199,9 @@ def export_attendees_csv(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/attendees/pdf', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/attendees/pdf', methods=['GET'],
+                     endpoint='export_attendees_pdf')
+@is_coorganizer
 def export_attendees_pdf(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -214,8 +220,9 @@ def export_attendees_pdf(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/sessions/csv', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/sessions/csv', methods=['GET'],
+                     endpoint='export_sessions_csv')
+@is_coorganizer
 def export_sessions_csv(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -234,8 +241,9 @@ def export_sessions_csv(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/speakers/csv', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/speakers/csv', methods=['GET'],
+                     endpoint='export_speakers_csv')
+@is_coorganizer
 def export_speakers_csv(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -254,8 +262,9 @@ def export_speakers_csv(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/sessions/pdf', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/sessions/pdf', methods=['GET'],
+                     endpoint='export_sessions_pdf')
+@is_coorganizer
 def export_sessions_pdf(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
@@ -274,8 +283,9 @@ def export_sessions_pdf(event_identifier):
     )
 
 
-@export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'])
-@jwt_required
+@export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'],
+                     endpoint='export_speakers_pdf')
+@is_coorganizer
 def export_speakers_pdf(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()

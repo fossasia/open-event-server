@@ -1,11 +1,12 @@
 from functools import wraps
-from flask import current_app as app
 from flask_jwt_extended import verify_jwt_in_request, current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
 from flask import request
 from datetime import datetime
+from app.models import db
+from app.models.event import Event
 
 
 def second_order_decorator(inner_dec):
@@ -157,10 +158,22 @@ def is_coorganizer(f):
     def decorated_function(*args, **kwargs):
         user = current_user
 
-        if user.is_staff:
-            return f(*args, **kwargs)
-        if 'event_id' in kwargs and user.has_event_access(kwargs['event_id']):
-            return f(*args, **kwargs)
+        if 'event_identifier' in kwargs:
+            event = db.session.query(Event).filter_by(identifier=kwargs['event_identifier']).first()
+            kwargs['event_id'] = event.id
+
+            if user.is_staff:
+                kwargs.pop('event_id', None)
+                return f(*args, **kwargs)
+            if 'event_id' in kwargs and user.has_event_access(kwargs['event_id']):
+                kwargs.pop('event_id', None)
+                return f(*args, **kwargs)
+        elif 'event_id' in kwargs:
+            if user.is_staff:
+                return f(*args, **kwargs)
+            if 'event_id' in kwargs and user.has_event_access(kwargs['event_id']):
+                return f(*args, **kwargs)
+
         return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
     return decorated_function
