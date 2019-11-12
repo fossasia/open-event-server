@@ -159,8 +159,11 @@ def is_coorganizer(f):
         user = current_user
 
         if 'event_identifier' in kwargs:
-            event = db.session.query(Event).filter_by(identifier=kwargs['event_identifier']).first()
-            kwargs['event_id'] = event.id
+            if not kwargs['event_identifier'].isdigit():
+                event = db.session.query(Event).filter_by(identifier=kwargs['event_identifier']).first()
+                kwargs['event_id'] = event.id
+            else:
+                kwargs['event_id'] = kwargs['event_identifier']
 
             if user.is_staff:
                 kwargs.pop('event_id', None)
