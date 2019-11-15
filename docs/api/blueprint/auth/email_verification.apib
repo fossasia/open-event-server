@@ -27,3 +27,28 @@ Sends the token to verify the account associated with the provided email id via 
         {
           "message": "Verification email resent"
         }
+
+## Verify Email [/v1/auth/verify-email]
+
+### Verify the email via auth token [POST]
+Verifies the user email via token.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "token": "your token"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+          "message": "your token"
+        }
