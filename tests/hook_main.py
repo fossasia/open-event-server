@@ -1913,6 +1913,46 @@ def attendee_receipts(transaction):
         db.session.commit()
 
 
+@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
+def get_attendees_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under an event > List All Attendees under an event")
+def get_attendees_from_event(transaction):
+    """
+    GET /v1/events/{event_id}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under a ticket > List All Attendees under a ticket")
+def get_attendees_from_ticket(transaction):
+    """
+    GET /v1/tickets/{ticket_id}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
+
 # ------------------------- Tracks -------------------------
 @hooks.before("Tracks > Tracks Collection > Create Track")
 def track_post(transaction):
@@ -4135,20 +4175,6 @@ def create_event_copy(transaction):
 def get_event_from_order(transaction):
     """
     GET /v1/orders/{identifier}/event
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        order = OrderFactory()
-        order.identifier = "7201904e"
-        db.session.add(order)
-        db.session.commit()
-
-
-@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
-def get_attendees_from_order(transaction):
-    """
-    GET /v1/orders/{identifier}/attendees
     :param transaction:
     :return:
     """
