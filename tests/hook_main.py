@@ -1913,6 +1913,46 @@ def attendee_receipts(transaction):
         db.session.commit()
 
 
+@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
+def get_attendees_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under an event > List All Attendees under an event")
+def get_attendees_from_event(transaction):
+    """
+    GET /v1/events/{event_id}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under a ticket > List All Attendees under a ticket")
+def get_attendees_from_ticket(transaction):
+    """
+    GET /v1/tickets/{ticket_id}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
+
 # ------------------------- Tracks -------------------------
 @hooks.before("Tracks > Tracks Collection > Create Track")
 def track_post(transaction):
@@ -4145,20 +4185,6 @@ def get_event_from_order(transaction):
         db.session.commit()
 
 
-@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
-def get_attendees_from_order(transaction):
-    """
-    GET /v1/orders/{identifier}/attendees
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        order = OrderFactory()
-        order.identifier = "7201904e"
-        db.session.add(order)
-        db.session.commit()
-
-
 @hooks.before("Change Password > Reset Forgotten Password > Reset Password from Token")
 def reset_password_patch(transaction):
     """
@@ -4172,6 +4198,15 @@ def reset_password_patch(transaction):
         db.session.add(user)
         db.session.commit()
 
+
+@hooks.before("Email Verification > Verify Email > Verify the email via auth token")
+def verify_email_from_token(transaction):
+    """
+    POST /v1/auth/verify-email
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 # ------------------------- Custom System Role -------------------------
 
