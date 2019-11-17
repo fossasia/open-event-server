@@ -4199,6 +4199,15 @@ def reset_password_patch(transaction):
         db.session.commit()
 
 
+@hooks.before("Email Verification > Verify Email > Verify the email via auth token")
+def verify_email_from_token(transaction):
+    """
+    POST /v1/auth/verify-email
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
 # ------------------------- Custom System Role -------------------------
 
 @hooks.before("Custom System Roles > Custom System Roles Collections > List All Custom System Roles")
