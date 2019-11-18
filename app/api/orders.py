@@ -319,6 +319,10 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+
+        if (not has_access('is_admin')) and ('DELETE' in request.method):
+            raise ConflictException({'source': 'data/order'}, 'You cannot delete an order.')
+
         if data.get('amount') or data.get('is_billing_enabled'):
             check_billing_info(data)
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
