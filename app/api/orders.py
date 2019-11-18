@@ -321,7 +321,7 @@ class OrderDetail(ResourceDetail):
         """
 
         if (not has_access('is_admin')) and ('DELETE' in request.method):
-            raise ConflictException({'source': 'data/order'}, 'You cannot delete an order.')
+            raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
         if data.get('amount') or data.get('is_billing_enabled'):
             check_billing_info(data)
@@ -437,18 +437,6 @@ class OrderDetail(ResourceDetail):
                 send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
                                                      order.event.name, order.identifier)
 
-    def before_delete_object(self, order, view_kwargs):
-        """
-        method to check for proper permissions for deleting
-        :param order:
-        :param view_kwargs:
-        :return:
-        """
-        if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenException({'source': ''}, 'Access Forbidden')
-        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
-            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
-
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (jwt_required, api.has_permission(
         'auth_required', methods="PATCH,DELETE", model=Order),)
@@ -457,7 +445,6 @@ class OrderDetail(ResourceDetail):
                   'model': Order,
                   'methods': {
                       'before_update_object': before_update_object,
-                      'before_delete_object': before_delete_object,
                       'before_get_object': before_get_object,
                       'after_update_object': after_update_object
                   }}
