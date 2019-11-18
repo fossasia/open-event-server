@@ -147,6 +147,30 @@ def is_organizer(f):
 
 
 @second_order_decorator(jwt_required)
+def get_event_id(f):
+    """
+    Get event id from event identifier.
+    :param f:
+    :return:
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if 'event_identifier' in kwargs:
+            if not kwargs['event_identifier'].isdigit():
+                event = db.session.query(Event).filter_by(identifier=kwargs['event_identifier']).first()
+                kwargs['event_id'] = event.id
+            else:
+                kwargs['event_id'] = kwargs['event_identifier']
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+
+@second_order_decorator(jwt_required)
 def is_coorganizer(f):
     """
     Allows Organizer and Co-organizer to access the event resources.
@@ -157,13 +181,6 @@ def is_coorganizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_user
-
-        if 'event_identifier' in kwargs:
-            if not kwargs['event_identifier'].isdigit():
-                event = db.session.query(Event).filter_by(identifier=kwargs['event_identifier']).first()
-                kwargs['event_id'] = event.id
-            else:
-                kwargs['event_id'] = kwargs['event_identifier']
 
         if user.is_staff or ('event_id' in kwargs and user.has_event_access(kwargs['event_id'])):
             if 'event_identifier' in kwargs:
