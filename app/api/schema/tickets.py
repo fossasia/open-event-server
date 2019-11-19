@@ -67,6 +67,12 @@ class TicketSchemaPublic(SoftDeletionSchema):
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
                                           "quantity should be greater than or equal to max-order")
 
+    @validates_schema
+    def validate_price(self, data):
+        if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
+            raise UnprocessableEntity({'pointer': 'data/attributes/price'},
+                                      "paid ticket price should be greater than 0")
+
     @validates_schema(pass_original=True)
     def validate_discount_code(self, data, original_data):
         if 'relationships' in original_data and 'discount-codes' in original_data['data']['relationships']:

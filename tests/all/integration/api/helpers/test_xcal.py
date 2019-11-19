@@ -11,8 +11,6 @@ from app.api.helpers.db import save_to_db
 
 
 class TestXCalExport(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_export(self):
         """Test to check event contents in xCal format"""

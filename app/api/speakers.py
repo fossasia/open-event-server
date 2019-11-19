@@ -47,10 +47,10 @@ class SpeakerListPost(ResourceList):
                                                           deleted_at=None)) > 0:
             raise ForbiddenException({'pointer': ''}, 'Speaker with this Email ID already exists')
 
-        if data.get('is_email_overriden') and not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'pointer': 'data/attributes/is_email_overriden'},
+        if data.get('is_email_overridden') and not has_access('is_organizer', event_id=data['event']):
+            raise ForbiddenException({'pointer': 'data/attributes/is_email_overridden'},
                                      'Organizer access required to override email')
-        elif data.get('is_email_overriden') and has_access('is_organizer', event_id=data['event']) and \
+        elif data.get('is_email_overridden') and has_access('is_organizer', event_id=data['event']) and \
                 not data.get('email'):
             data['email'] = current_user.email
 
@@ -135,10 +135,10 @@ class SpeakerDetail(ResourceDetail):
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
-        if data.get('is_email_overriden') and not has_access('is_organizer', event_id=speaker.event_id):
-            raise ForbiddenException({'pointer': 'data/attributes/is_email_overriden'},
+        if data.get('is_email_overridden') and not has_access('is_organizer', event_id=speaker.event_id):
+            raise ForbiddenException({'pointer': 'data/attributes/is_email_overridden'},
                                      'Organizer access required to override email')
-        elif data.get('is_email_overriden') and has_access('is_organizer', event_id=speaker.event_id) and \
+        elif data.get('is_email_overridden') and has_access('is_organizer', event_id=speaker.event_id) and \
                 not data.get('email'):
             data['email'] = current_user.email
 

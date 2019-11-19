@@ -10,8 +10,6 @@ from app.api.helpers.storage import upload_local
 class TestStorage(OpenEventTestCase):
     """Contains test for Storage Helpers"""
 
-    def Setup(self):
-        self.app = Setup.create_app()
 
     """Test local file upload."""
     @patch('app.api.helpers.storage.upload_local')

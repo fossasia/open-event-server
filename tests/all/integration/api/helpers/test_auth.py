@@ -11,8 +11,6 @@ import unittest
 
 
 class TestAuthentication(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_load_user(self):
         """Method to test the registered user details"""

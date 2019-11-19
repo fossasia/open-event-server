@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/fossasia/open-event-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-server)
 [![CircleCI Build Staus Badge](https://img.shields.io/circleci/build/github/fossasia/open-event-server?label=CircleCI%20Build)](https://www.circleci.com/gh/fossasia/open-event-server)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-server)
-[![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-server)
+[![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/development/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 [![Mailing List](https://img.shields.io/badge/Mailing%20List-FOSSASIA-blue.svg)](https://groups.google.com/forum/#!forum/open-event)
@@ -51,9 +51,9 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 
-One-click Heroku and Docker deployments are also available:
+One-click Heroku deployment is also available:
 
-[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
 ## Technology Stack

@@ -28,8 +28,7 @@ from app.models.ticket_holder import TicketHolder
 
 def get_new_event_identifier(length=8):
     identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    count = get_count(Event.query.filter_by(identifier=identifier))
-    if count == 0:
+    if not identifier.isdigit() and get_count(Event.query.filter_by(identifier=identifier)) == 0:
         return identifier
     else:
         return get_new_event_identifier(length)
@@ -364,7 +363,7 @@ class Event(SoftDeletionModel):
 
     def is_payment_enabled(self):
         return self.can_pay_by_paypal or self.can_pay_by_stripe or self.can_pay_by_omise or self.can_pay_by_alipay \
-            or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite or self.can_pay_by_paytm
+               or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite or self.can_pay_by_paytm
 
     @property
     def average_rating(self):
@@ -453,7 +452,6 @@ class Event(SoftDeletionModel):
     @property
     def has_speakers(self):
         return Speaker.query.filter_by(event_id=self.id).count() > 0
-
 
 
 @event.listens_for(Event, 'after_update')

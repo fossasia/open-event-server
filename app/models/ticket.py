@@ -14,7 +14,7 @@ discount_codes_tickets = db.Table(
     db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
     db.PrimaryKeyConstraint('discount_code_id', 'ticket_id'))
 
-ticket_tags_table = db.Table('association', db.Model.metadata,
+ticket_tags_table = db.Table('ticket_tagging', db.Model.metadata,
                              db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
                              db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
                              )

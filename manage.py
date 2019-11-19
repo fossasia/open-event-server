@@ -21,7 +21,7 @@ def list_routes():
     output = []
     for rule in app.url_map.iter_rules():
         methods = ','.join(rule.methods)
-        line = urllib.unquote("{:50s} {:20s} {}".format(
+        line = urllib.parse.unquote("{:50s} {:20s} {}".format(
             rule.endpoint, methods, rule))
         output.append(line)
 
@@ -35,6 +35,15 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_digit_identifier():
+    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
+    for event in events:
+        event.identifier = get_new_event_identifier()
+        db.session.add(event)
+    db.session.commit()
 
 
 @manager.option('-n', '--name', dest='name', default='all')
