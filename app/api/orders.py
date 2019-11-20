@@ -319,10 +319,6 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
-        if (not has_access('is_admin')) and ('DELETE' in request.method):
-            raise ForbiddenException({'pointer': ''}, "Access Forbidden")
-
         if data.get('amount') or data.get('is_billing_enabled'):
             check_billing_info(data)
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
@@ -438,8 +434,7 @@ class OrderDetail(ResourceDetail):
                                                      order.event.name, order.identifier)
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
-    decorators = (jwt_required, api.has_permission(
-        'auth_required', methods="PATCH,DELETE", model=Order),)
+    decorators = (jwt_required, api.has_permission('is_admin', methods="DELETE", model=Order),)
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
