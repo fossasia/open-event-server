@@ -7,8 +7,6 @@ from flask_jwt_extended import current_user
 from app.api.helpers.export_helpers import export_event_json, create_export_job
 from app.api.helpers.permissions import is_coorganizer, get_event_id
 from app.api.helpers.utilities import TASK_RESULTS
-from app.models import db
-from app.models.event import Event
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
 
@@ -23,7 +21,7 @@ EXPORT_SETTING = {
 @export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'], endpoint='export_event')
 @get_event_id
 @is_coorganizer
-def export_event(event_identifier):
+def export_event(event_id):
     from .helpers.tasks import export_event_task
 
     settings = EXPORT_SETTING
@@ -32,11 +30,6 @@ def export_event(event_identifier):
     settings['document'] = request.json.get('document', False)
     settings['audio'] = request.json.get('audio', False)
 
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = event.id
-    else:
-        event_id = event_identifier
     # queue task
     task = export_event_task.delay(
         current_user.email, event_id, settings)
@@ -71,13 +64,7 @@ def export_download(event_id, path):
 @export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'], endpoint='export_event_xcal')
 @get_event_id
 @is_coorganizer
-def export_event_xcal(event_identifier):
-
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
+def export_event_xcal(event_id):
 
     from .helpers.tasks import export_xcal_task
 
@@ -101,13 +88,7 @@ def event_export_task_base(event_id, settings):
 @export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'], endpoint='export_event_ical')
 @get_event_id
 @is_coorganizer
-def export_event_ical(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_event_ical(event_id):
     from .helpers.tasks import export_ical_task
 
     task = export_ical_task.delay(event_id)
@@ -123,13 +104,7 @@ def export_event_ical(event_identifier):
                      endpoint='export_event_pentabarf')
 @get_event_id
 @is_coorganizer
-def export_event_pentabarf(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_event_pentabarf(event_id):
     from .helpers.tasks import export_pentabarf_task
 
     task = export_pentabarf_task.delay(event_id)
@@ -145,13 +120,7 @@ def export_event_pentabarf(event_identifier):
                      endpoint='export_orders_csv')
 @get_event_id
 @is_coorganizer
-def export_orders_csv(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_orders_csv(event_id):
     from .helpers.tasks import export_order_csv_task
 
     task = export_order_csv_task.delay(event_id)
@@ -167,13 +136,7 @@ def export_orders_csv(event_identifier):
                      endpoint='export_orders_pdf')
 @get_event_id
 @is_coorganizer
-def export_orders_pdf(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_orders_pdf(event_id):
     from .helpers.tasks import export_order_pdf_task
 
     task = export_order_pdf_task.delay(event_id)
@@ -189,13 +152,7 @@ def export_orders_pdf(event_identifier):
                      endpoint='export_attendees_csv')
 @get_event_id
 @is_coorganizer
-def export_attendees_csv(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_attendees_csv(event_id):
     from .helpers.tasks import export_attendees_csv_task
 
     task = export_attendees_csv_task.delay(event_id)
@@ -211,13 +168,7 @@ def export_attendees_csv(event_identifier):
                      endpoint='export_attendees_pdf')
 @get_event_id
 @is_coorganizer
-def export_attendees_pdf(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_attendees_pdf(event_id):
     from .helpers.tasks import export_attendees_pdf_task
 
     task = export_attendees_pdf_task.delay(event_id)
@@ -233,13 +184,7 @@ def export_attendees_pdf(event_identifier):
                      endpoint='export_sessions_csv')
 @get_event_id
 @is_coorganizer
-def export_sessions_csv(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_sessions_csv(event_id):
     from .helpers.tasks import export_sessions_csv_task
 
     task = export_sessions_csv_task.delay(event_id)
@@ -255,13 +200,7 @@ def export_sessions_csv(event_identifier):
                      endpoint='export_speakers_csv')
 @get_event_id
 @is_coorganizer
-def export_speakers_csv(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_speakers_csv(event_id):
     from .helpers.tasks import export_speakers_csv_task
 
     task = export_speakers_csv_task.delay(event_id)
@@ -277,13 +216,7 @@ def export_speakers_csv(event_identifier):
                      endpoint='export_sessions_pdf')
 @get_event_id
 @is_coorganizer
-def export_sessions_pdf(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_sessions_pdf(event_id):
     from .helpers.tasks import export_sessions_pdf_task
 
     task = export_sessions_pdf_task.delay(event_id)
@@ -299,13 +232,7 @@ def export_sessions_pdf(event_identifier):
                      endpoint='export_speakers_pdf')
 @get_event_id
 @is_coorganizer
-def export_speakers_pdf(event_identifier):
-    if not event_identifier.isdigit():
-        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = str(event.id)
-    else:
-        event_id = event_identifier
-
+def export_speakers_pdf(event_id):
     from .helpers.tasks import export_speakers_pdf_task
 
     task = export_speakers_pdf_task.delay(event_id)

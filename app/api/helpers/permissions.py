@@ -184,7 +184,7 @@ def is_coorganizer(f):
 
         if user.is_staff or ('event_id' in kwargs and user.has_event_access(kwargs['event_id'])):
             if 'event_identifier' in kwargs:
-                kwargs.pop('event_id', None)
+                kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
 
         return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
