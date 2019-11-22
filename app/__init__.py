@@ -146,7 +146,8 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
-        from app.api.auth import ticket_blueprint, authorised_blueprint
+        from app.api.custom.tickets import ticket_blueprint
+        from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
         from app.api.settings import admin_misc_routes
