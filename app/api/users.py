@@ -108,7 +108,7 @@ class UserDetail(ResourceDetail):
     """
 
     def before_get(self, args, kwargs):
-        if current_user.is_admin or current_user.is_super_admin or current_user:
+        if current_user or (kwargs['event_id'] and has_access('is_owner', event_id=int(kwargs['event_id']))):
             self.schema = UserSchema
         else:
             self.schema = UserSchemaPublic
@@ -281,7 +281,7 @@ class UserDetail(ResourceDetail):
                                             DiscountCode, EmailNotification, Speaker, User],
                                      fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
-                                     leave_if=lambda a: a.get('attendee_id')),)
+                                     leave_if=lambda a: a.get('attendee_id') or a.get('event_id')),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
