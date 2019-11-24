@@ -5,6 +5,7 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
@@ -102,6 +103,11 @@ class AttendeeList(ResourceList):
         :return:
         """
         query_ = self.session.query(TicketHolder)
+
+        if not (has_access('is_admin') or has_access('is_super_admin')):
+            order_subq = self.session.query(Order).\
+                         filter(or_(Order.status == 'completed', Order.status == 'placed')).subquery()
+            query_ = query_.join(order_subq, TicketHolder.order)
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
