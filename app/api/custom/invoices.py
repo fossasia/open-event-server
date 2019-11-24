@@ -6,8 +6,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
 from app.api.helpers.errors import ForbiddenError, NotFoundError
-from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
+from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
+from app.models.order import Order
 from app.models.event_invoice import EventInvoice
+from app.api.custom.orders import order_blueprint
 
 event_blueprint = Blueprint('event_blueprint', __name__, url_prefix='/v1/events')
 
@@ -32,3 +35,25 @@ def event_invoices(invoice_identifier):
         raise ObjectNotFound({'source': ''},
                              "The Event Invoice isn't available at the moment. \
                              Invoices are usually issued on the 1st of every month")
+
+
+@order_blueprint.route('/invoices/<string:order_identifier>')
+@jwt_required
+def order_invoices(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+        except NoResultFound:
+            return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
+        if current_user.can_download_tickets(order):
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            try:
+                return return_file('invoice', file_path, order_identifier)
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return return_file('invoice', file_path, order_identifier)
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()

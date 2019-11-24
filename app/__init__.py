@@ -153,7 +153,7 @@ def create_app():
         from app.api.server_version import info_route
         from app.api.custom.tickets import ticket_blueprint
         from app.api.custom.orders import order_blueprint
-        from app.api.custom.events import event_blueprint
+        from app.api.custom.invoices import event_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
