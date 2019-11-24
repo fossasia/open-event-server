@@ -13,8 +13,6 @@ from tests.all.integration.setup_database import Setup
 
 
 class TestTicketValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_date_pass(self):
         """

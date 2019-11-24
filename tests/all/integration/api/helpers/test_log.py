@@ -10,8 +10,6 @@ import unittest
 
 
 class TestLogging(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def test_record_activity_valid_template(self):
         """Test to record activity for valid template"""

@@ -15,8 +15,6 @@ from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.utilities import image_link
 
 class TestFilesHelperValidation(OpenEventTestCase):
-    def setUp(self):
-        self.app = Setup.create_app()
 
     def getsizes(self, file):
         # get file size *and* image size (None if not known)

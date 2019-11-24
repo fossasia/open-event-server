@@ -261,6 +261,200 @@ Get a list of attendees of an order.
             "self": "/v1/orders/7201904e-c695-4251-a30a-61765a37ff24/attendees"
           }
         }
+        
+## List Attendees under an event [/v1/events/{event_id}/attendees]
++ Parameters
+    + event_id: 1 (integer) - Identifier of the event
+
+### List All Attendees under an event [GET]
+Get a list of attendees of an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "ticket": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/ticket",
+                    "related": "/v1/attendees/1/ticket"
+                  }
+                },
+                "order": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/order",
+                    "related": "/v1/attendees/1/order"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/event",
+                    "related": "/v1/attendees/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/user",
+                    "related": "/v1/attendees/1/user"
+                  }
+                }
+              },
+              "attributes": {
+                "facebook": null,
+                "address": "address",
+                "ticket-id": "31",
+                "is-checked-out": null,
+                "checkout-times": null,
+                "job-title": null,
+                "deleted-at": null,
+                "work-address": null,
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
+              },
+              "type": "attendee",
+              "id": "1",
+              "links": {
+                "self": "/v1/attendees/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/attendees"
+          }
+        }
+
+## List Attendees under a ticket [/v1/tickets/{ticket_id}/attendees]
++ Parameters
+    + ticket_id: 1 (integer) - Identifier of the event
+
+### List All Attendees under a ticket [GET]
+Get a list of attendees of a ticket.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "ticket": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/ticket",
+                    "related": "/v1/attendees/1/ticket"
+                  }
+                },
+                "order": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/order",
+                    "related": "/v1/attendees/1/order"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/event",
+                    "related": "/v1/attendees/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/user",
+                    "related": "/v1/attendees/1/user"
+                  }
+                }
+              },
+              "attributes": {
+                "facebook": null,
+                "address": "address",
+                "ticket-id": "1",
+                "is-checked-out": null,
+                "checkout-times": null,
+                "job-title": null,
+                "deleted-at": null,
+                "work-address": null,
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
+              },
+              "type": "attendee",
+              "id": "1",
+              "links": {
+                "self": "/v1/attendees/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tickets/1/attendees"
+          }
+        }
 
 ## Attendee Details [/v1/attendees/{attendee_id}]
 + Parameters
