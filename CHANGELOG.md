@@ -1,8 +1,12 @@
 ## Changelog
 
-##### v1.8.0 (Unreleased):
+##### v1.8.0 (2019-11-24):
 
 - Run `python manage.py fix_digit_identifier` to correct all digit identifiers
+- Handelled invalid price value in paid tickets
+- Check if event identifier does not contain of all digits
+- Fix check for `is_email_overridden` for speaker form
+- Improve test timings
 
 ##### v1.7.0 (2019-10-19):
 
