@@ -151,7 +151,7 @@ def create_app():
         from app.api.orders import alipay_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
-        from app.api.custom.tickets import ticket_blueprint
+        from app.api.custom.orders import ticket_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
