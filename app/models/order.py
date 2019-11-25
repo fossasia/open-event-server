@@ -55,7 +55,7 @@ class Order(SoftDeletionModel):
     transaction_id = db.Column(db.String)
     paid_via = db.Column(db.String)
     payment_mode = db.Column(db.String)
-    is_billing_enabled = db.Column(db.Boolean)
+    is_billing_enabled = db.Column(db.Boolean, nullable=False, default=False)
     brand = db.Column(db.String)
     exp_month = db.Column(db.Integer)
     exp_year = db.Column(db.Integer)
