@@ -204,7 +204,7 @@ def send_user_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_after_event(email, event_name, upcoming_events):
+def send_email_after_event(email, event_name, frontend_url):
     """email for role invite"""
     send_email(
         to=email,
@@ -215,7 +215,7 @@ def send_email_after_event(email, event_name, upcoming_events):
         html=MAILS[AFTER_EVENT]['message'].format(
             email=email,
             event_name=event_name,
-            upcoming_events=upcoming_events
+            url=frontend_url
         )
     )
 
