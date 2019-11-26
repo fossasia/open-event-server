@@ -186,7 +186,6 @@ def is_coorganizer(f):
             if 'event_identifier' in kwargs:
                 kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
-
         return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
     return decorated_function
