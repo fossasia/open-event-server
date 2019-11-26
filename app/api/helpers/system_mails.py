@@ -63,8 +63,7 @@ MAILS = {
         'message': (
             u"Hi {email},<br/>" +
             u"Thank You for participating in our event. We hope you enjoyed it. "
-            u"Please check the list of more upcoming events. <br />" +
-            u"Here are the upcoming events: {upcoming_events}. Get ready!! "
+            u"Please check out other upcoming events around you on {url} <br />"
         ),
         'sent_at': '1 day after the event'
     },
