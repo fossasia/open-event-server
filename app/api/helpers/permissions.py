@@ -149,7 +149,7 @@ def is_organizer(f):
 @second_order_decorator(jwt_required)
 def to_event_id(func):
     """
-    Get event id from event identifier.
+    Change event_identifier to event_id in kwargs
     :param f:
     :return:
     """
