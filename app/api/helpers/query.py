@@ -38,7 +38,7 @@ def event_query(self, query_, view_kwargs, event_id='event_id', event_identifier
     return query_
 
 
-#TODO: Unused function. Remove
+# TODO: Unused function. Remove
 def get_upcoming_events():
     return Event.query.filter(Event.starts_at >= datetime.datetime.now()).filter(
         Event.ends_at >= datetime.datetime.now()).filter_by(deleted_at=None)
