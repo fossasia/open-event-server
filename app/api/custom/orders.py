@@ -19,8 +19,10 @@ from app.models.discount_code import DiscountCode
 from app.models.order import Order
 
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')
 
 
+@ticket_blueprint.route('/<string:order_identifier>')
 @order_blueprint.route('/<string:order_identifier>/tickets')
 @jwt_required
 def ticket_attendee_authorized(order_identifier):
