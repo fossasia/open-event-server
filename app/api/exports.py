@@ -5,7 +5,7 @@ from flask import send_file, make_response, jsonify, url_for, \
 from flask_jwt_extended import current_user
 
 from app.api.helpers.export_helpers import export_event_json, create_export_job
-from app.api.helpers.permissions import is_coorganizer, get_event_id
+from app.api.helpers.permissions import is_coorganizer, to_event_id
 from app.api.helpers.utilities import TASK_RESULTS
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
@@ -19,7 +19,7 @@ EXPORT_SETTING = {
 
 
 @export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'], endpoint='export_event')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_event(event_id):
     from .helpers.tasks import export_event_task
@@ -49,7 +49,7 @@ def export_event(event_id):
 
 
 @export_routes.route('/events/<string:event_id>/exports/<path:path>', endpoint='export_download')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_download(event_id, path):
     if not path.startswith('/'):
@@ -62,7 +62,7 @@ def export_download(event_id, path):
 
 
 @export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'], endpoint='export_event_xcal')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_event_xcal(event_id):
 
@@ -86,7 +86,7 @@ def event_export_task_base(event_id, settings):
 
 
 @export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'], endpoint='export_event_ical')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_event_ical(event_id):
     from .helpers.tasks import export_ical_task
@@ -102,7 +102,7 @@ def export_event_ical(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/pentabarf', methods=['GET'],
                      endpoint='export_event_pentabarf')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_event_pentabarf(event_id):
     from .helpers.tasks import export_pentabarf_task
@@ -118,7 +118,7 @@ def export_event_pentabarf(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/orders/csv', methods=['GET'],
                      endpoint='export_orders_csv')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_orders_csv(event_id):
     from .helpers.tasks import export_order_csv_task
@@ -134,7 +134,7 @@ def export_orders_csv(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/orders/pdf', methods=['GET'],
                      endpoint='export_orders_pdf')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_orders_pdf(event_id):
     from .helpers.tasks import export_order_pdf_task
@@ -150,7 +150,7 @@ def export_orders_pdf(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/attendees/csv', methods=['GET'],
                      endpoint='export_attendees_csv')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_attendees_csv(event_id):
     from .helpers.tasks import export_attendees_csv_task
@@ -166,7 +166,7 @@ def export_attendees_csv(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/attendees/pdf', methods=['GET'],
                      endpoint='export_attendees_pdf')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_attendees_pdf(event_id):
     from .helpers.tasks import export_attendees_pdf_task
@@ -182,7 +182,7 @@ def export_attendees_pdf(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/sessions/csv', methods=['GET'],
                      endpoint='export_sessions_csv')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_sessions_csv(event_id):
     from .helpers.tasks import export_sessions_csv_task
@@ -198,7 +198,7 @@ def export_sessions_csv(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/speakers/csv', methods=['GET'],
                      endpoint='export_speakers_csv')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_speakers_csv(event_id):
     from .helpers.tasks import export_speakers_csv_task
@@ -214,7 +214,7 @@ def export_speakers_csv(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/sessions/pdf', methods=['GET'],
                      endpoint='export_sessions_pdf')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_sessions_pdf(event_id):
     from .helpers.tasks import export_sessions_pdf_task
@@ -230,7 +230,7 @@ def export_sessions_pdf(event_id):
 
 @export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'],
                      endpoint='export_speakers_pdf')
-@get_event_id
+@to_event_id
 @is_coorganizer
 def export_speakers_pdf(event_id):
     from .helpers.tasks import export_speakers_pdf_task

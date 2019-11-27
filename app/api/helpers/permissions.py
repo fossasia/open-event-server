@@ -154,7 +154,7 @@ def to_event_id(func):
     :return:
     """
 
-    @wraps(f)
+    @wraps(func)
     def decorated_function(*args, **kwargs):
 
         if 'event_identifier' in kwargs:
@@ -164,7 +164,7 @@ def to_event_id(func):
             else:
                 kwargs['event_id'] = kwargs['event_identifier']
 
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return decorated_function
 
