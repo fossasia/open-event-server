@@ -21,7 +21,7 @@ from app.models.order import Order
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
 
 
-@order_blueprint.route('/<string:order_identifier>')
+@order_blueprint.route('/<string:order_identifier>/tickets')
 @jwt_required
 def ticket_attendee_authorized(order_identifier):
     if current_user:
