@@ -97,6 +97,7 @@ def __pad__(string_literal):
 def __unpad__(string_literal):
     return string_literal[0:-ord(string_literal[-1])]
 
+
 def __encode__(to_encode, iv, key):
 
     # Pad
