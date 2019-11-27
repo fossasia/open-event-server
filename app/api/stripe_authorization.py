@@ -70,8 +70,6 @@ class StripeAuthorizationListPost(ResourceList):
         save_to_db(event)
 
     schema = StripeAuthorizationSchema
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=StripeAuthorization),)
     methods = ['POST']
     data_layer = {'session': db.session,
                   'model': StripeAuthorization,
