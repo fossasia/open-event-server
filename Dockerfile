@@ -13,8 +13,7 @@ RUN apk update && \
 ADD requirements.txt /requirements.txt
 ADD requirements /requirements/
 
-ENV PYTHONPATH /install/lib/python3.7/site-packages
-RUN LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install --no-warn-script-location -r /requirements.txt
+RUN pip install --prefix=/install --no-warn-script-location -r /requirements.txt
 
 ####
 
