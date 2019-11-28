@@ -14,8 +14,6 @@ RUN apk update && \
 ADD requirements.txt /requirements.txt
 ADD requirements /requirements/
 
-RUN wget https://bootstrap.pypa.io/ez_setup.py && python ez_setup.py
-
 ENV PYTHONPATH /install/lib/python3.7/site-packages
 RUN LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install -r /requirements.txt
 
