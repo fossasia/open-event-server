@@ -23,7 +23,7 @@ ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/ticke
 
 
 @ticket_blueprint.route('/<string:order_identifier>')
-@order_blueprint.route('/<string:order_identifier>/tickets')
+@order_blueprint.route('/<string:order_identifier>/tickets-pdf')
 @jwt_required
 def ticket_attendee_authorized(order_identifier):
     if current_user:
