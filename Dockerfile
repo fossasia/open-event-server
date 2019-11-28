@@ -1,5 +1,4 @@
-FROM python:3.7-alpine as base
-LABEL maintainer="Niranjan Rajendran <me@niranjan.io>"
+FROM python:3.7.5-alpine as base
 
 ####
 
@@ -18,16 +17,14 @@ ADD requirements /requirements/
 RUN wget https://bootstrap.pypa.io/ez_setup.py && python ez_setup.py
 
 ENV PYTHONPATH /install/lib/python3.7/site-packages
-RUN pip install --prefix=/install setuptools && \
-    LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install -r /requirements.txt
+RUN LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install -r /requirements.txt
 
 ####
 
 FROM base
 
 COPY --from=builder /install /usr/local
-RUN apk --no-cache add postgresql-dev ca-certificates libxslt jpeg zlib file libxml2 git && \
-    pip install git+https://github.com/fossasia/flask-rest-jsonapi.git@0.12.6.1#egg=flask-rest-jsonapi
+RUN apk --no-cache add postgresql-dev ca-certificates libxslt jpeg zlib file libxml2 git
 
 WORKDIR /data/app
 ADD . .
