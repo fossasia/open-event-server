@@ -99,7 +99,6 @@ def __unpad__(string_literal):
 
 
 def __encode__(to_encode, iv, key):
-
     # Pad
     to_encode = __pad__(to_encode)
     # Encrypt
