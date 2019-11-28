@@ -21,7 +21,7 @@ RUN LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install --no-warn-script-lo
 FROM base
 
 COPY --from=builder /install /usr/local
-RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2 git
+RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
 
 WORKDIR /data/app
 ADD . .
