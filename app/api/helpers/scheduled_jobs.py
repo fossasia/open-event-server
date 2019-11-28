@@ -29,13 +29,6 @@ def send_after_event_mail():
     from app import current_app as app
     with app.app_context():
         events = Event.query.filter_by(state='published', deleted_at=None).all()
-        upcoming_events = get_upcoming_events()
-        upcoming_event_links = "<ul>"
-        for upcoming_event in upcoming_events:
-            frontend_url = get_settings()['frontend_url']
-            upcoming_event_links += "<li><a href='{}/events/{}'>{}</a></li>" \
-                .format(frontend_url, upcoming_event.id, upcoming_event.name)
-        upcoming_event_links += "</ul>"
         for event in events:
             organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
             speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
@@ -44,16 +37,17 @@ def send_after_event_mail():
             time_difference = current_time - event.ends_at
             time_difference_minutes = (time_difference.days * 24 * 60) + \
                 (time_difference.seconds / 60)
+            frontend_url = get_settings()['frontend_url']
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
                     if not speaker.is_email_overridden:
-                        send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
+                        send_email_after_event(speaker.user.email, event.name, frontend_url)
                         send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
-                    send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
+                    send_email_after_event(organizer.user.email, event.name, frontend_url)
                     send_notif_after_event(organizer.user, event.name)
                 if owner:
-                    send_email_after_event(owner.user.email, event.name, upcoming_event_links)
+                    send_email_after_event(owner.user.email, event.name, frontend_url)
                     send_notif_after_event(owner.user, event.name)
 
 

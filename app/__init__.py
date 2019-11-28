@@ -146,11 +146,14 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
-        from app.api.auth import ticket_blueprint, authorised_blueprint
+        from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
+        from app.api.custom.orders import ticket_blueprint
+        from app.api.custom.orders import order_blueprint
+        from app.api.custom.invoices import event_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -164,12 +167,14 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
-        app.register_blueprint(ticket_blueprint)
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
         app.register_blueprint(info_route)
+        app.register_blueprint(ticket_blueprint)
+        app.register_blueprint(order_blueprint)
+        app.register_blueprint(event_blueprint)
 
         add_engine_pidguard(db.engine)
 
