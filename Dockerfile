@@ -1,4 +1,4 @@
-FROM python:3.7.5-alpine as base
+FROM python:3.7-alpine as base
 
 ####
 
@@ -21,7 +21,7 @@ RUN LIBRARY_PATH=/lib:/usr/lib pip install --prefix=/install --no-warn-script-lo
 FROM base
 
 COPY --from=builder /install /usr/local
-RUN apk --no-cache add postgresql-dev ca-certificates libxslt jpeg zlib file libxml2 git
+RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2 git
 
 WORKDIR /data/app
 ADD . .
