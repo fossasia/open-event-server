@@ -361,6 +361,8 @@ def event_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
+        module = ModuleFactory()
+        db.session.add(module)
         event = EventFactoryBasic()
         db.session.add(event)
         db.session.commit()

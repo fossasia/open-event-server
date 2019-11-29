@@ -56,7 +56,7 @@ def validate_event(user, modules, data):
     if not user.can_create_event():
         raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
-    elif and not modules.ticket_include:
+    elif not modules.ticket_include:
             raise ForbiddenException({'source': ''},
                                      "Ticketing is not enabled in the system")
     if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
