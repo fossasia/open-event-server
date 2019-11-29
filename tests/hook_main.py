@@ -336,6 +336,8 @@ def event_post(transaction):
     :return:
     """
     with stash['app'].app_context():
+        module = ModuleFactory()
+        db.session.add(module)
         RoleFactory(name=OWNER) # TODO: Change to get_or_create in event after_created
         db.session.commit()
 
