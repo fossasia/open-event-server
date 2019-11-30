@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import current_user, jwt_required
 from flask_limiter.util import get_remote_address
@@ -6,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app import limiter
 from app.models import db
 from app.api.auth import return_file
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
@@ -17,6 +19,7 @@ from app.api.schema.attendees import AttendeeSchema
 from app.api.helpers.permission_manager import has_access
 from app.models.discount_code import DiscountCode
 from app.models.order import Order
+from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
@@ -84,8 +87,11 @@ def resend_emails():
 
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 @jwt_required
-def calculate_amount():
-    data = request.get_json()
+def calculate_amount(*args):
+    if not args:
+        data = request.get_json()
+    else:
+        data = json.loads(args[0])
     tickets = data['tickets']
     discount_code = None
     if 'discount-code' in data:
@@ -117,12 +123,45 @@ def create_order():
         if ticket_info.event_id != int(data['event_id']):
             return jsonify(status='Order Unsuccessful',
                            error="Ticket with id {} belongs to a different Event.".format(ticket['id']))
-        if get_count(db.session.query(TicketHolder.id).filter_by(ticket_id=int(ticket['id']), deleted_at=None)) >= ticket['quantity']:
+        if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
+              ticket_id=int(ticket['id']), deleted_at=None))) < ticket['quantity']:
             return jsonify(status='Order Unsuccessful', error='Ticket already sold out.')
+    attendee_list = []
     for ticket in tickets:
         for ticket_amount in range(ticket['quantity']):
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
             db.session.commit()
+            db.session.refresh(attendee)
+            attendee_list.append(attendee.id)
+    ticket_pricing = calculate_amount(json.dumps(data))
+    if not has_access('is_coorganizer', event_id=data['event_id']):
+        data['status'] = 'initializing'
+    # create on site attendees
+    # check if order already exists for this attendee.
+    # check for free tickets and verified user
+    ticket_pricing = json.loads(ticket_pricing.data)
+    order = Order(amount=ticket_pricing['total_amount'], user_id=current_user.id, event_id=int(data['event_id']),
+                  status=data['status'])
+    db.session.add(order)
+    db.session.commit()
+    db.session.refresh(order)
+    order_tickets = {}
+    for attendee_id in attendee_list:
+        holder = TicketHolder.query.filter(TicketHolder.id == attendee_id).one()
+        holder.order_id = order.id
+        save_to_db(holder)
+        if not order_tickets.get(holder.ticket_id):
+            order_tickets[holder.ticket_id] = 1
+        else:
+            order_tickets[holder.ticket_id] += 1
 
-    return jsonify("Worked !!")
+    create_pdf_tickets_for_holder(order)
+
+    for ticket in order_tickets:
+        od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
+        save_to_db(od)
+
+    order.quantity = order.tickets_count
+    save_to_db(order)
+    return ticket_pricing
