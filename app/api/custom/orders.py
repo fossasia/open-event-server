@@ -163,5 +163,4 @@ def create_order():
         save_to_db(od)
 
     order.quantity = order.tickets_count
-    save_to_db(order)
-    return ticket_pricing
+    return jsonify("Order successful.")
