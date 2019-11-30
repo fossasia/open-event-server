@@ -3,6 +3,8 @@ from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from app.api.helpers.validations import validate_complex_fields_json
+from marshmallow import validates_schema
 
 
 class AttendeeSchemaPublic(SoftDeletionSchema):
@@ -18,6 +20,10 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         self_view = 'v1.attendee_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
+
+    @validates_schema(pass_original=True)
+    def validate_json(self, data, original_data):
+        validate_complex_fields_json(self, data, original_data)
 
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
@@ -52,6 +58,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
+    complex_field_values = fields.Dict(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',
                          self_view_kwargs={'id': '<id>'},

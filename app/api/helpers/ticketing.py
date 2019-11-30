@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from flask_jwt import current_identity as current_user
-
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.files import make_frontend_url
@@ -12,9 +10,11 @@ from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
+from app.models.order import Order
+from flask_jwt_extended import current_user
 
 
-class TicketingManager(object):
+class TicketingManager:
     """All ticketing and orders related helper functions"""
 
     @staticmethod
@@ -22,18 +22,23 @@ class TicketingManager(object):
         return 10
 
     @staticmethod
-    def match_discount_quantity(discount_code, ticket_holders=None):
+    def match_discount_quantity(discount_code, tickets=None, ticket_holders=None):
         qty = 0
-        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(discount_code.tickets.split(","))))
-
-        for holder in ticket_holders:
-            ticket_holder = TicketHolder.query.filter_by(id=holder).one()
-            if ticket_holder.ticket.id in discount_code.tickets.split(","):
-                qty += 1
+        ticket_ids = [ticket.id for ticket in discount_code.tickets]
+        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(ticket_ids))
+                                .join(Order).filter(Order.status.in_(['completed', 'placed'])))
+        if ticket_holders:
+            for holder in ticket_holders:
+                ticket_holder = TicketHolder.query.filter_by(id=holder).one()
+                if ticket_holder.ticket.id in ticket_ids:
+                    qty += 1
+        elif tickets:
+            for ticket in tickets:
+                if int(ticket['id']) in ticket_ids:
+                    qty += ticket['quantity']
         if (qty + old_holders) <= discount_code.tickets_number and \
             discount_code.min_quantity <= qty <= discount_code.max_quantity:
             return True
-
         return False
 
     @staticmethod
@@ -125,6 +130,9 @@ class TicketingManager(object):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.id)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.id)
 
             return True, 'Charge successful'
         else:
@@ -174,6 +182,9 @@ class TicketingManager(object):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.id)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.id)
 
             return True, 'Charge successful'
         else:

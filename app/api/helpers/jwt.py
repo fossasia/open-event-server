@@ -1,8 +1,12 @@
 import base64
 import json
 
-from flask_jwt import _default_request_handler
+from flask import _app_ctx_stack as ctx_stack
+from flask_jwt_extended.view_decorators import _decode_jwt_from_request, _load_user
+from flask_jwt_extended.config import config
+from flask_jwt_extended.exceptions import JWTExtendedException, UserLoadError
 from flask_scrypt import check_password_hash
+from jwt.exceptions import PyJWTError
 
 from app.models.user import User
 
@@ -14,27 +18,18 @@ def jwt_authenticate(email, password):
     :param password:
     :return:
     """
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email.strip(), deleted_at=None).first()
     if user is None:
         return None
-    auth_ok = user.facebook_login_hash == password or check_password_hash(
-        password.encode('utf-8'),
-        user.password.encode('utf-8'),
-        user.salt
-    )
+    auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
     if auth_ok:
         return user
     else:
         return None
 
 
-def jwt_identity(payload):
-    """
-    Jwt helper function
-    :param payload:
-    :return:
-    """
-    return User.query.get(payload['identity'])
+def jwt_user_loader(identity):
+    return User.query.filter_by(id=identity, deleted_at=None).first()
 
 
 def get_identity():
@@ -42,13 +37,15 @@ def get_identity():
     To be used only if identity for expired tokens is required, otherwise use current_identity from flask_jwt
     :return:
     """
-    token_second_segment = _default_request_handler().split('.')[1]
-    missing_padding = len(token_second_segment) % 4
+    token = None
+    try:
+        token, header = _decode_jwt_from_request('access')
+    except (JWTExtendedException, PyJWTError):
+        token = getattr(ctx_stack.top, 'expired_jwt', None)
 
-    # ensures the string is correctly padded to be a multiple of 4
-    if missing_padding != 0:
-        token_second_segment += '=' * (4 - missing_padding)
-
-    payload = json.loads(str(base64.b64decode(token_second_segment), 'utf-8'))
-    user = jwt_identity(payload)
-    return user
+    if token:
+        try:
+            _load_user(token[config.identity_claim_key])
+            return getattr(ctx_stack.top, 'jwt_user', None)
+        except UserLoadError:
+            pass

@@ -15,6 +15,7 @@ from app.models import db
 from app.models.access_code import AccessCode
 from app.models.ticket import Ticket
 from app.models.user import User
+from app.models.event import Event
 
 
 class AccessCodeListPost(ResourceList):
@@ -110,9 +111,16 @@ class AccessCodeDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
-        # Any registered user can fetch access code details using the code.
-        if kwargs.get('code'):
-            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code')).first()
+        # Any user can fetch access code details using the code.
+
+        if kwargs.get('access_event_identifier'):
+            event = safe_query(
+                db, Event, 'identifier', kwargs['access_event_identifier'],
+                'event_identifier')
+            kwargs['access_event_id'] = event.id
+        if kwargs.get('code') and kwargs.get('access_event_id'):
+            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code'),
+                                                            event_id=kwargs.get('access_event_id')).first()
             if access:
                 kwargs['id'] = access.id
             else:
@@ -129,7 +137,7 @@ class AccessCodeDetail(ResourceDetail):
                 raise UnprocessableEntity({'source': ''},
                                           "Please verify your permission")
 
-    decorators = (jwt_required, api.has_permission('is_coorganizer', fetch='event_id',
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="PATCH"),
                   api.has_permission('is_coorganizer_but_not_admin', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="DELETE"),)

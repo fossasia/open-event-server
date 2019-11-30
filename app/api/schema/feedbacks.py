@@ -23,7 +23,7 @@ class FeedbackSchema(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    rating = fields.Float(required=True, validate=Range(min=0, max=5))
+    rating = fields.Float(required=True, validate=Range(min=1, max=5))
     comment = fields.Str(required=False)
     event = Relationship(attribute='event',
                          self_view='v1.feedback_event',
@@ -37,7 +37,7 @@ class FeedbackSchema(SoftDeletionSchema):
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.session_detail',
                            related_view_kwargs={'feedback_id': '<id>'},
-                           schema='SessionsSchema',
+                           schema='SessionSchema',
                            type_='session')
     user = Relationship(attribute='user',
                         self_view='v1.feedback_user',

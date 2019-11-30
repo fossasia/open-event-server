@@ -2,18 +2,27 @@ from celery.signals import after_task_publish
 import logging
 import os.path
 from envparse import env
+
 import sys
 from flask import Flask, json, make_response
+from flask_celeryext import FlaskCeleryExt
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_login import current_user
-from flask_jwt import JWT
+from flask_jwt_extended import JWTManager
+from flask_limiter import Limiter
 from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
-from healthcheck import HealthCheck, EnvironmentDump
+from healthcheck import HealthCheck
 from apscheduler.schedulers.background import BackgroundScheduler
 from elasticsearch_dsl.connections import connections
 from pytz import utc
@@ -23,17 +32,18 @@ import sqlalchemy as sa
 import stripe
 from app.settings import get_settings
 from app.models import db
-from app.api.helpers.jwt import jwt_authenticate, jwt_identity
+from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
+from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
-from werkzeug.contrib.profiler import ProfilerMiddleware
+from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from app.api.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
-    send_event_fee_notification_followup
+    send_event_fee_notification_followup, change_session_state_on_event_completion, \
+    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
-from app.views.sentry import sentry
 from app.views.elastic_search import client
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
@@ -46,11 +56,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-
+limiter = Limiter(app)
 env.read_envfile()
 
 
-class ReverseProxied(object):
+class ReverseProxied:
     """
     ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
     """
@@ -97,14 +107,23 @@ def create_app():
     app.logger.setLevel(logging.ERROR)
 
     # set up jwt
-    app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-    app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24 * 60 * 60)
-    app.config['JWT_AUTH_URL_RULE'] = '/auth/session'
-    _jwt = JWT(app, jwt_authenticate, jwt_identity)
+    app.config['JWT_HEADER_TYPE'] = 'JWT'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=365)
+    app.config['JWT_ERROR_MESSAGE_KEY'] = 'error'
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
+    app.config['JWT_REFRESH_COOKIE_PATH'] = '/v1/auth/token/refresh'
+    app.config['JWT_SESSION_COOKIE'] = False
+    app.config['JWT_BLACKLIST_ENABLED'] = True
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
+    _jwt = JWTManager(app)
+    _jwt.user_loader_callback_loader(jwt_user_loader)
+    _jwt.token_in_blacklist_loader(is_token_blacklisted)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
+    app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
 
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
@@ -126,6 +145,15 @@ def create_app():
         from app.api.uploads import upload_routes
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
+        from app.api.role_invites import role_invites_misc_routes
+        from app.api.auth import authorised_blueprint
+        from app.api.admin_translations import admin_blueprint
+        from app.api.orders import alipay_blueprint
+        from app.api.settings import admin_misc_routes
+        from app.api.server_version import info_route
+        from app.api.custom.orders import ticket_blueprint
+        from app.api.custom.orders import order_blueprint
+        from app.api.custom.invoices import event_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -138,6 +166,20 @@ def create_app():
         app.register_blueprint(user_misc_routes)
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
+        app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(authorised_blueprint)
+        app.register_blueprint(admin_blueprint)
+        app.register_blueprint(alipay_blueprint)
+        app.register_blueprint(admin_misc_routes)
+        app.register_blueprint(info_route)
+        app.register_blueprint(ticket_blueprint)
+        app.register_blueprint(order_blueprint)
+        app.register_blueprint(event_blueprint)
+
+        add_engine_pidguard(db.engine)
+
+        if app.config['SQLALCHEMY_DATABASE_URI'].startswith("sqlite://"):
+            sqlite_datetime_fix()
 
     sa.orm.configure_mappers()
 
@@ -148,7 +190,8 @@ def create_app():
 
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
+        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration(), RedisIntegration(),
+                                                                CeleryIntegration(), SqlalchemyIntegration()])
 
     # redis
     redis_store.init_app(app)
@@ -181,25 +224,12 @@ def track_user():
 def make_celery(app=None):
     app = app or create_app()[0]
     celery.conf.update(app.config)
-    task_base = celery.Task
-
-    class ContextTask(task_base):
-        abstract = True
-
-        def __call__(self, *args, **kwargs):
-            if current_app.config['TESTING']:
-                with app.test_request_context():
-                    return task_base.__call__(self, *args, **kwargs)
-            with app.app_context():
-                return task_base.__call__(self, *args, **kwargs)
-
-    celery.Task = ContextTask
-    return celery
+    ext = FlaskCeleryExt(app)
+    return ext.celery
 
 
 # Health-check
 health = HealthCheck(current_app, "/health-check")
-envdump = EnvironmentDump(current_app, "/environment", include_config=False)
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
 with current_app.app_context():
@@ -209,13 +239,13 @@ health.add_check(health_check_migrations)
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
-def update_sent_state(sender=None, body=None, **kwargs):
+def update_sent_state(sender=None, headers=None, **kwargs):
     # the task may not exist if sent using `send_task` which
     # sends tasks by name, so fall back to the default result backend
     # if that is the case.
     task = celery.tasks.get(sender)
     backend = task.backend if task else celery.backend
-    backend.store_result(body['id'], None, 'WAITING')
+    backend.store_result(headers['id'], None, 'WAITING')
 
 
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
@@ -235,7 +265,11 @@ if app.config['ENABLE_ELASTICSEARCH']:
 
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+scheduler.add_job(send_event_fee_notification_followup, 'cron', day=1, month='1-12')
+scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
+scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
+scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
+scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
 scheduler.start()
 
 

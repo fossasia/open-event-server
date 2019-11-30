@@ -1,0 +1,219 @@
+# Group Pages
+
+**ADMIN**
+
+To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access. Pages endpoints is used to create static pages such as about page or any other page that doesn't need to be updated frequently and only a specific content is to be shown.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the page | string | **yes** |
+| `title` | Title of the page | string | - |
+| `url` | Url of the page  | string | **yes** |
+| `description` | Description of the page | string | **yes** |
+| `language`  | Language of the page | string | - |
+| `index` | Position of the page  | integer (default: `0` ) | - |
+| `place`  | Place where the page will be located, currently `footer` and `event` are accepted | string | - |
+
+## Page Collection [/v1/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Page Sizes [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "attributes": {
+                "name": "How it works",
+                "title": "How it works",
+                "url": "/how-it-works",
+                "description": "How it works",
+                "place": "footer",
+                "language": "English",
+                "index": 0
+              },
+              "type": "image-size",
+              "id": "1",
+              "links": {
+                "self": "/v1/image-sizes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages"
+          }
+        }
+
+
+### Create Page [POST]
+Create a new general page by admins.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "How it works",
+                  "title": "How it works",
+                  "url": "/how-it-works",
+                  "description": "How it works",
+                  "place": "footer",
+                  "language": "English",
+                  "index": 0
+                },
+                "type": "page"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": "data"
+        }
+
+## Page Details [/v1/pages/{page_id}]
++ Parameters
+    + page_id: 1 (integer) - ID of the page in the form of an integer
+
+### Get Page Details [GET]
+Get a single page.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how-it-works",
+              "description": "How it works",
+              "place": "footer",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+
+### Update Page [PATCH]
+Update a single page by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "How it works",
+                  "title": "How it works",
+                  "url": "/how-it-works",
+                  "description": "How it works",
+                  "place": "footer",
+                  "language": "English",
+                  "index": 0
+                },
+                "type": "page",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how-it-works",
+              "description": "How it works",
+              "place": "footer",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+### Delete Page [DELETE]
+Delete a single page.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

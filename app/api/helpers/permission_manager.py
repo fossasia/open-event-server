@@ -1,5 +1,5 @@
 from flask import current_app as app
-from flask_jwt import _jwt_required, current_identity
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from sqlalchemy.orm.exc import NoResultFound
 from flask import request
 
@@ -7,7 +7,9 @@ from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
+from app.models.event_invoice import EventInvoice
 from app.models.order import Order
+from app.models.speaker import Speaker
 from app.api.helpers.jwt import get_identity
 
 
@@ -23,7 +25,7 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
     Do not use this if the resource is also accessible by a normal admin, use the is_admin decorator instead.
     :return:
     """
-    user = current_identity
+    user = current_user
     if not user.is_super_admin:
         return ForbiddenError({'source': ''}, 'Super admin access is required').respond()
     return view(*view_args, **view_kwargs)
@@ -31,7 +33,7 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 @jwt_required
 def is_admin(view, view_args, view_kwargs, *args, **kwargs):
-    user = current_identity
+    user = current_user
     if not user.is_admin and not user.is_super_admin:
         return ForbiddenError({'source': ''}, 'Admin access is required').respond()
 
@@ -39,26 +41,39 @@ def is_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
-def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
-    user = current_identity
+def is_owner(view, view_args, view_kwargs, *args, **kwargs):
+    user = current_user
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if not user.is_organizer(kwargs['event_id']):
-        return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
+    if not user.is_owner(kwargs['event_id']):
+        return ForbiddenError({'source': ''}, 'Owner access is required').respond()
 
     return view(*view_args, **view_kwargs)
 
 
 @jwt_required
-def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
-    user = current_identity
+def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
+    user = current_user
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.is_owner(kwargs['event_id']) or user.is_organizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
+
+
+@jwt_required
+def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
+    user = current_user
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -66,9 +81,9 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
 
 @jwt_required
 def is_coorganizer_but_not_admin(view, view_args, view_kwargs, *args, **kwargs):
-    user = current_identity
+    user = current_user
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -90,11 +105,11 @@ def is_coorganizer_endpoint_related_to_event(view, view_args, view_kwargs, *args
     user = get_identity()
 
     if user.is_staff:
-        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        verify_jwt_in_request()
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
-        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+    if user.has_event_access(kwargs['event_id']):
+        verify_jwt_in_request()
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -106,7 +121,7 @@ def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
-    user = current_identity
+    user = current_user
     if not user.is_admin and not user.is_super_admin and user.id != kwargs['user_id']:
         return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
     return view(*view_args, **view_kwargs)
@@ -118,7 +133,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
-    user = current_identity
+    user = current_user
 
     if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
         return view(*view_args, **view_kwargs)
@@ -126,7 +141,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -138,7 +153,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
-    user = current_identity
+    user = current_user
     if user.is_admin or user.is_super_admin:
         return view(*view_args, **view_kwargs)
 
@@ -150,7 +165,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
     except NoResultFound:
         return NotFoundError({'parameter': 'id'}, 'Session not found.').respond()
 
-    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+    if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)
 
     if session.speakers:
@@ -158,7 +173,32 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
             if speaker.user_id == user.id:
                 return view(*view_args, **view_kwargs)
 
+    if session.creator_id == user.id:
+        return view(*view_args, **view_kwargs)
+
     return ForbiddenError({'source': ''}, 'Access denied.').respond()
+
+
+@jwt_required
+def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_user
+
+    if user.is_admin or user.is_super_admin:
+        return view(*view_args, **view_kwargs)
+
+    if user.has_event_access(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    if ('model' in kwargs) and (kwargs['model'] == Speaker):
+        query_user = Speaker.query.filter_by(email=user._email).first()
+        if query_user:
+            return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Detail ownership is required, access denied.').respond()
 
 
 @jwt_required
@@ -167,7 +207,7 @@ def is_session_self_submitted(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
-    user = current_identity
+    user = current_user
     if user.is_admin or user.is_super_admin:
         return view(*view_args, **view_kwargs)
 
@@ -179,7 +219,7 @@ def is_session_self_submitted(view, view_args, view_kwargs, *args, **kwargs):
     except NoResultFound:
         return NotFoundError({'parameter': 'session_id'}, 'Session not found.').respond()
 
-    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+    if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
@@ -193,12 +233,12 @@ def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and registrar to access the event resources.x`
     """
-    user = current_identity
+    user = current_user
     event_id = kwargs['event_id']
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
 
@@ -209,7 +249,7 @@ def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
-    user = current_identity
+    user = current_user
     if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
         return view(*view_args, **view_kwargs)
 
@@ -217,7 +257,7 @@ def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
 
     event_id = kwargs['event_id']
-    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Registrar access is required.').respond()
@@ -228,12 +268,12 @@ def is_track_organizer(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and Track Organizer to access the resource(s).
     """
-    user = current_identity
+    user = current_user
     event_id = kwargs['event_id']
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_track_organizer(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_track_organizer(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
 
@@ -243,26 +283,26 @@ def is_moderator(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and Moderator to access the resource(s).
     """
-    user = current_identity
+    user = current_user
     event_id = kwargs['event_id']
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_moderator(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_moderator(event_id) or user.has_event_access(event_id):
         return view_kwargs(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 
 
 @jwt_required
 def user_event(view, view_args, view_kwargs, *args, **kwargs):
-    user = current_identity
+    user = current_user
     view_kwargs['user_id'] = user.id
     return view(*view_args, **view_kwargs)
 
 
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or 'withRole' in request.args:
-        _jwt_required(app.config['JWT_DEFAULT_REALM'])
-        user = current_identity
+        verify_jwt_in_request()
+        user = current_user
 
         if 'GET' in request.method and user.is_staff:
             return view(*view_args, **view_kwargs)
@@ -273,8 +313,8 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
 
 def create_event(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or 'withRole' in request.args:
-        _jwt_required(app.config['JWT_DEFAULT_REALM'])
-        user = current_identity
+        verify_jwt_in_request()
+        user = current_user
 
         if user.can_create_event is False:
             return ForbiddenError({'source': ''}, 'Please verify your email').respond()
@@ -289,6 +329,7 @@ def create_event(view, view_args, view_kwargs, *args, **kwargs):
 permissions = {
     'is_super_admin': is_super_admin,
     'is_admin': is_admin,
+    'is_owner': is_owner,
     'is_organizer': is_organizer,
     'is_coorganizer': is_coorganizer,
     'is_track_organizer': is_track_organizer,
@@ -304,7 +345,8 @@ permissions = {
     'is_user_itself': is_user_itself,
     'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
     'is_registrar_or_user_itself': is_registrar_or_user_itself,
-    'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin
+    'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin,
+    'is_speaker_itself_or_admin': is_speaker_itself_or_admin
 }
 
 
@@ -364,6 +406,13 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         except NoResultFound:
             return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
         view_kwargs['event_id'] = event.id
+
+    if view_kwargs.get('event_invoice_identifier') is not None:
+        try:
+            event_invoice = EventInvoice.query.filter_by(identifier=view_kwargs['event_invoice_identifier']).one()
+        except NoResultFound:
+            return NotFoundError({'parameter': 'event_invoice_identifier'}, 'Event Invoice not found').respond()
+        view_kwargs['id'] = event_invoice.id
 
     # Only for events API
     if 'identifier' in view_kwargs:

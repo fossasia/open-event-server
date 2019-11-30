@@ -4,9 +4,8 @@ from pentabarf.Event import Event
 from flask import url_for
 from pentabarf.Person import Person
 from pentabarf.Room import Room
-from sqlalchemy import DATE
+from sqlalchemy import Date
 from sqlalchemy import asc
-from sqlalchemy import cast
 from sqlalchemy import func
 
 from app import db
@@ -14,6 +13,12 @@ from app.models.session import Session
 from app.settings import get_settings
 from app.models.event import Event as EventModel
 from app.models.microlocation import Microlocation
+
+
+def format_timedelta(td):
+    hours, remainder = divmod(td.total_seconds(), 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return '{:02}:{:02}'.format(int(hours), int(minutes))
 
 
 class PentabarfExporter:
@@ -30,14 +35,18 @@ class PentabarfExporter:
                                 days=diff.days if diff.days > 0 else 1,
                                 day_change="00:00", timeslot_duration="00:15",
                                 venue=event.location_name)
-        dates = (db.session.query(cast(Session.starts_at, DATE))
+        dates = (db.session.query(func.date(Session.starts_at, type_=Date))  # type_ needed for sqlite
                  .filter_by(event_id=event_id)
                  .filter_by(state='accepted')
                  .filter(Session.deleted_at.is_(None))
-                 .order_by(asc(Session.starts_at)).distinct().all())
+                 .order_by(asc(func.date(Session.starts_at))).distinct().all())
 
         for date in dates:
             date = date[0]
+
+            if date is None:
+                continue  # Cannot continue if date is missing
+
             day = Day(date=date)
             microlocation_ids = list(db.session.query(Session.microlocation_id)
                                      .filter(func.date(Session.starts_at) == date)
@@ -58,10 +67,14 @@ class PentabarfExporter:
                     room = Room(name=microlocation.name)
                     for session in sessions:
 
+                        if session.ends_at is None or session.starts_at is None:
+                            duration = ""
+                        else:
+                            duration = format_timedelta(session.ends_at - session.starts_at)
                         session_event = Event(id=session.id,
                                               date=session.starts_at,
-                                              start=session.starts_at,
-                                              duration=str(session.ends_at - session.starts_at) + "00:00",
+                                              start=session.starts_at.strftime('%H:%M'),
+                                              duration=duration,
                                               track=session.track.name,
                                               abstract=session.short_abstract,
                                               title=session.title,

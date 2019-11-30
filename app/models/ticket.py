@@ -14,7 +14,7 @@ discount_codes_tickets = db.Table(
     db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
     db.PrimaryKeyConstraint('discount_code_id', 'ticket_id'))
 
-ticket_tags_table = db.Table('association', db.Model.metadata,
+ticket_tags_table = db.Table('ticket_tagging', db.Model.metadata,
                              db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
                              db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
                              )
@@ -32,6 +32,8 @@ class Ticket(SoftDeletionModel):
     quantity = db.Column(db.Integer)
     position = db.Column(db.Integer)
     price = db.Column(db.Float)
+    min_price = db.Column(db.Float, default=0, nullable=False)
+    max_price = db.Column(db.Float)
     is_fee_absorbed = db.Column(db.Boolean)
     sales_starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     sales_ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -67,6 +69,8 @@ class Ticket(SoftDeletionModel):
                  price=0,
                  min_order=1,
                  max_order=10,
+                 min_price=0,
+                 max_price=0,
                  is_fee_absorbed=False,
                  tags=[],
                  access_codes=[],
@@ -82,6 +86,8 @@ class Ticket(SoftDeletionModel):
         self.is_checkin_restricted = is_checkin_restricted
         self.auto_checkin_enabled = auto_checkin_enabled
         self.price = price
+        self.min_price = min_price
+        self.max_price = max_price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
         self.is_hidden = is_hidden
@@ -166,6 +172,9 @@ class TicketTag(SoftDeletionModel):
     Tags to group tickets
     """
     __tablename__ = 'ticket_tag'
+    __table_args__ = (
+        db.UniqueConstraint('name', 'event_id', name='unique_ticket_tag'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)

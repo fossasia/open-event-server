@@ -54,7 +54,10 @@ class CustomSystemRoleDetail(ResourceDetail):
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomSystemRoleSchema
     data_layer = {'session': db.session,
-                  'model': CustomSysRole}
+                  'model': CustomSysRole,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class CustomSystemRoleRelationship(ResourceRelationship):

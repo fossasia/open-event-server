@@ -3,6 +3,7 @@ from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
@@ -10,6 +11,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.session import Session
 from utils.common import use_defaults
+from app.api.helpers.validations import validate_complex_fields_json
 
 
 @use_defaults()
@@ -28,7 +30,7 @@ class SessionSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_fields(self, data, original_data):
         if 'id' in original_data['data']:
             try:
                 session = Session.query.filter_by(id=original_data['data']['id']).one()
@@ -48,9 +50,12 @@ class SessionSchema(SoftDeletionSchema):
             if data['starts_at'] >= data['ends_at']:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+            if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/starts-at'}, "starts-at should be after current date-time")
 
         if 'state' in data:
-            if data['state'] is not 'draft' or not 'pending':
+            if data['state'] not in ('draft', 'pending'):
                 if not has_access('is_coorganizer', event_id=data['event']):
                     return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
@@ -61,6 +66,8 @@ class SessionSchema(SoftDeletionSchema):
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
                 return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+        validate_complex_fields_json(self, data, original_data)
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
@@ -82,9 +89,11 @@ class SessionSchema(SoftDeletionSchema):
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
+    is_locked = fields.Boolean(default=False)
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
+    complex_field_values = fields.Dict(allow_none=True)
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},

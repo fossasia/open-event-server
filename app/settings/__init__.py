@@ -6,20 +6,26 @@ from app.models.ticket_fee import TicketFees
 from app.models.setting import Setting, Environment
 
 
-def get_settings():
+def get_settings(from_db=False):
     """
     Use this to get latest system settings
     """
-    if 'custom_settings' in current_app.config:
+    if not from_db and 'custom_settings' in current_app.config:
         return current_app.config['custom_settings']
     s = Setting.query.order_by(desc(Setting.id)).first()
+    app_environment = current_app.config.get('ENV', 'production')
     if s is None:
-        set_settings(secret='super secret key', app_name='Open Event')
+        set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
     else:
         current_app.config['custom_settings'] = make_dict(s)
         if not current_app.config['custom_settings'].get('secret'):
-            set_settings(secret='super secret key', app_name='Open Event')
+            set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
     return current_app.config['custom_settings']
+
+
+def refresh_settings():
+    # Force fetch settings from DB, thus refreshing it
+    get_settings(from_db=True)
 
 
 def get_setts():

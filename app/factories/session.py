@@ -8,23 +8,19 @@ from app.factories.track import TrackFactory
 from app.models.session import db, Session
 
 
-class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Session
         sqlalchemy_session = db.session
 
-    event = factory.RelatedFactory(EventFactoryBasic)
-    session_type = factory.RelatedFactory(SessionTypeFactory)
-    track = factory.RelatedFactory(TrackFactory)
-    microlocation = factory.RelatedFactory(MicrolocationFactory)
     title = common.string_
     subtitle = common.string_
     level = common.int_
     short_abstract = common.string_
     long_abstract = (common.string_ + common.string_)
     comments = common.string_
-    starts_at = common.date_
-    ends_at = common.dateEnd_
+    starts_at = common.dateFuture_
+    ends_at = common.dateEndFuture_
     language = "English"
     slides_url = common.url_
     video_url = common.url_
@@ -38,3 +34,11 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
     session_type_id = 1
     track_id = 1
     microlocation_id = 1
+
+
+class SessionFactory(SessionFactoryBase):
+
+    event = factory.RelatedFactory(EventFactoryBasic)
+    session_type = factory.RelatedFactory(SessionTypeFactory)
+    track = factory.RelatedFactory(TrackFactory)
+    microlocation = factory.RelatedFactory(MicrolocationFactory)

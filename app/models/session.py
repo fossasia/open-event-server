@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from sqlalchemy import event, func
+from sqlalchemy.sql import func as sql_func
 
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -46,12 +47,14 @@ class Session(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
     last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     send_email = db.Column(db.Boolean, nullable=True)
+    is_locked = db.Column(db.Boolean, default=False, nullable=False)
+    complex_field_values = db.Column(db.JSON)
 
     def __init__(self,
                  title=None,
@@ -80,7 +83,10 @@ class Session(SoftDeletionModel):
                  deleted_at=None,
                  submitted_at=None,
                  last_modified_at=None,
-                 send_email=None):
+                 send_email=None,
+                 is_locked=False,
+                 complex_field_values=None
+                 ):
 
         if speakers is None:
             speakers = []
@@ -112,6 +118,8 @@ class Session(SoftDeletionModel):
         self.submission_modifier = submission_modifier
         self.last_modified_at = datetime.datetime.now(pytz.utc)
         self.send_email = send_email
+        self.is_locked = is_locked
+        self.complex_field_values = complex_field_values
 
     @staticmethod
     def get_service_name():

@@ -1,9 +1,10 @@
 language: python
 
-sudo: required
+dist: xenial
 
 services:
   - docker
+  - postgresql
 
 addons:
   apt:
@@ -12,16 +13,11 @@ addons:
       - libssl-dev
       - libffi-dev
 
-python:
-  - '3.6'
+python: 3.7
 
 cache: pip
 
-before-install:
-  - npm -g install npm@latest
-
 install:
-  - npm install -g dredd@4.0.0
   - pip3 install -r requirements/tests.txt
 
 env:
@@ -32,11 +28,15 @@ before_script:
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
-  - dredd
   
 script:
-  - nosetests tests/unittests -v --with-coverage
+  - nosetests tests/all -v --with-coverage
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
+
+branches:
+  only:
+    - master
+    - development

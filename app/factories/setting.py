@@ -19,6 +19,8 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     secret = common.secret_
     # Static domain
     static_domain = common.url_
+    # Order Expiry Time
+    order_expiry_time = 15  #min
 
     #
     #  STORAGE
@@ -61,12 +63,20 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_client_id = common.string_
     stripe_secret_key = common.string_
     stripe_publishable_key = common.string_
+    stripe_test_secret_key = common.string_
+    stripe_test_publishable_key = common.string_
     # PayPal Credentials
     paypal_mode = 'development'
     paypal_client = common.string_
     paypal_secret = common.string_
     paypal_sandbox_client = common.string_
     paypal_sandbox_secret = common.string_
+    # Omise Credentials
+    omise_mode = 'development'
+    omise_test_public = common.string_
+    omise_test_secret = common.string_
+    omise_live_public = common.string_
+    omise_live_secret = common.string_
     #
     # EMAIL
     #
@@ -96,6 +106,10 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     facebook_url = common.url_
     youtube_url = common.url_
 
+    # Event Invoices settings
+    invoice_sending_day = common.integer_
+    invoice_sending_timezone = common.timezone_
+
     #
     # Generators
     #
@@ -109,3 +123,16 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     #
     cookie_policy = common.string_
     cookie_policy_link = common.url_
+
+    # Admin Invoice Details
+    admin_billing_contact_name = common.string_
+    admin_billing_phone = common.string_
+    admin_billing_email = common.email_
+    admin_billing_state = common.string_
+    admin_billing_country = common.string_
+    admin_billing_tax_info = common.string_
+    admin_company = common.string_
+    admin_billing_address = common.string_
+    admin_billing_city = common.string_
+    admin_billing_zip = common.string_
+    admin_billing_additional_info = common.string_

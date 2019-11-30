@@ -1,14 +1,27 @@
 import base64
+import logging
 import random
 import string
+from datetime import timedelta
+from functools import wraps
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
-from flask_jwt import current_identity as current_user, jwt_required
+from flask import request, jsonify, make_response, Blueprint, send_file
+from flask_jwt_extended import (
+    jwt_required, jwt_refresh_token_required,
+    fresh_jwt_required, unset_jwt_cookies,
+    current_user, create_access_token,
+    create_refresh_token, set_refresh_cookies,
+    get_jwt_identity)
+from flask_limiter.util import get_remote_address
+from healthcheck import EnvironmentDump
 from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
+from app import limiter
 from app.api.helpers.db import save_to_db, get_count
+from app.api.helpers.auth import AuthManager, blacklist_token
+from app.api.helpers.jwt import jwt_authenticate
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
@@ -18,11 +31,83 @@ from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth,
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-    USER_REGISTER_WITH_PASSWORD
+    PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
+
+logger = logging.getLogger(__name__)
+authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+
+
+def authenticate(allow_refresh_token=False, existing_identity=None):
+    data = request.get_json()
+    username = data.get('email', data.get('username'))
+    password = data.get('password')
+    criterion = [username, password]
+
+    if not all(criterion):
+        return jsonify(error='username or password missing'), 400
+
+    identity = jwt_authenticate(username, password)
+    if not identity or (existing_identity and identity != existing_identity):
+        # For fresh login, credentials should match existing user
+        return jsonify(error='Invalid Credentials'), 401
+
+    remember_me = data.get('remember-me')
+    include_in_response = data.get('include-in-response')
+    add_refresh_token = allow_refresh_token and remember_me
+
+    expiry_time = timedelta(minutes=90) if add_refresh_token else None
+    access_token = create_access_token(identity.id, fresh=True, expires_delta=expiry_time)
+    response_data = {'access_token': access_token}
+
+    if add_refresh_token:
+        refresh_token = create_refresh_token(identity.id)
+        if include_in_response:
+            response_data['refresh_token'] = refresh_token
+
+    response = jsonify(response_data)
+
+    if add_refresh_token and not include_in_response:
+        set_refresh_cookies(response, refresh_token)
+
+    return response
+
+
+@authorised_blueprint.route('/auth/session', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
+def login():
+    return authenticate(allow_refresh_token=True)
+
+
+@auth_routes.route('/fresh-login', methods=['POST'])
+@jwt_required
+def fresh_login():
+    return authenticate(existing_identity=current_user)
+
+
+@auth_routes.route('/token/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh_token():
+    current_user = get_jwt_identity()
+    new_token = create_access_token(identity=current_user, fresh=False)
+    return jsonify({'access_token': new_token})
+
+
+@auth_routes.route('/logout', methods=['POST'])
+def logout():
+    response = jsonify({'success': True})
+    unset_jwt_cookies(response)
+    return response
+
+
+@auth_routes.route('/blacklist', methods=['POST'])
+@jwt_required
+def blacklist_token_rquest():
+    blacklist_token(current_user)
+    return jsonify({'success': True})
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -84,16 +169,18 @@ def get_token(provider):
     return make_response(jsonify(token=response.json()), 200)
 
 
-@auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
-def login_user(provider, auth_code):
+@auth_routes.route('/oauth/login/<provider>', methods=['POST'])
+def login_user(provider):
     if provider == 'facebook':
         provider_class = FbOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'redirect_uri': request.args.get('redirect_uri'),
+            'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
-            'code': auth_code
+            'code': request.args.get('code')
         }
+        if not payload['client_id'] or not payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
             'input_token': access_token['access_token'],
@@ -111,7 +198,7 @@ def login_user(provider, auth_code):
                 user.facebook_login_hash = random.getrandbits(128)
                 save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash), 200)
+                jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash), 200)
 
         user = User()
         user.first_name = user_details['first_name']
@@ -123,7 +210,7 @@ def login_user(provider, auth_code):
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash),
+        return make_response(jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash),
                              200)
 
     elif provider == 'google':
@@ -153,7 +240,10 @@ def login_user(provider, auth_code):
 
 @auth_routes.route('/verify-email', methods=['POST'])
 def verify_email():
-    token = base64.b64decode(request.json['data']['token'])
+    try:
+        token = base64.b64decode(request.json['data']['token'])
+    except base64.binascii.Error:
+        return BadRequestError({'source': ''}, 'Invalid Token').respond()
     s = get_serializer()
 
     try:
@@ -195,6 +285,12 @@ def resend_verification_email():
 
 
 @auth_routes.route('/reset-password', methods=['POST'])
+@limiter.limit(
+    '3/hour', key_func=lambda: request.json['data']['email'], error_message='Limit for this action exceeded'
+)
+@limiter.limit(
+    '1/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+)
 def reset_password_post():
     try:
         email = request.json['data']['email']
@@ -204,12 +300,16 @@ def reset_password_post():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User not found').respond()
+        logger.info('Tried to reset password not existing email %s', email)
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
+        if user.was_registered_with_order:
+            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'], link=link)
+        else:
+            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link, token=user.reset_password)
 
-    return make_response(jsonify(message="Email Sent"), 200)
+    return make_response(jsonify(message="If your email was registered with us, you'll get an \
+                         email with reset link shortly", email=email), 200)
 
 
 @auth_routes.route('/reset-password', methods=['PATCH'])
@@ -223,6 +323,8 @@ def reset_password_patch():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
+        if not user.is_verified:
+            user.is_verified = True
         save_to_db(user)
 
     return jsonify({
@@ -233,7 +335,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@jwt_required()
+@fresh_jwt_required
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']
@@ -244,7 +346,12 @@ def change_password():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
-
+            if user.is_correct_password(new_password):
+                return BadRequestError({'source': ''},
+                                       'Old and New passwords must be different').respond()
+            if len(new_password) < 8:
+                return BadRequestError({'source': ''},
+                                       'Password should have minimum 8 characters').respond()
             user.password = new_password
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
@@ -252,7 +359,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                           app_name=get_settings()['app_name'])
         else:
-            return BadRequestError({'source': ''}, 'Wrong Password').respond()
+            return BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
 
     return jsonify({
         "id": user.id,
@@ -260,3 +367,29 @@ def change_password():
         "name": user.fullname if user.fullname else None,
         "password-changed": True
     })
+
+
+def return_file(file_name_prefix, file_path, identifier):
+    response = make_response(send_file(file_path))
+    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, identifier)
+    return response
+
+
+# Access for Environment details & Basic Auth Support
+def requires_basic_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not AuthManager.check_auth_admin(auth.username, auth.password):
+            return make_response('Could not verify your access level for that URL.\n'
+                                 'You have to login with proper credentials', 401,
+                                 {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        return f(*args, **kwargs)
+    return decorated
+
+
+@authorised_blueprint.route('/environment')
+@requires_basic_auth
+def environment_details():
+    envdump = EnvironmentDump(include_config=False)
+    return envdump.dump_environment()

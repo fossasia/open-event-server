@@ -8,6 +8,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.discount_code import DiscountCode
+from app.models.ticket import Ticket
 
 
 class DiscountCodeSchemaPublic(SoftDeletionSchema):
@@ -85,7 +86,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
 
         DiscountCodeSchemaEvent.quantity_validation_helper(data)
 
-        if 'tickets_number' in data and 'max_quantity' in data:
+        if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
@@ -148,10 +149,59 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
 
         DiscountCodeSchemaTicket.quantity_validation_helper(data)
 
-        if 'tickets_number' in data and 'max_quantity' in data:
+        if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
+
+    @validates_schema(pass_original=True)
+    def validate_value(self, data, original_data):
+        if 'id' in original_data['data']:
+            try:
+                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
+
+            if 'type' not in data:
+                data['type'] = discount_code.type
+
+            if 'value' not in data:
+                data['value'] = discount_code.value
+
+        if data['type'] == "percent":
+            if 'tickets' in data:
+                for ticket in data['tickets']:
+                    ticket_object = Ticket.query.filter_by(id=ticket).one()
+                    if not ticket_object.price:
+                        raise UnprocessableEntity(
+                            {'pointer': '/data/attributes/tickets'},
+                            "discount code cannot be applied on free tickets"
+                        )
+            if data['value'] < 0 or data['value'] > 100:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/value'},
+                    "discount percent must be within range of 0 and 100"
+                )
+
+        if data['type'] == "amount":
+            if 'tickets' in data:
+                for ticket in data['tickets']:
+                    ticket_object = Ticket.query.filter_by(id=ticket).one()
+                    if not ticket_object.price:
+                        raise UnprocessableEntity(
+                            {'pointer': '/data/attributes/tickets'},
+                            "discount code cannot be applied on free tickets"
+                        )
+                    if ticket_object.price < data['value']:
+                        raise UnprocessableEntity(
+                            {'pointer': '/data/attributes/value'},
+                            "discount amount cannot be more than ticket amount"
+                        )
+            if data['value'] < 0:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/value'},
+                    "discount amount cannot be less than zero"
+                )
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):

@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint, abort, make_response
 from sqlalchemy.orm import make_transient
 
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.api.helpers.permission_manager import has_access
 from app.models.custom_form import CustomForms
@@ -14,9 +14,23 @@ from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.ticket import Ticket
 from app.models.track import Track
+from app.models.users_events_role import UsersEventsRoles
+from app.models.tax import Tax
 
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
+
+def start_sponsor_logo_generation_task(event_id):
+    from .helpers.tasks import sponsor_logos_url_task
+    sponsor_logos_url_task.delay(event_id=event_id)
+
+
+def copy_to_event(object, event):
+    db.session.expunge(object)  # expunge the object
+    make_transient(object)
+    object.event_id = event.id
+    delattr(object, 'id')
+    save_to_db(object)
 
 @event_copy.route('/<identifier>/copy', methods=['POST'])
 def create_event_copy(identifier):
@@ -31,97 +45,57 @@ def create_event_copy(identifier):
         return abort(
             make_response(jsonify(error="Access Forbidden"), 403)
         )
-    tickets = Ticket.query.filter_by(event_id=event.id).all()
-    social_links = SocialLink.query.filter_by(event_id=event.id).all()
-    sponsors = Sponsor.query.filter_by(event_id=event.id).all()
-    microlocations = Microlocation.query.filter_by(event_id=event.id).all()
-    tracks = Track.query.filter_by(event_id=event.id).all()
-    custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
-    discount_codes = DiscountCode.query.filter_by(event_id=event.id).all()
-    speaker_calls = SpeakersCall.query.filter_by(event_id=event.id).all()
+    tickets = Ticket.query.filter_by(event_id=event.id, deleted_at=None).all()
+    social_links = SocialLink.query.filter_by(event_id=event.id, deleted_at=None).all()
+    sponsors = Sponsor.query.filter_by(event_id=event.id, deleted_at=None).all()
+    microlocations = Microlocation.query.filter_by(event_id=event.id, deleted_at=None).all()
+    tracks = Track.query.filter_by(event_id=event.id, deleted_at=None).all()
+    custom_forms = CustomForms.query.filter_by(event_id=event.id, deleted_at=None).all()
+    discount_codes = DiscountCode.query.filter_by(event_id=event.id, deleted_at=None).all()
+    speaker_calls = SpeakersCall.query.filter_by(event_id=event.id, deleted_at=None).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id, deleted_at=None).all()
+    taxes = Tax.query.filter_by(event_id=event.id, deleted_at=None).all()
 
     db.session.expunge(event)  # expunge the object from session
     make_transient(event)
     delattr(event, 'id')
     event.identifier = get_new_event_identifier()
-    db.session.add(event)
-    db.session.commit()
+    save_to_db(event)
+
+    # Ensure tax information is copied
+    for tax in taxes:
+        copy_to_event(tax, event)
 
     # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
     for ticket in tickets:
-        ticket_id = ticket.id
-        db.session.expunge(ticket)  # expunge the object from session
-        make_transient(ticket)
-        ticket.event_id = event.id
-        delattr(ticket, 'id')
-        db.session.add(ticket)
-        db.session.commit()
+        copy_to_event(ticket, event)
 
     for link in social_links:
-        link_id = link.id
-        db.session.expunge(link)  # expunge the object from session
-        make_transient(link)
-        link.event_id = event.id
-        delattr(link, 'id')
-        db.session.add(link)
-        db.session.commit()
+        copy_to_event(link, event)
 
     for sponsor in sponsors:
-        sponsor_id = sponsor.id
-        db.session.expunge(sponsor)  # expunge the object from session
-        make_transient(sponsor)
-        sponsor.event_id = event.id
-        logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
-        delattr(sponsor, 'id')
-        sponsor.logo_url = logo_url
-        db.session.add(sponsor)
-        db.session.commit()
+        copy_to_event(sponsor, event)
+
+    start_sponsor_logo_generation_task(event.id)
 
     for location in microlocations:
-        location_id = location.id
-        db.session.expunge(location)  # expunge the object from session
-        make_transient(location)
-        location.event_id = event.id
-        delattr(location, 'id')
-        db.session.add(location)
-        db.session.commit()
+        copy_to_event(location, event)
 
     # No sessions are copied for new tracks
     for track in tracks:
-        track_id = track.id
-        db.session.expunge(track)  # expunge the object from session
-        make_transient(track)
-        track.event_id = event.id
-        delattr(track, 'id')
-        db.session.add(track)
-        db.session.commit()
+        copy_to_event(track, event)
 
     for call in speaker_calls:
-        call_id = call.id
-        db.session.expunge(call)  # expunge the object from session
-        make_transient(call)
-        call.event_id = event.id
-        delattr(call, 'id')
-        db.session.add(call)
-        db.session.commit()
+        copy_to_event(call, event)
 
     for code in discount_codes:
-        code_id = code.id
-        db.session.expunge(code)  # expunge the object from session
-        make_transient(code)
-        code.event_id = event.id
-        delattr(code, 'id')
-        db.session.add(code)
-        db.session.commit()
+        copy_to_event(code, event)
 
     for form in custom_forms:
-        form_id = form.id
-        db.session.expunge(form)  # expunge the object from session
-        make_transient(form)
-        form.event_id = event.id
-        delattr(form, 'id')
-        db.session.add(form)
-        db.session.commit()
+        copy_to_event(form, event)
+
+    for user_role in user_event_roles:
+        copy_to_event(user_role, event)
 
     return jsonify({
         'id': event.id,

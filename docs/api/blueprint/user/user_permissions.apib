@@ -1,0 +1,235 @@
+# Group User Permissions
+
+**ADMIN**
+
+To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the user permission | string | **yes** |
+| `description` | Description | string | - |
+| `unverified-user` | allow for unverified user if set to true  | boolean | - |
+| `anonymous-user` | allow for ananymous user if set to true | boolean | **yes** |
+
+## User Permission Collection [/v1/user-permissions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all user permissions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 2
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "description": "Publish event (make event live)",
+                        "unverified-user": false,
+                        "name": "publish_event",
+                        "anonymous-user": false
+                    },
+                    "type": "user-permission",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/user-permissions/1"
+                    }
+                },
+                {
+                    "attributes": {
+                        "description": "Create event",
+                        "unverified-user": true,
+                        "name": "create_event",
+                        "deleted-at": null,
+                        "anonymous-user": false
+                    },
+                    "type": "user-permission",
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/user-permissions/2"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/user-permissions"
+            }
+        }
+
+
+### Create User Permission [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "name": "example",
+                    "description": "example",
+                    "unverified-user": "false",
+                    "anonymous-user": "false"
+              },
+                "type": "user-permission"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "deleted-at": null,
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "1",
+            "links": {
+              "self": "/v1/user-permissions/3"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/3"
+          }
+        }
+
+
+## User Permission Details [/v1/user-permissions/{id}]
++ Parameters
+    + id: 1 (integer) - ID of the page in the form of an integer
+
+### Get User Permission Details [GET]
+Get a single resource.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "deleted-at": null,
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "1",
+            "links": {
+              "self": "/v1/user-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/1"
+          }
+        }
+
+
+### Update User Permission [PATCH]
+Update a single resource by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "name": "example",
+                    "description": "example",
+                    "unverified-user": "false",
+                    "anonymous-user": "false"
+                 },
+                "type": "user-permission",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "deleted-at": null,
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "3",
+            "links": {
+              "self": "/v1/user-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/1"
+          }
+        }
+
+### Delete User Permission [DELETE]
+Delete a single resource.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

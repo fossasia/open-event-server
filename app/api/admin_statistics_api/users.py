@@ -10,8 +10,8 @@ from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.models.event import Event
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
+from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import get_count
-
 
 class AdminStatisticsUserSchema(Schema):
     """
@@ -30,6 +30,7 @@ class AdminStatisticsUserSchema(Schema):
     admin = fields.Method("admin_count")
     verified = fields.Method("verified_count")
     unverified = fields.Method("unverified_count")
+    owner = fields.Method("owner_count")
     organizer = fields.Method("organizer_count")
     coorganizer = fields.Method("coorganizer_count")
     attendee = fields.Method("attendee_count")
@@ -49,21 +50,25 @@ class AdminStatisticsUserSchema(Schema):
 
     def get_all_user_roles(self, role_name):
         role = Role.query.filter_by(name=role_name).first()
-        uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
-            Event.deleted_at.is_(None), UsersEventsRoles.role == role)
-        return uers
+        newquery = User.query.join(UsersEventsRoles.user).join(UsersEventsRoles.role).filter(
+            UsersEventsRoles.role == role).distinct()
+        return newquery
+
+    def owner_count(self, obj):
+        return self.get_all_user_roles('owner').count()
 
     def organizer_count(self, obj):
-        return get_count(self.get_all_user_roles('organizer'))
+        return self.get_all_user_roles('organizer').count()
 
     def coorganizer_count(self, obj):
-        return get_count(self.get_all_user_roles('coorganizer'))
+        return self.get_all_user_roles('coorganizer').count()
 
     def track_organizer_count(self, obj):
-        return get_count(self.get_all_user_roles('track_organizer'))
+        return self.get_all_user_roles('track_organizer').count()
 
     def attendee_count(self, obj):
-        return get_count(self.get_all_user_roles('attendee'))
+        unique_attendee_query = db.session.query(TicketHolder.email).distinct()
+        return unique_attendee_query.count()
 
 
 class AdminStatisticsUserDetail(ResourceDetail):

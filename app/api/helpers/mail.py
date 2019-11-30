@@ -1,4 +1,5 @@
 import base64
+import logging
 from datetime import datetime
 
 from flask import current_app
@@ -11,14 +12,33 @@ from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
     AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
+    TEST_MAIL
 from app.models.user import User
 
 
-def send_email(to, action, subject, html):
+def check_smtp_config(smtp_encryption):
+    """
+    Checks config of SMTP
+    """
+    config = {
+                'host': get_settings()['smtp_host'],
+                'username': get_settings()['smtp_username'],
+                'password': get_settings()['smtp_password'],
+                'encryption': smtp_encryption,
+                'port': get_settings()['smtp_port'],
+    }
+    for field in config:
+        if field is None:
+            return False
+    return True
+
+
+def send_email(to, action, subject, html, attachments=None):
     """
     Sends email and records it in DB
     """
+    from .tasks import send_email_task_sendgrid, send_email_task_smtp
     if not string_empty(to):
         email_service = get_settings()['email_service']
         email_from_name = get_settings()['email_from_name']
@@ -30,44 +50,46 @@ def send_email(to, action, subject, html):
             'to': to,
             'from': email_from,
             'subject': subject,
-            'html': html
+            'html': html,
+            'attachments': attachments
         }
 
         if not current_app.config['TESTING']:
-            if email_service == 'smtp':
-                smtp_encryption = get_settings()['smtp_encryption']
-                if smtp_encryption == 'tls':
-                    smtp_encryption = 'required'
-                elif smtp_encryption == 'ssl':
-                    smtp_encryption = 'ssl'
-                elif smtp_encryption == 'tls_optional':
-                    smtp_encryption = 'optional'
-                else:
-                    smtp_encryption = 'none'
-
-                config = {
-                    'host': get_settings()['smtp_host'],
-                    'username': get_settings()['smtp_username'],
-                    'password': get_settings()['smtp_password'],
-                    'encryption': smtp_encryption,
-                    'port': get_settings()['smtp_port'],
-                }
-
-                from .tasks import send_mail_via_smtp_task
-                send_mail_via_smtp_task.delay(config, payload)
+            smtp_encryption = get_settings()['smtp_encryption']
+            if smtp_encryption == 'tls':
+                smtp_encryption = 'required'
+            elif smtp_encryption == 'ssl':
+                smtp_encryption = 'ssl'
+            elif smtp_encryption == 'tls_optional':
+                smtp_encryption = 'optional'
             else:
-                payload['fromname'] = email_from_name
-                key = get_settings()['sendgrid_key']
-                if not key:
-                    print('Sendgrid key not defined')
-                    return
-                headers = {
-                    "Authorization": ("Bearer " + key),
-                    "Content-Type": "application/json"
-                }
-                from .tasks import send_email_task
-                send_email_task.delay(payload, headers)
+                smtp_encryption = 'none'
 
+            smtp_config = {
+                'host': get_settings()['smtp_host'],
+                'username': get_settings()['smtp_username'],
+                'password': get_settings()['smtp_password'],
+                'encryption': smtp_encryption,
+                'port': get_settings()['smtp_port'],
+            }
+            smtp_status = check_smtp_config(smtp_encryption)
+            if smtp_status:
+                if email_service == 'smtp':
+                    send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+                else:
+                    key = get_settings().get('sendgrid_key')
+                    if key:
+                        headers = {
+                            "Authorization": ("Bearer " + key),
+                            "Content-Type": "application/json"
+                        }
+                        payload['fromname'] = email_from_name
+                        send_email_task_sendgrid.delay(payload=payload, headers=headers, smtp_config=smtp_config)
+                    else:
+                        logging.exception('SMTP & sendgrid have not been configured properly')
+
+            else:
+                logging.exception('SMTP is not configured properly. Cannot send email.')
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,
@@ -164,7 +186,25 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_after_event(email, event_name, upcoming_events):
+def send_user_email_role_invite(email, role_name, event_name, link):
+    """email for role invite"""
+    send_email(
+        to=email,
+        action=USER_EVENT_ROLE,
+        subject=MAILS[USER_EVENT_ROLE]['subject'].format(
+            role=role_name,
+            event=event_name
+        ),
+        html=MAILS[USER_EVENT_ROLE]['message'].format(
+            email=email,
+            role=role_name,
+            event=event_name,
+            link=link
+        )
+    )
+
+
+def send_email_after_event(email, event_name, frontend_url):
     """email for role invite"""
     send_email(
         to=email,
@@ -175,7 +215,7 @@ def send_email_after_event(email, event_name, upcoming_events):
         html=MAILS[AFTER_EVENT]['message'].format(
             email=email,
             event_name=event_name,
-            upcoming_events=upcoming_events
+            url=frontend_url
         )
     )
 
@@ -270,6 +310,14 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
         )
 
 
+def send_test_email(recipient):
+    send_email(to=recipient,
+               action=TEST_MAIL,
+               subject=MAILS[TEST_MAIL]['subject'],
+               html=MAILS[TEST_MAIL]['message']
+               )
+
+
 def send_email_change_user_email(user, email):
     serializer = get_serializer()
     hash_ = str(base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')), 'utf-8')
@@ -278,7 +326,7 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id):
+def send_email_to_attendees(order, purchaser_id, attachments=None):
     for holder in order.ticket_holders:
         if holder.user and holder.user.id == purchaser_id:
             # Ticket holder is the purchaser
@@ -287,12 +335,15 @@ def send_email_to_attendees(order, purchaser_id):
                 action=TICKET_PURCHASED,
                 subject=MAILS[TICKET_PURCHASED]['subject'].format(
                     event_name=order.event.name,
-                    invoice_id=order.invoice_number
+                    invoice_id=order.invoice_number,
+                    frontend_url=get_settings()['frontend_url']
                 ),
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
-                    event_name=order.event.name
-                )
+                    event_name=order.event.name,
+                    frontend_url=get_settings()['frontend_url']
+                ),
+                attachments=attachments
             )
         else:
             # The Ticket holder is not the purchaser
@@ -306,7 +357,8 @@ def send_email_to_attendees(order, purchaser_id):
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
-                )
+                ),
+                attachments=attachments
             )
 
 
@@ -316,11 +368,13 @@ def send_order_cancel_email(order):
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(
             event_name=order.event.name,
-            invoice_id=order.invoice_number
+            invoice_id=order.invoice_number,
+            frontend_url=get_settings()['frontend_url']
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
             order_url=make_frontend_url('/orders/{identifier}'.format(identifier=order.identifier)),
-            cancel_note=order.cancel_note
+            cancel_note=order.cancel_note,
+            frontend_url=get_settings()['frontend_url']
         )
     )

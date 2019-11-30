@@ -28,7 +28,7 @@ LANGUAGES = {
 }
 
 
-class Config(object):
+class Config:
     """
     The base configuration option. Contains the defaults.
     """
@@ -53,6 +53,9 @@ class Config(object):
     SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True
+    }
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SENTRY_DSN = env('SENTRY_DSN', default=None)
@@ -92,6 +95,7 @@ class ProductionConfig(Config):
     The configuration for a production environment
     """
 
+    ENV = 'production'
     MINIFY_PAGE = True
     PRODUCTION = True
     CACHING = True
@@ -113,6 +117,7 @@ class DevelopmentConfig(Config):
     The configuration for a development environment
     """
 
+    ENV = 'development'
     DEVELOPMENT = True
     DEBUG = True
     CACHING = True
@@ -126,9 +131,11 @@ class TestingConfig(Config):
     """
     The configuration for a test suit
     """
+
+    ENV = 'testing'
     TESTING = True
-    CELERY_ALWAYS_EAGER = True
-    CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False
     BROKER_BACKEND = 'memory'

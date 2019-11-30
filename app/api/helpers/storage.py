@@ -46,7 +46,7 @@ UPLOAD_PATHS = {
         'avatar': 'users/{user_id}/avatar',
         'thumbnail': 'users/{identifier}/thumbnail',
         'original': 'users/{identifier}/original',
-        'large': 'users/{identifier}/large',
+        'small': 'users/{identifier}/small',
         'icon': 'users/{identifier}/icon'
     },
     'temp': {
@@ -79,7 +79,10 @@ UPLOAD_PATHS = {
         'system_image': 'event_topic/{event_topic_id}/system_image'
     },
     'pdf': {
-        'ticket_attendee': 'attendees/tickets/pdf/{identifier}'
+        'ticket_attendee': 'attendees/tickets/pdf/{identifier}',
+        'order': 'orders/invoices/pdf/{identifier}',
+        'tickets_all': 'orders/tickets/pdf/{identifier}',
+        'event_invoice': 'events/organizer/invoices/pdf/{identifier}'
     }
 }
 
@@ -88,7 +91,7 @@ UPLOAD_PATHS = {
 # HELPER CLASSES
 ################
 
-class UploadedFile(object):
+class UploadedFile:
     """
     Helper for a disk-file to replicate request.files[ITEM] class
     """
@@ -108,7 +111,7 @@ class UploadedFile(object):
         self.file.close()
 
 
-class UploadedMemory(object):
+class UploadedMemory:
     """
     Helper for a memory file to replicate request.files[ITEM] class
     """
@@ -130,7 +133,7 @@ class UploadedMemory(object):
 # MAIN
 #########
 
-def upload(uploaded_file, key, **kwargs):
+def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
     """
     Upload handler
     """
@@ -152,15 +155,15 @@ def upload(uploaded_file, key, **kwargs):
     elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
         return upload_to_gs(gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs)
     else:
-        return upload_local(uploaded_file, key, **kwargs)
+        return upload_local(uploaded_file, key, upload_dir, **kwargs)
 
 
-def upload_local(uploaded_file, key, **kwargs):
+def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
     filename = secure_filename(uploaded_file.filename)
-    file_relative_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
+    file_relative_path = upload_dir + key + '/' + generate_hash(key) + '/' + filename
     file_path = app.config['BASE_DIR'] + '/' + file_relative_path
     dir_path = file_path.rsplit('/', 1)[0]
     # delete current
@@ -175,7 +178,7 @@ def upload_local(uploaded_file, key, **kwargs):
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
         return get_settings()['static_domain'] + \
-               file_relative_path.replace('/static', '')
+               file_relative_path
 
     return create_url(request.url, file_relative_path)
 

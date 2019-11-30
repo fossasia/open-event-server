@@ -26,10 +26,12 @@ class UserSchemaPublic(SoftDeletionSchema):
     avatar_url = fields.Url(allow_none=True)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
-    original_image_url = fields.Url(allow_none=True)
+    original_image_url = fields.Url(dump_only=True, allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
     icon_image_url = fields.Url(dump_only=True, allow_none=True)
+    was_registered_with_order = fields.Boolean()
+
 
 
 class UserSchema(UserSchemaPublic):
@@ -55,6 +57,7 @@ class UserSchema(UserSchemaPublic):
     facebook_id = fields.Integer(dump_only=True)
     is_sales_admin = fields.Boolean()
     is_marketer = fields.Boolean()
+    is_user_owner = fields.Boolean(dump_only=True)
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -67,6 +70,16 @@ class UserSchema(UserSchemaPublic):
     deleted_at = fields.DateTime(dump_only=True)
     details = fields.Str(allow_none=True)
     contact = fields.Str(allow_none=True)
+    billing_contact_name = fields.Str(allow_none=True)
+    billing_phone = fields.Str(allow_none=True)
+    billing_state = fields.Str(allow_none=True)
+    billing_country = fields.Str(allow_none=True)
+    billing_tax_info = fields.Str(allow_none=True)
+    company = fields.Str(allow_none=True)
+    billing_address = fields.Str(allow_none=True)
+    billing_city = fields.Str(allow_none=True)
+    billing_zip_code = fields.Str(allow_none=True)
+    billing_additional_info = fields.Str(allow_none=True)
     notifications = Relationship(
         attribute='notifications',
         self_view='v1.user_notification',
@@ -77,7 +90,7 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='notification')
     feedbacks = Relationship(
-        attribute='feedbacks',
+        attribute='feedback',
         self_view='v1.user_feedback',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.feedback_list',
@@ -146,38 +159,51 @@ class UserSchema(UserSchemaPublic):
         schema='SessionSchema',
         many=True,
         type_='session')
-    organizer_events = Relationship(
-        self_view='v1.user_organizer_event',
+    owner_events = Relationship(
+        self_view='v1.user_owner_events',
         self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        related_view_kwargs={'user_owner_id': '<id>'},
+        schema='EventSchema',
+        many=True,
+        type_='event')
+    organizer_events = Relationship(
+        self_view='v1.user_organizer_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view_kwargs={'user_organizer_id': '<id>'},
         related_view='v1.event_list',
         schema='EventSchema',
         many=True,
         type_='event')
     coorganizer_events = Relationship(
-        self_view='v1.user_coorganizer_event',
+        self_view='v1.user_coorganizer_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
+        related_view_kwargs={'user_coorganizer_id': '<id>'},
         schema='EventSchema',
         many=True,
         type_='event')
     track_organizer_events = Relationship(
-        self_view='v1.user_track_organizer_event',
+        self_view='v1.user_track_organizer_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
+        related_view_kwargs={'user_track_organizer_id': '<id>'},
         schema='EventSchema',
         many=True,
         type_='event')
     registrar_events = Relationship(
-        self_view='v1.user_registrar_event',
+        self_view='v1.user_registrar_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
+        related_view_kwargs={'user_registrar_id': '<id>'},
         schema='EventSchema',
         many=True,
         type_='event')
     moderator_events = Relationship(
-        self_view='v1.user_moderator_event',
+        self_view='v1.user_moderator_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
+        related_view_kwargs={'user_moderator_id': '<id>'},
         schema='EventSchema',
         many=True,
         type_='event')

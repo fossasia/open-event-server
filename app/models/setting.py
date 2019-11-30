@@ -30,6 +30,11 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
+    # Order Expiry Time in Minutes
+    order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
+
+    # Maximum number of complex custom fields allowed for a given form
+    max_complex_custom_fields = db.Column(db.Integer, default=30, nullable=False)
 
     #
     #  STORAGE
@@ -46,6 +51,15 @@ class Setting(db.Model):
     gs_key = db.Column(db.String)
     gs_secret = db.Column(db.String)
     gs_bucket_name = db.Column(db.String)
+
+    #
+    # CAPTCHA
+    #
+
+    # Google reCAPTCHA
+    is_google_recaptcha_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    google_recaptcha_site = db.Column(db.String)
+    google_recaptcha_secret = db.Column(db.String)
 
     #
     # Social Login
@@ -72,6 +86,13 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
+    stripe_test_client_id = db.Column(db.String)
+    stripe_test_secret_key = db.Column(db.String)
+    stripe_test_publishable_key = db.Column(db.String)
+
+    # AliPay Keys - Stripe Sources
+    alipay_secret_key = db.Column(db.String)
+    alipay_publishable_key = db.Column(db.String)
 
     # Paypal credentials
     paypal_mode = db.Column(db.String)
@@ -79,6 +100,21 @@ class Setting(db.Model):
     paypal_secret = db.Column(db.String)
     paypal_sandbox_client = db.Column(db.String)
     paypal_sandbox_secret = db.Column(db.String)
+
+    # Omise credentials
+    omise_mode = db.Column(db.String)
+    omise_live_public = db.Column(db.String)
+    omise_live_secret = db.Column(db.String)
+    omise_test_public = db.Column(db.String)
+    omise_test_secret = db.Column(db.String)
+
+    # payTM credentials
+    is_paytm_activated = db.Column(db.Boolean, default=False, nullable=False)
+    paytm_mode = db.Column(db.String)
+    paytm_live_merchant = db.Column(db.String)
+    paytm_live_secret = db.Column(db.String)
+    paytm_sandbox_merchant = db.Column(db.String)
+    paytm_sandbox_secret = db.Column(db.String)
 
     #
     # EMAIL
@@ -110,6 +146,25 @@ class Setting(db.Model):
     youtube_url = db.Column(db.String)
 
     #
+    # Event Invoices settings
+    #
+    invoice_sending_day = db.Column(db.Integer, nullable=False, default=1)
+    invoice_sending_timezone = db.Column(db.String, nullable=False, default="UTC")
+    #
+    # Admin Invoice Details
+    #
+    admin_billing_contact_name = db.Column(db.String)
+    admin_billing_phone = db.Column(db.String)
+    admin_billing_email = db.Column(db.String)
+    admin_billing_country = db.Column(db.String)
+    admin_billing_state = db.Column(db.String)
+    admin_billing_tax_info = db.Column(db.String)
+    admin_company = db.Column(db.String)
+    admin_billing_address = db.Column(db.String)
+    admin_billing_city = db.Column(db.String)
+    admin_billing_zip = db.Column(db.String)
+    admin_billing_additional_info = db.Column(db.String)
+    #
     # Generators
     #
     android_app_url = db.Column(db.String)
@@ -126,7 +181,7 @@ class Setting(db.Model):
                                       "event preferences and provide you with a customized experience. "
                                       "By closing this banner or by continuing to use the site, you agree. "
                                       "For more information please review our cookie policy.")
-    cookie_policy_link = db.Column(db.String, default="http://next.cookie-policy.eventyay.com")
+    cookie_policy_link = db.Column(db.String, default="https://next.eventyay.com/cookie-policy")
 
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
@@ -137,10 +192,12 @@ class Setting(db.Model):
                  gs_key=None,
                  gs_secret=None,
                  gs_bucket_name=None,
+                 is_google_recaptcha_enabled=False, google_recaptcha_secret=None, google_recaptcha_site=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
-                 stripe_client_id=None,
+                 stripe_client_id=None, stripe_test_client_id=None,
                  stripe_secret_key=None, stripe_publishable_key=None,
+                 stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
@@ -169,7 +226,36 @@ class Setting(db.Model):
                  android_app_url=None,
                  web_app_url=None,
                  cookie_policy=None,
-                 cookie_policy_link=None):
+                 cookie_policy_link=None,
+                 omise_mode=None,
+                 omise_test_public=None,
+                 omise_test_secret=None,
+                 omise_live_public=None,
+                 omise_live_secret=None,
+                 alipay_publishable_key=None,
+                 alipay_secret_key=None,
+                 is_paytm_activated=False,
+                 paytm_mode=None,
+                 paytm_live_merchant=None,
+                 paytm_live_secret=None,
+                 paytm_sandbox_merchant=None,
+                 paytm_sandbox_secret=None,
+                 invoice_sending_day=None,
+                 invoice_sending_timezone=None,
+                 admin_billing_contact_name=None,
+                 admin_billing_phone=None,
+                 admin_billing_email=None,
+                 admin_billing_country=None,
+                 admin_billing_tax_info=None,
+                 admin_company=None,
+                 admin_billing_address=None,
+                 admin_billing_city=None,
+                 admin_billing_state=None,
+                 admin_billing_zip=None,
+                 admin_billing_additional_info=None,
+                 order_expiry_time=None,
+                 max_complex_custom_fields=30
+                 ):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -179,6 +265,10 @@ class Setting(db.Model):
         self.gs_key = gs_key
         self.gs_secret = gs_secret
         self.gs_bucket_name = gs_bucket_name
+
+        self.is_google_recaptcha_enabled = is_google_recaptcha_enabled
+        self.google_recaptcha_site = google_recaptcha_site
+        self.google_recaptcha_secret = google_recaptcha_secret
 
         self.google_client_id = google_client_id
         self.google_client_secret = google_client_secret
@@ -204,6 +294,9 @@ class Setting(db.Model):
         self.stripe_client_id = stripe_client_id
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_secret_key = stripe_secret_key
+        self.stripe_test_client_id = stripe_test_client_id
+        self.stripe_test_publishable_key = stripe_test_publishable_key
+        self.stripe_test_secret_key = stripe_test_secret_key
         self.web_app_url = web_app_url
         self.android_app_url = android_app_url
         self.email_service = email_service
@@ -225,6 +318,46 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
+        # Omise Credentials
+        self.omise_mode = omise_mode
+        self.omise_test_public = omise_test_public
+        self.omise_test_secret = omise_test_secret
+        self.omise_live_public = omise_live_public
+        self.omise_live_secret = omise_live_secret
+
+        # AliPay Credentails
+        self.alipay_publishable_key = alipay_publishable_key
+        self.alipay_secret_key = alipay_secret_key
+
+        # payTM Credentials
+        self.is_paytm_activated = is_paytm_activated
+        self.paytm_mode = paytm_mode
+        self.paytm_live_merchant = paytm_live_merchant
+        self.paytm_live_secret = paytm_live_secret
+        self.paytm_sandbox_merchant = paytm_sandbox_merchant
+        self.paytm_sandbox_secret = paytm_sandbox_secret
+
+        # Event Invoice settings
+        self.invoice_sending_timezone = invoice_sending_timezone
+        self.invoice_sending_day = invoice_sending_day
+
+        # Admin Invoice Details
+        self.admin_billing_contact_name = admin_billing_contact_name
+        self.admin_billing_phone = admin_billing_phone
+        self.admin_billing_state = admin_billing_state
+        self.admin_billing_country = admin_billing_country
+        self.admin_billing_tax_info = admin_billing_tax_info
+        self.admin_company = admin_company
+        self.admin_billing_address = admin_billing_address
+        self.admin_billing_city = admin_billing_city
+        self.admin_billing_zip = admin_billing_zip
+        self.admin_billing_additional_info = admin_billing_additional_info
+
+        # Order Expiry Time in Minutes
+        self.order_expiry_time = order_expiry_time
+
+        self.max_complex_custom_fields = max_complex_custom_fields
+
     @hybrid_property
     def is_paypal_activated(self):
         if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
@@ -243,3 +376,19 @@ class Setting(db.Model):
 
     def __str__(self):
         return self.__repr__()
+
+    @hybrid_property
+    def is_alipay_activated(self):
+        if self.alipay_publishable_key and self.alipay_secret_key:
+            return True
+        else:
+            return False
+
+    @hybrid_property
+    def is_omise_activated(self):
+        if self.omise_mode == 'test' and self.omise_test_public and self.omise_test_secret:
+            return True
+        elif self.omise_live_public and self.omise_live_secret:
+            return True
+        else:
+            return False

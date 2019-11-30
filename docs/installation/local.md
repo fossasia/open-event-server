@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 3
+* Python 3.7
 * Postgres
 * OpenSSL
 
@@ -14,7 +14,7 @@ brew install postgresql
 ### For debian-based linux users
 ```sh
 sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install postgresql postgresql-contrib libssl-dev
 ```
 
 ## Steps
@@ -45,14 +45,11 @@ hint: You may need to upgrade your pip version and install following packages if
 
 # Installation in Virtual Environment
 
-```sh
-virtualenv -p python3 venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
+You can use either **pip** or **pipenv** to install Open Event Server in a virtual environment.
+
+Firstly, open a terminal and enter
 
 ```sh
-
 # For linux users
 sudo apt-get install python3-dev
 sudo apt-get install libpq-dev
@@ -63,7 +60,40 @@ brew install python@3
 brew install libmagic
 ```
 
-* **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
+## Using pip and virtualenv
+
+Open a terminal and enter the following commands to setup a virtual environment
+
+```sh
+sudo apt-get install python3.7
+virtualenv -p python3.7 venv
+. venv/bin/activate
+```
+
+Now to install the dependencies using pip, type
+
+```sh
+pip3 install -r requirements.txt
+```
+
+## Using pipenv
+
+Using pipenv, you will not need to set up virtualenv. It will do it automatically for you
+
+To setup a virtual environment and install the dependices, enter in a terminal
+
+```sh
+pipenv --python 3.7.3 install
+```
+
+Now to activate the virtual environemnt, type
+
+```sh
+pipenv shell
+```
+
+
+* **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
 
 ```sh
 # For linux users
@@ -73,16 +103,17 @@ sudo -u postgres psql
 psql -d postgres
 ```
 
-* When inside psql, create a user for open-event and then using the user create the database.
+* When inside psql, create a user for open-event and then using the user create the database. Also, create a test database named opev_test for the test suites by dumping the oevent database into it. without this, the tests will not run locally.
 
 For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
 
 ```sql
-CREATE USER john WITH PASSWORD 'start';
-CREATE DATABASE oevent WITH OWNER john;
+CREATE USER open_event_user WITH PASSWORD 'opev_pass';
+CREATE DATABASE oevent WITH OWNER open_event_user;
+CREATE DATABASE opev_test WITH OWNER open_event_user;
 ```
 
-* Once database is created, exit the psql shell with `\q` followed by ENTER.
+* Once the databases are created, exit the psql shell with `\q` followed by ENTER.
 
 
 * **Step 3** - Create application environment variables.
@@ -123,7 +154,7 @@ python3 manage.py db stamp head
 # For Ubuntu, Debian and alike
 sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
-sudo dnf install redis-server
+sudo dnf install redis
 
 # For macOS
 brew install redis

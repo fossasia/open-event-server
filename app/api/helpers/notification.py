@@ -2,6 +2,7 @@ from flask import current_app
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.log import record_activity
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.system_notifications import NOTIFS, get_event_exported_actions, get_event_imported_actions, \
     get_monthly_payment_notification_actions, get_monthly_payment_follow_up_notification_actions, \
     get_ticket_purchased_attendee_notification_actions, get_ticket_purchased_notification_actions, \
@@ -279,20 +280,41 @@ def send_notif_ticket_cancel(order):
         ),
         message=NOTIFS[TICKET_CANCELLED]['message'].format(
             cancel_note=order.cancel_note,
-            event_name=order.event.name
+            event_name=order.event.name,
+            event_url=make_frontend_url('/e/{identifier}'.format(identifier=order.event.identifier)),
+            order_url=make_frontend_url('/orders/{identifier}/view'.format(identifier=order.identifier)),
+            invoice_id=order.invoice_number
         )
     )
     for organizer in order.event.organizers:
         send_notification(
             user=organizer,
             title=NOTIFS[TICKET_CANCELLED_ORGANIZER]['title'].format(
-                invoice_id=order.invoice_number
+                invoice_id=order.invoice_number,
+                event_name=order.event.name
             ),
             message=NOTIFS[TICKET_CANCELLED_ORGANIZER]['message'].format(
                 cancel_note=order.cancel_note,
-                invoice_id=order.invoice_number
+                invoice_id=order.invoice_number,
+                event_name=order.event.name,
+                cancel_order_page=make_frontend_url('/events/{identifier}/tickets/orders/cancelled'
+                                                    .format(identifier=order.event.identifier))
             )
         )
+    send_notification(
+        user=order.event.owner,
+        title=NOTIFS[TICKET_CANCELLED_ORGANIZER]['title'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name
+        ),
+        message=NOTIFS[TICKET_CANCELLED_ORGANIZER]['message'].format(
+            cancel_note=order.cancel_note,
+            invoice_id=order.invoice_number,
+            event_name=order.event.name,
+            cancel_order_page=make_frontend_url('/events/{identifier}/tickets/orders/cancelled'
+                                                .format(identifier=order.event.identifier))
+        )
+    )
 
 
 def send_notification_with_action(user, action, **kwargs):

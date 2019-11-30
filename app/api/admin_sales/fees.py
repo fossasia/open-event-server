@@ -22,19 +22,25 @@ class AdminSalesFeesSchema(Schema):
     name = fields.String()
     payment_currency = fields.String()
     fee_percentage = fields.Float(attribute='fee')
+    maximum_fee = fields.Float(attribute='maximum_fee')
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
+    event_date = fields.Method('get_event_date')
 
     @staticmethod
     def calc_ticket_count(obj):
         """Count all tickets in all orders of this event"""
-        return sum([o.amount for o in obj.orders])
+        return sum([o.tickets_count for o in obj.orders if o.status == 'completed'])
 
     @staticmethod
     def calc_revenue(obj):
         """Returns total revenues of all completed orders for the given event"""
         return sum(
             [o.get_revenue() for o in obj.orders if o.status == 'completed'])
+
+    @staticmethod
+    def get_event_date(obj):
+        return obj.starts_at.isoformat()
 
 
 class AdminSalesFeesList(ResourceList):

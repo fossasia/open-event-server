@@ -26,12 +26,7 @@ def require_relationship(resource_list, data):
 
 
 def string_empty(value):
-    is_not_str_type = type(value) is not str
-    if sys.version_info[0] < 3:
-        is_not_str_type = is_not_str_type and type(value) is not unicode
-    if type(value) is not value and is_not_str_type:
-        return False
-    return not (value and value.strip() and value != u'' and value != u' ')
+    return isinstance(value, str) and not value.strip()
 
 
 def strip_tags(html):
@@ -112,11 +107,13 @@ def update_state(task_handle, state, result=None):
             state=state, meta=result
         )
 
+static_page = 'https://eventyay.com/'
+image_link = 'https://www.gstatic.com/webp/gallery/1.jpg'
 
 # store task results in case of testing
 # state and info
 TASK_RESULTS = {}
 
 
-class EmptyObject(object):
+class EmptyObject:
     pass

@@ -8,7 +8,7 @@ import zipfile
 import requests
 from flask import current_app as app
 from flask import request
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
 from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
@@ -19,6 +19,8 @@ from app.api.helpers.utilities import update_state, write_file, is_downloadable
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.event import Event
+from app.models.users_events_role import UsersEventsRoles
+from app.models.role import Role
 from app.models.import_job import ImportJob
 from app.models.microlocation import Microlocation
 from app.models.session import Session
@@ -27,6 +29,7 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
+from app.models.user import User, OWNER
 
 IMPORT_SERIES = [
     ('social_links', SocialLink),
@@ -146,7 +149,7 @@ def _delete_fields(srv, data):
 def create_import_job(task):
     """create import record in db"""
     ij = ImportJob(task=task,
-                   user=current_identity)
+                   user=current_user)
     save_to_db(ij, 'Import job saved')
 
 
@@ -320,8 +323,7 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
         obj['event_id'] = event_id
         # create object
         new_obj = srv[1](**obj)
-        db.session.add(new_obj)
-        db.session.commit()
+        save_to_db(new_obj)
         ids[old_id] = new_obj.id
         # add uploads to queue
         _upload_media_queue(srv, new_obj)
@@ -329,7 +331,7 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
     return ids
 
 
-def import_event_json(task_handle, zip_path):
+def import_event_json(task_handle, zip_path, creator_id):
     """
     Imports and creates event from json zip
     """
@@ -353,11 +355,14 @@ def import_event_json(task_handle, zip_path):
         srv = ('event', Event)
         data = _delete_fields(srv, data)
         new_event = Event(**data)
-        db.session.add(new_event)
-        db.session.commit()
+        save_to_db(new_event)
+        role = Role.query.filter_by(name=OWNER).first()
+        user = User.query.filter_by(id=creator_id).first()
+        uer = UsersEventsRoles(user_id=user.id, event_id=new_event.id, role_id=role.id)
+        save_to_db(uer, 'Event Saved')
         write_file(
             path + '/social_links',
-            json.dumps(data.get('social_links', []))
+            json.dumps(data.get('social_links', [])).encode('utf-8')
         )  # save social_links
         _upload_media_queue(srv, new_event)
     except Exception as e:

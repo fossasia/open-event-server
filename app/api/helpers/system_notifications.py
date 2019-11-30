@@ -299,7 +299,7 @@ NOTIFS = {
         )
     },
     MONTHLY_PAYMENT_NOTIF: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'{date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
@@ -309,7 +309,7 @@ NOTIFS = {
         'sent_at': '1st day of the month'
     },
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
@@ -333,14 +333,14 @@ NOTIFS = {
         )
     },
     TICKET_PURCHASED_ORGANIZER: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'title': u'New ticket purchase for {event_name} : ({invoice_id}) ',
         'message': (
             u"The order has been processed successfully."
         )
     },
     TICKET_RESEND_ORGANIZER: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id}) ',
         'message': (
             u"Email has been sent successfully."
@@ -350,16 +350,19 @@ NOTIFS = {
         'recipient': 'User',
         'title': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Your order for {event_name} has been cancelled by the organizer" +
-            u"<br/>Please contact the organizer for more info" +
+            u"Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer " +
+            u"<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> " +
+            u"<br/>Please contact the organizer for more info " +
             u"<br/>Message from the organizer: {cancel_note}."
         )
     },
     TICKET_CANCELLED_ORGANIZER: {
         'recipient': 'User',
-        'title': u'Order ({invoice_id}) has been cancelled',
+        'title': u'Order ({invoice_id}) of {event_name} has been cancelled',
         'message': (
-            u"Order ({invoice_id}) has been cancelled" +
+            u"Order ({invoice_id}) has been cancelled " +
+            u"Please visit the link to check the cancelled orders for this event:" +
+            u" <a href='{cancel_order_page}'>{event_name}</a> " +
             u"<br/>Cancel Note: {cancel_note}."
         )
     },
@@ -389,7 +392,7 @@ NOTIFS = {
     },
     EVENT_ROLE: {
         'title': u'Invitation to be {role_name} at {event_name}',
-        'message': u"You've been invited to be a <strong>{role_name}</strong>" +
+        'message': u"You've been invited to be one of the <strong>{role_name}s</strong>" +
                    u" at <strong>{event_name}</strong>.",
         'recipient': 'User',
     },
@@ -397,23 +400,23 @@ NOTIFS = {
         'title': u'New session proposal for {event_name}',
         'message': u"The event <strong>{event_name}</strong> has received" +
                    u" a new session proposal.",
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
     },
     SESSION_SCHEDULE: {
         'title': u'Schedule for Session {session_name} has been changed',
         'message': u"The schedule for session <strong>{session_name}</strong>" +
                    u" has been changed.",
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
     },
     NEXT_EVENT: {
         'title': u'Event {event_name} is coming soon',
         'message': u"Here are upcoming events: {up_coming_events}.",
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
     },
     SESSION_ACCEPT_REJECT: {
         'title': u'Session {session_name} has been {acceptance}',
         'message': u"The session <strong>{session_name}</strong> has been" +
-                   u"<strong>{acceptance}</strong> by the Organizer.",
+                   u" <strong>{acceptance}</strong> by the Organizer.",
         'recipient': 'Speaker',
     },
     INVITE_PAPERS: {

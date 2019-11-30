@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
@@ -21,28 +23,6 @@ class EventSchemaPublic(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.event_list'
         inflect = dasherize
-
-    @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
-        if 'id' in original_data['data']:
-            try:
-                event = Event.query.filter_by(id=original_data['data']['id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'source': 'data/id'}, "Event id not found")
-
-            if 'starts_at' not in data:
-                data['starts_at'] = event.starts_at
-
-            if 'ends_at' not in data:
-                data['ends_at'] = event.ends_at
-
-        if 'starts_at' not in data or 'ends_at' not in data:
-            raise UnprocessableEntity({'pointer': '/data/attributes/date'},
-                                      "enter required fields starts-at/ends-at")
-
-        if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
-                                      "ends-at should be after starts-at")
 
     @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):
@@ -79,17 +59,21 @@ class EventSchemaPublic(SoftDeletionSchema):
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)
     icon_image_url = fields.Url(dump_only=True)
-    organizer_name = fields.Str(allow_none=True)
+    show_remaining_tickets = fields.Bool(allow_none=False, default=False)
+    owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
-    has_organizer_info = fields.Bool(default=False)
-    organizer_description = fields.Str(allow_none=True)
+    has_owner_info = fields.Bool(default=False)
+    has_sessions = fields.Bool(default=0, dump_only=True)
+    has_speakers = fields.Bool(default=0, dump_only=True)
+    owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
     state = fields.Str(validate=validate.OneOf(choices=["published", "draft"]), allow_none=True, default='draft')
     ticket_url = fields.Url(allow_none=True)
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
-    is_ticketing_enabled = fields.Bool(default=False)
+    is_featured = fields.Bool(default=False)
+    is_ticket_form_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     tickets_available = fields.Float(dump_only=True)
@@ -97,12 +81,16 @@ class EventSchemaPublic(SoftDeletionSchema):
     revenue = fields.Float(dump_only=True)
     paypal_email = fields.Str(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
+    is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
     can_pay_by_cheque = fields.Bool(default=False)
     can_pay_by_bank = fields.Bool(default=False)
     can_pay_onsite = fields.Bool(default=False)
+    can_pay_by_omise = fields.Bool(default=False)
+    can_pay_by_alipay = fields.Bool(default=False)
+    can_pay_by_paytm = fields.Bool(default=False)
     cheque_details = fields.Str(allow_none=True)
     bank_details = fields.Str(allow_none=True)
     onsite_details = fields.Str(allow_none=True)
@@ -112,7 +100,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
-    order_expiry_time = fields.Integer(allow_none=True, default=10, validate=lambda n: 1 <= n <= 60)
     refund_policy = fields.String(dump_only=True,
                                   default='All sales are final. No refunds shall be issued in any case.')
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
@@ -270,6 +257,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    owner = Relationship(attribute='owner',
+                         self_view='v1.event_owner',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.user_detail',
+                         schema='UserSchemaPublic',
+                         related_view_kwargs={'event_id': '<id>'},
+                         type_='user')
     organizers = Relationship(attribute='organizers',
                               self_view='v1.event_organizers',
                               self_view_kwargs={'id': '<id>'},
@@ -284,6 +278,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='UserSchemaPublic',
                                 type_='user',
                                 many=True)
+    stripe_authorization = Relationship(attribute='stripe_authorization',
+                                        self_view='v1.stripe_authorization_event',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.stripe_authorization_detail',
+                                        related_view_kwargs={'event_id': '<id>'},
+                                        schema='StripeAuthorizationSchema',
+                                        type_='stripe-authorization')
 
 
 class EventSchema(EventSchemaPublic):
@@ -361,10 +362,3 @@ class EventSchema(EventSchemaPublic):
                              schema='AttendeeSchema',
                              many=True,
                              type_='attendee')
-    stripe_authorization = Relationship(attribute='stripe_authorization',
-                                        self_view='v1.stripe_authorization_event',
-                                        self_view_kwargs={'id': '<id>'},
-                                        related_view='v1.stripe_authorization_detail',
-                                        related_view_kwargs={'event_id': '<id>'},
-                                        schema='StripeAuthorizationSchema',
-                                        type_='stripe-authorization')

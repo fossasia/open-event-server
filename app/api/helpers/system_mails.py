@@ -7,11 +7,13 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
-    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE
+    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL
+
+
 
 MAILS = {
     EVENT_PUBLISH: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'{event_name} is Live',
         'message': (
             u"Hi {email}<br/>" +
@@ -38,7 +40,7 @@ MAILS = {
         )
     },
     SESSION_SCHEDULE: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Schedule for Session {session_name} has been changed',
         'message': (
             u"Hi {email},<br/>" +
@@ -47,7 +49,7 @@ MAILS = {
         )
     },
     NEXT_EVENT: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Event {event_name} is coming soon',
         'message': (
             u"Hi {email},<br/>" +
@@ -56,18 +58,17 @@ MAILS = {
         )
     },
     AFTER_EVENT: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Event {event_name} is over',
         'message': (
             u"Hi {email},<br/>" +
             u"Thank You for participating in our event. We hope you enjoyed it. "
-            u"Please check the list of more upcoming events" +
-            u"Here are the upcoming events: {upcoming_events} .Get ready!! "
+            u"Please check out other upcoming events around you on {url} <br />"
         ),
         'sent_at': '1 day after the event'
     },
     NEW_SESSION: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'New session proposal for {event_name}',
         'message': (
             u"Hi {email},<br/>" +
@@ -111,8 +112,18 @@ MAILS = {
         'recipient': 'User',
         'subject': u'{app_name}: Password Reset',
         'message': (
-            u"Please use the following link to reset your password.<br> <a href='{link}' target='_blank'>{link}</a>"
+            u"Please use the following link to reset your password.<br> <a href='{link}' target='_blank'>{link}</a>" +
+            " Or paste this token in your {app_name} App: {token} "
         )
+    },
+    PASSWORD_RESET_AND_VERIFY: {
+        'recipient': 'User',
+        'subject': u'{app_name}: Reset your password and verify your account',
+        'message': (
+            u"Please use the following link to reset your password and verify your account." +
+            "<br> <a href='{link}' target='_blank'>{link}</a>"
+        )
+
     },
     PASSWORD_CHANGE: {
         'recipient': 'User',
@@ -130,15 +141,24 @@ MAILS = {
             u"To accept the role please sign up using the following link: <a href='{link}' target='_blank'>Link</a>."
         )
     },
+    USER_EVENT_ROLE: {
+        'recipient': 'User',
+        'subject': u'Invitation to be {role} at {event}',
+        'message': (
+            u"Hello {email},<br><br>" +
+            u"You've been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>" +
+            u"To accept the role please go to the following link: <a href='{link}' target='_blank'>Link</a>."
+        )
+    },
     TICKET_PURCHASED: {
         'recipient': 'User',
         'subject': u'Your order invoice and tickets for {event_name} ({invoice_id}) ',
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
             u"<br/>Your order has been processed successfully." +
-            u"<br/> <a href='{pdf_url}'>Click here</a> to view/download your invoice."
+            u"<br/> You can find your Tickets and Order Invoice attached to this mail."
             u"<br><br><em>Looking forward to seeing you at the event."
-            u"<br/>Login to manage your orders at https://eventyay.com </em>"
+            u"<br/>Login to manage your orders at {frontend_url} </em>"
         )
     },
     TICKET_PURCHASED_ATTENDEE: {
@@ -153,13 +173,13 @@ MAILS = {
     },
 
     TICKET_PURCHASED_ORGANIZER: {
-        'recipient': 'Organizer, Coorganizer',
+        'recipient': 'Owner, Organizer, Coorganizer',
         'subject': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
         'message': (
             u"Hi, {buyer_email} just bought tickets for the event {event_name}"
             u"<br/>The order has been processed successfully." +
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at https://eventyay.com </em>"
+            u"<br/>Login to manage the orders at {frontend_url} </em>"
         )
     },
     TICKET_CANCELLED: {
@@ -170,7 +190,7 @@ MAILS = {
             u"<br/>Please contact the organizer for more info" +
             u"<br/>Message from the organizer: {cancel_note}"
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at https://eventyay.com </em>"
+            u"<br/>Login to manage the orders at {frontend_url} </em>"
         )
     },
     EVENT_EXPORTED: {
@@ -200,7 +220,7 @@ MAILS = {
         )
     },
     MONTHLY_PAYMENT_EMAIL: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'{date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
@@ -211,7 +231,7 @@ MAILS = {
         'sent_at': '1st day of the month'
     },
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
@@ -235,6 +255,13 @@ MAILS = {
         'message': (
             u"The error was as follows - <br>" +
             u"<pre>{error_text}</pre>"
+        )
+    },
+    TEST_MAIL: {
+        'recipient': 'User',
+        'subject': u'Test Mail Subject',
+        'message': (
+            u"This is a  <strong> Test </strong> E-mail."
         )
     }
 }

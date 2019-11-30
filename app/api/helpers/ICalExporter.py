@@ -47,8 +47,7 @@ class ICalExporter:
 
             for speaker in session.speakers:
                 # Ref: http://icalendar.readthedocs.io/en/latest/usage.html#file-structure
-                # can use speaker.email below but privacy reasons
-                attendee = vCalAddress('MAILTO:' + event.email if event.email else 'undefined@email.com')
+                attendee = vCalAddress('MAILTO:' + speaker.email if speaker.email else 'undefined@email.com')
                 attendee.params['cn'] = vText(speaker.name)
                 event_component.add('attendee', attendee)
 

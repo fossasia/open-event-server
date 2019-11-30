@@ -7,7 +7,7 @@ from flask_migrate import stamp
 from app import current_app
 from app.models import db
 from populate_db import populate
-from tests.unittests.auth_helper import create_super_admin
+from tests.all.integration.auth_helper import create_super_admin
 
 
 def create_default_user(email, password):
@@ -24,8 +24,8 @@ def create_default_user(email, password):
         ask_password = True
         while ask_password:
             password = getpass.getpass("Enter password for super_admin : ")
-            if len(password) < 4:
-                print('\nPassword should have minimum 4 characters')
+            if len(password) < 8:
+                print('\nPassword should have minimum 8 characters')
                 continue
             repassword = getpass.getpass("Enter your password again to confirm : ")
             if password != repassword:

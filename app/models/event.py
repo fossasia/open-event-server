@@ -10,22 +10,25 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
-from app.models.order import Order
-from app.models.ticket_fee import get_fee
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
+from app.models.event_topic import EventTopic
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
-from app.models.user import ATTENDEE, ORGANIZER
-from app.models.event_topic import EventTopic
+from app.models.order import Order
 from app.models.search import sync
+from app.models.user import ATTENDEE, ORGANIZER, OWNER
+from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.ticket import Ticket
+from app.models.ticket_fee import get_fee
+from app.models.ticket_fee import get_maximum_fee
 from app.models.ticket_holder import TicketHolder
+
 
 def get_new_event_identifier(length=8):
     identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    count = get_count(Event.query.filter_by(identifier=identifier))
-    if count == 0:
+    if not identifier.isdigit() and get_count(Event.query.filter_by(identifier=identifier)) == 0:
         return identifier
     else:
         return get_new_event_identifier(length)
@@ -50,15 +53,17 @@ class Event(SoftDeletionModel):
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
+    is_featured = db.Column(db.Boolean, default=False, nullable=False)
     description = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
     large_image_url = db.Column(db.String)
+    show_remaining_tickets = db.Column(db.Boolean, default=False, nullable=False)
     icon_image_url = db.Column(db.String)
-    organizer_name = db.Column(db.String)
+    owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
-    has_organizer_info = db.Column(db.Boolean)
-    organizer_description = db.Column(db.String)
+    has_owner_info = db.Column(db.Boolean)
+    owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
@@ -87,15 +92,20 @@ class Event(SoftDeletionModel):
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
+    is_ticket_form_enabled = db.Column(db.Boolean, default=True, nullable=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
-    can_pay_by_paypal = db.Column(db.Boolean, default=False)
-    can_pay_by_stripe = db.Column(db.Boolean, default=False)
-    can_pay_by_cheque = db.Column(db.Boolean, default=False)
-    can_pay_by_bank = db.Column(db.Boolean, default=False)
-    can_pay_onsite = db.Column(db.Boolean, default=False)
+    is_billing_info_mandatory = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_paypal = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_stripe = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_cheque = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_bank = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_onsite = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_omise = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_alipay = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_paytm = db.Column(db.Boolean, default=False, nullable=False)
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
@@ -105,7 +115,6 @@ class Event(SoftDeletionModel):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String, default='All sales are final. No refunds shall be issued in any case.')
-    order_expiry_time = db.Column(db.Integer, default=10)
     is_stripe_linked = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
@@ -116,6 +125,14 @@ class Event(SoftDeletionModel):
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
     events_orga = db.relationship(
         'EventOrgaModel', backref='event', foreign_keys=[events_orga_id])
+    owner = db.relationship('User',
+                            viewonly=True,
+                            secondary='join(UsersEventsRoles, Role,'
+                                      ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
+                            primaryjoin='UsersEventsRoles.event_id == Event.id',
+                            secondaryjoin='User.id == UsersEventsRoles.user_id',
+                            backref='owner_events',
+                            uselist=False)
     organizers = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
@@ -177,21 +194,24 @@ class Event(SoftDeletionModel):
                  thumbnail_image_url=None,
                  large_image_url=None,
                  icon_image_url=None,
-                 organizer_name=None,
-                 organizer_description=None,
+                 owner_name=None,
+                 owner_description=None,
                  state=None,
                  event_type_id=None,
                  privacy=None,
                  event_topic_id=None,
                  event_sub_topic_id=None,
+                 events_orga_id=None,
                  ticket_url=None,
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 show_remaining_tickets=False,
+                 is_ticket_form_enabled=True,
                  is_donation_enabled=False,
                  is_map_shown=False,
-                 has_organizer_info=False,
+                 has_owner_info=False,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
@@ -199,12 +219,16 @@ class Event(SoftDeletionModel):
                  payment_currency=None,
                  paypal_email=None,
                  speakers_call=None,
-                 can_pay_by_paypal=None,
-                 can_pay_by_stripe=None,
-                 can_pay_by_cheque=None,
+                 can_pay_by_paypal=False,
+                 can_pay_by_stripe=False,
+                 can_pay_by_cheque=False,
+                 can_pay_by_omise=False,
+                 can_pay_by_alipay=False,
+                 can_pay_by_paytm=False,
                  identifier=None,
-                 can_pay_by_bank=None,
-                 can_pay_onsite=None,
+                 can_pay_by_bank=False,
+                 is_featured=False,
+                 can_pay_onsite=False,
                  cheque_details=None,
                  bank_details=None,
                  pentabarf_url=None,
@@ -213,10 +237,10 @@ class Event(SoftDeletionModel):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
+                 is_billing_info_mandatory=False,
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
-                 order_expiry_time=None,
                  refund_policy='All sales are final. No refunds shall be issued in any case.',
                  is_stripe_linked=False):
 
@@ -237,16 +261,18 @@ class Event(SoftDeletionModel):
         self.thumbnail_image_url = thumbnail_image_url
         self.large_image_url = large_image_url
         self.icon_image_url = icon_image_url
-        self.organizer_name = organizer_name
-        self.organizer_description = clean_up_string(organizer_description)
+        self.owner_name = owner_name
+        self.owner_description = clean_up_string(owner_description)
         self.state = state
         self.is_map_shown = is_map_shown
-        self.has_organizer_info = has_organizer_info
+        self.has_owner_info = has_owner_info
         self.privacy = privacy
         self.event_type_id = event_type_id
         self.event_topic_id = event_topic_id
+        self.show_remaining_tickets = show_remaining_tickets
         self.copyright = copyright
         self.event_sub_topic_id = event_sub_topic_id
+        self.events_orga_id = events_orga_id
         self.ticket_url = ticket_url
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
@@ -263,7 +289,12 @@ class Event(SoftDeletionModel):
         self.can_pay_by_cheque = can_pay_by_cheque
         self.can_pay_by_bank = can_pay_by_bank
         self.can_pay_onsite = can_pay_onsite
+        self.can_pay_by_omise = can_pay_by_omise
+        self.can_pay_by_alipay = can_pay_by_alipay
+        self.can_pay_by_paytm = can_pay_by_paytm
         self.is_donation_enabled = is_donation_enabled
+        self.is_featured = is_featured
+        self.is_ticket_form_enabled = is_ticket_form_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
@@ -274,10 +305,10 @@ class Event(SoftDeletionModel):
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
+        self.is_billing_info_mandatory = is_billing_info_mandatory
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
         self.tax = tax
-        self.order_expiry_time = order_expiry_time
         self.refund_policy = refund_policy
         self.is_stripe_linked = is_stripe_linked
 
@@ -288,7 +319,7 @@ class Event(SoftDeletionModel):
         return self.__repr__()
 
     def __setattr__(self, name, value):
-        if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
+        if name == 'owner_description' or name == 'description' or name == 'code_of_conduct':
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
@@ -309,6 +340,13 @@ class Event(SoftDeletionModel):
         """
         return get_fee(self.payment_country, self.payment_currency)
 
+    @property
+    def maximum_fee(self):
+        """
+        Returns the maximum fee for this event
+        """
+        return get_maximum_fee(self.payment_country, self.payment_currency)
+
     def notification_settings(self, user_id):
         try:
             return EmailNotification.query.filter_by(
@@ -323,6 +361,10 @@ class Event(SoftDeletionModel):
             avg = round(avg, 2)
         return avg
 
+    def is_payment_enabled(self):
+        return self.can_pay_by_paypal or self.can_pay_by_stripe or self.can_pay_by_omise or self.can_pay_by_alipay \
+               or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite or self.can_pay_by_paytm
+
     @property
     def average_rating(self):
         return self.get_average_rating()
@@ -331,6 +373,13 @@ class Event(SoftDeletionModel):
         """returns organizer of an event"""
         for role in self.roles:
             if role.role.name == ORGANIZER:
+                return role.user
+        return None
+
+    def get_owner(self):
+        """returns owner of an event"""
+        for role in self.roles:
+            if role.role.name == OWNER:
                 return role.user
         return None
 
@@ -349,10 +398,19 @@ class Event(SoftDeletionModel):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    @property
+    def tickets_sold_object(self):
+        obj = db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)
+        return obj
+
     def calc_tickets_sold_count(self):
         """Calculate total number of tickets sold for the event"""
-        return db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)\
-            .count()
+        return self.tickets_sold_object.count()
+
+    def calc_tickets_sold_prev_month(self):
+        """Calculate tickets sold in the previous month"""
+        previous_month = datetime.datetime.now().month - 1
+        return self.tickets_sold_object.filter_by(completed_at=previous_month).count()
 
     def calc_total_tickets_count(self):
         """Calculate total available tickets for all types of tickets"""
@@ -368,6 +426,13 @@ class Event(SoftDeletionModel):
             revenue = 0
         return revenue
 
+    def calc_monthly_revenue(self):
+        """Returns revenue of current month. Invoice sent every 1st of the month for the previous month"""
+        previous_month = datetime.now().month - 1
+        orders = Order.query.filter_by(event_id=self.id, status='completed').all()
+        monthly_revenue = sum([o.amount for o in orders if o.completed_at and o.completed_at.month == previous_month])
+        return monthly_revenue
+
     @property
     def tickets_available(self):
         return self.calc_total_tickets_count()
@@ -379,6 +444,14 @@ class Event(SoftDeletionModel):
     @property
     def revenue(self):
         return self.calc_revenue()
+
+    @property
+    def has_sessions(self):
+        return Session.query.filter_by(event_id=self.id).count() > 0
+
+    @property
+    def has_speakers(self):
+        return Speaker.query.filter_by(event_id=self.id).count() > 0
 
 
 @event.listens_for(Event, 'after_update')

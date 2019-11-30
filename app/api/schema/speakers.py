@@ -1,9 +1,10 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
-
+from marshmallow import validates_schema
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from utils.common import use_defaults
+from app.api.helpers.validations import validate_complex_fields_json
 
 
 @use_defaults()
@@ -11,6 +12,10 @@ class SpeakerSchema(SoftDeletionSchema):
     """
     Speaker Schema based on Speaker Model
     """
+
+    @validates_schema(pass_original=True)
+    def validate_json(self, data, original_data):
+        validate_complex_fields_json(self, data, original_data)
 
     class Meta:
         """
@@ -39,12 +44,14 @@ class SpeakerSchema(SoftDeletionSchema):
     linkedin = fields.Url(allow_none=True)
     organisation = fields.Str(allow_none=True)
     is_featured = fields.Boolean(default=False)
+    is_email_overridden = fields.Boolean(default=False)
     position = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     gender = fields.Str(allow_none=True)
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
+    complex_field_values = fields.Dict(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.speaker_event',
                          self_view_kwargs={'id': '<id>'},

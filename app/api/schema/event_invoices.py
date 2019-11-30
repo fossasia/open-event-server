@@ -39,8 +39,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     last4 = fields.Str(allow_none=True)
     stripe_token = fields.Str(allow_none=True)
     paypal_token = fields.Str(allow_none=True)
-    status = fields.Str(validate=validate.OneOf(
-        choices=["expired", "deleted", "initialized" "completed", "placed", "pending", "cancelled"]), allow_none=True)
+    status = fields.Str(validate=validate.OneOf(choices=["paid", "due"]), allow_none=True)
     invoice_pdf_url = fields.Url(allow_none=True)
     user = Relationship(attribute='user',
                         self_view='v1.event_invoice_user',
@@ -49,6 +48,13 @@ class EventInvoiceSchema(SoftDeletionSchema):
                         related_view_kwargs={'event_invoice_id': '<id>'},
                         schema='UserSchemaPublic',
                         type_='user')
+    order = Relationship(attribute='order',
+                         self_view='v1.event_invoice_order',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.order_detail',
+                         related_view_kwargs={'id': '<id>'},
+                         schema='OrderSchema',
+                         type_='order')
     event = Relationship(attribute='event',
                          self_view='v1.event_invoice_event',
                          self_view_kwargs={'id': '<id>'},

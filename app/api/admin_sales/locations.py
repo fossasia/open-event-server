@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from flask_rest_jsonapi import ResourceList
 from sqlalchemy import func
+from app.api.helpers.utilities import dasherize
 
 from app.api.bootstrap import api
 from app.models import db
@@ -14,8 +15,8 @@ def sales_per_location_by_status(status):
         Event.location_name.label('location'),
         func.sum(Order.amount).label(status + '_sales'),
         func.sum(OrderTicket.quantity).label(status + '_tickets')) \
-                     .outerjoin(Order) \
-                     .outerjoin(OrderTicket) \
+                     .outerjoin(Order, Order.event_id == Event.id) \
+                     .outerjoin(OrderTicket, OrderTicket.order_id == Order.id) \
                      .filter(Event.id == Order.event_id) \
                      .filter(Order.status == status) \
                      .group_by(Event.location_name, Order.status) \
@@ -34,6 +35,7 @@ class AdminSalesByLocationSchema(Schema):
     class Meta:
         type_ = 'admin-sales-by-location'
         self_view = 'v1.admin_sales_by_location'
+        inflect = dasherize
 
     id = fields.String()
     location_name = fields.String()
@@ -63,9 +65,12 @@ class AdminSalesByLocationList(ResourceList):
     """
 
     def query(self, _):
-        locations = self.session.query(Event.location_name) \
-                                .group_by(Event.location_name) \
-                                .cte()
+        locations = self.session.query(
+            Event.location_name,
+            Event.location_name.label('id')) \
+                .group_by(Event.location_name) \
+                .filter(Event.location_name.isnot(None)) \
+                .cte()
 
         pending = sales_per_location_by_status('pending')
         completed = sales_per_location_by_status('completed')

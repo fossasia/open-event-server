@@ -6,11 +6,12 @@ from app import manager
 from app import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
+from app.models.module import Module
 from populate_db import populate
 from flask_migrate import stamp
 from sqlalchemy.engine import reflection
 
-from tests.unittests.auth_helper import create_super_admin
+from tests.all.integration.auth_helper import create_super_admin
 
 
 @manager.command
@@ -20,7 +21,7 @@ def list_routes():
     output = []
     for rule in app.url_map.iter_rules():
         methods = ','.join(rule.methods)
-        line = urllib.unquote("{:50s} {:20s} {}".format(
+        line = urllib.parse.unquote("{:50s} {:20s} {}".format(
             rule.endpoint, methods, rule))
         output.append(line)
 
@@ -34,6 +35,35 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_digit_identifier():
+    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
+    for event in events:
+        event.identifier = get_new_event_identifier()
+        db.session.add(event)
+    db.session.commit()
+
+
+@manager.option('-n', '--name', dest='name', default='all')
+@manager.option('-s', '--switch', dest='switch', default='off')
+def module(name, switch):
+    keys = [i.name for i in Module.__table__.columns][1:]
+    convey = {"on": True, "off": False}
+    if switch not in ['on', 'off']:
+        print("Choose either state On/Off")
+
+    elif name == 'all':
+        for key in keys:
+            setattr(Module.query.first(), key, convey[switch])
+            print("Module %s turned %s" % (key, switch))
+    elif name in keys:
+        setattr(Module.query.first(), name, convey[switch])
+        print("Module %s turned %s" % (name, switch))
+    else:
+        print("Invalid module selected")
+    db.session.commit()
 
 
 @manager.option('-e', '--event', help='Event ID. Eg. 1')
@@ -79,16 +109,18 @@ def initialize_db(credentials):
                 print("[LOG] Could not create tables. Either database does not exist or tables already created")
             if populate_data:
                 credentials = credentials.split(":")
-                create_super_admin(credentials[0], credentials[1])
+                admin_email = os.environ.get('SUPER_ADMIN_EMAIL', credentials[0])
+                admin_password = os.environ.get('SUPER_ADMIN_PASSWORD', credentials[1])
+                create_super_admin(admin_email, admin_password)
                 populate()
         else:
             print("[LOG] Tables already exist. Skipping data population & creation.")
 
 
 @manager.command
-def prepare_kubernetes_db():
+def prepare_kubernetes_db(credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
-        initialize_db('open_event_test_user@fossasia.org:fossasia')
+        initialize_db(credentials)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,8 @@ import pytz
 import requests
 from flask import current_app as app
 from flask import request, url_for
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
+from flask_login import current_user as current_logged_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
@@ -28,8 +29,8 @@ from app.models.track import Track
 FIELD_ORDER = {
     'event': [
         'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
-        'timezone', 'description', 'original_image_url', 'logo_url', 'organizer_name',
-        'organizer_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
+        'timezone', 'description', 'original_image_url', 'logo_url', 'owner_name',
+        'owner_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
         'event_topic_id', 'event_sub_topic_id', 'code_of_conduct'
     ],
     'microlocations': ['id', 'name', 'floor'],
@@ -229,6 +230,13 @@ def export_event_json(event_id, settings):
     return storage_url
 
 
+def get_current_user():
+    if current_user:
+        return current_user
+    else:
+        return current_logged_user
+
+
 # HELPERS
 
 def create_export_job(task_id, event_id):
@@ -237,15 +245,17 @@ def create_export_job(task_id, event_id):
     """
     export_job = ExportJob.query.filter_by(event_id=event_id).first()
     task_url = url_for('tasks.celery_task', task_id=task_id)
+    current_logged_user = get_current_user()
+
     if export_job:
 
         export_job.task = task_url
-        export_job.user_email = current_identity.email
+        export_job.user_email = current_logged_user.email
         export_job.event = Event.query.get(event_id)
         export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
-            task=task_url, user_email=current_identity.email,
+            task=task_url, user_email=current_logged_user.email,
             event=Event.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')

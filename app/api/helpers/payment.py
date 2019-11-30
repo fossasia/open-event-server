@@ -3,13 +3,19 @@ import json
 import paypalrestsdk
 import requests
 import stripe
+import omise
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
+from app.settings import get_settings
+from app.api.helpers import checksum
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
+from app.api.helpers.db import safe_query, save_to_db
+from app.models import db
+from app.models.order import Order
 
 
 @cache.memoize(5)
@@ -21,7 +27,7 @@ def forex(from_currency, to_currency, amount):
         return amount
 
 
-class StripePaymentsManager(object):
+class StripePaymentsManager:
     """
     Class to manage payments through Stripe.
     """
@@ -36,9 +42,13 @@ class StripePaymentsManager(object):
         """
         if not event:
             settings = get_settings()
-            if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
-                'stripe_secret_key'] != "" and \
-                    settings["stripe_publishable_key"] != "":
+            if settings['app_environment'] == 'development' and settings['stripe_test_secret_key'] and \
+                    settings['stripe_test_publishable_key']:
+                return {
+                    'SECRET_KEY': settings['stripe_test_secret_key'],
+                    'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"]
+                }
+            elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
@@ -125,7 +135,7 @@ class StripePaymentsManager(object):
             raise ConflictException({'pointer': ''}, str(e))
 
 
-class PayPalPaymentsManager(object):
+class PayPalPaymentsManager:
     """
     Class to manage payment through Paypal REST API.
     """
@@ -136,20 +146,24 @@ class PayPalPaymentsManager(object):
         Configure the paypal sdk
         :return: Credentials
         """
-        # Use Sandbox by default.
         settings = get_settings()
-        paypal_mode = 'sandbox'
-        paypal_client = settings.get('paypal_sandbox_client', None)
-        paypal_secret = settings.get('paypal_sandbox_secret', None)
+        # Use Sandbox by default.
+        paypal_mode = settings.get('paypal_mode',
+                                   'live' if (settings['app_environment'] == Environment.PRODUCTION) else 'sandbox')
+        paypal_key = None
+        if paypal_mode == 'sandbox':
+            paypal_key = 'paypal_sandbox'
+        elif paypal_mode == 'live':
+            paypal_key = 'paypal'
 
-        # Switch to production if paypal_mode is production.
-        if settings['paypal_mode'] == Environment.PRODUCTION:
-            paypal_mode = 'live'
-            paypal_client = settings.get('paypal_client', None)
-            paypal_secret = settings.get('paypal_secret', None)
+        if not paypal_key:
+            raise ConflictException({'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'")
+
+        paypal_client = settings.get('{}_client'.format(paypal_key), None)
+        paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
 
         if not paypal_client or not paypal_secret:
-            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured on the platform")
+            raise ConflictException({'pointer': ''}, "Payments through Paypal have not been configured on the platform")
 
         paypalrestsdk.configure({
             "mode": paypal_mode,
@@ -193,6 +207,48 @@ class PayPalPaymentsManager(object):
             return False, payment.error
 
     @staticmethod
+    def verify_payment(payment_id, order):
+        """
+        Verify Paypal payment one more time for paying with Paypal in mobile client
+        """
+        PayPalPaymentsManager.configure_paypal()
+        try:
+            payment_server = paypalrestsdk.Payment.find(payment_id)
+            if payment_server.state != 'approved':
+                return False, 'Payment has not been approved yet. Status is ' + payment_server.state + '.'
+
+            # Get the most recent transaction
+            transaction = payment_server.transactions[0]
+            amount_server = transaction.amount.total
+            currency_server = transaction.amount.currency
+            sale_state = transaction.related_resources[0].sale.state
+
+            if float(amount_server) != order.amount:
+                return False, 'Payment amount does not match order'
+            elif currency_server != order.event.payment_currency:
+                return False, 'Payment currency does not match order'
+            elif sale_state != 'completed':
+                return False, 'Sale not completed'
+            elif PayPalPaymentsManager.used_payment(payment_id, order):
+                return False, 'Payment already been verified'
+            else:
+                return True, None
+        except paypalrestsdk.ResourceNotFound:
+            return False, 'Payment Not Found'
+
+    @staticmethod
+    def used_payment(payment_id, order):
+        """
+        Function to check for recycling of payment IDs
+        """
+        if Order.query.filter(Order.paypal_token == payment_id).first() is None:
+            order.paypal_token = payment_id
+            save_to_db(order)
+            return False
+        else:
+            return True
+
+    @staticmethod
     def execute_payment(paypal_payer_id, paypal_payment_id):
         """
         Execute payemnt and charge the user.
@@ -207,3 +263,89 @@ class PayPalPaymentsManager(object):
             return True, 'Successfully Executed'
         else:
             return False, payment.error
+
+
+class AliPayPaymentsManager:
+    """
+    Class to manage AliPay Payments
+    """
+
+    @staticmethod
+    def create_source(amount, currency, redirect_return_uri):
+        stripe.api_key = get_settings()['alipay_publishable_key']
+        response = stripe.Source.create(type='alipay',
+                                        currency=currency,
+                                        amount=amount,
+                                        redirect={
+                                            'return_url': redirect_return_uri
+                                        }
+                                        )
+        return response
+
+    @staticmethod
+    def charge_source(order_identifier):
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        stripe.api_key = get_settings()['alipay_secret_key']
+        charge = stripe.Charge.create(
+                 amount=int(order.amount),
+                 currency=order.event.payment_currency,
+                 source=order.order_notes,
+                 )
+        return charge
+
+
+class OmisePaymentsManager:
+    """
+    Class to manage Omise Payments
+    """
+
+    @staticmethod
+    def charge_payment(order_identifier, token):
+        if get_settings()['app_environment'] == Environment.PRODUCTION:
+            omise.api_secret = get_settings()['omise_test_secret']
+            omise.api_public = get_settings()['omise_test_public']
+        else:
+            omise.api_secret = get_settings()['omise_test_secret']
+            omise.api_public = get_settings()['omise_test_public']
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        charge = omise.Charge.create(
+                amount=int(round(order.amount)),
+                currency=order.event.payment_currency,
+                card=token,
+                metadata={
+                    "order_id": str(order_identifier),
+                    "status": True
+                },
+                )
+        return charge
+
+
+class PaytmPaymentsManager:
+    """
+    Class to manage PayTM payments
+    """
+
+    @property
+    def paytm_endpoint(self):
+        if get_settings()['paytm_mode'] == 'test':
+            url = "https://securegw-stage.paytm.in/theia/api/v1/"
+        else:
+            url = "https://securegw.paytm.in/theia/api/v1/"
+        return url
+
+    @staticmethod
+    def generate_checksum(paytm_params):
+        if get_settings()['paytm_mode'] == 'test':
+            merchant_key = get_settings()['paytm_sandbox_secret']
+        else:
+            merchant_key = get_settings()['paytm_live_secret']
+        return checksum.generate_checksum_by_str(json.dumps(paytm_params["body"]), merchant_key)
+
+    @staticmethod
+    def hit_paytm_endpoint(url, head, body=None):
+        paytm_params = {}
+        paytm_params["body"] = body
+        paytm_params["head"] = head
+        post_data = json.dumps(paytm_params)
+        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+        return response

@@ -1,0 +1,250 @@
+# Group Admin Statistics
+
+## Event Statistics Details [/v1/admin/statistics/events]
+
+**Events:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `id`  | Id will be 1 | Integer |
+| `draft`  | No. of draft events | Integer |
+| `published`  | No. of published events | Integer |
+| `past`  | No. of past events | Integer |
+
+### Show Event Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "attributes": {
+                    "past": 15,
+                    "draft": 16,
+                    "published": 1
+                },
+                "type": "admin-statistics-event",
+                "id": "1",
+                "links": {
+                    "self": "/v1/admin/statistics/events"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/admin/statistics/events"
+            }
+        }
+
+
+## Event Types Statistics Details [/v1/admin/statistics/event-types]
+
+**Event Types:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event type | string |
+| `id`  | Id of the event type | Integer |
+| `count`  | No. of events of event type | Integer |
+
+### Show Event Types Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
+## Event Topics Statistics Details [/v1/admin/statistics/event-topics]
+
+**Event Topics:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event topic | string |
+| `id`  | Id of the event topic | Integer |
+| `count`  | No. of events of event topic | Integer |
+
+### Show Event Topics Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
+## User Statistics Details [/v1/admin/statistics/users]
+
+**Users:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `id`  | Id will be 1 | Integer |
+| `super-admin`  | No. of super admin users | Integer |
+| `admin`  | No. of admin users | Integer |
+| `verified`  | No. of verified users | Integer |
+| `unverified`  | No. of unverified users | Integer |
+| `organizer`  | No. of organizer users | Integer |
+| `coorganizer`  | No. of coorganizer users | Integer |
+| `attendee`  | No. of attendee users | Integer |
+| `track-organizer`  | No. of track organizer users | Integer |
+
+### Show User Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "attributes": {
+                    "attendee": 0,
+                    "verified": 1,
+                    "admin": 1,
+                    "coorganizer": 0,
+                    "super-admin": 1,
+                    "organizer": 16,
+                    "track-organizer": 0,
+                    "unverified": 2
+                },
+                "type": "admin-statistics-user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/admin/statistics/users"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/admin/statistics/users"
+            }
+        }
+
+
+## Session Statistics Details [/v1/admin/statistics/sessions]
+
+**Sessions:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `id`  | Id will be 1 | Integer |
+| `draft`  | No. of draft sessions | Integer |
+| `accepted`  | No. of accepted sessions | Integer |
+| `confirmed`  | No. of confirmed sessions | Integer |
+| `rejected`  | No. of rejected sessions | Integer |
+| `pending`  | No. of pending sessions | Integer |
+| `submitted`  | No. of submitted sessions | Integer |
+
+### Show Session Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "attributes": {
+                    "confirmed": 0,
+                    "accepted": 1,
+                    "submitted": 0,
+                    "draft": 0,
+                    "rejected": 0,
+                    "pending": 0
+                },
+                "type": "admin-statistics-session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/admin/statistics/sessions"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/admin/statistics/sessions"
+            }
+        }
+
+## Mail Statistics Details [/v1/admin/statistics/mails]
+
+**Mails:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `id`  | Id will be 1 | Integer |
+| `one-day`  | No. of mails in past 1 day | Integer |
+| `three-days`  | No. of mails in past 3 days | Integer |
+| `seven-day`  | No. of mails in past 7 days | Integer |
+| `thirty-day`  | No. of mails in past 30 days | Integer |
+
+### Show Mail Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "thirty-days": 0,
+                    "one-day": 0,
+                    "seven-days": 0,
+                    "three-days": 0
+                },
+                "type": "admin-statistics-mail",
+                "id": "1",
+                "links": {
+                    "self": "/v1/admin/statistics/mails"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/admin/statistics/mails"
+            }
+        }

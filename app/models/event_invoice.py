@@ -33,6 +33,7 @@ class EventInvoice(SoftDeletionModel):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='SET NULL'))
 
     created_at = db.Column(db.DateTime(timezone=True))
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
@@ -49,6 +50,9 @@ class EventInvoice(SoftDeletionModel):
     invoice_pdf_url = db.Column(db.String)
 
     event = db.relationship('Event', backref='invoices')
+
+    order = db.relationship('Order', backref='event_invoices', foreign_keys=[order_id])
+
     user = db.relationship('User', backref='invoices')
 
     discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
@@ -75,7 +79,8 @@ class EventInvoice(SoftDeletionModel):
                  last4=None,
                  stripe_token=None,
                  paypal_token=None,
-                 deleted_at=None
+                 deleted_at=None,
+                 status='due'
                  ):
         self.identifier = get_new_identifier()
         self.amount = amount
@@ -90,7 +95,7 @@ class EventInvoice(SoftDeletionModel):
         self.paid_via = paid_via
         self.created_at = datetime.utcnow()
         self.discount_code_id = discount_code_id
-        self.status = 'pending'
+        self.status = status
         self.invoice_pdf_url = invoice_pdf_url
         self.payment_mode = payment_mode
         self.brand = brand

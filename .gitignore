@@ -52,3 +52,10 @@ jobs.sqlite
 
 # for -e pip packages
 src
+
+#tickets
+generated/
+
+docker-compose.override.yml
+celerybeat-schedule.*
+.coverage

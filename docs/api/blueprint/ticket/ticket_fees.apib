@@ -1,0 +1,212 @@
+# Group Ticket Fees
+
+Ticket Fees basically stores the fee on a ticket
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `currency`  | Currency of the ticket | string | - |
+| `service-fee` | Service fee the ticket  | float | - |
+| `maximum-fee` | Maximum fee the ticket  | float | - |
+
+## Ticket Fees Collection [/v1/ticket-fees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to be fetched for the paginated response.
+    + sort (optional, string, `service-fee`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Ticket Fees [GET]
+Get a list of Ticket Fees.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "currency": "USD",
+                        "service-fee": 3.14,
+                        "maximum-fee": 5.14
+                    },
+                    "type": "ticket-fee",
+                    "id": 2,
+                    "links": {
+                        "self": "/v1/ticket-fees/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees"
+            }
+        }
+
+
+### Create Ticket Fee [POST]
+Create a new ticket fee.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "type": "ticket-fee",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"3.14",
+                        "maximum-fee":"5.14"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fee",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+## Ticket Fee Details [/v1/ticket-fees/{id}]
++ Parameters
+    + id: 1 (integer) - ID of the ticket fees as an integer
+
+### Get Ticket Fees Details [GET]
+Get a single ticket fee details.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fee",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+
+### Update Ticket Fees [PATCH]
+Update a single ticket fee by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "id": "1",
+                    "type": "ticket-fee",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"2.14",
+                        "maximum-fee":"3.14"
+                    }
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 2.14,
+                    "maximum-fee": 3.14
+                },
+                "type": "ticket-fee",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+### Delete Ticket Fees [DELETE]
+Delete a single ticket fee.
++ `id` (integer) - ID of the record to delete **(required)**
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

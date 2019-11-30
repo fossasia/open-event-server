@@ -7,6 +7,7 @@ from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy import event, desc
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import func
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.api.helpers.db import get_count
@@ -37,6 +38,7 @@ SYS_ROLES_LIST = [
 ]
 
 # Event-specific
+OWNER = 'owner'
 ORGANIZER = 'organizer'
 COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
@@ -75,8 +77,22 @@ class User(SoftDeletionModel):
     is_sales_admin = db.Column(db.Boolean, default=False)
     is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
+    was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    # Event Invoice Details
+    billing_contact_name = db.Column(db.String)
+    billing_phone = db.Column(db.String)
+    billing_state = db.Column(db.String)
+    billing_country = db.Column(db.String)
+    billing_tax_info = db.Column(db.String)
+    company = db.Column(db.String)
+    billing_address = db.Column(db.String)
+    billing_city = db.Column(db.String)
+    billing_zip_code = db.Column(db.String)
+    billing_additional_info = db.Column(db.String)
+
+    # relationships
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
@@ -197,6 +213,9 @@ class User(SoftDeletionModel):
         else:
             return True
 
+    def is_owner(self, event_id):
+        return self._is_role(OWNER, event_id)
+
     def is_organizer(self, event_id):
         # type: (object) -> object
         return self._is_role(ORGANIZER, event_id)
@@ -215,6 +234,14 @@ class User(SoftDeletionModel):
 
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
+
+    def has_event_access(self, event_id):
+        return self._is_role(OWNER, event_id) or self._is_role(ORGANIZER, event_id) or \
+            self._is_role(COORGANIZER, event_id)
+
+    @hybrid_property
+    def is_user_owner(self):
+        return self._is_role(OWNER)
 
     @hybrid_property
     def is_user_organizer(self):
@@ -357,6 +384,12 @@ class User(SoftDeletionModel):
         if not perm:
             return False
         return perm.panel_name
+
+    def can_download_tickets(self, order):
+        permissible_users = [holder.id for holder in order.ticket_holders] + [order.user.id]
+        if self.is_staff or self.has_event_access(order.event.id) or self.id in permissible_users:
+            return True
+        return False
 
     def can_access_panel(self, panel_name):
         """

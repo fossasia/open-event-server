@@ -1,6 +1,6 @@
 from app import current_app
 from app.models import db
-from app.api.helpers.db import get_or_create  # , save_to_db
+from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 from envparse import env
 
 # Admin message settings
@@ -18,7 +18,7 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
-from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
+from app.models.user import OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -39,6 +39,9 @@ from app.models.event_type import EventType
 
 # EventLocation
 from app.models.event_location import EventLocation
+
+# Custom Placeholder
+from app.models.custom_placeholder import CustomPlaceholder
 
 # User Permissions
 from app.models.user_permission import UserPermission
@@ -61,6 +64,7 @@ def create_roles():
     get_or_create(Role, name=MODERATOR, title_name='Moderator')
     get_or_create(Role, name=ATTENDEE, title_name='Attendee')
     get_or_create(Role, name=REGISTRAR, title_name='Registrar')
+    get_or_create(Role, name=OWNER, title_name='Owner')
 
 
 def create_services():
@@ -79,41 +83,6 @@ def create_services():
 
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
-
-    if current_app.config['DEVELOPMENT']:
-        # get the stripe keys from the env file and save it in the settings.
-        env.read_envfile()
-        stripe_secret_key = env('STRIPE_SECRET_KEY', default=None)
-        stripe_publishable_key = env('STRIPE_PUBLISHABLE_KEY', default=None)
-        stripe_client_id = env('STRIPE_CLIENT_ID', default=None)
-        paypal_sandbox_client = env('PAYPAL_SANDBOX_CLIENT', default=None)
-        paypal_sandbox_secret = env('PAYPAL_SANDBOX_SECRET', default=None)
-        fb_client_id = env('FACEBOOK_CLIENT_ID', default=None)
-        fb_client_secret = env('FACEBOOK_CLIENT_SECRET', default=None)
-        google_client_id = env('GOOGLE_CLIENT_ID', default=None)
-        google_client_secret = env('GOOGLE_CLIENT_SECRET', default=None)
-        tw_consumer_key = env('TWITTER_CONSUMER_KEY', default=None)
-        tw_consumer_secret = env('TWITTER_CONSUMER_SECRET', default=None)
-        in_client_id = env('INSTAGRAM_CLIENT_ID', default=None)
-        in_client_secret = env('INSTAGRAM_CLIENT_SECRET', default=None)
-
-        setting, _ = get_or_create(Setting, app_name='Open Event')
-        setting.stripe_client_id = stripe_client_id
-        setting.stripe_publishable_key = stripe_publishable_key
-        setting.stripe_secret_key = stripe_secret_key
-        setting.paypal_sandbox_client = paypal_sandbox_client
-        setting.paypal_sandbox_secret = paypal_sandbox_secret
-        setting.fb_client_id = fb_client_id
-        setting.fb_client_secret = fb_client_secret
-        setting.google_client_id = google_client_id
-        setting.google_client_secret = google_client_secret
-        setting.tw_consumer_key = tw_consumer_key
-        setting.tw_consumer_secret = tw_consumer_secret
-        setting.in_client_id = in_client_id
-        setting.in_client_secret = in_client_secret
-        db.session.add(setting)
-        db.session.commit()
-
 
 def create_event_image_sizes():
     get_or_create(
@@ -166,7 +135,7 @@ def create_event_sub_topics():
      "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
      "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
      "Family & Education": ["Education", "Baby", "Reunion"],
-     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Business & Professional": ["Career", "Startups & Small Business", "Educators", "Design", "Finance"],
      "Charity & Causes": ["Education", "Other", "Environment"],
      "Hobbies & Special Interest": ["Other", "Anime/Comics"],
      "Seasonal & Holiday": ["Easter", "Other"],
@@ -174,7 +143,7 @@ def create_event_sub_topics():
      "Religion & Spirituality": ["Mysticism and Occult"],
      "Government & Politics": ["Non-partisan"]
     }
-    eventopics=db.session.query(EventTopic).all()
+    eventopics = db.session.query(EventTopic).all()
     for keysub_topic in event_sub_topic:
         for subtopic in event_sub_topic[keysub_topic]:
             get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
@@ -207,16 +176,21 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
+    ownr = Role.query.get(7)
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
     sponsor = Service.query.get(4)
     microlocation = Service.query.get(5)
 
-    # For ORGANIZER
+    # For ORGANIZER and OWNER
     # All four permissions set to True
     services = [track, session, speaker, sponsor, microlocation]
     roles = [attend, regist]
+    for service in services:
+        perm, _ = get_or_create(Permission, role=ownr, service=service)
+        db.session.add(perm)
+
     for service in services:
         perm, _ = get_or_create(Permission, role=orgr, service=service)
         db.session.add(perm)
@@ -311,6 +285,15 @@ def create_admin_message_settings():
             )
 
 
+def create_custom_placeholders():
+    custom_placeholder, _ = get_or_create(
+        CustomPlaceholder, name='Hills',
+        original_image_url='https://www.w3schools.com/html/pic_mountain.jpg',
+        event_sub_topic_id=1
+    )
+    db.session.add(custom_placeholder)
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -347,6 +330,10 @@ def populate():
     create_event_locations()
     print('Creating admin message settings...')
     create_admin_message_settings()
+    print('Creating custom placeholders...')
+    create_custom_placeholders()
+
+    db.session.commit()
 
 
 def populate_without_print():
@@ -369,6 +356,7 @@ def populate_without_print():
     create_event_types()
     create_event_locations()
     create_admin_message_settings()
+    create_custom_placeholders()
 
     db.session.commit()
 

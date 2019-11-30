@@ -1,5 +1,5 @@
 from flask import request, current_app
-from flask_jwt import current_identity, _jwt_required
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -8,14 +8,11 @@ from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 import pytz
 from datetime import datetime
-import urllib.error
-
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
-from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -49,10 +46,74 @@ from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_favourite_event import UserFavouriteEvent
-from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
+from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, REGISTRAR, MODERATOR, \
+    SALES_ADMIN, MARKETER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
+
+def validate_event(user, modules, data):
+    if not user.can_create_event():
+        raise ForbiddenException({'source': ''},
+                                 "Please verify your Email")
+    elif not modules.ticket_include:
+            raise ForbiddenException({'source': ''},
+                                     "Ticketing is not enabled in the system")
+    if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
+        data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+        if not modules.payment_include:
+            raise ForbiddenException({'source': ''},
+                                     "Payment is not enabled in the system")
+    if data.get('is_donation_enabled', False) and not modules.donation_include:
+        raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
+                                 "Donation is not enabled in the system")
+
+    if data.get('state', None) == 'published' and not user.can_publish_event():
+        raise ForbiddenException({'source': ''},
+                                 "Only verified accounts can publish events")
+
+    if not data.get('is_event_online') and data.get('state', None) == 'published' \
+        and not data.get('location_name', None):
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Location is required to publish the event")
+
+    if data.get('location_name', None) and data.get('is_event_online'):
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Online Event does not have any locaton")
+
+    if not data.get('name', None) and data.get('state', None) == 'published':
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Event Name is required to publish the event")
+
+    if data.get('searchable_location_name') and data.get('is_event_online'):
+        raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
+                                "Online Event does not have any locaton")
+
+
+def validate_date(event, data):
+    if event:
+        if 'starts_at' not in data:
+            data['starts_at'] = event.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = event.ends_at
+
+    if not data.get('starts_at') or not data.get('ends_at'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                  "enter required fields starts-at/ends-at")
+
+    if data['starts_at'] >= data['ends_at']:
+        raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                  "ends-at should be after starts-at")
+
+    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+        if event and event.deleted_at and not data.get('deleted_at'):
+            data['state'] = 'draft'
+        elif event and not event.deleted_at and data.get('deleted_at'):
+            pass
+        else:
+            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                      "starts-at should be after current date-time")
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -75,10 +136,10 @@ class EventList(ResourceList):
         """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
-            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
             query2 = self.session.query(Event)
-            query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
-                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER))
+            query2 = query2.join(Event.roles).filter_by(user_id=current_user.id).join(UsersEventsRoles.role). \
+                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER, Role.name == OWNER))
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
@@ -87,6 +148,62 @@ class EventList(ResourceList):
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
+
+        if view_kwargs.get('user_owner_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_owner_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_owner_id'], 'user_owner_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == OWNER)
+
+        if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == ORGANIZER)
+
+        if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_coorganizer_id'], 'user_coorganizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == COORGANIZER)
+
+        if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_track_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == TRACK_ORGANIZER)
+
+        if view_kwargs.get('user_registrar_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_registrar_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_registrar_id'], 'user_registrar_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == REGISTRAR)
+
+        if view_kwargs.get('user_moderator_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_moderator_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_moderator_id'], 'user_moderator_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MODERATOR)
+
+        if view_kwargs.get('user_marketer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_marketer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_marketer_id'], 'user_marketer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MARKETER)
+
+        if view_kwargs.get('user_sales_admin_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_sales_admin_id'], 'user_sales_admin_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == SALES_ADMIN)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
             query_ = self.session.query(Event).filter(
@@ -120,69 +237,34 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
-        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
-            if not modules.payment_include:
-                raise ForbiddenException({'source': ''},
-                                         "Payment is not enabled in the system")
-        if data.get('is_donation_enabled', False) and not modules.donation_include:
-            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
-                                     "Donation is not enabled in the system")
-        if not user.can_create_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can create events")
-
-        if data.get('state', None) == 'published' and not user.can_publish_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can publish events")
-
-        if not data.get('is_event_online') and data.get('state', None) == 'published' \
-                and not data.get('location_name', None):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Location is required to publish the event")
-
-        if data.get('location_name', None) and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Online Event does not have any locaton")
-
-        if data.get('searchable_location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
-                                    "Online Event does not have any locaton")
+        validate_event(user, modules, data)
+        if data['state'] != 'draft':
+            validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
-        after create method to save roles for users and add the user as an accepted role(organizer)
+        after create method to save roles for users and add the user as an accepted role(owner and organizer)
         :param event:
         :param data:
         :param view_kwargs:
         :return:
         """
-        role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
+        role = Role.query.filter_by(name=OWNER).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
-        save_to_db(role_invite, 'Organiser Role Invite Added')
+        save_to_db(role_invite, 'Owner Role Invite Added')
 
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)
 
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
-        # TODO: Create an asynchronous celery task for this
-        # if data.get('original_image_url'):
-        #     try:
-        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-        #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
-        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-        #         )
-        #     self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
-        #     self.session.commit()
+
+        if data.get('original_image_url'):
+            start_image_resizing_tasks(event, data['original_image_url'])
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
@@ -250,6 +332,14 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('event_invoice_id') is not None:
         event_invoice = safe_query(db, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+        if event_invoice.event_id is not None:
+            view_kwargs['id'] = event_invoice.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('event_invoice_identifier') is not None:
+        event_invoice = safe_query(db, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
+                                   'event_invoice_identifier')
         if event_invoice.event_id is not None:
             view_kwargs['id'] = event_invoice.event_id
         else:
@@ -462,35 +552,9 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
+        user = User.query.filter_by(id=current_user.id).one()
         modules = Module.query.first()
-        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
-        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
-            if not modules.payment_include:
-                raise ForbiddenException({'source': ''},
-                                         "Payment is not enabled in the system")
-        if data.get('is_donation_enabled', False) and not modules.donation_include:
-            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
-                                     "Donation is not enabled in the system")
-
-        if data.get('state', None) == 'published' and not current_identity.can_publish_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can publish events")
-
-        if data.get('state', None) == 'published' and not data.get('location_name', None) and \
-                not data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Location is required to publish the event")
-
-        if data.get('location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Online Event does not have any locaton")
-
-        if data.get('searchable_location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
-                                    "Online Event does not have any locaton")
+        validate_event(user, modules, data)
 
     def before_update_object(self, event, data, view_kwargs):
         """
@@ -500,27 +564,26 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        # TODO: Create an asynchronous celery task for this
-        # if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
-        #     try:
-        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-        #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
-        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-        #         )
-        #     data['original_image_url'] = uploaded_images['original_image_url']
-        #     data['large_image_url'] = uploaded_images['large_image_url']
-        #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
-        #     data['icon_image_url'] = uploaded_images['icon_image_url']
+        is_date_updated = (data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at)
+        is_draft_published = (event.state == "draft" and data.get('state') == "published")
+        is_event_restored = (event.deleted_at and not data.get('deleted_at'))
+
+        if is_date_updated or is_draft_published or is_event_restored:
+            validate_date(event, data)
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
-            event.deleted_at = data.get('deleted_at')
+            if len(event.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
+            else:
+                event.deleted_at = data.get('deleted_at')
 
         if 'is_event_online' not in data and event.is_event_online \
                 or 'is_event_online' in data and not data['is_event_online']:
             if data.get('state', None) == 'published' and not data.get('location_name', None):
                 raise ConflictException({'pointer': '/data/attributes/location-name'},
                                         "Location is required to publish the event")
+        if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
+            start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
         if event.state == 'published' and event.schedule_published_on:
@@ -535,6 +598,7 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
                       'after_update_object': after_update_object,
                       'before_patch': before_patch
                   }}
@@ -603,6 +667,12 @@ def start_export_tasks(event):
     from .helpers.tasks import export_pentabarf_task
     task_pentabarf = export_pentabarf_task.delay(event_id, temp=False)
     create_export_job(task_pentabarf.id, event_id)
+
+
+def start_image_resizing_tasks(event, original_image_url):
+    event_id = str(event.id)
+    from .helpers.tasks import resize_event_images_task
+    resize_event_images_task.delay(event_id, original_image_url)
 
 
 def clear_export_urls(event):

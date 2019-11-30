@@ -47,7 +47,8 @@ def export_attendees_csv(attendees):
 
 def export_sessions_csv(sessions):
     headers = ['Session Title', 'Session Speakers',
-               'Session Track', 'Session Abstract', 'Created At', 'Email Sent']
+               'Session Track', 'Session Abstract', 'Created At', 'Email Sent',
+               'Level', 'Status', 'Session Type', 'Talk Length']
     rows = [headers]
     for session in sessions:
         if not session.deleted_at:
@@ -64,6 +65,10 @@ def export_sessions_csv(sessions):
             column.append(strip_tags(session.short_abstract) if session.short_abstract else '')
             column.append(session.created_at if session.created_at else '')
             column.append('Yes' if session.is_mail_sent else 'No')
+            column.append(session.level)
+            column.append(session.state)
+            column.append(session.session_type if session.session_type else '')
+            column.append(len(session.long_abstract) if session.long_abstract else None)
             rows.append(column)
 
     return rows
