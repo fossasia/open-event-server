@@ -17,7 +17,7 @@ from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ConflictException, MethodNotAllowed, UnprocessableEntity, ForbiddenException
+from app.api.helpers.exceptions import ConflictException, MethodNotAllowed, UnprocessableEntity
 from app.api.helpers.db import get_count
 
 class TicketListPost(ResourceList):
@@ -178,11 +178,6 @@ class TicketDetail(ResourceDetail):
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
-
-        if ticket.deleted_at != data.get('deleted_at'):
-            if not has_access('is_coorganizer', event_id=ticket.event_id):
-                raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
-            ticket.name = ticket.name+'.deleted'
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
