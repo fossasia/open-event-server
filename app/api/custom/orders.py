@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app import limiter
 from app.models import db
 from app.api.auth import return_file
-from app.api.helpers.db import safe_query, get_count, save_to_db
+from app.api.helpers.db import safe_query, get_count
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
@@ -16,6 +16,7 @@ from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
 from app.api.helpers.ticketing import TicketingManager
 from app.api.schema.attendees import AttendeeSchema
+from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
 from app.models.discount_code import DiscountCode
 from app.models.order import Order
@@ -116,8 +117,14 @@ def create_order():
     result = schema.load(json_api_attendee)
     if result.errors:
         return jsonify(result.errors)
+    ticket_ids = [ticket['id'] for ticket in tickets]
+    ticket_info_list = db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids)).all()
     for ticket in tickets:
-        ticket_info = db.session.query(Ticket).filter_by(id=int(ticket['id']), deleted_at=None).first()
+        ticket_info = None
+        for ticket_information in ticket_info_list:
+            if ticket_information.id == int(ticket['id']):
+                ticket_info = ticket_information
+                break
         if ticket_info is None:
             return jsonify(status='Order Unsuccessful', error='Ticket with id {} was not found.'.format(ticket['id']))
         if ticket_info.event_id != int(data['event_id']):
@@ -131,9 +138,7 @@ def create_order():
         for ticket_amount in range(ticket['quantity']):
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
-            db.session.commit()
-            db.session.refresh(attendee)
-            attendee_list.append(attendee.id)
+            attendee_list.append(attendee)
     ticket_pricing = calculate_amount(json.dumps(data))
     if not has_access('is_coorganizer', event_id=data['event_id']):
         data['status'] = 'initializing'
@@ -147,10 +152,9 @@ def create_order():
     db.session.commit()
     db.session.refresh(order)
     order_tickets = {}
-    for attendee_id in attendee_list:
-        holder = TicketHolder.query.filter(TicketHolder.id == attendee_id).one()
+    for holder in attendee_list:
         holder.order_id = order.id
-        save_to_db(holder)
+        db.session.add(holder)
         if not order_tickets.get(holder.ticket_id):
             order_tickets[holder.ticket_id] = 1
         else:
@@ -160,7 +164,11 @@ def create_order():
 
     for ticket in order_tickets:
         od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
-        save_to_db(od)
+        db.session.add(od)
 
     order.quantity = order.tickets_count
-    return jsonify("Order successful.")
+    db.session.add(order)
+    db.session.commit()
+    db.session.refresh(order)
+    order_schema = OrderSchema()
+    return order_schema.dump(order)
