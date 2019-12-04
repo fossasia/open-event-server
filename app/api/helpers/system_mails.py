@@ -4,7 +4,7 @@ Register a mail here before using it
 """
 from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
-    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
+    SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, AFTER_EVENT_SPEAKER, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
     TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL
@@ -58,12 +58,21 @@ MAILS = {
         )
     },
     AFTER_EVENT: {
-        'recipient': 'Owner, Organizer, Speaker',
-        'subject': u'Event {event_name} is over',
+        'recipient': 'Owner, Organizer',
+        'subject': u'Event {event_name} is over. Thank you for using Eventyay!',
         'message': (
             u"Hi {email},<br/>" +
-            u"Thank You for participating in our event. We hope you enjoyed it. "
-            u"Please check out other upcoming events around you on {url} <br />"
+            u"your event {event_name} is over. We hope you enjoyed it. "
+            u"Thank you for using the Eventyay platform for your event. We hope you enjoyed it.<br />"
+        ),
+        'sent_at': '1 day after the event'
+    },
+    AFTER_EVENT_SPEAKER: {
+        'recipient': 'Speaker',
+        'subject': u'Event {event_name} is over. Thank you for participating!',
+        'message': (
+            u"Hi {email},<br/>" +
+            u"thank you for participating in our {event_name}. We hope you enjoyed it and keep in touch. <br/> "
         ),
         'sent_at': '1 day after the event'
     },

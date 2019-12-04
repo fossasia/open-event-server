@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from flask import render_template
 
 from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
+from app.api.helpers.mail import send_email_after_event, send_email_after_event_to_speaker, send_email_for_monthly_fee_payment, \
     send_followup_email_for_monthly_fee_payment
 from app.api.helpers.notification import send_notif_monthly_fee_payment, send_followup_notif_monthly_fee_payment, \
     send_notif_after_event
@@ -37,17 +37,16 @@ def send_after_event_mail():
             time_difference = current_time - event.ends_at
             time_difference_minutes = (time_difference.days * 24 * 60) + \
                 (time_difference.seconds / 60)
-            frontend_url = get_settings()['frontend_url']
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
                     if not speaker.is_email_overridden:
-                        send_email_after_event(speaker.user.email, event.name, frontend_url)
+                        send_email_after_event_to_speaker(speaker.user.email, event.name)
                         send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
-                    send_email_after_event(organizer.user.email, event.name, frontend_url)
+                    send_email_after_event(organizer.user.email, event.name)
                     send_notif_after_event(organizer.user, event.name)
                 if owner:
-                    send_email_after_event(owner.user.email, event.name, frontend_url)
+                    send_email_after_event(owner.user.email, event.name)
                     send_notif_after_event(owner.user, event.name)
 
 

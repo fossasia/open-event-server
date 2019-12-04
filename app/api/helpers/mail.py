@@ -11,9 +11,9 @@ from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
-    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
-    TEST_MAIL
+    AFTER_EVENT, AFTER_EVENT_SPEAKER, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL,\
+    EVENT_EXPORTED, EVENT_EXPORT_FAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, \
+    TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, TEST_MAIL
 from app.models.user import User
 
 
@@ -204,7 +204,7 @@ def send_user_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_after_event(email, event_name, frontend_url):
+def send_email_after_event(email, event_name):
     """email for role invite"""
     send_email(
         to=email,
@@ -215,10 +215,22 @@ def send_email_after_event(email, event_name, frontend_url):
         html=MAILS[AFTER_EVENT]['message'].format(
             email=email,
             event_name=event_name,
-            url=frontend_url
         )
     )
 
+
+def send_email_after_event_to_speaker(email, event_name):
+    send_email(
+        to=email,
+        action=AFTER_EVENT_SPEAKER,
+        subject=MAILS[AFTER_EVENT_SPEAKER]['subject'].format(
+            event_name=event_name
+        ),
+        html=MAILS[AFTER_EVENT_SPEAKER]['message'].format(
+            email=email,
+            event_name=event_name
+        )
+    )
 
 def send_email_for_monthly_fee_payment(email, event_name, previous_month, amount, app_name, link):
     """email for monthly fee payment"""
