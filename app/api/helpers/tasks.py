@@ -135,7 +135,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
         logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.URLError):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
 
 
@@ -152,7 +152,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
         logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
 
 
@@ -166,7 +166,7 @@ def sponsor_logos_url_task(self, event_id):
             sponsor.logo_url = new_logo_url
             save_to_db(sponsor)
             logging.info('Sponsor logo url successfully generated')
-        except(urllib.error.HTTPError, urllib.error.URLError):
+        except(requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
             logging.exception('Error encountered while logo generation')
 
 
@@ -181,7 +181,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
         speaker.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(speaker)
         logging.info('Resized images saved successfully for speaker with id: {}'.format(speaker_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(speaker_id))
 
 
