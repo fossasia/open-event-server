@@ -59,7 +59,7 @@ MAILS = {
     },
     AFTER_EVENT: {
         'recipient': 'Owner, Organizer',
-        'subject': u'Event {event_name} is over. Thank you for using Eventyay!',
+        'subject': u'{event_name} is over. Thank you for using Eventyay!',
         'message': (
             u"Hi {email},<br/>" +
             u"your event {event_name} is over. We hope you enjoyed it. "
@@ -69,7 +69,7 @@ MAILS = {
     },
     AFTER_EVENT_SPEAKER: {
         'recipient': 'Speaker',
-        'subject': u'Event {event_name} is over. Thank you for participating!',
+        'subject': u'{event_name} is over. Thank you for participating!',
         'message': (
             u"Hi {email},<br/>" +
             u"thank you for participating in our {event_name}. We hope you enjoyed it and keep in touch. <br/> "
@@ -195,11 +195,13 @@ MAILS = {
         'recipient': 'User',
         'subject': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Hi,Your order for {event_name} has been cancelled has been cancelled by the organizer"
-            u"<br/>Please contact the organizer for more info" +
-            u"<br/>Message from the organizer: {cancel_note}"
-            u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at {frontend_url} </em>"
+            u"Hello,"
+            u"<br/>your order for {event_name} has been cancelled by the organizer."
+            u"<br/>Please contact the organizer for more info." +
+            u"{cancel_msg}"
+            u"<br/>To manage orders please login to {frontend_url} and visit \"My Tickets\"."
+            u"<br/>Best regards,"
+            u"<br/>{app_name} Team"
         )
     },
     EVENT_EXPORTED: {

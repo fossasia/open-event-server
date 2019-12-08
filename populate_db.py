@@ -267,6 +267,7 @@ def create_admin_message_settings():
                      "User email",
                      "Invitation For Papers",
                      "After Event",
+                     "After Event to Speaker"
                      "Ticket(s) Purchased",
                      "Session Accept or Reject",
                      "Event Published",
