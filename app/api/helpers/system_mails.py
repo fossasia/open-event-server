@@ -63,7 +63,7 @@ MAILS = {
         'message': (
             u"Hi {email},<br/>" +
             u"your event {event_name} is over. We hope you enjoyed it. "
-            u"Thank you for using the Eventyay platform for your event. We hope you enjoyed it.<br />"
+            u"Thank you for using the {app_name} platform for your event. We hope you enjoyed it.<br />"
         ),
         'sent_at': '1 day after the event'
     },

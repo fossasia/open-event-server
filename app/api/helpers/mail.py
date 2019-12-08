@@ -215,6 +215,7 @@ def send_email_after_event(email, event_name):
         html=MAILS[AFTER_EVENT]['message'].format(
             email=email,
             event_name=event_name,
+            app_name=get_settings('app_name')
         )
     )
 
