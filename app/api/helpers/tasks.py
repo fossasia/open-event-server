@@ -135,7 +135,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
         logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
-    except (requests.exceptions.HTTPError, requests.exceptions.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
 
 
