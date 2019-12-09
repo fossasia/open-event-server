@@ -118,7 +118,8 @@ def create_order():
     if result.errors:
         return jsonify(result.errors)
     ticket_ids = [ticket['id'] for ticket in tickets]
-    ticket_info_list = db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids)).all()
+    ticket_info_list = db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids)).filter_by(event_id=data['event_id'],
+                                                                                            deleted_at=None).all()
     for ticket in tickets:
         ticket_info = None
         for ticket_information in ticket_info_list:
@@ -127,9 +128,6 @@ def create_order():
                 break
         if ticket_info is None:
             return jsonify(status='Order Unsuccessful', error='Ticket with id {} was not found.'.format(ticket['id']))
-        if ticket_info.event_id != int(data['event_id']):
-            return jsonify(status='Order Unsuccessful',
-                           error="Ticket with id {} belongs to a different Event.".format(ticket['id']))
         if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
               ticket_id=int(ticket['id']), deleted_at=None))) < ticket['quantity']:
             return jsonify(status='Order Unsuccessful', error='Ticket already sold out.')
