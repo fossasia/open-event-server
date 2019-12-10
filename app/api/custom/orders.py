@@ -117,17 +117,17 @@ def create_order():
     result = schema.load(json_api_attendee)
     if result.errors:
         return jsonify(result.errors)
-    ticket_ids = [ticket['id'] for ticket in tickets]
+    ticket_ids = [int(ticket['id']) for ticket in tickets]
     ticket_info_list = db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids)).filter_by(event_id=data['event_id'],
                                                                                             deleted_at=None).all()
+    ticket_ids_found = [ticket_information.id for ticket_information in ticket_info_list]
+    tickets_not_found = list(set(ticket_ids) - set(ticket_ids_found))
+    if tickets_not_found:
+        return jsonify(status='Order Unsuccessful', error='Ticket with id {} was not found.'.format(tickets_not_found))
     for ticket in tickets:
         ticket_info = None
         for ticket_information in ticket_info_list:
-            if ticket_information.id == int(ticket['id']):
-                ticket_info = ticket_information
-                break
-        if ticket_info is None:
-            return jsonify(status='Order Unsuccessful', error='Ticket with id {} was not found.'.format(ticket['id']))
+            ticket_info = ticket_information
         if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
               ticket_id=int(ticket['id']), deleted_at=None))) < ticket['quantity']:
             return jsonify(status='Order Unsuccessful', error='Ticket already sold out.')
