@@ -4,7 +4,7 @@ import os.path
 from envparse import env
 
 import sys
-from flask import Flask, json, make_response
+from flask import Flask, json, make_response, request
 from flask_celeryext import FlaskCeleryExt
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -229,12 +229,13 @@ def make_celery(app=None):
 
 
 # Health-check
-health = HealthCheck(current_app, "/health-check")
-health.add_check(health_check_celery)
+health = HealthCheck()
+health_dependencies = HealthCheck()
 health.add_check(health_check_db)
 with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
+health_dependencies.add_check(health_check_celery)
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
@@ -285,3 +286,11 @@ def internal_server_error(error):
 
 if __name__ == '__main__':
     current_app.run()
+
+
+@app.route('/health-check')
+def health_check():
+    param = request.args.get('q')
+    if param == 'celery':
+        return health_dependencies.run()
+    return health.run()

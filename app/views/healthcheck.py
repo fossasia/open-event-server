@@ -1,6 +1,5 @@
 from errno import errorcode
 
-from celery.task.control import inspect
 from flask import current_app
 from redis.exceptions import ConnectionError
 
@@ -13,7 +12,7 @@ def health_check_celery():
     :return:
     """
     try:
-        d = inspect().stats()
+        d = current_app.celery.inspect().stats()
         if not d:
             capture_message('No running Celery workers were found.')
             return False, 'No running Celery workers were found.'

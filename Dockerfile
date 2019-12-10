@@ -26,4 +26,5 @@ WORKDIR /data/app
 ADD . .
 
 EXPOSE 8080
+HEALTHCHECK CMD curl --fail http://localhost:5000/health-check || exit 1
 CMD ["sh", "scripts/container_start.sh"]
