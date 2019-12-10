@@ -127,7 +127,8 @@ def create_order():
     for ticket in tickets:
         ticket_info = None
         for ticket_information in ticket_info_list:
-            ticket_info = ticket_information
+            if ticket_information.id == int(ticket['id']):
+                ticket_info = ticket_information
         if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
               ticket_id=int(ticket['id']), deleted_at=None))) < ticket['quantity']:
             return jsonify(status='Order Unsuccessful', error='Ticket already sold out.')
