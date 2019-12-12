@@ -7,4 +7,5 @@ def serialize(self, attr, obj, accessor=None):
         return super().serialize(attr, obj, accessor)
     return self._serialize(None, attr, obj)
 
+
 Relationship.serialize = serialize
