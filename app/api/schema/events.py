@@ -40,7 +40,6 @@ class EventSchemaPublic(ModelSchema):
             raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
                                       "Unknown timezone: '{}'".
                                       format(data['timezone']))
-
     deleted_at = fields.DateTime(allow_none=True)
     has_sessions = fields.Bool(default=0, dump_only=True)
     has_speakers = fields.Bool(default=0, dump_only=True)
@@ -50,6 +49,22 @@ class EventSchemaPublic(ModelSchema):
     revenue = fields.Float(dump_only=True)
     average_rating = fields.Float(dump_only=True)
 
+    tickets = Relationship(attribute='tickets',
+                           self_view='v1.event_ticket',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.ticket_list',
+                           related_view_kwargs={'event_id': '<id>'},
+                           schema='TicketSchemaPublic',
+                           many=True,
+                           type_='ticket')
+    faqs = Relationship(attribute='faqs',
+                        self_view='v1.event_faqs',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.faq_list',
+                        related_view_kwargs={'event_id': '<id>'},
+                        schema='FaqSchema',
+                        many=True,
+                        type_='faq')
     faq_types = Relationship(attribute='faq_types',
                              self_view='v1.event_faq_types',
                              self_view_kwargs={'id': '<id>'},
@@ -74,6 +89,14 @@ class EventSchemaPublic(ModelSchema):
                                schema='TicketTagSchema',
                                many=True,
                                type_='ticket-tag')
+    microlocations = Relationship(attribute='microlocation',
+                                  self_view='v1.event_microlocation',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.microlocation_list',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='MicrolocationSchema',
+                                  many=True,
+                                  type_='microlocation')
     social_links = Relationship(attribute='social_link',
                                 self_view='v1.event_social_link',
                                 self_view_kwargs={'id': '<id>'},
@@ -127,6 +150,36 @@ class EventSchemaPublic(ModelSchema):
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
+    sessions = Relationship(attribute='session',
+                            self_view='v1.event_session',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.session_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SessionSchema',
+                            many=True,
+                            type_='session')
+    speakers = Relationship(attribute='speaker',
+                            self_view='v1.event_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SpeakerSchema',
+                            many=True,
+                            type_='speaker')
+    event_type = Relationship(attribute='event_type',
+                              self_view='v1.event_event_type',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.event_type_detail',
+                              related_view_kwargs={'event_id': '<id>'},
+                              schema='EventTypeSchema',
+                              type_='event-type')
+    event_topic = Relationship(attribute='event_topic',
+                               self_view='v1.event_event_topic',
+                               self_view_kwargs={'id': '<id>'},
+                               related_view='v1.event_topic_detail',
+                               related_view_kwargs={'event_id': '<id>'},
+                               schema='EventTopicSchema',
+                               type_='event-topic')
     event_orga = Relationship(attribute='events_orga',
                               self_view='v1.events_orga',
                               self_view_kwargs={'id': '<id>'},
@@ -134,6 +187,13 @@ class EventSchemaPublic(ModelSchema):
                               related_view_kwargs={'event_id': '<id>'},
                               schema='EventOrgaSchema',
                               type='event-orga')
+    event_sub_topic = Relationship(attribute='event_sub_topic',
+                                   self_view='v1.event_event_sub_topic',
+                                   self_view_kwargs={'id': '<id>'},
+                                   related_view='v1.event_sub_topic_detail',
+                                   related_view_kwargs={'event_id': '<id>'},
+                                   schema='EventSubTopicSchema',
+                                   type_='event-sub-topic')
     custom_forms = Relationship(attribute='custom_form',
                                 self_view='v1.event_custom_forms',
                                 self_view_kwargs={'id': '<id>'},
@@ -142,6 +202,27 @@ class EventSchemaPublic(ModelSchema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    owner = Relationship(attribute='owner',
+                         self_view='v1.event_owner',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.user_detail',
+                         schema='UserSchemaPublic',
+                         related_view_kwargs={'event_id': '<id>'},
+                         type_='user')
+    organizers = Relationship(attribute='organizers',
+                              self_view='v1.event_organizers',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchemaPublic',
+                              type_='user',
+                              many=True)
+    coorganizers = Relationship(attribute='coorganizers',
+                                self_view='v1.event_coorganizers',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.user_list',
+                                schema='UserSchemaPublic',
+                                type_='user',
+                                many=True)
     stripe_authorization = Relationship(attribute='stripe_authorization',
                                         self_view='v1.stripe_authorization_event',
                                         self_view_kwargs={'id': '<id>'},
