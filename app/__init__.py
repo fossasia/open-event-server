@@ -27,7 +27,6 @@ from healthcheck import HealthCheck
 from apscheduler.schedulers.background import BackgroundScheduler
 from elasticsearch_dsl.connections import connections
 from pytz import utc
-from sqlalchemy.exc import ProgrammingError
 
 import sqlalchemy as sa
 
@@ -52,6 +51,7 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
+from app.extensions import shell
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -199,6 +199,8 @@ def create_app():
     # redis
     redis_store.init_app(app)
 
+    shell.init_app(app)
+
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
         client.init_app(app)
@@ -273,12 +275,7 @@ scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minu
 scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
 scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
 scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
-with current_app.app_context():
-    try:
-        order_expiry_time = get_settings()['order_expiry_time']
-    except ProgrammingError:
-        order_expiry_time = 15
-scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=order_expiry_time)
+scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=5)
 scheduler.start()
 
 

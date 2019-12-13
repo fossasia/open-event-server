@@ -22,3 +22,5 @@ class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
     pdf_url = common.url_
     event_id = 1
     ticket_id = None
+    created_at = common.date_
+    modified_at = common.date_

@@ -2,8 +2,10 @@ import datetime
 
 from app import current_app as app, db
 from app.factories.event_invoice import EventInvoiceFactory
+from app.factories.attendee import AttendeeFactory
 from app.models.event_invoice import EventInvoice
-from app.api.helpers.scheduled_jobs import event_invoices_mark_due
+from app.models.ticket_holder import TicketHolder
+from app.api.helpers.scheduled_jobs import event_invoices_mark_due, delete_ticket_holders_no_order_id
 
 from tests.all.integration.utils import OpenEventTestCase
 
@@ -29,3 +31,16 @@ class TestScheduledJobs(OpenEventTestCase):
 
             self.assertEqual(status_new, "due")
             self.assertNotEqual(status_paid, "due")
+
+    def test_delete_ticket_holders_with_no_order_id(self):
+        """Method to test deleting ticket holders with no order id after expiry time"""
+        with app.test_request_context():
+            attendee_new = AttendeeFactory()
+            db.session.commit()
+
+            attendee_new_id = attendee_new.id
+            delete_ticket_holders_no_order_id()
+
+            ticket_holder_deleted = TicketHolder.query.get(attendee_new_id)
+
+            self.assertIsNot(ticket_holder_deleted, None)

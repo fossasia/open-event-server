@@ -160,10 +160,9 @@ def delete_ticket_holders_no_order_id():
     from app import current_app as app
     with app.app_context():
         order_expiry_time = get_settings()['order_expiry_time']
-        db.session.query(TicketHolder).filter(TicketHolder.order_id == None,
-                                              TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
-                                              < datetime.datetime.utcnow()).delete(synchronize_session=False)
-
+        TicketHolder.query.filter(TicketHolder.order_id == None, TicketHolder.deleted_at == None,
+                                  TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
+                                  < datetime.datetime.utcnow()).delete(synchronize_session=False)
 
 
 def event_invoices_mark_due():
