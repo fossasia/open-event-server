@@ -22,6 +22,7 @@ from app.models.role import Role
 from app.models.service import Service
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 
@@ -94,11 +95,11 @@ class User(SoftDeletionModel):
 
     # relationships
     speaker = db.relationship('Speaker', backref="user")
-    favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     marketer_events = db.relationship(
                           'Event',
                           viewonly=True,
