@@ -46,6 +46,8 @@ class TicketHolder(SoftDeletionModel):
     checkout_times: str = db.Column(db.String)
     attendee_notes: str = db.Column(db.String)
     event_id: int = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    modified_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow,  onupdate=datetime.utcnow)
     complex_field_values: str = db.Column(db.JSON)
     user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
                            backref='attendees')
