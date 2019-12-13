@@ -24,6 +24,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
+from app.models.user_favourite_event import UserFavouriteEvent
 
 # System-wide
 ADMIN = 'admin'
