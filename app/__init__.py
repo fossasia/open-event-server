@@ -27,6 +27,7 @@ from healthcheck import HealthCheck
 from apscheduler.schedulers.background import BackgroundScheduler
 from elasticsearch_dsl.connections import connections
 from pytz import utc
+from sqlalchemy.exc import ProgrammingError
 
 import sqlalchemy as sa
 
@@ -41,7 +42,8 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \
-    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due
+    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due, \
+    delete_ticket_holders_no_order_id
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -271,6 +273,12 @@ scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minu
 scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
 scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
 scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
+with current_app.app_context():
+    try:
+        order_expiry_time = get_settings()['order_expiry_time']
+    except ProgrammingError:
+        order_expiry_time = 15
+scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=order_expiry_time)
 scheduler.start()
 
 

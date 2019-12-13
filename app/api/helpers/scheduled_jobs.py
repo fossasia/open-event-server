@@ -21,6 +21,7 @@ from app.models.speaker import Speaker
 from app.models.session import Session
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees, get_fee
+from app.models.ticket_holder import TicketHolder
 
 from app.settings import get_settings
 
@@ -153,6 +154,16 @@ def expire_pending_tickets():
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()
+
+
+def delete_ticket_holders_no_order_id():
+    from app import current_app as app
+    with app.app_context():
+        order_expiry_time = get_settings()['order_expiry_time']
+        db.session.query(TicketHolder).filter(TicketHolder.order_id == None,
+                                              TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
+                                              < datetime.datetime.utcnow()).delete(synchronize_session=False)
+
 
 
 def event_invoices_mark_due():
