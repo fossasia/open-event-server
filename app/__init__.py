@@ -18,6 +18,7 @@ from flask_script import Manager
 from flask_login import current_user
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
+from flask_limiter.util import get_ipaddr
 from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
@@ -56,7 +57,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-limiter = Limiter(app)
+limiter = Limiter(app, key_func=get_ipaddr)
 env.read_envfile()
 
 
