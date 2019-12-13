@@ -22,7 +22,6 @@ from app.models.role import Role
 from app.models.service import Service
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 

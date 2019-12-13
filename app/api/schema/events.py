@@ -10,7 +10,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 from app.models.event import Event
 from utils.common import use_defaults
 

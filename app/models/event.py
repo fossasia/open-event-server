@@ -24,8 +24,6 @@ from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee
 from app.models.ticket_fee import get_maximum_fee
 from app.models.ticket_holder import TicketHolder
-from app.models.role_invite import RoleInvite
-from app.models.faq import Faq
 
 
 def get_new_event_identifier(length=8):
