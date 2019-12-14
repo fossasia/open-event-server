@@ -110,10 +110,7 @@ def create_order():
                                                                                        deleted_at=None).all()
     ticket_ids_found = {ticket_information.id for ticket_information in ticket_list}
     tickets_not_found = ticket_ids - ticket_ids_found
-    if len(tickets_not_found) == 1:
-        return make_response(jsonify(status='Order Unsuccessful', error='Ticket with id {} was not found in Event {}.'
-                                     .format(tickets_not_found, data['event_id'])), 404)
-    elif len(tickets_not_found) > 1:
+    if tickets_not_found:
         return make_response(jsonify(status='Order Unsuccessful', error='Tickets with id {} were not found in Event {}.'
                                      .format(tickets_not_found, data['event_id'])), 404)
     for ticket_info in ticket_list:
