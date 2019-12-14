@@ -223,5 +223,5 @@ def calculate_order_amount(data):
             'ticket_fee': round(ticket_fee, 2),
             'sub_total': round(sub_total, 2)
         })
-    return jsonify(dict(tax_included=tax_included, total_amount=round(total_amount, 2), total_tax=round(total_tax, 2),
-                        total_discount=round(total_discount, 2), tickets=ticket_list))
+    return dict(tax_included=tax_included, total_amount=round(total_amount, 2), total_tax=round(total_tax, 2),
+                        total_discount=round(total_discount, 2), tickets=ticket_list)

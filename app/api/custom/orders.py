@@ -88,7 +88,7 @@ def resend_emails():
 @jwt_required
 def calculate_amount():
     data = request.get_json()
-    return calculate_order_amount(data)
+    return jsonify(calculate_order_amount(data))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
@@ -123,7 +123,7 @@ def create_order():
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
             attendee_list.append(attendee)
-    ticket_pricing = json.loads(calculate_order_amount(data).get_data().decode("utf-8"))
+    ticket_pricing = calculate_order_amount(data)
     if not has_access('is_coorganizer', event_id=data['event_id']):
         data['status'] = 'initializing'
     # create on site attendees
