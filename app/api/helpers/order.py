@@ -1,16 +1,17 @@
 import logging
 from datetime import timedelta, datetime, timezone
 
-from flask import render_template
+from flask import render_template, jsonify
 
 from app.settings import get_settings
-from app.api.helpers import ticketing
-from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count
+from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.ticket import Ticket
+from app.models.discount_code import DiscountCode
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 from app.models.order import OrderTicket
@@ -134,7 +135,16 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code):
+def calculate_order_amount(data):
+    from app.api.helpers.ticketing import TicketingManager
+    tickets = data['tickets']
+    discount_code = None
+    if 'discount-code' in data:
+        discount_code_id = data['discount-code']
+        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
+        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
+            return UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
+
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
@@ -213,5 +223,5 @@ def calculate_order_amount(tickets, discount_code):
             'ticket_fee': round(ticket_fee, 2),
             'sub_total': round(sub_total, 2)
         })
-    return dict(tax_included=tax_included, total_amount=round(total_amount, 2), total_tax=round(total_tax, 2),
-                total_discount=round(total_discount, 2), tickets=ticket_list)
+    return jsonify(dict(tax_included=tax_included, total_amount=round(total_amount, 2), total_tax=round(total_tax, 2),
+                        total_discount=round(total_discount, 2), tickets=ticket_list))

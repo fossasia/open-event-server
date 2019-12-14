@@ -14,11 +14,9 @@ from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, Not
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
-from app.api.helpers.ticketing import TicketingManager
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
-from app.models.discount_code import DiscountCode
 from app.models.order import Order
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
@@ -88,20 +86,9 @@ def resend_emails():
 
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 @jwt_required
-def calculate_amount(*args):
-    if not args:
-        data = request.get_json()
-    else:
-        data = json.loads(args[0])
-    tickets = data['tickets']
-    discount_code = None
-    if 'discount-code' in data:
-        discount_code_id = data['discount-code']
-        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
-        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
-            return UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
-
-    return jsonify(calculate_order_amount(tickets, discount_code))
+def calculate_amount():
+    data = request.get_json()
+    return calculate_order_amount(data)
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
@@ -139,13 +126,12 @@ def create_order():
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
             attendee_list.append(attendee)
-    ticket_pricing = calculate_amount(json.dumps(data))
+    ticket_pricing = json.loads(calculate_order_amount(data).get_data().decode("utf-8"))
     if not has_access('is_coorganizer', event_id=data['event_id']):
         data['status'] = 'initializing'
     # create on site attendees
     # check if order already exists for this attendee.
     # check for free tickets and verified user
-    ticket_pricing = json.loads(ticket_pricing.data)
     order = Order(amount=ticket_pricing['total_amount'], user_id=current_user.id, event_id=int(data['event_id']),
                   status=data['status'])
     db.session.add(order)
