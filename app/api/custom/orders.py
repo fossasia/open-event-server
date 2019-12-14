@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import current_user, jwt_required
 from flask_limiter.util import get_remote_address
@@ -18,6 +16,7 @@ from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
 from app.models.order import Order
+from app.models.discount_code import DiscountCode
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
@@ -84,18 +83,28 @@ def resend_emails():
         return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
 
 
+def calculate_order_amount_wrapper(data):
+    tickets = data['tickets']
+    discount_code = None
+    if 'discount-code' in data:
+        discount_code_id = data['discount-code']
+        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
+    return tickets, discount_code
+
+
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 @jwt_required
 def calculate_amount():
     data = request.get_json()
-    return jsonify(calculate_order_amount(data))
+    tickets, discount_code = calculate_order_amount_wrapper(data)
+    return jsonify(calculate_order_amount(tickets, discount_code))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
     data = request.get_json()
-    tickets = data['tickets']
+    tickets, discount_code = calculate_order_amount_wrapper(data)
     attendee = data['attendee']
     for attribute in attendee:
         attendee[attribute.replace('-', '_')] = attendee.pop(attribute)
@@ -123,7 +132,7 @@ def create_order():
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
             attendee_list.append(attendee)
-    ticket_pricing = calculate_order_amount(data)
+    ticket_pricing = calculate_order_amount(tickets, discount_code)
     if not has_access('is_coorganizer', event_id=data['event_id']):
         data['status'] = 'initializing'
     # create on site attendees
