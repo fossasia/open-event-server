@@ -137,6 +137,7 @@ def create_app():
     # development api
     with app.app_context():
         from app.api.admin_statistics_api.events import event_statistics
+        from app.api.helpers.errors import error_blueprint
         from app.api.auth import auth_routes
         from app.api.attendees import attendee_misc_routes
         from app.api.bootstrap import api_v1
@@ -177,6 +178,7 @@ def create_app():
         app.register_blueprint(ticket_blueprint)
         app.register_blueprint(order_blueprint)
         app.register_blueprint(event_blueprint)
+        app.register_blueprint(error_blueprint)
 
         add_engine_pidguard(db.engine)
 

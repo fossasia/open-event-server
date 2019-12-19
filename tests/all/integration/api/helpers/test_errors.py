@@ -3,7 +3,7 @@ import json
 
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.errors import ErrorResponse, ForbiddenError, NotFoundError, ServerError, \
-    UnprocessableEntityError, BadRequestError
+    UnprocessableEntityError, BadRequestError, RequestLimitError
 from tests.all.integration.setup_database import Setup
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask import make_response
@@ -46,6 +46,11 @@ class TestErrorsHelperValidation(OpenEventTestCase):
             # Bad Request Error
             bad_request_error = BadRequestError({'source': ''}, 'Request cannot be served')
             self.assertEqual(bad_request_error.status, 400)
+
+            # Request limit Error
+            request_limit_error = RequestLimitError({'source': ''},
+                                                    'Request limit exceeded')
+            self.assertEqual(request_limit_error.status, 429)
 
 
 if __name__ == '__main__':
