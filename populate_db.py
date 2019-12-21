@@ -1,4 +1,4 @@
-from app import current_app
+from app.instance import current_app
 from app.models import db
 from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 from envparse import env

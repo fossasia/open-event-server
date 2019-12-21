@@ -27,7 +27,7 @@ from app.settings import get_settings
 
 
 def send_after_event_mail():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(state='published', deleted_at=None).all()
         for event in events:
@@ -53,7 +53,7 @@ def send_after_event_mail():
 
 
 def change_session_state_on_event_completion():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         sessions_to_be_changed = Session.query.join(Event).filter(Session.state == 'pending')\
                                  .filter(Event.ends_at < datetime.datetime.now())
@@ -63,7 +63,7 @@ def change_session_state_on_event_completion():
 
 
 def send_event_fee_notification():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
@@ -121,7 +121,7 @@ def send_event_fee_notification():
 
 
 def send_event_fee_notification_followup():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'paid').all()
         for incomplete_invoice in incomplete_invoices:
@@ -148,7 +148,7 @@ def send_event_fee_notification_followup():
 
 
 def expire_pending_tickets():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         db.session.query(Order).filter(Order.status == 'pending',
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
@@ -167,7 +167,7 @@ def delete_ticket_holders_no_order_id():
 
 
 def event_invoices_mark_due():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         db.session.query(EventInvoice).filter(
             EventInvoice.status == 'upcoming',
@@ -178,7 +178,7 @@ def event_invoices_mark_due():
 
 
 def send_monthly_event_invoice():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
