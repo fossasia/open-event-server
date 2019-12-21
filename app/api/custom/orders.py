@@ -3,7 +3,6 @@ from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 
-from app import limiter
 from app.models import db
 from app.api.auth import return_file
 from app.api.helpers.db import safe_query
@@ -14,6 +13,7 @@ from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.permission_manager import has_access
+from app.extensions.limiter import limiter
 from app.models.discount_code import DiscountCode
 from app.models.order import Order
 
