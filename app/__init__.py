@@ -5,7 +5,6 @@ from envparse import env
 
 import sys
 from flask import Flask, json, make_response
-from flask_celeryext import FlaskCeleryExt
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -13,8 +12,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from app.settings import get_settings, get_setts
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
+from flask_migrate import Migrate
 from flask_login import current_user
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
@@ -45,9 +43,7 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.elastic_search import client
-from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
-from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.extensions import shell, limiter
 
@@ -90,8 +86,6 @@ def create_app():
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
     db.init_app(app)
-    _manager = Manager(app)
-    _manager.add_command('db', MigrateCommand)
 
     if app.config['CACHING']:
         cache.init_app(app, config={'CACHE_TYPE': 'simple'})
@@ -202,6 +196,7 @@ def create_app():
 
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
+        from app.views.elastic_cron_helpers import cron_rebuild_events_elasticsearch
         client.init_app(app)
         connections.add_connection('default', client.elasticsearch)
         with app.app_context():
@@ -211,10 +206,10 @@ def create_app():
                 pass
 
     app_created = True
-    return app, _manager, db, _jwt
+    return app
 
 
-current_app, manager, database, jwt = create_app()
+current_app = create_app()
 init_filters(app)
 
 
@@ -225,13 +220,6 @@ def track_user():
         current_user.update_lat()
 
 
-def make_celery(app=None):
-    app = app or create_app()[0]
-    celery.conf.update(app.config)
-    ext = FlaskCeleryExt(app)
-    return ext.celery
-
-
 # Health-check
 health = HealthCheck(current_app, "/health-check")
 health.add_check(health_check_celery)
@@ -240,6 +228,13 @@ with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
+
+# register celery tasks. removing them will cause the tasks to not function. so don't remove them
+# it is important to register them after celery is defined to resolve circular imports
+
+from .api.helpers import tasks
+
+celery = tasks.celery
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
@@ -252,18 +247,11 @@ def update_sent_state(sender=None, headers=None, **kwargs):
     backend.store_result(headers['id'], None, 'WAITING')
 
 
-# register celery tasks. removing them will cause the tasks to not function. so don't remove them
-# it is important to register them after celery is defined to resolve circular imports
-
-from .api.helpers import tasks
-
-# import helpers.tasks
-
-
 scheduler = BackgroundScheduler(timezone=utc)
 # scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 # scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
 if app.config['ENABLE_ELASTICSEARCH']:
+    from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
     scheduler.add_job(sync_events_elasticsearch, 'interval', minutes=60)
     scheduler.add_job(cron_rebuild_events_elasticsearch, 'cron', day=7)
 
