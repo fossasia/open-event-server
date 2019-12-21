@@ -1,6 +1,5 @@
 import unittest
 
-from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.xcal import XCalExporter
 from xml.etree.ElementTree import fromstring, tostring

@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch
 
 from tests.all.integration.utils import OpenEventTestCase
-from tests.all.integration.setup_database import Setup
 from app.api.helpers.storage import upload_local
 
 

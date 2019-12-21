@@ -17,7 +17,6 @@ from app.api.helpers.system_notifications import (
     get_session_accept_reject_notification_actions,
     get_invite_papers_notification_actions
 )
-from tests.all.integration.setup_database import Setup
 from app.models.notification import NotificationAction
 
 

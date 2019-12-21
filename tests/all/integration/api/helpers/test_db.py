@@ -8,7 +8,6 @@ from app.api.helpers.db import save_to_db, safe_query, get_or_create, get_count
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models import db
 from app.models.event import Event
-from tests.all.integration.setup_database import Setup
 
 
 class TestDBHelperValidation(OpenEventTestCase):

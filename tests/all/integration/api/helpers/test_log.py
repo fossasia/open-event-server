@@ -1,4 +1,3 @@
-from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.log import record_activity
 from app.models.activity import Activity

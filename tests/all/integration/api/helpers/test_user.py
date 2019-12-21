@@ -6,7 +6,6 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 
 from tests.all.integration.utils import OpenEventTestCase
-from tests.all.integration.setup_database import Setup
 
 
 class TestUserUtilitiesHelper(OpenEventTestCase):

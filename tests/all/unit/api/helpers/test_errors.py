@@ -1,5 +1,6 @@
 from unittest import TestCase
-from app.api.helpers.errors import ErrorResponse
+from app.api.helpers.errors import ErrorResponse, ForbiddenError, \
+    NotFoundError, ServerError, UnprocessableEntityError, BadRequestError
 
 
 class TestErrorDetails(TestCase):
@@ -14,3 +15,27 @@ class TestErrorDetails(TestCase):
                          'title': error_response.title,
                          'detail': error_response.detail}
         self.assertEqual(error_response.to_dict(), expected_dict)
+
+    def test_errors(self):
+        """Method to test the status code of all errors"""
+
+        # Forbidden Error
+        forbidden_error = ForbiddenError({'source': ''}, 'Super admin access is required')
+        self.assertEqual(forbidden_error.status, 403)
+
+        # Not Found Error
+        not_found_error = NotFoundError({'source': ''}, 'Object not found.')
+        self.assertEqual(not_found_error.status, 404)
+
+        # Server Error
+        server_error = ServerError({'source': ''}, 'Internal Server Error')
+        self.assertEqual(server_error.status, 500)
+
+        # UnprocessableEntity Error
+        unprocessable_entity_error = UnprocessableEntityError({'source': ''},
+            'Entity cannot be processed')
+        self.assertEqual(unprocessable_entity_error.status, 422)
+
+        # Bad Request Error
+        bad_request_error = BadRequestError({'source': ''}, 'Request cannot be served')
+        self.assertEqual(bad_request_error.status, 400)
