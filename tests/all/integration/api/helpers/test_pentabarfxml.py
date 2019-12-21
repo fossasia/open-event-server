@@ -5,7 +5,6 @@ from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.pentabarfxml import PentabarfExporter
 from xml.etree.ElementTree import fromstring, tostring
-from app import current_app as app
 from app.api.helpers.db import save_to_db
 
 from app.models import db
@@ -20,7 +19,7 @@ class TestPentabarfXML(OpenEventTestCase):
 
     def test_export(self):
         """Test to check event contents in pentabarfxml format"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_event = EventFactoryBasic()
             save_to_db(test_event)
             pentabarf_export = PentabarfExporter()
@@ -31,7 +30,7 @@ class TestPentabarfXML(OpenEventTestCase):
 
     def test_export_with_none_ends(self):
         """Test to check event with session with none ends in pentabarfxml format"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             session = SessionFactory(title='Cool Session', ends_at=None)
             db.session.commit()
             pentabarf_export = PentabarfExporter()
@@ -41,7 +40,7 @@ class TestPentabarfXML(OpenEventTestCase):
 
     def test_export_with_none_starts(self):
         """Test to check event with session with none starts in pentabarfxml format"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             session = SessionFactory(title='Cool Session', starts_at=None, ends_at=None)
             db.session.commit()
             pentabarf_export = PentabarfExporter()
@@ -51,7 +50,7 @@ class TestPentabarfXML(OpenEventTestCase):
 
     def test_export_with_multiple_sessions(self):
         """Test to check event with sessions in pentabarfxml format"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             keynote = SessionFactory(
                 title='Keynote',
                 starts_at=datetime(2019, 10, 15, 10, 25, 46),

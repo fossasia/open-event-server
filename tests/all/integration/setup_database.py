@@ -23,7 +23,7 @@ class Setup(object):
             db.create_all()
             set_settings(secret='super secret key', app_name='Open Event', app_environment=Environment.TESTING)
 
-        return app.test_client()
+        return app
 
     @staticmethod
     def drop_db():

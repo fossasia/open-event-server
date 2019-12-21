@@ -2,7 +2,7 @@ import unittest
 from datetime import timedelta, datetime, timezone
 
 from app.settings import get_settings
-from app import current_app as app, db
+from app.models import db
 from app.api.helpers.order import set_expiry_for_order, delete_related_attendees_for_order
 import app.factories.common as common
 from app.factories.attendee import AttendeeFactoryBase, AttendeeFactory
@@ -21,7 +21,7 @@ class TestOrderUtilities(OpenEventTestCase):
     def test_should_expire_outdated_order(self):
         """Method to test expiration of outdated orders"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             obj = OrderFactory()
             order_expiry_time = get_settings()['order_expiry_time']
             event = EventFactoryBasic()
@@ -34,7 +34,7 @@ class TestOrderUtilities(OpenEventTestCase):
     def test_should_not_expire_valid_orders(self):
         """Method to test to not mark valid orders as expired"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             obj = OrderFactory()
             event = EventFactoryBasic()
             obj.event = event
@@ -44,7 +44,7 @@ class TestOrderUtilities(OpenEventTestCase):
     def test_should_delete_related_attendees(self):
         """Method to test to delete related attendees of an event"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             attendee = AttendeeFactory()
             save_to_db(attendee)
 
@@ -59,7 +59,7 @@ class TestOrderUtilities(OpenEventTestCase):
     def test_count_sold_and_reserved_tickets(self):
         """Method to test the count query of sold tickets"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             ticket = TicketFactory()
 
             completed_order = OrderFactory(status='completed')

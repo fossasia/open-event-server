@@ -1,6 +1,5 @@
 import unittest
 
-from app import current_app as app
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
@@ -67,7 +66,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         Discount Code Validate Amount Value - Tests if function runs without an exception
         :return:
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             ticket = TicketFactory()
             ticket.price = 100
             save_to_db(ticket)
@@ -88,7 +87,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         Discount Code Validate Amount Value - Tests if exception is raised when discount value is gt ticket price
         :return:
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             ticket = TicketFactory()
             ticket.price = 100
             save_to_db(ticket)
@@ -110,7 +109,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         Discount Code Validate Amount Value - Tests exception when discount code is created for free ticket
         :return:
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             ticket = TicketFactory()
             ticket.price = 0
             save_to_db(ticket)
@@ -132,7 +131,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         Discount Code Validate Quantity - Tests if validation works on values stored in db and not given in 'data'
         :return:
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             schema = DiscountCodeSchemaTicket()
             obj = DiscountCodeFactory()
             save_to_db(obj)

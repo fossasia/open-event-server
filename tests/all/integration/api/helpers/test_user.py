@@ -1,5 +1,4 @@
 import unittest
-from app import current_app as app
 from tests.all.integration.auth_helper import create_user
 from app.api.helpers.user import modify_email_for_user_to_be_deleted, \
      modify_email_for_user_to_be_restored
@@ -15,7 +14,7 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
     def test_modify_email_for_user_to_be_deleted(self):
         """Method to test modification of email for user to be deleted"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             user = create_user(email="test_user@gmail.com", password="testpass")
             save_to_db(user)
             modified_user = modify_email_for_user_to_be_deleted(user)
@@ -24,7 +23,7 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
     def test_modify_email_for_user_to_be_restored(self):
         """Method to test modification of email for user to be restored"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             user = create_user(email="test_user@gmail.com.deleted", password="testpass")
             save_to_db(user)
             modified_user = modify_email_for_user_to_be_restored(user)

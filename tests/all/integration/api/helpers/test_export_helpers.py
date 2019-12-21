@@ -3,7 +3,6 @@ import unittest
 from tests.all.integration.utils import OpenEventTestCase
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.setup_database import Setup
-from app import current_app as app
 from app.api.helpers.export_helpers import create_export_job
 from app.factories.export_job import ExportJobFactory
 from app.factories.event import EventFactoryBasic
@@ -18,7 +17,7 @@ class TestExportJobHelpers(OpenEventTestCase):
     def test_create_export_job(self):
         """Method to test export job before creation"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_related_event = EventFactoryBasic()
             save_to_db(test_related_event)
             test_export_job = ExportJobFactory()

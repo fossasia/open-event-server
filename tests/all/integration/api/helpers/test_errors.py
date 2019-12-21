@@ -7,7 +7,6 @@ from app.api.helpers.errors import ErrorResponse, ForbiddenError, NotFoundError,
 from tests.all.integration.setup_database import Setup
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask import make_response
-from app import current_app as app
 
 
 class TestErrorsHelperValidation(OpenEventTestCase):
@@ -15,7 +14,7 @@ class TestErrorsHelperValidation(OpenEventTestCase):
     def test_error_response_base_respond(self):
         """Method to test base error response methods"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             base_error_response = ErrorResponse(source="test source", detail="test detail")
             json_object = json.dumps(jsonapi_errors([base_error_response.to_dict()]))
             self.assertNotEqual(base_error_response.respond(), make_response(json_object, 200,
@@ -25,7 +24,7 @@ class TestErrorsHelperValidation(OpenEventTestCase):
     def test_errors(self):
         """Method to test the status code of all errors"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             # Forbidden Error
             forbidden_error = ForbiddenError({'source': ''}, 'Super admin access is required')
             self.assertEqual(forbidden_error.status, 403)
