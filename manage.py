@@ -8,7 +8,7 @@ from sqlalchemy import or_
 
 from app.api.helpers.db import save_to_db
 from app.models.event import Event, get_new_event_identifier
-from app import current_app as app
+from app.instance import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
 from app.models.module import Module

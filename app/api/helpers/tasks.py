@@ -12,7 +12,7 @@ from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName, From,
     FileType, Disposition)
 
-from app import create_app
+from app.instance import create_app
 from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker

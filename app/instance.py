@@ -33,7 +33,8 @@ from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
-from app.views import BlueprintsManager
+from app.views.blueprints import BlueprintsManager
+from app.api import routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \

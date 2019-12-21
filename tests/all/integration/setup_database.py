@@ -3,7 +3,7 @@ import sys
 
 import logging
 
-from app import current_app as app
+from app.instance import current_app as app
 from app.api.helpers.tasks import celery
 from app.models import db
 from app.models.setting import Environment
