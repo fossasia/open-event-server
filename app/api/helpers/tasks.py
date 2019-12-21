@@ -7,7 +7,6 @@ import uuid
 from flask import current_app, render_template
 from flask_celeryext import RequestContextTask
 from marrow.mailer import Mailer, Message
-from app import get_settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName, From,
@@ -18,6 +17,7 @@ from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.api.helpers.mail import check_smtp_config
+from app.settings import get_settings
 
 """
 Define all API v2 celery tasks here

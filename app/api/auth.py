@@ -16,7 +16,6 @@ from flask_jwt_extended import (
 from healthcheck import EnvironmentDump
 from sqlalchemy.orm.exc import NoResultFound
 
-from app import get_settings
 from app import limiter
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.auth import AuthManager, blacklist_token
@@ -33,6 +32,7 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.settings import get_settings
 
 
 logger = logging.getLogger(__name__)
