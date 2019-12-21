@@ -1,22 +1,26 @@
+import logging
 import os
+
+from flask_script import Manager
+from flask_migrate import stamp, MigrateCommand
+from sqlalchemy.engine import reflection
+from sqlalchemy import or_
 
 from app.api.helpers.db import save_to_db
 from app.models.event import Event, get_new_event_identifier
-from app import manager
 from app import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
 from app.models.module import Module
-from populate_db import populate
-from flask_migrate import stamp
-from sqlalchemy.engine import reflection
-from sqlalchemy import or_
-from tests.all.integration.auth_helper import create_super_admin
 from app.api.helpers.tasks import resize_event_images_task
 from app.api.helpers.tasks import resize_speaker_images_task
-import logging
+from populate_db import populate
+from tests.all.integration.auth_helper import create_super_admin
 
 logger = logging.getLogger(__name__)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 
 @manager.command
