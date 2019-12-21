@@ -1,4 +1,4 @@
 -r dev.txt
 
-coverage~=4.5
+coverage~=5.0
 dredd_hooks~=0.2
