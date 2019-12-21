@@ -17,8 +17,6 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_login import current_user
 from flask_jwt_extended import JWTManager
-from flask_limiter import Limiter
-from flask_limiter.util import get_ipaddr
 from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
@@ -51,7 +49,7 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
-from app.extensions import shell
+from app.extensions import shell, limiter
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -59,7 +57,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-limiter = Limiter(app, key_func=get_ipaddr)
 env.read_envfile()
 
 
@@ -199,7 +196,9 @@ def create_app():
     # redis
     redis_store.init_app(app)
 
+    # Initialize Extensions
     shell.init_app(app)
+    limiter.init_app(app)
 
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
