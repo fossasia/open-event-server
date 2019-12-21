@@ -100,7 +100,7 @@ class UserSchema(UserSchemaPublic):
         type_='feedback')
     event_invoice = Relationship(
         attribute='event_invoice',
-        self_view='v1.user_event_invoices',
+        self_view='v1.user_event_invoice',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_invoice_list',
         related_view_kwargs={'user_id': '<id>'},
