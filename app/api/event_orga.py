@@ -1,9 +1,9 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceRelationship
 
-from app import db
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.schema.events_orga import EventOrgaSchema
+from app.models import db
 from app.models.event import Event
 from app.models.event_orga import EventOrgaModel
 
