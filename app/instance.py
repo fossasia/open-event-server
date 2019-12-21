@@ -5,6 +5,7 @@ from envparse import env
 
 import sys
 from flask import Flask, json, make_response
+from werkzeug.exceptions import HTTPException
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -261,49 +262,13 @@ def internal_server_error(error):
                          {'Content-Type': 'application/vnd.api+json'})
 
 
-@app.errorhandler(422)
-def unprocessable_entity_handler(error):
+@app.errorhandler(HTTPException)
+def error_handler(error):
     return make_response(json.dumps({
-            'status': 422,
-            'title': 'Unprocessable Entity'
+            'status': error.code,
+            'title': error.name
         }),
-        422,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
-
-
-@app.errorhandler(400)
-def badrequest_handler(error):
-    return make_response(json.dumps({
-            'status': 400,
-            'title': 'Bad Request'
-        }),
-        400,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
-
-
-@app.errorhandler(403)
-def forbidden_error_handler(error):
-    return make_response(json.dumps({
-            'status': 403,
-            'title': 'Access Forbidden'
-        }),
-        403,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
-
-
-@app.errorhandler(404)
-def notfound_error_handler(error):
-    return make_response(json.dumps({
-            'status': 404,
-            'title': 'Not Found'
-        }),
-        404,
+        error.code,
         {
             'Content-Type': 'application/vnd.api+json'
         })

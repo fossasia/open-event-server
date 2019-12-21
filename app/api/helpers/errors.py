@@ -42,8 +42,8 @@ class ErrorResponse:
                 'title': self.title,
                 'detail': self.detail}
 
-
-class ForbiddenError(ErrorResponse):
+                
+class ForbiddenError(ErrorResponse):        
     """
     Default class for 403 Error
     """
