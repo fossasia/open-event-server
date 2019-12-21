@@ -1,6 +1,5 @@
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
-from tests.all.integration.setup_database import Setup
 from app.api.helpers.csv_jobs_util import *
 from app.factories.attendee import AttendeeFactory
 from app.factories.order import OrderFactory

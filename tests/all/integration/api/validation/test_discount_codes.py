@@ -3,63 +3,11 @@ import unittest
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
-from app.api.helpers.db import save_to_db
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.ticket import TicketFactory
-from tests.all.integration.setup_database import Setup
 
 
 class TestDiscountCodeValidation(OpenEventTestCase):
-
-    def test_quantity_pass(self):
-        """
-        Discount Code Validate Quantity - Tests if the function runs without an exception
-        :return:
-        """
-        schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 20,
-            'tickets_number': 30
-        }
-        DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
-
-    def test_quantity_min_gt_max(self):
-        """
-        Discount Code Validate Quantity - Tests if exception is raised when min_quantity greater than max
-        :return:
-        """
-        schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 20,
-            'max_quantity': 10,
-            'tickets_number': 30
-        }
-        with self.assertRaises(UnprocessableEntity):
-            DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
-
-    def test_quantity_max_gt_tickets_number(self):
-        """
-        Discount Code Validate Quantity - Tests if exception is raised when max_quantity greater than ticket_number
-        :return:
-        """
-        schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 30,
-            'tickets_number': 20
-        }
-        with self.assertRaises(UnprocessableEntity):
-            DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
     def test_amount_lte_ticket_price(self):
         """
@@ -67,9 +15,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         :return:
         """
         with self.app.test_request_context():
-            ticket = TicketFactory()
-            ticket.price = 100
-            save_to_db(ticket)
+            TicketFactory(price=100)
 
             schema = DiscountCodeSchemaTicket()
             original_data = {
@@ -88,9 +34,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         :return:
         """
         with self.app.test_request_context():
-            ticket = TicketFactory()
-            ticket.price = 100
-            save_to_db(ticket)
+            TicketFactory(price=100)
 
             schema = DiscountCodeSchemaTicket()
             original_data = {
@@ -110,9 +54,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         :return:
         """
         with self.app.test_request_context():
-            ticket = TicketFactory()
-            ticket.price = 0
-            save_to_db(ticket)
+            TicketFactory(price=0)
 
             schema = DiscountCodeSchemaTicket()
             original_data = {
@@ -133,8 +75,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         """
         with self.app.test_request_context():
             schema = DiscountCodeSchemaTicket()
-            obj = DiscountCodeFactory()
-            save_to_db(obj)
+            DiscountCodeFactory()
 
             original_data = {
                 'data': {

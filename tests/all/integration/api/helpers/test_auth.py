@@ -1,7 +1,6 @@
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.auth import AuthManager
-from tests.all.integration.setup_database import Setup
 from app.models import db
 from app.models.user import User
 

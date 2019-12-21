@@ -9,7 +9,6 @@ from flask import Request, request, jsonify
 
 from app.api.helpers.files import create_save_resized_image, create_save_image_sizes
 from app.api.helpers.files import uploaded_image, uploaded_file
-from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.utilities import image_link
 
