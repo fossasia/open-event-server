@@ -1,6 +1,5 @@
 import unittest
 
-from app import current_app as app
 from app.api.helpers.filters import json_to_rest_filter_list
 from tests.all.integration.utils import OpenEventTestCase
 from tests.all.integration.setup_database import Setup
@@ -15,7 +14,7 @@ class TestFiltersHelperValidation(OpenEventTestCase):
         Method to test that a json string is converted to a rest filter object
         list.
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             json_string = """
             [
                 {

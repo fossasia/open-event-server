@@ -1,6 +1,5 @@
 import unittest
 
-from app import current_app as app
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.access_codes import AccessCodeSchema
@@ -97,7 +96,7 @@ class TestAccessCodeValidation(OpenEventTestCase):
         Acces Code Validate Quantity - Tests if validation works on values stored in db and not given in 'data'
         :return:
         """
-        with app.test_request_context():
+        with self.app.test_request_context():
             schema = AccessCodeSchema()
             obj = AccessCodeFactory()
             save_to_db(obj)
