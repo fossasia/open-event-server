@@ -51,7 +51,11 @@ services:
   celery:
     <<: *defaults
     container_name: opev-celery
-    command: sh ./scripts/container_start.sh run celery
+    environment:
+      <<: *environment-vars
+      DEPLOYMENT: celery
+      C_FORCE_ROOT: "true"
+    command: run celery
 
 volumes:
     pg:
