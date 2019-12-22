@@ -13,7 +13,6 @@ from flask_jwt_extended import (
     current_user, create_access_token,
     create_refresh_token, set_refresh_cookies,
     get_jwt_identity)
-from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -289,7 +288,7 @@ def resend_verification_email():
     '3/hour', key_func=lambda: request.json['data']['email'], error_message='Limit for this action exceeded'
 )
 @limiter.limit(
-    '1/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+    '1/minute', error_message='Limit for this action exceeded'
 )
 def reset_password_post():
     try:

@@ -22,7 +22,7 @@ ticket_tags_table = db.Table('ticket_tagging', db.Model.metadata,
 
 class Ticket(SoftDeletionModel):
     __tablename__ = 'tickets'
-    __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
+    __table_args__ = (db.UniqueConstraint('name', 'event_id', 'deleted_at', name='name_event_deleted_at_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
