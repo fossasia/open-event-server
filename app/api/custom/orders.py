@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import current_user, jwt_required
-from flask_limiter.util import get_remote_address
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -50,7 +49,7 @@ def ticket_attendee_authorized(order_identifier):
     '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
 )
 @limiter.limit(
-    '60/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+    '60/minute', error_message='Limit for this action exceeded'
 )
 def resend_emails():
     """
