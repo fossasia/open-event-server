@@ -291,7 +291,7 @@ def internal_server_error(error):
 def ratelimit_handler(err):
     return make_response(
             jsonify(error="ratelimit exceeded %s" % err.description)
-            ,429
+            , 429
     )
 
 
