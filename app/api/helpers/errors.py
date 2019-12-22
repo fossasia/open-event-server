@@ -1,9 +1,8 @@
 import json
 
-from flask import make_response, Blueprint
+from flask import make_response
 from flask_rest_jsonapi.errors import jsonapi_errors
 
-error_blueprint = Blueprint('errors', __name__)
 
 class ErrorResponse:
     """
@@ -16,7 +15,6 @@ class ErrorResponse:
 
     def __init__(self, source, detail, title=None, status=None):
         """Initialize a jsonapi ErrorResponse Object
-
         :param dict source: the source of the error
         :param str detail: the detail of the error
         """
@@ -79,16 +77,3 @@ class BadRequestError(ErrorResponse):
     """
     status = 400
     title = 'Bad Request'
-
-
-class RequestLimitError(ErrorResponse):
-    """
-    Default class for 429 Error
-    """
-    status = 429
-    title = 'Request Limit Exceeded'
-
-
-@error_blueprint.app_errorhandler(429)
-def handle_429(error):
-    raise RequestLimitError({'source': ''}, error.description).respond()
