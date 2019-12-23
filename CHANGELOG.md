@@ -1,5 +1,15 @@
 ## Changelog
 
+##### v1.10.0 (2019-12-22):
+
+- Fix event and speaker image resizing, and add management command to resize event and speaker images which remained to be resized.  
+Run `python manage.py fix_event_and_speaker_images` to resize images which weren't resized due to the bug
+- Optimize link generation of relationships with up to 10X speedup
+- Add scheduled job to automatically remove orphan ticket holders with no order ID
+- Add created and modified times in ticket holder
+- Allow new tickets to have same name as deleted tickets
+- Fix PayTM payment gateway
+
 ##### v1.9.0 (2019-11-28):
 
 - Fix billing info requirements from attendees
