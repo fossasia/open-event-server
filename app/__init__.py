@@ -4,7 +4,7 @@ import os.path
 from envparse import env
 
 import sys
-from flask import Flask, json, make_response, jsonify
+from flask import Flask, json, make_response
 from flask_celeryext import FlaskCeleryExt
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -293,7 +293,7 @@ def internal_server_error(error):
 def ratelimit_handler(error):
     exc = JsonApiException({'pointer': ''}, str(error))
     return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
-                        {'Content-Type': 'application/vnd.api+json'})
+                         {'Content-Type': 'application/vnd.api+json'})
 
 
 if __name__ == '__main__':
