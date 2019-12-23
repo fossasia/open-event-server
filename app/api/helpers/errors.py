@@ -15,6 +15,7 @@ class ErrorResponse:
 
     def __init__(self, source, detail, title=None, status=None):
         """Initialize a jsonapi ErrorResponse Object
+        
         :param dict source: the source of the error
         :param str detail: the detail of the error
         """

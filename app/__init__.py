@@ -290,11 +290,10 @@ def internal_server_error(error):
 
 
 @app.errorhandler(429)
-def ratelimit_handler(err):
-    return make_response(
-            jsonify(error="ratelimit exceeded %s" % err.description)
-            , 429
-    )
+def ratelimit_handler(error):
+    exc = JsonApiException({'pointer': ''}, str(error))
+    return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
+                        {'Content-Type': 'application/vnd.api+json'})
 
 
 if __name__ == '__main__':
