@@ -208,7 +208,7 @@ class OrdersListPost(ResourceList):
             send_notif_to_attendees(order, current_user.id)
 
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-                order.completed_at = datetime.utcnow()
+                order.completed_at = pytz.utc.localize(datetime.utcnow())
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
@@ -421,7 +421,7 @@ class OrderDetail(ResourceDetail):
             send_notif_to_attendees(order, current_user.id)
 
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-                order.completed_at = datetime.utcnow()
+                order.completed_at = pytz.utc.localize(datetime.utcnow())
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
