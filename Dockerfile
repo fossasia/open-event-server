@@ -26,4 +26,4 @@ WORKDIR /data/app
 ADD . .
 
 EXPOSE 8080
-CMD ["sh", "scripts/container_start.sh"]
+ENTRYPOINT ["sh", "scripts/container_start.sh"]
