@@ -5,6 +5,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+import requests
 
 import PIL
 from PIL import Image
@@ -77,7 +78,7 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     if not image_file:
         return None
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
-    data = urllib.request.urlopen(image_file).read()
+    data = requests.get(image_file).content
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
@@ -129,7 +130,14 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     try:
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
-        image_sizes = ImageSizes(image_sizes_type, 1300, 500, True, 100, 75, 30, True, 100, 500, 200, True, 100)
+        image_sizes = ImageSizes(image_sizes_type, full_width=1300,
+                                 full_height=500, full_aspect=True, full_quality=80,
+                                 icon_width=75, icon_height=30, icon_aspect=True,
+                                 icon_quality=80, thumbnail_width=500, thumbnail_height=200,
+                                 thumbnail_aspect=True, thumbnail_quality=80, logo_width=500,
+                                 logo_height=200, icon_size_width_height=35, icon_size_quality=80,
+                                 small_size_width_height=50, small_size_quality=80,
+                                 thumbnail_size_width_height=500)
 
     # Get an unique identifier from uuid if not provided
     if unique_identifier is None:

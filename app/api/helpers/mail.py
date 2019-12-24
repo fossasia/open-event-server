@@ -204,7 +204,7 @@ def send_user_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_after_event(email, event_name, upcoming_events):
+def send_email_after_event(email, event_name, frontend_url):
     """email for role invite"""
     send_email(
         to=email,
@@ -215,7 +215,7 @@ def send_email_after_event(email, event_name, upcoming_events):
         html=MAILS[AFTER_EVENT]['message'].format(
             email=email,
             event_name=event_name,
-            upcoming_events=upcoming_events
+            url=frontend_url
         )
     )
 
@@ -363,18 +363,21 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
 
 
 def send_order_cancel_email(order):
+    cancel_msg = ''
+    if order.cancel_note:
+        cancel_msg = u"<br/>Message from the organizer: {cancel_note}".format(cancel_note=order.cancel_note)
+
     send_email(
         to=order.user.email,
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(
             event_name=order.event.name,
             invoice_id=order.invoice_number,
-            frontend_url=get_settings()['frontend_url']
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
-            order_url=make_frontend_url('/orders/{identifier}'.format(identifier=order.identifier)),
-            cancel_note=order.cancel_note,
-            frontend_url=get_settings()['frontend_url']
+            frontend_url=get_settings()['frontend_url'],
+            cancel_msg=cancel_msg,
+            app_name=get_settings()['app_name']
         )
     )

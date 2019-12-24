@@ -21,6 +21,7 @@ from app.models.speaker import Speaker
 from app.models.session import Session
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees, get_fee
+from app.models.ticket_holder import TicketHolder
 
 from app.settings import get_settings
 
@@ -29,13 +30,6 @@ def send_after_event_mail():
     from app import current_app as app
     with app.app_context():
         events = Event.query.filter_by(state='published', deleted_at=None).all()
-        upcoming_events = get_upcoming_events()
-        upcoming_event_links = "<ul>"
-        for upcoming_event in upcoming_events:
-            frontend_url = get_settings()['frontend_url']
-            upcoming_event_links += "<li><a href='{}/events/{}'>{}</a></li>" \
-                .format(frontend_url, upcoming_event.id, upcoming_event.name)
-        upcoming_event_links += "</ul>"
         for event in events:
             organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
             speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
@@ -44,16 +38,17 @@ def send_after_event_mail():
             time_difference = current_time - event.ends_at
             time_difference_minutes = (time_difference.days * 24 * 60) + \
                 (time_difference.seconds / 60)
+            frontend_url = get_settings()['frontend_url']
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
                     if not speaker.is_email_overridden:
-                        send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
+                        send_email_after_event(speaker.user.email, event.name, frontend_url)
                         send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
-                    send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
+                    send_email_after_event(organizer.user.email, event.name, frontend_url)
                     send_notif_after_event(organizer.user, event.name)
                 if owner:
-                    send_email_after_event(owner.user.email, event.name, upcoming_event_links)
+                    send_email_after_event(owner.user.email, event.name, frontend_url)
                     send_notif_after_event(owner.user, event.name)
 
 
@@ -158,6 +153,16 @@ def expire_pending_tickets():
         db.session.query(Order).filter(Order.status == 'pending',
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
+        db.session.commit()
+
+
+def delete_ticket_holders_no_order_id():
+    from app import current_app as app
+    with app.app_context():
+        order_expiry_time = get_settings()['order_expiry_time']
+        TicketHolder.query.filter(TicketHolder.order_id == None, TicketHolder.deleted_at.is_(None),
+                                  TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
+                                  < datetime.datetime.utcnow()).delete(synchronize_session=False)
         db.session.commit()
 
 

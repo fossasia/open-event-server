@@ -18,6 +18,7 @@ from flask_script import Manager
 from flask_login import current_user
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
+from flask_limiter.util import get_ipaddr
 from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
@@ -40,7 +41,8 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \
-    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due
+    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due, \
+    delete_ticket_holders_no_order_id
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -49,6 +51,7 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
+from app.extensions import shell
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +59,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-limiter = Limiter(app)
+limiter = Limiter(app, key_func=get_ipaddr)
 env.read_envfile()
 
 
@@ -146,11 +149,14 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
-        from app.api.auth import ticket_blueprint, authorised_blueprint
+        from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
+        from app.api.custom.orders import ticket_blueprint
+        from app.api.custom.orders import order_blueprint
+        from app.api.custom.invoices import event_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -164,12 +170,14 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
-        app.register_blueprint(ticket_blueprint)
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
         app.register_blueprint(admin_misc_routes)
         app.register_blueprint(info_route)
+        app.register_blueprint(ticket_blueprint)
+        app.register_blueprint(order_blueprint)
+        app.register_blueprint(event_blueprint)
 
         add_engine_pidguard(db.engine)
 
@@ -190,6 +198,8 @@ def create_app():
 
     # redis
     redis_store.init_app(app)
+
+    shell.init_app(app)
 
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
@@ -265,6 +275,7 @@ scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minu
 scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
 scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
 scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
+scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=5)
 scheduler.start()
 
 

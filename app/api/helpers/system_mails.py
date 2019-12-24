@@ -63,8 +63,7 @@ MAILS = {
         'message': (
             u"Hi {email},<br/>" +
             u"Thank You for participating in our event. We hope you enjoyed it. "
-            u"Please check the list of more upcoming events. <br />" +
-            u"Here are the upcoming events: {upcoming_events}. Get ready!! "
+            u"Please check out other upcoming events around you on {url} <br />"
         ),
         'sent_at': '1 day after the event'
     },
@@ -187,11 +186,13 @@ MAILS = {
         'recipient': 'User',
         'subject': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Hi,Your order for {event_name} has been cancelled has been cancelled by the organizer"
-            u"<br/>Please contact the organizer for more info" +
-            u"<br/>Message from the organizer: {cancel_note}"
-            u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at {frontend_url} </em>"
+            u"Hello,"
+            u"<br/>your order for {event_name} has been cancelled by the organizer."
+            u"<br/>Please contact the organizer for more info." +
+            u"{cancel_msg}"
+            u"<br/>To manage orders please login to {frontend_url} and visit \"My Tickets\"."
+            u"<br/>Best regards,"
+            u"<br/>{app_name} Team"
         )
     },
     EVENT_EXPORTED: {
