@@ -1,5 +1,5 @@
 #!/bin/sh
-export DEPLOYMENT=${DEPLOYMENT:-api}
+export DEPLOYMENT=${1:-api}
 
 echo "[LOG] Deploying ${DEPLOYMENT}"
 echo "[LOG] Using database: ${DATABASE_URL}"
@@ -18,6 +18,7 @@ then
     echo "[LOG] Starting gunicorn on port ${PORT}"
     gunicorn -b 0.0.0.0:${PORT} app:app -w $GUNICORN_WORKERS --enable-stdio-inheritance --log-level $GUNICORN_LOG_LEVEL --proxy-protocol --preload $GUNICORN_EXTRA_ARGS
 fi
+
 if [ "$DEPLOYMENT" == "celery" ]
 then
     echo "[LOG] Starting celery worker"
