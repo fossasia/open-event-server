@@ -25,10 +25,5 @@ RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file li
 WORKDIR /data/app
 ADD . .
 
-RUN adduser -S open_event_user
-RUN chown -R open_event_user /data/app
-# Change to non-root privilege
-USER open_event_user
-
 EXPOSE 8080
 ENTRYPOINT ["sh", "scripts/container_start.sh"]
