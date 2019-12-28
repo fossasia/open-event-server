@@ -7,14 +7,11 @@ from app.factories.order import OrderFactory
 from app.models.ticket_holder import db, TicketHolder
 
 
-class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class AttendeeFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = TicketHolder
         sqlalchemy_session = db.session
 
-    event = factory.RelatedFactory(EventFactoryBasic)
-    ticket = factory.RelatedFactory(TicketFactory)
-    order = factory.RelatedFactory(OrderFactory)
     firstname = common.string_
     lastname = common.string_
     email = common.email_
@@ -29,3 +26,9 @@ class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
     order_id = None
     created_at = common.date_
     modified_at = common.date_
+
+
+class AttendeeFactory(AttendeeFactoryBase):
+    event = factory.RelatedFactory(EventFactoryBasic)
+    ticket = factory.RelatedFactory(TicketFactory)
+    order = factory.RelatedFactory(OrderFactory)
