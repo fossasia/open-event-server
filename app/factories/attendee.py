@@ -22,7 +22,7 @@ class AttendeeFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     is_checked_in = True
     pdf_url = common.url_
     event_id = 1
-    ticket_id = None
+    ticket_id = 1
     order_id = None
     created_at = common.date_
     modified_at = common.date_
