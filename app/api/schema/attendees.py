@@ -50,7 +50,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     gender = fields.Str(allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
-    ticket_id = fields.Str(required=True)
+    ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
     device_name_checkin = fields.Str(allow_none=True)
     checkin_times = fields.Str(allow_none=True)
