@@ -47,8 +47,9 @@ def export_attendees_csv(attendees):
 
 def export_sessions_csv(sessions):
     headers = ['Session Title', 'Session Speakers',
-               'Session Track', 'Session Abstract', 'Created At', 'Email Sent',
-               'Level', 'Status', 'Session Type', 'Talk Length']
+               'Session Track', 'Session Abstract Short', 'Session Abstract Long', 'Comment',
+               'Created At', 'Email Sent', 'Level', 'Status', 'Session Type', 'Talk Length',
+               'Language', 'Slides', 'Audio', 'Video']
     rows = [headers]
     for session in sessions:
         if not session.deleted_at:
@@ -63,20 +64,28 @@ def export_sessions_csv(sessions):
                 column.append('')
             column.append(session.track.name if session.track and session.track.name else '')
             column.append(strip_tags(session.short_abstract) if session.short_abstract else '')
+            column.append(strip_tags(session.long_abstract) if session.long_abstract else '')
+            column.append(strip_tags(session.comments) if session.comments else '')
             column.append(session.created_at if session.created_at else '')
             column.append('Yes' if session.is_mail_sent else 'No')
             column.append(session.level)
             column.append(session.state)
-            column.append(session.session_type if session.session_type else '')
-            column.append(len(session.long_abstract) if session.long_abstract else None)
+            column.append(session.session_type.name if session.session_type and session.session_type.name else '')
+            column.append(session.session_type.length if session.session_type and session.session_type.length else '')
+            column.append(session.language if session.language else '')
+            column.append(session.slides_url if session.slides_url else '')
+            column.append(session.audio_url if session.audio_url else '')
+            column.append(session.video_url if session.video_url else '')
             rows.append(column)
 
     return rows
 
 
 def export_speakers_csv(speakers):
-    headers = ['Speaker Name', 'Speaker Email', 'Speaker Session(s)',
-               'Speaker Mobile', 'Speaker Bio', 'Speaker Organisation', 'Speaker Position']
+    headers = ['Speaker Name', 'Speaker Email', 'Speaker Session(s)', 'Speaker Mobile',
+               'Speaker Bio', 'Speaker Organisation', 'Speaker Position', 'Speaker Experience',
+               'Speaker Sponsorship Required', 'Speaker City', 'Speaker Country',
+               'Speaker Website', 'Speaker Twitter', 'Speaker Facebook', 'Speaker Github', 'Speaker LinkedIn']
     rows = [headers]
     for speaker in speakers:
         column = [speaker.name if speaker.name else '', speaker.email if speaker.email else '']
@@ -92,6 +101,15 @@ def export_speakers_csv(speakers):
         column.append(speaker.short_biography if speaker.short_biography else '')
         column.append(speaker.organisation if speaker.organisation else '')
         column.append(speaker.position if speaker.position else '')
+        column.append(speaker.speaking_experience if speaker.speaking_experience else '')
+        column.append(speaker.sponsorship_required if speaker.sponsorship_required else '')
+        column.append(speaker.city if speaker.city else '')
+        column.append(speaker.country if speaker.country else '')
+        column.append(speaker.website if speaker.website else '')
+        column.append(speaker.twitter if speaker.twitter else '')
+        column.append(speaker.facebook if speaker.facebook else '')
+        column.append(speaker.github if speaker.github else '')
+        column.append(speaker.linkedin if speaker.linkedin else '')
         rows.append(column)
 
     return rows
