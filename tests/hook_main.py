@@ -1858,7 +1858,7 @@ def attendee_post(transaction):
         ticket = TicketFactory()
         db.session.add(ticket)
 
-        attendee = AttendeeFactory(ticket_id=1, event_id=1)
+        attendee = AttendeeFactory()
         db.session.add(attendee)
         db.session.commit()
 
