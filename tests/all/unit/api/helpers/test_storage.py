@@ -1,8 +1,10 @@
 """Test file for storage functions."""
+import os
+from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from app.api.helpers.storage import create_url, generate_hash
+from app.api.helpers.storage import create_url, generate_hash, UploadedFile
 
 
 class TestStorageHelperValidation(unittest.TestCase):
@@ -63,6 +65,21 @@ class TestStorageHelperValidation(unittest.TestCase):
             actual_output = generate_hash(test_input)
             self.assertEqual(exepected_output, actual_output)
             self.assertEqual(len(actual_output), 10)
+
+
+class TestUploadedFile(unittest.TestCase):
+    test_data = b'\xffhellothere'
+
+    def _uploaded_file(self, folder, filename='testfile.bin'):
+        path = os.path.join(folder, filename)
+        with open(path, 'wb') as f:
+            f.write(self.test_data)
+        return UploadedFile(path, filename)
+
+    def test_read(self):
+        with TemporaryDirectory() as folder:
+            file = self._uploaded_file(folder)
+            self.assertEqual(file.read(), self.test_data)
 
 
 if __name__ == '__main__':
