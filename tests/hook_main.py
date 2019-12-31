@@ -1855,12 +1855,6 @@ def attendee_post(transaction):
     """
     # Skip until docs for direct endpoints added
     with stash['app'].app_context():
-        ticket = TicketFactory()
-        db.session.add(ticket)
-
-        event = EventFactoryBasic()
-        db.session.add(event)
-
         attendee = AttendeeFactory()
         db.session.add(attendee)
         db.session.commit()
