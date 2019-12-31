@@ -99,7 +99,16 @@ class UploadedFile:
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
-        self.file = open(file_path)
+        self.file = open(file_path, 'rb')
+
+    def __len__(self):
+        position = self.file.tell()
+        try:
+            self.file.seek(0, os.SEEK_END)
+            last_position = self.file.tell()
+        finally:
+            self.file.seek(position)
+        return last_position
 
     def save(self, new_path):
         copyfile(self.file_path, new_path)

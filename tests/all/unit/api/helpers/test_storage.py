@@ -76,6 +76,11 @@ class TestUploadedFile(unittest.TestCase):
             f.write(self.test_data)
         return UploadedFile(path, filename)
 
+    def test_len(self):
+        with TemporaryDirectory() as folder:
+            file = self._uploaded_file(folder)
+            self.assertEqual(len(file), len(self.test_data))
+
     def test_read(self):
         with TemporaryDirectory() as folder:
             file = self._uploaded_file(folder)
