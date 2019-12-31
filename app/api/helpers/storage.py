@@ -233,15 +233,15 @@ def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='
         item.delete()
     # set object settings
 
-    file_data = file.read()
-    file_mime = magic.from_buffer(file_data, mime=True)
-    size = len(file_data)
-    sent = k.set_contents_from_string(
-        file_data,
+    file_mime = magic.from_file(file.file_path, mime=True)
+    size = len(file)
+    sent = k.set_contents_from_file(
+        file.file,
         headers={
             'Content-Disposition': 'attachment; filename=%s' % filename,
             'Content-Type': '%s' % file_mime
-        }
+        },
+        rewind=True
     )
     k.set_acl(acl)
     s3_url = 'https://%s.s3.amazonaws.com/' % bucket_name
