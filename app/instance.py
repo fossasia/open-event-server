@@ -195,17 +195,6 @@ def create_app():
     shell.init_app(app)
     limiter.init_app(app)
 
-    # elasticsearch
-    if app.config['ENABLE_ELASTICSEARCH']:
-        from app.views.elastic_cron_helpers import cron_rebuild_events_elasticsearch
-        client.init_app(app)
-        connections.add_connection('default', client.elasticsearch)
-        with app.app_context():
-            try:
-                cron_rebuild_events_elasticsearch.delay()
-            except Exception:
-                pass
-
     app_created = True
     return app
 
@@ -251,11 +240,6 @@ def update_sent_state(sender=None, headers=None, **kwargs):
 scheduler = BackgroundScheduler(timezone=utc)
 # scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 # scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
-if app.config['ENABLE_ELASTICSEARCH']:
-    from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
-    scheduler.add_job(sync_events_elasticsearch, 'interval', minutes=60)
-    scheduler.add_job(cron_rebuild_events_elasticsearch, 'cron', day=7)
-
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=1, month='1-12')
