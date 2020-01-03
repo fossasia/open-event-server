@@ -84,8 +84,6 @@ class Event(SoftDeletionModel):
     event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
     event_sub_topic_id = db.Column(db.Integer, db.ForeignKey(
         'event_sub_topics.id', ondelete='CASCADE'))
-    events_orga_id = db.Column(db.Integer, db.ForeignKey(
-        'events_orga.id', ondelete='CASCADE'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -123,8 +121,6 @@ class Event(SoftDeletionModel):
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
-    events_orga = db.relationship(
-        'EventOrgaModel', backref='event', foreign_keys=[events_orga_id])
     owner = db.relationship('User',
                             viewonly=True,
                             secondary='join(UsersEventsRoles, Role,'
@@ -201,7 +197,6 @@ class Event(SoftDeletionModel):
                  privacy=None,
                  event_topic_id=None,
                  event_sub_topic_id=None,
-                 events_orga_id=None,
                  ticket_url=None,
                  copyright=None,
                  code_of_conduct=None,
@@ -272,7 +267,6 @@ class Event(SoftDeletionModel):
         self.show_remaining_tickets = show_remaining_tickets
         self.copyright = copyright
         self.event_sub_topic_id = event_sub_topic_id
-        self.events_orga_id = events_orga_id
         self.ticket_url = ticket_url
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
