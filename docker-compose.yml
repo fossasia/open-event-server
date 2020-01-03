@@ -53,8 +53,8 @@ services:
     container_name: opev-celery
     environment:
       <<: *environment-vars
-      DEPLOYMENT: celery
       C_FORCE_ROOT: "true"
+    command: celery
 
 volumes:
     pg:

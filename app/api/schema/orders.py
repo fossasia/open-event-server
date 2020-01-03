@@ -3,9 +3,9 @@ from marshmallow import post_dump, validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app import db
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from app.models import db
 from utils.common import use_defaults
 
 

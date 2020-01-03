@@ -1,5 +1,3 @@
-from tests.all.integration.setup_database import Setup
-from app import current_app as app
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.log import record_activity
 from app.models.activity import Activity
@@ -13,7 +11,7 @@ class TestLogging(OpenEventTestCase):
 
     def test_record_activity_valid_template(self):
         """Test to record activity for valid template"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_user = create_user(email="logging@test.com", password="logpass")
             record_activity('create_user', login_user=test_user, user=test_user)
             user_id_format = ' (' + str(test_user.id) + ')'
@@ -23,7 +21,7 @@ class TestLogging(OpenEventTestCase):
 
     def test_record_activity_invalid_template(self):
         """Test to record activity for invalid template"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_user = create_user(email="logging@test.com", password="logpass")
             record_activity('invalid_template', login_user=test_user, user=test_user)
             user_id_format = ' (' + str(test_user.id) + ')'

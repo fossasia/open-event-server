@@ -5,19 +5,19 @@ import requests
 import uuid
 
 from flask import current_app, render_template
-from flask_celeryext import RequestContextTask
+from flask_celeryext import FlaskCeleryExt, RequestContextTask
 from marrow.mailer import Mailer, Message
-from app import get_settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName, From,
     FileType, Disposition)
 
-from app import make_celery
+from app.instance import create_app
 from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.api.helpers.mail import check_smtp_config
+from app.settings import get_settings
 
 """
 Define all API v2 celery tasks here
@@ -50,6 +50,12 @@ import urllib.error
 import base64
 
 logger = logging.getLogger(__name__)
+
+def make_celery(app=None):
+    app = app or create_app()
+    ext = FlaskCeleryExt(app)
+    return ext.celery
+
 celery = make_celery()
 
 
