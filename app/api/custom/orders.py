@@ -15,7 +15,6 @@ from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
 from app.extensions.limiter import limiter
-from app.models.discount_code import DiscountCode
 from app.models.order import Order
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
