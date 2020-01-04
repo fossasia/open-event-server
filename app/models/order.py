@@ -91,7 +91,6 @@ class Order(SoftDeletionModel):
                  transaction_id=None,
                  paid_via=None,
                  is_billing_enabled=False,
-                 created_at=datetime.datetime.now(datetime.timezone.utc),
                  user_id=None,
                  discount_code_id=None,
                  event_id=None,
@@ -115,7 +114,7 @@ class Order(SoftDeletionModel):
         self.transaction_id = transaction_id
         self.paid_via = paid_via
         self.is_billing_enabled = is_billing_enabled
-        self.created_at = created_at
+        self.created_at = datetime.datetime.now(datetime.timezone.utc)
         self.discount_code_id = discount_code_id
         self.status = status
         self.payment_mode = payment_mode
