@@ -447,6 +447,41 @@ class Event(SoftDeletionModel):
     def has_speakers(self):
         return Speaker.query.filter_by(event_id=self.id).count() > 0
 
+    @property
+    def order_statistics(self):
+        order_statistics = {
+            'id': self.id,
+            'sales' : self.sales_count()
+        }
+        return order_statistics
+
+    def sales_count(self):
+        obj_id = self.id
+        total = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == self.id).scalar()
+        draft = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                             Order.status == 'draft').scalar()
+        cancelled = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                                 Order.status == 'cancelled').scalar()
+        pending = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                               Order.status == 'pending').scalar()
+        expired = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                               Order.status == 'expired').scalar()
+        placed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                              Order.status == 'placed').scalar()
+        completed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                                 Order.status == 'completed').scalar()
+        result = {
+            'total': total or 0,
+            'draft': draft or 0,
+            'cancelled': cancelled or 0,
+            'pending': pending or 0,
+            'expired': expired or 0,
+            'placed': placed or 0,
+            'completed': completed or 0,
+            'id': self.id,
+        }
+        return result
+
 
 @event.listens_for(Event, 'after_update')
 @event.listens_for(Event, 'after_insert')

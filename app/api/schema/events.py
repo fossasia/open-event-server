@@ -272,6 +272,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                         related_view_kwargs={'event_id': '<id>'},
                                         schema='StripeAuthorizationSchema',
                                         type_='stripe-authorization')
+    order_statistics = Relationship(attribute='order_statistics',
+                                    self_view='v1.event_order_statistics',
+                                    self_view_kwargs={'id': '<id>'},
+                                    related_view_kwargs={'id': '<id>'},
+                                    related_view='v1.order_statistics_event_detail',
+                                    schema='OrderStatisticsEventSchema',
+                                    type_='order-statistics-event')
 
 
 class EventSchema(EventSchemaPublic):

@@ -50,7 +50,7 @@ from app.api.microlocations import MicrolocationList, MicrolocationListPost, Mic
 from app.api.modules import ModuleDetail
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, \
     NotificationRelationship, NotificationActionDetail, NotificationActionRelationship, NotificationActionList
-from app.api.order_statistics.events import OrderStatisticsEventDetail
+from app.api.order_statistics.events import OrderStatisticsEventDetail, OrderStatisticsEventRelationship
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
 from app.api.pages import PageList, PageDetail
@@ -269,6 +269,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
           '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event',
+          '/order_statistics/<int:id>/event',
           '/user-favourite-events/<int:user_favourite_event_id>/event', '/discount-codes/<int:discount_code_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
@@ -322,6 +323,9 @@ api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/ord
           '/events/<identifier>/relationships/orders')
 api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
           '/events/<identifier>/relationships/stripe-authorization')
+api.route(EventRelationship, 'event_order_statistics', '/events/<int:id>/relationships/order_statistics',
+          '/events/<identifier>/relationships/order_statistics')
+
 # Events -> roles:
 api.route(EventRelationship, 'event_owner', '/events/<int:id>/relationships/owner',
           '/events/<identifier>/relationships/owner')
@@ -630,7 +634,8 @@ api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/eve
 
 # Ticket statistics API
 api.route(OrderStatisticsEventDetail, 'order_statistics_event_detail', '/events/<int:id>/order-statistics',
-          '/events/<identifier>/order-statistics')
+          '/events/<identifier>/order-statistics', '/events/<int:id>/order_statistics/event')
+api.route(OrderStatisticsEventRelationship, 'order_statistics', '/events/<int:id>/relationships/event')
 api.route(OrderStatisticsTicketDetail, 'order_statistics_ticket_detail', '/tickets/<int:id>/order-statistics')
 
 # Admin Statistics API

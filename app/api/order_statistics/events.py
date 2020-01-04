@@ -1,6 +1,7 @@
-from flask_rest_jsonapi import ResourceDetail
+from flask_rest_jsonapi import ResourceDetail, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy import func
 
 from app.api.bootstrap import api
@@ -32,6 +33,13 @@ class OrderStatisticsEventSchema(Schema):
     tickets = fields.Method("tickets_count")
     orders = fields.Method("orders_count")
     sales = fields.Method("sales_count")
+    event = Relationship(attribute='event',
+                         self_view='v1.order_statistics',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.event_detail',
+                         related_view_kwargs={'id': '<id>'},
+                         schema="EventSchema",
+                         type_='event')
 
     def tickets_count(self, obj):
         obj_id = obj.id
@@ -128,3 +136,14 @@ class OrderStatisticsEventDetail(ResourceDetail):
                   'methods': {
                       'before_get_object': before_get_object
                   }}
+
+
+class OrderStatisticsEventRelationship(ResourceRelationship):
+    """
+    User Relationship
+    """
+
+    schema = OrderStatisticsEventSchema
+    data_layer = {'session': db.session,
+                  'model': OrderStatisticsEventSchema
+                  }
