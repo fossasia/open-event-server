@@ -1,5 +1,5 @@
-from app import get_settings
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.settings import get_settings
 
 
 def validate_complex_fields_json(self, data, original_data):

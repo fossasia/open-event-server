@@ -1,6 +1,5 @@
 import unittest
 
-from app import current_app as app
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.system_notifications import (
     get_event_exported_actions,
@@ -18,7 +17,6 @@ from app.api.helpers.system_notifications import (
     get_session_accept_reject_notification_actions,
     get_invite_papers_notification_actions
 )
-from tests.all.integration.setup_database import Setup
 from app.models.notification import NotificationAction
 
 
@@ -27,7 +25,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_event_exported(self):
         """Method to test the actions associated with a notification about an event being successfully exported."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/some/path/image.png'
             response = get_event_exported_actions(request_url)
             expected_action = NotificationAction(
@@ -45,7 +43,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_event_imported(self):
         """Method to test the actions associated with a notification about an event being successfully exported."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525'
             request_event_id = 1
             response = get_event_imported_actions(request_event_id, request_url)
@@ -66,7 +64,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_monthly_payment_notification(self):
         """Method to test the actions associated with a notification of monthly payments"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525/payment'
             request_event_id = 1
             response = get_monthly_payment_notification_actions(request_event_id, request_url)
@@ -86,7 +84,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_monthly_pay_followup_notification(self):
         """Method to test the actions associated with a follow up notification of monthly payments."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525/payment'
             request_event_id = 1
             response = get_monthly_payment_follow_up_notification_actions(request_event_id, request_url)
@@ -106,7 +104,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_ticket_purchased_notification(self):
         """Method to test the actions associated with a notification of tickets purchased."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525/order'
             request_order_id = 1
             response = get_ticket_purchased_notification_actions(request_order_id, request_url)
@@ -127,7 +125,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
         """Method to test the actions associated with a notification of tickets purchased for an attendee that is
            not the buyer."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_pdfurl = 'https://localhost/pdf/e/24324/'
             response = get_ticket_purchased_attendee_notification_actions(request_pdfurl)
             expected_action = NotificationAction(
@@ -145,7 +143,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_ticket_purchase_organizer(self):
         """Method to test the actions associated with a notification of tickets purchased for the event organizer."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525/order'
             request_order_id = 1
             response = get_ticket_purchased_organizer_notification_actions(request_order_id, request_url)
@@ -165,7 +163,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_event_published_notification(self):
         """Method to test the actions associated with a notification of an event getting published."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525'
             request_event_id = 1
             response = get_event_published_notification_actions(request_event_id, request_url)
@@ -185,7 +183,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_event_role_notification(self):
         """Method to test the actions associated with a notification of an event role."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525/invitation'
             request_event_id = 1
             response = get_event_role_notification_actions(request_event_id, request_url)
@@ -205,7 +203,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_new_session_notification(self):
         """Method to test the actions associated with a notification of an event getting a new session proposal."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/session/345525'
             request_session_id = 1
             response = get_new_session_notification_actions(request_session_id, request_url)
@@ -225,7 +223,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_session_schedule_notification(self):
         """Method to test the actions associated with a notification of change in schedule of a session."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/session/345525'
             request_session_id = 1
             response = get_session_schedule_notification_actions(request_session_id, request_url)
@@ -245,7 +243,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_next_event_notification(self):
         """Method to test the actions associated with a notification of next event."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/345525'
             request_session_id = 1
             response = get_next_event_notification_actions(request_session_id, request_url)
@@ -265,7 +263,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_session_accept_reject_notif(self):
         """Method to test the actions associated with a notification of a session getting accepted/rejected."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_url = 'https://localhost/e/session/345525'
             request_session_id = 1
             response = get_session_accept_reject_notification_actions(request_session_id, request_url)
@@ -285,7 +283,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
     def test_invite_papers_notification(self):
         """Method to test the actions associated with an invite to submit papers."""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             request_cfs_url = 'https://localhost/e/cfs/345525'
             request_submit_url = 'https://localhost/e/cfs/345525/submit'
             response = get_invite_papers_notification_actions(request_cfs_url, request_submit_url)

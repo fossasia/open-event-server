@@ -1,17 +1,26 @@
+import logging
 import os
+
+from flask_script import Manager
+from flask_migrate import stamp, MigrateCommand
+from sqlalchemy.engine import reflection
+from sqlalchemy import or_
 
 from app.api.helpers.db import save_to_db
 from app.models.event import Event, get_new_event_identifier
-from app import manager
-from app import current_app as app
+from app.instance import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
 from app.models.module import Module
+from app.api.helpers.tasks import resize_event_images_task
+from app.api.helpers.tasks import resize_speaker_images_task
 from populate_db import populate
-from flask_migrate import stamp
-from sqlalchemy.engine import reflection
-
 from tests.all.integration.auth_helper import create_super_admin
+
+logger = logging.getLogger(__name__)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 
 @manager.command
@@ -35,6 +44,26 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_event_and_speaker_images():
+    events = Event.query.filter(Event.original_image_url.isnot(None),
+                                or_(Event.thumbnail_image_url == None, Event.large_image_url == None,
+                                    Event.icon_image_url == None)).all()
+    logger.info('Resizing images of %s events...', len(events))
+    for event in events:
+        logger.info('Resizing Event %s', event.id)
+        resize_event_images_task.delay(event.id, event.original_image_url)
+
+    speakers = Speaker.query.filter(Speaker.photo_url.isnot(None),
+                                    or_(Speaker.icon_image_url == None,
+                                        Speaker.small_image_url == None, Speaker.thumbnail_image_url == None)).all()
+
+    logger.info('Resizing images of %s speakers...', len(speakers))
+    for speaker in speakers:
+        logging.info('Resizing Speaker %s', speaker.id)
+        resize_speaker_images_task.delay(speaker.id, speaker.photo_url)
 
 
 @manager.command

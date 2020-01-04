@@ -48,14 +48,20 @@ class TicketListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if data.get('type') == 'paid' and data.get('event'):
+        if data.get('event'):
             try:
                 event = db.session.query(Event).filter_by(id=data['event'], deleted_at=None).one()
             except NoResultFound:
                 raise UnprocessableEntity({'event_id': data['event']}, "Event does not exist")
-            if not event.is_payment_enabled():
-                raise UnprocessableEntity(
-                    {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+
+            if data.get('type') == 'paid':
+                if not event.is_payment_enabled():
+                    raise UnprocessableEntity(
+                        {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+
+            if data.get('sales_ends_at') > event.ends_at:
+                raise UnprocessableEntity({'sales_ends_at': '/data/attributes/sales-ends-at'},
+                                          "Ticket end date cannot be greater than event end date")
 
     schema = TicketSchema
     methods = ['POST', ]

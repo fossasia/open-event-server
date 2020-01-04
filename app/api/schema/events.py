@@ -63,8 +63,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
     has_owner_info = fields.Bool(default=False)
-    has_sessions = fields.Bool(default=0, dump_only=True)
-    has_speakers = fields.Bool(default=0, dump_only=True)
     owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
@@ -76,9 +74,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_ticket_form_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
-    tickets_available = fields.Float(dump_only=True)
-    tickets_sold = fields.Float(dump_only=True)
-    revenue = fields.Float(dump_only=True)
     paypal_email = fields.Str(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
     is_billing_info_mandatory = fields.Bool(default=False)
@@ -99,7 +94,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
-    average_rating = fields.Float(dump_only=True)
     refund_policy = fields.String(dump_only=True,
                                   default='All sales are final. No refunds shall be issued in any case.')
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
@@ -235,13 +229,6 @@ class EventSchemaPublic(SoftDeletionSchema):
                                related_view_kwargs={'event_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
-    event_orga = Relationship(attribute='events_orga',
-                              self_view='v1.events_orga',
-                              self_view_kwargs={'id': '<id>'},
-                              related_view='v1.event_orga_detail',
-                              related_view_kwargs={'event_id': '<id>'},
-                              schema='EventOrgaSchema',
-                              type='event-orga')
     event_sub_topic = Relationship(attribute='event_sub_topic',
                                    self_view='v1.event_event_sub_topic',
                                    self_view_kwargs={'id': '<id>'},
