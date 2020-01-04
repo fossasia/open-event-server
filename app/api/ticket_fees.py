@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 
-from app import db
 from app.api.bootstrap import api
 from app.api.schema.ticket_fees import TicketFeesSchema
+from app.models import db
 from app.models.ticket_fee import TicketFees
 
 

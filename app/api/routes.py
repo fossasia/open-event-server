@@ -28,7 +28,6 @@ from app.api.event_image_sizes import EventImageSizeDetail
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.event_locations import EventLocationList
-from app.api.event_orga import EventOrgaDetail
 from app.api.event_statistics import EventStatisticsGeneralDetail
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail, \
     EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
@@ -301,8 +300,6 @@ api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships
           '/events/<identifier>/relationships/event-type')
 api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic',
           '/events/<identifier>/relationships/event-topic')
-api.route(EventRelationship, 'events_orga', '/events/<int:id>/relationships/event-orga',
-          '/events/<identifier>/relationships/event-orga')
 api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relationships/event-sub-topic',
           '/events/<identifier>/relationships/event-sub-topic')
 api.route(EventRelationship, 'event_role_invite', '/events/<int:id>/relationships/role-invites',
@@ -530,9 +527,6 @@ api.route(EventTopicRelationship, 'event_topic_event',
 api.route(EventTopicRelationship, 'event_topic_event_sub_topic',
           '/event-topics/<int:id>/relationships/event-sub-topics')
 
-# event orga
-api.route(EventOrgaDetail, 'event_orga_detail', '/events/<event_identifier>/event-orga',
-          '/events/<int:event_id>/event-orga')
 
 # event sub topics
 api.route(EventSubTopicListPost, 'event_sub_topic_list_post', '/event-sub-topics')

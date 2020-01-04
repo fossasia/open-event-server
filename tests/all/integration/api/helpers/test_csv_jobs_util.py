@@ -1,7 +1,5 @@
-from app import current_app as app
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
-from tests.all.integration.setup_database import Setup
 from app.api.helpers.csv_jobs_util import *
 from app.factories.attendee import AttendeeFactory
 from app.factories.order import OrderFactory
@@ -19,7 +17,7 @@ class TestExportCSV(OpenEventTestCase):
     def test_export_orders_csv(self):
         """Method to check the orders data export"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_order = OrderFactory()
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
@@ -29,14 +27,14 @@ class TestExportCSV(OpenEventTestCase):
     def test_export_attendees_csv(self):
         """Method to check the attendees data export"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_attendee = AttendeeFactory()
             field_data = export_attendees_csv([test_attendee])
             self.assertEqual(field_data[1][3], common.string_)
             self.assertEqual(field_data[1][5], 'user0@example.com')
 
     def _test_export_session_csv(self, test_session=None):
-        with app.test_request_context():
+        with self.app.test_request_context():
             if not test_session:
                 test_session = SessionFactory()
             field_data = export_sessions_csv([test_session])
@@ -48,13 +46,13 @@ class TestExportCSV(OpenEventTestCase):
     def test_export_sessions_csv(self):
         """Method to check sessions data export"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             self._test_export_session_csv()
 
     def test_export_sessions_none_csv(self):
         """Method to check sessions data export with no abstract"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_session = SessionFactory()
             test_session.long_abstract = None
             test_session.level = None
@@ -63,7 +61,7 @@ class TestExportCSV(OpenEventTestCase):
     def test_export_sessions_with_details_csv(self):
         """Method to check that sessions details are correct"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_session = SessionFactory(short_abstract='short_abstract',
                                           long_abstract='long_abstract', comments='comment',
                                           level='level')
@@ -91,7 +89,7 @@ class TestExportCSV(OpenEventTestCase):
     def test_export_speakers_csv(self):
         """Method to check speakers data export"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_speaker = SpeakerFactory(name='Mario Behling', mobile='9004345009', short_biography='Speaker Bio',
                                           organisation='FOSSASIA', position='position', speaking_experience='1',
                                           sponsorship_required='No', city='Berlin', country='Germany')

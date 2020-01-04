@@ -3,7 +3,7 @@ import sys
 
 import logging
 
-from app import current_app as app, celery
+from app.instance import current_app as app
 from app.models import db
 from app.models.setting import Environment
 from app.settings import set_settings
@@ -18,12 +18,11 @@ class Setup(object):
         app.secret_key = 'super secret key'
         app.logger.addHandler(logging.StreamHandler(sys.stdout))
         app.logger.setLevel(logging.ERROR)
-        celery.conf.update(app.config)
         with app.test_request_context():
             db.create_all()
             set_settings(secret='super secret key', app_name='Open Event', app_environment=Environment.TESTING)
 
-        return app.test_client()
+        return app
 
     @staticmethod
     def drop_db():
