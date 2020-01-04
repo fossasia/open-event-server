@@ -4,7 +4,7 @@ import re
 
 from flask_migrate import stamp
 
-from app import current_app
+from app.instance import current_app
 from app.models import db
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin

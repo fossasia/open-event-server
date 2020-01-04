@@ -1,9 +1,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import current_user, jwt_required
-from flask_limiter.util import get_remote_address
 from sqlalchemy.orm.exc import NoResultFound
 
-from app import limiter
 from app.models import db
 from app.api.auth import return_file
 from app.api.helpers.db import safe_query, get_count
@@ -15,9 +13,9 @@ from app.api.helpers.storage import generate_hash
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
-from app.models.order import Order
+from app.extensions.limiter import limiter
 from app.models.discount_code import DiscountCode
-from app.models.order import OrderTicket
+from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
@@ -53,7 +51,7 @@ def ticket_attendee_authorized(order_identifier):
     '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
 )
 @limiter.limit(
-    '60/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+    '60/minute', error_message='Limit for this action exceeded'
 )
 def resend_emails():
     """

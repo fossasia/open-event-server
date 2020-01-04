@@ -1,9 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from app import current_app as app
 from tests.all.integration.utils import OpenEventTestCase
-from tests.all.integration.setup_database import Setup
 from app.api.helpers.storage import upload_local
 
 
@@ -20,8 +18,7 @@ class TestStorage(OpenEventTestCase):
         expected_response = 'https://next.eventyay.com/static/media/upload_key/hash/test.pdf'
         uploadedfile_object.filename = 'test.pdf'
 
-        with app.test_request_context():
-            app.config['BASE_DIR'] = 'testdir'
+        with self.app.test_request_context():
             actual_response = upload_local(uploadedfile_object, 'upload_key')
             self.assertEqual(expected_response, actual_response)
 
