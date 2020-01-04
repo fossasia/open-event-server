@@ -16,6 +16,7 @@ from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
 from app.models.order import Order
+from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
@@ -132,6 +133,7 @@ def create_order():
             attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
             db.session.add(attendee)
             attendee_list.append(attendee)
+    # created_at not getting filled
     ticket_pricing = calculate_order_amount(tickets, discount_code)
     if not has_access('is_coorganizer', event_id=data['event_id']):
         data['status'] = 'initializing'
@@ -163,4 +165,48 @@ def create_order():
     db.session.commit()
     db.session.refresh(order)
     order_schema = OrderSchema()
+    return order_schema.dump(order)
+
+
+@order_blueprint.route('/complete-order/<order_id>', methods=['PATCH'])
+@jwt_required
+def complete_order(order_id):
+    data = request.get_json()
+    order = Order.query.filter_by(id=order_id).first()
+    order_schema = OrderSchema()
+    if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
+        return make_response(jsonify(status='Access Forbidden', error='You cannot update an order.'), 403)
+    if has_access('is_coorganizer', event_id=order.event_id) and 'status' in data:
+        if data['status'] != 'cancelled':
+            return make_response(jsonify(status='Access Forbidden', error='You can only cancel an order.'), 403)
+        elif data['status'] == 'cancelled':
+            order.status = 'cancelled'
+            db.session.add(order)
+            db.session.commit()
+            # delete attendee after cancellation of order
+            return order_schema.dump(order)
+    updated_attendees = data['attendees']
+
+    if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != len(updated_attendees):
+        return make_response(jsonify(status='Unprocessable Entity', error='You need to provide info of all attendees.')
+                             , 422)
+    else:
+        attendees = db.session.query(TicketHolder).filter_by(order_id=order_id, deleted_at=None).all()
+    form_fields = db.session.query(CustomForms).filter_by(event_id=order.event_id, form='attendee', is_included=True,
+                                                          deleted_at=None).all()
+    for attendee, updated_attendee in zip(attendees, updated_attendees):
+        for field in form_fields:
+            if field.is_required is True and field.field_identifier not in updated_attendee:
+                return make_response(jsonify(status='Unprocessable Entity', error='{} is a required field.'
+                                             .format(field.field_identifier)), 422)
+            if field.field_identifier in updated_attendee:
+                setattr(attendee, field.field_identifier, updated_attendee[field.field_identifier])
+        db.session.add(attendee)
+    # modified_at not getting filled
+    if order.amount == 0:
+        order.status = 'completed'
+        db.session.add(order)
+
+    # add ticketing pdf logic
+    db.session.commit()
     return order_schema.dump(order)
