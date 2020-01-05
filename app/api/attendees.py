@@ -75,10 +75,6 @@ class AttendeeListPost(ResourceList):
                 "Ticket belongs to a different Event"
             )
 
-        # populate event id and ticket id
-        data['ticket_id'] = ticket.id
-        data['event_id'] = ticket.event_id
-
         # Check if the ticket is already sold out or not.
         if get_sold_and_reserved_tickets_count(ticket.event_id) >= ticket.quantity:
             raise ConflictException(
