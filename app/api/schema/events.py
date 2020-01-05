@@ -344,7 +344,7 @@ class EventSchema(EventSchemaPublic):
     attendees = Relationship(attribute='attendees',
                              self_view='v1.event_attendees',
                              self_view_kwargs={'id': '<id>'},
-                             related_view='v1.attendee_list',
+                             related_view='v1.attendee_list_post',
                              related_view_kwargs={'event_id': '<id>'},
                              schema='AttendeeSchema',
                              many=True,
