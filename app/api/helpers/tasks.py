@@ -5,19 +5,19 @@ import requests
 import uuid
 
 from flask import current_app, render_template
-from flask_celeryext import RequestContextTask
+from flask_celeryext import FlaskCeleryExt, RequestContextTask
 from marrow.mailer import Mailer, Message
-from app import get_settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName, From,
     FileType, Disposition)
 
-from app import make_celery
+from app.instance import create_app
 from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.api.helpers.mail import check_smtp_config
+from app.settings import get_settings
 
 """
 Define all API v2 celery tasks here
@@ -50,6 +50,12 @@ import urllib.error
 import base64
 
 logger = logging.getLogger(__name__)
+
+def make_celery(app=None):
+    app = app or create_app()
+    ext = FlaskCeleryExt(app)
+    return ext.celery
+
 celery = make_celery()
 
 
@@ -126,7 +132,7 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
 
 @celery.task(base=RequestContextTask, name='resize.event.images', bind=True)
 def resize_event_images_task(self, event_id, original_image_url):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = Event.query.get(event_id)
     try:
         logging.info('Event image resizing tasks started {}'.format(original_image_url))
         uploaded_images = create_save_image_sizes(original_image_url, 'event-image', event.id)
@@ -135,7 +141,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
         logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
 
 
@@ -152,7 +158,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
         logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
 
 
@@ -166,13 +172,13 @@ def sponsor_logos_url_task(self, event_id):
             sponsor.logo_url = new_logo_url
             save_to_db(sponsor)
             logging.info('Sponsor logo url successfully generated')
-        except(urllib.error.HTTPError, urllib.error.URLError):
+        except(requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
             logging.exception('Error encountered while logo generation')
 
 
 @celery.task(base=RequestContextTask, name='resize.speaker.images', bind=True)
 def resize_speaker_images_task(self, speaker_id, photo_url):
-    speaker = safe_query(db, Speaker, 'id', speaker_id, 'speaker_id')
+    speaker = Speaker.query.get(speaker_id)
     try:
         logging.info('Speaker image resizing tasks started for speaker with id {}'.format(speaker_id))
         uploaded_images = create_save_image_sizes(photo_url, 'speaker-image', speaker_id)
@@ -181,7 +187,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
         speaker.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(speaker)
         logging.info('Resized images saved successfully for speaker with id: {}'.format(speaker_id))
-    except (urllib.error.HTTPError, urllib.error.URLError):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(speaker_id))
 
 

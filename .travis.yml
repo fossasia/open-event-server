@@ -30,7 +30,7 @@ before_script:
   - bash scripts/test_multiple_heads.sh
   
 script:
-  - nosetests tests/all -v --with-coverage
+  - nosetests tests/ -v --with-coverage
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
