@@ -18,9 +18,6 @@ from app.models.discount_code import DiscountCode
 from app.models.user_token_blacklist import UserTokenBlackListTime
 from app.models.event_invoice import EventInvoice
 
-
-
-
 class TestCreatedatValidation(TestCase):
 
     def test_createdat_all_models(self):
