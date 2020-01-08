@@ -101,3 +101,29 @@ class ImageSizes(db.Model):
             'icon_size_width_height': self.icon_size_width_height,
             'icon_size_quality': self.icon_size_quality
         }
+
+    def init_speaker_image_size(self):
+        # initializes the default value to the attributes of speaker-image type
+        self.icon_size_width_height = 35
+        self.icon_size_quality = 80
+        self.small_size_width_height = 50
+        self.small_size_quality = 80,
+        self.thumbnail_size_width_height = 500
+        self.thumbnail_quality = 80
+
+    def init_event_image_size(self):
+        # initializes the default value to the attributes of event-image type
+        self.full_width = 1300,
+        self.full_height = 500
+        self.full_aspect = True
+        self.full_quality = 80,
+        self.icon_width = 75
+        self.icon_height = 30
+        self.icon_aspect = True,
+        self.icon_quality = 80
+        self.thumbnail_width = 500
+        self.thumbnail_height = 200,
+        self.thumbnail_aspect = True
+        self.thumbnail_quality = 80
+        self.logo_width = 500
+        self.logo_height = 200
