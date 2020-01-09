@@ -80,7 +80,7 @@ redis-3.2.1/src/redis-server &
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.celery &
+celery worker -A app.instance.celery &
 unset INTEGRATE_SOCKETIO
 
 # run app
