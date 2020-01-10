@@ -263,11 +263,13 @@ def internal_server_error(error):
 
 @app.errorhandler(429)
 def ratelimit_handler(error):
-    dict_ = {'status': 429,
-             'title': 'Request Limit Exceeded',
-             }
-    return make_response(json.dumps(dict_), 429,
-                         {'Content-Type': 'application/vnd.api+json'})
+    return make_response(json.dumps({
+            'status': 429,
+            'title': 'Request Limit Exceeded'
+        }),
+        429, {
+            'Content-Type': 'application/vnd.api+json'
+        })
 
 
 if __name__ == '__main__':
