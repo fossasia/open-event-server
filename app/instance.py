@@ -267,7 +267,8 @@ def ratelimit_handler(error):
             'status': 429,
             'title': 'Request Limit Exceeded'
         }),
-        429, {
+        429,
+        {
             'Content-Type': 'application/vnd.api+json'
         })
 
