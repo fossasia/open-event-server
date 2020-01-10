@@ -314,3 +314,5 @@ The tentative release policy, for now (since there is a lot of activity and a lo
 This project is currently licensed under the **[GNU General Public License v3](LICENSE)**.
 
 > To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
+ ## comments 
+ It is very nice
