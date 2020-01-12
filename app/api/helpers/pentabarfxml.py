@@ -8,11 +8,11 @@ from sqlalchemy import Date
 from sqlalchemy import asc
 from sqlalchemy import func
 
-from app import db
 from app.models.session import Session
 from app.settings import get_settings
 from app.models.event import Event as EventModel
 from app.models.microlocation import Microlocation
+from app.models import db
 
 
 def format_timedelta(td):

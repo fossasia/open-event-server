@@ -2,13 +2,10 @@ import unittest
 
 from flask_jwt_extended import create_access_token
 
-from app import current_app as app
 from app.api.helpers.jwt import jwt_authenticate, get_identity
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
-from app.models import db
 from app.api.helpers.db import save_to_db
-from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 
 
@@ -17,7 +14,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
     def test_jwt_authenticate(self):
         """Method to test jwt authentication"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             user = UserFactory()
             save_to_db(user)
 
@@ -32,7 +29,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
     def test_get_identity(self):
         """Method to test identity of authenticated user"""
 
-        with app.test_request_context():
+        with self.app.test_request_context():
             user = UserFactory()
             save_to_db(user)
 
@@ -43,7 +40,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
             # Authenticate User
             self.auth = {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
 
-        with app.test_request_context(headers=self.auth):
+        with self.app.test_request_context(headers=self.auth):
             self.assertEquals(get_identity().id, user.id)
 
 

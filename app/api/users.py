@@ -6,7 +6,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.error
 
-from app import get_settings
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
 from app.api.helpers.exceptions import ConflictException, UnprocessableEntity, ForbiddenException
@@ -31,6 +30,7 @@ from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
+from app.settings import get_settings
 
 user_misc_routes = Blueprint('user_misc', __name__, url_prefix='/v1')
 

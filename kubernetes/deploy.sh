@@ -23,7 +23,7 @@ elif [ "$1" = "create" ]; then
     # Start Redis deployment & service
     kubectl create -R -f ${DIR}/yamls/redis
     # Start Elasticsearch deployment & service
-    kubectl create -R -f ${DIR}/yamls/elasticsearch
+    # kubectl create -R -f ${DIR}/yamls/elasticsearch
     # Start postgres deployment & service
     kubectl create -R -f ${DIR}/yamls/postgres
     echo "Waiting for postgres to startup. Will start in ~30s."

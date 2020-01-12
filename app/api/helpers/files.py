@@ -14,9 +14,9 @@ from flask import current_app as app
 from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
-from app import get_settings
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 from app.models.image_size import ImageSizes
+from app.settings import get_settings
 
 
 def get_file_name():

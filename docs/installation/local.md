@@ -162,7 +162,7 @@ brew install redis
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-INTEGRATE_SOCKETIO=false celery worker -A app.celery
+INTEGRATE_SOCKETIO=false celery worker -A app.instance.celery
 
 # run app
 python3 manage.py runserver
@@ -184,7 +184,7 @@ The development server is the one that Flask ships with. It's based on Werkzeug 
 If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python3 manage.py runserver`:
 
 ```bash
-gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
+gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
 ```
 
 `-w` specifies the number of worker classes to be used. `--reload` is used for development environments, so the server is restarted if any of the application python files change.
@@ -236,7 +236,7 @@ Test the Nginx configuration and restart the Nginx server. Then run the Gunicorn
 ```bash
 sudo service nginx testconfig # Should respond with "test is successful"
 sudo service nginx restart
-gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
+gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
 
 ---
