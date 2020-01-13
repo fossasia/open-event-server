@@ -42,6 +42,7 @@ class SpeakerSchema(SoftDeletionSchema):
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
     linkedin = fields.Url(allow_none=True)
+    instagram = fields.Url(allow_none=True)
     organisation = fields.Str(allow_none=True)
     is_featured = fields.Boolean(default=False)
     is_email_overridden = fields.Boolean(default=False)
