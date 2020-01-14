@@ -22,6 +22,7 @@ class Speaker(SoftDeletionModel):
     facebook = db.Column(db.String)
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
+    instagram = db.Column(db.String)
     organisation = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False)
     is_email_overridden = db.Column(db.Boolean, default=False)
@@ -51,6 +52,7 @@ class Speaker(SoftDeletionModel):
                  facebook=None,
                  github=None,
                  linkedin=None,
+                 instagram=None,
                  organisation=None,
                  is_featured=False,
                  is_email_overridden=False,
@@ -79,6 +81,7 @@ class Speaker(SoftDeletionModel):
         self.facebook = facebook
         self.github = github
         self.linkedin = linkedin
+        self.instagram = instagram
         self.is_featured = is_featured
         self.is_email_overridden = is_email_overridden
         self.organisation = organisation
