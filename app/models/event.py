@@ -447,11 +447,11 @@ class Event(SoftDeletionModel):
     @property
     def has_speakers(self):
         return Speaker.query.filter_by(event_id=self.id).count() > 0
-    
+
     @property
     def order_statistics(self):
         return Namespace(id=self.id)
-    
+
     @property
     def general_statistics(self):
         return Namespace(id=self.id)

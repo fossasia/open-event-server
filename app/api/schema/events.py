@@ -279,11 +279,11 @@ class EventSchemaPublic(SoftDeletionSchema):
                                     schema='OrderStatisticsEventSchema',
                                     type_='order-statistics-event')
     general_statistics = Relationship(self_view='v1.event_general_statistics',
-                                    self_view_kwargs={'id': '<id>'},
-                                    related_view='v1.event_statistics_general_detail',
-                                    related_view_kwargs={'id': '<id>'},
-                                    schema='EventStatisticsGeneralSchema',
-                                    type_='general-statistics-event')
+                                      self_view_kwargs={'id': '<id>'},
+                                      related_view='v1.event_statistics_general_detail',
+                                      related_view_kwargs={'id': '<id>'},
+                                      schema='EventStatisticsGeneralSchema',
+                                      type_='general-statistics-event')
 
 
 class EventSchema(EventSchemaPublic):
