@@ -9,6 +9,7 @@ from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
+from app.models.ticket import Ticket
 from app.models.order import Order, OrderTicket
 
 
@@ -32,6 +33,7 @@ class OrderStatisticsEventSchema(Schema):
     orders = fields.Method("orders_count")
     sales = fields.Method("sales_count")
 
+
     def tickets_count(self, obj):
         obj_id = obj.id
         total = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
@@ -48,6 +50,8 @@ class OrderStatisticsEventSchema(Schema):
             Order.event_id == obj_id, Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
             Order.event_id == obj_id, Order.status == 'completed').scalar()
+        max = db.session.query(func.sum(Ticket.quantity.label('sum'))).filter(Ticket.event_id == obj_id,
+                                                                              Ticket.deleted_at == None).scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -55,7 +59,8 @@ class OrderStatisticsEventSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
+            'max': max or 0
         }
         return result
 
