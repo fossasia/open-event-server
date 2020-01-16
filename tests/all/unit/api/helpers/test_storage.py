@@ -47,16 +47,16 @@ class TestStorageHelperValidation(unittest.TestCase):
     def test_generate_hash(self):
         """Test generation of hash for a key."""
 
-        self.app.secret_key = 'secret_key'
+        secret_key = 'secret_key'
         test_input = 'case1'
         exepected_output = 'WUFCV0xHVk'
-        actual_output = generate_hash(test_input)
+        actual_output = generate_hash(test_input, secret_key)
         self.assertEqual(exepected_output, actual_output)
         self.assertEqual(len(actual_output), 10)
 
         test_input = '/static/uploads/pdf/temp/'
         exepected_output = 'MzRueVhjY0'
-        actual_output = generate_hash(test_input)
+        actual_output = generate_hash(test_input, secret_key)
         self.assertEqual(exepected_output, actual_output)
         self.assertEqual(len(actual_output), 10)
 

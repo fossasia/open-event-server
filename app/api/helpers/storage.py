@@ -285,9 +285,11 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
 # ########
 
 
-def generate_hash(key):
+def generate_hash(key, salt=None):
     """
     Generate hash for key
     """
-    phash = generate_password_hash(key, app.secret_key)
+    if not salt:
+        salt = app.secret_key
+    phash = generate_password_hash(key, salt)
     return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient
