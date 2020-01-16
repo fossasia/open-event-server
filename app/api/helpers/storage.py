@@ -289,5 +289,5 @@ def generate_hash(key):
     """
     Generate hash for key
     """
-    phash = generate_password_hash(key, get_settings()['secret'])
+    phash = generate_password_hash(key, app.secret_key)
     return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient

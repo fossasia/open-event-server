@@ -40,6 +40,8 @@ class Config:
     PRODUCTION = False
     TESTING = False
 
+    SECRET_KEY = env.str('SECRET_KEY', default=None)
+
     CACHING = False
     PROFILE = False
     SQLALCHEMY_RECORD_QUERIES = False
@@ -99,8 +101,6 @@ class ProductionConfig(Config):
     MINIFY_PAGE = True
     PRODUCTION = True
     CACHING = True
-
-    # if force on
 
 
 class StagingConfig(ProductionConfig):
