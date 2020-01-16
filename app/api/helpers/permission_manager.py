@@ -27,7 +27,7 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
     """
     user = current_user
     if not user.is_super_admin:
-        raise ForbiddenError({'source': ''}, 'Super admin access is required').respond()
+        return ForbiddenError({'source': ''}, 'Super admin access is required').respond()
     return view(*view_args, **view_kwargs)
 
 
@@ -389,7 +389,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if 'check' in kwargs:
         check = kwargs['check']
         if not check(view_kwargs):
-            raise ForbiddenError({'source': ''}, 'Access forbidden').respond()
+            return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
     # For Orders API
     if 'order_identifier' in view_kwargs:
