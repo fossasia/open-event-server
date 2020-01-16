@@ -95,7 +95,7 @@ def create_app():
         else:
             random_secret = secrets.token_hex()
             app.logger.warning(f'Using random secret "{ random_secret }" for development server. '
-                                'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
+                               'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
             app.config['SECRET_KEY'] = random_secret
 
     db.init_app(app)
