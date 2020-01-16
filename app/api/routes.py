@@ -322,6 +322,10 @@ api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/ord
           '/events/<identifier>/relationships/orders')
 api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
           '/events/<identifier>/relationships/stripe-authorization')
+api.route(EventRelationship, 'event_order_statistics', '/events/<int:id>/relationships/order-statistics',
+          '/events/<identifier>/relationships/order-statistics')
+api.route(EventRelationship, 'event_general_statistics', '/events/<int:id>/relationships/general-statistics',
+          '/events/<identifier>/relationships/general-statistics')
 # Events -> roles:
 api.route(EventRelationship, 'event_owner', '/events/<int:id>/relationships/owner',
           '/events/<identifier>/relationships/owner')
