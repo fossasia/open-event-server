@@ -261,13 +261,49 @@ def internal_server_error(error):
                          {'Content-Type': 'application/vnd.api+json'})
 
 
-@app.errorhandler(429)
-def ratelimit_handler(error):
+@app.errorhandler(422)
+def unprocessable_entity_handler(error):
     return make_response(json.dumps({
-            'status': 429,
-            'title': 'Request Limit Exceeded'
+            'status': 422,
+            'title': 'Unprocessable Entity'
         }),
-        429,
+        422,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(400)
+def badrequest_handler(error):
+    return make_response(json.dumps({
+            'status': 400,
+            'title': 'Bad Request'
+        }),
+        400,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(403)
+def forbidden_error_handler(error):
+    return make_response(json.dumps({
+            'status': 403,
+            'title': 'Access Forbidden'
+        }),
+        403,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(404)
+def notfound_error_handler(error):
+    return make_response(json.dumps({
+            'status': 404,
+            'title': 'Not Found'
+        }),
+        404,
         {
             'Content-Type': 'application/vnd.api+json'
         })

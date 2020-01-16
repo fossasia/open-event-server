@@ -138,7 +138,7 @@ def calculate_order_amount(tickets, discount_code):
     from app.api.helpers.ticketing import TicketingManager
     if discount_code:
         if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
-            return UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
+            raise UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
 
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
