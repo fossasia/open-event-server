@@ -22,6 +22,7 @@ install:
 
 env:
   - APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
+  - SECRET_KEY=super secret key
   
 before_script:
   - psql -c 'create database test;' -U postgres
