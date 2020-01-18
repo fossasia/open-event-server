@@ -73,7 +73,7 @@ MAILS = {
         'message': (
             u"Hi {email},<br/>" +
             u"The event <strong>{event_name}</strong> has received a new session proposal. " +
-            u"<br/> Visit this link to view the session: {link}"
+            u"<br/> Visit this link to view the session: <a href='{link}' target='_blank'>{link}</a>"
         )
     },
     USER_REGISTER: {
@@ -97,7 +97,7 @@ MAILS = {
         'subject': u'Email Confirmation to Create Account for Open-Event',
         'message': (
             u"Hi {email},<br/>" +
-            u"Please visit this link to confirm your email: {link}"
+            u"Please visit this link to confirm your email:  <a href='{link}' target='_blank'>{link}</a>"
         )
     },
     USER_CHANGE_EMAIL: {
@@ -179,7 +179,7 @@ MAILS = {
             u"Hi, {buyer_email} just bought tickets for the event {event_name}"
             u"<br/>The order has been processed successfully." +
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at {frontend_url} </em>"
+            u"<br/>Login to manage the orders at <a href='{frontend_url}' target='_blank'>{frontend_url}</a> </em>"
         )
     },
     TICKET_CANCELLED: {
@@ -190,7 +190,8 @@ MAILS = {
             u"<br/>your order for {event_name} has been cancelled by the organizer."
             u"<br/>Please contact the organizer for more info." +
             u"{cancel_msg}"
-            u"<br/>To manage orders please login to {frontend_url} and visit \"My Tickets\"."
+            u"<br/>To manage orders please login to <a href='{frontend_url}' target='_blank'>{frontend_url}</a>"
+            u"and visit \"My Tickets\"."
             u"<br/>Best regards,"
             u"<br/>{app_name} Team"
         )
