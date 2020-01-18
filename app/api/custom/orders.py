@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
-
 from app.models import db
 from app.api.auth import return_file
 from app.api.helpers.db import safe_query, get_count
@@ -15,10 +14,9 @@ from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.api.helpers.permission_manager import has_access
 from app.extensions.limiter import limiter
-from app.models.order import Order
+from app.models.order import Order, OrderTicket
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
-from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 

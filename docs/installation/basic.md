@@ -45,6 +45,9 @@ CREATE DATABASE oevent WITH OWNER open_event_user;
 cp .env.example .env
 ```
 
+Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that server will not run in production mode if you don't supply a secret.
+To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above in `.env` file
+
 
 * **Step 4** - Start the postgres service.
 
@@ -80,7 +83,7 @@ redis-3.2.1/src/redis-server &
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.celery &
+celery worker -A app.instance.celery &
 unset INTEGRATE_SOCKETIO
 
 # run app

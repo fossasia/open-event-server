@@ -1,6 +1,7 @@
 from celery.signals import after_task_publish
 import logging
 import os.path
+import secrets
 from envparse import env
 
 import sys
@@ -86,6 +87,17 @@ def create_app():
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
+
+    if not app.config['SECRET_KEY']:
+        if app.config['PRODUCTION']:
+            app.logger.error('SECRET_KEY must be set in .env or environment variables in production')
+            exit(1)
+        else:
+            random_secret = secrets.token_hex()
+            app.logger.warning(f'Using random secret "{ random_secret }" for development server. '
+                               'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
+            app.config['SECRET_KEY'] = random_secret
+
     db.init_app(app)
 
     if app.config['CACHING']:
@@ -94,7 +106,6 @@ def create_app():
         cache.init_app(app, config={'CACHE_TYPE': 'null'})
 
     stripe.api_key = 'SomeStripeKey'
-    app.secret_key = 'super secret key'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
@@ -259,6 +270,18 @@ def internal_server_error(error):
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
     return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
                          {'Content-Type': 'application/vnd.api+json'})
+
+
+@app.errorhandler(429)
+def ratelimit_handler(error):
+    return make_response(json.dumps({
+            'status': 429,
+            'title': 'Request Limit Exceeded'
+        }),
+        429,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
 
 
 if __name__ == '__main__':

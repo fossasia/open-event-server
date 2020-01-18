@@ -15,11 +15,11 @@ def get_settings(from_db=False):
     s = Setting.query.order_by(desc(Setting.id)).first()
     app_environment = current_app.config.get('ENV', 'production')
     if s is None:
-        set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
+        set_settings(app_name='Open Event', app_environment=app_environment)
     else:
         current_app.config['custom_settings'] = make_dict(s)
-        if not current_app.config['custom_settings'].get('secret'):
-            set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
+        if not current_app.config['custom_settings'].get('app_environment'):
+            set_settings(app_name='Open Event', app_environment=app_environment)
     return current_app.config['custom_settings']
 
 
@@ -71,7 +71,6 @@ def set_settings(**kwargs):
                 setattr(setting, key, value)
         from app.api.helpers.db import save_to_db
         save_to_db(setting, 'Setting saved')
-        current_app.secret_key = setting.secret
         stripe.api_key = setting.stripe_secret_key
 
         if setting.app_environment == Environment.DEVELOPMENT and not current_app.config['DEVELOPMENT']:

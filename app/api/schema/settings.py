@@ -111,8 +111,6 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
 
     app_environment = fields.Str(default=Environment.PRODUCTION)
 
-    # App secret
-    secret = fields.Str(allow_none=True)
     # Static domain
     static_domain = fields.Str(allow_none=True)
 

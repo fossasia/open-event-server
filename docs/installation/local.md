@@ -122,7 +122,8 @@ CREATE DATABASE opev_test WITH OWNER open_event_user;
 cp .env.example .env
 ```
 
-The URL is short, thanks to the resemble of Postgres user and OS user.
+Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that server will not run in production mode if you don't supply a secret.
+To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above and paste it in `.env` file
 
 
 * **Step 4** - Start the postgres service.
@@ -162,7 +163,7 @@ brew install redis
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-INTEGRATE_SOCKETIO=false celery worker -A app.celery
+INTEGRATE_SOCKETIO=false celery worker -A app.instance.celery
 
 # run app
 python3 manage.py runserver

@@ -24,5 +24,5 @@ then
     echo "[LOG] Starting celery worker"
     export INTEGRATE_SOCKETIO=false
     export CELERY_LOG_LEVEL=${CELERY_LOG_LEVEL:-info}
-    celery worker -B -A app.celery --loglevel=$CELERY_LOG_LEVEL $CELERY_EXTRA_ARGS
+    celery worker -B -A app.instance.celery --loglevel=$CELERY_LOG_LEVEL $CELERY_EXTRA_ARGS
 fi

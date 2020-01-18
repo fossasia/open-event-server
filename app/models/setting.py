@@ -26,8 +26,6 @@ class Setting(db.Model):
     app_name = db.Column(db.String)
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = db.Column(db.String)
-    # App secret
-    secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
     # Order Expiry Time in Minutes
@@ -200,7 +198,7 @@ class Setting(db.Model):
                  stripe_test_secret_key=None, stripe_test_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
-                 secret=None, storage_place=None,
+                 storage_place=None,
                  app_name=None,
                  static_domain=None,
                  tagline=None,
@@ -283,7 +281,6 @@ class Setting(db.Model):
         self.app_name = app_name
         self.static_domain = static_domain
         self.tagline = tagline
-        self.secret = secret
         self.storage_place = storage_place
         self.google_url = google_url
         self.github_url = github_url
