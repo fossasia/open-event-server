@@ -9,6 +9,7 @@ from app.api.helpers.mail import send_email_new_session, send_email_session_acce
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
+from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionSchema
 from app.models import db
@@ -17,8 +18,6 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
-from app.models.speakers_call import SpeakersCall
-from datetime import datetime
 from app.models.user import User
 from app.models.session_speaker_link import SessionsSpeakersLink
 from app.settings import get_settings
@@ -150,11 +149,7 @@ class SessionDetail(ResourceDetail):
         if session.is_locked and data.get('is_locked') == session.is_locked:
             raise ForbiddenException({'source': '/data/attributes/is-locked'}, "Locked sessions cannot be edited")
 
-        speakers_call = safe_query(self, SpeakersCall, 'event_id', session.event_id, 'event-id')
-        speakers_call_tz = speakers_call.ends_at.tzinfo
-        if speakers_call.ends_at <= datetime.now().replace(tzinfo=speakers_call_tz) and \
-           not (has_access('is_admin') or has_access('is_organizer', event_id=session.event_id) or
-                has_access('is_coorganizer', event_id=session.event_id)):
+        if not can_edit_after_cfs_ends(session.event_id):
             raise ForbiddenException({'source': ''},
                                      "Cannot edit session after the call for speaker is ended")
 

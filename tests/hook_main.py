@@ -1269,6 +1269,8 @@ def speaker_patch(transaction):
     """
     with stash['app'].app_context():
         speaker = SpeakerFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(speaker)
         db.session.commit()
 
@@ -1282,6 +1284,8 @@ def speaker_delete(transaction):
     """
     with stash['app'].app_context():
         speaker = SpeakerFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(speaker)
         db.session.commit()
 
