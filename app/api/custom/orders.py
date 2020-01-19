@@ -123,7 +123,7 @@ def create_order():
                                      .format(tickets_not_found, data['event_id'])), 404)
     for ticket_info in ticket_list:
         if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(ticket_info.id), deleted_at=None))) < quantity[ticket_info.id]:
+            ticket_id=int(ticket_info.id), deleted_at=None))) < quantity[ticket_info.id]:
             return make_response(jsonify(status='Order Unsuccessful', error='Ticket already sold out.'), 409)
     attendee_list = []
     for ticket in tickets:
@@ -170,6 +170,8 @@ def create_order():
 @jwt_required
 def complete_order(order_id):
     data = request.get_json()
+    for attribute in data:
+        data[attribute.replace('-', '_')] = data.pop(attribute)
     order = Order.query.filter_by(id=order_id).first()
     order_schema = OrderSchema()
     if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
@@ -184,7 +186,9 @@ def complete_order(order_id):
             # delete attendee after cancellation of order
             return order_schema.dump(order)
     updated_attendees = data['attendees']
-
+    for updated_attendee in updated_attendees:
+        for attribute in updated_attendee:
+            updated_attendee[attribute.replace('-', '_')] = updated_attendee.pop(attribute)
     if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != len(updated_attendees):
         return make_response(jsonify(status='Unprocessable Entity', error='You need to provide info of all attendees.')
                              , 422)
@@ -205,9 +209,13 @@ def complete_order(order_id):
         order.status = 'completed'
     elif order.amount > 0:
         order.status = 'pending'
-        if data['is_billing_enabled']:
-            if ('company' not in data) or ('address' not in data) or ('city' not in data) or ('zipcode' not in data) \
-                  or ('country' not in data):
+        if 'is_billing_enabled' in data:
+            if data['is_billing_enabled']:
+                if ('company' not in data) or ('address' not in data) or ('city' not in data) \
+                      or ('zipcode' not in data) or ('country' not in data):
+                    return make_response(jsonify(status='Unprocessable Entity', error='Billing information incomplete.')
+                                         , 422)
+            else:
                 return make_response(jsonify(status='Unprocessable Entity', error='Billing information incomplete.')
                                      , 422)
         else:
