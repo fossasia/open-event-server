@@ -203,8 +203,26 @@ def complete_order(order_id):
     # modified_at not getting filled
     if order.amount == 0:
         order.status = 'completed'
-        db.session.add(order)
-
+    elif order.amount > 0:
+        order.status = 'pending'
+        if data['is_billing_enabled']:
+            if ('company' not in data) or ('address' not in data) or ('city' not in data) or ('zipcode' not in data) \
+                  or ('country' not in data):
+                return make_response(jsonify(status='Unprocessable Entity', error='Billing information incomplete.')
+                                     , 422)
+        else:
+            return make_response(jsonify(status='Unprocessable Entity', error='Billing information is mandatory '
+                                                                              'for this order.'), 422)
+        order.company = data['company']
+        order.address = data['address']
+        order.city = data['city']
+        order.zipcode = data['zipcode']
+        order.country = data['country']
+        if 'state' in data:
+            order.state = data['state']
+        if 'tax_business_info' in data:
+            order.tax_business_info = data['tax_business_info']
     # add ticketing pdf logic
+    db.session.add(order)
     db.session.commit()
     return order_schema.dump(order)
