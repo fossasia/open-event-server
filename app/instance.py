@@ -37,10 +37,6 @@ from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views.blueprints import BlueprintsManager
 from app.api import routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
-from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
-    send_event_fee_notification_followup, change_session_state_on_event_completion, \
-    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due, \
-    delete_ticket_holders_no_order_id
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -234,8 +230,11 @@ health.add_check(health_check_migrations)
 # it is important to register them after celery is defined to resolve circular imports
 
 from .api.helpers import tasks
-
 celery = tasks.celery
+# register scheduled jobs
+from app.api.helpers.scheduled_jobs import setup_scheduled_task
+setup_scheduled_task(celery)
+
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
@@ -246,20 +245,6 @@ def update_sent_state(sender=None, headers=None, **kwargs):
     task = celery.tasks.get(sender)
     backend = task.backend if task else celery.backend
     backend.store_result(headers['id'], None, 'WAITING')
-
-
-scheduler = BackgroundScheduler(timezone=utc)
-# scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
-# scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
-scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
-scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-scheduler.add_job(send_event_fee_notification_followup, 'cron', day=1, month='1-12')
-scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
-scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
-scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
-scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
-scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=5)
-scheduler.start()
 
 
 @app.errorhandler(500)
