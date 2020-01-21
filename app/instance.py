@@ -138,7 +138,7 @@ def create_app():
     with app.app_context():
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
-        from app.api.attendees import attendee_misc_routes
+        from app.api.custom.attendees import attendee_blueprint
         from app.api.bootstrap import api_v1
         from app.api.celery_tasks import celery_routes
         from app.api.event_copy import event_copy
@@ -166,7 +166,7 @@ def create_app():
         app.register_blueprint(auth_routes)
         app.register_blueprint(event_statistics)
         app.register_blueprint(user_misc_routes)
-        app.register_blueprint(attendee_misc_routes)
+        app.register_blueprint(attendee_blueprint)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
         app.register_blueprint(authorised_blueprint)
