@@ -12,6 +12,8 @@ from flask_migrate import Migrate
 from flask import Flask
 from app.models import db
 from app.models.user import OWNER
+from app.models.user_token_blacklist import UserTokenBlackListTime  # noqa Workaround for registering unimported model
+from app.api import routes  # noqa Workaround for importing all required models
 
 # imports from factories
 
@@ -1066,6 +1068,8 @@ def session_patch(transaction):
     """
     with stash['app'].app_context():
         session = SessionFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(session)
         db.session.commit()
 
@@ -1079,6 +1083,8 @@ def session_delete(transaction):
     """
     with stash['app'].app_context():
         session = SessionFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(session)
         db.session.commit()
 
@@ -1263,6 +1269,8 @@ def speaker_patch(transaction):
     """
     with stash['app'].app_context():
         speaker = SpeakerFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(speaker)
         db.session.commit()
 
@@ -1276,6 +1284,8 @@ def speaker_delete(transaction):
     """
     with stash['app'].app_context():
         speaker = SpeakerFactory()
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
         db.session.add(speaker)
         db.session.commit()
 

@@ -4,9 +4,9 @@ from datetime import timedelta, datetime, timezone
 from flask import render_template
 
 from app.settings import get_settings
-from app.api.helpers import ticketing
 from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
@@ -135,6 +135,11 @@ def create_onsite_attendees_for_order(data):
 
 
 def calculate_order_amount(tickets, discount_code):
+    from app.api.helpers.ticketing import TicketingManager
+    if discount_code:
+        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
+            return UnprocessableEntityError({'source': 'discount-code'}, 'Discount Usage Exceeded').respond()
+
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []

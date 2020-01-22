@@ -1,11 +1,10 @@
 import unittest
 
-from tests.all.integration.utils import OpenEventTestCase
+from unittest import TestCase
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed
-from tests.all.integration.setup_database import Setup
 
 
-class TestExceptionsHelperValidation(OpenEventTestCase):
+class TestExceptionsHelperValidation(TestCase):
 
     def test_exceptions(self):
         """Method to test all exceptions."""

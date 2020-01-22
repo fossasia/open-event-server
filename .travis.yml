@@ -21,7 +21,7 @@ install:
   - pip3 install -r requirements/tests.txt
 
 env:
-  - APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
+  - APP_CONFIG="config.TestingConfig" SECRET_KEY="super secret key" PATH=$PATH:${HOME}/google-cloud-sdk/bin
   
 before_script:
   - psql -c 'create database test;' -U postgres
@@ -30,7 +30,7 @@ before_script:
   - bash scripts/test_multiple_heads.sh
   
 script:
-  - nosetests tests/all -v --with-coverage
+  - nosetests tests/ -v --with-coverage
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'

@@ -1,7 +1,6 @@
 import unittest
 import icalendar
 
-from app import current_app as app
 from app.factories.session import SessionFactory
 from app.factories.speaker import SpeakerFactory
 from app.api.helpers.ICalExporter import ICalExporter
@@ -12,7 +11,7 @@ class TestICalExporter(OpenEventTestCase):
 
     def test_export_basic(self):
         """Test to export ical format event"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_session = SessionFactory()
             icalexport_object = ICalExporter()
             test_cal_str = icalexport_object.export(test_session.event_id)
@@ -22,7 +21,7 @@ class TestICalExporter(OpenEventTestCase):
 
     def test_export_subcomponents(self):
         """Test to check presence of subcomponents"""
-        with app.test_request_context():
+        with self.app.test_request_context():
             test_session = SessionFactory()
 
             speaker = SpeakerFactory(name="xyz", email="test@xyz.com", user_id=1)

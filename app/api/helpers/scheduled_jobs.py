@@ -3,6 +3,8 @@ import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
 from flask import render_template
+from flask_celeryext import RequestContextTask
+from app.instance import celery
 
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
@@ -26,8 +28,9 @@ from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 
 
+@celery.task(base=RequestContextTask, name='send.after.event.mail')
 def send_after_event_mail():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(state='published', deleted_at=None).all()
         for event in events:
@@ -52,8 +55,9 @@ def send_after_event_mail():
                     send_notif_after_event(owner.user, event.name)
 
 
+@celery.task(base=RequestContextTask, name='change.session.state.on.event.completion')
 def change_session_state_on_event_completion():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         sessions_to_be_changed = Session.query.join(Event).filter(Session.state == 'pending')\
                                  .filter(Event.ends_at < datetime.datetime.now())
@@ -62,8 +66,9 @@ def change_session_state_on_event_completion():
             save_to_db(session, 'Changed {} session state to rejected'.format(session.title))
 
 
+@celery.task(base=RequestContextTask, name='send.event.fee.notification')
 def send_event_fee_notification():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
@@ -81,10 +86,9 @@ def send_event_fee_notification():
 
             fee_total = 0
             for order in orders:
-                for order_ticket in order.tickets:
-                    ticket = safe_query(db, Ticket, 'id', order_ticket.ticket_id, 'ticket_id')
+                for ticket in order.tickets:
                     if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
-                        fee = ticket.price * (get_fee(order.event.payment_currency) / 100.0)
+                        fee = ticket.price * (get_fee(event.payment_country, order.event.payment_currency) / 100.0)
                         fee_total += fee
 
             if fee_total > 0:
@@ -93,7 +97,7 @@ def send_event_fee_notification():
                     amount=fee_total, event_id=event.id, user_id=owner.user.id)
 
                 if event.discount_code_id and event.discount_code:
-                    r = relativedelta(datetime.utcnow(), event.created_at)
+                    r = relativedelta(datetime.datetime.utcnow(), event.created_at)
                     if r <= event.discount_code.valid_till:
                         new_invoice.amount = fee_total - \
                             (fee_total * (event.discount_code.value / 100.0))
@@ -120,8 +124,9 @@ def send_event_fee_notification():
                                                new_invoice.event_id)
 
 
+@celery.task(base=RequestContextTask, name='send.event.fee.notification.followup')
 def send_event_fee_notification_followup():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'paid').all()
         for incomplete_invoice in incomplete_invoices:
@@ -147,8 +152,9 @@ def send_event_fee_notification_followup():
                                                         incomplete_invoice.event.id)
 
 
+@celery.task(base=RequestContextTask, name='expire.pending.tickets')
 def expire_pending_tickets():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         db.session.query(Order).filter(Order.status == 'pending',
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
@@ -156,8 +162,9 @@ def expire_pending_tickets():
         db.session.commit()
 
 
+@celery.task(base=RequestContextTask, name='delete.ticket.holders.no.order.id')
 def delete_ticket_holders_no_order_id():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         order_expiry_time = get_settings()['order_expiry_time']
         TicketHolder.query.filter(TicketHolder.order_id == None, TicketHolder.deleted_at.is_(None),
@@ -166,8 +173,9 @@ def delete_ticket_holders_no_order_id():
         db.session.commit()
 
 
+@celery.task(base=RequestContextTask, name='event.invoices.mark.due')
 def event_invoices_mark_due():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         db.session.query(EventInvoice).filter(
             EventInvoice.status == 'upcoming',
@@ -177,8 +185,9 @@ def event_invoices_mark_due():
         ).update({EventInvoice.status: 'due'}, synchronize_session=False)
 
 
+@celery.task(base=RequestContextTask, name='send.monthly.event.invoice')
 def send_monthly_event_invoice():
-    from app import current_app as app
+    from app.instance import current_app as app
     with app.app_context():
         events = Event.query.filter_by(deleted_at=None, state='published').all()
         for event in events:
@@ -211,3 +220,16 @@ def send_monthly_event_invoice():
 
             event_invoice = EventInvoice(amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id)
             save_to_db(event_invoice)
+
+
+@celery.on_after_configure.connect
+def setup_scheduled_task(sender, **kwargs):
+    from celery.schedules import crontab
+    sender.add_periodic_task(crontab(hour='*/5', minute=30), send_after_event_mail)
+    sender.add_periodic_task(crontab(day_of_week='0-6'), send_event_fee_notification)
+    sender.add_periodic_task(crontab(minute=0, hour=0, day_of_month=1), send_event_fee_notification_followup)
+    sender.add_periodic_task(crontab(hour='*/5', minute=30), change_session_state_on_event_completion)
+    sender.add_periodic_task(crontab(minute='*/45'), expire_pending_tickets)
+    sender.add_periodic_task(crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice)
+    sender.add_periodic_task(crontab(minute=0, hour='*/5'), event_invoices_mark_due)
+    sender.add_periodic_task(crontab(minute='*/5'), delete_ticket_holders_no_order_id)

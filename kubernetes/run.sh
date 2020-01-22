@@ -9,11 +9,11 @@ then
     echo "[LOG] Running migrations"
     python manage.py db upgrade
     echo "[LOG] Starting gunicorn on port 8080"
-    gunicorn -b 0.0.0.0:8080 app:app -w 1 --enable-stdio-inheritance --log-level "warning" --proxy-protocol
+    gunicorn -b 0.0.0.0:8080 app.instance:app -w 1 --enable-stdio-inheritance --log-level "warning" --proxy-protocol
 fi
 if [ "$DEPLOYMENT" == "celery" ]
 then
     echo "[LOG] Starting celery worker"
     export INTEGRATE_SOCKETIO=false
-    celery worker -A app.celery --loglevel=warning
+    celery worker -A app.instance.celery --loglevel=warning
 fi

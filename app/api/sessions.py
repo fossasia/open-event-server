@@ -9,6 +9,7 @@ from app.api.helpers.mail import send_email_new_session, send_email_session_acce
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
+from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionSchema
 from app.models import db
@@ -147,6 +148,10 @@ class SessionDetail(ResourceDetail):
 
         if session.is_locked and data.get('is_locked') == session.is_locked:
             raise ForbiddenException({'source': '/data/attributes/is-locked'}, "Locked sessions cannot be edited")
+
+        if not can_edit_after_cfs_ends(session.event_id):
+            raise ForbiddenException({'source': ''},
+                                     "Cannot edit session after the call for speaker is ended")
 
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """

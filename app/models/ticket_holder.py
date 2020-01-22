@@ -35,6 +35,7 @@ class TicketHolder(SoftDeletionModel):
     facebook: str = db.Column(db.String)
     github: str = db.Column(db.String)
     gender: str = db.Column(db.String)
+    age_group: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)
     ticket_id: int = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))

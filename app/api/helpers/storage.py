@@ -99,7 +99,16 @@ class UploadedFile:
     def __init__(self, file_path, filename):
         self.file_path = file_path
         self.filename = filename
-        self.file = open(file_path)
+        self.file = open(file_path, 'rb')
+
+    def __len__(self):
+        position = self.file.tell()
+        try:
+            self.file.seek(0, os.SEEK_END)
+            last_position = self.file.tell()
+        finally:
+            self.file.seek(position)
+        return last_position
 
     def save(self, new_path):
         copyfile(self.file_path, new_path)
@@ -224,15 +233,15 @@ def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='
         item.delete()
     # set object settings
 
-    file_data = file.read()
-    file_mime = magic.from_buffer(file_data, mime=True)
-    size = len(file_data)
-    sent = k.set_contents_from_string(
-        file_data,
+    file_mime = magic.from_file(file.file_path, mime=True)
+    size = len(file)
+    sent = k.set_contents_from_file(
+        file.file,
         headers={
             'Content-Disposition': 'attachment; filename=%s' % filename,
             'Content-Type': '%s' % file_mime
-        }
+        },
+        rewind=True
     )
     k.set_acl(acl)
     s3_url = 'https://%s.s3.amazonaws.com/' % bucket_name
@@ -276,9 +285,11 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
 # ########
 
 
-def generate_hash(key):
+def generate_hash(key, salt=None):
     """
     Generate hash for key
     """
-    phash = generate_password_hash(key, get_settings()['secret'])
+    if not salt:
+        salt = app.secret_key
+    phash = generate_password_hash(key, salt)
     return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient

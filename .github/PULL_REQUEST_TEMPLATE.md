@@ -18,7 +18,7 @@ Fixes #
 
 - [ ] I have read the [Contribution & Best practices Guide](https://blog.fossasia.org/open-source-developer-guide-and-best-practices-at-fossasia) and my PR follows them.
 - [ ] My branch is up-to-date with the Upstream `development` branch.
-- [ ] The unit tests pass locally with my changes <!-- use `nosetests tests/all` to run all the tests -->
+- [ ] The unit tests pass locally with my changes <!-- use `nosetests tests/` to run all the tests -->
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] I have added necessary documentation (if appropriate)
 <!-- If an existing function does not have a docstring, please add one -->

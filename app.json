@@ -12,6 +12,9 @@
         "APP_SECRET_TOKEN": {
             "generator": "secret"
         },
+        "SECRET_KEY": {
+            "generator": "secret"
+        },
         "ON_HEROKU": "true",
         "FORCE_SSL": "true",
         "INVITATION_CODE": {

@@ -4,7 +4,6 @@ from datetime import datetime
 
 from flask import current_app
 
-from app import get_settings
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
@@ -15,6 +14,7 @@ from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, 
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
     TEST_MAIL
 from app.models.user import User
+from app.settings import get_settings
 
 
 def check_smtp_config(smtp_encryption):

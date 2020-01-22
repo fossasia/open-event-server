@@ -58,6 +58,7 @@ ATTENDEE_FORM = {
     "facebook": {"include": 0, "require": 0},
     "github": {"include": 1, "require": 0},
     "gender": {"include": 0, "require": 0},
+    "age_group": {"include": 0, "require": 0},
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))

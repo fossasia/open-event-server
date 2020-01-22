@@ -1,11 +1,11 @@
 from celery.signals import after_task_publish
 import logging
 import os.path
+import secrets
 from envparse import env
 
 import sys
 from flask import Flask, json, make_response
-from flask_celeryext import FlaskCeleryExt
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -13,12 +13,9 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
 from app.settings import get_settings, get_setts
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
+from flask_migrate import Migrate
 from flask_login import current_user
 from flask_jwt_extended import JWTManager
-from flask_limiter import Limiter
-from flask_limiter.util import get_ipaddr
 from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
@@ -37,21 +34,16 @@ from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
-from app.views import BlueprintsManager
+from app.views.blueprints import BlueprintsManager
+from app.api import routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
-from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
-    send_event_fee_notification_followup, change_session_state_on_event_completion, \
-    expire_pending_tickets, send_monthly_event_invoice, event_invoices_mark_due, \
-    delete_ticket_holders_no_order_id
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.elastic_search import client
-from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
-from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
-from app.extensions import shell
+from app.extensions import shell, limiter
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -59,7 +51,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-limiter = Limiter(app, key_func=get_ipaddr)
 env.read_envfile()
 
 
@@ -92,9 +83,18 @@ def create_app():
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
+
+    if not app.config['SECRET_KEY']:
+        if app.config['PRODUCTION']:
+            app.logger.error('SECRET_KEY must be set in .env or environment variables in production')
+            exit(1)
+        else:
+            random_secret = secrets.token_hex()
+            app.logger.warning(f'Using random secret "{ random_secret }" for development server. '
+                               'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
+            app.config['SECRET_KEY'] = random_secret
+
     db.init_app(app)
-    _manager = Manager(app)
-    _manager.add_command('db', MigrateCommand)
 
     if app.config['CACHING']:
         cache.init_app(app, config={'CACHE_TYPE': 'simple'})
@@ -102,7 +102,6 @@ def create_app():
         cache.init_app(app, config={'CACHE_TYPE': 'null'})
 
     stripe.api_key = 'SomeStripeKey'
-    app.secret_key = 'super secret key'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
@@ -139,7 +138,7 @@ def create_app():
     with app.app_context():
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
-        from app.api.attendees import attendee_misc_routes
+        from app.api.custom.attendees import attendee_blueprint
         from app.api.bootstrap import api_v1
         from app.api.celery_tasks import celery_routes
         from app.api.event_copy import event_copy
@@ -167,7 +166,7 @@ def create_app():
         app.register_blueprint(auth_routes)
         app.register_blueprint(event_statistics)
         app.register_blueprint(user_misc_routes)
-        app.register_blueprint(attendee_misc_routes)
+        app.register_blueprint(attendee_blueprint)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
         app.register_blueprint(authorised_blueprint)
@@ -199,23 +198,15 @@ def create_app():
     # redis
     redis_store.init_app(app)
 
+    # Initialize Extensions
     shell.init_app(app)
-
-    # elasticsearch
-    if app.config['ENABLE_ELASTICSEARCH']:
-        client.init_app(app)
-        connections.add_connection('default', client.elasticsearch)
-        with app.app_context():
-            try:
-                cron_rebuild_events_elasticsearch.delay()
-            except Exception:
-                pass
+    limiter.init_app(app)
 
     app_created = True
-    return app, _manager, db, _jwt
+    return app
 
 
-current_app, manager, database, jwt = create_app()
+current_app = create_app()
 init_filters(app)
 
 
@@ -226,13 +217,6 @@ def track_user():
         current_user.update_lat()
 
 
-def make_celery(app=None):
-    app = app or create_app()[0]
-    celery.conf.update(app.config)
-    ext = FlaskCeleryExt(app)
-    return ext.celery
-
-
 # Health-check
 health = HealthCheck(current_app, "/health-check")
 health.add_check(health_check_celery)
@@ -240,6 +224,16 @@ health.add_check(health_check_db)
 with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
+
+
+# register celery tasks. removing them will cause the tasks to not function. so don't remove them
+# it is important to register them after celery is defined to resolve circular imports
+
+from .api.helpers import tasks
+celery = tasks.celery
+# register scheduled jobs
+from app.api.helpers.scheduled_jobs import setup_scheduled_task
+setup_scheduled_task(celery)
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
@@ -253,32 +247,6 @@ def update_sent_state(sender=None, headers=None, **kwargs):
     backend.store_result(headers['id'], None, 'WAITING')
 
 
-# register celery tasks. removing them will cause the tasks to not function. so don't remove them
-# it is important to register them after celery is defined to resolve circular imports
-
-from .api.helpers import tasks
-
-# import helpers.tasks
-
-
-scheduler = BackgroundScheduler(timezone=utc)
-# scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
-# scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
-if app.config['ENABLE_ELASTICSEARCH']:
-    scheduler.add_job(sync_events_elasticsearch, 'interval', minutes=60)
-    scheduler.add_job(cron_rebuild_events_elasticsearch, 'cron', day=7)
-
-scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
-scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-scheduler.add_job(send_event_fee_notification_followup, 'cron', day=1, month='1-12')
-scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
-scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
-scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
-scheduler.add_job(event_invoices_mark_due, 'cron', hour=5)
-scheduler.add_job(delete_ticket_holders_no_order_id, 'cron', minute=5)
-scheduler.start()
-
-
 @app.errorhandler(500)
 def internal_server_error(error):
     if current_app.config['PROPOGATE_ERROR'] is True:
@@ -287,6 +255,18 @@ def internal_server_error(error):
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
     return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
                          {'Content-Type': 'application/vnd.api+json'})
+
+
+@app.errorhandler(429)
+def ratelimit_handler(error):
+    return make_response(json.dumps({
+            'status': 429,
+            'title': 'Request Limit Exceeded'
+        }),
+        429,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
 
 
 if __name__ == '__main__':

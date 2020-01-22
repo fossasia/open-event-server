@@ -1,3 +1,4 @@
+from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
@@ -5,7 +6,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.api.helpers.validations import validate_complex_fields_json
 from marshmallow import validates_schema
-
+from app.api.helpers.static import AGE_GROUP_CHOICES
 
 class AttendeeSchemaPublic(SoftDeletionSchema):
     """
@@ -48,6 +49,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
     gender = fields.Str(allow_none=True)
+    age_group = fields.Str(validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)
