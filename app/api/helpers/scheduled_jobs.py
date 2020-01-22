@@ -86,8 +86,7 @@ def send_event_fee_notification():
 
             fee_total = 0
             for order in orders:
-                for order_ticket in order.tickets:
-                    ticket = safe_query(db, Ticket, 'id', order_ticket.ticket_id, 'ticket_id')
+                for ticket in order.tickets:
                     if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
                         fee = ticket.price * (get_fee(event.payment_country, order.event.payment_currency) / 100.0)
                         fee_total += fee
