@@ -35,8 +35,7 @@ class UserFavouriteEventListPost(ResourceList):
             raise ForbiddenException({'source': ''}, 'Only Authorized Users can favourite an event')
 
         data['user'] = current_user.id
-        user_favourite_event = UserFavouriteEvent.query.filter_by(
-                                   user=current_user, event_id=int(data['event'])).first()
+        user_favourite_event = find_user_favourite_event_by_id(event_id=data['event'])
         if user_favourite_event:
             raise ConflictException({'pointer': '/data/relationships/event'}, "Event already favourited")
 
@@ -86,8 +85,7 @@ class UserFavouriteEventDetail(ResourceDetail):
 
         if view_kwargs.get('id') is not None:
             try:
-                user_favourite_event = UserFavouriteEvent.query.filter_by(
-                    user=current_user, event_id=view_kwargs['id']).first()
+                user_favourite_event = find_user_favourite_event_by_id(event_id=view_kwargs['id'])
             except NoResultFound:
                 raise ObjectNotFound({'source': '/data/relationships/event'}, "Object: not found")
             else:
@@ -113,3 +111,9 @@ class UserFavouriteEventRelationship(ResourceRelationship):
     methods = ['GET']
     data_layer = {'session': db.session,
                   'model': UserFavouriteEvent}
+
+
+def find_user_favourite_event_by_id(event_id):
+    return UserFavouriteEvent.query.filter_by(deleted_at=None,
+                                              user=current_user,
+                                              event_id=event_id).first()
