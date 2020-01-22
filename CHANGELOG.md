@@ -1,5 +1,18 @@
 ## Changelog
 
+#### v1.11.0 (2020-01-23):
+
+- Fix count query of tickets.
+- Restricting deletion of orders except by admin.
+- Fix missing fields and incorrect column value in session csv export.
+- Moved execution code from __init__.
+- Addition of field for Promoted Events, Instagram Speaker URL, Age Groups for Attendee.
+- Replaced jobs running with APS to celery-beat.
+- Fix sessions can not be edited after CFS has ended.
+- Fix remove secret from DB and enforce env.
+- Removed events-orga endpoint, elasticsearch initialisation.
+- Fix superadmin can delete spam events.
+
 ##### v1.10.0 (2019-12-22):
 
 - Fix event and speaker image resizing, and add management command to resize event and speaker images which remained to be resized.  
