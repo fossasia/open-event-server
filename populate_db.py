@@ -18,7 +18,15 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
-from app.models.user import OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
+from app.models.user import (
+    OWNER,
+    ORGANIZER,
+    COORGANIZER,
+    TRACK_ORGANIZER,
+    MODERATOR,
+    ATTENDEE,
+    REGISTRAR,
+)
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -45,6 +53,7 @@ from app.models.custom_placeholder import CustomPlaceholder
 
 # User Permissions
 from app.models.user_permission import UserPermission
+
 SALES = 'sales'
 ADMIN = 'admin'
 EVENTS = 'events'
@@ -84,22 +93,38 @@ def create_services():
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
 
+
 def create_event_image_sizes():
     get_or_create(
-        ImageSizes, type='event-image', full_width=1300,
-        full_height=500, full_aspect=True, full_quality=80,
-        icon_width=75, icon_height=30, icon_aspect=True,
-        icon_quality=80, thumbnail_width=500, thumbnail_height=200,
-        thumbnail_aspect=True, thumbnail_quality=80, logo_width=500,
-        logo_height=200
+        ImageSizes,
+        type='event-image',
+        full_width=1300,
+        full_height=500,
+        full_aspect=True,
+        full_quality=80,
+        icon_width=75,
+        icon_height=30,
+        icon_aspect=True,
+        icon_quality=80,
+        thumbnail_width=500,
+        thumbnail_height=200,
+        thumbnail_aspect=True,
+        thumbnail_quality=80,
+        logo_width=500,
+        logo_height=200,
     )
 
 
 def create_speaker_image_sizes():
     get_or_create(
-        ImageSizes, type='speaker-image', icon_size_width_height=35, icon_size_quality=80,
-        small_size_width_height=50, small_size_quality=80,
-        thumbnail_size_width_height=500, thumbnail_quality=80
+        ImageSizes,
+        type='speaker-image',
+        icon_size_width_height=35,
+        icon_size_quality=80,
+        small_size_width_height=50,
+        small_size_quality=80,
+        thumbnail_size_width_height=500,
+        thumbnail_quality=80,
     )
 
 
@@ -108,57 +133,109 @@ def create_modules():
 
 
 def create_event_topics():
-    event_topic = ['Health & Wellness', 'Home & Lifestyle',
-                   'Charity & Causes', 'Other', 'Religion & Spirituality',
-                   'Community & Culture', 'Government & Politics',
-                   'Government & Politics', 'Auto, Boat & Air',
-                   'Travel & Outdoor', 'Hobbies & Special Interest',
-                   'Sports & Fitness', 'Business & Professional',
-                   'Music', 'Seasonal & Holiday',
-                   'Film, Media & Entertainment', 'Family & Education',
-                   'Science & Technology', 'Performing & Visual Arts',
-                   'Food & Drink', 'Family & Education']
+    event_topic = [
+        'Health & Wellness',
+        'Home & Lifestyle',
+        'Charity & Causes',
+        'Other',
+        'Religion & Spirituality',
+        'Community & Culture',
+        'Government & Politics',
+        'Government & Politics',
+        'Auto, Boat & Air',
+        'Travel & Outdoor',
+        'Hobbies & Special Interest',
+        'Sports & Fitness',
+        'Business & Professional',
+        'Music',
+        'Seasonal & Holiday',
+        'Film, Media & Entertainment',
+        'Family & Education',
+        'Science & Technology',
+        'Performing & Visual Arts',
+        'Food & Drink',
+        'Family & Education',
+    ]
     for topic in event_topic:
         get_or_create(EventTopic, name=topic)
 
 
 def create_event_sub_topics():
     event_sub_topic = {
-     "Film, Media & Entertainment": ["Comedy", "Gaming", "Anime"],
-     "Community & Culture": ["City/Town", "Other", "LGBT"],
-     "Home & Lifestyle": ["Dating", "Home & Garden"],
-     "Sports & Fitness": ["Volleyball", "Other"],
-     "Health & Wellness": ["Yoga", "Medical"],
-     "Food & Drink": ["Other", "Food", "Beer"],
-     "Other": ["Avatar", "Logo"],
-     "Science & Technology": ["Robotics", "Other", "High Tech", "Science", "Social Media", "Medicine", "Mobile", "Biotech"],
-     "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
-     "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
-     "Family & Education": ["Education", "Baby", "Reunion"],
-     "Business & Professional": ["Career", "Startups & Small Business", "Educators", "Design", "Finance"],
-     "Charity & Causes": ["Education", "Other", "Environment"],
-     "Hobbies & Special Interest": ["Other", "Anime/Comics"],
-     "Seasonal & Holiday": ["Easter", "Other"],
-     "Auto, Boat & Air": ["Auto", "Air"],
-     "Religion & Spirituality": ["Mysticism and Occult"],
-     "Government & Politics": ["Non-partisan"]
+        "Film, Media & Entertainment": ["Comedy", "Gaming", "Anime"],
+        "Community & Culture": ["City/Town", "Other", "LGBT"],
+        "Home & Lifestyle": ["Dating", "Home & Garden"],
+        "Sports & Fitness": ["Volleyball", "Other"],
+        "Health & Wellness": ["Yoga", "Medical"],
+        "Food & Drink": ["Other", "Food", "Beer"],
+        "Other": ["Avatar", "Logo"],
+        "Science & Technology": [
+            "Robotics",
+            "Other",
+            "High Tech",
+            "Science",
+            "Social Media",
+            "Medicine",
+            "Mobile",
+            "Biotech",
+        ],
+        "Music": [
+            "Cultural",
+            "Pop",
+            "Top 40",
+            "EDM / Electronic",
+            "R&B",
+            "Other",
+            "Classical",
+        ],
+        "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
+        "Family & Education": ["Education", "Baby", "Reunion"],
+        "Business & Professional": [
+            "Career",
+            "Startups & Small Business",
+            "Educators",
+            "Design",
+            "Finance",
+        ],
+        "Charity & Causes": ["Education", "Other", "Environment"],
+        "Hobbies & Special Interest": ["Other", "Anime/Comics"],
+        "Seasonal & Holiday": ["Easter", "Other"],
+        "Auto, Boat & Air": ["Auto", "Air"],
+        "Religion & Spirituality": ["Mysticism and Occult"],
+        "Government & Politics": ["Non-partisan"],
     }
     eventopics = db.session.query(EventTopic).all()
     for keysub_topic in event_sub_topic:
         for subtopic in event_sub_topic[keysub_topic]:
-            get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
+            get_or_create(
+                EventSubTopic,
+                name=subtopic,
+                event_topic_id=next(x for x in eventopics if x.name == keysub_topic).id,
+            )
 
 
 def create_event_types():
-    event_type = ['Camp, Treat & Retreat', 'Dinner or Gala',
-                  'Other', 'Concert or Performance', 'Conference',
-                  'Seminar or Talk', 'Convention',
-                  'Festival or Fair', 'Tour',
-                  'Screening', 'Game or Competition',
-                  'Party or Social Gathering', 'Race or Endurance Event',
-                  'Meeting or Networking Event', 'Attraction',
-                  'Class, Training, or Workshop', 'Appearance or Signing',
-                  'Tournament', 'Rally']
+    event_type = [
+        'Camp, Treat & Retreat',
+        'Dinner or Gala',
+        'Other',
+        'Concert or Performance',
+        'Conference',
+        'Seminar or Talk',
+        'Convention',
+        'Festival or Fair',
+        'Tour',
+        'Screening',
+        'Game or Competition',
+        'Party or Social Gathering',
+        'Race or Endurance Event',
+        'Meeting or Networking Event',
+        'Attraction',
+        'Class, Training, or Workshop',
+        'Appearance or Signing',
+        'Tournament',
+        'Rally',
+    ]
     for type_ in event_type:
         get_or_create(EventType, name=type_)
 
@@ -232,8 +309,18 @@ def create_custom_sys_roles():
 
 
 def create_panels():
-    panels = [SALES, ADMIN, EVENTS, SESSIONS, USERS, PERMISSIONS, MESSAGES,
-              REPORTS, SETTINGS, CONTENT]
+    panels = [
+        SALES,
+        ADMIN,
+        EVENTS,
+        SESSIONS,
+        USERS,
+        PERMISSIONS,
+        MESSAGES,
+        REPORTS,
+        SETTINGS,
+        CONTENT,
+    ]
     for panel in panels:
         perm, _ = get_or_create(PanelPermission, panel_name=panel)
         db.session.add(perm)
@@ -249,47 +336,62 @@ def create_panel_permissions():
 
 def create_user_permissions():
     # Publish Event
-    user_perm, _ = get_or_create(UserPermission, name='publish_event',
-                                 description='Publish event (make event live)')
+    user_perm, _ = get_or_create(
+        UserPermission,
+        name='publish_event',
+        description='Publish event (make event live)',
+    )
     user_perm.verified_user = True
     db.session.add(user_perm)
 
     # Create Event
-    user_perm, _ = get_or_create(UserPermission, name='create_event',
-                                 description='Create event')
+    user_perm, _ = get_or_create(
+        UserPermission, name='create_event', description='Create event'
+    )
     user_perm.verified_user, user_perm.unverified_user = True, False
     db.session.add(user_perm)
 
 
 def create_admin_message_settings():
-    default_mails = ["Next Event",
-                     "Session Schedule Change",
-                     "User email",
-                     "Invitation For Papers",
-                     "After Event",
-                     "Ticket(s) Purchased",
-                     "Session Accept or Reject",
-                     "Event Published",
-                     "Event Export Failed",
-                     "Event Exported",
-                     "Event Role Invitation",
-                     "New Session Proposal"]
+    default_mails = [
+        "Next Event",
+        "Session Schedule Change",
+        "User email",
+        "Invitation For Papers",
+        "After Event",
+        "Ticket(s) Purchased",
+        "Session Accept or Reject",
+        "Event Published",
+        "Event Export Failed",
+        "Event Exported",
+        "Event Role Invitation",
+        "New Session Proposal",
+    ]
     for mail in MAILS:
         if mail in default_mails:
-            get_or_create(MessageSettings, action=mail, mail_status=True,
-                          notification_status=True, user_control_status=True)
+            get_or_create(
+                MessageSettings,
+                action=mail,
+                mail_status=True,
+                notification_status=True,
+                user_control_status=True,
+            )
         else:
             get_or_create(
-                MessageSettings, action=mail, mail_status=False,
-                notification_status=False, user_control_status=False
+                MessageSettings,
+                action=mail,
+                mail_status=False,
+                notification_status=False,
+                user_control_status=False,
             )
 
 
 def create_custom_placeholders():
     custom_placeholder, _ = get_or_create(
-        CustomPlaceholder, name='Hills',
+        CustomPlaceholder,
+        name='Hills',
         original_image_url='https://www.w3schools.com/html/pic_mountain.jpg',
-        event_sub_topic_id=1
+        event_sub_topic_id=1,
     )
     db.session.add(custom_placeholder)
 

@@ -17,10 +17,14 @@ down_revision = 'cd3beca1951a'
 
 
 def upgrade():
-	op.execute("UPDATE event_invoices SET status = 'due' where status = 'pending';",
-               execution_options=None)
+    op.execute(
+        "UPDATE event_invoices SET status = 'due' where status = 'pending';",
+        execution_options=None,
+    )
 
 
 def downgrade():
-    op.execute("UPDATE event_invoices SET status = 'pending' where status = 'due';",
-               execution_options=None)
+    op.execute(
+        "UPDATE event_invoices SET status = 'pending' where status = 'due';",
+        execution_options=None,
+    )

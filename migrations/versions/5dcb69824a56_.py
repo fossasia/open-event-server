@@ -23,10 +23,14 @@ def upgrade():
     op.alter_column('events', 'thumbnail', new_column_name='thumbnail_image_url')
     op.alter_column('events', 'icon', new_column_name='icon_image_url')
 
-    op.alter_column('events_version', 'background_url', new_column_name='original_image_url')
+    op.alter_column(
+        'events_version', 'background_url', new_column_name='original_image_url'
+    )
     op.alter_column('events_version', 'logo', new_column_name='logo_url')
     op.alter_column('events_version', 'large', new_column_name='large_image_url')
-    op.alter_column('events_version', 'thumbnail', new_column_name='thumbnail_image_url')
+    op.alter_column(
+        'events_version', 'thumbnail', new_column_name='thumbnail_image_url'
+    )
     op.alter_column('events_version', 'icon', new_column_name='icon_image_url')
     # ### end Alembic commands ###
 
@@ -40,9 +44,13 @@ def downgrade():
     op.alter_column('events', 'thumbnail_image_url', new_column_name='thumbnail')
     op.alter_column('events', 'icon_image_url', new_column_name='icon')
 
-    op.alter_column('events_version', 'original_image_url', new_column_name='background_url')
+    op.alter_column(
+        'events_version', 'original_image_url', new_column_name='background_url'
+    )
     op.alter_column('events_version', 'logo_url', new_column_name='logo')
     op.alter_column('events_version', 'large_image_url', new_column_name='large')
-    op.alter_column('events_version', 'thumbnail_image_url', new_column_name='thumbnail')
+    op.alter_column(
+        'events_version', 'thumbnail_image_url', new_column_name='thumbnail'
+    )
     op.alter_column('events_version', 'icon_image_url', new_column_name='icon')
     # ### end Alembic commands ###

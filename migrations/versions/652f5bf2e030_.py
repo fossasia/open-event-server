@@ -19,9 +19,18 @@ def upgrade():
     op.add_column('events', sa.Column('ical_url', sa.String(), nullable=True))
     op.add_column('events', sa.Column('pentabarf_url', sa.String(), nullable=True))
     op.add_column('events', sa.Column('xcal_url', sa.String(), nullable=True))
-    op.add_column('events_version', sa.Column('ical_url', sa.String(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('pentabarf_url', sa.String(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('xcal_url', sa.String(), autoincrement=False, nullable=True))
+    op.add_column(
+        'events_version',
+        sa.Column('ical_url', sa.String(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('pentabarf_url', sa.String(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('xcal_url', sa.String(), autoincrement=False, nullable=True),
+    )
     ### end Alembic commands ###
 
 

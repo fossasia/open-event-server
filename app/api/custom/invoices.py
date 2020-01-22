@@ -19,22 +19,32 @@ event_blueprint = Blueprint('event_blueprint', __name__, url_prefix='/v1/events'
 @jwt_required
 def event_invoices(invoice_identifier):
     if not current_user:
-        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+        return ForbiddenError(
+            {'source': ''}, 'Authentication Required to access Invoice'
+        ).respond()
     try:
-        event_invoice = EventInvoice.query.filter_by(identifier=invoice_identifier).first()
+        event_invoice = EventInvoice.query.filter_by(
+            identifier=invoice_identifier
+        ).first()
         event_id = event_invoice.event_id
     except NoResultFound:
         return NotFoundError({'source': ''}, 'Event Invoice not found').respond()
     if not current_user.is_organizer(event_id) and not current_user.is_staff:
         return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
-    file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + invoice_identifier + '.pdf'
+    file_path = (
+        '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
+        + invoice_identifier
+        + '.pdf'
+    )
     try:
         return return_file('event-invoice', file_path, invoice_identifier)
     except FileNotFoundError:
-        raise ObjectNotFound({'source': ''},
-                             "The Event Invoice isn't available at the moment. \
-                             Invoices are usually issued on the 1st of every month")
+        raise ObjectNotFound(
+            {'source': ''},
+            "The Event Invoice isn't available at the moment. \
+                             Invoices are usually issued on the 1st of every month",
+        )
 
 
 @order_blueprint.route('/invoices/<string:order_identifier>')
@@ -47,7 +57,11 @@ def order_invoices(order_identifier):
             return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
         if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            file_path = (
+                '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
             try:
                 return return_file('invoice', file_path, order_identifier)
             except FileNotFoundError:
@@ -56,4 +70,6 @@ def order_invoices(order_identifier):
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
-        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+        return ForbiddenError(
+            {'source': ''}, 'Authentication Required to access Invoice'
+        ).respond()

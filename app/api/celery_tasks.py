@@ -21,6 +21,7 @@ def celery_task(task_id):
         info = TASK_RESULTS[task_id]['result']
     else:
         from app.views.celery_ import celery
+
         result = AsyncResult(id=task_id, app=celery)
         state = result.state
         info = result.info

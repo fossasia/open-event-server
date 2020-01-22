@@ -34,9 +34,7 @@ def db_drop_everything(db):
         for fk in inspector.get_foreign_keys(table_name):
             if not fk['name']:
                 continue
-            fks.append(
-                ForeignKeyConstraint((), (), name=fk['name'])
-            )
+            fks.append(ForeignKeyConstraint((), (), name=fk['name']))
         t = Table(table_name, metadata, *fks)
         tbs.append(t)
         all_fks.extend(fks)

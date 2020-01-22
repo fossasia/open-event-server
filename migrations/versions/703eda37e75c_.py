@@ -22,11 +22,26 @@ def upgrade():
     op.add_column('events', sa.Column('pay_by_paypal', sa.Boolean(), nullable=True))
     op.add_column('events', sa.Column('pay_by_stripe', sa.Boolean(), nullable=True))
     op.add_column('events', sa.Column('pay_onsite', sa.Boolean(), nullable=True))
-    op.add_column('events_version', sa.Column('pay_by_bank', sa.Boolean(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('pay_by_cheque', sa.Boolean(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('pay_by_paypal', sa.Boolean(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('pay_by_stripe', sa.Boolean(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('pay_onsite', sa.Boolean(), autoincrement=False, nullable=True))
+    op.add_column(
+        'events_version',
+        sa.Column('pay_by_bank', sa.Boolean(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('pay_by_cheque', sa.Boolean(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('pay_by_paypal', sa.Boolean(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('pay_by_stripe', sa.Boolean(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('pay_onsite', sa.Boolean(), autoincrement=False, nullable=True),
+    )
     ### end Alembic commands ###
 
 

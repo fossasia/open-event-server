@@ -17,7 +17,7 @@ class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     subtitle = common.string_
     level = common.int_
     short_abstract = common.string_
-    long_abstract = (common.string_ + common.string_)
+    long_abstract = common.string_ + common.string_
     comments = common.string_
     starts_at = common.dateFuture_
     ends_at = common.dateEndFuture_

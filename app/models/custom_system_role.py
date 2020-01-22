@@ -5,6 +5,7 @@ from app.models.panel_permission import PanelPermission
 class CustomSysRole(db.Model):
     """Custom System Role
     """
+
     __tablename__ = 'custom_sys_roles'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -30,23 +31,30 @@ class CustomSysRole(db.Model):
 class UserSystemRole(db.Model):
     """User Custom System Role
     """
+
     __tablename__ = 'user_system_role'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id',
-                                                  ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User')
 
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id',
-                                                   ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event')
 
-    role_id = db.Column(db.Integer, db.ForeignKey('custom_sys_roles.id',
-                                                  ondelete='CASCADE'))
+    role_id = db.Column(
+        db.Integer, db.ForeignKey('custom_sys_roles.id', ondelete='CASCADE')
+    )
     role = db.relationship('CustomSysRole')
 
-    def __init__(self, user=None, event=None, role=None,
-                 user_id=None, role_id=None, event_id=None):
+    def __init__(
+        self,
+        user=None,
+        event=None,
+        role=None,
+        user_id=None,
+        role_id=None,
+        event_id=None,
+    ):
         if user:
             self.user = user
         if event:

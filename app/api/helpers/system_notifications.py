@@ -25,7 +25,8 @@ from app.models.notification import (
     TICKET_PURCHASED_ATTENDEE,
     TICKET_CANCELLED,
     TICKET_CANCELLED_ORGANIZER,
-    NotificationAction)
+    NotificationAction,
+)
 
 
 def get_event_exported_actions(download_url):
@@ -35,9 +36,7 @@ def get_event_exported_actions(download_url):
     :return: actions.
     """
     download_action = NotificationAction(
-        subject='event-export',
-        link=download_url,
-        action_type='download'
+        subject='event-export', link=download_url, action_type='download'
     )
     save_to_db(download_action)
     return [download_action]
@@ -54,7 +53,7 @@ def get_event_imported_actions(event_id, event_url):
         subject='event',  # subject is still 'event' since the action will be to view the imported event.
         link=event_url,
         subject_id=event_id,
-        action_type='view'
+        action_type='view',
     )
     save_to_db(view_event_action)
     return [view_event_action]
@@ -68,10 +67,7 @@ def get_monthly_payment_notification_actions(event_id, payment_url):
     :return: actions
     """
     view_invoice_action = NotificationAction(
-        subject='event',
-        link=payment_url,
-        subject_id=event_id,
-        action_type='view'
+        subject='event', link=payment_url, subject_id=event_id, action_type='view'
     )
     save_to_db(view_invoice_action)
     return [view_invoice_action]
@@ -85,10 +81,7 @@ def get_monthly_payment_follow_up_notification_actions(event_id, payment_url):
     :return: actions
     """
     view_invoice_action = NotificationAction(
-        subject='invoice',
-        link=payment_url,
-        subject_id=event_id,
-        action_type='view'
+        subject='invoice', link=payment_url, subject_id=event_id, action_type='view'
     )
     save_to_db(view_invoice_action)
     return [view_invoice_action]
@@ -102,10 +95,7 @@ def get_ticket_purchased_notification_actions(order_id, order_url):
     :return:
     """
     view_order_invoice_action = NotificationAction(
-        subject='order',
-        link=order_url,
-        subject_id=order_id,
-        action_type='view'
+        subject='order', link=order_url, subject_id=order_id, action_type='view'
     )
     save_to_db(view_order_invoice_action)
     return [view_order_invoice_action]
@@ -118,9 +108,7 @@ def get_ticket_purchased_attendee_notification_actions(pdf_url):
     :return: actions
     """
     view_ticket_action = NotificationAction(
-        subject='tickets-pdf',
-        link=pdf_url,
-        action_type='view'
+        subject='tickets-pdf', link=pdf_url, action_type='view'
     )
     save_to_db(view_ticket_action)
     return [view_ticket_action]
@@ -134,10 +122,7 @@ def get_ticket_purchased_organizer_notification_actions(order_id, order_url):
     :return: actions
     """
     view_ticket_action = NotificationAction(
-        subject='order',
-        subject_id=order_id,
-        link=order_url,
-        action_type='view'
+        subject='order', subject_id=order_id, link=order_url, action_type='view'
     )
     save_to_db(view_ticket_action)
     return [view_ticket_action]
@@ -151,10 +136,7 @@ def get_event_published_notification_actions(event_id, event_link):
     :return: actions
     """
     view_event_action = NotificationAction(
-        subject='event',
-        subject_id=event_id,
-        link=event_link,
-        action_type='view'
+        subject='event', subject_id=event_id, link=event_link, action_type='view'
     )
     save_to_db(view_event_action)
     return [view_event_action]
@@ -171,7 +153,7 @@ def get_event_role_notification_actions(event_id, invitation_link):
         subject='event-role',
         subject_id=event_id,
         link=invitation_link,
-        action_type='view'
+        action_type='view',
     )
     save_to_db(accept_event_role_action)
     return [accept_event_role_action]
@@ -185,10 +167,7 @@ def get_new_session_notification_actions(session_id, link):
     :return: actions
     """
     view_session_action = NotificationAction(
-        subject='session',
-        link=link,
-        subject_id=session_id,
-        action_type='view'
+        subject='session', link=link, subject_id=session_id, action_type='view'
     )
     save_to_db(view_session_action)
     return [view_session_action]
@@ -202,10 +181,7 @@ def get_session_schedule_notification_actions(session_id, link):
     :return: actions
     """
     view_session_action = NotificationAction(
-        subject='session',
-        link=link,
-        subject_id=session_id,
-        action_type='view'
+        subject='session', link=link, subject_id=session_id, action_type='view'
     )
     save_to_db(view_session_action)
     return [view_session_action]
@@ -219,10 +195,7 @@ def get_next_event_notification_actions(event_id, link):
     :return: actions
     """
     view_event_action = NotificationAction(
-        subject='event',
-        link=link,
-        subject_id=event_id,
-        action_type='view'
+        subject='event', link=link, subject_id=event_id, action_type='view'
     )
     save_to_db(view_event_action)
     return [view_event_action]
@@ -236,10 +209,7 @@ def get_session_accept_reject_notification_actions(session_id, link):
     :return: actions
     """
     view_session_action = NotificationAction(
-        subject='session',
-        link=link,
-        subject_id=session_id,
-        action_type='view'
+        subject='session', link=link, subject_id=session_id, action_type='view'
     )
     save_to_db(view_session_action)
     return [view_session_action]
@@ -253,14 +223,10 @@ def get_invite_papers_notification_actions(cfs_link, submit_link):
     :return:
     """
     view_cfs_action = NotificationAction(
-        subject='call-for-speakers',
-        link=cfs_link,
-        action_type='view'
+        subject='call-for-speakers', link=cfs_link, action_type='view'
     )
     submit_paper_action = NotificationAction(
-        subject='call-for-speakers',
-        link=submit_link,
-        action_type='submit'
+        subject='call-for-speakers', link=submit_link, action_type='submit'
     )
     save_to_db(view_cfs_action)
     save_to_db(submit_paper_action)
@@ -273,112 +239,96 @@ NOTIFS = {
         'title': u'Event {event_name} has been exported',
         'message': (
             u"Event <strong>{event_name}</strong> has been exported successfully."
-        )
+        ),
     },
     EVENT_EXPORT_FAIL: {
         'recipient': 'User',
         'title': u'Export of event {event_name} failed',
-        'message': (
-            u"The following error occurred:<br>" +
-            u"<pre>{error_text}</pre>"
-        )
+        'message': (u"The following error occurred:<br>" + u"<pre>{error_text}</pre>"),
     },
     EVENT_IMPORTED: {
         'recipient': 'User',
         'title': u'Event {event_name} has been imported',
         'message': (
             u"Event <strong>{event_name}</strong> has been imported successfully."
-        )
+        ),
     },
     EVENT_IMPORT_FAIL: {
         'recipient': 'User',
         'title': u'Import of event failed',
-        'message': (
-            u"The following error occurred:<br>" +
-            u"<pre>{error_text}</pre>"
-        )
+        'message': (u"The following error occurred:<br>" + u"<pre>{error_text}</pre>"),
     },
     MONTHLY_PAYMENT_NOTIF: {
         'recipient': 'Owner, Organizer',
         'subject': u'{date} - Monthly service fee invoice for {event_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
-            u"<br/> That payment for the same has to be made in two weeks." +
-            u"<br><br><em>Thank you for using {app_name}.</em>"
+            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
+            + u"<br/> That payment for the same has to be made in two weeks."
+            + u"<br><br><em>Thank you for using {app_name}.</em>"
         ),
-        'sent_at': '1st day of the month'
+        'sent_at': '1st day of the month',
     },
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF: {
         'recipient': 'Owner, Organizer',
         'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
-            u"<br/> That payment for the same is past the due date." +
-            u"<br><br><em>Thank you for using {app_name}.</em>"
+            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
+            + u"<br/> That payment for the same is past the due date."
+            + u"<br><br><em>Thank you for using {app_name}.</em>"
         ),
-        'sent_at': '15th day of the month'
+        'sent_at': '15th day of the month',
     },
     TICKET_PURCHASED: {
         'recipient': 'User',
         'title': u'Your order invoice and tickets ({invoice_id})',
-        'message': (
-            u"Your order has been processed successfully."
-        )
+        'message': (u"Your order has been processed successfully."),
     },
     TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'User',
         'title': u'Your ticket for {event_name}',
-        'message': (
-            u"Your order has been processed successfully."
-        )
+        'message': (u"Your order has been processed successfully."),
     },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer',
         'title': u'New ticket purchase for {event_name} : ({invoice_id}) ',
-        'message': (
-            u"The order has been processed successfully."
-        )
+        'message': (u"The order has been processed successfully."),
     },
     TICKET_RESEND_ORGANIZER: {
         'recipient': 'Owner, Organizer',
         'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id}) ',
-        'message': (
-            u"Email has been sent successfully."
-        )
+        'message': (u"Email has been sent successfully."),
     },
     TICKET_CANCELLED: {
         'recipient': 'User',
         'title': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer " +
-            u"<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> " +
-            u"<br/>Please contact the organizer for more info " +
-            u"<br/>Message from the organizer: {cancel_note}."
-        )
+            u"Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer "
+            + u"<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> "
+            + u"<br/>Please contact the organizer for more info "
+            + u"<br/>Message from the organizer: {cancel_note}."
+        ),
     },
     TICKET_CANCELLED_ORGANIZER: {
         'recipient': 'User',
         'title': u'Order ({invoice_id}) of {event_name} has been cancelled',
         'message': (
-            u"Order ({invoice_id}) has been cancelled " +
-            u"Please visit the link to check the cancelled orders for this event:" +
-            u" <a href='{cancel_order_page}'>{event_name}</a> " +
-            u"<br/>Cancel Note: {cancel_note}."
-        )
+            u"Order ({invoice_id}) has been cancelled "
+            + u"Please visit the link to check the cancelled orders for this event:"
+            + u" <a href='{cancel_order_page}'>{event_name}</a> "
+            + u"<br/>Cancel Note: {cancel_note}."
+        ),
     },
     USER_CHANGE_EMAIL: {
         'recipient': 'User',
         'title': u'Your email has been changed',
         'message': (
             u"Your email has been changed from {email} to {new_email}.<br>Please verify your new email."
-        )
+        ),
     },
     PASSWORD_CHANGE: {
         'recipient': 'User',
         'subject': u'{app_name}: Password Change',
-        'message': (
-            u"Your password has been successfully changed."
-        )
+        'message': (u"Your password has been successfully changed."),
     },
     AFTER_EVENT: {
         'title': u'Event {event_name} completed',
@@ -392,20 +342,20 @@ NOTIFS = {
     },
     EVENT_ROLE: {
         'title': u'Invitation to be {role_name} at {event_name}',
-        'message': u"You've been invited to be one of the <strong>{role_name}s</strong>" +
-                   u" at <strong>{event_name}</strong>.",
+        'message': u"You've been invited to be one of the <strong>{role_name}s</strong>"
+        + u" at <strong>{event_name}</strong>.",
         'recipient': 'User',
     },
     NEW_SESSION: {
         'title': u'New session proposal for {event_name}',
-        'message': u"The event <strong>{event_name}</strong> has received" +
-                   u" a new session proposal.",
+        'message': u"The event <strong>{event_name}</strong> has received"
+        + u" a new session proposal.",
         'recipient': 'Owner, Organizer',
     },
     SESSION_SCHEDULE: {
         'title': u'Schedule for Session {session_name} has been changed',
-        'message': u"The schedule for session <strong>{session_name}</strong>" +
-                   u" has been changed.",
+        'message': u"The schedule for session <strong>{session_name}</strong>"
+        + u" has been changed.",
         'recipient': 'Owner, Organizer, Speaker',
     },
     NEXT_EVENT: {
@@ -415,8 +365,8 @@ NOTIFS = {
     },
     SESSION_ACCEPT_REJECT: {
         'title': u'Session {session_name} has been {acceptance}',
-        'message': u"The session <strong>{session_name}</strong> has been" +
-                   u" <strong>{acceptance}</strong> by the Organizer.",
+        'message': u"The session <strong>{session_name}</strong> has been"
+        + u" <strong>{acceptance}</strong> by the Organizer.",
         'recipient': 'Speaker',
     },
     INVITE_PAPERS: {

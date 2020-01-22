@@ -18,10 +18,12 @@ down_revision = '246b5b6123af'
 def upgrade():
     op.execute(
         "UPDATE ticket_tag SET deleted_at = current_timestamp, name = concat(name, id, '.deleted') where id in (SELECT ticket_tag.id FROM ticket_tag LEFT OUTER JOIN (SELECT MIN(id) as id, name, event_id FROM ticket_tag GROUP BY name, event_id) as KeepRows ON ticket_tag.id = KeepRows.id WHERE KeepRows.id IS NULL);",
-        execution_options=None)
+        execution_options=None,
+    )
 
 
 def downgrade():
     op.execute(
         "UPDATE ticket_tag SET deleted_at = null, name = left(name, length(name)-length(cast(id as varchar))-8) where right(name, 8) = '.deleted';",
-        execution_options=None)
+        execution_options=None,
+    )

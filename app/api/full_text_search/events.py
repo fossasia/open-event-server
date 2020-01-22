@@ -45,13 +45,11 @@ class EventSearchResultList(Resource):
             search = search.highlight('location_name')
 
         if args.get('owner-name'):
-            search = search.query(
-                'fuzzy', owner_name=args['owner_name'])
+            search = search.query('fuzzy', owner_name=args['owner_name'])
             search = search.highlight('owner_name')
 
         if args.get('owner-description'):
-            search = search.query(
-                'fuzzy', owner_description=args['owner_description'])
+            search = search.query('fuzzy', owner_description=args['owner_description'])
             search = search.highlight('owner_description')
 
         return [to_dict(r) for r in search.execute()]

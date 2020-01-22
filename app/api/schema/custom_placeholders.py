@@ -20,10 +20,12 @@ class CustomPlaceholderSchema(Schema):
     icon_image_url = fields.Url(dump_only=True)
     copyright = fields.String(allow_none=True)
     origin = fields.String(allow_none=True)
-    event_sub_topic = Relationship(attribute='event_sub_topic',
-                                   self_view='v1.custom_placeholder_event_sub_topic',
-                                   self_view_kwargs={'id': '<id>'},
-                                   related_view='v1.event_sub_topic_detail',
-                                   related_view_kwargs={'custom_placeholder_id': '<id>'},
-                                   schema='EventSubTopicSchema',
-                                   type_='event-sub-topic')
+    event_sub_topic = Relationship(
+        attribute='event_sub_topic',
+        self_view='v1.custom_placeholder_event_sub_topic',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_sub_topic_detail',
+        related_view_kwargs={'custom_placeholder_id': '<id>'},
+        schema='EventSubTopicSchema',
+        type_='event-sub-topic',
+    )

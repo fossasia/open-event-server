@@ -21,10 +21,19 @@ def upgrade():
     op.drop_column('email_notification', 'new_paper')
     op.drop_column('email_notification', 'session_accept_reject')
     op.drop_column('email_notification', 'session_schedule')
-    op.add_column('email_notification', sa.Column('next_event', sa.Integer(), nullable=True))
-    op.add_column('email_notification', sa.Column('new_paper', sa.Integer(), nullable=True))
-    op.add_column('email_notification', sa.Column('session_accept_reject', sa.Integer(), nullable=True))
-    op.add_column('email_notification', sa.Column('session_schedule', sa.Integer(), nullable=True))
+    op.add_column(
+        'email_notification', sa.Column('next_event', sa.Integer(), nullable=True)
+    )
+    op.add_column(
+        'email_notification', sa.Column('new_paper', sa.Integer(), nullable=True)
+    )
+    op.add_column(
+        'email_notification',
+        sa.Column('session_accept_reject', sa.Integer(), nullable=True),
+    )
+    op.add_column(
+        'email_notification', sa.Column('session_schedule', sa.Integer(), nullable=True)
+    )
     ### end Alembic commands ###
 
 
@@ -34,8 +43,17 @@ def downgrade():
     op.drop_column('email_notification', 'new_paper')
     op.drop_column('email_notification', 'session_accept_reject')
     op.drop_column('email_notification', 'session_schedule')
-    op.add_column('email_notification', sa.Column('next_event', sa.Binary(), nullable=True))
-    op.add_column('email_notification', sa.Column('new_paper', sa.Binary(), nullable=True))
-    op.add_column('email_notification', sa.Column('session_accept_reject', sa.Binary(), nullable=True))
-    op.add_column('email_notification', sa.Column('session_schedule', sa.Binary(), nullable=True))
+    op.add_column(
+        'email_notification', sa.Column('next_event', sa.Binary(), nullable=True)
+    )
+    op.add_column(
+        'email_notification', sa.Column('new_paper', sa.Binary(), nullable=True)
+    )
+    op.add_column(
+        'email_notification',
+        sa.Column('session_accept_reject', sa.Binary(), nullable=True),
+    )
+    op.add_column(
+        'email_notification', sa.Column('session_schedule', sa.Binary(), nullable=True)
+    )
     ### end Alembic commands ###

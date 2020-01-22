@@ -10,10 +10,12 @@ class ModuleSchema(Schema):
     """
     Admin Api schema for modules Model
     """
+
     class Meta:
         """
         Meta class for module Api Schema
         """
+
         type_ = 'module'
         self_view = 'v1.module_detail'
         self_view_kwargs = {'id': '<id>'}

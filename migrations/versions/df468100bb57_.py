@@ -17,10 +17,12 @@ down_revision = '82cdc4ac5d20'
 
 
 def upgrade():
-    op.add_column('ticket_holders', sa.Column(
-        'is_checked_out', sa.Boolean(), nullable=True))
-    op.add_column('ticket_holders', sa.Column(
-        'checkout_times', sa.String(), nullable=True))
+    op.add_column(
+        'ticket_holders', sa.Column('is_checked_out', sa.Boolean(), nullable=True)
+    )
+    op.add_column(
+        'ticket_holders', sa.Column('checkout_times', sa.String(), nullable=True)
+    )
 
 
 def downgrade():

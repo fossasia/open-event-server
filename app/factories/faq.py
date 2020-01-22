@@ -6,7 +6,6 @@ from app.models.faq import db, Faq
 
 
 class FaqFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = Faq
         sqlalchemy_session = db.session

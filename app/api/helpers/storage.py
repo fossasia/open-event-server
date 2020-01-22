@@ -24,42 +24,37 @@ UPLOAD_PATHS = {
     'sessions': {
         'video': 'events/{event_id}/sessions/{id}/video',
         'audio': 'events/{event_id}/audios/{id}/audio',
-        'slides': 'events/{event_id}/slides/{id}/slides'
+        'slides': 'events/{event_id}/slides/{id}/slides',
     },
     'speakers': {
         'photo': 'events/{event_id}/speakers/{id}/photo',
         'thumbnail': 'events/{event_id}/speakers/{id}/thumbnail',
         'small': 'events/{event_id}/speakers/{id}/small',
-        'icon': 'events/{event_id}/speakers/{id}/icon'
+        'icon': 'events/{event_id}/speakers/{id}/icon',
     },
     'event': {
         'logo': 'events/{event_id}/logo',
         'original': 'events/{identifier}/original',
         'thumbnail': 'events/{identifier}/thumbnail',
         'large': 'events/{identifier}/large',
-        'icon': 'events/{identifier}/icon'
+        'icon': 'events/{identifier}/icon',
     },
-    'sponsors': {
-        'logo': 'events/{event_id}/sponsors/{id}/logo'
-    },
+    'sponsors': {'logo': 'events/{event_id}/sponsors/{id}/logo'},
     'user': {
         'avatar': 'users/{user_id}/avatar',
         'thumbnail': 'users/{identifier}/thumbnail',
         'original': 'users/{identifier}/original',
         'small': 'users/{identifier}/small',
-        'icon': 'users/{identifier}/icon'
+        'icon': 'users/{identifier}/icon',
     },
-    'temp': {
-        'event': 'events/temp/{uuid}',
-        'image': 'temp/images/{uuid}'
-    },
+    'temp': {'event': 'events/temp/{uuid}', 'image': 'temp/images/{uuid}'},
     'exports': {
         'zip': 'exports/{event_id}/zip',
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
         'xcal': 'exports/{event_id}/xcal',
         'csv': 'exports/{event_id}/csv/{identifier}',
-        'pdf': 'exports/{event_id}/pdf/{identifier}'
+        'pdf': 'exports/{event_id}/pdf/{identifier}',
     },
     'exports-temp': {
         'zip': 'exports/{event_id}/temp/zip',
@@ -67,29 +62,28 @@ UPLOAD_PATHS = {
         'ical': 'exports/{event_id}/temp/ical',
         'xcal': 'exports/{event_id}/temp/xcal',
         'csv': 'exports/{event_id}/csv/{identifier}',
-        'pdf': 'exports/{event_id}/pdf/{identifier}'
+        'pdf': 'exports/{event_id}/pdf/{identifier}',
     },
     'custom-placeholders': {
         'original': 'custom-placeholders/{identifier}/original',
         'thumbnail': 'custom-placeholders/{identifier}/thumbnail',
         'large': 'custom-placeholders/{identifier}/large',
-        'icon': 'custom-placeholders/{identifier}/icon'
+        'icon': 'custom-placeholders/{identifier}/icon',
     },
-    'event_topic': {
-        'system_image': 'event_topic/{event_topic_id}/system_image'
-    },
+    'event_topic': {'system_image': 'event_topic/{event_topic_id}/system_image'},
     'pdf': {
         'ticket_attendee': 'attendees/tickets/pdf/{identifier}',
         'order': 'orders/invoices/pdf/{identifier}',
         'tickets_all': 'orders/tickets/pdf/{identifier}',
-        'event_invoice': 'events/organizer/invoices/pdf/{identifier}'
-    }
+        'event_invoice': 'events/organizer/invoices/pdf/{identifier}',
+    },
 }
 
 
 ################
 # HELPER CLASSES
 ################
+
 
 class UploadedFile:
     """
@@ -142,6 +136,7 @@ class UploadedMemory:
 # MAIN
 #########
 
+
 def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
     """
     Upload handler
@@ -160,9 +155,19 @@ def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
 
     # upload
     if aws_bucket_name and aws_key and aws_secret and storage_place == 's3':
-        return upload_to_aws(aws_bucket_name, aws_region, aws_key, aws_secret, uploaded_file, key, **kwargs)
+        return upload_to_aws(
+            aws_bucket_name,
+            aws_region,
+            aws_key,
+            aws_secret,
+            uploaded_file,
+            key,
+            **kwargs
+        )
     elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
-        return upload_to_gs(gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs)
+        return upload_to_gs(
+            gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs
+        )
     else:
         return upload_local(uploaded_file, key, upload_dir, **kwargs)
 
@@ -186,8 +191,7 @@ def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):
     uploaded_file.save(file_path)
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
-        return get_settings()['static_domain'] + \
-               file_relative_path
+        return get_settings()['static_domain'] + file_relative_path
 
     return create_url(request.url, file_relative_path)
 
@@ -202,11 +206,16 @@ def create_url(request_url, file_relative_path):
         port = None
 
     return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
-        scheme=url.scheme, hostname=url.hostname, port=port,
-        file_relative_path=file_relative_path).replace(':None', '')
+        scheme=url.scheme,
+        hostname=url.hostname,
+        port=port,
+        file_relative_path=file_relative_path,
+    ).replace(':None', '')
 
 
-def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
+def upload_to_aws(
+    bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'
+):
     """
     Uploads to AWS at key
     http://{bucket}.s3.amazonaws.com/{key}
@@ -217,7 +226,7 @@ def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='
             aws_region,
             aws_access_key_id=aws_key,
             aws_secret_access_key=aws_secret,
-            calling_format=OrdinaryCallingFormat()
+            calling_format=OrdinaryCallingFormat(),
         )
     else:
         conn = S3Connection(aws_key, aws_secret)
@@ -239,9 +248,9 @@ def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='
         file.file,
         headers={
             'Content-Disposition': 'attachment; filename=%s' % filename,
-            'Content-Type': '%s' % file_mime
+            'Content-Type': '%s' % file_mime,
         },
-        rewind=True
+        rewind=True,
     )
     k.set_acl(acl)
     s3_url = 'https://%s.s3.amazonaws.com/' % bucket_name
@@ -251,7 +260,9 @@ def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='
 
 
 def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-read'):
-    conn = GSConnection(client_id, client_secret, calling_format=OrdinaryCallingFormat())
+    conn = GSConnection(
+        client_id, client_secret, calling_format=OrdinaryCallingFormat()
+    )
     bucket = conn.get_bucket(bucket_name)
     k = Key(bucket)
     # generate key
@@ -270,8 +281,8 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
         file_data,
         headers={
             'Content-Disposition': 'attachment; filename=%s' % filename,
-            'Content-Type': '%s' % file_mime
-        }
+            'Content-Type': '%s' % file_mime,
+        },
     )
     k.set_acl(acl)
     gs_url = 'https://storage.googleapis.com/%s/' % bucket_name

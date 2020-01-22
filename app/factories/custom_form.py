@@ -6,7 +6,6 @@ from app.models.custom_form import db, CustomForms
 
 
 class CustomFormFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = CustomForms
         sqlalchemy_session = db.session

@@ -16,18 +16,21 @@ down_revision = '3a01b7d9d55e'
 
 def upgrade():
     op.drop_column('discount_codes', 'tickets')
-    op.create_table('discount_codes_tickets',
-    sa.Column('discount_code_id', sa.Integer(), nullable=False),
-    sa.Column('ticket_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(
-        ['discount_code_id'], ['discount_codes.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(
-        ['ticket_id'], ['tickets.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('discount_code_id', 'ticket_id')
+    op.create_table(
+        'discount_codes_tickets',
+        sa.Column('discount_code_id', sa.Integer(), nullable=False),
+        sa.Column('ticket_id', sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ['discount_code_id'], ['discount_codes.id'], ondelete='CASCADE'
+        ),
+        sa.ForeignKeyConstraint(['ticket_id'], ['tickets.id'], ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('discount_code_id', 'ticket_id'),
     )
 
 
 def downgrade():
-    op.add_column('discount_codes', sa.Column(
-        'tickets', sa.VARCHAR(), autoincrement=False, nullable=True))
+    op.add_column(
+        'discount_codes',
+        sa.Column('tickets', sa.VARCHAR(), autoincrement=False, nullable=True),
+    )
     op.drop_table('discount_codes_tickets')

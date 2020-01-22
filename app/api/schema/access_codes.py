@@ -19,6 +19,7 @@ class AccessCodeSchema(SoftDeletionSchema):
         """
         Meta class for Access Code Api Schema
         """
+
         type_ = 'access-code'
         self_view = 'v1.access_code_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -27,7 +28,9 @@ class AccessCodeSchema(SoftDeletionSchema):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
+            access_code = AccessCode.query.filter_by(
+                id=original_data['data']['id']
+            ).one()
 
             if 'valid_from' not in data:
                 data['valid_from'] = access_code.valid_from
@@ -36,13 +39,17 @@ class AccessCodeSchema(SoftDeletionSchema):
                 data['valid_till'] = access_code.valid_till
 
         if data['valid_from'] > data['valid_till']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
-                                      "valid_till should be after valid_from")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/valid-till'},
+                "valid_till should be after valid_from",
+            )
 
     @validates_schema(pass_original=True)
     def validate_order_quantity(self, data, original_data):
         if 'id' in original_data['data']:
-            access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
+            access_code = AccessCode.query.filter_by(
+                id=original_data['data']['id']
+            ).one()
 
             if 'min_quantity' not in data:
                 data['min_quantity'] = access_code.min_quantity
@@ -58,13 +65,15 @@ class AccessCodeSchema(SoftDeletionSchema):
         tickets_number = data.get('tickets_number', None)
         if min_quantity and max_quantity and (min_quantity > max_quantity):
             raise UnprocessableEntity(
-                    {'pointer': '/data/attributes/min-quantity'},
-                    "min-quantity should be less than max-quantity"
+                {'pointer': '/data/attributes/min-quantity'},
+                "min-quantity should be less than max-quantity",
             )
 
         if tickets_number and max_quantity and (tickets_number < max_quantity):
-            raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                      "tickets-number should be greater than max-quantity")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/tickets-number'},
+                "tickets-number should be greater than max-quantity",
+            )
 
     id = fields.Integer(dump_ony=True)
     code = fields.Str(required=True)
@@ -78,25 +87,31 @@ class AccessCodeSchema(SoftDeletionSchema):
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(required=True)
     valid_till = fields.DateTime(required=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.access_code_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'access_code_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
-    marketer = Relationship(attribute='user',
-                            self_view='v1.access_code_user',
-                            self_view_kwargs={'id': '<id>'},
-                            related_view='v1.user_detail',
-                            related_view_kwargs={'access_code_id': '<id>'},
-                            schema='UserSchemaPublic',
-                            type_='user')
-    tickets = Relationship(attribute='tickets',
-                           self_view='v1.access_code_tickets',
-                           self_view_kwargs={'id': '<id>'},
-                           related_view='v1.ticket_list',
-                           related_view_kwargs={'access_code_id': '<id>'},
-                           schema='TicketSchemaPublic',
-                           many=True,
-                           type_='ticket')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.access_code_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'access_code_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
+    marketer = Relationship(
+        attribute='user',
+        self_view='v1.access_code_user',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_detail',
+        related_view_kwargs={'access_code_id': '<id>'},
+        schema='UserSchemaPublic',
+        type_='user',
+    )
+    tickets = Relationship(
+        attribute='tickets',
+        self_view='v1.access_code_tickets',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.ticket_list',
+        related_view_kwargs={'access_code_id': '<id>'},
+        schema='TicketSchemaPublic',
+        many=True,
+        type_='ticket',
+    )

@@ -45,6 +45,7 @@ pycountry
 pytz
 diff-match-patch
 blinker~=1.4
+black~=19.10b0
 envparse~=0.2
 git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.1
 wtforms~=2.2
@@ -54,8 +55,9 @@ factory_boy~=2.12
 sentry-sdk[flask]~=0.13
 healthcheck~=1.3
 elasticsearch-dsl~=7.0.0
+pre-commit~=1.21.0
 flask-redis~=0.4
-SQLAlchemy~=1.3.12
+SQLAlchemy~=1.3.13
 Flask-Elasticsearch~=0.2
 paypalrestsdk~=1.13
 eventlet~=0.25

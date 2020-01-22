@@ -5,8 +5,14 @@ import datetime
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import get_filename_from_cd
-from app.api.helpers.utilities import string_empty, dasherize, represents_int, str_generator, \
-                                      require_relationship, monthdelta
+from app.api.helpers.utilities import (
+    string_empty,
+    dasherize,
+    represents_int,
+    str_generator,
+    require_relationship,
+    monthdelta,
+)
 
 
 class TestUtilitiesHelperValidation(unittest.TestCase):
@@ -37,7 +43,6 @@ class TestUtilitiesHelperValidation(unittest.TestCase):
 
         self.assertTrue(represents_int(4))
         self.assertFalse(represents_int('test'))
-
 
     def test_string_empty(self):
         """Method to test whether an empty string is correctly identified."""

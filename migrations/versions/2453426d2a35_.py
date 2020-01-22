@@ -24,7 +24,7 @@ def upgrade():
         sa.Column('user_id', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['event_id'], ['events.id'], ondelete='CASCADE'),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
     )
     # ### end Alembic commands ###
 

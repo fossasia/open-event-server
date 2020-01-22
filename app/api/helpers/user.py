@@ -36,13 +36,15 @@ def modify_email_for_user_to_be_restored(user):
     user_email = user.email
     remove_str = '.deleted'
     if user_email.endswith(remove_str):
-        user_email = user_email[:-len(remove_str)]
+        user_email = user_email[: -len(remove_str)]
         try:
             db.session.query(User).filter_by(email=user_email).one()
         except NoResultFound:
             user.email = user_email
             save_to_db(user)
         else:
-            raise ForbiddenException({'pointer': '/data/attributes/email'},
-                                     "This email is already registered! Manually edit and then try restoring")
+            raise ForbiddenException(
+                {'pointer': '/data/attributes/email'},
+                "This email is already registered! Manually edit and then try restoring",
+            )
     return user

@@ -22,7 +22,7 @@ def _git(cwd, *cmd):
     raise GitError('git exited with a non-zero exit code', err)
 
 
-class Git():
+class Git:
     def __init__(self, repo, cwd, branch='master'):
         self.repo = repo
         self.cwd = cwd

@@ -54,18 +54,14 @@ class AdminSalesByOrganizersList(ResourceList):
 
     def query(self, _):
         query_ = self.session.query(User)
-        query_ = query_.join(UsersEventsRoles).filter(or_(Role.name == 'organizer', Role.name == 'owner'))
+        query_ = query_.join(UsersEventsRoles).filter(
+            or_(Role.name == 'organizer', Role.name == 'owner')
+        )
         query_ = query_.join(Event).outerjoin(Order).outerjoin(OrderTicket)
 
         return query_
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByOrganizersSchema
-    data_layer = {
-        'model': User,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': User, 'session': db.session, 'methods': {'query': query}}

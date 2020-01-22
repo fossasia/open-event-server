@@ -11,10 +11,12 @@ class AdminStatisticsEventSchema(Schema):
     """
     Api schema
     """
+
     class Meta:
         """
         Meta class
         """
+
         type_ = 'admin-statistics-event'
         self_view = 'v1.admin_statistics_event_detail'
         inflect = dasherize

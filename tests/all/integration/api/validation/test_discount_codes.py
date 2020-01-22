@@ -8,7 +8,6 @@ from app.factories.ticket import TicketFactory
 
 
 class TestDiscountCodeValidation(OpenEventTestCase):
-
     def test_amount_lte_ticket_price(self):
         """
         Discount Code Validate Amount Value - Tests if function runs without an exception
@@ -18,14 +17,8 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             TicketFactory(price=100)
 
             schema = DiscountCodeSchemaTicket()
-            original_data = {
-                'data': {}
-            }
-            data = {
-                'type': 'amount',
-                'value': 70,
-                'tickets': ['1']
-            }
+            original_data = {'data': {}}
+            data = {'type': 'amount', 'value': 70, 'tickets': ['1']}
             DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_amount_gt_ticket_price(self):
@@ -37,14 +30,8 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             TicketFactory(price=100)
 
             schema = DiscountCodeSchemaTicket()
-            original_data = {
-                'data': {}
-            }
-            data = {
-                'type': 'amount',
-                'value': 150,
-                'tickets': ['1']
-            }
+            original_data = {'data': {}}
+            data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
             with self.assertRaises(UnprocessableEntity):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
@@ -57,14 +44,8 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             TicketFactory(price=0)
 
             schema = DiscountCodeSchemaTicket()
-            original_data = {
-                'data': {}
-            }
-            data = {
-                'type': 'amount',
-                'value': 150,
-                'tickets': ['1']
-            }
+            original_data = {'data': {}}
+            data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
             with self.assertRaises(UnprocessableEntity):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
@@ -77,11 +58,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             schema = DiscountCodeSchemaTicket()
             DiscountCodeFactory()
 
-            original_data = {
-                'data': {
-                    'id': 1
-                }
-            }
+            original_data = {'data': {'id': 1}}
             data = {}
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 

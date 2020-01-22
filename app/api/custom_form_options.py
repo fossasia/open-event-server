@@ -13,15 +13,17 @@ class CustomFormOptionList(ResourceList):
         query_ = self.session.query(CustomFormOptions)
         if view_kwargs.get('custom_form_id'):
             query_ = self.session.query(CustomFormOptions).filter(
-                getattr(CustomFormOptions, 'custom_form_id') == view_kwargs['custom_form_id'])
+                getattr(CustomFormOptions, 'custom_form_id')
+                == view_kwargs['custom_form_id']
+            )
         return query_
 
     schema = CustomFormOptionSchema
-    data_layer = {'session': db.session,
-                  'model': CustomFormOptions,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': CustomFormOptions,
+        'methods': {'query': query},
+    }
 
 
 class CustomFormOptionDetail(ResourceDetail):
@@ -30,9 +32,7 @@ class CustomFormOptionDetail(ResourceDetail):
     """
 
     schema = CustomFormOptionSchema
-    data_layer = {'session': db.session,
-                  'model': CustomFormOptions
-                  }
+    data_layer = {'session': db.session, 'model': CustomFormOptions}
 
 
 class CustomFormOptionRelationship(ResourceRelationship):
@@ -41,6 +41,4 @@ class CustomFormOptionRelationship(ResourceRelationship):
     """
 
     schema = CustomFormOptionSchema
-    data_layer = {'session': db.session,
-                  'model': CustomFormOptions
-                  }
+    data_layer = {'session': db.session, 'model': CustomFormOptions}

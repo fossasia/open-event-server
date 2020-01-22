@@ -14,6 +14,7 @@ class EventTopicSchema(SoftDeletionSchema):
         """
         Meta class for event topic Api Schema
         """
+
         type_ = 'event-topic'
         self_view = 'v1.event_topic_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -23,19 +24,23 @@ class EventTopicSchema(SoftDeletionSchema):
     name = fields.Str(required=True)
     system_image_url = fields.Url()
     slug = fields.Str(dump_only=True)
-    events = Relationship(attribute='event',
-                          many=True,
-                          self_view='v1.event_topic_event',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.event_list',
-                          related_view_kwargs={'event_topic_id': '<id>'},
-                          schema='EventSchemaPublic',
-                          type_='event')
-    event_sub_topics = Relationship(attribute='event_sub_topics',
-                                    self_view='v1.event_topic_event_sub_topic',
-                                    self_view_kwargs={'id': '<id>'},
-                                    related_view='v1.event_sub_topic_list',
-                                    related_view_kwargs={'event_topic_id': '<id>'},
-                                    many=True,
-                                    schema='EventSubTopicSchema',
-                                    type_='event-sub-topic')
+    events = Relationship(
+        attribute='event',
+        many=True,
+        self_view='v1.event_topic_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        related_view_kwargs={'event_topic_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
+    event_sub_topics = Relationship(
+        attribute='event_sub_topics',
+        self_view='v1.event_topic_event_sub_topic',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_sub_topic_list',
+        related_view_kwargs={'event_topic_id': '<id>'},
+        many=True,
+        schema='EventSubTopicSchema',
+        type_='event-sub-topic',
+    )

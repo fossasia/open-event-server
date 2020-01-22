@@ -20,9 +20,18 @@ def upgrade():
     op.add_column('events', sa.Column('bank_details', sa.String(), nullable=True))
     op.add_column('events', sa.Column('cheque_details', sa.String(), nullable=True))
     op.add_column('events', sa.Column('onsite_details', sa.String(), nullable=True))
-    op.add_column('events_version', sa.Column('bank_details', sa.String(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('cheque_details', sa.String(), autoincrement=False, nullable=True))
-    op.add_column('events_version', sa.Column('onsite_details', sa.String(), autoincrement=False, nullable=True))
+    op.add_column(
+        'events_version',
+        sa.Column('bank_details', sa.String(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('cheque_details', sa.String(), autoincrement=False, nullable=True),
+    )
+    op.add_column(
+        'events_version',
+        sa.Column('onsite_details', sa.String(), autoincrement=False, nullable=True),
+    )
     ### end Alembic commands ###
 
 

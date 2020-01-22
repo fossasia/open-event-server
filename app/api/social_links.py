@@ -12,6 +12,7 @@ class SocialLinkListPost(ResourceList):
     """
     List and Create Social Links for an event
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -24,14 +25,14 @@ class SocialLinkListPost(ResourceList):
 
     methods = ['POST']
     schema = SocialLinkSchema
-    data_layer = {'session': db.session,
-                  'model': SocialLink}
+    data_layer = {'session': db.session, 'model': SocialLink}
 
 
 class SocialLinkList(ResourceList):
     """
     List and Create Social Links for an event
     """
+
     def query(self, view_kwargs):
         """
         query method for social link
@@ -45,31 +46,45 @@ class SocialLinkList(ResourceList):
     view_kwargs = True
     methods = ['GET']
     schema = SocialLinkSchema
-    data_layer = {'session': db.session,
-                  'model': SocialLink,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': SocialLink,
+        'methods': {'query': query},
+    }
 
 
 class SocialLinkDetail(ResourceDetail):
     """
     Social Link detail by id
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SocialLink),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=SocialLink,
+        ),
+    )
     schema = SocialLinkSchema
-    data_layer = {'session': db.session,
-                  'model': SocialLink}
+    data_layer = {'session': db.session, 'model': SocialLink}
 
 
 class SocialLinkRelationship(ResourceRelationship):
     """
     Social Link Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SocialLink),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=SocialLink,
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = SocialLinkSchema
-    data_layer = {'session': db.session,
-                  'model': SocialLink}
+    data_layer = {'session': db.session, 'model': SocialLink}

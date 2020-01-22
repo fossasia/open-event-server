@@ -16,12 +16,17 @@ class EventLocationList(ResourceList):
     """
     List event locations
     """
+
     def get(self, *args, **kwargs):
         qs = QSManager(request.args, self.schema)
-        popular_locations = db.session.query(Event.searchable_location_name, func.count(Event.id).label('counts')) \
-            .group_by(Event.searchable_location_name) \
-            .order_by(desc('counts')) \
+        popular_locations = (
+            db.session.query(
+                Event.searchable_location_name, func.count(Event.id).label('counts')
+            )
+            .group_by(Event.searchable_location_name)
+            .order_by(desc('counts'))
             .limit(6)
+        )
         locations = []
         for location, _ in popular_locations:
             if location is not None:
@@ -30,16 +35,15 @@ class EventLocationList(ResourceList):
                 locations.append(new_location)
         schema = EventLocationSchema()
         result = schema.dump(locations, many=True).data
-        view_kwargs = request.view_args if getattr(self, 'view_kwargs', None) is True else dict()
-        add_pagination_links(result,
-                             len(locations),
-                             qs,
-                             url_for(self.view, **view_kwargs))
+        view_kwargs = (
+            request.view_args if getattr(self, 'view_kwargs', None) is True else dict()
+        )
+        add_pagination_links(
+            result, len(locations), qs, url_for(self.view, **view_kwargs)
+        )
         result.update({'meta': {'count': len(locations)}})
         return result
 
     decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = EventLocationSchema
-    data_layer = {'session': db.session,
-                  'model': EventLocation
-                  }
+    data_layer = {'session': db.session, 'model': EventLocation}

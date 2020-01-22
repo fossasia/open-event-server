@@ -13,8 +13,7 @@ from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ServerError, NotFoundError
-from app.api.helpers.storage import UploadedFile, upload, UploadedMemory, \
-    UPLOAD_PATHS
+from app.api.helpers.storage import UploadedFile, upload, UploadedMemory, UPLOAD_PATHS
 from app.api.helpers.utilities import update_state, write_file, is_downloadable
 from app.models import db
 from app.models.custom_form import CustomForms
@@ -39,20 +38,20 @@ IMPORT_SERIES = [
     ('speakers', Speaker),
     ('tracks', Track),
     ('session_types', SessionType),
-    ('sessions', Session)
+    ('sessions', Session),
 ]
 
 DELETE_FIELDS = {
     'event': ['creator', 'created_at'],
     'tracks': ['sessions', 'font_color'],
-    'speakers': ['sessions']
+    'speakers': ['sessions'],
 }
 
 RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
         ('microlocation', 'microlocation_id', 'microlocations'),
-        ('session_type', 'session_type_id', 'session_types')
+        ('session_type', 'session_type_id', 'session_types'),
     ]
 }
 
@@ -87,7 +86,9 @@ def get_file_from_request(ext=None, folder=None, name='file'):
     if ext is None:
         ext = []
 
-    print("get_file_from_request() INVOKED. We have: request.files = %r" % request.files)
+    print(
+        "get_file_from_request() INVOKED. We have: request.files = %r" % request.files
+    )
 
     if name not in request.files:
         raise NotFoundError(source='{}', detail='File not found')
@@ -101,7 +102,9 @@ def get_file_from_request(ext=None, folder=None, name='file'):
         if 'UPLOAD_FOLDER' in app.config:
             folder = app.config['UPLOAD_FOLDER']
         else:
-            folder = 'static/uploads/' + UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+            folder = 'static/uploads/' + UPLOAD_PATHS['temp']['event'].format(
+                uuid=uuid.uuid4()
+            )
     else:
         with app.app_context():
             folder = app.config['BASE_DIR'] + folder
@@ -148,8 +151,7 @@ def _delete_fields(srv, data):
 
 def create_import_job(task):
     """create import record in db"""
-    ij = ImportJob(task=task,
-                   user=current_user)
+    ij = ImportJob(task=task, user=current_user)
     save_to_db(ij, 'Import job saved')
 
 
@@ -182,11 +184,7 @@ def _upload_media_queue(srv, obj):
         # if not path.startswith('/'):  # relative
         #     continue
         # file OK
-        UPLOAD_QUEUE.append({
-            'srv': srv,
-            'id': obj.id,
-            'field': i
-        })
+        UPLOAD_QUEUE.append({'srv': srv, 'id': obj.id, 'field': i})
     return
 
 
@@ -208,7 +206,12 @@ def _upload_media(task_handle, event_id, base_path):
         if name == 'event':
             item = db.session.query(model).filter_by(id=event_id).first()
         else:
-            item = db.session.query(model).filter_by(event_id=event_id).filter_by(id=id_).first()
+            item = (
+                db.session.query(model)
+                .filter_by(event_id=event_id)
+                .filter_by(id=id_)
+                .first()
+            )
         # get cur file
         if i['field'] in ['original', 'large', 'thumbnail', 'small', 'icon']:
             field = '{}_image_url'.format(i['field'])
@@ -362,7 +365,7 @@ def import_event_json(task_handle, zip_path, creator_id):
         save_to_db(uer, 'Event Saved')
         write_file(
             path + '/social_links',
-            json.dumps(data.get('social_links', [])).encode('utf-8')
+            json.dumps(data.get('social_links', [])).encode('utf-8'),
         )  # save social_links
         _upload_media_queue(srv, new_event)
     except Exception as e:
@@ -375,7 +378,8 @@ def import_event_json(task_handle, zip_path, creator_id):
             data = open(path + '/%s' % item[0], 'r').read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
-                task_handle, dic, item, new_event.id, service_ids)
+                task_handle, dic, item, new_event.id, service_ids
+            )
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
             item[1].is_importing = False
@@ -386,8 +390,9 @@ def import_event_json(task_handle, zip_path, creator_id):
     except ValueError:
         db.session.delete(new_event)
         db.session.commit()
-        raise make_error(item[0], er=ServerError(source='Zip Upload',
-                                                 detail='Invalid json'))
+        raise make_error(
+            item[0], er=ServerError(source='Zip Upload', detail='Invalid json')
+        )
     except Exception:
         print(traceback.format_exc())
         db.session.delete(new_event)

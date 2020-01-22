@@ -8,10 +8,12 @@ class MailSchema(Schema):
     """
     Api schema for mail Model
     """
+
     class Meta:
         """
         Meta class for mail Api Schema
         """
+
         type_ = 'mail'
         self_view = 'v1.mail_detail'
         self_view_kwargs = {'id': '<id>'}

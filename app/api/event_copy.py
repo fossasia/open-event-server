@@ -22,6 +22,7 @@ event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
 def start_sponsor_logo_generation_task(event_id):
     from .helpers.tasks import sponsor_logos_url_task
+
     sponsor_logos_url_task.delay(event_id=event_id)
 
 
@@ -31,6 +32,7 @@ def copy_to_event(object, event):
     object.event_id = event.id
     delattr(object, 'id')
     save_to_db(object)
+
 
 @event_copy.route('/<identifier>/copy', methods=['POST'])
 def create_event_copy(identifier):
@@ -42,18 +44,24 @@ def create_event_copy(identifier):
     event = safe_query(db, Event, id, identifier, 'event_' + id)
 
     if not has_access('is_coorganizer', event_id=event.id):
-        return abort(
-            make_response(jsonify(error="Access Forbidden"), 403)
-        )
+        return abort(make_response(jsonify(error="Access Forbidden"), 403))
     tickets = Ticket.query.filter_by(event_id=event.id, deleted_at=None).all()
     social_links = SocialLink.query.filter_by(event_id=event.id, deleted_at=None).all()
     sponsors = Sponsor.query.filter_by(event_id=event.id, deleted_at=None).all()
-    microlocations = Microlocation.query.filter_by(event_id=event.id, deleted_at=None).all()
+    microlocations = Microlocation.query.filter_by(
+        event_id=event.id, deleted_at=None
+    ).all()
     tracks = Track.query.filter_by(event_id=event.id, deleted_at=None).all()
     custom_forms = CustomForms.query.filter_by(event_id=event.id, deleted_at=None).all()
-    discount_codes = DiscountCode.query.filter_by(event_id=event.id, deleted_at=None).all()
-    speaker_calls = SpeakersCall.query.filter_by(event_id=event.id, deleted_at=None).all()
-    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id, deleted_at=None).all()
+    discount_codes = DiscountCode.query.filter_by(
+        event_id=event.id, deleted_at=None
+    ).all()
+    speaker_calls = SpeakersCall.query.filter_by(
+        event_id=event.id, deleted_at=None
+    ).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(
+        event_id=event.id, deleted_at=None
+    ).all()
     taxes = Tax.query.filter_by(event_id=event.id, deleted_at=None).all()
 
     db.session.expunge(event)  # expunge the object from session
@@ -97,8 +105,4 @@ def create_event_copy(identifier):
     for user_role in user_event_roles:
         copy_to_event(user_role, event)
 
-    return jsonify({
-        'id': event.id,
-        'identifier': event.identifier,
-        "copied": True
-    })
+    return jsonify({'id': event.id, 'identifier': event.identifier, "copied": True})

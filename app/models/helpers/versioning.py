@@ -41,11 +41,9 @@ def clean_html(html):
         'ul',
         'ol',
         'li',
-        'strike'
+        'strike',
     ]
-    attrs = {
-        '*': ['style']
-    }
+    attrs = {'*': ['style']}
     styles = ['text-align', 'font-weight', 'text-decoration']
     cleaned = bleach.clean(html, tags=tags, attributes=attrs, styles=styles, strip=True)
     return bleach.linkify(cleaned, callbacks=[nofollow, target_blank], parse_email=True)
@@ -72,8 +70,12 @@ def side_by_side_diff(old_text, new_text):
     if not new_text:
         new_text = ''
 
-    old_text = strip_tags(strip_line_breaks(str(old_text).encode('utf-8', errors='ignore')))
-    new_text = strip_tags(strip_line_breaks(str(new_text).encode('utf-8', errors='ignore')))
+    old_text = strip_tags(
+        strip_line_breaks(str(old_text).encode('utf-8', errors='ignore'))
+    )
+    new_text = strip_tags(
+        strip_line_breaks(str(new_text).encode('utf-8', errors='ignore'))
+    )
 
     old_text = unicodedata.normalize("NFKD", old_text)
     new_text = unicodedata.normalize("NFKD", new_text)
@@ -104,9 +106,7 @@ def side_by_side_diff(old_text, new_text):
     for change_type, entry in diff:
         assert change_type in [-1, 0, 1]
 
-        entry = (entry.replace('&', '&amp;')
-                 .replace('<', '&lt;')
-                 .replace('>', '&gt;'))
+        entry = entry.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
         lines = line_split.split(entry)
 

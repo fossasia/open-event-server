@@ -8,6 +8,7 @@ from app.models import db
 
 class ExportJob(db.Model):
     """Export Jobs model class"""
+
     __tablename__ = 'export_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)
@@ -16,8 +17,7 @@ class ExportJob(db.Model):
     user_email = db.Column(db.String)
     # not linking to User because when user is deleted, this will be lost
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('export_jobs'))
 
     def __init__(self, task=None, user_email=None, event=None):

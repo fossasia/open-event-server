@@ -11,16 +11,19 @@ from app.models.order import Order, OrderTicket
 
 
 def sales_per_location_by_status(status):
-    return db.session.query(
-        Event.location_name.label('location'),
-        func.sum(Order.amount).label(status + '_sales'),
-        func.sum(OrderTicket.quantity).label(status + '_tickets')) \
-                     .outerjoin(Order, Order.event_id == Event.id) \
-                     .outerjoin(OrderTicket, OrderTicket.order_id == Order.id) \
-                     .filter(Event.id == Order.event_id) \
-                     .filter(Order.status == status) \
-                     .group_by(Event.location_name, Order.status) \
-                     .cte()
+    return (
+        db.session.query(
+            Event.location_name.label('location'),
+            func.sum(Order.amount).label(status + '_sales'),
+            func.sum(OrderTicket.quantity).label(status + '_tickets'),
+        )
+        .outerjoin(Order, Order.event_id == Event.id)
+        .outerjoin(OrderTicket, OrderTicket.order_id == Order.id)
+        .filter(Event.id == Order.event_id)
+        .filter(Order.status == status)
+        .group_by(Event.location_name, Order.status)
+        .cte()
+    )
 
 
 class AdminSalesByLocationSchema(Schema):
@@ -65,29 +68,25 @@ class AdminSalesByLocationList(ResourceList):
     """
 
     def query(self, _):
-        locations = self.session.query(
-            Event.location_name,
-            Event.location_name.label('id')) \
-                .group_by(Event.location_name) \
-                .filter(Event.location_name.isnot(None)) \
-                .cte()
+        locations = (
+            self.session.query(Event.location_name, Event.location_name.label('id'))
+            .group_by(Event.location_name)
+            .filter(Event.location_name.isnot(None))
+            .cte()
+        )
 
         pending = sales_per_location_by_status('pending')
         completed = sales_per_location_by_status('completed')
         placed = sales_per_location_by_status('placed')
 
-        return self.session.query(locations, pending, completed, placed) \
-                           .outerjoin(pending, pending.c.location == locations.c.location_name) \
-                           .outerjoin(completed, completed.c.location == locations.c.location_name) \
-                           .outerjoin(placed, placed.c.location == locations.c.location_name)
+        return (
+            self.session.query(locations, pending, completed, placed)
+            .outerjoin(pending, pending.c.location == locations.c.location_name)
+            .outerjoin(completed, completed.c.location == locations.c.location_name)
+            .outerjoin(placed, placed.c.location == locations.c.location_name)
+        )
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByLocationSchema
-    data_layer = {
-        'model': Event,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': Event, 'session': db.session, 'methods': {'query': query}}

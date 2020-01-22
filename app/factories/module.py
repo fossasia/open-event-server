@@ -4,7 +4,6 @@ from app.models.module import db, Module
 
 
 class ModuleFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = Module
         sqlalchemy_session = db.session

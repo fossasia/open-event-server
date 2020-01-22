@@ -6,7 +6,6 @@ from app.models.feedback import db, Feedback
 
 
 class FeedbackFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = Feedback
         sqlalchemy_session = db.session

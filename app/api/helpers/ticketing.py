@@ -4,8 +4,14 @@ from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer
-from app.api.helpers.order import delete_related_attendees_for_order, create_pdf_tickets_for_holder
+from app.api.helpers.notification import (
+    send_notif_to_attendees,
+    send_notif_ticket_purchase_organizer,
+)
+from app.api.helpers.order import (
+    delete_related_attendees_for_order,
+    create_pdf_tickets_for_holder,
+)
 from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
@@ -25,8 +31,11 @@ class TicketingManager:
     def match_discount_quantity(discount_code, tickets=None, ticket_holders=None):
         qty = 0
         ticket_ids = [ticket.id for ticket in discount_code.tickets]
-        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(ticket_ids))
-                                .join(Order).filter(Order.status.in_(['completed', 'placed'])))
+        old_holders = get_count(
+            TicketHolder.query.filter(TicketHolder.ticket_id.in_(ticket_ids))
+            .join(Order)
+            .filter(Order.status.in_(['completed', 'placed']))
+        )
         if ticket_holders:
             for holder in ticket_holders:
                 ticket_holder = TicketHolder.query.filter_by(id=holder).one()
@@ -36,8 +45,10 @@ class TicketingManager:
             for ticket in tickets:
                 if int(ticket['id']) in ticket_ids:
                     qty += ticket['quantity']
-        if (qty + old_holders) <= discount_code.tickets_number and \
-            discount_code.min_quantity <= qty <= discount_code.max_quantity:
+        if (
+            (qty + old_holders) <= discount_code.tickets_number
+            and discount_code.min_quantity <= qty <= discount_code.max_quantity
+        ):
             return True
         return False
 
@@ -54,18 +65,32 @@ class TicketingManager:
         for order_ticket in order.order_tickets:
             with db.session.no_autoflush:
                 if order_ticket.ticket.is_fee_absorbed or not fees:
-                    ticket_amount = (order_ticket.ticket.price * order_ticket.quantity)
-                    amount += (order_ticket.ticket.price * order_ticket.quantity)
+                    ticket_amount = order_ticket.ticket.price * order_ticket.quantity
+                    amount += order_ticket.ticket.price * order_ticket.quantity
                 else:
-                    order_fee = fees.service_fee * (order_ticket.ticket.price * order_ticket.quantity) / 100
+                    order_fee = (
+                        fees.service_fee
+                        * (order_ticket.ticket.price * order_ticket.quantity)
+                        / 100
+                    )
                     if order_fee > fees.maximum_fee:
-                        ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
-                        amount += (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                        ticket_amount = (
+                            order_ticket.ticket.price * order_ticket.quantity
+                        ) + fees.maximum_fee
+                        amount += (
+                            order_ticket.ticket.price * order_ticket.quantity
+                        ) + fees.maximum_fee
                     else:
-                        ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + order_fee
-                        amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+                        ticket_amount = (
+                            order_ticket.ticket.price * order_ticket.quantity
+                        ) + order_fee
+                        amount += (
+                            order_ticket.ticket.price * order_ticket.quantity
+                        ) + order_fee
 
-                if discount and str(order_ticket.ticket.id) in discount.tickets.split(","):
+                if discount and str(order_ticket.ticket.id) in discount.tickets.split(
+                    ","
+                ):
                     if discount.type == "amount":
                         total_discount += discount.value * order_ticket.quantity
                     else:
@@ -126,13 +151,25 @@ class TicketingManager:
             send_email_to_attendees(order, current_user.id)
             send_notif_to_attendees(order, current_user.id)
 
-            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            order_url = make_frontend_url(
+                path='/orders/{identifier}'.format(identifier=order.identifier)
+            )
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
-                                                     order.id)
+                send_notif_ticket_purchase_organizer(
+                    organizer,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.id,
+                )
             if order.event.owner:
-                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
-                                                     order.event.name, order.id)
+                send_notif_ticket_purchase_organizer(
+                    order.event.owner,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.id,
+                )
 
             return True, 'Charge successful'
         else:
@@ -161,7 +198,9 @@ class TicketingManager:
         save_to_db(order)
 
         # create the transaction.
-        status, error = PayPalPaymentsManager.execute_payment(paypal_payer_id, paypal_payment_id)
+        status, error = PayPalPaymentsManager.execute_payment(
+            paypal_payer_id, paypal_payment_id
+        )
 
         if status:
             # successful transaction hence update the order details.
@@ -178,13 +217,25 @@ class TicketingManager:
             send_email_to_attendees(order, order.user_id)
             send_notif_to_attendees(order, order.user_id)
 
-            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            order_url = make_frontend_url(
+                path='/orders/{identifier}'.format(identifier=order.identifier)
+            )
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
-                                                     order.id)
+                send_notif_ticket_purchase_organizer(
+                    organizer,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.id,
+                )
             if order.event.owner:
-                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
-                                                     order.event.name, order.id)
+                send_notif_ticket_purchase_organizer(
+                    order.event.owner,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.id,
+                )
 
             return True, 'Charge successful'
         else:

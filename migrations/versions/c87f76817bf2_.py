@@ -13,6 +13,7 @@ down_revision = '86fe7df8dca6'
 from alembic import op
 import sqlalchemy as sa
 
+
 def upgrade():
     op.drop_column('events', 'event_url')
     op.drop_column('events_version', 'event_url')

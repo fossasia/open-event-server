@@ -27,7 +27,9 @@ def upgrade():
         AND R1.event_id = R2.event_id
         """
     )
-    op.create_unique_constraint('email_role_event_uc', 'role_invites', ['email', 'role_id', 'event_id'])
+    op.create_unique_constraint(
+        'email_role_event_uc', 'role_invites', ['email', 'role_id', 'event_id']
+    )
     # ### end Alembic commands ###
 
 

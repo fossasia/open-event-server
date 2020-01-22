@@ -18,7 +18,8 @@ def upgrade():
     op.execute(
         """DELETE FROM ticket_holders WHERE id NOT IN
         (SELECT min(id) FROM ticket_holders GROUP BY ticket_id)
-        """)
+        """
+    )
     op.create_unique_constraint('ticket_event', 'ticket_holders', ['ticket_id'])
     # ### end Alembic commands ###
 

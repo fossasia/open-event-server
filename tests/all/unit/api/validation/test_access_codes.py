@@ -7,21 +7,14 @@ import datetime
 
 
 class TestAccessCodeValidation(TestCase):
-
     def test_quantity_pass(self):
         """
         Acces Code Validate Quantity - Tests if the function runs without an exception
         :return:
         """
         schema = AccessCodeSchema()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 5,
-            'max_quantity': 10,
-            'tickets_number': 30
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 5, 'max_quantity': 10, 'tickets_number': 30}
         AccessCodeSchema.validate_order_quantity(schema, data, original_data)
 
     def test_quantity_min_gt_max(self):
@@ -30,14 +23,8 @@ class TestAccessCodeValidation(TestCase):
         :return:
         """
         schema = AccessCodeSchema()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 5,
-            'tickets_number': 30
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 10, 'max_quantity': 5, 'tickets_number': 30}
         with self.assertRaises(UnprocessableEntity):
             AccessCodeSchema.validate_order_quantity(schema, data, original_data)
 
@@ -47,14 +34,8 @@ class TestAccessCodeValidation(TestCase):
         :return:
         """
         schema = AccessCodeSchema()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 20,
-            'tickets_number': 15
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 10, 'max_quantity': 20, 'tickets_number': 15}
         with self.assertRaises(UnprocessableEntity):
             AccessCodeSchema.validate_order_quantity(schema, data, original_data)
 
@@ -64,12 +45,10 @@ class TestAccessCodeValidation(TestCase):
         :return:
         """
         schema = AccessCodeSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
             'valid_from': datetime.datetime(2019, 1, 1),
-            'valid_till': datetime.datetime(2018, 1, 1)
+            'valid_till': datetime.datetime(2018, 1, 1),
         }
         with self.assertRaises(UnprocessableEntity):
             AccessCodeSchema.validate_date(schema, data, original_data)
@@ -80,12 +59,10 @@ class TestAccessCodeValidation(TestCase):
         :return:
         """
         schema = AccessCodeSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
             'valid_from': datetime.datetime(2018, 1, 1),
-            'valid_till': datetime.datetime(2019, 1, 1)
+            'valid_till': datetime.datetime(2019, 1, 1),
         }
         AccessCodeSchema.validate_date(schema, data, original_data)
 

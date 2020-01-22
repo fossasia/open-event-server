@@ -5,6 +5,7 @@ from app.models import db
 
 class Speaker(SoftDeletionModel):
     """Speaker model class"""
+
     __tablename__ = 'speaker'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -36,36 +37,38 @@ class Speaker(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
 
-    def __init__(self,
-                 name=None,
-                 photo_url=None,
-                 thumbnail_image_url=None,
-                 small_image_url=None,
-                 icon_image_url=None,
-                 short_biography=None,
-                 long_biography=None,
-                 speaking_experience=None,
-                 email=None,
-                 mobile=None,
-                 website=None,
-                 twitter=None,
-                 facebook=None,
-                 github=None,
-                 linkedin=None,
-                 instagram=None,
-                 organisation=None,
-                 is_featured=False,
-                 is_email_overridden=False,
-                 position=None,
-                 country=None,
-                 city=None,
-                 gender=None,
-                 heard_from=None,
-                 sponsorship_required=None,
-                 event_id=None,
-                 user_id=None,
-                 deleted_at=None,
-                 complex_field_values=None):
+    def __init__(
+        self,
+        name=None,
+        photo_url=None,
+        thumbnail_image_url=None,
+        small_image_url=None,
+        icon_image_url=None,
+        short_biography=None,
+        long_biography=None,
+        speaking_experience=None,
+        email=None,
+        mobile=None,
+        website=None,
+        twitter=None,
+        facebook=None,
+        github=None,
+        linkedin=None,
+        instagram=None,
+        organisation=None,
+        is_featured=False,
+        is_email_overridden=False,
+        position=None,
+        country=None,
+        city=None,
+        gender=None,
+        heard_from=None,
+        sponsorship_required=None,
+        event_id=None,
+        user_id=None,
+        deleted_at=None,
+        complex_field_values=None,
+    ):
         self.name = name
         self.photo_url = photo_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -107,7 +110,12 @@ class Speaker(SoftDeletionModel):
         return self.__repr__()
 
     def __setattr__(self, name, value):
-        if name == 'short_biography' or name == 'long_biography' or name == 'speaking_experience' or name == 'sponsorship_required':
+        if (
+            name == 'short_biography'
+            or name == 'long_biography'
+            or name == 'speaking_experience'
+            or name == 'sponsorship_required'
+        ):
             super(Speaker, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Speaker, self).__setattr__(name, value)
@@ -116,8 +124,9 @@ class Speaker(SoftDeletionModel):
     def serialize(self):
         """Return object data in easily serializable format"""
 
-        session_data = [{'title': session.title, 'id': session.id}
-                        for session in self.sessions]
+        session_data = [
+            {'title': session.title, 'id': session.id} for session in self.sessions
+        ]
 
         return {
             'id': self.id,
@@ -143,5 +152,5 @@ class Speaker(SoftDeletionModel):
             'gender': self.gender,
             'heard_from': self.heard_from,
             'sponsorship_required': self.sponsorship_required,
-            'sessions': session_data
+            'sessions': session_data,
         }

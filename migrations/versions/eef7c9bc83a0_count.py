@@ -9,15 +9,20 @@ import sqlalchemy as sa
 import sqlalchemy_utils
 
 
- # revision identifiers, used by Alembic.
+# revision identifiers, used by Alembic.
 revision = 'eef7c9bc83a12'
 down_revision = 'eef7c9bc83a0'
 
 
 def upgrade():
-    op.execute("UPDATE custom_forms SET type = 'select' where field_identifier = 'country' and form = 'attendee';", execution_options=None)
-
+    op.execute(
+        "UPDATE custom_forms SET type = 'select' where field_identifier = 'country' and form = 'attendee';",
+        execution_options=None,
+    )
 
 
 def downgrade():
-    op.execute("UPDATE custom_forms SET type = 'text' where field_identifier = 'country' and form = 'attendee';", execution_options=None)
+    op.execute(
+        "UPDATE custom_forms SET type = 'text' where field_identifier = 'country' and form = 'attendee';",
+        execution_options=None,
+    )

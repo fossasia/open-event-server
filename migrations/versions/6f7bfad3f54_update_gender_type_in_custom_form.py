@@ -17,11 +17,14 @@ down_revision = '6f7b6fad3f53'
 
 
 def upgrade():
-    op.execute("UPDATE custom_forms SET type = 'select' where field_identifier = 'gender';",
-               execution_options=None)
-    
+    op.execute(
+        "UPDATE custom_forms SET type = 'select' where field_identifier = 'gender';",
+        execution_options=None,
+    )
 
 
 def downgrade():
-    op.execute("UPDATE custom_forms SET type = 'text' where field_identifier = 'gender';",
-               execution_options=None)
+    op.execute(
+        "UPDATE custom_forms SET type = 'text' where field_identifier = 'gender';",
+        execution_options=None,
+    )

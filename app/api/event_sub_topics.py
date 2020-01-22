@@ -17,6 +17,7 @@ class EventSubTopicListPost(ResourceList):
     """
     Create event sub topics
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -30,10 +31,11 @@ class EventSubTopicListPost(ResourceList):
             raise ForbiddenException({'source': ''}, 'Admin access is required.')
 
     view_kwargs = True
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     schema = EventSubTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventSubTopic}
+    data_layer = {'session': db.session, 'model': EventSubTopic}
 
 
 class EventSubTopicList(ResourceList):
@@ -50,18 +52,22 @@ class EventSubTopicList(ResourceList):
 
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            event_topic = safe_query(self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id')
+            event_topic = safe_query(
+                self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id'
+            )
             query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = EventSubTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventSubTopic,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EventSubTopic,
+        'methods': {'query': query},
+    }
 
 
 class EventSubTopicDetail(ResourceDetail):
@@ -76,7 +82,13 @@ class EventSubTopicDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
@@ -87,8 +99,13 @@ class EventSubTopicDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('custom_placeholder_id'):
-            custom_placeholder = safe_query(self, CustomPlaceholder, 'id', view_kwargs['custom_placeholder_id'],
-                                            'custom_placeholder_id')
+            custom_placeholder = safe_query(
+                self,
+                CustomPlaceholder,
+                'id',
+                view_kwargs['custom_placeholder_id'],
+                'custom_placeholder_id',
+            )
             if custom_placeholder.event_sub_topic_id:
                 view_kwargs['id'] = custom_placeholder.event_sub_topic_id
             else:
@@ -96,29 +113,29 @@ class EventSubTopicDetail(ResourceDetail):
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventSubTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventSubTopic,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EventSubTopic,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class EventSubTopicRelationshipRequired(ResourceRelationship):
     """
     Event sub topic Relationship
     """
+
     decorators = (api.has_permission('is_admin', methods="PATCH"),)
     methods = ['GET', 'PATCH']
     schema = EventSubTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventSubTopic}
+    data_layer = {'session': db.session, 'model': EventSubTopic}
 
 
 class EventSubTopicRelationshipOptional(ResourceRelationship):
     """
     Event sub topic Relationship
     """
+
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventSubTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventSubTopic}
+    data_layer = {'session': db.session, 'model': EventSubTopic}

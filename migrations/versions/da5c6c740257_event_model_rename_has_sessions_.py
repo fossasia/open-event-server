@@ -16,12 +16,26 @@ import sqlalchemy_utils
 
 
 def upgrade():
-    op.alter_column('events', 'has_sessions_speakers', new_column_name='is_sessions_speakers_enabled')
-    op.alter_column('events_version', 'has_sessions_speakers', new_column_name='is_sessions_speakers_enabled')
+    op.alter_column(
+        'events',
+        'has_sessions_speakers',
+        new_column_name='is_sessions_speakers_enabled',
+    )
+    op.alter_column(
+        'events_version',
+        'has_sessions_speakers',
+        new_column_name='is_sessions_speakers_enabled',
+    )
 
 
 def downgrade():
-    op.alter_column('events', 'is_sessions_speakers_enabled', new_column_name='has_sessions_speakers')
-    op.alter_column('events_version', 'is_sessions_speakers_enabled', new_column_name='has_sessions_speakers')
-
-
+    op.alter_column(
+        'events',
+        'is_sessions_speakers_enabled',
+        new_column_name='has_sessions_speakers',
+    )
+    op.alter_column(
+        'events_version',
+        'is_sessions_speakers_enabled',
+        new_column_name='has_sessions_speakers',
+    )

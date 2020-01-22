@@ -10,7 +10,7 @@ class NotificationActionFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = notification.NotificationAction
         sqlalchemy_session = db.session
 
-    subject = 'event',
-    link = common.url_,
-    subject_id = 1,
+    subject = ('event',)
+    link = (common.url_,)
+    subject_id = (1,)
     action_type = 'view'

@@ -9,18 +9,23 @@ from app.models.base import SoftDeletionModel
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 
-speakers_sessions = db.Table('speakers_sessions',
-                             db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
-                             db.Column('session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')),
-                             db.PrimaryKeyConstraint('speaker_id', 'session_id'))
+speakers_sessions = db.Table(
+    'speakers_sessions',
+    db.Column(
+        'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')
+    ),
+    db.Column(
+        'session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')
+    ),
+    db.PrimaryKeyConstraint('speaker_id', 'session_id'),
+)
 
 
 class Session(SoftDeletionModel):
     """Session model class"""
+
     __tablename__ = 'sessions'
-    __versioned__ = {
-        'exclude': []
-    }
+    __versioned__ = {'exclude': []}
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
@@ -32,11 +37,17 @@ class Session(SoftDeletionModel):
     starts_at = db.Column(db.DateTime(timezone=True))
     ends_at = db.Column(db.DateTime(timezone=True))
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
-    microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocations.id', ondelete='CASCADE'))
-    session_type_id = db.Column(db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE'))
-    speakers = db.relationship('Speaker',
-                               secondary=speakers_sessions,
-                               backref=db.backref('sessions', lazy='dynamic'))
+    microlocation_id = db.Column(
+        db.Integer, db.ForeignKey('microlocations.id', ondelete='CASCADE')
+    )
+    session_type_id = db.Column(
+        db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE')
+    )
+    speakers = db.relationship(
+        'Speaker',
+        secondary=speakers_sessions,
+        backref=db.backref('sessions', lazy='dynamic'),
+    )
 
     feedbacks = db.relationship('Feedback', backref="session")
     slides_url = db.Column(db.String)
@@ -51,42 +62,45 @@ class Session(SoftDeletionModel):
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
-    last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    last_modified_at = db.Column(
+        db.DateTime(timezone=True), default=datetime.datetime.utcnow
+    )
     send_email = db.Column(db.Boolean, nullable=True)
     is_locked = db.Column(db.Boolean, default=False, nullable=False)
     complex_field_values = db.Column(db.JSON)
 
-    def __init__(self,
-                 title=None,
-                 subtitle=None,
-                 short_abstract='',
-                 long_abstract='',
-                 comments=None,
-                 starts_at=None,
-                 ends_at=None,
-                 track_id=None,
-                 language=None,
-                 microlocation_id=None,
-                 speakers=None,
-                 event_id=None,
-                 creator_id=None,
-                 state="pending",
-                 slides_url=None,
-                 video_url=None,
-                 audio_url=None,
-                 signup_url=None,
-                 session_type_id=None,
-                 level=None,
-                 created_at=None,
-                 submission_modifier=None,
-                 is_mail_sent=False,
-                 deleted_at=None,
-                 submitted_at=None,
-                 last_modified_at=None,
-                 send_email=None,
-                 is_locked=False,
-                 complex_field_values=None
-                 ):
+    def __init__(
+        self,
+        title=None,
+        subtitle=None,
+        short_abstract='',
+        long_abstract='',
+        comments=None,
+        starts_at=None,
+        ends_at=None,
+        track_id=None,
+        language=None,
+        microlocation_id=None,
+        speakers=None,
+        event_id=None,
+        creator_id=None,
+        state="pending",
+        slides_url=None,
+        video_url=None,
+        audio_url=None,
+        signup_url=None,
+        session_type_id=None,
+        level=None,
+        created_at=None,
+        submission_modifier=None,
+        is_mail_sent=False,
+        deleted_at=None,
+        submitted_at=None,
+        last_modified_at=None,
+        send_email=None,
+        is_locked=False,
+        complex_field_values=None,
+    ):
 
         if speakers is None:
             speakers = []
@@ -130,7 +144,11 @@ class Session(SoftDeletionModel):
         return self.state == "accepted"
 
     def get_average_rating(self):
-        avg = db.session.query(func.avg(Feedback.rating)).filter_by(session_id=self.id).scalar()
+        avg = (
+            db.session.query(func.avg(Feedback.rating))
+            .filter_by(session_id=self.id)
+            .scalar()
+        )
         if avg is not None:
             avg = round(avg, 2)
         return avg

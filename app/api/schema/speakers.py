@@ -21,6 +21,7 @@ class SpeakerSchema(SoftDeletionSchema):
         """
         Meta class for speaker schema
         """
+
         type_ = 'speaker'
         self_view = 'v1.speaker_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -53,25 +54,31 @@ class SpeakerSchema(SoftDeletionSchema):
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
     complex_field_values = fields.Dict(allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.speaker_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'speaker_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
-    user = Relationship(attribute='user',
-                        self_view='v1.speaker_user',
-                        self_view_kwargs={'id': '<id>'},
-                        related_view='v1.user_detail',
-                        related_view_kwargs={'speaker_id': '<id>'},
-                        schema='UserSchemaPublic',
-                        type_='user')
-    sessions = Relationship(attribute='sessions',
-                            self_view='v1.speaker_session',
-                            self_view_kwargs={'id': '<id>'},
-                            related_view='v1.session_list',
-                            related_view_kwargs={'speaker_id': '<id>'},
-                            schema='SessionSchema',
-                            many=True,
-                            type_='session')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.speaker_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'speaker_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
+    user = Relationship(
+        attribute='user',
+        self_view='v1.speaker_user',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_detail',
+        related_view_kwargs={'speaker_id': '<id>'},
+        schema='UserSchemaPublic',
+        type_='user',
+    )
+    sessions = Relationship(
+        attribute='sessions',
+        self_view='v1.speaker_session',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_list',
+        related_view_kwargs={'speaker_id': '<id>'},
+        schema='SessionSchema',
+        many=True,
+        type_='session',
+    )

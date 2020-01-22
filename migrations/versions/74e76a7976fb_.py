@@ -20,7 +20,8 @@ def upgrade():
     op.add_column('user', sa.Column('in_trash', sa.Boolean(), default=False))
     op.add_column('events', sa.Column('in_trash', sa.Boolean(), default=False))
 
+
 def downgrade():
-	op.drop_column('events', 'in_trash')
-	op.drop_column('user', 'in_trash')
-	op.drop_column('session', 'in_trash')
+    op.drop_column('events', 'in_trash')
+    op.drop_column('user', 'in_trash')
+    op.drop_column('session', 'in_trash')

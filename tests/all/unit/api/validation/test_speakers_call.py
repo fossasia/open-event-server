@@ -8,20 +8,21 @@ from app.api.schema.speakers_calls import SpeakersCallSchema
 
 
 class TestSpeakersCallValidation(TestCase):
-
     def test_date_pass(self):
         """
         Speakers Call Validate Date - Tests if the function runs without an exception
         :return:
         """
         schema = SpeakersCallSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
-            'starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
             'ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'event_starts_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'event_starts_at': datetime(2003, 9, 10, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
         }
         SpeakersCallSchema.validate_date(schema, data, original_data)
 
@@ -31,13 +32,15 @@ class TestSpeakersCallValidation(TestCase):
         :return:
         """
         schema = SpeakersCallSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
-            'starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
             'ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'event_starts_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'event_starts_at': datetime(2003, 9, 10, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
         }
         with self.assertRaises(UnprocessableEntity):
             SpeakersCallSchema.validate_date(schema, data, original_data)

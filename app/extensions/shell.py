@@ -10,11 +10,16 @@ from app.models.user import User
 
 
 def init_app(app):
-
     @app.shell_context_processor
     def shell_context():
         return dict(
-            db=db, Event=Event, Session=Session,
-            Ticket=Ticket, Order=Order, Setting=Setting,
-            Speaker=Speaker, Track=Track, User=User
+            db=db,
+            Event=Event,
+            Session=Session,
+            Ticket=Ticket,
+            Order=Order,
+            Setting=Setting,
+            Speaker=Speaker,
+            Track=Track,
+            User=User,
         )

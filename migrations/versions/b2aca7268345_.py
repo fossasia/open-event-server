@@ -22,10 +22,16 @@ def upgrade():
     op.execute('ALTER TABLE events RENAME organizer_description TO owner_description')
     op.execute('ALTER TABLE events RENAME organizer_name TO owner_name')
     op.execute('ALTER TABLE events_version RENAME has_organizer_info TO has_owner_info')
-    op.execute('ALTER TABLE events_version RENAME organizer_description TO owner_description')
+    op.execute(
+        'ALTER TABLE events_version RENAME organizer_description TO owner_description'
+    )
     op.execute('ALTER TABLE events_version RENAME organizer_name TO owner_name')
-    op.execute("INSERT INTO roles(name, title_name) SELECT 'owner', 'Owner' WHERE NOT EXISTS (SELECT id FROM roles WHERE name='owner')")
-    op.execute("UPDATE users_events_roles SET role_id=(SELECT id FROM roles WHERE name='owner') WHERE id IN (SELECT DISTINCT ON(event_id, role_id) id FROM users_events_roles WHERE role_id=(SELECT id FROM roles WHERE name='organizer'))")
+    op.execute(
+        "INSERT INTO roles(name, title_name) SELECT 'owner', 'Owner' WHERE NOT EXISTS (SELECT id FROM roles WHERE name='owner')"
+    )
+    op.execute(
+        "UPDATE users_events_roles SET role_id=(SELECT id FROM roles WHERE name='owner') WHERE id IN (SELECT DISTINCT ON(event_id, role_id) id FROM users_events_roles WHERE role_id=(SELECT id FROM roles WHERE name='organizer'))"
+    )
     # ### end Alembic commands ###
 
 
@@ -35,8 +41,12 @@ def downgrade():
     op.execute('ALTER TABLE events RENAME owner_description TO organizer_description')
     op.execute('ALTER TABLE events RENAME owner_name TO organizer_name')
     op.execute('ALTER TABLE events_version RENAME has_owner_info TO has_organizer_info')
-    op.execute('ALTER TABLE events_version RENAME owner_description TO organizer_description')
+    op.execute(
+        'ALTER TABLE events_version RENAME owner_description TO organizer_description'
+    )
     op.execute('ALTER TABLE events_version RENAME owner_name TO organizer_name')
-    op.execute("UPDATE users_events_roles SET role_id=(SELECT id FROM roles WHERE name='organizer') WHERE role_id=(SELECT id FROM roles WHERE name='owner')")
+    op.execute(
+        "UPDATE users_events_roles SET role_id=(SELECT id FROM roles WHERE name='organizer') WHERE role_id=(SELECT id FROM roles WHERE name='owner')"
+    )
     op.execute("DELETE FROM roles WHERE name='owner'")
     # ### end Alembic commands ###

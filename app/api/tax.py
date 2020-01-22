@@ -5,7 +5,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import ForbiddenException, ConflictException, MethodNotAllowed
+from app.api.helpers.exceptions import (
+    ForbiddenException,
+    ConflictException,
+    MethodNotAllowed,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tax import TaxSchemaPublic, TaxSchema
@@ -19,6 +23,7 @@ class TaxList(ResourceList):
     TaxList class for creating a TaxSchema
     only POST and GET method allowed
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -30,8 +35,17 @@ class TaxList(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
-        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_tax_enabled=False)) > 0:
-            raise MethodNotAllowed({'parameter': 'event_id'}, "Tax is disabled for this Event")
+        if (
+            get_count(
+                db.session.query(Event).filter_by(
+                    id=int(data['event']), is_tax_enabled=False
+                )
+            )
+            > 0
+        ):
+            raise MethodNotAllowed(
+                {'parameter': 'event_id'}, "Tax is disabled for this Event"
+            )
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -40,8 +54,15 @@ class TaxList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if self.session.query(Tax).filter_by(event_id=data['event'], deleted_at=None).first():
-            raise ConflictException({'pointer': '/data/relationships/event'}, "Tax already exists for this event")
+        if (
+            self.session.query(Tax)
+            .filter_by(event_id=data['event'], deleted_at=None)
+            .first()
+        ):
+            raise ConflictException(
+                {'pointer': '/data/relationships/event'},
+                "Tax already exists for this event",
+            )
 
     def before_get(self, args, kwargs):
         """
@@ -58,11 +79,11 @@ class TaxList(ResourceList):
     methods = ['POST', 'GET']
     view_kwargs = True
     schema = TaxSchema
-    data_layer = {'session': db.session,
-                  'model': Tax,
-                  'methods': {
-                      'before_create_object': before_create_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Tax,
+        'methods': {'before_create_object': before_create_object},
+    }
 
 
 class TaxDetail(ResourceDetail):
@@ -80,7 +101,13 @@ class TaxDetail(ResourceDetail):
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
 
         if event:
             tax = safe_query(self, Tax, 'event_id', event.id, 'event_id')
@@ -97,35 +124,54 @@ class TaxDetail(ResourceDetail):
             try:
                 tax = Tax.query.filter_by(id=kwargs['id']).one()
             except NoResultFound:
-                raise ObjectNotFound({'parameter': 'id'},
-                                     "Tax: Not found for id {}".format(id))
-            if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=tax.event_id):
+                raise ObjectNotFound(
+                    {'parameter': 'id'}, "Tax: Not found for id {}".format(id)
+                )
+            if 'Authorization' in request.headers and has_access(
+                'is_coorganizer', event_id=tax.event_id
+            ):
                 self.schema = TaxSchema
             else:
                 self.schema = TaxSchemaPublic
         else:
-            if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=kwargs['event_id']):
+            if 'Authorization' in request.headers and has_access(
+                'is_coorganizer', event_id=kwargs['event_id']
+            ):
                 self.schema = TaxSchema
             else:
                 self.schema = TaxSchemaPublic
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=Tax, methods="PATCH,DELETE"),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Tax,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = TaxSchema
-    data_layer = {'session': db.session,
-                  'model': Tax,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Tax,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class TaxRelationship(ResourceRelationship):
     """
         Tax Relationship Resource
     """
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=Tax, methods="PATCH,DELETE"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Tax,
+            methods="PATCH,DELETE",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = TaxSchema
-    data_layer = {'session': db.session,
-                  'model': Tax}
+    data_layer = {'session': db.session, 'model': Tax}

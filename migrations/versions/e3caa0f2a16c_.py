@@ -16,7 +16,9 @@ down_revision = '41818fe31207'
 
 
 def upgrade():
-    op.add_column('users', sa.Column('was_registered_with_order', sa.Boolean(), nullable=True))
+    op.add_column(
+        'users', sa.Column('was_registered_with_order', sa.Boolean(), nullable=True)
+    )
     # ### end Alembic commands ###
 
 

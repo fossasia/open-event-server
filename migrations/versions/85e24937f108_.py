@@ -15,6 +15,7 @@ import sqlalchemy_utils
 revision = '85e24937f108'
 down_revision = ('aefa134809bf', '4b9a4e5aebe6')
 
+
 def upgrade():
     pass
 

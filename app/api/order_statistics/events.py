@@ -22,6 +22,7 @@ class OrderStatisticsEventSchema(Schema):
         """
         Meta class
         """
+
         type_ = 'order-statistics-event'
         self_view = 'v1.order_statistics_event_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -33,25 +34,55 @@ class OrderStatisticsEventSchema(Schema):
     orders = fields.Method("orders_count")
     sales = fields.Method("sales_count")
 
-
     def tickets_count(self, obj):
         obj_id = obj.id
-        total = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id).scalar()
-        draft = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'draft').scalar()
-        cancelled = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'cancelled').scalar()
-        pending = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'pending').scalar()
-        expired = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'expired').scalar()
-        placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'placed').scalar()
-        completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'completed').scalar()
-        max = db.session.query(func.sum(Ticket.quantity.label('sum'))).filter(Ticket.event_id == obj_id,
-                                                                              Ticket.deleted_at == None).scalar()
+        total = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id)
+            .scalar()
+        )
+        draft = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'draft')
+            .scalar()
+        )
+        cancelled = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'cancelled')
+            .scalar()
+        )
+        pending = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'pending')
+            .scalar()
+        )
+        expired = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'expired')
+            .scalar()
+        )
+        placed = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'placed')
+            .scalar()
+        )
+        completed = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(Order.event_id == obj_id, Order.status == 'completed')
+            .scalar()
+        )
+        max = (
+            db.session.query(func.sum(Ticket.quantity.label('sum')))
+            .filter(Ticket.event_id == obj_id, Ticket.deleted_at == None)
+            .scalar()
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -60,19 +91,43 @@ class OrderStatisticsEventSchema(Schema):
             'expired': expired or 0,
             'placed': placed or 0,
             'completed': completed or 0,
-            'max': max or 0
+            'max': max or 0,
         }
         return result
 
     def orders_count(self, obj):
         obj_id = obj.id
         total = get_count(db.session.query(Order).filter(Order.event_id == obj_id))
-        draft = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'draft'))
-        cancelled = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'cancelled'))
-        pending = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'pending'))
-        expired = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'expired'))
-        placed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'placed'))
-        completed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'completed'))
+        draft = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'draft'
+            )
+        )
+        cancelled = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'cancelled'
+            )
+        )
+        pending = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'pending'
+            )
+        )
+        expired = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'expired'
+            )
+        )
+        placed = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'placed'
+            )
+        )
+        completed = get_count(
+            db.session.query(Order).filter(
+                Order.event_id == obj_id, Order.status == 'completed'
+            )
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -80,25 +135,47 @@ class OrderStatisticsEventSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
         }
         return result
 
     def sales_count(self, obj):
         obj_id = obj.id
-        total = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id).scalar()
-        draft = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                             Order.status == 'draft').scalar()
-        cancelled = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                                 Order.status == 'cancelled').scalar()
-        pending = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                               Order.status == 'pending').scalar()
-        expired = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                               Order.status == 'expired').scalar()
-        placed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                              Order.status == 'placed').scalar()
-        completed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                                 Order.status == 'completed').scalar()
+        total = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id)
+            .scalar()
+        )
+        draft = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'draft')
+            .scalar()
+        )
+        cancelled = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'cancelled')
+            .scalar()
+        )
+        pending = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'pending')
+            .scalar()
+        )
+        expired = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'expired')
+            .scalar()
+        )
+        placed = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'placed')
+            .scalar()
+        )
+        completed = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .filter(Order.event_id == obj_id, Order.status == 'completed')
+            .scalar()
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -106,7 +183,7 @@ class OrderStatisticsEventSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
         }
         return result
 
@@ -118,14 +195,20 @@ class OrderStatisticsEventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
+            event = safe_query(
+                self, Event, 'identifier', view_kwargs['identifier'], 'identifier'
+            )
             view_kwargs['id'] = event.id
 
     methods = ['GET']
-    decorators = (api.has_permission('is_coorganizer', fetch="id", fetch_as="event_id", model=Event),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer', fetch="id", fetch_as="event_id", model=Event
+        ),
+    )
     schema = OrderStatisticsEventSchema
-    data_layer = {'session': db.session,
-                  'model': Event,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Event,
+        'methods': {'before_get_object': before_get_object},
+    }

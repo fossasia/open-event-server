@@ -4,6 +4,7 @@ from app.models.base import SoftDeletionModel
 
 class UserEmail(SoftDeletionModel):
     """user email model class"""
+
     __tablename__ = 'user_emails'
 
     id = db.Column(db.Integer, primary_key=True)

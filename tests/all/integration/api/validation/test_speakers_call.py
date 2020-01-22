@@ -9,7 +9,6 @@ from app.factories.speakers_call import SpeakersCallFactory
 
 
 class TestSpeakersCallValidation(OpenEventTestCase):
-
     def test_date_db_populate(self):
         """
         Speakers Call Validate Date - Tests if validation works on values stored in db and not given in 'data'
@@ -19,11 +18,7 @@ class TestSpeakersCallValidation(OpenEventTestCase):
             schema = SpeakersCallSchema()
             SpeakersCallFactory()
 
-            original_data = {
-                'data': {
-                    'id': 1
-                }
-            }
+            original_data = {'data': {'id': 1}}
             data = {}
             SpeakersCallSchema.validate_date(schema, data, original_data)
 

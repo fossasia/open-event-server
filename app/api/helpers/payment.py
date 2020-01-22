@@ -42,28 +42,33 @@ class StripePaymentsManager:
         """
         if not event:
             settings = get_settings()
-            if settings['app_environment'] == 'development' and settings['stripe_test_secret_key'] and \
-                    settings['stripe_test_publishable_key']:
+            if (
+                settings['app_environment'] == 'development'
+                and settings['stripe_test_secret_key']
+                and settings['stripe_test_publishable_key']
+            ):
                 return {
                     'SECRET_KEY': settings['stripe_test_secret_key'],
-                    'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"]
+                    'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"],
                 }
             elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
-                    'PUBLISHABLE_KEY': settings["stripe_publishable_key"]
+                    'PUBLISHABLE_KEY': settings["stripe_publishable_key"],
                 }
             else:
                 return None
         else:
             if represents_int(event):
-                authorization = StripeAuthorization.query.filter_by(event_id=event).first()
+                authorization = StripeAuthorization.query.filter_by(
+                    event_id=event
+                ).first()
             else:
                 authorization = event.stripe_authorization
             if authorization:
                 return {
                     'SECRET_KEY': authorization.stripe_secret_key,
-                    'PUBLISHABLE_KEY': authorization.stripe_publishable_key
+                    'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
                 }
             else:
                 return None
@@ -78,12 +83,15 @@ class StripePaymentsManager:
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for the Platform")
+            raise ForbiddenException(
+                {'pointer': ''},
+                "Stripe payment isn't configured properly for the Platform",
+            )
 
         data = {
             'client_secret': credentials['SECRET_KEY'],
             'code': stripe_auth_code,
-            'grant_type': 'authorization_code'
+            'grant_type': 'authorization_code',
         }
 
         response = requests.post('https://connect.stripe.com/oauth/token', data=data)
@@ -102,8 +110,9 @@ class StripePaymentsManager:
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
-            raise ConflictException({'pointer': ''},
-                                    'Stripe credentials not found for the event.')
+            raise ConflictException(
+                {'pointer': ''}, 'Stripe credentials not found for the event.'
+            )
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
@@ -114,8 +123,7 @@ class StripePaymentsManager:
 
         try:
             customer = stripe.Customer.create(
-                email=order_invoice.user.email,
-                source=order_invoice.stripe_token
+                email=order_invoice.user.email, source=order_invoice.stripe_token
             )
 
             charge = stripe.Charge.create(
@@ -126,9 +134,9 @@ class StripePaymentsManager:
                     'order_id': order_invoice.id,
                     'event': order_invoice.event.name,
                     'user_id': order_invoice.user_id,
-                    'event_id': order_invoice.event_id
+                    'event_id': order_invoice.event_id,
                 },
-                description=order_invoice.event.name
+                description=order_invoice.event.name,
             )
             return charge
         except Exception as e:
@@ -148,8 +156,12 @@ class PayPalPaymentsManager:
         """
         settings = get_settings()
         # Use Sandbox by default.
-        paypal_mode = settings.get('paypal_mode',
-                                   'live' if (settings['app_environment'] == Environment.PRODUCTION) else 'sandbox')
+        paypal_mode = settings.get(
+            'paypal_mode',
+            'live'
+            if (settings['app_environment'] == Environment.PRODUCTION)
+            else 'sandbox',
+        )
         paypal_key = None
         if paypal_mode == 'sandbox':
             paypal_key = 'paypal_sandbox'
@@ -157,18 +169,26 @@ class PayPalPaymentsManager:
             paypal_key = 'paypal'
 
         if not paypal_key:
-            raise ConflictException({'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'")
+            raise ConflictException(
+                {'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'"
+            )
 
         paypal_client = settings.get('{}_client'.format(paypal_key), None)
         paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
 
         if not paypal_client or not paypal_secret:
-            raise ConflictException({'pointer': ''}, "Payments through Paypal have not been configured on the platform")
+            raise ConflictException(
+                {'pointer': ''},
+                "Payments through Paypal have not been configured on the platform",
+            )
 
-        paypalrestsdk.configure({
-            "mode": paypal_mode,
-            "client_id": paypal_client,
-            "client_secret": paypal_secret})
+        paypalrestsdk.configure(
+            {
+                "mode": paypal_mode,
+                "client_id": paypal_client,
+                "client_secret": paypal_secret,
+            }
+        )
 
     @staticmethod
     def create_payment(order, return_url, cancel_url):
@@ -180,26 +200,29 @@ class PayPalPaymentsManager:
         :return: request_id or the error message along with an indicator.
         """
         if (not order.event.paypal_email) or order.event.paypal_email == '':
-            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured for the event")
+            raise ConflictException(
+                {'pointer': ''},
+                "Payments through Paypal hasn't been configured for the event",
+            )
 
         PayPalPaymentsManager.configure_paypal()
 
-        payment = paypalrestsdk.Payment({
-            "intent": "sale",
-            "payer": {"payment_method": "paypal"},
-            "redirect_urls": {
-                "return_url": return_url,
-                "cancel_url": cancel_url},
-            "transactions": [{
-                "amount": {
-                    "total": int(order.amount),
-                    "currency": order.event.payment_currency
-                },
-                "payee": {
-                    "email": order.event.paypal_email
-                }
-            }]
-        })
+        payment = paypalrestsdk.Payment(
+            {
+                "intent": "sale",
+                "payer": {"payment_method": "paypal"},
+                "redirect_urls": {"return_url": return_url, "cancel_url": cancel_url},
+                "transactions": [
+                    {
+                        "amount": {
+                            "total": int(order.amount),
+                            "currency": order.event.payment_currency,
+                        },
+                        "payee": {"email": order.event.paypal_email},
+                    }
+                ],
+            }
+        )
 
         if payment.create():
             return True, payment.id
@@ -215,7 +238,12 @@ class PayPalPaymentsManager:
         try:
             payment_server = paypalrestsdk.Payment.find(payment_id)
             if payment_server.state != 'approved':
-                return False, 'Payment has not been approved yet. Status is ' + payment_server.state + '.'
+                return (
+                    False,
+                    'Payment has not been approved yet. Status is '
+                    + payment_server.state
+                    + '.',
+                )
 
             # Get the most recent transaction
             transaction = payment_server.transactions[0]
@@ -273,13 +301,12 @@ class AliPayPaymentsManager:
     @staticmethod
     def create_source(amount, currency, redirect_return_uri):
         stripe.api_key = get_settings()['alipay_publishable_key']
-        response = stripe.Source.create(type='alipay',
-                                        currency=currency,
-                                        amount=amount,
-                                        redirect={
-                                            'return_url': redirect_return_uri
-                                        }
-                                        )
+        response = stripe.Source.create(
+            type='alipay',
+            currency=currency,
+            amount=amount,
+            redirect={'return_url': redirect_return_uri},
+        )
         return response
 
     @staticmethod
@@ -287,10 +314,10 @@ class AliPayPaymentsManager:
         order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
         stripe.api_key = get_settings()['alipay_secret_key']
         charge = stripe.Charge.create(
-                 amount=int(order.amount),
-                 currency=order.event.payment_currency,
-                 source=order.order_notes,
-                 )
+            amount=int(order.amount),
+            currency=order.event.payment_currency,
+            source=order.order_notes,
+        )
         return charge
 
 
@@ -309,14 +336,11 @@ class OmisePaymentsManager:
             omise.api_public = get_settings()['omise_test_public']
         order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
         charge = omise.Charge.create(
-                amount=int(round(order.amount)),
-                currency=order.event.payment_currency,
-                card=token,
-                metadata={
-                    "order_id": str(order_identifier),
-                    "status": True
-                },
-                )
+            amount=int(round(order.amount)),
+            currency=order.event.payment_currency,
+            card=token,
+            metadata={"order_id": str(order_identifier), "status": True},
+        )
         return charge
 
 
@@ -339,7 +363,9 @@ class PaytmPaymentsManager:
             merchant_key = get_settings()['paytm_sandbox_secret']
         else:
             merchant_key = get_settings()['paytm_live_secret']
-        return checksum.generate_checksum_by_str(json.dumps(paytm_params["body"]), merchant_key)
+        return checksum.generate_checksum_by_str(
+            json.dumps(paytm_params["body"]), merchant_key
+        )
 
     @staticmethod
     def hit_paytm_endpoint(url, head, body=None):
@@ -347,5 +373,7 @@ class PaytmPaymentsManager:
         paytm_params["body"] = body
         paytm_params["head"] = head
         post_data = json.dumps(paytm_params)
-        response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+        response = requests.post(
+            url, data=post_data, headers={"Content-type": "application/json"}
+        ).json()
         return response

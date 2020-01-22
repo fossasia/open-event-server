@@ -1,5 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, \
-    ResourceRelationship
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import require_relationship
@@ -16,17 +15,20 @@ class UserEmailListAdmin(ResourceList):
     """
     Admin List for User Emails
     """
-    methods = ['GET', ]
+
+    methods = [
+        'GET',
+    ]
     schema = UserEmailSchema
     decorators = (api.has_permission('is_admin'),)
-    data_layer = {'session': db.session,
-                  'model': UserEmail}
+    data_layer = {'session': db.session, 'model': UserEmail}
 
 
 class UserEmailList(ResourceList):
     """
     List User Emails for a user
     """
+
     def query(self, view_kwargs):
         """
         query method for Notifications list
@@ -38,22 +40,29 @@ class UserEmailList(ResourceList):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
+
     view_kwargs = True
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=UserEmail,
-                  methods="GET"),)
-    methods = ["GET", ]
+    decorators = (
+        api.has_permission(
+            'is_user_itself', fetch="user_id", model=UserEmail, methods="GET"
+        ),
+    )
+    methods = [
+        "GET",
+    ]
     schema = UserEmailSchema
-    data_layer = {'session': db.session,
-                  'model': UserEmail,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': UserEmail,
+        'methods': {'query': query},
+    }
 
 
 class UserEmailListPost(ResourceList):
     """
     Create new alternate email for a user
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -64,33 +73,54 @@ class UserEmailListPost(ResourceList):
         """
         require_relationship(['user'], data)
 
-        if get_count(db.session.query(UserEmail.id).filter_by(email_address=data.get('email-address'),
-                    user_id=int(data['user']), deleted_at=None)) > 0:
-            raise ConflictException({'pointer': '/data/attributes/name'}, "Email already exists")
+        if (
+            get_count(
+                db.session.query(UserEmail.id).filter_by(
+                    email_address=data.get('email-address'),
+                    user_id=int(data['user']),
+                    deleted_at=None,
+                )
+            )
+            > 0
+        ):
+            raise ConflictException(
+                {'pointer': '/data/attributes/name'}, "Email already exists"
+            )
 
     schema = UserEmailSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': UserEmail}
+    methods = [
+        'POST',
+    ]
+    data_layer = {'session': db.session, 'model': UserEmail}
 
 
 class UserEmailDetail(ResourceDetail):
     """
    User Email detail by id
     """
+
     schema = UserEmailSchema
-    decorators = (api.has_permission('is_user_itself', fetch='user_id',
-                  fetch_as="user_id", model=UserEmail, methods="PATCH,DELETE"), )
-    data_layer = {'session': db.session,
-                  'model': UserEmail}
+    decorators = (
+        api.has_permission(
+            'is_user_itself',
+            fetch='user_id',
+            fetch_as="user_id",
+            model=UserEmail,
+            methods="PATCH,DELETE",
+        ),
+    )
+    data_layer = {'session': db.session, 'model': UserEmail}
 
 
 class UserEmailRelationship(ResourceRelationship):
     """
     User Email Relationship
     """
-    decorators = (api.has_permission('is_user_itself', fetch='user_id',
-                  model=UserEmail, methods="GET"), )
+
+    decorators = (
+        api.has_permission(
+            'is_user_itself', fetch='user_id', model=UserEmail, methods="GET"
+        ),
+    )
     schema = UserEmailSchema
-    data_layer = {'session': db.session,
-                  'model': UserEmail}
+    data_layer = {'session': db.session, 'model': UserEmail}

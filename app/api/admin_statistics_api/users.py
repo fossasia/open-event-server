@@ -13,14 +13,17 @@ from app.models.role import Role
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import get_count
 
+
 class AdminStatisticsUserSchema(Schema):
     """
     Api schema
     """
+
     class Meta:
         """
         Meta class
         """
+
         type_ = 'admin-statistics-user'
         self_view = 'v1.admin_statistics_user_detail'
         inflect = dasherize
@@ -43,15 +46,25 @@ class AdminStatisticsUserSchema(Schema):
         return get_count(User.query.filter_by(is_admin=True, is_super_admin=False))
 
     def verified_count(self, obj):
-        return get_count(User.query.filter_by(is_verified=True, is_super_admin=False, is_admin=False))
+        return get_count(
+            User.query.filter_by(is_verified=True, is_super_admin=False, is_admin=False)
+        )
 
     def unverified_count(self, obj):
-        return get_count(User.query.filter_by(is_verified=False, is_super_admin=False, is_admin=False))
+        return get_count(
+            User.query.filter_by(
+                is_verified=False, is_super_admin=False, is_admin=False
+            )
+        )
 
     def get_all_user_roles(self, role_name):
         role = Role.query.filter_by(name=role_name).first()
-        newquery = User.query.join(UsersEventsRoles.user).join(UsersEventsRoles.role).filter(
-            UsersEventsRoles.role == role).distinct()
+        newquery = (
+            User.query.join(UsersEventsRoles.user)
+            .join(UsersEventsRoles.role)
+            .filter(UsersEventsRoles.role == role)
+            .distinct()
+        )
         return newquery
 
     def owner_count(self, obj):
@@ -75,10 +88,8 @@ class AdminStatisticsUserDetail(ResourceDetail):
     """
     Detail by id
     """
+
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)
     schema = AdminStatisticsUserSchema
-    data_layer = {
-        'class': NoModelLayer,
-        'session': db.session
-    }
+    data_layer = {'class': NoModelLayer, 'session': db.session}

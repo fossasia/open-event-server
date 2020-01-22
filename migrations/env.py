@@ -20,8 +20,9 @@ LOGGER = logging.getLogger('alembic.env')
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-config.set_main_option('sqlalchemy.url',
-                       current_app.config.get('SQLALCHEMY_DATABASE_URI'))
+config.set_main_option(
+    'sqlalchemy.url', current_app.config.get('SQLALCHEMY_DATABASE_URI')
+)
 target_metadata = current_app.extensions['migrate'].db.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -87,9 +88,8 @@ class DropSPOp(ReversibleOp):
 @Operations.implementation_for(CreateSPOp)
 def create_or_replace_sp(operations, operation):
     operations.execute(
-        "CREATE OR REPLACE FUNCTION %s %s" % (
-            operation.target.name, operation.target.sqltext
-        )
+        "CREATE OR REPLACE FUNCTION %s %s"
+        % (operation.target.name, operation.target.sqltext)
     )
 
 
@@ -135,16 +135,20 @@ def run_migrations_online():
                 directives[:] = []
                 LOGGER.info('No changes in schema detected.')
 
-    engine = engine_from_config(config.get_section(config.config_ini_section),
-                                prefix='sqlalchemy.',
-                                poolclass=pool.NullPool)
+    engine = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix='sqlalchemy.',
+        poolclass=pool.NullPool,
+    )
 
     connection = engine.connect()
-    context.configure(connection=connection,
-                      target_metadata=target_metadata,
-                      process_revision_directives=process_revision_directives,
-                      compare_type=True,
-                      **current_app.extensions['migrate'].configure_args)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        process_revision_directives=process_revision_directives,
+        compare_type=True,
+        **current_app.extensions['migrate'].configure_args
+    )
 
     try:
         with context.begin_transaction():
@@ -152,8 +156,8 @@ def run_migrations_online():
     finally:
         connection.close()
 
+
 if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-
