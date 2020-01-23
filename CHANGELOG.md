@@ -1,5 +1,23 @@
 ## Changelog
 
+#### v1.11.1 (2020-01-23):
+
+- Fix event fee notification task being triggered every minute
+
+#### v1.11.0 (2020-01-23):
+
+- **BREAKING:** Fix security issues related to secret key. You **MUST** add the current secret key set in DB as `SECRET_KEY` environment variable before upgrading. After upgrading, the column will be removed from DB 
+- Fix count query of tickets used to reserve tickets
+- Support event statistics in include query
+- Restrict deletion of orders except by admin
+- Fix missing fields and incorrect column value in session csv export
+- Addition of field for Promoted Events, Instagram Speaker URL, Age Groups for Attendee
+- Replaced jobs running with APS to celery-beat
+- Fix sessions can be edited after CFS has ended
+- Removed elasticsearch initialisation and redundant APIs
+- Change country field type to select in forms
+- Other minor fixes
+
 ##### v1.10.0 (2019-12-22):
 
 - Fix event and speaker image resizing, and add management command to resize event and speaker images which remained to be resized.  

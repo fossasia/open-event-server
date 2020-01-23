@@ -55,6 +55,7 @@ class Event(SoftDeletionModel):
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
+    is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     description = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
@@ -224,6 +225,7 @@ class Event(SoftDeletionModel):
                  identifier=None,
                  can_pay_by_bank=False,
                  is_featured=False,
+                 is_promoted=False,
                  can_pay_onsite=False,
                  cheque_details=None,
                  bank_details=None,
@@ -289,6 +291,7 @@ class Event(SoftDeletionModel):
         self.can_pay_by_paytm = can_pay_by_paytm
         self.is_donation_enabled = is_donation_enabled
         self.is_featured = is_featured
+        self.is_promoted = is_promoted
         self.is_ticket_form_enabled = is_ticket_form_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details

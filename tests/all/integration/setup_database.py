@@ -15,12 +15,11 @@ class Setup(object):
     @staticmethod
     def create_app():
         app.config.from_object('config.TestingConfig')
-        app.secret_key = 'super secret key'
         app.logger.addHandler(logging.StreamHandler(sys.stdout))
         app.logger.setLevel(logging.ERROR)
         with app.test_request_context():
             db.create_all()
-            set_settings(secret='super secret key', app_name='Open Event', app_environment=Environment.TESTING)
+            set_settings(app_name='Open Event', app_environment=Environment.TESTING)
 
         return app
 

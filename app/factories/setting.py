@@ -15,8 +15,6 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     app_name = common.string_
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = common.string_
-    # App secret
-    secret = common.secret_
     # Static domain
     static_domain = common.url_
     # Order Expiry Time
