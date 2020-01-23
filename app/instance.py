@@ -6,6 +6,7 @@ from envparse import env
 
 import sys
 from flask import Flask, json, make_response
+from werkzeug.exceptions import HTTPException
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -257,13 +258,13 @@ def internal_server_error(error):
                          {'Content-Type': 'application/vnd.api+json'})
 
 
-@app.errorhandler(429)
-def ratelimit_handler(error):
+@app.errorhandler(HTTPException)
+def error_handler(error):
     return make_response(json.dumps({
-            'status': 429,
-            'title': 'Request Limit Exceeded'
+            'status': error.code,
+            'title': error.name
         }),
-        429,
+        error.code,
         {
             'Content-Type': 'application/vnd.api+json'
         })
