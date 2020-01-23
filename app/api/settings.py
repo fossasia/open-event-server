@@ -10,6 +10,7 @@ from app.models.setting import Setting
 from app.settings import refresh_settings
 from app.api.helpers.mail import send_test_email
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.permissions import is_admin
 
 
@@ -64,7 +65,7 @@ class SettingDetail(ResourceDetail):
 def test_email_setup():
     recipient = request.json.get('recipient')
     if not recipient:
-        raise UnprocessableEntityError({'source': 'recipient'},
+        raise UnprocessableEntity({'source': 'recipient'},
                                         'Required parameter recipient not found')
     send_test_email(recipient)
     return make_response(jsonify(message='Test mail sent, please verify delivery'), 200)

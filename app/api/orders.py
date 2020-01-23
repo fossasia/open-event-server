@@ -19,6 +19,7 @@ from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
+from app.api.helpers.exceptions import BadRequestException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
@@ -532,7 +533,7 @@ def create_paypal_payment(order_identifier):
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error')
+        raise BadRequestException({'source': ''}, 'Bad Request Error')
 
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
     status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
@@ -552,7 +553,7 @@ def verify_mobile_paypal_payment(order_identifier):
     try:
         payment_id = request.json['data']['attributes']['payment-id']
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error')
+        raise BadRequestException({'source': ''}, 'Bad Request Error')
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
     status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
     return jsonify(status=status, error=error)
@@ -575,7 +576,7 @@ def create_source(order_identifier):
         save_to_db(order)
         return jsonify(link=source_object.redirect['url'])
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Source creation error')
+        raise BadRequestException({'source': ''}, 'Source creation error')
 
 
 @alipay_blueprint.route('/alipay_return_uri/<string:order_identifier>', methods=['GET', 'POST'])

@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import NotFoundError
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, NotFoundException
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
@@ -165,16 +165,16 @@ def accept_invite():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
+        raise NotFoundException({'source': ''}, 'Role Invite Not Found')
     else:
         try:
             user = User.query.filter_by(email=role_invite.email).first()
         except NoResultFound:
-            raise NotFoundError({'source': ''}, 'User corresponding to role invite not Found')
+            raise NotFoundException({'source': ''}, 'User corresponding to role invite not Found')
         try:
             role = Role.query.filter_by(name=role_invite.role_name).first()
         except NoResultFound:
-            raise NotFoundError({'source': ''}, 'Role corresponding to role invite not Found')
+            raise NotFoundException({'source': ''}, 'Role corresponding to role invite not Found')
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = UsersEventsRoles.query.filter_by(user=user).filter_by(
             event=event).filter_by(role=role).first()
@@ -206,7 +206,7 @@ def fetch_user():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
+        raise NotFoundException({'source': ''}, 'Role Invite Not Found')
     else:
         return jsonify({
             "email": role_invite.email

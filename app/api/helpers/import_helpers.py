@@ -13,6 +13,7 @@ from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ServerError, NotFoundError
+from app.api.helpers.exceptions import NotFoundException
 from app.api.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.api.helpers.utilities import update_state, write_file, is_downloadable
@@ -90,12 +91,12 @@ def get_file_from_request(ext=None, folder=None, name='file'):
     print("get_file_from_request() INVOKED. We have: request.files = %r" % request.files)
 
     if name not in request.files:
-        raise NotFoundError(source='{}', detail='File not found')
+        raise NotFoundException(source='{}', detail='File not found')
     uploaded_file = request.files[name]
     if uploaded_file.filename == '':
-        raise NotFoundError(source='{}', detail='File not found')
+        raise NotFoundException(source='{}', detail='File not found')
     if not _allowed_file(uploaded_file.filename, ext):
-        raise NotFoundError(source='{}', detail='Invalid file type')
+        raise NotFoundException(source='{}', detail='Invalid file type')
 
     if not folder:
         if 'UPLOAD_FOLDER' in app.config:
@@ -382,7 +383,7 @@ def import_event_json(task_handle, zip_path, creator_id):
     except IOError:
         db.session.delete(new_event)
         db.session.commit()
-        raise NotFoundError('File %s missing in event zip' % item[0])
+        raise NotFoundException('File %s missing in event zip' % item[0])
     except ValueError:
         db.session.delete(new_event)
         db.session.commit()

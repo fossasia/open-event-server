@@ -3,6 +3,7 @@ from flask_jwt_extended import verify_jwt_in_request, current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.exceptions import ForbiddenException
 from flask import request
 from datetime import datetime
 from app.models import db
@@ -61,7 +62,7 @@ def is_super_admin(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_super_admin:
-            raise ForbiddenError({'source': ''}, 'Super admin access is required')
+            raise ForbiddenException({'source': ''}, 'Super admin access is required')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -79,7 +80,7 @@ def is_admin(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_admin and not user.is_super_admin:
-            raise ForbiddenError({'source': ''}, 'Admin access is required')
+            raise ForbiddenException({'source': ''}, 'Admin access is required')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -98,7 +99,7 @@ def is_user_itself(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
-            raise ForbiddenError({'source': ''}, 'Access Forbidden')
+            raise ForbiddenException({'source': ''}, 'Access Forbidden')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -120,7 +121,7 @@ def is_owner(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_owner(kwargs['event_id']):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Owner access is required')
+        raise ForbiddenException({'source': ''}, 'Owner access is required')
 
     return decorated_function
 
@@ -141,7 +142,7 @@ def is_organizer(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_organizer(kwargs['event_id']):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Organizer access is required')
+        raise ForbiddenException({'source': ''}, 'Organizer access is required')
 
     return decorated_function
 
@@ -186,7 +187,7 @@ def is_coorganizer(f):
             if 'event_identifier' in kwargs:
                 kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
+        raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
     return decorated_function
 
@@ -209,7 +210,7 @@ def is_registrar(f):
                     user.is_registrar(kwargs['event_id']) or
                     user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Registrar Access is Required.')
+        raise ForbiddenException({'source': ''}, 'Registrar Access is Required.')
 
     return decorated_function
 
@@ -232,7 +233,7 @@ def is_track_organizer(f):
                     user.is_track_organizer(kwargs['event_id']) or
                     user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Track Organizer access is Required.')
+        raise ForbiddenException({'source': ''}, 'Track Organizer access is Required.')
 
     return decorated_function
 
@@ -255,7 +256,7 @@ def is_moderator(f):
                     user.is_moderator(kwargs['event_id']) or
                     user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': ''}, 'Moderator Access is Required.')
+        raise ForbiddenException({'source': ''}, 'Moderator Access is Required.')
 
     return decorated_function
 

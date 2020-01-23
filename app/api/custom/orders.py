@@ -7,6 +7,8 @@ from app.api.auth import return_file
 from app.api.helpers.db import safe_query, get_count
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError
+from app.api.helpers.exceptions import ForbiddenException, NotFoundException
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
@@ -31,7 +33,7 @@ def ticket_attendee_authorized(order_identifier):
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
         except NoResultFound:
-            raise NotFoundError({'source': ''}, 'This ticket is not associated with any order')
+            raise NotFoundException({'source': ''}, 'This ticket is not associated with any order')
         if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
@@ -41,9 +43,9 @@ def ticket_attendee_authorized(order_identifier):
                 create_pdf_tickets_for_holder(order)
                 return return_file('ticket', file_path, order_identifier)
         else:
-            raise ForbiddenError({'source': ''}, 'Unauthorized Access')
+            raise ForbiddenException({'source': ''}, 'Unauthorized Access')
     else:
-        raise ForbiddenError({'source': ''}, 'Authentication Required to access ticket')
+        raise ForbiddenException({'source': ''}, 'Authentication Required to access ticket')
 
 
 @order_blueprint.route('/resend-email', methods=['POST'])
@@ -75,10 +77,10 @@ def resend_emails():
             return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
                            format(order_identifier))
         else:
-            raise UnprocessableEntityError({'source': 'data/order'},
+            raise UnprocessableEntity({'source': 'data/order'},
                                             "Only placed and completed orders have confirmation")
     else:
-        raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
+        raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
 
 def calculate_order_amount_wrapper(data):
