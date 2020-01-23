@@ -226,7 +226,7 @@ def send_monthly_event_invoice():
 def setup_scheduled_task(sender, **kwargs):
     from celery.schedules import crontab
     sender.add_periodic_task(crontab(hour='*/5', minute=30), send_after_event_mail)
-    sender.add_periodic_task(crontab(day_of_week='0-6'), send_event_fee_notification)
+    sender.add_periodic_task(crontab(minute=0, hour=0), send_event_fee_notification)
     sender.add_periodic_task(crontab(minute=0, hour=0, day_of_month=1), send_event_fee_notification_followup)
     sender.add_periodic_task(crontab(hour='*/5', minute=30), change_session_state_on_event_completion)
     sender.add_periodic_task(crontab(minute='*/45'), expire_pending_tickets)
