@@ -270,13 +270,49 @@ def ratelimit_handler(error):
         })
 
 
-@app.errorhandler(HTTPException)
-def error_handler(error):
+@app.errorhandler(404)
+def notfound_handler(error):
     return make_response(json.dumps({
-            'status': error.code,
-            'title': error.name
+            'status': 404,
+            'title': 'Not Found'
         }),
-        error.code,
+        404,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(422)
+def unprocessable_entity_handler(error):
+    return make_response(json.dumps({
+            'status': 422,
+            'title': 'Unprocessable Entity'
+        }),
+        422,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(400)
+def badrequest_handler(error):
+    return make_response(json.dumps({
+            'status': 400,
+            'title': 'Bad Request'
+        }),
+        400,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
+@app.errorhandler(403)
+def forbidden_error_handler(error):
+    return make_response(json.dumps({
+            'status': 403,
+            'title': 'Unprocessable Entity'
+        }),
+        403,
         {
             'Content-Type': 'application/vnd.api+json'
         })
