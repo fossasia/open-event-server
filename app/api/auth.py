@@ -242,18 +242,18 @@ def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
     except base64.binascii.Error:
-        raise BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
     except Exception:
-        raise BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
     except Exception:
-        raise BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
@@ -265,13 +265,13 @@ def resend_verification_email():
     try:
         email = request.json['data']['email']
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
         raise UnprocessableEntityError(
-            {'source': ''}, 'User with email: ' + email + ' not found.').respond()
+            {'source': ''}, 'User with email: ' + email + ' not found.')
     else:
         serializer = get_serializer()
         hash_ = str(base64.b64encode(str(serializer.dumps(
@@ -294,7 +294,7 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
@@ -319,7 +319,7 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).one()
     except NoResultFound:
-        raise NotFoundError({'source': ''}, 'User Not Found').respond()
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         user.password = password
         if not user.is_verified:
@@ -342,15 +342,15 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
-        raise NotFoundError({'source': ''}, 'User Not Found').respond()
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
                 raise BadRequestError({'source': ''},
-                                       'Old and New passwords must be different').respond()
+                                       'Old and New passwords must be different')
             if len(new_password) < 8:
                 raise BadRequestError({'source': ''},
-                                       'Password should have minimum 8 characters').respond()
+                                       'Password should have minimum 8 characters')
             user.password = new_password
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
@@ -358,7 +358,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                           app_name=get_settings()['app_name'])
         else:
-            raise BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
+            raise BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.')
 
     return jsonify({
         "id": user.id,

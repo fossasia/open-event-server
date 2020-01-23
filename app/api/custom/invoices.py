@@ -19,14 +19,14 @@ event_blueprint = Blueprint('event_blueprint', __name__, url_prefix='/v1/events'
 @jwt_required
 def event_invoices(invoice_identifier):
     if not current_user:
-        raise ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+        raise ForbiddenError({'source': ''}, 'Authentication Required to access Invoice')
     try:
         event_invoice = EventInvoice.query.filter_by(identifier=invoice_identifier).first()
         event_id = event_invoice.event_id
     except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Event Invoice not found').respond()
+        raise NotFoundError({'source': ''}, 'Event Invoice not found')
     if not current_user.is_organizer(event_id) and not current_user.is_staff:
-        raise ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+        raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
     file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + invoice_identifier + '.pdf'
     try:
@@ -44,7 +44,7 @@ def order_invoices(order_identifier):
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
         except NoResultFound:
-            raise NotFoundError({'source': ''}, 'Order Invoice not found').respond()
+            raise NotFoundError({'source': ''}, 'Order Invoice not found')
         if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
@@ -54,6 +54,6 @@ def order_invoices(order_identifier):
                 create_pdf_tickets_for_holder(order)
                 return return_file('invoice', file_path, order_identifier)
         else:
-            raise ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+            raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
-        raise ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+        raise ForbiddenError({'source': ''}, 'Authentication Required to access Invoice')

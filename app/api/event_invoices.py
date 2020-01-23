@@ -149,7 +149,7 @@ def create_paypal_payment_invoice(invoice_identifier):
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
     except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     event_invoice = safe_query(db, EventInvoice, 'identifier', invoice_identifier, 'identifier')
     status, response = PayPalPaymentsManager.create_payment(event_invoice, return_url, cancel_url)
@@ -171,7 +171,7 @@ def charge_paypal_payment_invoice(invoice_identifier):
         paypal_payment_id = request.json['data']['attributes']['paypal_payment_id']
         paypal_payer_id = request.json['data']['attributes']['paypal_payer_id']
     except Exception as e:
-        raise BadRequestError({'source': e}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': e}, 'Bad Request Error')
     event_invoice = safe_query(db, EventInvoice, 'identifier', invoice_identifier, 'identifier')
     # save the paypal payment_id with the order
     event_invoice.paypal_token = paypal_payment_id
