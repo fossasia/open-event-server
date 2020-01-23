@@ -258,6 +258,18 @@ def internal_server_error(error):
                          {'Content-Type': 'application/vnd.api+json'})
 
 
+@app.errorhandler(429)
+def ratelimit_handler(error):
+    return make_response(json.dumps({
+            'status': 429,
+            'title': 'Request Limit Exceeded'
+        }),
+        429,
+        {
+            'Content-Type': 'application/vnd.api+json'
+        })
+
+
 @app.errorhandler(HTTPException)
 def error_handler(error):
     return make_response(json.dumps({
