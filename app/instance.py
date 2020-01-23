@@ -6,7 +6,6 @@ from envparse import env
 
 import sys
 from flask import Flask, json, make_response
-from werkzeug.exceptions import HTTPException
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
