@@ -1,5 +1,9 @@
 ## Changelog
 
+#### v1.11.1 (2020-01-23):
+
+- Fix event fee notification task being triggered every minute
+
 #### v1.11.0 (2020-01-23):
 
 - **BREAKING:** Fix security issues related to secret key. You **MUST** add the current secret key set in DB as `SECRET_KEY` environment variable before upgrading. After upgrading, the column will be removed from DB 
