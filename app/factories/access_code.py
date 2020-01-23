@@ -21,8 +21,7 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     tickets_number = 30
     min_quantity = 10
     max_quantity = 20
+    marketer_id = 1
     valid_from = common.date_
     valid_till = common.dateEnd_
-    used_for = common.string_
-    user_id = 1
     event_id = 1
