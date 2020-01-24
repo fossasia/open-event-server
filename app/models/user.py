@@ -13,7 +13,7 @@ from sqlalchemy.sql import func
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.custom_system_role import CustomSysRole, UserSystemRole
+from app.models.custom_system_role import UserSystemRole
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission

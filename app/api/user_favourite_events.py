@@ -1,4 +1,3 @@
-from flask import current_app as app
 from flask import request
 from flask_jwt_extended import current_user, jwt_required, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship

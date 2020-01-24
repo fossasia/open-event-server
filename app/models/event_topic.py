@@ -1,9 +1,6 @@
 import urllib.parse
 import uuid
 
-from flask import current_app as app
-from flask import request
-
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel

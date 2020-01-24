@@ -7,9 +7,7 @@ from datetime import timedelta
 import sentry_sdk
 import sqlalchemy as sa
 import stripe
-from apscheduler.schedulers.background import BackgroundScheduler
 from celery.signals import after_task_publish
-from elasticsearch_dsl.connections import connections
 from envparse import env
 from flask import Flask, json, make_response
 from flask_cors import CORS
@@ -35,7 +33,6 @@ from app.models import db
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
-from app.settings import get_settings, get_setts
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.views.blueprints import BlueprintsManager
 from app.views.elastic_search import client

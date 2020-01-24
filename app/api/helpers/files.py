@@ -8,7 +8,7 @@ import uuid
 
 import PIL
 import requests
-from flask import current_app as app
+from flask import current_app
 from PIL import Image
 from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
@@ -98,7 +98,7 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
         img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
 
     temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
-    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+    temp_file_path = current_app.config['BASE_DIR'] + '/' + temp_file_relative_path
     dir_path = temp_file_path.rsplit('/', 1)[0]
 
     # create dirs if not present
@@ -213,7 +213,7 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
             image_file = io.BytesIO(img_data.read())
     else:
         file_relative_path = 'static/default_system_image.png'
-        image_file = app.config['BASE_DIR'] + '/' + file_relative_path
+        image_file = current_app.config['BASE_DIR'] + '/' + file_relative_path
     try:
         im = Image.open(image_file)
     except IOError:
@@ -226,7 +226,7 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
         img = im
 
     temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
-    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+    temp_file_path = current_app.config['BASE_DIR'] + '/' + temp_file_relative_path
     dir_path = temp_file_path.rsplit('/', 1)[0]
 
     # create dirs if not present

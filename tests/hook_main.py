@@ -4,8 +4,8 @@ import sys
 import dredd_hooks as hooks
 import requests
 
-# DO NOT REMOVE THIS. This adds the project root for successful imports. Imports from the project directory should be
-# placed only below this
+# DO NOT REMOVE THIS. This adds the project root for successful imports.
+# Imports from the project directory should be placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 
 from flask_migrate import Migrate

@@ -3,7 +3,6 @@ import csv
 import json
 import logging
 import os
-import traceback
 import urllib.error
 import uuid
 

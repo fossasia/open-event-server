@@ -1,7 +1,6 @@
 import factory
 
 from app.factories.event import EventFactoryBasic
-from app.factories.user import UserFactory
 from app.models.user import User
 from app.models.user_favourite_event import UserFavouriteEvent, db
 

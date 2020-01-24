@@ -53,7 +53,7 @@ from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
-from app.models.discount_code import TICKET, DiscountCode
+from app.models.discount_code import DiscountCode
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User

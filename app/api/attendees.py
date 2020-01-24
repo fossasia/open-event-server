@@ -5,7 +5,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
