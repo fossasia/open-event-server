@@ -2325,7 +2325,7 @@ def event_image_size_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event_image_size = EventImageSizeFactory()
+        event_image_size = EventImageSizeFactory(type='event-image')
         db.session.add(event_image_size)
         db.session.commit()
 
@@ -2338,7 +2338,7 @@ def event_image_size_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event_image_size = EventImageSizeFactory()
+        event_image_size = EventImageSizeFactory(type='event-image')
         db.session.add(event_image_size)
         db.session.commit()
 
@@ -2351,8 +2351,8 @@ def speaker_image_size_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        EventImageSizeFactory()
-        SpeakerImageSizeFactory()
+        EventImageSizeFactory(type='event-image')
+        SpeakerImageSizeFactory(type='speaker-image')
         db.session.commit()
 
 
@@ -2364,8 +2364,8 @@ def speaker_size_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        EventImageSizeFactory()
-        SpeakerImageSizeFactory()
+        EventImageSizeFactory(type='event-image')
+        SpeakerImageSizeFactory(type='speaker-image')
         db.session.commit()
 
 
