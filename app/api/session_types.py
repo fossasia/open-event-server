@@ -17,6 +17,7 @@ class SessionTypeListPost(ResourceList):
     """
     List and create sessions
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -30,16 +31,18 @@ class SessionTypeListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     schema = SessionTypeSchema
-    data_layer = {'session': db.session,
-                  'model': SessionType}
+    data_layer = {'session': db.session, 'model': SessionType}
 
 
 class SessionTypeList(ResourceList):
     """
     List sessions
     """
+
     def query(self, view_kwargs):
         """
         query method for Session Type List
@@ -51,19 +54,22 @@ class SessionTypeList(ResourceList):
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = SessionTypeSchema
-    data_layer = {'session': db.session,
-                  'model': SessionType,
-                  'methods': {
-                      'query': query,
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': SessionType,
+        'methods': {'query': query,},
+    }
 
 
 class SessionTypeDetail(ResourceDetail):
     """
     Detail about a single session type by id
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method for session type detail
@@ -72,40 +78,63 @@ class SessionTypeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id'):
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query(
+                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+            )
             if session.session_type_id:
                 view_kwargs['id'] = session.session_type_id
             else:
                 view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SessionType),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=SessionType,
+        ),
+    )
     schema = SessionTypeSchema
-    data_layer = {'session': db.session,
-                  'model': SessionType,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': SessionType,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class SessionTypeRelationshipRequired(ResourceRelationship):
     """
     SessionType Relationship
     """
+
     methods = ['GET', 'PATCH']
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH", fetch="event_id", fetch_as="event_id",
-                                     model=SessionType),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=SessionType,
+        ),
+    )
     schema = SessionTypeSchema
-    data_layer = {'session': db.session,
-                  'model': SessionType}
+    data_layer = {'session': db.session, 'model': SessionType}
 
 
 class SessionTypeRelationshipOptional(ResourceRelationship):
     """
     SessionType Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SessionType),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=SessionType,
+        ),
+    )
     schema = SessionTypeSchema
-    data_layer = {'session': db.session,
-                  'model': SessionType}
+    data_layer = {'session': db.session, 'model': SessionType}

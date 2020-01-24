@@ -8,10 +8,12 @@ class RoleSchema(SoftDeletionSchema):
     """
     Api schema for role Model
     """
+
     class Meta:
         """
         Meta class for role Api Schema
         """
+
         type_ = 'role'
         self_view = 'v1.role_detail'
         self_view_kwargs = {'id': '<id>'}

@@ -11,7 +11,7 @@ def status_summary(orders, status):
     """
     return {
         'sales_total': sum([o.amount for o in orders if o.status == status]),
-        'ticket_count': sum([o.tickets_count for o in orders if o.status == status])
+        'ticket_count': sum([o.tickets_count for o in orders if o.status == status]),
     }
 
 

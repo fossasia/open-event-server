@@ -22,9 +22,16 @@ class CustomPlaceholderList(ResourceList):
         """
         query_ = self.session.query(CustomPlaceholder)
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(self, EventSubTopic, 'id', view_kwargs['event_sub_topic_id'],
-                                         'event_sub_topic_id')
-            query_ = query_.join(EventSubTopic).filter(EventSubTopic.id == event_sub_topic.id)
+            event_sub_topic = safe_query(
+                self,
+                EventSubTopic,
+                'id',
+                view_kwargs['event_sub_topic_id'],
+                'event_sub_topic_id',
+            )
+            query_ = query_.join(EventSubTopic).filter(
+                EventSubTopic.id == event_sub_topic.id
+            )
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -35,8 +42,13 @@ class CustomPlaceholderList(ResourceList):
         :return:
         """
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(self, EventSubTopic, 'id', view_kwargs['event_sub_topic_id'],
-                                         'event_sub_topic_id')
+            event_sub_topic = safe_query(
+                self,
+                EventSubTopic,
+                'id',
+                view_kwargs['event_sub_topic_id'],
+                'event_sub_topic_id',
+            )
             data['event_sub_topic_id'] = event_sub_topic.id
 
     def after_create_object(self, custom_placeholder, data, view_kwargs):
@@ -48,26 +60,32 @@ class CustomPlaceholderList(ResourceList):
         :return:
         """
         if data.get('original_image_url'):
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'custom-placeholders',
-                                                      custom_placeholder.id)
-            self.session.query(CustomPlaceholder).filter_by(id=custom_placeholder.id).update(uploaded_images)
+            uploaded_images = create_save_image_sizes(
+                data['original_image_url'], 'custom-placeholders', custom_placeholder.id
+            )
+            self.session.query(CustomPlaceholder).filter_by(
+                id=custom_placeholder.id
+            ).update(uploaded_images)
 
     view_kwargs = True
     decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = CustomPlaceholderSchema
-    data_layer = {'session': db.session,
-                  'model': CustomPlaceholder,
-                  'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object,
-                      'after_create_object': after_create_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': CustomPlaceholder,
+        'methods': {
+            'query': query,
+            'before_create_object': before_create_object,
+            'after_create_object': after_create_object,
+        },
+    }
 
 
 class CustomPlaceholderDetail(ResourceDetail):
     """
     custom placeholder detail by id
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get object method to get custom placeholder id for detail
@@ -76,12 +94,22 @@ class CustomPlaceholderDetail(ResourceDetail):
         """
         event_sub_topic = None
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(self, EventSubTopic, 'id', view_kwargs['event_sub_topic_id'],
-                                         'event_sub_topic_id')
+            event_sub_topic = safe_query(
+                self,
+                EventSubTopic,
+                'id',
+                view_kwargs['event_sub_topic_id'],
+                'event_sub_topic_id',
+            )
 
         if event_sub_topic:
-            custom_placeholder = safe_query(self, CustomPlaceholder, 'event_sub_topic_id', event_sub_topic.id,
-                                            'event_sub_topic_id')
+            custom_placeholder = safe_query(
+                self,
+                CustomPlaceholder,
+                'event_sub_topic_id',
+                event_sub_topic.id,
+                'event_sub_topic_id',
+            )
             view_kwargs['id'] = custom_placeholder.id
 
     def before_update_object(self, custom_placeholder, data, view_kwargs):
@@ -92,9 +120,13 @@ class CustomPlaceholderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('original_image_url') and data['original_image_url'] != custom_placeholder.original_image_url:
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'custom-placeholders',
-                                                      custom_placeholder.id)
+        if (
+            data.get('original_image_url')
+            and data['original_image_url'] != custom_placeholder.original_image_url
+        ):
+            uploaded_images = create_save_image_sizes(
+                data['original_image_url'], 'custom-placeholders', custom_placeholder.id
+            )
             data['original_image_url'] = uploaded_images['original_image_url']
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
@@ -102,19 +134,21 @@ class CustomPlaceholderDetail(ResourceDetail):
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomPlaceholderSchema
-    data_layer = {'session': db.session,
-                  'model': CustomPlaceholder,
-                  'methods': {
-                      'before_get_object': before_get_object,
-                      'before_update_object': before_update_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': CustomPlaceholder,
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_update_object': before_update_object,
+        },
+    }
 
 
 class CustomPlaceholderRelationship(ResourceRelationship):
     """
     Relationship
     """
+
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomPlaceholderSchema
-    data_layer = {'session': db.session,
-                  'model': CustomPlaceholder}
+    data_layer = {'session': db.session, 'model': CustomPlaceholder}

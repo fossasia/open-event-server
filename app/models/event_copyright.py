@@ -8,6 +8,7 @@ class EventCopyright(SoftDeletionModel):
     """
     Copyright Information about an event.
     """
+
     __tablename__ = 'event_copyrights'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -21,15 +22,17 @@ class EventCopyright(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('copyright', uselist=False))
 
-    def __init__(self,
-                 holder=None,
-                 holder_url=None,
-                 licence=None,
-                 licence_url=None,
-                 year=None,
-                 logo=None,
-                 event_id=None,
-                 deleted_at=None):
+    def __init__(
+        self,
+        holder=None,
+        holder_url=None,
+        licence=None,
+        licence_url=None,
+        year=None,
+        logo=None,
+        event_id=None,
+        deleted_at=None,
+    ):
         self.holder = holder
         self.holder_url = holder_url
         self.licence = licence
@@ -55,5 +58,5 @@ class EventCopyright(SoftDeletionModel):
             'licence': self.licence,
             'licence_url': self.licence_url,
             'year': self.year,
-            'logo': self.logo
+            'logo': self.logo,
         }

@@ -9,20 +9,23 @@ from app.api.schema.tickets import TicketSchema
 
 
 class TestTicketValidation(TestCase):
-
     def test_date_pass(self):
         """
         Tickets Validate Date - Tests if the function runs without an exception
         :return:
         """
         schema = TicketSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
-            'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'event_ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'event_ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
         }
         TicketSchema.validate_date(schema, data, original_data)
 
@@ -32,13 +35,17 @@ class TestTicketValidation(TestCase):
         :return:
         """
         schema = TicketSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
-            'sales_starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'event_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'event_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
         }
         with self.assertRaises(UnprocessableEntity):
             TicketSchema.validate_date(schema, data, original_data)
@@ -83,11 +90,7 @@ class TestTicketValidation(TestCase):
         :return:
         """
         schema = TicketSchema()
-        data = {
-            'min_order': 10,
-            'max_order': 20,
-            'quantity': 30
-        }
+        data = {'min_order': 10, 'max_order': 20, 'quantity': 30}
         TicketSchema.validate_quantity(schema, data)
 
     def test_quantity_min_gt_max(self):
@@ -96,11 +99,7 @@ class TestTicketValidation(TestCase):
         :return:
         """
         schema = TicketSchema()
-        data = {
-            'min_order': 20,
-            'max_order': 10,
-            'quantity': 30
-        }
+        data = {'min_order': 20, 'max_order': 10, 'quantity': 30}
         with self.assertRaises(UnprocessableEntity):
             TicketSchema.validate_quantity(schema, data)
 
@@ -110,11 +109,7 @@ class TestTicketValidation(TestCase):
         :return:
         """
         schema = TicketSchema()
-        data = {
-            'min_order': 10,
-            'max_order': 20,
-            'quantity': 5
-        }
+        data = {'min_order': 10, 'max_order': 20, 'quantity': 5}
         with self.assertRaises(UnprocessableEntity):
             TicketSchema.validate_quantity(schema, data)
 

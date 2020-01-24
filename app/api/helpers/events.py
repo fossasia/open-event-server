@@ -16,14 +16,35 @@ def create_custom_forms_for_attendees(event):
     event_id = event.id
     form_type = 'text'
 
-    first_name_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
-                                  event_id=event_id, type=form_type, field_identifier='firstname')
+    first_name_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type=form_type,
+        field_identifier='firstname',
+    )
 
-    last_name_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
-                                 event_id=event_id, type=form_type, field_identifier='lastname')
+    last_name_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type=form_type,
+        field_identifier='lastname',
+    )
 
-    email_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
-                             event_id=event_id, type='email', field_identifier='email')
+    email_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type='email',
+        field_identifier='email',
+    )
 
     save_to_db(first_name_form, 'First name form saved')
     save_to_db(last_name_form, 'Last name form saved')

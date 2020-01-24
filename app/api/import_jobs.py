@@ -11,6 +11,7 @@ class ImportJobList(ResourceList):
     """
     List ImportJob
     """
+
     def query(self, kwargs):
         query_ = self.session.query(ImportJob)
         query_ = query_.filter_by(user_id=current_user.id)
@@ -18,18 +19,14 @@ class ImportJobList(ResourceList):
 
     decorators = (jwt_required,)
     schema = ImportJobSchema
-    data_layer = {'session': db.session,
-                  'model': ImportJob,
-                  'methods': {
-                      'query': query,
-                  }}
+    data_layer = {'session': db.session, 'model': ImportJob, 'methods': {'query': query,}}
 
 
 class ImportJobDetail(ResourceDetail):
     """
     ImportJob Detail by id
     """
-    decorators = (jwt_required, )
+
+    decorators = (jwt_required,)
     schema = ImportJobSchema
-    data_layer = {'session': db.session,
-                  'model': ImportJob}
+    data_layer = {'session': db.session, 'model': ImportJob}

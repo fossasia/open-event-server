@@ -29,7 +29,9 @@ class TestPermissionManager(OpenEventTestCase):
             save_to_db(event)
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
+            self.auth = {
+                'Authorization': "JWT " + create_access_token(user.id, fresh=True)
+            }
 
     def test_has_access(self):
         """Method to test whether user has access to different roles"""
@@ -43,7 +45,9 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test accessible role of a user based on an event"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            response = accessible_role_based_events(lambda *a, **b: b.get('user_id'), (), {}, (), {})
+            response = accessible_role_based_events(
+                lambda *a, **b: b.get('user_id'), (), {}, (), {}
+            )
             assert response is not None
 
     def test_is_organizer(self):

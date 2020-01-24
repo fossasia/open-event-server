@@ -16,22 +16,25 @@ class FaqTypeListPost(ResourceList):
     """
     List and create faq-types
     """
+
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session,
-                  'model': FaqType}
+    data_layer = {'session': db.session, 'model': FaqType}
 
 
 class FaqTypeList(ResourceList):
     """
     List faq-types
     """
+
     def query(self, view_kwargs):
         """
         query method for Session Type List
@@ -43,19 +46,18 @@ class FaqTypeList(ResourceList):
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session,
-                  'model': FaqType,
-                  'methods': {
-                      'query': query,
-                  }}
+    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query,}}
 
 
 class FaqTypeDetail(ResourceDetail):
     """
     Detail about a single faq type by id
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method for session type detail
@@ -70,34 +72,55 @@ class FaqTypeDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=FaqType),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=FaqType,
+        ),
+    )
     schema = FaqTypeSchema
-    data_layer = {'session': db.session,
-                  'model': FaqType,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': FaqType,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class FaqTypeRelationshipRequired(ResourceRelationship):
     """
     FaqType Relationship
     """
+
     methods = ['GET', 'PATCH']
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=FaqType),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=FaqType,
+        ),
+    )
     schema = FaqTypeSchema
-    data_layer = {'session': db.session,
-                  'model': FaqType}
+    data_layer = {'session': db.session, 'model': FaqType}
 
 
 class FaqTypeRelationshipOptional(ResourceRelationship):
     """
     FaqType Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=FaqType),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=FaqType,
+        ),
+    )
     schema = FaqTypeSchema
-    data_layer = {'session': db.session,
-                  'model': FaqType}
+    data_layer = {'session': db.session, 'model': FaqType}

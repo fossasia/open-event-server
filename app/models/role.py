@@ -5,6 +5,7 @@ from app.models.base import SoftDeletionModel
 class Role(SoftDeletionModel):
     """Event Role
     """
+
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)

@@ -5,7 +5,13 @@ from app.models import db
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
     count = get_count(EventLocation.query.filter_by(slug=slug))
     if count == 0:
         return slug
@@ -22,9 +28,7 @@ class EventLocation(db.Model):
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, unique=True, nullable=False)
 
-    def __init__(self,
-                 name=None,
-                 slug=None):
+    def __init__(self, name=None, slug=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)

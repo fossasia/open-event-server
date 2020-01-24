@@ -7,8 +7,7 @@ class SessionType(SoftDeletionModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     length = db.Column(db.String, nullable=False)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="session_type", foreign_keys=[event_id])
     sessions = db.relationship('Session', backref="session_type")
 

@@ -34,8 +34,10 @@ class TicketSchemaPublic(SoftDeletionSchema):
             #     data['event_ends_at'] = ticket.event.ends_at
 
         if data['sales_starts_at'] >= data['sales_ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
-                                      "sales-ends-at should be after sales-starts-at")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/sales-ends-at'},
+                "sales-ends-at should be after sales-starts-at",
+            )
 
         # if 'event_ends_at' in data and data['sales_starts_at'] > data['event_ends_at']:
         #     raise UnprocessableEntity({'pointer': '/data/attributes/sales-starts-at'},
@@ -49,40 +51,55 @@ class TicketSchemaPublic(SoftDeletionSchema):
     def validate_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
-                                          "max-order should be greater than or equal to min-order")
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/max-order'},
+                    "max-order should be greater than or equal to min-order",
+                )
 
         if 'quantity' in data and 'min_order' in data:
             if data['quantity'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than or equal to min-order")
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/quantity'},
+                    "quantity should be greater than or equal to min-order",
+                )
 
         if 'min_price' in data and 'max_price' in data and data['type'] == 'donation':
-                if data['min_price'] > data['max_price']:
-                    raise UnprocessableEntity({'pointer': '/data/attributes/min-price'},
-                                              "minimum price should be lesser than or equal to maximum price")
+            if data['min_price'] > data['max_price']:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/min-price'},
+                    "minimum price should be lesser than or equal to maximum price",
+                )
 
         if 'quantity' in data and 'max_order' in data:
             if data['quantity'] < data['max_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than or equal to max-order")
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/quantity'},
+                    "quantity should be greater than or equal to max-order",
+                )
 
     @validates_schema
     def validate_price(self, data):
         if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
-            raise UnprocessableEntity({'pointer': 'data/attributes/price'},
-                                      "paid ticket price should be greater than 0")
+            raise UnprocessableEntity(
+                {'pointer': 'data/attributes/price'},
+                "paid ticket price should be greater than 0",
+            )
 
     @validates_schema(pass_original=True)
     def validate_discount_code(self, data, original_data):
-        if 'relationships' in original_data and 'discount-codes' in original_data['data']['relationships']:
+        if (
+            'relationships' in original_data
+            and 'discount-codes' in original_data['data']['relationships']
+        ):
             discount_codes = original_data['data']['relationships']['discount-codes']
             for code in discount_codes['data']:
                 try:
                     DiscountCode.query.filter_by(id=code['id']).one()
                 except NoResultFound:
                     raise UnprocessableEntity(
-                        {'pointer': '/data/relationships/discount-codes'}, "Discount code does not exist")
+                        {'pointer': '/data/relationships/discount-codes'},
+                        "Discount code does not exist",
+                    )
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
@@ -102,22 +119,26 @@ class TicketSchemaPublic(SoftDeletionSchema):
     max_order = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     is_checkin_restricted = fields.Boolean(default=True)
     auto_checkin_enabled = fields.Boolean(default=False)
-    event = Relationship(attribute='event',
-                         self_view='v1.ticket_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'ticket_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.ticket_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'ticket_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
 
-    ticket_tags = Relationship(attribute='tags',
-                               self_view='v1.ticket_ticket_tag',
-                               self_view_kwargs={'id': '<id>'},
-                               related_view='v1.ticket_tag_list',
-                               related_view_kwargs={'ticket_id': '<id>'},
-                               schema='TicketTagSchema',
-                               many=True,
-                               type_='ticket-tag')
+    ticket_tags = Relationship(
+        attribute='tags',
+        self_view='v1.ticket_ticket_tag',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.ticket_tag_list',
+        related_view_kwargs={'ticket_id': '<id>'},
+        schema='TicketTagSchema',
+        many=True,
+        type_='ticket-tag',
+    )
 
     discount_codes = Relationship(
         attribute='discount_codes',
@@ -127,7 +148,8 @@ class TicketSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'ticket_id': '<id>'},
         schema='DiscountCodeSchemaTicket',
         many=True,
-        type_='discount-code')
+        type_='discount-code',
+    )
 
 
 class TicketSchema(TicketSchemaPublic):
@@ -137,19 +159,23 @@ class TicketSchema(TicketSchemaPublic):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    access_codes = Relationship(attribute='access_codes',
-                                self_view='v1.ticket_access_code',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.access_code_list',
-                                related_view_kwargs={'ticket_id': '<id>'},
-                                schema='AccessCodeSchema',
-                                many=True,
-                                type_='access-code')
-    attendees = Relationship(attribute='ticket_holders',
-                             self_view='v1.ticket_attendees',
-                             self_view_kwargs={'id': '<id>'},
-                             related_view='v1.attendee_list_post',
-                             related_view_kwargs={'ticket_id': '<id>'},
-                             schema='AttendeeSchema',
-                             many=True,
-                             type_='attendee')
+    access_codes = Relationship(
+        attribute='access_codes',
+        self_view='v1.ticket_access_code',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.access_code_list',
+        related_view_kwargs={'ticket_id': '<id>'},
+        schema='AccessCodeSchema',
+        many=True,
+        type_='access-code',
+    )
+    attendees = Relationship(
+        attribute='ticket_holders',
+        self_view='v1.ticket_attendees',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.attendee_list_post',
+        related_view_kwargs={'ticket_id': '<id>'},
+        schema='AttendeeSchema',
+        many=True,
+        type_='attendee',
+    )

@@ -10,7 +10,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestJWTHelperValidation(OpenEventTestCase):
-
     def test_jwt_authenticate(self):
         """Method to test jwt authentication"""
 
@@ -38,7 +37,9 @@ class TestJWTHelperValidation(OpenEventTestCase):
             save_to_db(event)
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
+            self.auth = {
+                'Authorization': "JWT " + create_access_token(user.id, fresh=True)
+            }
 
         with self.app.test_request_context(headers=self.auth):
             self.assertEquals(get_identity().id, user.id)

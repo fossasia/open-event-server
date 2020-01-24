@@ -10,7 +10,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestSessionValidation(OpenEventTestCase):
-
     def test_date_db_populate(self):
         """
         Sessions Validate Date - Tests if validation works on values stored in db and not given in 'data'
@@ -20,11 +19,7 @@ class TestSessionValidation(OpenEventTestCase):
             schema = SessionSchema()
             SessionFactory()
 
-            original_data = {
-                'data': {
-                    'id': 1
-                }
-            }
+            original_data = {'data': {'id': 1}}
             data = {}
             SessionSchema.validate_fields(schema, data, original_data)
 

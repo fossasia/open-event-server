@@ -49,6 +49,7 @@ REGISTRAR = 'registrar'
 
 class User(SoftDeletionModel):
     """User model class"""
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -100,20 +101,21 @@ class User(SoftDeletionModel):
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
     marketer_events = db.relationship(
-                          'Event',
-                          viewonly=True,
-                          secondary='join(UserSystemRole, CustomSysRole,'
-                                    ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
-                          primaryjoin='UserSystemRole.user_id == User.id',
-                          secondaryjoin='Event.id == UserSystemRole.event_id'
+        'Event',
+        viewonly=True,
+        secondary='join(UserSystemRole, CustomSysRole,'
+        ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+        primaryjoin='UserSystemRole.user_id == User.id',
+        secondaryjoin='Event.id == UserSystemRole.event_id',
     )
     sales_admin_events = db.relationship(
-                         'Event',
-                         viewonly=True,
-                         secondary='join(UserSystemRole, CustomSysRole,'
-                                   ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
-                         primaryjoin='UserSystemRole.user_id == User.id',
-                         secondaryjoin='Event.id == UserSystemRole.event_id')
+        'Event',
+        viewonly=True,
+        secondary='join(UserSystemRole, CustomSysRole,'
+        ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+        primaryjoin='UserSystemRole.user_id == User.id',
+        secondaryjoin='Event.id == UserSystemRole.event_id',
+    )
 
     @hybrid_property
     def password(self):
@@ -189,8 +191,9 @@ class User(SoftDeletionModel):
         Exclude Attendee Role.
         """
         attendee_role = Role.query.filter_by(name=ATTENDEE).first()
-        uer = UER.query.filter(UER.user == self, UER.event_id == event_id,
-                               UER.role != attendee_role).first()
+        uer = UER.query.filter(
+            UER.user == self, UER.event_id == event_id, UER.role != attendee_role
+        ).first()
         if uer is None:
             return False
         else:
@@ -202,12 +205,9 @@ class User(SoftDeletionModel):
         """
         role = Role.query.filter_by(name=role_name).first()
         if event_id:
-            uer = UER.query.filter_by(user=self,
-                                      event_id=event_id,
-                                      role=role).first()
+            uer = UER.query.filter_by(user=self, event_id=event_id, role=role).first()
         else:
-            uer = UER.query.filter_by(user=self,
-                                      role=role).first()
+            uer = UER.query.filter_by(user=self, role=role).first()
         if not uer:
             return False
         else:
@@ -236,8 +236,11 @@ class User(SoftDeletionModel):
         return self._is_role(ATTENDEE, event_id)
 
     def has_event_access(self, event_id):
-        return self._is_role(OWNER, event_id) or self._is_role(ORGANIZER, event_id) or \
-            self._is_role(COORGANIZER, event_id)
+        return (
+            self._is_role(OWNER, event_id)
+            or self._is_role(ORGANIZER, event_id)
+            or self._is_role(COORGANIZER, event_id)
+        )
 
     @hybrid_property
     def is_user_owner(self):
@@ -290,12 +293,10 @@ class User(SoftDeletionModel):
 
         service = Service.query.filter_by(name=service_name).first()
 
-        uer_querylist = UER.query.filter_by(user=self,
-                                            event_id=event_id)
+        uer_querylist = UER.query.filter_by(user=self, event_id=event_id)
         for uer in uer_querylist:
             role = uer.role
-            perm = Permission.query.filter_by(role=role,
-                                              service=service).first()
+            perm = Permission.query.filter_by(role=role, service=service).first()
             if getattr(perm, operations[operation]):
                 return True
 
@@ -315,8 +316,11 @@ class User(SoftDeletionModel):
 
     def is_speaker_at_session(self, session_id):
         try:
-            session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
-                Session.id == session_id).one()
+            session = (
+                Session.query.filter(Session.speakers.any(Speaker.user_id == self.id))
+                .filter(Session.id == session_id)
+                .one()
+            )
             if session:
                 return True
             else:
@@ -328,8 +332,11 @@ class User(SoftDeletionModel):
 
     def is_speaker_at_event(self, event_id):
         try:
-            session = Session.query.filter(Session.speakers.any(Speaker.user_id == self.id)).filter(
-                Session.event_id == event_id).first()
+            session = (
+                Session.query.filter(Session.speakers.any(Speaker.user_id == self.id))
+                .filter(Session.event_id == event_id)
+                .first()
+            )
             if session:
                 return True
             else:
@@ -380,14 +387,22 @@ class User(SoftDeletionModel):
         custom_role = UserSystemRole.query.filter_by(user=self).first()
         if not custom_role:
             return False
-        perm = PanelPermission.query.filter(PanelPermission.custom_system_roles.any(id=custom_role.role_id)).first()
+        perm = PanelPermission.query.filter(
+            PanelPermission.custom_system_roles.any(id=custom_role.role_id)
+        ).first()
         if not perm:
             return False
         return perm.panel_name
 
     def can_download_tickets(self, order):
-        permissible_users = [holder.id for holder in order.ticket_holders] + [order.user.id]
-        if self.is_staff or self.has_event_access(order.event.id) or self.id in permissible_users:
+        permissible_users = [holder.id for holder in order.ticket_holders] + [
+            order.user.id
+        ]
+        if (
+            self.is_staff
+            or self.has_event_access(order.event.id)
+            or self.id in permissible_users
+        ):
             return True
         return False
 
@@ -415,13 +430,20 @@ class User(SoftDeletionModel):
         """
         notifs = []
         unread_notifs = Notification.query.filter_by(user=self, is_read=False).order_by(
-            desc(Notification.received_at))
+            desc(Notification.received_at)
+        )
         for notif in unread_notifs:
-            notifs.append({
-                'title': notif.title,
-                'received_at': humanize.naturaltime(datetime.now(pytz.utc) - notif.received_at),
-                'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
-            })
+            notifs.append(
+                {
+                    'title': notif.title,
+                    'received_at': humanize.naturaltime(
+                        datetime.now(pytz.utc) - notif.received_at
+                    ),
+                    'mark_read': url_for(
+                        'notifications.mark_as_read', notification_id=notif.id
+                    ),
+                }
+            )
 
         return notifs
 

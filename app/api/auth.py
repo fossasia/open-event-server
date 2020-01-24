@@ -131,17 +131,24 @@ def redirect_uri(provider):
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
     else:
-        return make_response(jsonify(
-            message="No support for {}".format(provider)), 404)
+        return make_response(jsonify(message="No support for {}".format(provider)), 404)
 
     client_id = provider_class.get_client_id()
     if not client_id:
-        return make_response(jsonify(
-            message="{} client id is not configured on the server".format(provider)), 404)
+        return make_response(
+            jsonify(
+                message="{} client id is not configured on the server".format(provider)
+            ),
+            404,
+        )
 
-    url = provider_class.get_auth_uri() + '?client_id=' + \
-          client_id + '&redirect_uri=' + \
-          provider_class.get_redirect_uri()
+    url = (
+        provider_class.get_auth_uri()
+        + '?client_id='
+        + client_id
+        + '&redirect_uri='
+        + provider_class.get_redirect_uri()
+    )
     return make_response(jsonify(url=url), 200)
 
 
@@ -152,29 +159,28 @@ def get_token(provider):
         payload = {
             'grant_type': 'client_credentials',
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     elif provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     elif provider == 'twitter':
         provider_class = TwitterOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(
-            message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message="No support for {}".format(provider)), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -187,19 +193,29 @@ def login_user(provider):
             'client_id': provider_class.get_client_id(),
             'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
-            'code': request.args.get('code')
+            'code': request.args.get('code'),
         }
         if not payload['client_id'] or not payload['client_secret']:
             raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
-        access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
+        access_token = requests.get(
+            'https://graph.facebook.com/v3.0/oauth/access_token', params=payload
+        ).json()
         payload_details = {
             'input_token': access_token['access_token'],
-            'access_token': provider_class.get_client_id() + '|' + provider_class.get_client_secret()
+            'access_token': provider_class.get_client_id()
+            + '|'
+            + provider_class.get_client_secret(),
         }
-        details = requests.get('https://graph.facebook.com/debug_token', params=payload_details).json()
-        user_details = requests.get('https://graph.facebook.com/v3.0/' + details['data']['user_id'],
-                                    params={'access_token': access_token['access_token'],
-                                            'fields': 'first_name, last_name, email'}).json()
+        details = requests.get(
+            'https://graph.facebook.com/debug_token', params=payload_details
+        ).json()
+        user_details = requests.get(
+            'https://graph.facebook.com/v3.0/' + details['data']['user_id'],
+            params={
+                'access_token': access_token['access_token'],
+                'fields': 'first_name, last_name, email',
+            },
+        ).json()
 
         if get_count(db.session.query(User).filter_by(email=user_details['email'])) > 0:
             user = db.session.query(User).filter_by(email=user_details['email']).one()
@@ -208,42 +224,52 @@ def login_user(provider):
                 user.facebook_login_hash = random.getrandbits(128)
                 save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash), 200)
+                jsonify(
+                    user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash
+                ),
+                200,
+            )
 
         user = User()
         user.first_name = user_details['first_name']
         user.last_name = user_details['last_name']
         user.facebook_id = user_details['id']
         user.facebook_login_hash = random.getrandbits(128)
-        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        user.password = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits)
+            for _ in range(8)
+        )
         if user_details['email']:
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash),
-                             200)
+        return make_response(
+            jsonify(
+                user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash
+            ),
+            200,
+        )
 
     elif provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     elif provider == 'twitter':
         provider_class = TwitterOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(
-            message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message="No support for {}".format(provider)), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -282,13 +308,17 @@ def resend_verification_email():
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
         return UnprocessableEntityError(
-            {'source': ''}, 'User with email: ' + email + ' not found.').respond()
+            {'source': ''}, 'User with email: ' + email + ' not found.'
+        ).respond()
     else:
         serializer = get_serializer()
-        hash_ = str(base64.b64encode(str(serializer.dumps(
-            [user.email, str_generator()])).encode()), 'utf-8')
-        link = make_frontend_url(
-            '/verify'.format(id=user.id), {'token': hash_})
+        hash_ = str(
+            base64.b64encode(
+                str(serializer.dumps([user.email, str_generator()])).encode()
+            ),
+            'utf-8',
+        )
+        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash_})
         send_email_confirmation(user.email, link)
 
         return make_response(jsonify(message="Verification email resent"), 200)
@@ -296,11 +326,11 @@ def resend_verification_email():
 
 @auth_routes.route('/reset-password', methods=['POST'])
 @limiter.limit(
-    '3/hour', key_func=lambda: request.json['data']['email'], error_message='Limit for this action exceeded'
+    '3/hour',
+    key_func=lambda: request.json['data']['email'],
+    error_message='Limit for this action exceeded',
 )
-@limiter.limit(
-    '1/minute', error_message='Limit for this action exceeded'
-)
+@limiter.limit('1/minute', error_message='Limit for this action exceeded')
 def reset_password_post():
     try:
         email = request.json['data']['email']
@@ -314,12 +344,29 @@ def reset_password_post():
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
-            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'], link=link)
+            send_email_with_action(
+                user,
+                PASSWORD_RESET_AND_VERIFY,
+                app_name=get_settings()['app_name'],
+                link=link,
+            )
         else:
-            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link, token=user.reset_password)
+            send_email_with_action(
+                user,
+                PASSWORD_RESET,
+                app_name=get_settings()['app_name'],
+                link=link,
+                token=user.reset_password,
+            )
 
-    return make_response(jsonify(message="If your email was registered with us, you'll get an \
-                         email with reset link shortly", email=email), 200)
+    return make_response(
+        jsonify(
+            message="If your email was registered with us, you'll get an \
+                         email with reset link shortly",
+            email=email,
+        ),
+        200,
+    )
 
 
 @auth_routes.route('/reset-password', methods=['PATCH'])
@@ -337,11 +384,13 @@ def reset_password_patch():
             user.is_verified = True
         save_to_db(user)
 
-    return jsonify({
-        "id": user.id,
-        "email": user.email,
-        "name": user.fullname if user.fullname else None
-    })
+    return jsonify(
+        {
+            "id": user.id,
+            "email": user.email,
+            "name": user.fullname if user.fullname else None,
+        }
+    )
 
 
 @auth_routes.route('/change-password', methods=['POST'])
@@ -357,31 +406,42 @@ def change_password():
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
-                return BadRequestError({'source': ''},
-                                       'Old and New passwords must be different').respond()
+                return BadRequestError(
+                    {'source': ''}, 'Old and New passwords must be different'
+                ).respond()
             if len(new_password) < 8:
-                return BadRequestError({'source': ''},
-                                       'Password should have minimum 8 characters').respond()
+                return BadRequestError(
+                    {'source': ''}, 'Password should have minimum 8 characters'
+                ).respond()
             user.password = new_password
             save_to_db(user)
-            send_email_with_action(user, PASSWORD_CHANGE,
-                                   app_name=get_settings()['app_name'])
-            send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
-                                          app_name=get_settings()['app_name'])
+            send_email_with_action(
+                user, PASSWORD_CHANGE, app_name=get_settings()['app_name']
+            )
+            send_notification_with_action(
+                user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']
+            )
         else:
-            return BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
+            return BadRequestError(
+                {'source': ''}, 'Wrong Password. Please enter correct current password.'
+            ).respond()
 
-    return jsonify({
-        "id": user.id,
-        "email": user.email,
-        "name": user.fullname if user.fullname else None,
-        "password-changed": True
-    })
+    return jsonify(
+        {
+            "id": user.id,
+            "email": user.email,
+            "name": user.fullname if user.fullname else None,
+            "password-changed": True,
+        }
+    )
 
 
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, identifier)
+    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (
+        file_name_prefix,
+        identifier,
+    )
     return response
 
 
@@ -391,10 +451,14 @@ def requires_basic_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         if not auth or not AuthManager.check_auth_admin(auth.username, auth.password):
-            return make_response('Could not verify your access level for that URL.\n'
-                                 'You have to login with proper credentials', 401,
-                                 {'WWW-Authenticate': 'Basic realm="Login Required"'})
+            return make_response(
+                'Could not verify your access level for that URL.\n'
+                'You have to login with proper credentials',
+                401,
+                {'WWW-Authenticate': 'Basic realm="Login Required"'},
+            )
         return f(*args, **kwargs)
+
     return decorated
 
 

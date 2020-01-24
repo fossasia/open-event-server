@@ -39,7 +39,9 @@ class TicketHolder(SoftDeletionModel):
     age_group: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)
-    ticket_id: int = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
+    ticket_id: int = db.Column(
+        db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')
+    )
     order_id: int = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     is_checked_in: bool = db.Column(db.Boolean, default=False)
     is_checked_out: bool = db.Column(db.Boolean, default=False)
@@ -49,10 +51,17 @@ class TicketHolder(SoftDeletionModel):
     attendee_notes: str = db.Column(db.String)
     event_id: int = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
-    modified_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow,  onupdate=datetime.utcnow)
+    modified_at: datetime = db.Column(
+        db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
+    )
     complex_field_values: str = db.Column(db.JSON)
-    user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
-                           backref='attendees')
+    user = db.relationship(
+        'User',
+        foreign_keys=[email],
+        primaryjoin='User.email == TicketHolder.email',
+        viewonly=True,
+        backref='attendees',
+    )
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
 
@@ -85,13 +94,15 @@ class TicketHolder(SoftDeletionModel):
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
-        return {'id': self.id,
-                'firstname': self.firstname,
-                'lastname': self.lastname,
-                'email': self.email,
-                'city': self.city,
-                'address': self.address,
-                'state': self.state,
-                'country': self.country,
-                'company': self.company,
-                'taxBusinessInfo': self.tax_business_info}
+        return {
+            'id': self.id,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'email': self.email,
+            'city': self.city,
+            'address': self.address,
+            'state': self.state,
+            'country': self.country,
+            'company': self.company,
+            'taxBusinessInfo': self.tax_business_info,
+        }

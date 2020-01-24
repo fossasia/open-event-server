@@ -28,20 +28,22 @@ class FaqListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event']))
+            raise ObjectNotFound(
+                {'parameter': 'event_id'}, "Event: {} not found".format(data['event'])
+            )
 
     schema = FaqSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': Faq
-                  }
+    methods = [
+        'POST',
+    ]
+    data_layer = {'session': db.session, 'model': Faq}
 
 
 class FaqList(ResourceList):
     """
     Show List of FAQs
     """
+
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -51,49 +53,70 @@ class FaqList(ResourceList):
         query_ = self.session.query(Faq)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('faq_type_id') is not None:
-            faq_type = safe_query(self, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id')
+            faq_type = safe_query(
+                self, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id'
+            )
             query_ = query_.join(FaqType).filter(FaqType.id == faq_type.id)
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = FaqSchema
-    data_layer = {'session': db.session,
-                  'model': Faq,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {'session': db.session, 'model': Faq, 'methods': {'query': query}}
 
 
 class FaqDetail(ResourceDetail):
     """
     FAQ Resource
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Faq, methods="PATCH,DELETE"), )
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Faq,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = FaqSchema
-    data_layer = {'session': db.session,
-                  'model': Faq}
+    data_layer = {'session': db.session, 'model': Faq}
 
 
 class FaqRelationshipRequired(ResourceRelationship):
     """
     FAQ Relationship (Required)
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=Faq, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Faq,
+            methods="PATCH",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = FaqSchema
-    data_layer = {'session': db.session,
-                  'model': Faq}
+    data_layer = {'session': db.session, 'model': Faq}
 
 
 class FaqRelationshipOptional(ResourceRelationship):
     """
     FAQ Relationship (Required)
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=Faq, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Faq,
+            methods="PATCH",
+        ),
+    )
     schema = FaqSchema
-    data_layer = {'session': db.session,
-                  'model': Faq}
+    data_layer = {'session': db.session, 'model': Faq}

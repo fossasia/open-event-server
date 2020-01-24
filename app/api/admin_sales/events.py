@@ -51,12 +51,6 @@ class AdminSalesByEventsList(ResourceList):
         return self.session.query(Event).outerjoin(Order).outerjoin(OrderTicket)
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByEventsSchema
-    data_layer = {
-        'model': Event,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': Event, 'session': db.session, 'methods': {'query': query}}

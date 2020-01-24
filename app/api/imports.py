@@ -21,20 +21,20 @@ def import_event(source_type):
         file_path = None
         abort(404)
     from .helpers.tasks import import_event_task
-    task = import_event_task.delay(email=current_user.email, file=file_path,
-                                   source_type=source_type, creator_id=current_user.id)
+
+    task = import_event_task.delay(
+        email=current_user.email,
+        file=file_path,
+        source_type=source_type,
+        creator_id=current_user.id,
+    )
     # create import job
     create_import_job(task.id)
 
     # if testing
     if current_app.config.get('CELERY_ALWAYS_EAGER'):
-        TASK_RESULTS[task.id] = {
-            'result': task.get(),
-            'state': task.state
-        }
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+        TASK_RESULTS[task.id] = {'result': task.get(), 'state': task.state}
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
 def import_event_task_base(task_handle, file_path, source_type='json', creator_id=None):
@@ -42,10 +42,10 @@ def import_event_task_base(task_handle, file_path, source_type='json', creator_i
     if source_type == 'json':
         new_event = import_event_json(task_handle, file_path, creator_id)
     if new_event:
-        url = make_frontend_url(path='/events/{identifier}'.format(identifier=new_event.identifier))
-        return {'url': url,
-                'id': new_event.id,
-                'event_name': new_event.name}
+        url = make_frontend_url(
+            path='/events/{identifier}'.format(identifier=new_event.identifier)
+        )
+        return {'url': url, 'id': new_event.id, 'event_name': new_event.name}
 
     else:
         return None

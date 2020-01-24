@@ -20,6 +20,7 @@ class OrderStatisticsTicketSchema(Schema):
         """
         Meta class
         """
+
         type_ = 'order-statistics-ticket'
         self_view = 'v1.order_statistics_ticket_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -33,20 +34,48 @@ class OrderStatisticsTicketSchema(Schema):
 
     def tickets_count(self, obj):
         obj_id = obj.id
-        total = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id).scalar()
-        draft = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'draft').scalar()
-        cancelled = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'cancelled').scalar()
-        pending = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'pending').scalar()
-        expired = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'expired').scalar()
-        placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'placed').scalar()
-        completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'completed').scalar()
+        total = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id)
+            .scalar()
+        )
+        draft = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'draft')
+            .scalar()
+        )
+        cancelled = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'cancelled')
+            .scalar()
+        )
+        pending = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'pending')
+            .scalar()
+        )
+        expired = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'expired')
+            .scalar()
+        )
+        placed = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'placed')
+            .scalar()
+        )
+        completed = (
+            db.session.query(func.sum(OrderTicket.quantity.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'completed')
+            .scalar()
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -54,25 +83,47 @@ class OrderStatisticsTicketSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
         }
         return result
 
     def orders_count(self, obj):
         obj_id = obj.id
-        total = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id))
-        draft = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                   Order.status == 'draft'))
-        cancelled = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                       Order.status == 'cancelled'))
-        pending = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                     Order.status == 'pending'))
-        expired = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                     Order.status == 'expired'))
-        placed = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                    Order.status == 'placed'))
-        completed = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                       Order.status == 'completed'))
+        total = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id)
+        )
+        draft = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'draft')
+        )
+        cancelled = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'cancelled')
+        )
+        pending = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'pending')
+        )
+        expired = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'expired')
+        )
+        placed = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'placed')
+        )
+        completed = get_count(
+            db.session.query(Order)
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'completed')
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -80,26 +131,54 @@ class OrderStatisticsTicketSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
         }
         return result
 
     def sales_count(self, obj):
         obj_id = obj.id
-        total = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id).scalar()
-        draft = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'draft').scalar()
-        cancelled = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'cancelled').scalar()
-        pending = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'pending').scalar()
-        expired = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'expired').scalar()
-        placed = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'placed').scalar()
-        completed = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'completed').scalar()
+        total = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id)
+            .scalar()
+        )
+        draft = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'draft')
+            .scalar()
+        )
+        cancelled = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'cancelled')
+            .scalar()
+        )
+        pending = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'pending')
+            .scalar()
+        )
+        expired = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'expired')
+            .scalar()
+        )
+        placed = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'placed')
+            .scalar()
+        )
+        completed = (
+            db.session.query(func.sum(Order.amount.label('sum')))
+            .join(Order.order_tickets)
+            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'completed')
+            .scalar()
+        )
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -107,7 +186,7 @@ class OrderStatisticsTicketSchema(Schema):
             'pending': pending or 0,
             'expired': expired or 0,
             'placed': placed or 0,
-            'completed': completed or 0
+            'completed': completed or 0,
         }
         return result
 
@@ -116,8 +195,12 @@ class OrderStatisticsTicketDetail(ResourceDetail):
     """
     detail by id
     """
+
     methods = ['GET']
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id", model=Ticket),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer', fetch="event_id", fetch_as="event_id", model=Ticket
+        ),
+    )
     schema = OrderStatisticsTicketSchema
-    data_layer = {'session': db.session,
-                  'model': Ticket}
+    data_layer = {'session': db.session, 'model': Ticket}

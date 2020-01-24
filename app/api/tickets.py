@@ -24,6 +24,7 @@ class TicketListPost(ResourceList):
     """
     Create and List Tickets
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -34,12 +35,21 @@ class TicketListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event']))
+            raise ObjectNotFound(
+                {'parameter': 'event_id'}, "Event: {} not found".format(data['event'])
+            )
 
-        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']),
-                                                           deleted_at=None)) > 0:
-            raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
+        if (
+            get_count(
+                db.session.query(Ticket.id).filter_by(
+                    name=data['name'], event_id=int(data['event']), deleted_at=None
+                )
+            )
+            > 0
+        ):
+            raise ConflictException(
+                {'pointer': '/data/attributes/name'}, "Ticket already exists"
+            )
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -50,33 +60,48 @@ class TicketListPost(ResourceList):
         """
         if data.get('event'):
             try:
-                event = db.session.query(Event).filter_by(id=data['event'], deleted_at=None).one()
+                event = (
+                    db.session.query(Event)
+                    .filter_by(id=data['event'], deleted_at=None)
+                    .one()
+                )
             except NoResultFound:
-                raise UnprocessableEntity({'event_id': data['event']}, "Event does not exist")
+                raise UnprocessableEntity(
+                    {'event_id': data['event']}, "Event does not exist"
+                )
 
             if data.get('type') == 'paid':
                 if not event.is_payment_enabled():
                     raise UnprocessableEntity(
-                        {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+                        {'event_id': data['event']},
+                        "Event having paid ticket must have a payment method",
+                    )
 
             if data.get('sales_ends_at') > event.ends_at:
-                raise UnprocessableEntity({'sales_ends_at': '/data/attributes/sales-ends-at'},
-                                          "Ticket end date cannot be greater than event end date")
+                raise UnprocessableEntity(
+                    {'sales_ends_at': '/data/attributes/sales-ends-at'},
+                    "Ticket end date cannot be greater than event end date",
+                )
 
     schema = TicketSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': Ticket,
-                  'methods': {
-                      'before_create_object': before_create_object,
-                      'before_post': before_post
-                  }}
+    methods = [
+        'POST',
+    ]
+    data_layer = {
+        'session': db.session,
+        'model': Ticket,
+        'methods': {
+            'before_create_object': before_create_object,
+            'before_post': before_post,
+        },
+    }
 
 
 class TicketList(ResourceList):
     """
     List Tickets based on different params
     """
+
     def before_get(self, args, view_kwargs):
         """
         before get method to get the resource id for assigning schema
@@ -84,7 +109,11 @@ class TicketList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if view_kwargs.get('ticket_tag_id') or view_kwargs.get('access_code_id') or view_kwargs.get('order_identifier'):
+        if (
+            view_kwargs.get('ticket_tag_id')
+            or view_kwargs.get('access_code_id')
+            or view_kwargs.get('order_identifier')
+        ):
             self.schema = TicketSchemaPublic
 
     def query(self, view_kwargs):
@@ -98,7 +127,9 @@ class TicketList(ResourceList):
             verify_jwt_in_request()
             if current_user.is_super_admin or current_user.is_admin:
                 query_ = self.session.query(Ticket)
-            elif view_kwargs.get('event_id') and has_access('is_organizer', event_id=view_kwargs['event_id']):
+            elif view_kwargs.get('event_id') and has_access(
+                'is_organizer', event_id=view_kwargs['event_id']
+            ):
                 query_ = self.session.query(Ticket)
             else:
                 query_ = self.session.query(Ticket).filter_by(is_hidden=False)
@@ -106,21 +137,37 @@ class TicketList(ResourceList):
             query_ = self.session.query(Ticket).filter_by(is_hidden=False)
 
         if view_kwargs.get('ticket_tag_id'):
-            ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
+            ticket_tag = safe_query(
+                self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id'
+            )
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('access_code_id'):
-            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            access_code = safe_query(
+                self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
+            )
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
         if view_kwargs.get('discount_code_id'):
-            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            discount_code = safe_query(
+                self,
+                DiscountCode,
+                'id',
+                view_kwargs['discount_code_id'],
+                'discount_code_id',
+            )
             # discount_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            order = safe_query(
+                self,
+                Order,
+                'identifier',
+                view_kwargs['order_identifier'],
+                'order_identifier',
+            )
             ticket_ids = []
             for ticket in order.tickets:
                 ticket_ids.append(ticket.id)
@@ -129,22 +176,28 @@ class TicketList(ResourceList):
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Ticket, methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+    methods = [
+        'GET',
+    ]
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Ticket,
+            methods="POST",
+            check=lambda a: a.get('event_id') or a.get('event_identifier'),
+        ),
+    )
     schema = TicketSchema
-    data_layer = {'session': db.session,
-                  'model': Ticket,
-                  'methods': {
-                      'query': query,
-                  }}
+    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query,}}
 
 
 class TicketDetail(ResourceDetail):
     """
     Ticket Resource
     """
+
     def before_get(self, args, view_kwargs):
         """
         before get method to get the resource id for assigning schema
@@ -162,7 +215,9 @@ class TicketDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            attendee = safe_query(
+                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
+            )
             if attendee.ticket_id is not None:
                 view_kwargs['id'] = attendee.ticket_id
             else:
@@ -178,42 +233,73 @@ class TicketDetail(ResourceDetail):
         """
         if ticket.type == 'paid':
             try:
-                event = db.session.query(Event).filter_by(id=ticket.event.id, deleted_at=None).one()
+                event = (
+                    db.session.query(Event)
+                    .filter_by(id=ticket.event.id, deleted_at=None)
+                    .one()
+                )
             except NoResultFound:
-                raise UnprocessableEntity({'event_id': ticket.event.id}, "Event does not exist")
+                raise UnprocessableEntity(
+                    {'event_id': ticket.event.id}, "Event does not exist"
+                )
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
-                    {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
+                    {'event_id': ticket.event.id},
+                    "Event having paid ticket must have a payment method",
+                )
 
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Ticket,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = TicketSchema
-    data_layer = {'session': db.session,
-                  'model': Ticket,
-                  'methods': {
-                      'before_get_object': before_get_object,
-                      'before_update_object': before_update_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Ticket,
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_update_object': before_update_object,
+        },
+    }
 
 
 class TicketRelationshipRequired(ResourceRelationship):
     """
     Tickets Relationship (Required)
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=Ticket, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Ticket,
+            methods="PATCH",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = TicketSchema
-    data_layer = {'session': db.session,
-                  'model': Ticket}
+    data_layer = {'session': db.session, 'model': Ticket}
 
 
 class TicketRelationshipOptional(ResourceRelationship):
     """
     Tickets Relationship (Optional)
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=Ticket,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = TicketSchema
-    data_layer = {'session': db.session,
-                  'model': Ticket}
+    data_layer = {'session': db.session, 'model': Ticket}

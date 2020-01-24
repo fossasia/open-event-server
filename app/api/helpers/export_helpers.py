@@ -28,24 +28,65 @@ from app.models.track import Track
 # order of keys in export json
 FIELD_ORDER = {
     'event': [
-        'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
-        'timezone', 'description', 'original_image_url', 'logo_url', 'owner_name',
-        'owner_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
-        'event_topic_id', 'event_sub_topic_id', 'code_of_conduct'
+        'id',
+        'name',
+        'latitude',
+        'longitude',
+        'location_name',
+        'starts_at',
+        'ends_at',
+        'timezone',
+        'description',
+        'original_image_url',
+        'logo_url',
+        'owner_name',
+        'owner_description',
+        'external_event_url',
+        'ticket_url',
+        'privacy',
+        'event_type_id',
+        'event_topic_id',
+        'event_sub_topic_id',
+        'code_of_conduct',
     ],
     'microlocations': ['id', 'name', 'floor'],
     'sessions': [
-        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'starts_at', 'ends_at',
-        'session_type_id', 'track_id', 'comments', 'language', 'slides_url', 'audio_url', 'video_url'
+        'id',
+        'title',
+        'subtitle',
+        'short_abstract',
+        'long_abstract',
+        'starts_at',
+        'ends_at',
+        'session_type_id',
+        'track_id',
+        'comments',
+        'language',
+        'slides_url',
+        'audio_url',
+        'video_url',
     ],
     'speakers': [
-        'id', 'name', 'email', 'mobile', 'photo_url', 'organisation', 'position', 'country',
-        'short_biography', 'long_biography', 'website', 'twitter', 'facebook', 'github', 'linkedin'
+        'id',
+        'name',
+        'email',
+        'mobile',
+        'photo_url',
+        'organisation',
+        'position',
+        'country',
+        'short_biography',
+        'long_biography',
+        'website',
+        'twitter',
+        'facebook',
+        'github',
+        'linkedin',
     ],
     'sponsors': ['id', 'name', 'logo_url', 'level', 'type', 'url', 'description'],
     'tracks': ['id', 'name', 'color', 'font_color'],
     'session_types': ['id', 'name', 'length'],
-    'forms': []
+    'forms': [],
 }
 
 # keep sync with storage.UPLOAD_PATHS
@@ -53,18 +94,14 @@ DOWNLOAD_FIEDLS = {
     'sessions': {
         'video_url': ['video', '/videos/session_%d'],
         'audio_url': ['audio', '/audios/session_%d'],
-        'slides_url': ['document', '/slides/session_%d']
+        'slides_url': ['document', '/slides/session_%d'],
     },
-    'speakers': {
-        'photo_url': ['image', '/images/speakers/%s_%d']
-    },
+    'speakers': {'photo_url': ['image', '/images/speakers/%s_%d']},
     'event': {
         'logo_url': ['image', '/images/logo'],
-        'external_event_url': ['image', '/images/background']
+        'external_event_url': ['image', '/images/background'],
     },
-    'sponsors': {
-        'logo_url': ['image', '/images/sponsors/%s_%d']
-    }
+    'sponsors': {'logo_url': ['image', '/images/sponsors/%s_%d']},
 }
 
 DATE_FIELDS = ['starts_at', 'ends_at', 'created_at', 'deleted_at', 'submitted_at']
@@ -77,7 +114,7 @@ EXPORTS = [
     ('sponsors', Sponsor),
     ('tracks', Track),
     ('session_types', SessionType),
-    ('forms', CustomForms)
+    ('forms', CustomForms),
 ]
 
 # strings to remove in a filename
@@ -85,6 +122,7 @@ FILENAME_EXCLUDE = '<>:"/\|?*;'
 
 
 # FUNCTIONS
+
 
 def sorted_dict(data):
     """
@@ -96,7 +134,9 @@ def sorted_dict(data):
         data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
     elif type(data) == list:
         for count in range(len(data)):
-            data[count] = OrderedDict(sorted(list(data[count].items()), key=lambda t: t[0]))
+            data[count] = OrderedDict(
+                sorted(list(data[count].items()), key=lambda t: t[0])
+            )
     return data
 
 
@@ -194,25 +234,24 @@ def export_event_json(event_id, settings):
     # save to directory
     for e in EXPORTS:
         if e[0] == 'event':
-            query_obj = db.session.query(e[1]).filter(
-                e[1].id == event_id).first()
+            query_obj = db.session.query(e[1]).filter(e[1].id == event_id).first()
             data = _order_json(dict(query_obj.__dict__), e)
             _download_media(data, 'event', dir_path, settings)
         else:
-            query_objs = db.session.query(e[1]).filter(
-                e[1].event_id == event_id).all()
+            query_objs = db.session.query(e[1]).filter(e[1].event_id == event_id).all()
             data = [_order_json(dict(query_obj.__dict__), e) for query_obj in query_objs]
             for count in range(len(data)):
                 data[count] = _order_json(data[count], e)
                 _download_media(data[count], e[0], dir_path, settings)
-        data_str = json.dumps(data, indent=4, ensure_ascii=False, default=handle_unserializable_data).encode('utf-8')
+        data_str = json.dumps(
+            data, indent=4, ensure_ascii=False, default=handle_unserializable_data
+        ).encode('utf-8')
         fp = open(dir_path + '/' + e[0], 'w')
         fp.write(str(data_str, 'utf-8'))
         fp.close()
     # add meta
     data_str = json.dumps(
-        _generate_meta(), sort_keys=True,
-        indent=4, ensure_ascii=False
+        _generate_meta(), sort_keys=True, indent=4, ensure_ascii=False
     ).encode('utf-8')
     fp = open(dir_path + '/meta', 'w')
     fp.write(str(data_str, 'utf-8'))
@@ -221,9 +260,7 @@ def export_event_json(event_id, settings):
     shutil.make_archive(dir_path, 'zip', dir_path)
     dir_path = dir_path + ".zip"
 
-    storage_path = UPLOAD_PATHS['exports']['zip'].format(
-        event_id=event_id
-    )
+    storage_path = UPLOAD_PATHS['exports']['zip'].format(event_id=event_id)
     uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
     storage_url = upload(uploaded_file, storage_path)
 
@@ -238,6 +275,7 @@ def get_current_user():
 
 
 # HELPERS
+
 
 def create_export_job(task_id, event_id):
     """
@@ -255,8 +293,9 @@ def create_export_job(task_id, event_id):
         export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
-            task=task_url, user_email=current_logged_user.email,
-            event=Event.query.get(event_id)
+            task=task_url,
+            user_email=current_logged_user.email,
+            event=Event.query.get(event_id),
         )
     save_to_db(export_job, 'ExportJob saved')
 

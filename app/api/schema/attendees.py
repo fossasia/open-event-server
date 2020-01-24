@@ -17,6 +17,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         """
         Meta class for Attendee API Schema
         """
+
         type_ = 'attendee'
         self_view = 'v1.attendee_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -49,7 +50,9 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
     gender = fields.Str(allow_none=True)
-    age_group = fields.Str(validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True)
+    age_group = fields.Str(
+        validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
+    )
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)
@@ -61,20 +64,24 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = fields.Dict(allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.attendee_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'attendee_id': '<id>'},
-                         schema='EventSchema',
-                         type_='event')
-    user = Relationship(attribute='user',
-                        self_view='v1.attendee_user',
-                        self_view_kwargs={'id': '<id>'},
-                        related_view='v1.user_detail',
-                        related_view_kwargs={'attendee_id': '<id>'},
-                        schema='UserSchemaPublic',
-                        type_='user')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.attendee_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='EventSchema',
+        type_='event',
+    )
+    user = Relationship(
+        attribute='user',
+        self_view='v1.attendee_user',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='UserSchemaPublic',
+        type_='user',
+    )
 
 
 class AttendeeSchema(AttendeeSchemaPublic):
@@ -86,21 +93,26 @@ class AttendeeSchema(AttendeeSchemaPublic):
         """
         Meta class for Attendee API Schema
         """
+
         type_ = 'attendee'
         self_view = 'v1.attendee_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    ticket = Relationship(attribute='ticket',
-                          self_view='v1.attendee_ticket',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.ticket_detail',
-                          related_view_kwargs={'attendee_id': '<id>'},
-                          schema='TicketSchemaPublic',
-                          type_='ticket')
-    order = Relationship(self_view='v1.attendee_order',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.order_detail',
-                         related_view_kwargs={'attendee_id': '<id>'},
-                         schema='OrderSchema',
-                         type_='order')
+    ticket = Relationship(
+        attribute='ticket',
+        self_view='v1.attendee_ticket',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.ticket_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='TicketSchemaPublic',
+        type_='ticket',
+    )
+    order = Relationship(
+        self_view='v1.attendee_order',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.order_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='OrderSchema',
+        type_='order',
+    )

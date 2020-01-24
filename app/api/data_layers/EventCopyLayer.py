@@ -24,14 +24,15 @@ def update_created_at(obj):
 
 
 class EventCopyLayer(BaseDataLayer):
-
     def create_object(self, data, view_kwargs):
         identifier = 'identifier'
 
         if view_kwargs.get('identifier').isdigit():
             identifier = 'id'
 
-        event = safe_query(db, Event, identifier, view_kwargs['identifier'], 'event_'+identifier)
+        event = safe_query(
+            db, Event, identifier, view_kwargs['identifier'], 'event_' + identifier
+        )
         tickets = Ticket.query.filter_by(event_id=event.id).all()
         social_links = SocialLink.query.filter_by(event_id=event.id).all()
         sponsors = Sponsor.query.filter_by(event_id=event.id).all()
@@ -69,7 +70,9 @@ class EventCopyLayer(BaseDataLayer):
             db.session.expunge(sponsor)  # expunge the object from session
             make_transient(sponsor)
             sponsor.event_id = event.id
-            logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
+            logo_url = create_save_resized_image(
+                image_file=sponsor.logo_url, resize=False
+            )
             delattr(sponsor, 'id')
             sponsor.logo_url = logo_url
             save_to_db(sponsor)

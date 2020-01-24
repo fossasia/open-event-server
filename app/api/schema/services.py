@@ -16,6 +16,7 @@ class ServiceSchema(Schema):
         """
         Meta class for Service API schema
         """
+
         type_ = 'service'
         self_view = 'v1.service_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -23,5 +24,9 @@ class ServiceSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    name = fields.Str(default="track", validate=validate.OneOf(
-        choices=["microlocation", "session", "speaker", "track", "sponsor"]))
+    name = fields.Str(
+        default="track",
+        validate=validate.OneOf(
+            choices=["microlocation", "session", "speaker", "track", "sponsor"]
+        ),
+    )

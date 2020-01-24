@@ -43,7 +43,6 @@ class TestUtilitiesHelperValidation(unittest.TestCase):
         self.assertTrue(represents_int(4))
         self.assertFalse(represents_int('test'))
 
-
     def test_string_empty(self):
         """Method to test whether an empty string is correctly identified."""
 

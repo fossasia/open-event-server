@@ -44,10 +44,13 @@ class GoogleOAuth:
 
 class FbOAuth:
     """Facebook Credentials"""
+
     Fb_AUTH_URI = 'https://www.facebook.com/dialog/oauth'
     Fb_TOKEN_URI = 'https://graph.facebook.com/oauth/access_token'
-    Fb_USER_INFO = 'https://graph.facebook.com/me?fields=' +\
-        'email,id,name,picture,last_name,first_name,link'
+    Fb_USER_INFO = (
+        'https://graph.facebook.com/me?fields='
+        + 'email,id,name,picture,last_name,first_name,link'
+    )
     SCOPE = ['public_profile', 'email']
 
     @classmethod
@@ -60,8 +63,7 @@ class FbOAuth:
 
     @classmethod
     def get_redirect_uri(cls):
-        url = make_frontend_url(
-            '/oauth/callback?provider=facebook')
+        url = make_frontend_url('/oauth/callback?provider=facebook')
         return url
 
     @classmethod
@@ -79,6 +81,7 @@ class FbOAuth:
 
 class TwitterOAuth:
     """Twitter Credentials"""
+
     TW_AUTH_URI = 'https://api.twitter.com/oauth/authorize'
     TW_REQUEST_TOKEN_URI = 'https://api.twitter.com/oauth/request_token'
     TW_ACCESS_TOKEN = "https://api.twitter.com/oauth/access_token"
@@ -102,8 +105,7 @@ class TwitterOAuth:
         return tw_redirect_uri
 
     def get_consumer(self):
-        return oauth2.Consumer(key=self.get_client_id(),
-                               secret=self.get_client_secret())
+        return oauth2.Consumer(key=self.get_client_id(), secret=self.get_client_secret())
 
     def get_auth_uri(cls):
         return cls.TW_AUTH_URI
@@ -112,8 +114,12 @@ class TwitterOAuth:
         consumer = self.get_consumer()
         client = oauth2.Client(consumer)
         return client.request(
-            self.TW_ACCESS_TOKEN + 'oauth_verifier=' +
-            oauth_verifier + "&oauth_token=" + oauth_token, "POST"
+            self.TW_ACCESS_TOKEN
+            + 'oauth_verifier='
+            + oauth_verifier
+            + "&oauth_token="
+            + oauth_token,
+            "POST",
         )
 
     def get_authorized_client(self, oauth_verifier, oauth_token):
@@ -128,6 +134,7 @@ class TwitterOAuth:
 
 class InstagramOAuth:
     """Instagram Credentials"""
+
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
     INSTAGRAM_TOKEN_URI = "https://api.instagram.com/oauth/access_token"
     SCOPE = ['basic', 'public_content']

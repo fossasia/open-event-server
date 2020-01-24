@@ -12,7 +12,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestDBHelperValidation(OpenEventTestCase):
-
     def test_save_to_db(self):
         """Method to test the function save_to_db"""
 
@@ -35,7 +34,9 @@ class TestDBHelperValidation(OpenEventTestCase):
         """Method to test the exception in function safe_query"""
 
         with self.app.test_request_context():
-            self.assertRaises(ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id'))
+            self.assertRaises(
+                ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id')
+            )
 
     def test_get_or_create(self):
         """Method to test the function get_or_create"""
@@ -47,7 +48,9 @@ class TestDBHelperValidation(OpenEventTestCase):
             self.assertEqual(event.id, obj.id)
             self.assertFalse(is_created)
 
-            obj, is_created = get_or_create(Event, name="new event", starts_at=event.starts_at, ends_at=event.ends_at)
+            obj, is_created = get_or_create(
+                Event, name="new event", starts_at=event.starts_at, ends_at=event.ends_at
+            )
             self.assertNotEqual(event.id, obj.id)
             self.assertTrue(is_created)
 

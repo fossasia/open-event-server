@@ -13,12 +13,13 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestScheduledJobs(OpenEventTestCase):
-
     def test_event_invoices_mark_due(self):
         """Method to test marking of event invoices as due"""
 
         with self.app.test_request_context():
-            event_invoice_new = EventInvoiceFactory(event__ends_at=datetime.datetime(2019, 7, 20))
+            event_invoice_new = EventInvoiceFactory(
+                event__ends_at=datetime.datetime(2019, 7, 20)
+            )
             event_invoice_paid = EventInvoiceFactory(status="paid")
 
             db.session.commit()
@@ -49,8 +50,10 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test not deleting ticket holders with no order id but created within expiry time"""
 
         with self.app.test_request_context():
-            attendee = AttendeeFactory(created_at=datetime.datetime.utcnow(),
-                                       modified_at=datetime.datetime.utcnow())
+            attendee = AttendeeFactory(
+                created_at=datetime.datetime.utcnow(),
+                modified_at=datetime.datetime.utcnow(),
+            )
 
             db.session.commit()
             attendee_id = attendee.id
@@ -62,11 +65,12 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test not deleting ticket holders with order id after expiry time"""
 
         with self.app.test_request_context():
-            attendee = AttendeeFactory(order_id=1, ticket_id=1,
-                                       created_at=datetime.datetime.utcnow() -
-                                       datetime.timedelta(minutes=15),
-                                       modified_at=datetime.datetime.utcnow() -
-                                       datetime.timedelta(minutes=15))
+            attendee = AttendeeFactory(
+                order_id=1,
+                ticket_id=1,
+                created_at=datetime.datetime.utcnow() - datetime.timedelta(minutes=15),
+                modified_at=datetime.datetime.utcnow() - datetime.timedelta(minutes=15),
+            )
 
             db.session.commit()
             attendee_id = attendee.id

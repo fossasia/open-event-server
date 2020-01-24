@@ -16,7 +16,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestOrderUtilities(OpenEventTestCase):
-
     def test_should_expire_outdated_order(self):
         """Method to test expiration of outdated orders"""
 
@@ -26,7 +25,8 @@ class TestOrderUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             obj.event = event
             obj.created_at = datetime.now(timezone.utc) - timedelta(
-                minutes=order_expiry_time)
+                minutes=order_expiry_time
+            )
             set_expiry_for_order(obj)
             self.assertEqual(obj.status, 'expired')
 
@@ -48,7 +48,9 @@ class TestOrderUtilities(OpenEventTestCase):
             save_to_db(attendee)
 
             obj = OrderFactory()
-            obj.ticket_holders = [attendee, ]
+            obj.ticket_holders = [
+                attendee,
+            ]
             save_to_db(obj)
 
             delete_related_attendees_for_order(obj)
@@ -63,11 +65,15 @@ class TestOrderUtilities(OpenEventTestCase):
 
             completed_order = OrderFactory(status='completed')
             placed_order = OrderFactory(status='placed')
-            initializing_order = OrderFactory(status='initializing',
-                                              created_at=datetime.utcnow() - timedelta(minutes=5))
-            pending_order = OrderFactory(status='pending',
-                                         created_at=datetime.utcnow() - timedelta(minutes=35))
-            expired_time_order = OrderFactory(status='initializing', created_at=common.date_)
+            initializing_order = OrderFactory(
+                status='initializing', created_at=datetime.utcnow() - timedelta(minutes=5)
+            )
+            pending_order = OrderFactory(
+                status='pending', created_at=datetime.utcnow() - timedelta(minutes=35)
+            )
+            expired_time_order = OrderFactory(
+                status='initializing', created_at=common.date_
+            )
             expired_order = OrderFactory(status='expired')
 
             db.session.commit()

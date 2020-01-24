@@ -29,11 +29,13 @@ class XCalExporter:
         cal_name_node = SubElement(v_calendar_node, 'x-wr-calname')
         cal_name_node.text = event.name
 
-        sessions = Session.query \
-            .filter_by(event_id=event_id) \
-            .filter_by(state='accepted') \
-            .filter(Session.deleted_at.is_(None)) \
-            .order_by(asc(Session.starts_at)).all()
+        sessions = (
+            Session.query.filter_by(event_id=event_id)
+            .filter_by(state='accepted')
+            .filter(Session.deleted_at.is_(None))
+            .order_by(asc(Session.starts_at))
+            .all()
+        )
 
         for session in sessions:
 
@@ -69,14 +71,21 @@ class XCalExporter:
                 status_node.text = 'CONFIRMED'
 
                 categories_node = SubElement(v_event_node, 'categories')
-                categories_node.text = session.session_type.name if session.session_type else ''
+                categories_node.text = (
+                    session.session_type.name if session.session_type else ''
+                )
 
                 url_node = SubElement(v_event_node, 'url')
-                url_node.text = url_for('v1.event_list',
-                                        identifier=event.identifier, _external=True)
+                url_node.text = url_for(
+                    'v1.event_list', identifier=event.identifier, _external=True
+                )
 
                 location_node = SubElement(v_event_node, 'location')
-                location_node.text = session.microlocation.name if session.microlocation else 'Not decided yet'
+                location_node.text = (
+                    session.microlocation.name
+                    if session.microlocation
+                    else 'Not decided yet'
+                )
 
                 for speaker in session.speakers:
                     attendee_node = SubElement(v_event_node, 'attendee')

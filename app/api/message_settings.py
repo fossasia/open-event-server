@@ -10,6 +10,7 @@ class MessageSettingsList(ResourceList):
     """
     List Events Role Permission
     """
+
     def query(self, view_kwargs):
         """
         query method for Message Setting List
@@ -22,19 +23,19 @@ class MessageSettingsList(ResourceList):
     decorators = (api.has_permission('is_admin', methods="GET"),)
     methods = ['GET']
     schema = MessageSettingSchema
-    data_layer = {'session': db.session,
-                  'model': MessageSettings,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': MessageSettings,
+        'methods': {'query': query},
+    }
 
 
 class MessageSettingsDetail(ResourceDetail):
     """
     Events Role Permission detail by id
     """
+
     schema = MessageSettingSchema
     decorators = (api.has_permission('is_admin', methods="PATCH"),)
     methods = ['GET', 'PATCH']
-    data_layer = {'session': db.session,
-                  'model': MessageSettings}
+    data_layer = {'session': db.session, 'model': MessageSettings}

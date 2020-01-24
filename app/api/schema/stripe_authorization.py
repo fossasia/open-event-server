@@ -14,6 +14,7 @@ class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
         """
         Meta class for StripeAuthorization Api Schema
         """
+
         type_ = 'stripe-authorization'
         self_view = 'v1.stripe_authorization_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -22,13 +23,15 @@ class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     stripe_publishable_key = fields.Str(dump_only=True)
 
-    event = Relationship(attribute='event',
-                         self_view='v1.stripe_authorization_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'stripe_authorization_id': '<id>'},
-                         schema="EventSchema",
-                         type_='event')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.stripe_authorization_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'stripe_authorization_id': '<id>'},
+        schema="EventSchema",
+        type_='event',
+    )
 
 
 class StripeAuthorizationSchema(StripeAuthorizationSchemaPublic):
@@ -40,6 +43,7 @@ class StripeAuthorizationSchema(StripeAuthorizationSchemaPublic):
         """
         Meta class for StripeAuthorization Api Schema
         """
+
         type_ = 'stripe-authorization'
         self_view = 'v1.stripe_authorization_detail'
         self_view_kwargs = {'id': '<id>'}

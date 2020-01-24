@@ -10,10 +10,12 @@ class SettingSchemaPublic(Schema):
     """
     Public Api schema for settings Model
     """
+
     class Meta:
         """
         Meta class for setting Api Schema
         """
+
         type_ = 'setting'
         self_view = 'v1.setting_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -28,10 +30,14 @@ class SettingSchemaPublic(Schema):
     tagline = fields.Str(allow_none=True)
 
     # Order Expiry Time
-    order_expiry_time = fields.Integer(allow_none=False, default=15, validate=lambda n: 1 <= n <= 60)
+    order_expiry_time = fields.Integer(
+        allow_none=False, default=15, validate=lambda n: 1 <= n <= 60
+    )
 
     # Maximum number of complex custom fields allowed for a given form
-    max_complex_custom_fields = fields.Integer(allow_none=False, default=30, validate=lambda n: 1 <= n <= 30)
+    max_complex_custom_fields = fields.Integer(
+        allow_none=False, default=30, validate=lambda n: 1 <= n <= 30
+    )
 
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
@@ -72,10 +78,12 @@ class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
     Non Admin Api schema for settings Model
     """
+
     class Meta:
         """
         Meta class for setting Api Schema
         """
+
         type_ = 'setting'
         self_view = 'v1.setting_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -95,10 +103,12 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     """
     Admin Api schema for settings Model
     """
+
     class Meta:
         """
         Meta class for setting Api Schema
         """
+
         type_ = 'setting'
         self_view = 'v1.setting_detail'
         self_view_kwargs = {'id': '<id>'}

@@ -64,35 +64,59 @@ alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipa
 
 
 def check_event_user_ticket_holders(order, data, element):
-    if element in ['event', 'user'] and data[element]\
-            != str(getattr(order, element, None).id):
-        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                 "You cannot update {} of an order".format(element))
+    if element in ['event', 'user'] and data[element] != str(
+        getattr(order, element, None).id
+    ):
+        raise ForbiddenException(
+            {'pointer': 'data/{}'.format(element)},
+            "You cannot update {} of an order".format(element),
+        )
     elif element == 'ticket_holders':
         ticket_holders = []
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
-            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                     "You cannot update {} of an order".format(element))
+            raise ForbiddenException(
+                {'pointer': 'data/{}'.format(element)},
+                "You cannot update {} of an order".format(element),
+            )
 
 
 def is_payment_valid(order, mode):
     if mode == 'stripe':
-        return (order.paid_via == 'stripe') and order.brand and order.transaction_id \
-            and order.exp_year and order.last4 and order.exp_month
+        return (
+            (order.paid_via == 'stripe')
+            and order.brand
+            and order.transaction_id
+            and order.exp_year
+            and order.last4
+            and order.exp_month
+        )
     elif mode == 'paypal':
         return (order.paid_via == 'paypal') and order.transaction_id
 
 
 def check_billing_info(data):
-    if data.get('amount') and data.get('amount') > 0 and not data.get('is_billing_enabled'):
-        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
-                                  "Billing information is mandatory for this order")
-    if data.get('is_billing_enabled') and not (data.get('company') and data.get('address') and data.get('city') and
-                                               data.get('zipcode') and data.get('country')):
-        raise UnprocessableEntity({'pointer': '/data/attributes/is_billing_enabled'},
-                                  "Billing information incomplete")
+    if (
+        data.get('amount')
+        and data.get('amount') > 0
+        and not data.get('is_billing_enabled')
+    ):
+        raise UnprocessableEntity(
+            {'pointer': '/data/attributes/is_billing_enabled'},
+            "Billing information is mandatory for this order",
+        )
+    if data.get('is_billing_enabled') and not (
+        data.get('company')
+        and data.get('address')
+        and data.get('city')
+        and data.get('zipcode')
+        and data.get('country')
+    ):
+        raise UnprocessableEntity(
+            {'pointer': '/data/attributes/is_billing_enabled'},
+            "Billing information incomplete",
+        )
 
 
 class OrdersListPost(ResourceList):
@@ -134,49 +158,75 @@ class OrdersListPost(ResourceList):
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
-                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder),
-                                                                                  deleted_at=None).one()
+                ticket_holder_object = (
+                    self.session.query(TicketHolder)
+                    .filter_by(id=int(ticket_holder), deleted_at=None)
+                    .one()
+                )
                 if ticket_holder_object.order_id:
-                    raise ConflictException({'pointer': '/data/relationships/attendees'},
-                                            "Order already exists for attendee with id {}".format(str(ticket_holder)))
+                    raise ConflictException(
+                        {'pointer': '/data/relationships/attendees'},
+                        "Order already exists for attendee with id {}".format(
+                            str(ticket_holder)
+                        ),
+                    )
             except NoResultFound:
-                raise ConflictException({'pointer': '/data/relationships/attendees'},
-                                        "Attendee with id {} does not exists".format(str(ticket_holder)))
+                raise ConflictException(
+                    {'pointer': '/data/relationships/attendees'},
+                    "Attendee with id {} does not exists".format(str(ticket_holder)),
+                )
 
             if ticket_holder_object.ticket.type == 'free':
                 free_ticket_quantity += 1
 
-        if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
+        if not current_user.is_verified and free_ticket_quantity == len(
+            data['ticket_holders']
+        ):
             raise ForbiddenException(
                 {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
-                "Unverified user cannot place free orders"
+                "Unverified user cannot place free orders",
             )
 
         if data.get('cancel_note'):
             del data['cancel_note']
 
         if data.get('payment_mode') != 'free' and not data.get('amount'):
-            raise ConflictException({'pointer': '/data/attributes/amount'},
-                                    "Amount cannot be null for a paid order")
+            raise ConflictException(
+                {'pointer': '/data/attributes/amount'},
+                "Amount cannot be null for a paid order",
+            )
 
         if not data.get('amount'):
             data['amount'] = 0
         # Apply discount only if the user is not event admin
-        if data.get('discount_code') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount_code'],
-                                                                    'discount_code_id')
+        if data.get('discount_code') and not has_access(
+            'is_coorganizer', event_id=data['event']
+        ):
+            discount_code = safe_query_without_soft_deleted_entries(
+                self, DiscountCode, 'id', data['discount_code'], 'discount_code_id'
+            )
             if not discount_code.is_active:
-                raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
+                raise UnprocessableEntity(
+                    {'source': 'discount_code_id'}, "Inactive Discount Code"
+                )
             else:
                 now = pytz.utc.localize(datetime.utcnow())
                 valid_from = discount_code.valid_from
                 valid_till = discount_code.valid_till
                 if not (valid_from <= now <= valid_till):
-                    raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
-                if not TicketingManager.match_discount_quantity(discount_code, None, data['ticket_holders']):
-                    raise UnprocessableEntity({'source': 'discount_code_id'}, 'Discount Usage Exceeded')
+                    raise UnprocessableEntity(
+                        {'source': 'discount_code_id'}, "Inactive Discount Code"
+                    )
+                if not TicketingManager.match_discount_quantity(
+                    discount_code, None, data['ticket_holders']
+                ):
+                    raise UnprocessableEntity(
+                        {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
+                    )
             if discount_code.event.id != int(data['event']):
-                raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
+                raise UnprocessableEntity(
+                    {'source': 'discount_code_id'}, "Invalid Discount Code"
+                )
 
     def after_create_object(self, order, data, view_kwargs):
         """
@@ -200,13 +250,15 @@ class OrdersListPost(ResourceList):
         create_pdf_tickets_for_holder(order)
 
         for ticket in order_tickets:
-            od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
+            od = OrderTicket(
+                order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
+            )
             save_to_db(od)
 
         order.quantity = order.tickets_count
         save_to_db(order)
-#         if not has_access('is_coorganizer', event_id=data['event']):
-#             TicketingManager.calculate_update_amount(order)
+        #         if not has_access('is_coorganizer', event_id=data['event']):
+        #             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed' or order.status == 'placed':
@@ -214,40 +266,74 @@ class OrdersListPost(ResourceList):
             order_identifier = order.identifier
 
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            ticket_path = (
+                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            invoice_path = (
+                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
 
             # send email and notifications.
-            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+            send_email_to_attendees(
+                order=order,
+                purchaser_id=current_user.id,
+                attachments=[ticket_path, invoice_path],
+            )
 
             send_notif_to_attendees(order, current_user.id)
 
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
 
-            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            order_url = make_frontend_url(
+                path='/orders/{identifier}'.format(identifier=order.identifier)
+            )
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
-                                                     order.identifier)
+                send_notif_ticket_purchase_organizer(
+                    organizer,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.identifier,
+                )
             for coorganizer in order.event.coorganizers:
-                send_notif_ticket_purchase_organizer(coorganizer, order.invoice_number, order_url, order.event.name,
-                                                     order.identifier)
+                send_notif_ticket_purchase_organizer(
+                    coorganizer,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.identifier,
+                )
             if order.event.owner:
-                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
-                                                     order.event.name, order.identifier)
+                send_notif_ticket_purchase_organizer(
+                    order.event.owner,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.identifier,
+                )
 
         data['user_id'] = current_user.id
 
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     decorators = (jwt_required,)
     schema = OrderSchema
-    data_layer = {'session': db.session,
-                  'model': Order,
-                  'methods': {'before_create_object': before_create_object,
-                              'after_create_object': after_create_object
-                              }}
+    data_layer = {
+        'session': db.session,
+        'model': Order,
+        'methods': {
+            'before_create_object': before_create_object,
+            'after_create_object': after_create_object,
+        },
+    }
 
 
 class OrdersList(ResourceList):
@@ -262,7 +348,9 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
-        if kwargs.get('event_id') and not has_access('is_coorganizer', event_id=kwargs['event_id']):
+        if kwargs.get('event_id') and not has_access(
+            'is_coorganizer', event_id=kwargs['event_id']
+        ):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
@@ -272,7 +360,9 @@ class OrdersList(ResourceList):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            query_ = query_.join(User, User.id == Order.user_id).filter(User.id == user.id)
+            query_ = query_.join(User, User.id == Order.user_id).filter(
+                User.id == user.id
+            )
         else:
             # orders under an event
             query_ = event_query(self, query_, view_kwargs)
@@ -285,13 +375,11 @@ class OrdersList(ResourceList):
         return query_
 
     decorators = (jwt_required,)
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = OrderSchema
-    data_layer = {'session': db.session,
-                  'model': Order,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {'session': db.session, 'model': Order, 'methods': {'query': query}}
 
 
 class OrderDetail(ResourceDetail):
@@ -306,16 +394,30 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id'):
-            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            attendee = safe_query(
+                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
+            )
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
-            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            order = safe_query(
+                self,
+                Order,
+                'identifier',
+                view_kwargs['order_identifier'],
+                'order_identifier',
+            )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
             order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
 
-        if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
-            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+        if not has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=order.event_id,
+            user_id=order.user_id,
+        ):
+            return ForbiddenException(
+                {'source': ''}, 'You can only access your orders or your event\'s orders'
+            )
 
         # expire the initializing order if time limit is over.
         set_expiry_for_order(order)
@@ -334,9 +436,13 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('amount') and (data.get('is_billing_enabled') or order.event.is_billing_info_mandatory):
+        if data.get('amount') and (
+            data.get('is_billing_enabled') or order.event.is_billing_info_mandatory
+        ):
             check_billing_info(data)
-        if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
+        if (not has_access('is_coorganizer', event_id=order.event_id)) and (
+            not current_user.id == order.user_id
+        ):
             raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
@@ -344,10 +450,15 @@ class OrderDetail(ResourceDetail):
                 # Order created from the tickets tab.
                 for element in data:
                     if data[element]:
-                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
-                                != getattr(order, element, None) and element not in get_updatable_fields():
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of an order".format(element))
+                        if (
+                            element not in ['event', 'ticket_holders', 'user']
+                            and data[element] != getattr(order, element, None)
+                            and element not in get_updatable_fields()
+                        ):
+                            raise ForbiddenException(
+                                {'pointer': 'data/{}'.format(element)},
+                                "You cannot update {} of an order".format(element),
+                            )
                         else:
                             check_event_user_ticket_holders(order, data, element)
 
@@ -355,55 +466,96 @@ class OrderDetail(ResourceDetail):
                 # Order created from the public pages.
                 for element in data:
                     if data[element]:
-                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
-                                != getattr(order, element, None):
+                        if element not in ['event', 'ticket_holders', 'user'] and data[
+                            element
+                        ] != getattr(order, element, None):
                             if element != 'status' and element != 'deleted_at':
-                                raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                         "You cannot update {} of an order".format(element))
-                            elif element == 'status' and order.amount and order.status == 'completed':
+                                raise ForbiddenException(
+                                    {'pointer': 'data/{}'.format(element)},
+                                    "You cannot update {} of an order".format(element),
+                                )
+                            elif (
+                                element == 'status'
+                                and order.amount
+                                and order.status == 'completed'
+                            ):
                                 # Since we don't have a refund system.
-                                raise ForbiddenException({'pointer': 'data/status'},
-                                                         "You cannot update the status of a completed paid order")
+                                raise ForbiddenException(
+                                    {'pointer': 'data/status'},
+                                    "You cannot update the status of a completed paid order",
+                                )
                             elif element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
-                                raise ForbiddenException({'pointer': 'data/status'},
-                                                         "You cannot update the status of a cancelled order")
+                                raise ForbiddenException(
+                                    {'pointer': 'data/status'},
+                                    "You cannot update the status of a cancelled order",
+                                )
                         else:
                             check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
-                raise ForbiddenException({'pointer': ''},
-                                         "You cannot update a non-initialized or non-pending order")
+                raise ForbiddenException(
+                    {'pointer': ''},
+                    "You cannot update a non-initialized or non-pending order",
+                )
             else:
                 for element in data:
                     if data[element]:
-                        if element == 'is_billing_enabled' and order.status == 'completed'\
-                                and data[element] != getattr(order, element, None):
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of a completed order".format(element))
-                        elif element not in ['event', 'ticket_holders', 'user'] and data[element]\
-                                != getattr(order, element, None) and element not in get_updatable_fields():
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of an order".format(element))
+                        if (
+                            element == 'is_billing_enabled'
+                            and order.status == 'completed'
+                            and data[element] != getattr(order, element, None)
+                        ):
+                            raise ForbiddenException(
+                                {'pointer': 'data/{}'.format(element)},
+                                "You cannot update {} of a completed order".format(
+                                    element
+                                ),
+                            )
+                        elif (
+                            element not in ['event', 'ticket_holders', 'user']
+                            and data[element] != getattr(order, element, None)
+                            and element not in get_updatable_fields()
+                        ):
+                            raise ForbiddenException(
+                                {'pointer': 'data/{}'.format(element)},
+                                "You cannot update {} of an order".format(element),
+                            )
                         else:
                             check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
-            if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
-                data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
+            if order.order_notes and data['order_notes'] not in order.order_notes.split(
+                ","
+            ):
+                data['order_notes'] = '{},{}'.format(
+                    order.order_notes, data['order_notes']
+                )
 
         if data.get('payment_mode') == 'free' and data.get('amount') > 0:
-            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
-                                      "payment-mode cannot be free for order with amount > 0")
-        elif data.get('status') == 'completed' and data.get('payment_mode') == 'stripe' and \
-                not is_payment_valid(order, 'stripe'):
-            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
-                                      "insufficient data to verify stripe payment")
-        elif data.get('status') == 'completed' and data.get('payment_mode') == 'paypal' and \
-                not is_payment_valid(order, 'paypal'):
-            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
-                                      "insufficient data to verify paypal payment")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/payment-mode'},
+                "payment-mode cannot be free for order with amount > 0",
+            )
+        elif (
+            data.get('status') == 'completed'
+            and data.get('payment_mode') == 'stripe'
+            and not is_payment_valid(order, 'stripe')
+        ):
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/payment-mode'},
+                "insufficient data to verify stripe payment",
+            )
+        elif (
+            data.get('status') == 'completed'
+            and data.get('payment_mode') == 'paypal'
+            and not is_payment_valid(order, 'paypal')
+        ):
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/payment-mode'},
+                "insufficient data to verify paypal payment",
+            )
 
     def after_update_object(self, order, data, view_kwargs):
         """
@@ -422,31 +574,57 @@ class OrderDetail(ResourceDetail):
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif (order.status == 'completed' or order.status == 'placed') and order.deleted_at is None:
+        elif (
+            order.status == 'completed' or order.status == 'placed'
+        ) and order.deleted_at is None:
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            ticket_path = (
+                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            invoice_path = (
+                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
 
             # send email and notifications.
-            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+            send_email_to_attendees(
+                order=order,
+                purchaser_id=current_user.id,
+                attachments=[ticket_path, invoice_path],
+            )
 
             send_notif_to_attendees(order, current_user.id)
 
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
 
-            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            order_url = make_frontend_url(
+                path='/orders/{identifier}'.format(identifier=order.identifier)
+            )
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
-                                                     order.identifier)
+                send_notif_ticket_purchase_organizer(
+                    organizer,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.identifier,
+                )
             if order.event.owner:
-                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
-                                                     order.event.name, order.identifier)
+                send_notif_ticket_purchase_organizer(
+                    order.event.owner,
+                    order.invoice_number,
+                    order_url,
+                    order.event.name,
+                    order.identifier,
+                )
 
     def before_delete_object(self, order, view_kwargs):
         """
@@ -457,21 +635,31 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
-        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
-            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
+        elif (
+            order.amount
+            and order.amount > 0
+            and (order.status == 'completed' or order.status == 'placed')
+        ):
+            raise ConflictException(
+                {'source': ''}, 'You cannot delete a placed/completed paid order.'
+            )
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
-    decorators = (jwt_required, api.has_permission(
-        'auth_required', methods="PATCH,DELETE", model=Order),)
+    decorators = (
+        jwt_required,
+        api.has_permission('auth_required', methods="PATCH,DELETE", model=Order),
+    )
     schema = OrderSchema
-    data_layer = {'session': db.session,
-                  'model': Order,
-                  'methods': {
-                      'before_update_object': before_update_object,
-                      'before_delete_object': before_delete_object,
-                      'before_get_object': before_get_object,
-                      'after_update_object': after_update_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Order,
+        'methods': {
+            'before_update_object': before_update_object,
+            'before_delete_object': before_delete_object,
+            'before_get_object': before_get_object,
+            'after_update_object': after_update_object,
+        },
+    }
 
 
 class OrderRelationship(ResourceRelationship):
@@ -486,18 +674,23 @@ class OrderRelationship(ResourceRelationship):
         :return:
         """
         if kwargs.get('order_identifier'):
-            order = safe_query(db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier')
+            order = safe_query(
+                db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
+            )
             kwargs['id'] = order.id
         elif kwargs.get('id'):
             order = safe_query(db, Order, 'id', kwargs['id'], 'id')
 
-        if not has_access('is_coorganizer', event_id=order.event_id, user_id=order.user_id):
-            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+        if not has_access(
+            'is_coorganizer', event_id=order.event_id, user_id=order.user_id
+        ):
+            return ForbiddenException(
+                {'source': ''}, 'You can only access your orders or your event\'s orders'
+            )
 
     decorators = (jwt_required,)
     schema = OrderSchema
-    data_layer = {'session': db.session,
-                  'model': Order}
+    data_layer = {'session': db.session, 'model': Order}
 
 
 class ChargeSchema(Schema):
@@ -509,6 +702,7 @@ class ChargeSchema(Schema):
         """
         Meta class for ChargeSchema
         """
+
         type_ = 'charge'
         inflect = dasherize
         self_view = 'v1.charge_list'
@@ -526,19 +720,20 @@ class ChargeList(ResourceList):
     """
     ChargeList ResourceList for ChargesLayer class
     """
-    methods = ['POST', ]
+
+    methods = [
+        'POST',
+    ]
     schema = ChargeSchema
 
-    data_layer = {
-        'class': ChargesLayer,
-        'session': db.session,
-        'model': Order
-    }
+    data_layer = {'class': ChargesLayer, 'session': db.session, 'model': Order}
 
     decorators = (jwt_required,)
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/create-paypal-payment', methods=['POST'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/create-paypal-payment', methods=['POST']
+)
 @jwt_required
 def create_paypal_payment(order_identifier):
     """
@@ -559,7 +754,10 @@ def create_paypal_payment(order_identifier):
     else:
         return jsonify(status=False, error=response)
 
-@order_misc_routes.route('/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST'])
+
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/verify-mobile-paypal-payment', methods=['POST']
+)
 @jwt_required
 def verify_mobile_paypal_payment(order_identifier):
     """
@@ -575,7 +773,9 @@ def verify_mobile_paypal_payment(order_identifier):
     return jsonify(status=status, error=error)
 
 
-@alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
+@alipay_blueprint.route(
+    '/create_source/<string:order_identifier>', methods=['GET', 'POST']
+)
 @jwt_required
 def create_source(order_identifier):
     """
@@ -585,9 +785,15 @@ def create_source(order_identifier):
     """
     try:
         order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
-        source_object = AliPayPaymentsManager.create_source(amount=int(order.amount), currency='usd',
-                                                            redirect_return_uri=url_for('alipay_blueprint.alipay_return_uri',
-                                                            order_identifier=order.identifier, _external=True))
+        source_object = AliPayPaymentsManager.create_source(
+            amount=int(order.amount),
+            currency='usd',
+            redirect_return_uri=url_for(
+                'alipay_blueprint.alipay_return_uri',
+                order_identifier=order.identifier,
+                _external=True,
+            ),
+        )
         order.order_notes = source_object.id
         save_to_db(order)
         return jsonify(link=source_object.redirect['url'])
@@ -595,7 +801,9 @@ def create_source(order_identifier):
         return BadRequestError({'source': ''}, 'Source creation error').respond()
 
 
-@alipay_blueprint.route('/alipay_return_uri/<string:order_identifier>', methods=['GET', 'POST'])
+@alipay_blueprint.route(
+    '/alipay_return_uri/<string:order_identifier>', methods=['GET', 'POST']
+)
 def alipay_return_uri(order_identifier):
     """
     Charge Object creation & Order finalization for Alipay payments.
@@ -615,7 +823,9 @@ def alipay_return_uri(order_identifier):
         return jsonify(status=False, error='Source object status error')
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET']
+)
 @jwt_required
 def omise_checkout(order_identifier):
     """
@@ -630,21 +840,34 @@ def omise_checkout(order_identifier):
     try:
         charge = OmisePaymentsManager.charge_payment(order_identifier, token)
     except omise.errors.BaseError as e:
-        logging.exception(f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors""")
+        logging.exception(
+            f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors"""
+        )
         return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
     except Exception as e:
         logging.exception('Error while charging omise')
     if charge.failure_code is not None:
-        logging.warning("Omise Failure Message: {} ({})".format(charge.failure_message, charge.failure_code))
-        return jsonify(status=False, error="Omise Failure Message: {} ({})".
-                       format(charge.failure_message, charge.failure_code))
+        logging.warning(
+            "Omise Failure Message: {} ({})".format(
+                charge.failure_message, charge.failure_code
+            )
+        )
+        return jsonify(
+            status=False,
+            error="Omise Failure Message: {} ({})".format(
+                charge.failure_message, charge.failure_code
+            ),
+        )
     else:
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
         return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/initiate-transaction', methods=['POST', 'GET'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/initiate-transaction',
+    methods=['POST', 'GET'],
+)
 @jwt_required
 def initiate_transaction(order_identifier):
     """
@@ -658,144 +881,167 @@ def initiate_transaction(order_identifier):
     # body parameters
     paytm_params["body"] = {
         "requestType": "Payment",
-        "mid": (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
-                else get_settings()['paytm_live_merchant']),
+        "mid": (
+            get_settings()['paytm_sandbox_merchant']
+            if paytm_mode == 'test'
+            else get_settings()['paytm_live_merchant']
+        ),
         "websiteName": "eventyay",
         "orderId": order_identifier,
         "callbackUrl": "",
-        "txnAmount": {
-            "value": order.amount,
-            "currency": "INR",
-        },
-        "userInfo": {
-            "custId": order.user.id,
-        },
+        "txnAmount": {"value": order.amount, "currency": "INR",},
+        "userInfo": {"custId": order.user.id,},
     }
     checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
     # head parameters
-    paytm_params["head"] = {
-        "signature"	: checksum
-    }
+    paytm_params["head"] = {"signature": checksum}
     post_data = json.dumps(paytm_params)
     if paytm_mode == 'test':
-        url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
-            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+        url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".format(
+            get_settings()['paytm_sandbox_merchant'], order_identifier
+        )
     else:
-        url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".\
-            format(get_settings()['paytm_live_merchant'], order_identifier)
-    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"})
+        url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid={}&orderId={}".format(
+            get_settings()['paytm_live_merchant'], order_identifier
+        )
+    response = requests.post(
+        url, data=post_data, headers={"Content-type": "application/json"}
+    )
     return response.json()
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>')
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/fetch-payment-options/<string:txn_token>'
+)
 @jwt_required
 def fetch_payment_options(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     if paytm_mode == 'test':
-        url = "https://securegw-stage.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
-            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+        url = "https://securegw-stage.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".format(
+            get_settings()['paytm_sandbox_merchant'], order_identifier
+        )
     else:
-        url = "https://securegw.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".\
-            format(get_settings()['paytm_live_merchant'], order_identifier)
+        url = "https://securegw.paytm.in/theia/api/v1/fetchPaymentOptions?mid={}&orderId={}".format(
+            get_settings()['paytm_live_merchant'], order_identifier
+        )
     head = {
         "clientId": "C11",
         "version": "v1",
         "requestTimestamp": str(int(time.time())),
         "channelId": "WEB",
-        "txnToken": txn_token
+        "txnToken": txn_token,
     }
     response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head)
     return response
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>', methods=['POST'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/send_otp/<string:txn_token>',
+    methods=['POST'],
+)
 @jwt_required
 def send_otp(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     if paytm_mode == 'test':
-        url = "https://securegw-stage.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
-            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".format(
+            get_settings()['paytm_sandbox_merchant'], order_identifier
+        )
     else:
-        url = "https://securegw.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".\
-            format(get_settings()['paytm_live_merchant'], order_identifier)
+        url = "https://securegw.paytm.in/theia/api/v1/login/sendOtp?mid={}&orderId={}".format(
+            get_settings()['paytm_live_merchant'], order_identifier
+        )
 
     head = {
         "clientId": "C11",
         "version": "v1",
         "requestTimestamp": str(int(time.time())),
         "channelId": "WEB",
-        "txnToken": txn_token
+        "txnToken": txn_token,
     }
     body = {"mobileNumber": request.json['data']['phone']}
     response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
     return response
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/validate_otp/<string:txn_token>', methods=['POST'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/validate_otp/<string:txn_token>',
+    methods=['POST'],
+)
 def validate_otp(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
     if paytm_mode == 'test':
-        url = "https://securegw-stage.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
-            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+        url = "https://securegw-stage.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".format(
+            get_settings()['paytm_sandbox_merchant'], order_identifier
+        )
     else:
-        url = "https://securegw.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".\
-            format(get_settings()['paytm_live_merchant'], order_identifier)
+        url = "https://securegw.paytm.in/theia/api/v1/login/validateOtp?mid={}&orderId={}".format(
+            get_settings()['paytm_live_merchant'], order_identifier
+        )
     head = {
         "clientId": "C11",
         "version": "v1",
         "requestTimestamp": str(int(time.time())),
         "channelId": "WEB",
-        "txnToken": txn_token
+        "txnToken": txn_token,
     }
     body = {"otp": request.json['data']['otp']}
     response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
     return response
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>')
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/process_transaction/<string:txn_token>'
+)
 @jwt_required
 def process_transaction(order_identifier, txn_token):
     paytm_mode = get_settings()['paytm_mode']
-    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
-                   else get_settings()['paytm_live_merchant'])
+    merchant_id = (
+        get_settings()['paytm_sandbox_merchant']
+        if paytm_mode == 'test'
+        else get_settings()['paytm_live_merchant']
+    )
 
     if paytm_mode == 'test':
-        url = "https://securegw-stage.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
-            format(get_settings()['paytm_sandbox_merchant'], order_identifier)
+        url = "https://securegw-stage.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".format(
+            get_settings()['paytm_sandbox_merchant'], order_identifier
+        )
     else:
-        url = "https://securegw.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".\
-            format(get_settings()['paytm_live_merchant'], order_identifier)
+        url = "https://securegw.paytm.in/theia/api/v1/processTransaction?mid={}&orderId={}".format(
+            get_settings()['paytm_live_merchant'], order_identifier
+        )
 
     head = {
         "version": "v1",
         "requestTimestamp": str(int(time.time())),
         "channelId": "WEB",
-        "txnToken": txn_token
+        "txnToken": txn_token,
     }
 
     body = {
         "requestType": "NATIVE",
         "mid": merchant_id,
         "orderId": order_identifier,
-        "paymentMode": "BALANCE"
+        "paymentMode": "BALANCE",
     }
 
     response = PaytmPaymentsManager.hit_paytm_endpoint(url=url, head=head, body=body)
     return response
 
 
-@order_misc_routes.route('/orders/<string:order_identifier>/paytm/transaction-status', methods=['GET'])
+@order_misc_routes.route(
+    '/orders/<string:order_identifier>/paytm/transaction-status', methods=['GET']
+)
 def get_transaction_status(order_identifier):
     paytm_params = dict()
     paytm_checksum_params = dict()
     url = ""
     paytm_mode = get_settings()['paytm_mode']
-    merchant_id = (get_settings()['paytm_sandbox_merchant'] if paytm_mode == 'test'
-                   else get_settings()['paytm_live_merchant'])
-    paytm_checksum_params["body"] = {
-        "mid": merchant_id,
-        "orderId": order_identifier
-    }
+    merchant_id = (
+        get_settings()['paytm_sandbox_merchant']
+        if paytm_mode == 'test'
+        else get_settings()['paytm_live_merchant']
+    )
+    paytm_checksum_params["body"] = {"mid": merchant_id, "orderId": order_identifier}
     checksum = PaytmPaymentsManager.generate_checksum(paytm_checksum_params)
 
     paytm_params["MID"] = merchant_id
@@ -807,5 +1053,7 @@ def get_transaction_status(order_identifier):
         url = "https://securegw-stage.paytm.in/order/status"
     else:
         url = "https://securegw.paytm.in/order/status"
-    response = requests.post(url, data=post_data, headers={"Content-type": "application/json"}).json()
+    response = requests.post(
+        url, data=post_data, headers={"Content-type": "application/json"}
+    ).json()
     return response
