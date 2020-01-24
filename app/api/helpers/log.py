@@ -1,5 +1,5 @@
 from app.api.helpers.db import save_to_db
-from app.models.activity import Activity, ACTIVITIES
+from app.models.activity import ACTIVITIES, Activity
 
 
 def record_activity(template, login_user=None, **kwargs):

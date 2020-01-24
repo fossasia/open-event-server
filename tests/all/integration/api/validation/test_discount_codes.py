@@ -1,10 +1,10 @@
 import unittest
 
-from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.ticket import TicketFactory
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestDiscountCodeValidation(OpenEventTestCase):

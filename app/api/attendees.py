@@ -2,10 +2,10 @@ import datetime
 
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy import or_, and_
+from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import get_count, safe_query
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -21,7 +21,6 @@ from app.models.order import Order
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
-
 from app.settings import get_settings
 
 

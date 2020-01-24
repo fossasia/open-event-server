@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.session_type import db, SessionType
+from app.models.session_type import SessionType, db
 
 
 class SessionTypeFactory(factory.alchemy.SQLAlchemyModelFactory):

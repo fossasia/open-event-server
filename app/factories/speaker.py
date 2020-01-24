@@ -4,7 +4,7 @@ import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.factories.session import SessionFactory
 from app.factories.user import UserFactory
-from app.models.speaker import db, Speaker
+from app.models.speaker import Speaker, db
 
 
 class SpeakerFactoryBase(factory.alchemy.SQLAlchemyModelFactory):

@@ -4,18 +4,18 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count, save_to_db
+from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
-from app.api.helpers.utilities import require_relationship
 from app.api.helpers.speaker import can_edit_after_cfs_ends
+from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
 from app.models import db
 from app.models.event import Event
 from app.models.session import Session
-from app.models.speaker import Speaker
 from app.models.session_speaker_link import SessionsSpeakersLink
+from app.models.speaker import Speaker
 from app.models.user import User
 
 

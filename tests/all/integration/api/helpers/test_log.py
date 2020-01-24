@@ -1,10 +1,10 @@
-from tests.all.integration.utils import OpenEventTestCase
+import unittest
+
 from app.api.helpers.log import record_activity
+from app.models import db
 from app.models.activity import Activity
 from tests.all.integration.auth_helper import create_user
-from app.models import db
-
-import unittest
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestLogging(OpenEventTestCase):

@@ -1,6 +1,13 @@
 from unittest import TestCase
-from app.api.helpers.errors import ErrorResponse, ForbiddenError, \
-    NotFoundError, ServerError, UnprocessableEntityError, BadRequestError
+
+from app.api.helpers.errors import (
+    BadRequestError,
+    ErrorResponse,
+    ForbiddenError,
+    NotFoundError,
+    ServerError,
+    UnprocessableEntityError,
+)
 
 
 class TestErrorDetails(TestCase):

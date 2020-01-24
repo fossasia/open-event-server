@@ -1,8 +1,12 @@
-from flask import jsonify, url_for, current_app, Blueprint, abort
-from flask_jwt_extended import jwt_required, current_user
+from flask import Blueprint, abort, current_app, jsonify, url_for
+from flask_jwt_extended import current_user, jwt_required
 
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.import_helpers import get_file_from_request, import_event_json, create_import_job
+from app.api.helpers.import_helpers import (
+    create_import_job,
+    get_file_from_request,
+    import_event_json,
+)
 from app.api.helpers.utilities import TASK_RESULTS
 
 import_routes = Blueprint('imports', __name__, url_prefix='/v1')

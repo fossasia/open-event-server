@@ -1,17 +1,24 @@
 from datetime import datetime
 
-from app.api.helpers.db import save_to_db, get_count
+from flask_jwt_extended import current_user
+
+from app.api.helpers.db import get_count, save_to_db
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer
-from app.api.helpers.order import delete_related_attendees_for_order, create_pdf_tickets_for_holder
-from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
+from app.api.helpers.notification import (
+    send_notif_ticket_purchase_organizer,
+    send_notif_to_attendees,
+)
+from app.api.helpers.order import (
+    create_pdf_tickets_for_holder,
+    delete_related_attendees_for_order,
+)
+from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
+from app.models.order import Order
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
-from app.models.order import Order
-from flask_jwt_extended import current_user
 
 
 class TicketingManager:

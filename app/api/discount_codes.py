@@ -6,11 +6,20 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity, MethodNotAllowed
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    MethodNotAllowed,
+    UnprocessableEntity,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.discount_codes import DiscountCodeSchemaEvent, DiscountCodeSchemaPublic, DiscountCodeSchemaTicket
+from app.api.schema.discount_codes import (
+    DiscountCodeSchemaEvent,
+    DiscountCodeSchemaPublic,
+    DiscountCodeSchemaTicket,
+)
 from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event

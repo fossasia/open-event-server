@@ -1,15 +1,22 @@
+from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from flask import request
-from app.api.helpers.db import safe_query, get_count, save_to_db
-from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
+from app.api.helpers.db import get_count, safe_query, save_to_db
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    UnprocessableEntity,
+)
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.stripe_authorization import StripeAuthorizationSchema, StripeAuthorizationSchemaPublic
+from app.api.schema.stripe_authorization import (
+    StripeAuthorizationSchema,
+    StripeAuthorizationSchemaPublic,
+)
 from app.models import db
 from app.models.event import Event
 from app.models.stripe_authorization import StripeAuthorization

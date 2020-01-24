@@ -1,10 +1,10 @@
 import re
 import unicodedata
+from itertools import zip_longest
 
 import bleach
 import diff_match_patch
-from bleach.callbacks import target_blank, nofollow
-from itertools import zip_longest
+from bleach.callbacks import nofollow, target_blank
 
 
 def remove_line_breaks(target_string):

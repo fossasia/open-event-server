@@ -1,7 +1,12 @@
 import unittest
-
 from unittest import TestCase
-from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed
+
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    MethodNotAllowed,
+    UnprocessableEntity,
+)
 
 
 class TestExceptionsHelperValidation(TestCase):

@@ -1,5 +1,6 @@
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 

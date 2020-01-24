@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.image_size import db, ImageSizes
+from app.models.image_size import ImageSizes, db
 
 
 class EventImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):

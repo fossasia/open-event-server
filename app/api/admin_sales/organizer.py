@@ -1,18 +1,17 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
-from flask_rest_jsonapi import ResourceList
 
-from app.api.helpers.utilities import dasherize
+from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.order import Order, OrderTicket
 from app.models.role import Role
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
-
-from app.api.admin_sales.utils import summary
 
 
 class AdminSalesByOrganizersSchema(Schema):

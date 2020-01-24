@@ -1,7 +1,7 @@
 import argparse
 import logging
-import threading
 import sys
+import threading
 from os.path import join
 
 import yaml

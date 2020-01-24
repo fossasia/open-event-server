@@ -1,9 +1,10 @@
-from flask import Blueprint
-from flask import make_response, request, jsonify, abort
-from flask_jwt_extended import jwt_required
-from app.api.helpers.files import uploaded_image, uploaded_file
-from app.api.helpers.storage import UPLOAD_PATHS, upload_local, upload
 import uuid
+
+from flask import Blueprint, abort, jsonify, make_response, request
+from flask_jwt_extended import jwt_required
+
+from app.api.helpers.files import uploaded_file, uploaded_image
+from app.api.helpers.storage import UPLOAD_PATHS, upload, upload_local
 
 upload_routes = Blueprint('upload', __name__, url_prefix='/v1/upload')
 

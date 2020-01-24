@@ -1,16 +1,15 @@
 from flask import Blueprint
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, jwt_required
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
-
 from app.api.auth import return_file
+from app.api.custom.orders import order_blueprint
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.order import create_pdf_tickets_for_holder
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
-from app.models.order import Order
 from app.models.event_invoice import EventInvoice
-from app.api.custom.orders import order_blueprint
+from app.models.order import Order
 
 event_blueprint = Blueprint('event_blueprint', __name__, url_prefix='/v1/events')
 

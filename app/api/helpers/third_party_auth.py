@@ -3,8 +3,8 @@ import urllib
 import oauth2
 from flask import request
 
-from app.settings import get_settings
 from app.api.helpers.files import make_frontend_url
+from app.settings import get_settings
 
 
 class GoogleOAuth:

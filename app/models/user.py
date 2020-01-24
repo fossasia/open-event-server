@@ -5,16 +5,16 @@ import humanize
 import pytz
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
-from sqlalchemy import event, desc
+from sqlalchemy import desc, event
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql import func
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.custom_system_role import UserSystemRole, CustomSysRole
-from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.custom_system_role import CustomSysRole, UserSystemRole
+from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
 from app.models.permission import Permission

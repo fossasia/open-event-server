@@ -8,11 +8,27 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
-from app.api.helpers.utilities import string_empty, get_serializer, str_generator
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
-    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
-    TEST_MAIL
+from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.models.mail import (
+    AFTER_EVENT,
+    EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED,
+    EVENT_IMPORT_FAIL,
+    EVENT_IMPORTED,
+    EVENT_ROLE,
+    MONTHLY_PAYMENT_EMAIL,
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+    NEW_SESSION,
+    SESSION_ACCEPT_REJECT,
+    TEST_MAIL,
+    TICKET_CANCELLED,
+    TICKET_PURCHASED,
+    TICKET_PURCHASED_ATTENDEE,
+    USER_CHANGE_EMAIL,
+    USER_CONFIRM,
+    USER_EVENT_ROLE,
+    Mail,
+)
 from app.models.user import User
 from app.settings import get_settings
 

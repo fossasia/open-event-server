@@ -1,6 +1,11 @@
-from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeDetail, AccessCodeRelationshipRequired, \
-    AccessCodeRelationshipOptional
-from app.api.activities import ActivityList, ActivityDetail
+from app.api.access_codes import (
+    AccessCodeDetail,
+    AccessCodeList,
+    AccessCodeListPost,
+    AccessCodeRelationshipOptional,
+    AccessCodeRelationshipRequired,
+)
+from app.api.activities import ActivityDetail, ActivityList
 from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.events import AdminSalesByEventsList
 from app.api.admin_sales.fees import AdminSalesFeesList
@@ -12,79 +17,225 @@ from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
 from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
 from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
-from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
-    AttendeeRelationshipRequired, AttendeeListPost
+from app.api.attendees import (
+    AttendeeDetail,
+    AttendeeList,
+    AttendeeListPost,
+    AttendeeRelationshipOptional,
+    AttendeeRelationshipRequired,
+)
 from app.api.bootstrap import api
-from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
-from app.api.custom_form_options import CustomFormOptionList, CustomFormOptionDetail, CustomFormOptionRelationship
-from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
-from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail, CustomSystemRoleRelationship
-from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
-    DiscountCodeRelationshipRequired, DiscountCodeListPost
-from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail, \
-    EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
-from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
+from app.api.custom_form_options import (
+    CustomFormOptionDetail,
+    CustomFormOptionList,
+    CustomFormOptionRelationship,
+)
+from app.api.custom_forms import (
+    CustomFormDetail,
+    CustomFormList,
+    CustomFormListPost,
+    CustomFormRelationshipRequired,
+)
+from app.api.custom_placeholders import (
+    CustomPlaceholderDetail,
+    CustomPlaceholderList,
+    CustomPlaceholderRelationship,
+)
+from app.api.custom_system_roles import (
+    CustomSystemRoleDetail,
+    CustomSystemRoleList,
+    CustomSystemRoleRelationship,
+)
+from app.api.discount_codes import (
+    DiscountCodeDetail,
+    DiscountCodeList,
+    DiscountCodeListPost,
+    DiscountCodeRelationshipOptional,
+    DiscountCodeRelationshipRequired,
+)
+from app.api.email_notifications import (
+    EmailNotificationDetail,
+    EmailNotificationList,
+    EmailNotificationListAdmin,
+    EmailNotificationRelationshipOptional,
+    EmailNotificationRelationshipRequired,
+)
+from app.api.event_copyright import (
+    EventCopyrightDetail,
+    EventCopyrightListPost,
+    EventCopyrightRelationshipRequired,
+)
 from app.api.event_image_sizes import EventImageSizeDetail
-from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
-    EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
+from app.api.event_invoices import (
+    EventInvoiceDetail,
+    EventInvoiceList,
+    EventInvoiceRelationshipOptional,
+    EventInvoiceRelationshipRequired,
+)
 from app.api.event_locations import EventLocationList
 from app.api.event_statistics import EventStatisticsGeneralDetail
-from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail, \
-    EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
-from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
-from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
-from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
-from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
-    EventsRolePermissionRelationship
-from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
-    FaqTypeRelationshipRequired
-from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
-from app.api.feedbacks import FeedbackListPost, FeedbackList, FeedbackDetail, \
-    FeedbackRelationship
+from app.api.event_sub_topics import (
+    EventSubTopicDetail,
+    EventSubTopicList,
+    EventSubTopicListPost,
+    EventSubTopicRelationshipOptional,
+    EventSubTopicRelationshipRequired,
+)
+from app.api.event_topics import EventTopicDetail, EventTopicList, EventTopicRelationship
+from app.api.event_types import EventTypeDetail, EventTypeList, EventTypeRelationship
+from app.api.events import EventCopyResource, EventDetail, EventList, EventRelationship
+from app.api.events_role_permission import (
+    EventsRolePermissionDetail,
+    EventsRolePermissionList,
+    EventsRolePermissionRelationship,
+)
+from app.api.faq_types import (
+    FaqTypeDetail,
+    FaqTypeList,
+    FaqTypeListPost,
+    FaqTypeRelationshipOptional,
+    FaqTypeRelationshipRequired,
+)
+from app.api.faqs import (
+    FaqDetail,
+    FaqList,
+    FaqListPost,
+    FaqRelationshipOptional,
+    FaqRelationshipRequired,
+)
+from app.api.feedbacks import (
+    FeedbackDetail,
+    FeedbackList,
+    FeedbackListPost,
+    FeedbackRelationship,
+)
 from app.api.full_text_search.events import EventSearchResultList
-from app.api.import_jobs import ImportJobList, ImportJobDetail
-from app.api.mails import MailList, MailDetail
-from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
-from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
-    MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
+from app.api.import_jobs import ImportJobDetail, ImportJobList
+from app.api.mails import MailDetail, MailList
+from app.api.message_settings import MessageSettingsDetail, MessageSettingsList
+from app.api.microlocations import (
+    MicrolocationDetail,
+    MicrolocationList,
+    MicrolocationListPost,
+    MicrolocationRelationshipOptional,
+    MicrolocationRelationshipRequired,
+)
 from app.api.modules import ModuleDetail
-from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, \
-    NotificationRelationship, NotificationActionDetail, NotificationActionRelationship, NotificationActionList
+from app.api.notifications import (
+    NotificationActionDetail,
+    NotificationActionList,
+    NotificationActionRelationship,
+    NotificationDetail,
+    NotificationList,
+    NotificationListAdmin,
+    NotificationRelationship,
+)
 from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
-from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
-from app.api.pages import PageList, PageDetail
-from app.api.panel_permissions import PanelPermissionList, PanelPermissionDetail, \
-    PanelPermissionRelationship
-from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
-from app.api.roles import RoleList, RoleDetail
-from app.api.service import ServiceList, ServiceDetail
-from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail, \
-    SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
-from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
-    SessionRelationshipOptional
+from app.api.orders import (
+    ChargeList,
+    OrderDetail,
+    OrderRelationship,
+    OrdersList,
+    OrdersListPost,
+)
+from app.api.pages import PageDetail, PageList
+from app.api.panel_permissions import (
+    PanelPermissionDetail,
+    PanelPermissionList,
+    PanelPermissionRelationship,
+)
+from app.api.role_invites import (
+    RoleInviteDetail,
+    RoleInviteList,
+    RoleInviteListPost,
+    RoleInviteRelationship,
+)
+from app.api.roles import RoleDetail, RoleList
+from app.api.service import ServiceDetail, ServiceList
+from app.api.session_types import (
+    SessionTypeDetail,
+    SessionTypeList,
+    SessionTypeListPost,
+    SessionTypeRelationshipOptional,
+    SessionTypeRelationshipRequired,
+)
+from app.api.sessions import (
+    SessionDetail,
+    SessionList,
+    SessionListPost,
+    SessionRelationshipOptional,
+    SessionRelationshipRequired,
+)
 from app.api.settings import SettingDetail
-from app.api.social_links import SocialLinkList, SocialLinkListPost, SocialLinkDetail, SocialLinkRelationship
+from app.api.social_links import (
+    SocialLinkDetail,
+    SocialLinkList,
+    SocialLinkListPost,
+    SocialLinkRelationship,
+)
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
-from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired, \
-    SpeakerRelationshipOptional
-from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
-from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
-from app.api.stripe_authorization import StripeAuthorizationDetail, StripeAuthorizationRelationship, \
-    StripeAuthorizationListPost
-from app.api.tax import TaxList, TaxDetail, TaxRelationship
-from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
-from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetail, TicketTagRelationshipOptional, \
-    TicketTagRelationshipRequired
-from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired, \
-    TicketRelationshipOptional
-from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
-from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmailList, UserEmailDetail, \
-    UserEmailRelationship
-from app.api.user_favourite_events import UserFavouriteEventListPost, UserFavouriteEventList, \
-    UserFavouriteEventDetail, UserFavouriteEventRelationship
-from app.api.user_permission import UserPermissionList, UserPermissionDetail
-from app.api.users import UserList, UserDetail, UserRelationship
+from app.api.speakers import (
+    SpeakerDetail,
+    SpeakerList,
+    SpeakerListPost,
+    SpeakerRelationshipOptional,
+    SpeakerRelationshipRequired,
+)
+from app.api.speakers_calls import (
+    SpeakersCallDetail,
+    SpeakersCallList,
+    SpeakersCallRelationship,
+)
+from app.api.sponsors import (
+    SponsorDetail,
+    SponsorList,
+    SponsorListPost,
+    SponsorRelationship,
+)
+from app.api.stripe_authorization import (
+    StripeAuthorizationDetail,
+    StripeAuthorizationListPost,
+    StripeAuthorizationRelationship,
+)
+from app.api.tax import TaxDetail, TaxList, TaxRelationship
+from app.api.ticket_fees import TicketFeeDetail, TicketFeeList
+from app.api.ticket_tags import (
+    TicketTagDetail,
+    TicketTagList,
+    TicketTagListPost,
+    TicketTagRelationshipOptional,
+    TicketTagRelationshipRequired,
+)
+from app.api.tickets import (
+    TicketDetail,
+    TicketList,
+    TicketListPost,
+    TicketRelationshipOptional,
+    TicketRelationshipRequired,
+)
+from app.api.tracks import (
+    TrackDetail,
+    TrackList,
+    TrackListPost,
+    TrackRelationshipOptional,
+    TrackRelationshipRequired,
+)
+from app.api.user_emails import (
+    UserEmailDetail,
+    UserEmailList,
+    UserEmailListAdmin,
+    UserEmailListPost,
+    UserEmailRelationship,
+)
+from app.api.user_favourite_events import (
+    UserFavouriteEventDetail,
+    UserFavouriteEventList,
+    UserFavouriteEventListPost,
+    UserFavouriteEventRelationship,
+)
+from app.api.user_permission import UserPermissionDetail, UserPermissionList
+from app.api.users import UserDetail, UserList, UserRelationship
 
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')

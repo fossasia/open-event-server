@@ -4,27 +4,32 @@ import pytz
 from dateutil.relativedelta import relativedelta
 from flask import render_template
 from flask_celeryext import RequestContextTask
-from app.instance import celery
 
 from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
-    send_followup_email_for_monthly_fee_payment
-from app.api.helpers.notification import send_notif_monthly_fee_payment, send_followup_notif_monthly_fee_payment, \
-    send_notif_after_event
-from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
-from app.api.helpers.utilities import monthdelta
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import (
+    send_email_after_event,
+    send_email_for_monthly_fee_payment,
+    send_followup_email_for_monthly_fee_payment,
+)
+from app.api.helpers.notification import (
+    send_followup_notif_monthly_fee_payment,
+    send_notif_after_event,
+    send_notif_monthly_fee_payment,
+)
+from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.storage import UPLOAD_PATHS
+from app.api.helpers.utilities import monthdelta
+from app.instance import celery
 from app.models import db
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.order import Order
-from app.models.speaker import Speaker
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees, get_fee
 from app.models.ticket_holder import TicketHolder
-
 from app.settings import get_settings
 
 

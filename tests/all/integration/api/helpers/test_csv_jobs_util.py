@@ -1,14 +1,14 @@
-from tests.all.integration.auth_helper import create_user
-from tests.all.integration.utils import OpenEventTestCase
+import unittest
+
+import app.factories.common as common
 from app.api.helpers.csv_jobs_util import *
 from app.factories.attendee import AttendeeFactory
 from app.factories.order import OrderFactory
 from app.factories.session import SessionFactory
 from app.factories.speaker import SpeakerFactory
 from app.models import db
-import app.factories.common as common
-
-import unittest
+from tests.all.integration.auth_helper import create_user
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestExportCSV(OpenEventTestCase):

@@ -1,8 +1,8 @@
-from app.models.speakers_call import SpeakersCall
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.exceptions import ForbiddenException
-
 from datetime import datetime
+
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
+from app.models.speakers_call import SpeakersCall
 
 
 def can_edit_after_cfs_ends(event_id):

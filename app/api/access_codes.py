@@ -4,8 +4,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    UnprocessableEntity,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -13,9 +16,9 @@ from app.api.helpers.utilities import require_relationship
 from app.api.schema.access_codes import AccessCodeSchema
 from app.models import db
 from app.models.access_code import AccessCode
+from app.models.event import Event
 from app.models.ticket import Ticket
 from app.models.user import User
-from app.models.event import Event
 
 
 class AccessCodeListPost(ResourceList):

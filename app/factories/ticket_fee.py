@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.ticket_fee import db, TicketFees
+from app.models.ticket_fee import TicketFees, db
 
 
 class TicketFeesFactory(factory.alchemy.SQLAlchemyModelFactory):

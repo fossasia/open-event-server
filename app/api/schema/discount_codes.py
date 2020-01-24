@@ -1,5 +1,5 @@
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from marshmallow import validates_schema, validate
+from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound

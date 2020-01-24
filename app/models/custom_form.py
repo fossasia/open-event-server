@@ -1,4 +1,5 @@
 import json
+
 from sqlalchemy.schema import UniqueConstraint
 
 from app.models import db

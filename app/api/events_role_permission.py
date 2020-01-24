@@ -1,5 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, \
-    ResourceRelationship
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
 from app.api.schema.event_role_permissions import EventsRolePermissionSchema

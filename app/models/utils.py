@@ -2,7 +2,7 @@ import os
 import warnings
 from datetime import datetime, timedelta
 
-from sqlalchemy import types, Table, event
+from sqlalchemy import Table, event, types
 
 
 # https://docs.sqlalchemy.org/en/13/faq/connections.html#how-do-i-use-engines-connections-sessions-with-python-multiprocessing-or-os-fork

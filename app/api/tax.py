@@ -5,10 +5,14 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import ForbiddenException, ConflictException, MethodNotAllowed
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    MethodNotAllowed,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.tax import TaxSchemaPublic, TaxSchema
+from app.api.schema.tax import TaxSchema, TaxSchemaPublic
 from app.models import db
 from app.models.event import Event
 from app.models.tax import Tax

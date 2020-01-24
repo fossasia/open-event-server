@@ -1,12 +1,11 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, \
-    ResourceRelationship
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query
 from app.api.schema.custom_system_roles import CustomSystemRoleSchema
 from app.models import db
 from app.models.custom_system_role import CustomSysRole
 from app.models.panel_permission import PanelPermission
-from app.api.helpers.db import safe_query
 
 
 class CustomSystemRoleList(ResourceList):

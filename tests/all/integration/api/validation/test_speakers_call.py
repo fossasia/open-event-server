@@ -1,11 +1,12 @@
 import unittest
 from datetime import datetime
+
 from pytz import timezone
 
-from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.speakers_calls import SpeakersCallSchema
 from app.factories.speakers_call import SpeakersCallFactory
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestSpeakersCallValidation(OpenEventTestCase):

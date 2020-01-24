@@ -3,9 +3,10 @@ from errno import errorcode
 from celery.task.control import inspect
 from flask import current_app
 from redis.exceptions import ConnectionError
+from sentry_sdk import capture_exception, capture_message
 
 from app.models import db
-from sentry_sdk import capture_exception, capture_message
+
 
 def health_check_celery():
     """

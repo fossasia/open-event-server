@@ -1,7 +1,8 @@
 import base64
-from io import BytesIO
 from dataclasses import dataclass
 from datetime import datetime
+from io import BytesIO
+
 import qrcode
 
 from app.models import db

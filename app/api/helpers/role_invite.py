@@ -1,4 +1,5 @@
 import logging
+
 from app.models import db
 from app.models.role_invite import RoleInvite
 

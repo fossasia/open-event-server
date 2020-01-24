@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.storage import upload_local
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestStorage(OpenEventTestCase):

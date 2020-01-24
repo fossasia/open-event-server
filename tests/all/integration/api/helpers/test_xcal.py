@@ -1,11 +1,10 @@
 import unittest
-
-from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.xcal import XCalExporter
 from xml.etree.ElementTree import fromstring, tostring
 
-from app.factories.event import EventFactoryBasic
 from app.api.helpers.db import save_to_db
+from app.api.helpers.xcal import XCalExporter
+from app.factories.event import EventFactoryBasic
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestXCalExport(OpenEventTestCase):

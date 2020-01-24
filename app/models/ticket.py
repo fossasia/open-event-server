@@ -1,6 +1,6 @@
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.order import OrderTicket, Order
+from app.models.order import Order, OrderTicket
 
 access_codes_tickets = db.Table('access_codes_tickets',
                                 db.Column('access_code_id', db.Integer, db.ForeignKey(

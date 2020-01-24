@@ -5,10 +5,10 @@ from sqlalchemy.orm import make_transient
 
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
+from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event, get_new_event_identifier
-from app.models import db
 from app.models.microlocation import Microlocation
 from app.models.social_link import SocialLink
 from app.models.speakers_call import SpeakersCall

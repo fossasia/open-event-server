@@ -1,18 +1,16 @@
+from flask import url_for
 from pentabarf.Conference import Conference
 from pentabarf.Day import Day
 from pentabarf.Event import Event
-from flask import url_for
 from pentabarf.Person import Person
 from pentabarf.Room import Room
-from sqlalchemy import Date
-from sqlalchemy import asc
-from sqlalchemy import func
+from sqlalchemy import Date, asc, func
 
-from app.models.session import Session
-from app.settings import get_settings
+from app.models import db
 from app.models.event import Event as EventModel
 from app.models.microlocation import Microlocation
-from app.models import db
+from app.models.session import Session
+from app.settings import get_settings
 
 
 def format_timedelta(td):

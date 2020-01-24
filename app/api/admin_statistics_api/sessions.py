@@ -1,13 +1,13 @@
 from flask_rest_jsonapi import ResourceDetail
-from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 
-from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
-from app.models import db
-from app.models.session import Session
 from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.api.helpers.db import get_count
+from app.api.helpers.utilities import dasherize
+from app.models import db
+from app.models.session import Session
 
 
 class AdminStatisticsSessionSchema(Schema):

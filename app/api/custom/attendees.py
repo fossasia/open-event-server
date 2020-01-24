@@ -1,18 +1,13 @@
-from flask import Blueprint, request, jsonify, abort, make_response
+from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.permissions import jwt_required
-from app.api.helpers.errors import (
-    UnprocessableEntityError,
-    NotFoundError,
-    ForbiddenError,
-)
 from app.api.helpers.permission_manager import has_access
-
-from app.models.order import Order
+from app.api.helpers.permissions import jwt_required
 from app.models import db
+from app.models.order import Order
 
 attendee_blueprint = Blueprint('attendee_blueprint', __name__, url_prefix='/v1')
 

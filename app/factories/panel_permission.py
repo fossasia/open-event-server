@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.panel_permission import db, PanelPermission
+from app.models.panel_permission import PanelPermission, db
 
 
 class PanelPermissionFactory(factory.alchemy.SQLAlchemyModelFactory):

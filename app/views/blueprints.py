@@ -1,9 +1,10 @@
 import flask_login as login
 import requests
-from flask import url_for, redirect, Blueprint, request, make_response
-from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
+from flask import Blueprint, make_response, redirect, request, url_for
+from flask_admin import Admin, AdminIndexView, expose
+from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
-from wtforms import form, fields, validators
+from wtforms import fields, form, validators
 
 from app.models import db
 from app.models.user import User

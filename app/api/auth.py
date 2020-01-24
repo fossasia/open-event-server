@@ -6,34 +6,45 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import request, jsonify, make_response, Blueprint, send_file
+from flask import Blueprint, jsonify, make_response, request, send_file
 from flask_jwt_extended import (
-    jwt_required, jwt_refresh_token_required,
-    fresh_jwt_required, unset_jwt_cookies,
-    current_user, create_access_token,
-    create_refresh_token, set_refresh_cookies,
-    get_jwt_identity)
+    create_access_token,
+    create_refresh_token,
+    current_user,
+    fresh_jwt_required,
+    get_jwt_identity,
+    jwt_refresh_token_required,
+    jwt_required,
+    set_refresh_cookies,
+    unset_jwt_cookies,
+)
 from healthcheck import EnvironmentDump
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.auth import AuthManager, blacklist_token
-from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
+from app.api.helpers.db import get_count, save_to_db
+from app.api.helpers.errors import (
+    BadRequestError,
+    NotFoundError,
+    UnprocessableEntityError,
+)
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_with_action, \
-    send_email_confirmation
+from app.api.helpers.jwt import jwt_authenticate
+from app.api.helpers.mail import send_email_confirmation, send_email_with_action
 from app.api.helpers.notification import send_notification_with_action
-from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
+from app.api.helpers.third_party_auth import (
+    FbOAuth,
+    GoogleOAuth,
+    InstagramOAuth,
+    TwitterOAuth,
+)
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-    PASSWORD_RESET_AND_VERIFY
+from app.models.mail import PASSWORD_CHANGE, PASSWORD_RESET, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 from app.settings import get_settings
-
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')

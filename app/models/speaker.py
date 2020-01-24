@@ -1,6 +1,6 @@
-from app.models.base import SoftDeletionModel
-from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
+from app.models.base import SoftDeletionModel
+from app.models.helpers.versioning import clean_html, clean_up_string
 
 
 class Speaker(SoftDeletionModel):

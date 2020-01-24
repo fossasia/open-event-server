@@ -1,19 +1,23 @@
 import logging
-from datetime import timedelta, datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from flask import render_template
 
-from app.settings import get_settings
-from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count
-from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
+from app.api.helpers.db import (
+    get_count,
+    safe_query_without_soft_deleted_entries,
+    save_to_db,
+)
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
+from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
-from app.models.order import OrderTicket
+from app.settings import get_settings
 
 
 def delete_related_attendees_for_order(order):

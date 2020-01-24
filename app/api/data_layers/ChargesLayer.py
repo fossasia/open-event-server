@@ -1,7 +1,7 @@
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
+from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.ticketing import TicketingManager
 from app.models.order import Order
 

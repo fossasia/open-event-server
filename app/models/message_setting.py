@@ -1,11 +1,11 @@
-from app.models import db
-from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 
 import pytz
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.system_notifications import NOTIFS
+from app.models import db
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'

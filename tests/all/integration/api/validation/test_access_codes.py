@@ -1,8 +1,9 @@
 import unittest
 
-from tests.all.integration.utils import OpenEventTestCase
 from app.api.schema.access_codes import AccessCodeSchema
 from app.factories.access_code import AccessCodeFactory
+from tests.all.integration.utils import OpenEventTestCase
+
 
 class TestAccessCodeValidation(OpenEventTestCase):
 

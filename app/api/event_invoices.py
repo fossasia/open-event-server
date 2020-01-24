@@ -1,24 +1,21 @@
 import datetime
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+
 from flask import jsonify, request
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.permissions import is_admin
+from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.errors import BadRequestError
+from app.api.helpers.payment import PayPalPaymentsManager
+from app.api.helpers.permissions import is_admin, jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
+from app.api.orders import order_misc_routes
 from app.api.schema.event_invoices import EventInvoiceSchema
 from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.user import User
-from app.api.helpers.payment import PayPalPaymentsManager
-from app.api.helpers.errors import BadRequestError
-from app.api.helpers.db import save_to_db
-
-
-from app.api.helpers.permissions import jwt_required
-from app.api.orders import order_misc_routes
 
 
 class EventInvoiceList(ResourceList):

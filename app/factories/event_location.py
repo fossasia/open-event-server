@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.event_location import db, EventLocation
+from app.models.event_location import EventLocation, db
 
 
 class EventLocationFactory(factory.alchemy.SQLAlchemyModelFactory):

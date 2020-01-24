@@ -4,7 +4,7 @@ import app.factories.common as common
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
-from app.models.event_invoice import db, EventInvoice
+from app.models.event_invoice import EventInvoice, db
 
 
 class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):

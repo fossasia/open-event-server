@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.page import db, Page
+from app.models.page import Page, db
 
 
 class PageFactory(factory.alchemy.SQLAlchemyModelFactory):

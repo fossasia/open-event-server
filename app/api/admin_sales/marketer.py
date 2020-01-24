@@ -1,13 +1,12 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from flask_rest_jsonapi import ResourceList
 
+from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
 from app.models import db
 from app.models.order import Order, OrderTicket
 from app.models.user import User
-
-from app.api.admin_sales.utils import summary
 
 
 class AdminSalesByMarketerSchema(Schema):

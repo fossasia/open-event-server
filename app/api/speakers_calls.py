@@ -3,7 +3,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import ConflictException, ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers_calls import SpeakersCallSchema

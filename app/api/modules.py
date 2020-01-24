@@ -1,10 +1,11 @@
 from flask_rest_jsonapi import ResourceDetail
 
 from app.api.bootstrap import api
+from app.api.helpers.exceptions import ConflictException
 from app.api.schema.modules import ModuleSchema
 from app.models import db
 from app.models.module import Module
-from app.api.helpers.exceptions import ConflictException
+
 
 class ModuleDetail(ResourceDetail):
     """

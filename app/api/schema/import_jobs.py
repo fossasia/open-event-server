@@ -1,7 +1,7 @@
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
-from marshmallow_jsonapi.flask import Schema
 
 
 class ImportJobSchema(Schema):

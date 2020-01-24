@@ -4,13 +4,12 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import func
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import get_count, safe_query
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
-from app.models.ticket import Ticket
 from app.models.order import Order, OrderTicket
+from app.models.ticket import Ticket
 
 
 class OrderStatisticsEventSchema(Schema):
