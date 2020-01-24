@@ -1,7 +1,8 @@
 import icalendar
+from flask import url_for
 from icalendar import Calendar, vCalAddress, vText
 from sqlalchemy import asc
-from flask import url_for
+
 from app.models.event import Event as EventModel
 from app.models.session import Session
 

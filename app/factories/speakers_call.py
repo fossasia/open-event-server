@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.speakers_call import db, SpeakersCall
+from app.models.speakers_call import SpeakersCall, db
 
 
 class SpeakersCallFactory(factory.alchemy.SQLAlchemyModelFactory):

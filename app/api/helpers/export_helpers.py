@@ -12,8 +12,8 @@ from flask_jwt_extended import current_user
 from flask_login import current_user as current_logged_user
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
-from app.api.helpers.utilities import is_downloadable, get_filename_from_cd
+from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
+from app.api.helpers.utilities import get_filename_from_cd, is_downloadable
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.event import Event

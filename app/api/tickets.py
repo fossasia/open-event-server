@@ -1,11 +1,16 @@
-from flask import request, current_app
+from flask import current_app, request
+from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_jwt_extended import current_user, verify_jwt_in_request
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.exceptions import (
+    ConflictException,
+    MethodNotAllowed,
+    UnprocessableEntity,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -13,12 +18,11 @@ from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
+from app.models.event import Event
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
-from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ConflictException, MethodNotAllowed, UnprocessableEntity
-from app.api.helpers.db import get_count
+
 
 class TicketListPost(ResourceList):
     """

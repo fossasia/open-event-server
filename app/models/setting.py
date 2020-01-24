@@ -1,5 +1,6 @@
-from app.models import db
 from sqlalchemy.ext.hybrid import hybrid_property
+
+from app.models import db
 
 
 class Environment:

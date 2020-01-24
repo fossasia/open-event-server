@@ -1,6 +1,6 @@
-from tests.all.integration.utils import OpenEventTestCase
 from app.views.healthcheck import check_migrations
 from populate_db import populate
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestMigrations(OpenEventTestCase):

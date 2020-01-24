@@ -8,7 +8,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.models import db
 
-
 # ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
 
 

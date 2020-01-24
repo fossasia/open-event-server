@@ -1,15 +1,16 @@
 import os
 from base64 import b64encode
 from shutil import copyfile, rmtree
+from urllib.parse import urlparse
 
 import boto
 import magic
 from boto.gs.connection import GSConnection
-from boto.s3.connection import S3Connection, OrdinaryCallingFormat
+from boto.s3.connection import OrdinaryCallingFormat, S3Connection
 from boto.s3.key import Key
-from flask import current_app as app, request
+from flask import current_app as app
+from flask import request
 from flask_scrypt import generate_password_hash
-from urllib.parse import urlparse
 from werkzeug.utils import secure_filename
 
 from app.settings import get_settings

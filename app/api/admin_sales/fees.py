@@ -1,6 +1,6 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from flask_rest_jsonapi import ResourceList
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize

@@ -7,7 +7,7 @@ from sqlalchemy.sql import func as sql_func
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.feedback import Feedback
-from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_html, clean_up_string
 
 speakers_sessions = db.Table('speakers_sessions',
                              db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),

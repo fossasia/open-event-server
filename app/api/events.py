@@ -1,26 +1,31 @@
-from flask import request, current_app
-from flask_jwt_extended import verify_jwt_in_request, current_user
+from datetime import datetime
+
+import pytz
+from flask import current_app, request
+from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
-import pytz
-from datetime import datetime
+
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
-from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    UnprocessableEntity,
+)
+from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
-from app.api.schema.events import EventSchemaPublic, EventSchema
-from app.api.helpers.export_helpers import create_export_job
+from app.api.schema.events import EventSchema, EventSchemaPublic
 # models
 from app.models import db
 from app.models.access_code import AccessCode
-from app.models.module import Module
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
@@ -31,6 +36,7 @@ from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
 from app.models.microlocation import Microlocation
+from app.models.module import Module
 from app.models.order import Order
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
@@ -40,16 +46,25 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
+from app.models.stripe_authorization import StripeAuthorization
 from app.models.tax import Tax
-from app.models.ticket import Ticket
-from app.models.ticket import TicketTag
+from app.models.ticket import Ticket, TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
+from app.models.user import (
+    ATTENDEE,
+    COORGANIZER,
+    MARKETER,
+    MODERATOR,
+    ORGANIZER,
+    OWNER,
+    REGISTRAR,
+    SALES_ADMIN,
+    TRACK_ORGANIZER,
+    User,
+)
 from app.models.user_favourite_event import UserFavouriteEvent
-from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, REGISTRAR, MODERATOR, \
-    SALES_ADMIN, MARKETER
 from app.models.users_events_role import UsersEventsRoles
-from app.models.stripe_authorization import StripeAuthorization
 
 
 def validate_event(user, modules, data):

@@ -1,4 +1,4 @@
-from flask import jsonify, Blueprint
+from flask import Blueprint, jsonify
 
 SERVER_VERSION = '1.11.2'
 

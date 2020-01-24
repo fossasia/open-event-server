@@ -5,9 +5,9 @@ not work properly
 
 """
 
-from app.models.event import Event
-from app.models.search.sync import rebuild_indices, sync_event_from_database, sync
 from app.api.helpers.tasks import celery
+from app.models.event import Event
+from app.models.search.sync import rebuild_indices, sync, sync_event_from_database
 from app.views.elastic_search import connect_from_config
 from app.views.postgres import get_session_from_config
 

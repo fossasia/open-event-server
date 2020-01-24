@@ -1,9 +1,9 @@
-from marshmallow_jsonapi import fields
 from marshmallow import validate as validate
+from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
-from utils.common import use_defaults
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'

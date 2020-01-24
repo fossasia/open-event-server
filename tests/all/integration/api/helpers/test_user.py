@@ -1,10 +1,12 @@
 import unittest
-from tests.all.integration.auth_helper import create_user
-from app.api.helpers.user import modify_email_for_user_to_be_deleted, \
-     modify_email_for_user_to_be_restored
+
 from app.api.helpers.db import save_to_db
 from app.api.helpers.exceptions import ForbiddenException
-
+from app.api.helpers.user import (
+    modify_email_for_user_to_be_deleted,
+    modify_email_for_user_to_be_restored,
+)
+from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 
 

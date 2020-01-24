@@ -1,17 +1,16 @@
 # PLEASE PUT ALL FUNCTIONS WHICH PERFORM GENERAL FORMATTING ON ANY DATATYPE WITHOUT USING ANY
 # MODULES RELATED TO THE EVENT-SYSTEM i.e FUNCTIONS SPECIFIC TO DB MODELS E.G A FUNCTION JUST FOR ROLE_INVITES
 import random
+import re
 import string
 import sys
 
 import bleach
-from itsdangerous import Serializer
 import requests
-import re
+from flask import current_app
+from itsdangerous import Serializer
 
 from app.api.helpers.exceptions import UnprocessableEntity
-
-from flask import current_app
 
 
 def dasherize(text):

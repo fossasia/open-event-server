@@ -1,10 +1,11 @@
+from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
-from marshmallow import validates_schema
+
 from app.api.helpers.utilities import dasherize
+from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
 from utils.common import use_defaults
-from app.api.helpers.validations import validate_complex_fields_json
 
 
 @use_defaults()

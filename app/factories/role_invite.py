@@ -3,7 +3,7 @@ import factory
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.factories.role import RoleFactory
-from app.models.role_invite import db, RoleInvite
+from app.models.role_invite import RoleInvite, db
 
 
 class RoleInviteFactory(factory.alchemy.SQLAlchemyModelFactory):

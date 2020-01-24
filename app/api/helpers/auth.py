@@ -1,7 +1,7 @@
 import datetime
 
-import pytz
 import flask_login as login
+import pytz
 from flask_login import current_user
 
 from app.models import db

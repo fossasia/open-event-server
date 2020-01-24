@@ -15,16 +15,15 @@ from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
 from app.models.event_topic import EventTopic
 from app.models.feedback import Feedback
-from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.order import Order
 from app.models.search import sync
-from app.models.user import ATTENDEE, ORGANIZER, OWNER
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket import Ticket
-from app.models.ticket_fee import get_fee
-from app.models.ticket_fee import get_maximum_fee
+from app.models.ticket_fee import get_fee, get_maximum_fee
 from app.models.ticket_holder import TicketHolder
+from app.models.user import ATTENDEE, ORGANIZER, OWNER
 
 
 def get_new_event_identifier(length=8):

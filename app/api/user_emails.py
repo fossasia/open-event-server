@@ -1,15 +1,13 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, \
-    ResourceRelationship
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
+from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.utilities import require_relationship
-from app.models.user import User
-from app.api.helpers.db import safe_query
 from app.api.schema.user_email import UserEmailSchema
 from app.models import db
-from app.api.helpers.exceptions import ConflictException
+from app.models.user import User
 from app.models.user_email import UserEmail
-from app.api.helpers.db import get_count
 
 
 class UserEmailListAdmin(ResourceList):

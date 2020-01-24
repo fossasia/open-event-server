@@ -5,16 +5,15 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
-import requests
 
 import PIL
-from PIL import Image
-from flask import current_app
+import requests
 from flask import current_app as app
+from PIL import Image
 from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
-from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
+from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, generate_hash, upload
 from app.models.image_size import ImageSizes
 from app.settings import get_settings
 

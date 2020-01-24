@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.user_permission import db, UserPermission
+from app.models.user_permission import UserPermission, db
 
 
 class UserPermissionFactory(factory.alchemy.SQLAlchemyModelFactory):

@@ -1,7 +1,6 @@
 import datetime
-import uuid
-
 import time
+import uuid
 
 from app.api.helpers.db import get_count
 from app.models import db

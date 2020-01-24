@@ -1,6 +1,6 @@
+from marshmallow import validate as validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from marshmallow import validate as validate
 
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults

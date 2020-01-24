@@ -3,10 +3,14 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import safe_query, get_count, save_to_db
+from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
-from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
+from app.api.helpers.notification import (
+    send_notif_new_session_organizer,
+    send_notif_session_accept_reject,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
@@ -15,13 +19,12 @@ from app.api.schema.sessions import SessionSchema
 from app.models import db
 from app.models.microlocation import Microlocation
 from app.models.session import Session
+from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
-from app.models.session_speaker_link import SessionsSpeakersLink
 from app.settings import get_settings
-from app.api.helpers.files import make_frontend_url
 
 
 class SessionListPost(ResourceList):

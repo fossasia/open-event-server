@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from app.models import db
 from app.models.base import SoftDeletionModel
-from datetime import datetime
+
 
 class EventOrgaModel(SoftDeletionModel):
     """Event Orga object table"""

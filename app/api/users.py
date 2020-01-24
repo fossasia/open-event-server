@@ -1,29 +1,40 @@
 import base64
+import urllib.error
 
-from flask import Blueprint, request, jsonify, abort, make_response
+from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
-import urllib.error
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity, ForbiddenException
+from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    UnprocessableEntity,
+)
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
-from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
+from app.api.helpers.mail import (
+    send_email_change_user_email,
+    send_email_confirmation,
+    send_email_with_action,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
-from app.api.helpers.user import modify_email_for_user_to_be_deleted, modify_email_for_user_to_be_restored
+from app.api.helpers.user import (
+    modify_email_for_user_to_be_deleted,
+    modify_email_for_user_to_be_restored,
+)
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.schema.users import UserSchema, UserSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
-from app.models.event_invoice import EventInvoice
 from app.models.event import Event
+from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
+from app.models.mail import PASSWORD_RESET_AND_VERIFY, USER_REGISTER_WITH_PASSWORD
 from app.models.notification import Notification
 from app.models.session import Session
 from app.models.speaker import Speaker

@@ -1,23 +1,23 @@
 import unittest
 
-from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.system_notifications import (
     get_event_exported_actions,
     get_event_imported_actions,
-    get_monthly_payment_notification_actions,
-    get_monthly_payment_follow_up_notification_actions,
-    get_ticket_purchased_notification_actions,
-    get_ticket_purchased_attendee_notification_actions,
-    get_ticket_purchased_organizer_notification_actions,
     get_event_published_notification_actions,
     get_event_role_notification_actions,
+    get_invite_papers_notification_actions,
+    get_monthly_payment_follow_up_notification_actions,
+    get_monthly_payment_notification_actions,
     get_new_session_notification_actions,
-    get_session_schedule_notification_actions,
     get_next_event_notification_actions,
     get_session_accept_reject_notification_actions,
-    get_invite_papers_notification_actions
+    get_session_schedule_notification_actions,
+    get_ticket_purchased_attendee_notification_actions,
+    get_ticket_purchased_notification_actions,
+    get_ticket_purchased_organizer_notification_actions,
 )
 from app.models.notification import NotificationAction
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestSystemNotificationHelperValidation(OpenEventTestCase):

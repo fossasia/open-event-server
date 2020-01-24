@@ -2,12 +2,12 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.roles import RoleSchema
 from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
-from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class RoleList(ResourceList):

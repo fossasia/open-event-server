@@ -4,13 +4,17 @@ from flask import Response
 from flask_jwt_extended import create_access_token
 
 from app.api.helpers.db import get_or_create, save_to_db
-from app.api.helpers.permission_manager import has_access, accessible_role_based_events, permission_manager
+from app.api.helpers.permission_manager import (
+    accessible_role_based_events,
+    has_access,
+    permission_manager,
+)
 from app.factories.event import EventFactoryBasic
-from app.models.users_events_role import UsersEventsRoles
-from tests.all.integration.utils import OpenEventTestCase
 from app.factories.user import UserFactory
 from app.models import db
+from app.models.users_events_role import UsersEventsRoles
 from tests.all.integration.setup_database import Setup
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestPermissionManager(OpenEventTestCase):

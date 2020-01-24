@@ -1,12 +1,14 @@
 import datetime
 
-from app.models import db
-from app.factories.event_invoice import EventInvoiceFactory
+from app.api.helpers.scheduled_jobs import (
+    delete_ticket_holders_no_order_id,
+    event_invoices_mark_due,
+)
 from app.factories.attendee import AttendeeFactory
+from app.factories.event_invoice import EventInvoiceFactory
+from app.models import db
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.scheduled_jobs import event_invoices_mark_due, delete_ticket_holders_no_order_id
-
 from tests.all.integration.utils import OpenEventTestCase
 
 

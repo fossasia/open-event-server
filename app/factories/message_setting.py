@@ -1,6 +1,6 @@
 import factory
 
-from app.models.message_setting import db, MessageSettings
+from app.models.message_setting import MessageSettings, db
 
 
 class MessageSettingsFactory(factory.alchemy.SQLAlchemyModelFactory):

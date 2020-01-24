@@ -1,12 +1,12 @@
-from flask_rest_jsonapi import ResourceDetail
-from flask import jsonify, Blueprint
+from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
+from flask_rest_jsonapi import ResourceDetail
 from sqlalchemy.sql import text
 
 from app.api.bootstrap import api
-from app.models import db
 from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.api.schema.admin_statistics_schema.events import AdminStatisticsEventSchema
+from app.models import db
 
 event_statistics = Blueprint('event_statistics', __name__, url_prefix='/v1/admin/statistics')
 

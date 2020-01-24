@@ -1,10 +1,12 @@
-from marshmallow_jsonapi.flask import Schema
+from datetime import datetime
+
+import pytz
 from marshmallow_jsonapi import fields
-from app.models.event import Event
+from marshmallow_jsonapi.flask import Schema
+
 from app.api.helpers.db import get_count
 from app.api.helpers.utilities import dasherize
-from datetime import datetime
-import pytz
+from app.models.event import Event
 
 
 class AdminStatisticsEventSchema(Schema):

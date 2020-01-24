@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.schema.notifications import NotificationSchema, NotificationActionSchema
+from app.api.schema.notifications import NotificationActionSchema, NotificationSchema
 from app.models import db
 from app.models.notification import Notification, NotificationAction
 from app.models.user import User

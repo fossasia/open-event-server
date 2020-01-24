@@ -1,50 +1,48 @@
-from app.instance import current_app
-from app.models import db
-from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 from envparse import env
 
+from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
+from app.instance import current_app
+from app.models import db
+# Custom Placeholder
+from app.models.custom_placeholder import CustomPlaceholder
+from app.models.custom_system_role import CustomSysRole
+# EventLocation
+from app.models.event_location import EventLocation
+# EventSubTopic
+from app.models.event_sub_topic import EventSubTopic
+# EventTopic
+from app.models.event_topic import EventTopic
+# EventType
+from app.models.event_type import EventType
+from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
-
+from app.models.microlocation import Microlocation
+from app.models.module import Module
+# Admin Panel Permissions
+from app.models.panel_permission import PanelPermission
+from app.models.permission import Permission
 # Event Role-Service Permissions
 from app.models.role import Role
 from app.models.service import Service
-from app.models.permission import Permission
-
-from app.models.track import Track
 from app.models.session import Session
+from app.models.setting import Setting
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
-from app.models.microlocation import Microlocation
-
-from app.models.user import OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
-
-# Admin Panel Permissions
-from app.models.panel_permission import PanelPermission
-from app.models.custom_system_role import CustomSysRole
-
-from app.models.setting import Setting
-from app.models.image_size import ImageSizes
-from app.models.module import Module
-
-# EventTopic
-from app.models.event_topic import EventTopic
-
-# EventSubTopic
-from app.models.event_sub_topic import EventSubTopic
-
-# EventType
-from app.models.event_type import EventType
-
-# EventLocation
-from app.models.event_location import EventLocation
-
-# Custom Placeholder
-from app.models.custom_placeholder import CustomPlaceholder
-
+from app.models.track import Track
+from app.models.user import (
+    ATTENDEE,
+    COORGANIZER,
+    MODERATOR,
+    ORGANIZER,
+    OWNER,
+    REGISTRAR,
+    TRACK_ORGANIZER,
+)
 # User Permissions
 from app.models.user_permission import UserPermission
+
 SALES = 'sales'
 ADMIN = 'admin'
 EVENTS = 'events'

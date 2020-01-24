@@ -1,5 +1,5 @@
 from flask import request
-from marshmallow import post_dump, validates_schema, validate
+from marshmallow import post_dump, validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 

@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.custom_system_role import db, CustomSysRole
+from app.models.custom_system_role import CustomSysRole, db
 
 
 class CustomSysRoleFactory(factory.alchemy.SQLAlchemyModelFactory):

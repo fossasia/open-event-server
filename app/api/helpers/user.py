@@ -1,7 +1,8 @@
 from sqlalchemy.orm.exc import NoResultFound
+
+from app.api.helpers.db import save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.models import db
-from app.api.helpers.db import save_to_db
 from app.models.user import User
 
 

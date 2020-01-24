@@ -1,53 +1,61 @@
+import base64
 import csv
 import json
+import logging
 import os
-import requests
+import traceback
+import urllib.error
 import uuid
 
+import requests
 from flask import current_app, render_template
 from flask_celeryext import FlaskCeleryExt, RequestContextTask
 from marrow.mailer import Mailer, Message
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
-    Mail, Attachment, FileContent, FileName, From,
-    FileType, Disposition)
+    Attachment,
+    Disposition,
+    FileContent,
+    FileName,
+    FileType,
+    From,
+    Mail,
+)
 
-from app.instance import create_app
+from app.api.exports import event_export_task_base
+from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.files import (
+    create_save_image_sizes,
+    create_save_pdf,
+    create_save_resized_image,
+)
+from app.api.helpers.ICalExporter import ICalExporter
+from app.api.helpers.mail import check_smtp_config, send_export_mail, send_import_mail
+from app.api.helpers.notification import send_notif_after_export, send_notif_after_import
+from app.api.helpers.pentabarfxml import PentabarfExporter
+from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
 from app.api.helpers.utilities import strip_tags
+from app.api.helpers.xcal import XCalExporter
+from app.api.imports import import_event_task_base
+from app.instance import create_app
+from app.models import db
+from app.models.discount_code import DiscountCode
+from app.models.event import Event
+from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.api.helpers.mail import check_smtp_config
+from app.models.sponsor import Sponsor
+from app.models.ticket_holder import TicketHolder
+from app.models.user import User
 from app.settings import get_settings
+
+from .import_helpers import update_import_job
 
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
 """
-import logging
-import traceback
 
-from app.api.helpers.files import create_save_image_sizes, create_save_resized_image
-from app.api.helpers.mail import send_export_mail, send_import_mail
-from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
-from app.api.helpers.db import safe_query
-from .import_helpers import update_import_job
-from app.models.user import User
-from app.models import db
-from app.api.exports import event_export_task_base
-from app.api.imports import import_event_task_base
-from app.models.event import Event
-from app.models.order import Order
-from app.models.sponsor import Sponsor
-from app.models.discount_code import DiscountCode
-from app.models.ticket_holder import TicketHolder
-from app.api.helpers.ICalExporter import ICalExporter
-from app.api.helpers.xcal import XCalExporter
-from app.api.helpers.pentabarfxml import PentabarfExporter
-from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
-from app.api.helpers.db import save_to_db
-from app.api.helpers.files import create_save_pdf
-import urllib.error
-import base64
 
 logger = logging.getLogger(__name__)
 

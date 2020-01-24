@@ -1,9 +1,9 @@
+import datetime
 import unittest
 from unittest import TestCase
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.access_codes import AccessCodeSchema
-import datetime
 
 
 class TestAccessCodeValidation(TestCase):

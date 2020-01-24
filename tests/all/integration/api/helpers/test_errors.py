@@ -1,10 +1,11 @@
-import unittest
 import json
+import unittest
 
-from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.errors import ErrorResponse
-from flask_rest_jsonapi.errors import jsonapi_errors
 from flask import make_response
+from flask_rest_jsonapi.errors import jsonapi_errors
+
+from app.api.helpers.errors import ErrorResponse
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestErrorsHelperValidation(OpenEventTestCase):

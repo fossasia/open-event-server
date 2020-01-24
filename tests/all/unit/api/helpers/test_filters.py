@@ -1,6 +1,6 @@
 import unittest
-
 from unittest import TestCase
+
 from app.api.helpers.filters import json_to_rest_filter_list
 
 

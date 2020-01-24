@@ -1,12 +1,11 @@
-from flask import jsonify, request, Blueprint
+from flask import Blueprint, jsonify, request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import NotFoundError
-from app.api.helpers.exceptions import ForbiddenException
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access

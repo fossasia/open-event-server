@@ -1,12 +1,13 @@
-from flask import request
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 import datetime
 
+from flask import request
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+
 from app.api.helpers.db import safe_query
+from app.api.helpers.permission_manager import has_access
 from app.models.event import Event
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
-from app.api.helpers.permission_manager import has_access
 
 
 def event_query(self, query_, view_kwargs, event_id='event_id', event_identifier='event_identifier',

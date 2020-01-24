@@ -1,6 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from app.models import db
+
 from app.api.schema.custom_form_options import CustomFormOptionSchema
+from app.models import db
 from app.models.custom_form_option import CustomFormOptions
 
 

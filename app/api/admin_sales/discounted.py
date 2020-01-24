@@ -1,10 +1,10 @@
-from sqlalchemy import func
 from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy import func
 
-from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event

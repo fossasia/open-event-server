@@ -1,13 +1,14 @@
-from app.instance import current_app
-from app.models import db
 from sqlalchemy.engine import reflection
 from sqlalchemy.schema import (
-    MetaData,
-    Table,
+    DropConstraint,
     DropTable,
     ForeignKeyConstraint,
-    DropConstraint,
+    MetaData,
+    Table,
 )
+
+from app.instance import current_app
+from app.models import db
 
 
 def db_drop_everything(db):

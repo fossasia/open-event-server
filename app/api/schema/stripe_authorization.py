@@ -46,5 +46,3 @@ class StripeAuthorizationSchema(StripeAuthorizationSchemaPublic):
         inflect = dasherize
 
     stripe_auth_code = fields.Str(load_only=True, required=True)
-
-

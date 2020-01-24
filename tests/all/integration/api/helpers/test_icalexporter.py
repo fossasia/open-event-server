@@ -1,9 +1,10 @@
 import unittest
+
 import icalendar
 
+from app.api.helpers.ICalExporter import ICalExporter
 from app.factories.session import SessionFactory
 from app.factories.speaker import SpeakerFactory
-from app.api.helpers.ICalExporter import ICalExporter
 from tests.all.integration.utils import OpenEventTestCase
 
 

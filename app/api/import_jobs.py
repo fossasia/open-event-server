@@ -1,10 +1,10 @@
-from flask_rest_jsonapi import ResourceList, ResourceDetail
+from flask_jwt_extended import current_user
+from flask_rest_jsonapi import ResourceDetail, ResourceList
 
+from app.api.helpers.permissions import jwt_required
 from app.api.schema.import_jobs import ImportJobSchema
 from app.models import db
 from app.models.import_job import ImportJob
-from app.api.helpers.permissions import jwt_required
-from flask_jwt_extended import current_user
 
 
 class ImportJobList(ResourceList):

@@ -1,12 +1,11 @@
 # Checksum module from https://github.com/Paytm-Payments/Paytm_Web_Sample_Kit_Python
 
 import base64
-import string
-import random
 import hashlib
+import random
+import string
 
 from Crypto.Cipher import AES
-
 
 IV = "@@@@&&&&####$$$$"
 BLOCK_SIZE = 16

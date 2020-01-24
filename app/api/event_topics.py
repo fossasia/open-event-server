@@ -1,12 +1,13 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 import urllib.error
+
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.files import create_system_image
 from app.api.schema.event_topics import EventTopicSchema
 from app.models import db
-from app.api.helpers.files import create_system_image
 from app.models.event import Event
 from app.models.event_sub_topic import EventSubTopic
 from app.models.event_topic import EventTopic

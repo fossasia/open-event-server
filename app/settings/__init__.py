@@ -2,8 +2,8 @@ import stripe
 from flask import current_app
 from sqlalchemy import desc
 
+from app.models.setting import Environment, Setting
 from app.models.ticket_fee import TicketFees
-from app.models.setting import Setting, Environment
 
 
 def get_settings(from_db=False):

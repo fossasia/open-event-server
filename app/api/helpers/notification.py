@@ -1,18 +1,40 @@
 from flask import current_app
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.log import record_activity
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.system_notifications import NOTIFS, get_event_exported_actions, get_event_imported_actions, \
-    get_monthly_payment_notification_actions, get_monthly_payment_follow_up_notification_actions, \
-    get_ticket_purchased_attendee_notification_actions, get_ticket_purchased_notification_actions, \
-    get_ticket_purchased_organizer_notification_actions, get_new_session_notification_actions, \
-    get_session_accept_reject_notification_actions, get_event_role_notification_actions
+from app.api.helpers.log import record_activity
+from app.api.helpers.system_notifications import (
+    NOTIFS,
+    get_event_exported_actions,
+    get_event_imported_actions,
+    get_event_role_notification_actions,
+    get_monthly_payment_follow_up_notification_actions,
+    get_monthly_payment_notification_actions,
+    get_new_session_notification_actions,
+    get_session_accept_reject_notification_actions,
+    get_ticket_purchased_attendee_notification_actions,
+    get_ticket_purchased_notification_actions,
+    get_ticket_purchased_organizer_notification_actions,
+)
 from app.models.message_setting import MessageSettings
-from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
-    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER
+from app.models.notification import (
+    AFTER_EVENT,
+    EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED,
+    EVENT_IMPORT_FAIL,
+    EVENT_IMPORTED,
+    EVENT_ROLE,
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
+    MONTHLY_PAYMENT_NOTIF,
+    NEW_SESSION,
+    SESSION_ACCEPT_REJECT,
+    TICKET_CANCELLED,
+    TICKET_CANCELLED_ORGANIZER,
+    TICKET_PURCHASED,
+    TICKET_PURCHASED_ATTENDEE,
+    TICKET_PURCHASED_ORGANIZER,
+    Notification,
+)
 
 
 def send_notification(user, title, message, actions=None):

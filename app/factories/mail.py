@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.mail import db, Mail
+from app.models.mail import Mail, db
 
 
 class MailFactory(factory.alchemy.SQLAlchemyModelFactory):

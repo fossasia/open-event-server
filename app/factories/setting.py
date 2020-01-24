@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.setting import db, Setting
+from app.models.setting import Setting, db
 
 
 class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):

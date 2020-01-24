@@ -1,9 +1,9 @@
 import factory
 
-from app.factories.user import UserFactory
 from app.factories.event import EventFactoryBasic
-from app.models.user_favourite_event import db, UserFavouriteEvent
+from app.factories.user import UserFactory
 from app.models.user import User
+from app.models.user_favourite_event import UserFavouriteEvent, db
 
 
 class UserFavouriteEventFactory(factory.alchemy.SQLAlchemyModelFactory):

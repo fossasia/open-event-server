@@ -1,7 +1,8 @@
 import unittest
 from datetime import datetime
-from pytz import timezone
 from unittest import TestCase
+
+from pytz import timezone
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.sessions import SessionSchema
