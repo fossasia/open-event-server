@@ -17,7 +17,7 @@ from app.api.helpers.notification import (
     send_notif_after_event,
     send_notif_monthly_fee_payment,
 )
-from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
+from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.utilities import monthdelta
 from app.instance import celery

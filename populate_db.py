@@ -1,6 +1,6 @@
 from envparse import env
 
-from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
+from app.api.helpers.db import get_or_create
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
 from app.instance import current_app
