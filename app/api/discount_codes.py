@@ -47,7 +47,8 @@ class DiscountCodeListPost(ResourceList):
         else:
             raise ConflictException(
                 {'pointer': '/data/attributes/used-for'},
-                "used-for attribute is required and should be equal to 'ticket' or 'event' to create discount code")
+                "used-for attribute is required and should be equal to 'ticket' or 'event' to create discount code",
+            )
 
     def before_post(self, args, kwargs, data):
         """Before post method to check required relationships and set user_id
@@ -59,8 +60,14 @@ class DiscountCodeListPost(ResourceList):
             require_relationship(['event'], data)
             if not has_access('is_coorganizer', event_id=data['event']):
                 raise ForbiddenException({'source': ''}, 'You are not authorized')
-        elif data['used_for'] == 'event' and not has_access('is_admin') and 'events' in data:
-            raise UnprocessableEntity({'source': ''}, "Please verify your permission or check your relationship")
+        elif (
+            data['used_for'] == 'event'
+            and not has_access('is_admin')
+            and 'events' in data
+        ):
+            raise UnprocessableEntity(
+                {'source': ''}, "Please verify your permission or check your relationship"
+            )
 
         data['user_id'] = current_user.id
 
@@ -70,12 +77,20 @@ class DiscountCodeListPost(ResourceList):
             if 'events' in data:
                 for event in data['events']:
                     try:
-                        event_now = db.session.query(Event).filter_by(id=event, deleted_at=None).one()
+                        event_now = (
+                            db.session.query(Event)
+                            .filter_by(id=event, deleted_at=None)
+                            .one()
+                        )
                     except NoResultFound:
-                        raise UnprocessableEntity({'event_id': event}, "Event does not exist")
+                        raise UnprocessableEntity(
+                            {'event_id': event}, "Event does not exist"
+                        )
                     if event_now.discount_code_id:
                         raise UnprocessableEntity(
-                            {'event_id': event}, "A Discount Code already exists for the provided Event ID")
+                            {'event_id': event},
+                            "A Discount Code already exists for the provided Event ID",
+                        )
         else:
             self.resource.schema = DiscountCodeSchemaTicket
 
@@ -93,11 +108,14 @@ class DiscountCodeListPost(ResourceList):
 
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
-    data_layer = {'session': db.session,
-                  'model': DiscountCode,
-                  'methods': {
-                      'before_create_object': before_create_object,
-                      'after_create_object': after_create_object}}
+    data_layer = {
+        'session': db.session,
+        'model': DiscountCode,
+        'methods': {
+            'before_create_object': before_create_object,
+            'after_create_object': after_create_object,
+        },
+    }
 
 
 class DiscountCodeList(ResourceList):
@@ -121,7 +139,13 @@ class DiscountCodeList(ResourceList):
                 raise ForbiddenException({'source': ''}, 'You are not authorized')
 
         if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
             view_kwargs['event_id'] = event.id
 
         # event co-organizer access required for discount codes under an event.
@@ -130,7 +154,9 @@ class DiscountCodeList(ResourceList):
                 self.schema = DiscountCodeSchemaTicket
                 query_ = query_.filter_by(event_id=view_kwargs['event_id'])
             else:
-                raise ForbiddenException({'source': ''}, 'Event organizer access required')
+                raise ForbiddenException(
+                    {'source': ''}, 'Event organizer access required'
+                )
 
         # discount_code - ticket :: many-to-many relationship
         if view_kwargs.get('ticket_id') and has_access('is_coorganizer'):
@@ -141,13 +167,16 @@ class DiscountCodeList(ResourceList):
         return query_
 
     decorators = (jwt_required,)
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     view_kwargs = True
     schema = DiscountCodeSchemaPublic
-    data_layer = {'session': db.session,
-                  'model': DiscountCode,
-                  'methods': {
-                      'query': query}}
+    data_layer = {
+        'session': db.session,
+        'model': DiscountCode,
+        'methods': {'query': query},
+    }
 
 
 class DiscountCodeDetail(ResourceDetail):
@@ -162,14 +191,21 @@ class DiscountCodeDetail(ResourceDetail):
 
         used_for = json_data['data']['attributes'].get('used-for')
         try:
-            discount = db.session.query(DiscountCode).filter_by(id=int(json_data['data']['id'])).one()
+            discount = (
+                db.session.query(DiscountCode)
+                .filter_by(id=int(json_data['data']['id']))
+                .one()
+            )
         except NoResultFound:
-                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
 
         if not used_for:
             used_for = discount.used_for
         elif used_for != discount.used_for:
-            raise ConflictException({'pointer': '/data/attributes/used-for'}, "Cannot modify discount code usage type")
+            raise ConflictException(
+                {'pointer': '/data/attributes/used-for'},
+                "Cannot modify discount code usage type",
+            )
 
         if used_for == 'ticket':
             self.schema = DiscountCodeSchemaTicket
@@ -188,7 +224,8 @@ class DiscountCodeDetail(ResourceDetail):
                 raise UnprocessableEntity(
                     {'source': ''},
                     "Please verify your permission. You must have coorganizer "
-                    "privileges to view ticket discount code details")
+                    "privileges to view ticket discount code details",
+                )
         if kwargs.get('event_id'):
             if has_access('is_admin'):
                 event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
@@ -199,18 +236,23 @@ class DiscountCodeDetail(ResourceDetail):
             else:
                 raise UnprocessableEntity(
                     {'source': ''},
-                    "Please verify your permission. You must be admin to view event discount code details")
+                    "Please verify your permission. You must be admin to view event discount code details",
+                )
 
         if kwargs.get('event_identifier'):
             event = safe_query(
-                db, Event, 'identifier', kwargs['event_identifier'],
-                'event_identifier')
+                db, Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
+            )
             kwargs['event_id'] = event.id
 
         if kwargs.get('discount_event_identifier'):
             event = safe_query(
-                db, Event, 'identifier', kwargs['discount_event_identifier'],
-                'event_identifier')
+                db,
+                Event,
+                'identifier',
+                kwargs['discount_event_identifier'],
+                'event_identifier',
+            )
             kwargs['discount_event_id'] = event.id
 
         if kwargs.get('event_id') and has_access('is_admin'):
@@ -224,18 +266,31 @@ class DiscountCodeDetail(ResourceDetail):
         if kwargs.get('code'):
             # filter on deleted_at is required to catch the id of a
             # discount code which has not been deleted.
-            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'),
-                                                                event_id=kwargs.get('discount_event_id'),
-                                                                deleted_at=None).first()
+            discount = (
+                db.session.query(DiscountCode)
+                .filter_by(
+                    code=kwargs.get('code'),
+                    event_id=kwargs.get('discount_event_id'),
+                    deleted_at=None,
+                )
+                .first()
+            )
             if discount:
                 kwargs['id'] = discount.id
                 discount_tz = discount.valid_from.tzinfo
                 current_time = datetime.now().replace(tzinfo=discount_tz)
                 if not discount.is_active:
-                    raise MethodNotAllowed({'parameter': '{code}'}, "Discount Code is not active")
-                elif current_time < discount.valid_from or current_time > discount.valid_till:
-                    raise MethodNotAllowed({'parameter': '{code}'},
-                                           "Discount Code is not active in current time frame")
+                    raise MethodNotAllowed(
+                        {'parameter': '{code}'}, "Discount Code is not active"
+                    )
+                elif (
+                    current_time < discount.valid_from
+                    or current_time > discount.valid_till
+                ):
+                    raise MethodNotAllowed(
+                        {'parameter': '{code}'},
+                        "Discount Code is not active in current time frame",
+                    )
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -244,22 +299,21 @@ class DiscountCodeDetail(ResourceDetail):
 
         if kwargs.get('id'):
             try:
-                discount = db.session.query(
-                    DiscountCode).filter_by(id=kwargs.get('id')).one()
+                discount = (
+                    db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
+                )
             except NoResultFound:
-                raise ObjectNotFound(
-                    {'parameter': '{id}'}, "DiscountCode: not found")
+                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
 
-#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            #             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
             if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-#             elif discount.used_for == 'event' and has_access('is_admin'):
+            #             elif discount.used_for == 'event' and has_access('is_admin'):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntity({'source': ''},
-                                          "Please verify your permission")
+                raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     def before_get_object(self, view_kwargs):
         """
@@ -268,7 +322,13 @@ class DiscountCodeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id') and has_access('is_admin'):
@@ -279,15 +339,26 @@ class DiscountCodeDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_id') and has_access('is_admin'):
-            event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+            event_invoice = safe_query(
+                self,
+                EventInvoice,
+                'id',
+                view_kwargs['event_invoice_id'],
+                'event_invoice_id',
+            )
             if event_invoice.discount_code_id:
                 view_kwargs['id'] = event_invoice.discount_code_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_identifier') and has_access('is_admin'):
-            event_invoice = safe_query(self, EventInvoice, 'identifier', view_kwargs['event_invoice_identifier'],
-                                       'event_invoice_identifier')
+            event_invoice = safe_query(
+                self,
+                EventInvoice,
+                'identifier',
+                view_kwargs['event_invoice_identifier'],
+                'event_invoice_identifier',
+            )
             if event_invoice.discount_code_id:
                 view_kwargs['id'] = event_invoice.discount_code_id
             else:
@@ -295,31 +366,34 @@ class DiscountCodeDetail(ResourceDetail):
 
         if view_kwargs.get('id'):
             try:
-                discount = self.session.query(
-                    DiscountCode).filter_by(id=view_kwargs.get('id')).one()
+                discount = (
+                    self.session.query(DiscountCode)
+                    .filter_by(id=view_kwargs.get('id'))
+                    .one()
+                )
             except NoResultFound:
-                raise ObjectNotFound(
-                    {'parameter': '{id}'}, "DiscountCode: not found")
+                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
 
             if 'code' in view_kwargs:  # usage via discount code is public
                 self.schema = DiscountCodeSchemaPublic
                 return
 
-#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            #             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
             if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-#             elif discount.used_for == 'event' and has_access('is_admin'):
+            #             elif discount.used_for == 'event' and has_access('is_admin'):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntity({'source': ''},
-                                          "Please verify your permission")
+                raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
         elif not view_kwargs.get('id') and not has_access('is_admin'):
-            raise UnprocessableEntity({'source': ''},
-                                      "Please verify your permission. You must be admin to view event\
-                                      discount code details")
+            raise UnprocessableEntity(
+                {'source': ''},
+                "Please verify your permission. You must be admin to view event\
+                                      discount code details",
+            )
 
     def before_update_object(self, discount, data, view_kwargs):
         """
@@ -333,12 +407,19 @@ class DiscountCodeDetail(ResourceDetail):
             used_for = data['used_for']
         else:
             used_for = discount.used_for
-        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=view_kwargs.get('event_id')) \
-           and used_for != 'event':
+        if (
+            discount.used_for == 'ticket'
+            and has_access('is_coorganizer', event_id=view_kwargs.get('event_id'))
+            and used_for != 'event'
+        ):
             self.schema = DiscountCodeSchemaTicket
             self.resource.schema = DiscountCodeSchemaTicket
 
-        elif discount.used_for == 'event' and has_access('is_admin') and used_for != 'ticket':
+        elif (
+            discount.used_for == 'event'
+            and has_access('is_admin')
+            and used_for != 'ticket'
+        ):
             self.schema = DiscountCodeSchemaEvent
             self.resource.schema = DiscountCodeSchemaEvent
         else:
@@ -351,7 +432,9 @@ class DiscountCodeDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=view_kwargs['event_id']):
+        if discount.used_for == 'ticket' and has_access(
+            'is_coorganizer', event_id=view_kwargs['event_id']
+        ):
             self.schema = DiscountCodeSchemaTicket
 
         elif discount.used_for == 'event' and has_access('is_admin'):
@@ -359,14 +442,17 @@ class DiscountCodeDetail(ResourceDetail):
         else:
             raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
-#     decorators = (jwt_required,)
+    #     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
-    data_layer = {'session': db.session,
-                  'model': DiscountCode,
-                  'methods': {
-                      'before_get_object': before_get_object,
-                      'before_update_object': before_update_object,
-                      'before_delete_object': before_delete_object}}
+    data_layer = {
+        'session': db.session,
+        'model': DiscountCode,
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_update_object': before_update_object,
+            'before_delete_object': before_delete_object,
+        },
+    }
 
 
 class DiscountCodeRelationshipRequired(ResourceRelationship):
@@ -382,25 +468,23 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         :return:
         """
         try:
-            discount = db.session.query(
-                DiscountCode).filter_by(id=kwargs.get('id')).one()
+            discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
         except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': '{id}'}, "DiscountCode: not found")
-        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
+        if discount.used_for == 'ticket' and has_access(
+            'is_coorganizer', event_id=discount.event_id
+        ):
             self.schema = DiscountCodeSchemaTicket
 
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntity({'source': ''},
-                                      "Please verify your permission")
+            raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     methods = ['GET', 'PATCH']
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
-    data_layer = {'session': db.session,
-                  'model': DiscountCode}
+    data_layer = {'session': db.session, 'model': DiscountCode}
 
 
 class DiscountCodeRelationshipOptional(ResourceRelationship):
@@ -416,21 +500,19 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
         :return:
         """
         try:
-            discount = db.session.query(
-                DiscountCode).filter_by(id=kwargs.get('id')).one()
+            discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
         except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': '{id}'}, "DiscountCode: not found")
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode: not found")
 
-        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+        if discount.used_for == 'ticket' and has_access(
+            'is_coorganizer', event_id=discount.event_id
+        ):
             self.schema = DiscountCodeSchemaTicket
 
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntity({'source': ''},
-                                      "Please verify your permission")
+            raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     schema = DiscountCodeSchemaEvent
-    data_layer = {'session': db.session,
-                  'model': DiscountCode}
+    data_layer = {'session': db.session, 'model': DiscountCode}

@@ -8,7 +8,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestEventUtilities(OpenEventTestCase):
-
     def test_should_create_attendee_forms(self):
         """Method to test custom forms for attendees of an event."""
         with self.app.test_request_context():

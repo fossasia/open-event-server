@@ -17,10 +17,12 @@ class TestErrorDetails(TestCase):
         """To test details in the form of dict"""
 
         error_response = ErrorResponse(source="test source", detail="test detail")
-        expected_dict = {'status': error_response.status,
-                         'source': error_response.source,
-                         'title': error_response.title,
-                         'detail': error_response.detail}
+        expected_dict = {
+            'status': error_response.status,
+            'source': error_response.source,
+            'title': error_response.title,
+            'detail': error_response.detail,
+        }
         self.assertEqual(error_response.to_dict(), expected_dict)
 
     def test_errors(self):
@@ -39,8 +41,9 @@ class TestErrorDetails(TestCase):
         self.assertEqual(server_error.status, 500)
 
         # UnprocessableEntity Error
-        unprocessable_entity_error = UnprocessableEntityError({'source': ''},
-            'Entity cannot be processed')
+        unprocessable_entity_error = UnprocessableEntityError(
+            {'source': ''}, 'Entity cannot be processed'
+        )
         self.assertEqual(unprocessable_entity_error.status, 422)
 
         # Bad Request Error

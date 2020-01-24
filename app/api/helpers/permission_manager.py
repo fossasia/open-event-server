@@ -89,7 +89,9 @@ def is_coorganizer_but_not_admin(view, view_args, view_kwargs, *args, **kwargs):
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
 
-def is_coorganizer_endpoint_related_to_event(view, view_args, view_kwargs, *args, **kwargs):
+def is_coorganizer_endpoint_related_to_event(
+    view, view_args, view_kwargs, *args, **kwargs
+):
     """
      If the authorization header is present (but expired) and the event being accessed is not published
      - And the user is related to the event (organizer, co-organizer etc) show a 401
@@ -135,7 +137,11 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     """
     user = current_user
 
-    if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
+    if (
+        user.is_admin
+        or user.is_super_admin
+        or ('user_id' in kwargs and user.id == kwargs['user_id'])
+    ):
         return view(*view_args, **view_kwargs)
 
     if user.is_staff:
@@ -198,7 +204,9 @@ def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
         if query_user:
             return view(*view_args, **view_kwargs)
 
-    return ForbiddenError({'source': ''}, 'Detail ownership is required, access denied.').respond()
+    return ForbiddenError(
+        {'source': ''}, 'Detail ownership is required, access denied.'
+    ).respond()
 
 
 @jwt_required
@@ -346,7 +354,7 @@ permissions = {
     'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
     'is_registrar_or_user_itself': is_registrar_or_user_itself,
     'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin,
-    'is_speaker_itself_or_admin': is_speaker_itself_or_admin
+    'is_speaker_itself_or_admin': is_speaker_itself_or_admin,
 }
 
 
@@ -394,24 +402,36 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     # For Orders API
     if 'order_identifier' in view_kwargs:
         try:
-            order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).one()
+            order = Order.query.filter_by(
+                identifier=view_kwargs['order_identifier']
+            ).one()
         except NoResultFound:
-            return NotFoundError({'parameter': 'order_identifier'}, 'Order not found').respond()
+            return NotFoundError(
+                {'parameter': 'order_identifier'}, 'Order not found'
+            ).respond()
         view_kwargs['id'] = order.id
 
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
-            event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()
+            event = Event.query.filter_by(
+                identifier=view_kwargs['event_identifier']
+            ).one()
         except NoResultFound:
-            return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
+            return NotFoundError(
+                {'parameter': 'event_identifier'}, 'Event not found'
+            ).respond()
         view_kwargs['event_id'] = event.id
 
     if view_kwargs.get('event_invoice_identifier') is not None:
         try:
-            event_invoice = EventInvoice.query.filter_by(identifier=view_kwargs['event_invoice_identifier']).one()
+            event_invoice = EventInvoice.query.filter_by(
+                identifier=view_kwargs['event_invoice_identifier']
+            ).one()
         except NoResultFound:
-            return NotFoundError({'parameter': 'event_invoice_identifier'}, 'Event Invoice not found').respond()
+            return NotFoundError(
+                {'parameter': 'event_invoice_identifier'}, 'Event Invoice not found'
+            ).respond()
         view_kwargs['id'] = event_invoice.id
 
     # Only for events API
@@ -458,7 +478,9 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 if not view_kwargs.get(f_url):
                     continue
                 try:
-                    data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
+                    data = mod.query.filter(
+                        getattr(mod, fetch_key_model) == view_kwargs[f_url]
+                    ).one()
                 except NoResultFound:
                     pass
                 else:

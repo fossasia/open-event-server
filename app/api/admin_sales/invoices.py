@@ -42,6 +42,6 @@ class AdminSalesInvoicesList(ResourceList):
     """
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesInvoicesSchema
     data_layer = {'model': EventInvoice, 'session': db.session}

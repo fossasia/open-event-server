@@ -18,6 +18,7 @@ class UserFavouriteEventListPost(ResourceList):
     """
     Create User Favourite Events
     """
+
     @classmethod
     def before_post(self, args, kwargs, data):
         """
@@ -32,19 +33,27 @@ class UserFavouriteEventListPost(ResourceList):
         if 'Authorization' in request.headers:
             verify_jwt_in_request()
         else:
-            raise ForbiddenException({'source': ''}, 'Only Authorized Users can favourite an event')
+            raise ForbiddenException(
+                {'source': ''}, 'Only Authorized Users can favourite an event'
+            )
 
         data['user'] = current_user.id
         user_favourite_event = find_user_favourite_event_by_id(event_id=data['event'])
         if user_favourite_event:
-            raise ConflictException({'pointer': '/data/relationships/event'}, "Event already favourited")
+            raise ConflictException(
+                {'pointer': '/data/relationships/event'}, "Event already favourited"
+            )
 
     view_kwargs = True
     schema = UserFavouriteEventSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': UserFavouriteEvent,
-                  'methods': {'before_post': before_post}}
+    methods = [
+        'POST',
+    ]
+    data_layer = {
+        'session': db.session,
+        'model': UserFavouriteEvent,
+        'methods': {'before_post': before_post},
+    }
 
 
 class UserFavouriteEventList(ResourceList):
@@ -69,25 +78,30 @@ class UserFavouriteEventList(ResourceList):
 
     methods = ['GET']
     schema = UserFavouriteEventSchema
-    data_layer = {'session': db.session,
-                  'model': UserFavouriteEvent,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': UserFavouriteEvent,
+        'methods': {'query': query},
+    }
 
 
 class UserFavouriteEventDetail(ResourceDetail):
     """
     User Favourite Events detail by id
     """
+
     @jwt_required
     def before_get_object(self, view_kwargs):
 
         if view_kwargs.get('id') is not None:
             try:
-                user_favourite_event = find_user_favourite_event_by_id(event_id=view_kwargs['id'])
+                user_favourite_event = find_user_favourite_event_by_id(
+                    event_id=view_kwargs['id']
+                )
             except NoResultFound:
-                raise ObjectNotFound({'source': '/data/relationships/event'}, "Object: not found")
+                raise ObjectNotFound(
+                    {'source': '/data/relationships/event'}, "Object: not found"
+                )
             else:
                 if user_favourite_event is not None:
                     view_kwargs['id'] = user_favourite_event.id
@@ -96,24 +110,24 @@ class UserFavouriteEventDetail(ResourceDetail):
 
     methods = ['GET', 'DELETE']
     schema = UserFavouriteEventSchema
-    data_layer = {'session': db.session,
-                  'model': UserFavouriteEvent,
-                  'methods': {
-                      'before_get_object': before_get_object,
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': UserFavouriteEvent,
+        'methods': {'before_get_object': before_get_object,},
+    }
 
 
 class UserFavouriteEventRelationship(ResourceRelationship):
     """
     User Favourite Events Relationship
     """
+
     schema = UserFavouriteEventSchema
     methods = ['GET']
-    data_layer = {'session': db.session,
-                  'model': UserFavouriteEvent}
+    data_layer = {'session': db.session, 'model': UserFavouriteEvent}
 
 
 def find_user_favourite_event_by_id(event_id):
-    return UserFavouriteEvent.query.filter_by(deleted_at=None,
-                                              user=current_user,
-                                              event_id=event_id).first()
+    return UserFavouriteEvent.query.filter_by(
+        deleted_at=None, user=current_user, event_id=event_id
+    ).first()

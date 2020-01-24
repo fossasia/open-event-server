@@ -17,15 +17,14 @@ from app.api.helpers.utilities import TASK_RESULTS
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
 
-EXPORT_SETTING = {
-    'image': False,
-    'video': False,
-    'document': False,
-    'audio': False
-}
+EXPORT_SETTING = {'image': False, 'video': False, 'document': False, 'audio': False}
 
 
-@export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'], endpoint='export_event')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/json',
+    methods=['POST'],
+    endpoint='export_event',
+)
 @to_event_id
 @is_coorganizer
 def export_event(event_id):
@@ -38,24 +37,20 @@ def export_event(event_id):
     settings['audio'] = request.json.get('audio', False)
 
     # queue task
-    task = export_event_task.delay(
-        current_user.email, event_id, settings)
+    task = export_event_task.delay(current_user.email, event_id, settings)
     # create Job
     create_export_job(task.id, event_id)
 
     # in case of testing
     if current_app.config.get('CELERY_ALWAYS_EAGER'):
         # send_export_mail(event_id, task.get())
-        TASK_RESULTS[task.id] = {
-            'result': task.get(),
-            'state': task.state
-        }
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+        TASK_RESULTS[task.id] = {'result': task.get(), 'state': task.state}
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_id>/exports/<path:path>', endpoint='export_download')
+@export_routes.route(
+    '/events/<string:event_id>/exports/<path:path>', endpoint='export_download'
+)
 @to_event_id
 @is_coorganizer
 def export_download(event_id, path):
@@ -64,11 +59,17 @@ def export_download(event_id, path):
     if not os.path.isfile(path):
         return 'Not Found', 404
     response = make_response(send_file(path))
-    response.headers['Content-Disposition'] = 'attachment; filename=event%d.zip' % event_id
+    response.headers['Content-Disposition'] = (
+        'attachment; filename=event%d.zip' % event_id
+    )
     return response
 
 
-@export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'], endpoint='export_event_xcal')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/xcal',
+    methods=['GET'],
+    endpoint='export_event_xcal',
+)
 @to_event_id
 @is_coorganizer
 def export_event_xcal(event_id):
@@ -80,9 +81,7 @@ def export_event_xcal(event_id):
     # create Job
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
 def event_export_task_base(event_id, settings):
@@ -92,7 +91,11 @@ def event_export_task_base(event_id, settings):
     return path
 
 
-@export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'], endpoint='export_event_ical')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/ical',
+    methods=['GET'],
+    endpoint='export_event_ical',
+)
 @to_event_id
 @is_coorganizer
 def export_event_ical(event_id):
@@ -102,13 +105,14 @@ def export_event_ical(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/pentabarf', methods=['GET'],
-                     endpoint='export_event_pentabarf')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/pentabarf',
+    methods=['GET'],
+    endpoint='export_event_pentabarf',
+)
 @to_event_id
 @is_coorganizer
 def export_event_pentabarf(event_id):
@@ -118,13 +122,14 @@ def export_event_pentabarf(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/orders/csv', methods=['GET'],
-                     endpoint='export_orders_csv')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/orders/csv',
+    methods=['GET'],
+    endpoint='export_orders_csv',
+)
 @to_event_id
 @is_coorganizer
 def export_orders_csv(event_id):
@@ -134,13 +139,14 @@ def export_orders_csv(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/orders/pdf', methods=['GET'],
-                     endpoint='export_orders_pdf')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/orders/pdf',
+    methods=['GET'],
+    endpoint='export_orders_pdf',
+)
 @to_event_id
 @is_coorganizer
 def export_orders_pdf(event_id):
@@ -150,13 +156,14 @@ def export_orders_pdf(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/attendees/csv', methods=['GET'],
-                     endpoint='export_attendees_csv')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/attendees/csv',
+    methods=['GET'],
+    endpoint='export_attendees_csv',
+)
 @to_event_id
 @is_coorganizer
 def export_attendees_csv(event_id):
@@ -166,13 +173,14 @@ def export_attendees_csv(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/attendees/pdf', methods=['GET'],
-                     endpoint='export_attendees_pdf')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/attendees/pdf',
+    methods=['GET'],
+    endpoint='export_attendees_pdf',
+)
 @to_event_id
 @is_coorganizer
 def export_attendees_pdf(event_id):
@@ -182,13 +190,14 @@ def export_attendees_pdf(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/sessions/csv', methods=['GET'],
-                     endpoint='export_sessions_csv')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/sessions/csv',
+    methods=['GET'],
+    endpoint='export_sessions_csv',
+)
 @to_event_id
 @is_coorganizer
 def export_sessions_csv(event_id):
@@ -198,13 +207,14 @@ def export_sessions_csv(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/speakers/csv', methods=['GET'],
-                     endpoint='export_speakers_csv')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/speakers/csv',
+    methods=['GET'],
+    endpoint='export_speakers_csv',
+)
 @to_event_id
 @is_coorganizer
 def export_speakers_csv(event_id):
@@ -214,13 +224,14 @@ def export_speakers_csv(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/sessions/pdf', methods=['GET'],
-                     endpoint='export_sessions_pdf')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/sessions/pdf',
+    methods=['GET'],
+    endpoint='export_sessions_pdf',
+)
 @to_event_id
 @is_coorganizer
 def export_sessions_pdf(event_id):
@@ -230,13 +241,14 @@ def export_sessions_pdf(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
 
-@export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'],
-                     endpoint='export_speakers_pdf')
+@export_routes.route(
+    '/events/<string:event_identifier>/export/speakers/pdf',
+    methods=['GET'],
+    endpoint='export_speakers_pdf',
+)
 @to_event_id
 @is_coorganizer
 def export_speakers_pdf(event_id):
@@ -246,6 +258,4 @@ def export_speakers_pdf(event_id):
 
     create_export_job(task.id, event_id)
 
-    return jsonify(
-        task_url=url_for('tasks.celery_task', task_id=task.id)
-    )
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))

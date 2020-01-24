@@ -13,20 +13,24 @@ from app.models.user import User
 
 
 def sales_per_marketer_and_discount_by_status(status):
-    return db.session.query(Event.id.label('event_id'),
-                            DiscountCode.id.label('discount_code_id'),
-                            User.id.label('marketer_id'),
-                            func.sum(Order.amount).label(status + '_sales'),
-                            func.sum(OrderTicket.quantity).label(status + '_tickets')) \
-                     .filter(Event.id == Order.event_id) \
-                     .filter(Order.marketer_id == User.id) \
-                     .filter(Order.discount_code_id == DiscountCode.id) \
-                     .filter(Order.status == status) \
-                     .group_by(Event) \
-                     .group_by(DiscountCode) \
-                     .group_by(User) \
-                     .group_by(Order.status) \
-                     .cte()
+    return (
+        db.session.query(
+            Event.id.label('event_id'),
+            DiscountCode.id.label('discount_code_id'),
+            User.id.label('marketer_id'),
+            func.sum(Order.amount).label(status + '_sales'),
+            func.sum(OrderTicket.quantity).label(status + '_tickets'),
+        )
+        .filter(Event.id == Order.event_id)
+        .filter(Order.marketer_id == User.id)
+        .filter(Order.discount_code_id == DiscountCode.id)
+        .filter(Order.status == status)
+        .group_by(Event)
+        .group_by(DiscountCode)
+        .group_by(User)
+        .group_by(Order.status)
+        .cte()
+    )
 
 
 class AdminSalesDiscountedSchema(Schema):
@@ -80,38 +84,44 @@ class AdminSalesDiscountedList(ResourceList):
         completed = sales_per_marketer_and_discount_by_status('completed')
         placed = sales_per_marketer_and_discount_by_status('placed')
 
-        discounts = self.session.query(Event.id.label('event_id'),
-                                       Event.name.label('event_name'),
-                                       DiscountCode.id.label('discount_code_id'),
-                                       DiscountCode.code.label('code'),
-                                       User.id.label('marketer_id'),
-                                       User.email.label('email')) \
-                                .filter(Event.id == Order.event_id) \
-                                .filter(Order.marketer_id == User.id) \
-                                .filter(Order.discount_code_id == DiscountCode.id) \
-                                .cte()
+        discounts = (
+            self.session.query(
+                Event.id.label('event_id'),
+                Event.name.label('event_name'),
+                DiscountCode.id.label('discount_code_id'),
+                DiscountCode.code.label('code'),
+                User.id.label('marketer_id'),
+                User.email.label('email'),
+            )
+            .filter(Event.id == Order.event_id)
+            .filter(Order.marketer_id == User.id)
+            .filter(Order.discount_code_id == DiscountCode.id)
+            .cte()
+        )
 
-        return self.session.query(discounts, pending, completed, placed) \
-                           .outerjoin(pending,
-                                      (pending.c.event_id == discounts.c.event_id) &
-                                      (pending.c.discount_code_id == discounts.c.discount_code_id) &
-                                      (pending.c.marketer_id == discounts.c.marketer_id)) \
-                           .outerjoin(completed,
-                                      (completed.c.event_id == discounts.c.event_id) &
-                                      (completed.c.discount_code_id == discounts.c.discount_code_id) &
-                                      (completed.c.marketer_id == discounts.c.marketer_id)) \
-                           .outerjoin(placed,
-                                      (placed.c.event_id == discounts.c.event_id) &
-                                      (placed.c.discount_code_id == discounts.c.discount_code_id) &
-                                      (placed.c.marketer_id == discounts.c.marketer_id))
+        return (
+            self.session.query(discounts, pending, completed, placed)
+            .outerjoin(
+                pending,
+                (pending.c.event_id == discounts.c.event_id)
+                & (pending.c.discount_code_id == discounts.c.discount_code_id)
+                & (pending.c.marketer_id == discounts.c.marketer_id),
+            )
+            .outerjoin(
+                completed,
+                (completed.c.event_id == discounts.c.event_id)
+                & (completed.c.discount_code_id == discounts.c.discount_code_id)
+                & (completed.c.marketer_id == discounts.c.marketer_id),
+            )
+            .outerjoin(
+                placed,
+                (placed.c.event_id == discounts.c.event_id)
+                & (placed.c.discount_code_id == discounts.c.discount_code_id)
+                & (placed.c.marketer_id == discounts.c.marketer_id),
+            )
+        )
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesDiscountedSchema
-    data_layer = {
-        'model': Event,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': Event, 'session': db.session, 'methods': {'query': query}}

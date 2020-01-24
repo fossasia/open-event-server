@@ -32,6 +32,8 @@ class ModuleDetail(ResourceDetail):
     decorators = (api.has_permission('is_admin', methods='PATCH', id='1'),)
     methods = ['GET', 'PATCH']
     schema = ModuleSchema
-    data_layer = {'session': db.session,
-                  'model': Module,
-                  'methods': {'before_patch': before_patch}}
+    data_layer = {
+        'session': db.session,
+        'model': Module,
+        'methods': {'before_patch': before_patch},
+    }

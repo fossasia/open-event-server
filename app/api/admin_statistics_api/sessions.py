@@ -14,10 +14,12 @@ class AdminStatisticsSessionSchema(Schema):
     """
     Api schema
     """
+
     class Meta:
         """
         Meta class
         """
+
         type_ = 'admin-statistics-session'
         self_view = 'v1.admin_statistics_session_detail'
         inflect = dasherize
@@ -53,10 +55,8 @@ class AdminStatisticsSessionDetail(ResourceDetail):
     """
     Detail by id
     """
+
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)
     schema = AdminStatisticsSessionSchema
-    data_layer = {
-        'class': NoModelLayer,
-        'session': db.session
-    }
+    data_layer = {'class': NoModelLayer, 'session': db.session}

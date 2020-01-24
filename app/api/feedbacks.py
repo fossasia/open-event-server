@@ -33,14 +33,19 @@ class FeedbackListPost(ResourceList):
         """
         require_relationship(['user'], data)
         if not has_access('is_user_itself', user_id=int(data['user'])):
-            raise ObjectNotFound({'parameter': 'user_id'},
-                                 "User: {} doesn't match auth key".format(data['user']))
+            raise ObjectNotFound(
+                {'parameter': 'user_id'},
+                "User: {} doesn't match auth key".format(data['user']),
+            )
         if 'event' in data and 'session' in data:
-            raise UnprocessableEntity({'pointer': ''},
-                                      "Only one relationship between event and session is allowed")
+            raise UnprocessableEntity(
+                {'pointer': ''},
+                "Only one relationship between event and session is allowed",
+            )
         if 'event' not in data and 'session' not in data:
-            raise UnprocessableEntity({'pointer': ''},
-                                      "A valid relationship with event and session is required")
+            raise UnprocessableEntity(
+                {'pointer': ''}, "A valid relationship with event and session is required"
+            )
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -52,14 +57,19 @@ class FeedbackListPost(ResourceList):
         if data.get('session', None):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenException({'source': ''},
-                                         "Event co-organizer access required")
+                raise ForbiddenException(
+                    {'source': ''}, "Event co-organizer access required"
+                )
 
     schema = FeedbackSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': Feedback,
-                  'methods': {'before_create_object': before_create_object}}
+    methods = [
+        'POST',
+    ]
+    data_layer = {
+        'session': db.session,
+        'model': Feedback,
+        'methods': {'before_create_object': before_create_object},
+    }
 
 
 class FeedbackList(ResourceList):
@@ -77,24 +87,28 @@ class FeedbackList(ResourceList):
         if view_kwargs.get('user_id'):
             # feedbacks under an user
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User, User.id == Feedback.user_id).filter(User.id == user.id)
+            query_ = query_.join(User, User.id == Feedback.user_id).filter(
+                User.id == user.id
+            )
         elif view_kwargs.get('session_id'):
             # feedbacks under a session
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
-            query_ = query_.join(Session, Session.id == Feedback.session_id).filter(Session.id == session.id)
+            session = safe_query(
+                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+            )
+            query_ = query_.join(Session, Session.id == Feedback.session_id).filter(
+                Session.id == session.id
+            )
         else:
             # feedbacks under an event
             query_ = event_query(self, query_, view_kwargs)
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
+    methods = [
+        'GET',
+    ]
     schema = FeedbackSchema
-    data_layer = {'session': db.session,
-                  'model': Feedback,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {'session': db.session, 'model': Feedback, 'methods': {'query': query}}
 
 
 class FeedbackDetail(ResourceDetail):
@@ -112,7 +126,13 @@ class FeedbackDetail(ResourceDetail):
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
 
         if event:
             feedback = safe_query(self, Feedback, 'event_id', event.id, 'event_id')
@@ -129,36 +149,55 @@ class FeedbackDetail(ResourceDetail):
         if feedback and feedback.session_id:
             session = Session.query.filter_by(id=feedback.session_id).first()
             if session and not current_user.id == feedback.user_id:
-                raise ForbiddenException({'source': ''},
-                                         "Feedback can be updated only by user himself")
+                raise ForbiddenException(
+                    {'source': ''}, "Feedback can be updated only by user himself"
+                )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenException({'source': ''},
-                                         "Event co-organizer access required")
+                raise ForbiddenException(
+                    {'source': ''}, "Event co-organizer access required"
+                )
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):
                 delete_feedback(feedback)
             else:
-                raise ForbiddenException({'source': ''},
-                                         "Feedback can be deleted only by user himself")
+                raise ForbiddenException(
+                    {'source': ''}, "Feedback can be deleted only by user himself"
+                )
 
-    decorators = (api.has_permission('is_user_itself', fetch='user_id',
-                                     fetch_as="user_id", model=Feedback, methods="PATCH,DELETE"),)
+    decorators = (
+        api.has_permission(
+            'is_user_itself',
+            fetch='user_id',
+            fetch_as="user_id",
+            model=Feedback,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = FeedbackSchema
-    data_layer = {'session': db.session,
-                  'model': Feedback,
-                  'methods': {
-                      'before_update_object': before_update_object,
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Feedback,
+        'methods': {
+            'before_update_object': before_update_object,
+            'before_get_object': before_get_object,
+        },
+    }
 
 
 class FeedbackRelationship(ResourceRelationship):
     """
     Feedback Relationship
     """
-    decorators = (api.has_permission('is_user_itself', fetch='user_id',
-                                     fetch_as="user_id", model=Feedback, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_user_itself',
+            fetch='user_id',
+            fetch_as="user_id",
+            model=Feedback,
+            methods="PATCH",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = FeedbackSchema
-    data_layer = {'session': db.session,
-                  'model': Feedback}
+    data_layer = {'session': db.session, 'model': Feedback}

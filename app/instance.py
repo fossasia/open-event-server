@@ -84,12 +84,16 @@ def create_app():
 
     if not app.config['SECRET_KEY']:
         if app.config['PRODUCTION']:
-            app.logger.error('SECRET_KEY must be set in .env or environment variables in production')
+            app.logger.error(
+                'SECRET_KEY must be set in .env or environment variables in production'
+            )
             exit(1)
         else:
             random_secret = secrets.token_hex()
-            app.logger.warning(f'Using random secret "{ random_secret }" for development server. '
-                               'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
+            app.logger.warning(
+                f'Using random secret "{ random_secret }" for development server. '
+                'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables'
+            )
             app.config['SECRET_KEY'] = random_secret
 
     db.init_app(app)
@@ -184,14 +188,21 @@ def create_app():
     sa.orm.configure_mappers()
 
     if app.config['SERVE_STATIC']:
-        app.add_url_rule('/static/<path:filename>',
-                         endpoint='static',
-                         view_func=app.send_static_file)
+        app.add_url_rule(
+            '/static/<path:filename>', endpoint='static', view_func=app.send_static_file
+        )
 
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
-        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration(), RedisIntegration(),
-                                                                CeleryIntegration(), SqlalchemyIntegration()])
+        sentry_sdk.init(
+            app.config['SENTRY_DSN'],
+            integrations=[
+                FlaskIntegration(),
+                RedisIntegration(),
+                CeleryIntegration(),
+                SqlalchemyIntegration(),
+            ],
+        )
 
     # redis
     redis_store.init_app(app)
@@ -228,9 +239,11 @@ health.add_check(health_check_migrations)
 # it is important to register them after celery is defined to resolve circular imports
 
 from .api.helpers import tasks
+
 celery = tasks.celery
 # register scheduled jobs
 from app.api.helpers.scheduled_jobs import setup_scheduled_task
+
 setup_scheduled_task(celery)
 
 
@@ -251,20 +264,20 @@ def internal_server_error(error):
         exc = JsonApiException({'pointer': ''}, str(error))
     else:
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
-    return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
-                         {'Content-Type': 'application/vnd.api+json'})
+    return make_response(
+        json.dumps(jsonapi_errors([exc.to_dict()])),
+        exc.status,
+        {'Content-Type': 'application/vnd.api+json'},
+    )
 
 
 @app.errorhandler(429)
 def ratelimit_handler(error):
-    return make_response(json.dumps({
-            'status': 429,
-            'title': 'Request Limit Exceeded'
-        }),
+    return make_response(
+        json.dumps({'status': 429, 'title': 'Request Limit Exceeded'}),
         429,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
+        {'Content-Type': 'application/vnd.api+json'},
+    )
 
 
 if __name__ == '__main__':

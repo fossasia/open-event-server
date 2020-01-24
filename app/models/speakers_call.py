@@ -6,6 +6,7 @@ from app.models.base import SoftDeletionModel
 
 class SpeakersCall(SoftDeletionModel):
     """call for paper model class"""
+
     __tablename__ = 'speakers_calls'
     id = db.Column(db.Integer, primary_key=True)
     announcement = db.Column(db.Text, nullable=False)
@@ -16,8 +17,16 @@ class SpeakersCall(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref=backref("speakers_call", uselist=False))
 
-    def __init__(self, announcement=None, starts_at=None, ends_at=None, hash=None, privacy='public',
-                 event_id=None, deleted_at=None):
+    def __init__(
+        self,
+        announcement=None,
+        starts_at=None,
+        ends_at=None,
+        hash=None,
+        privacy='public',
+        event_id=None,
+        deleted_at=None,
+    ):
         self.announcement = announcement
         self.starts_at = starts_at
         self.ends_at = ends_at
@@ -39,8 +48,12 @@ class SpeakersCall(SoftDeletionModel):
         return {
             'id': self.id,
             'announcement': self.announcement,
-            'starts_at': self.starts_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.starts_at else '',
-            'ends_at': self.ends_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.ends_at else '',
+            'starts_at': self.starts_at.strftime("%Y-%m-%dT%H:%M:%S%Z")
+            if self.starts_at
+            else '',
+            'ends_at': self.ends_at.strftime("%Y-%m-%dT%H:%M:%S%Z")
+            if self.ends_at
+            else '',
             'privacy': self.privacy,
-            'hash': self.hash
+            'hash': self.hash,
         }

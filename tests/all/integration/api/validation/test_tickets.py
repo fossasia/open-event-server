@@ -10,7 +10,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestTicketValidation(OpenEventTestCase):
-
     def test_date_db_populate(self):
         """
         Tickets Validate Date - Tests if validation works on values stored in db and not given in 'data'
@@ -20,11 +19,7 @@ class TestTicketValidation(OpenEventTestCase):
             schema = TicketSchema()
             TicketFactory()
 
-            original_data = {
-                'data': {
-                    'id': 1
-                }
-            }
+            original_data = {'data': {'id': 1}}
             data = {}
             TicketSchema.validate_date(schema, data, original_data)
 

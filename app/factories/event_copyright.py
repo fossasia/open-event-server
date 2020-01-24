@@ -6,7 +6,6 @@ from app.models.event_copyright import EventCopyright, db
 
 
 class EventCopyrightFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = EventCopyright
         sqlalchemy_session = db.session

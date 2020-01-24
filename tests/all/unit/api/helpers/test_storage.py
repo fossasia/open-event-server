@@ -18,7 +18,7 @@ class TestStorageHelperValidation(unittest.TestCase):
 
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+        )
 
     def test_http_url(self):
         """Method to test a url with port 80."""
@@ -26,7 +26,7 @@ class TestStorageHelperValidation(unittest.TestCase):
         expected_file_url = 'http://localhost/some/path/image.png'
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+        )
 
     def test_https_url(self):
         """Method to test a url with port 443."""
@@ -34,7 +34,7 @@ class TestStorageHelperValidation(unittest.TestCase):
         expected_file_url = 'https://localhost/some/path/image.png'
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+        )
 
     def test_create_url(self):
         """Method to test a generated url of uploaded file"""
@@ -42,7 +42,7 @@ class TestStorageHelperValidation(unittest.TestCase):
         expected_file_url = 'https://localhost:4200/some/path/image.png'
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+        )
 
     def test_generate_hash(self):
         """Test generation of hash for a key."""

@@ -16,6 +16,7 @@ class AuthManager:
     @staticmethod
     def init_login(app):
         from flask import request, url_for, redirect
+
         login_manager = login.LoginManager()
         login_manager.init_app(app)
 
@@ -58,7 +59,9 @@ def blacklist_token(user):
 
 
 def is_token_blacklisted(token):
-    blacklist_time = UserTokenBlackListTime.query.filter_by(user_id=token['identity']).first()
+    blacklist_time = UserTokenBlackListTime.query.filter_by(
+        user_id=token['identity']
+    ).first()
     if not blacklist_time:
         return False
     return token['iat'] < blacklist_time.blacklisted_at.timestamp()

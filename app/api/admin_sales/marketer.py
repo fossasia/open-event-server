@@ -43,16 +43,13 @@ class AdminSalesByMarketerList(ResourceList):
     """
 
     def query(self, _):
-        return self.session.query(User).join(
-            Order, Order.marketer_id == User.id).outerjoin(OrderTicket)
+        return (
+            self.session.query(User)
+            .join(Order, Order.marketer_id == User.id)
+            .outerjoin(OrderTicket)
+        )
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByMarketerSchema
-    data_layer = {
-        'model': User,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': User, 'session': db.session, 'methods': {'query': query}}

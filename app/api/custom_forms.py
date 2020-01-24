@@ -28,20 +28,22 @@ class CustomFormListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event_id']))
+            raise ObjectNotFound(
+                {'parameter': 'event_id'}, "Event: {} not found".format(data['event_id'])
+            )
 
     schema = CustomFormSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': CustomForms
-                  }
+    methods = [
+        'POST',
+    ]
+    data_layer = {'session': db.session, 'model': CustomForms}
 
 
 class CustomFormList(ResourceList):
     """
     Create and List Custom Forms
     """
+
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -53,14 +55,16 @@ class CustomFormList(ResourceList):
         return query_
 
     view_kwargs = True
-    decorators = (jwt_required, )
-    methods = ['GET', ]
+    decorators = (jwt_required,)
+    methods = [
+        'GET',
+    ]
     schema = CustomFormSchema
-    data_layer = {'session': db.session,
-                  'model': CustomForms,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': CustomForms,
+        'methods': {'query': query},
+    }
 
 
 class CustomFormDetail(ResourceDetail):
@@ -78,29 +82,49 @@ class CustomFormDetail(ResourceDetail):
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
 
         if event:
             custom_form = safe_query(self, CustomForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = custom_form.id
 
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"), )
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=CustomForms,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = CustomFormSchema
-    data_layer = {'session': db.session,
-                  'model': CustomForms,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': CustomForms,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class CustomFormRelationshipRequired(ResourceRelationship):
     """
     CustomForm Relationship (Required)
     """
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=CustomForms, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch='event_id',
+            fetch_as="event_id",
+            model=CustomForms,
+            methods="PATCH",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = CustomFormSchema
-    data_layer = {'session': db.session,
-                  'model': CustomForms}
+    data_layer = {'session': db.session, 'model': CustomForms}

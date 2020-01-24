@@ -18,6 +18,7 @@ class EventTopicList(ResourceList):
     """
     List and create event topics
     """
+
     def after_create_object(self, event_topic, data, view_kwargs):
         """
         after create method to save roles for users and add the user as an accepted role(organizer)
@@ -28,7 +29,9 @@ class EventTopicList(ResourceList):
         """
         if data.get('system_image_url'):
             try:
-                uploaded_image = create_system_image(data['system_image_url'], unique_identifier=event_topic.id)
+                uploaded_image = create_system_image(
+                    data['system_image_url'], unique_identifier=event_topic.id
+                )
             except (urllib.error.HTTPError, urllib.error.URLError):
                 raise UnprocessableEntity(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
@@ -50,15 +53,18 @@ class EventTopicList(ResourceList):
 
     decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = EventTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventTopic,
-                  'methods': {'after_create_object': after_create_object}}
+    data_layer = {
+        'session': db.session,
+        'model': EventTopic,
+        'methods': {'after_create_object': after_create_object},
+    }
 
 
 class EventTopicDetail(ResourceDetail):
     """
     Event topic detail by id
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method to get the resource id for fetching details
@@ -66,7 +72,13 @@ class EventTopicDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
@@ -77,8 +89,13 @@ class EventTopicDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(self, EventSubTopic, 'id', view_kwargs['event_sub_topic_id'],
-                                         'event_sub_topic_id')
+            event_sub_topic = safe_query(
+                self,
+                EventSubTopic,
+                'id',
+                view_kwargs['event_sub_topic_id'],
+                'event_sub_topic_id',
+            )
             if event_sub_topic.event_topic_id:
                 view_kwargs['id'] = event_sub_topic.event_topic_id
             else:
@@ -94,7 +111,9 @@ class EventTopicDetail(ResourceDetail):
         """
         if data.get('system_image_url'):
             try:
-                uploaded_image = create_system_image(data['system_image_url'], unique_identifier=event_topic.id)
+                uploaded_image = create_system_image(
+                    data['system_image_url'], unique_identifier=event_topic.id
+                )
             except (urllib.error.HTTPError, urllib.error.URLError):
                 raise UnprocessableEntity(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
@@ -115,19 +134,21 @@ class EventTopicDetail(ResourceDetail):
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventTopic,
-                  'methods': {
-                      'before_update_object': before_update_object,
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EventTopic,
+        'methods': {
+            'before_update_object': before_update_object,
+            'before_get_object': before_get_object,
+        },
+    }
 
 
 class EventTopicRelationship(ResourceRelationship):
     """
     Event topic Relationship
     """
+
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventTopicSchema
-    data_layer = {'session': db.session,
-                  'model': EventTopic}
+    data_layer = {'session': db.session, 'model': EventTopic}

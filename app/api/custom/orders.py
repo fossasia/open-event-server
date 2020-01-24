@@ -30,10 +30,16 @@ def ticket_attendee_authorized(order_identifier):
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
         except NoResultFound:
-            return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
+            return NotFoundError(
+                {'source': ''}, 'This ticket is not associated with any order'
+            ).respond()
         if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            file_path = (
+                '../generated/tickets/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
             try:
                 return return_file('ticket', file_path, order_identifier)
             except FileNotFoundError:
@@ -42,16 +48,18 @@ def ticket_attendee_authorized(order_identifier):
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
-        return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()
+        return ForbiddenError(
+            {'source': ''}, 'Authentication Required to access ticket'
+        ).respond()
 
 
 @order_blueprint.route('/resend-email', methods=['POST'])
 @limiter.limit(
-    '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
+    '5/minute',
+    key_func=lambda: request.json['data']['user'],
+    error_message='Limit for this action exceeded',
 )
-@limiter.limit(
-    '60/minute', error_message='Limit for this action exceeded'
-)
+@limiter.limit('60/minute', error_message='Limit for this action exceeded')
 def resend_emails():
     """
     Sends confirmation email for pending and completed orders on organizer request
@@ -60,22 +68,40 @@ def resend_emails():
     """
     order_identifier = request.json['data']['order']
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
-    if (has_access('is_coorganizer', event_id=order.event_id)):
+    if has_access('is_coorganizer', event_id=order.event_id):
         if order.status == 'completed' or order.status == 'placed':
             # fetch tickets attachment
             order_identifier = order.identifier
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            ticket_path = (
+                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            invoice_path = (
+                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+                + order_identifier
+                + '.pdf'
+            )
 
             # send email.
-            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
-            return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
-                           format(order_identifier))
+            send_email_to_attendees(
+                order=order,
+                purchaser_id=current_user.id,
+                attachments=[ticket_path, invoice_path],
+            )
+            return jsonify(
+                status=True,
+                message="Verification emails for order : {} has been sent succesfully".format(
+                    order_identifier
+                ),
+            )
         else:
-            return UnprocessableEntityError({'source': 'data/order'},
-                                            "Only placed and completed orders have confirmation").respond()
+            return UnprocessableEntityError(
+                {'source': 'data/order'},
+                "Only placed and completed orders have confirmation",
+            ).respond()
     else:
         return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
 
@@ -112,21 +138,43 @@ def create_order():
         return make_response(jsonify(result.errors), 422)
     ticket_ids = {int(ticket['id']) for ticket in tickets}
     quantity = {int(ticket['id']): ticket['quantity'] for ticket in tickets}
-    ticket_list = db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids)).filter_by(event_id=data['event_id'],
-                                                                                       deleted_at=None).all()
+    ticket_list = (
+        db.session.query(Ticket)
+        .filter(Ticket.id.in_(ticket_ids))
+        .filter_by(event_id=data['event_id'], deleted_at=None)
+        .all()
+    )
     ticket_ids_found = {ticket_information.id for ticket_information in ticket_list}
     tickets_not_found = ticket_ids - ticket_ids_found
     if tickets_not_found:
-        return make_response(jsonify(status='Order Unsuccessful', error='Tickets with id {} were not found in Event {}.'
-                                     .format(tickets_not_found, data['event_id'])), 404)
+        return make_response(
+            jsonify(
+                status='Order Unsuccessful',
+                error='Tickets with id {} were not found in Event {}.'.format(
+                    tickets_not_found, data['event_id']
+                ),
+            ),
+            404,
+        )
     for ticket_info in ticket_list:
-        if (ticket_info.quantity - get_count(db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(ticket_info.id), deleted_at=None))) < quantity[ticket_info.id]:
-            return make_response(jsonify(status='Order Unsuccessful', error='Ticket already sold out.'), 409)
+        if (
+            ticket_info.quantity
+            - get_count(
+                db.session.query(TicketHolder.id).filter_by(
+                    ticket_id=int(ticket_info.id), deleted_at=None
+                )
+            )
+        ) < quantity[ticket_info.id]:
+            return make_response(
+                jsonify(status='Order Unsuccessful', error='Ticket already sold out.'),
+                409,
+            )
     attendee_list = []
     for ticket in tickets:
         for ticket_amount in range(ticket['quantity']):
-            attendee = TicketHolder(**result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id']))
+            attendee = TicketHolder(
+                **result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id'])
+            )
             db.session.add(attendee)
             attendee_list.append(attendee)
     ticket_pricing = calculate_order_amount(tickets, discount_code)
@@ -135,8 +183,12 @@ def create_order():
     # create on site attendees
     # check if order already exists for this attendee.
     # check for free tickets and verified user
-    order = Order(amount=ticket_pricing['total_amount'], user_id=current_user.id, event_id=int(data['event_id']),
-                  status=data['status'])
+    order = Order(
+        amount=ticket_pricing['total_amount'],
+        user_id=current_user.id,
+        event_id=int(data['event_id']),
+        status=data['status'],
+    )
     db.session.add(order)
     db.session.commit()
     db.session.refresh(order)
@@ -152,7 +204,9 @@ def create_order():
     create_pdf_tickets_for_holder(order)
 
     for ticket in order_tickets:
-        od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
+        od = OrderTicket(
+            order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
+        )
         db.session.add(od)
 
     order.quantity = order.tickets_count

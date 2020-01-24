@@ -18,16 +18,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--workdir', help='Directory to clone projects in')
 parser.add_argument('--config', help='config.yml with project descriptions')
 
+
 def get_auto_updater(cwd, name, cfg):
     logger.info('project <%s> from <%s> added', name, cfg['url'])
-    a = AutoUpdater(
-        name, cfg['url'], cwd=join(cwd, name), branch=cfg['branch'])
+    a = AutoUpdater(name, cfg['url'], cwd=join(cwd, name), branch=cfg['branch'])
 
     if 'init' in cfg or 'upgrade' in cfg:
         a.add_scripts(
-            container=cfg['container'],
-            init_cmd=cfg['init'],
-            upgrade_cmd=cfg['upgrade'])
+            container=cfg['container'], init_cmd=cfg['init'], upgrade_cmd=cfg['upgrade']
+        )
 
     return a
 
@@ -58,7 +57,6 @@ if __name__ == '__main__':
 
     with open(config_file, 'r') as ymlfile:
         config = yaml.safe_load(ymlfile)
-
 
     projects = [get_auto_updater(cwd, n, config[n]) for n in config]
 

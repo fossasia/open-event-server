@@ -12,7 +12,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestExportJobHelpers(OpenEventTestCase):
-
     def test_create_export_job(self):
         """Method to test export job before creation"""
 

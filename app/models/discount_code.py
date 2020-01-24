@@ -29,23 +29,25 @@ class DiscountCode(SoftDeletionModel):
 
     used_for = db.Column(db.String, nullable=False)
 
-    def __init__(self,
-                 code=None,
-                 discount_url=None,
-                 value=None,
-                 type=None,
-                 tickets_number=None,
-                 min_quantity=None,
-                 max_quantity=None,
-                 valid_from=None,
-                 valid_till=None,
-                 is_active=True,
-                 created_at=None,
-                 used_for=None,
-                 event_id=None,
-                 user_id=None,
-                 marketer_id=None,
-                 deleted_at=None):
+    def __init__(
+        self,
+        code=None,
+        discount_url=None,
+        value=None,
+        type=None,
+        tickets_number=None,
+        min_quantity=None,
+        max_quantity=None,
+        valid_from=None,
+        valid_till=None,
+        is_active=True,
+        created_at=None,
+        used_for=None,
+        event_id=None,
+        user_id=None,
+        marketer_id=None,
+        deleted_at=None,
+    ):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -76,16 +78,18 @@ class DiscountCode(SoftDeletionModel):
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
-        return {'id': self.id,
-                'code': self.code,
-                'discount_url': self.discount_url,
-                'value': self.value,
-                'type': self.type,
-                'tickets_number': self.tickets_number,
-                'min_quantity': self.min_quantity,
-                'max_quantity': self.max_quantity,
-                'used_for': self.used_for,
-                'valid_from': self.valid_from,
-                'valid_till': self.valid_till,
-                'event_id': self.event_id,
-                'is_active': self.is_active}
+        return {
+            'id': self.id,
+            'code': self.code,
+            'discount_url': self.discount_url,
+            'value': self.value,
+            'type': self.type,
+            'tickets_number': self.tickets_number,
+            'min_quantity': self.min_quantity,
+            'max_quantity': self.max_quantity,
+            'used_for': self.used_for,
+            'valid_from': self.valid_from,
+            'valid_till': self.valid_till,
+            'event_id': self.event_id,
+            'is_active': self.is_active,
+        }

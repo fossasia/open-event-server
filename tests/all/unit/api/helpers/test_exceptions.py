@@ -10,18 +10,21 @@ from app.api.helpers.exceptions import (
 
 
 class TestExceptionsHelperValidation(TestCase):
-
     def test_exceptions(self):
         """Method to test all exceptions."""
 
         # Unprocessable Entity Exception
         with self.assertRaises(UnprocessableEntity):
-            raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                      "min-quantity should be less than max-quantity")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/min-quantity'},
+                "min-quantity should be less than max-quantity",
+            )
 
         # Conflict Exception
         with self.assertRaises(ConflictException):
-            raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
+            raise ConflictException(
+                {'pointer': '/data/attributes/email'}, "Email already exists"
+            )
 
         # Forbidden Exception
         with self.assertRaises(ForbiddenException):

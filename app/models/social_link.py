@@ -29,7 +29,9 @@ class SocialLink(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="social_link")
 
-    def __init__(self, name=None, link=None, event_id=None, deleted_at=None, identifier=None):
+    def __init__(
+        self, name=None, link=None, event_id=None, deleted_at=None, identifier=None
+    ):
         self.name = name
         self.link = link
         self.event_id = event_id

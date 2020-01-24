@@ -35,7 +35,9 @@ def use_defaults():
     Adds the make_object method defined above to the class.
     :return: wrapper
     """
+
     def wrapper(k, *args, **kwargs):
         setattr(k, "make_object", eval("make_object", *args, **kwargs))
         return k
+
     return wrapper

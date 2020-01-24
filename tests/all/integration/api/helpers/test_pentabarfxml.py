@@ -14,7 +14,6 @@ from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestPentabarfXML(OpenEventTestCase):
-
     def test_export(self):
         """Test to check event contents in pentabarfxml format"""
         with self.app.test_request_context():
@@ -24,7 +23,9 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_string = pentabarf_export.export(test_event.id)
             pentabarf_original = fromstring(pentabarf_string)
             self.assertEqual(pentabarf_original.find('conference/title').text, "example")
-            self.assertEqual(pentabarf_original.find('conference/start').text, "2099-12-13")
+            self.assertEqual(
+                pentabarf_original.find('conference/start').text, "2099-12-13"
+            )
 
     def test_export_with_none_ends(self):
         """Test to check event with session with none ends in pentabarfxml format"""
@@ -34,7 +35,9 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_export = PentabarfExporter()
             pentabarf_string = pentabarf_export.export(session.event.id)
             pentabarf_original = fromstring(pentabarf_string)
-            self.assertEqual(pentabarf_original.find('day/room/event/duration').text, None)
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/duration').text, None
+            )
 
     def test_export_with_none_starts(self):
         """Test to check event with session with none starts in pentabarfxml format"""
@@ -57,30 +60,39 @@ class TestPentabarfXML(OpenEventTestCase):
                 microlocation__name='Great Hall',
                 event__name='Awesome Conference',
                 event__starts_at=datetime(2019, 10, 15),
-                event__ends_at=datetime(2019, 10, 16, 13, 30, 00))
+                event__ends_at=datetime(2019, 10, 16, 13, 30, 00),
+            )
 
             UserFactory()
             mario = SpeakerFactoryBase.build(name='Mario Behling', user_id=1)
-            keynote.speakers = [mario, SpeakerFactoryBase.build(name='Hong Phuc Dang', user_id=1)]
+            keynote.speakers = [
+                mario,
+                SpeakerFactoryBase.build(name='Hong Phuc Dang', user_id=1),
+            ]
 
             SessionFactoryBase(
                 title='Hot Session',
                 starts_at=datetime(2019, 10, 15, 11, 30, 00),
-                ends_at=datetime(2019, 10, 15, 12, 00, 54))
+                ends_at=datetime(2019, 10, 15, 12, 00, 54),
+            )
 
             future_session = SessionFactoryBase(
                 title='Future Session',
                 starts_at=datetime(2019, 10, 16, 9, 15, 30),
-                ends_at=datetime(2019, 10, 16, 10, 30, 45))
+                ends_at=datetime(2019, 10, 16, 10, 30, 45),
+            )
 
-            future_session.speakers = [SpeakerFactoryBase.build(name='Pranav Mistry', user_id=1)]
+            future_session.speakers = [
+                SpeakerFactoryBase.build(name='Pranav Mistry', user_id=1)
+            ]
 
             MicrolocationFactoryBase(name='Assembly Hall')
             end_session = SessionFactoryBase(
                 title='Bye Bye Session',
                 starts_at=datetime(2019, 10, 16, 11, 30, 20),
                 ends_at=datetime(2019, 10, 16, 13, 00, 30),
-                microlocation_id=2)
+                microlocation_id=2,
+            )
 
             end_session.speakers = [mario]
 
@@ -89,28 +101,64 @@ class TestPentabarfXML(OpenEventTestCase):
             pentabarf_string = pentabarf_export.export(keynote.event.id)
             pentabarf_original = fromstring(pentabarf_string)
 
-            self.assertEqual(pentabarf_original.find('conference/title').text, "Awesome Conference")
-            self.assertEqual(pentabarf_original.find('conference/start').text, '2019-10-15')
+            self.assertEqual(
+                pentabarf_original.find('conference/title').text, "Awesome Conference"
+            )
+            self.assertEqual(
+                pentabarf_original.find('conference/start').text, '2019-10-15'
+            )
             self.assertEqual(pentabarf_original.find('conference/end').text, '2019-10-16')
             self.assertEqual(pentabarf_original.find('conference/days').text, '1')
 
-            self.assertEqual(pentabarf_original.find('day/room').attrib['name'], 'Great Hall')
-            self.assertEqual(pentabarf_original.find('day/room/event/title').text, 'Keynote')
-            self.assertEqual(pentabarf_original.find('day/room/event/track').text, 'Amazing Track')
-            self.assertEqual(pentabarf_original.find('day/room/event/start').text, '10:25')
-            self.assertEqual(pentabarf_original.find('day/room/event/duration').text, '00:45')
-            self.assertEqual(pentabarf_original.find('day/room/event/persons/person[@id="2"]').text, 'Hong Phuc Dang')
-            self.assertEqual(len(pentabarf_original.find('day/room/event/persons').getchildren()), 2)
+            self.assertEqual(
+                pentabarf_original.find('day/room').attrib['name'], 'Great Hall'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/title').text, 'Keynote'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/track').text, 'Amazing Track'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/start').text, '10:25'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/duration').text, '00:45'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day/room/event/persons/person[@id="2"]').text,
+                'Hong Phuc Dang',
+            )
+            self.assertEqual(
+                len(pentabarf_original.find('day/room/event/persons').getchildren()), 2
+            )
 
-            self.assertEqual(pentabarf_original.find('day/room/event[2]/title').text, 'Hot Session')
+            self.assertEqual(
+                pentabarf_original.find('day/room/event[2]/title').text, 'Hot Session'
+            )
 
-            self.assertEqual(pentabarf_original.find('day[2]/room/event/title').text, 'Future Session')
-            self.assertEqual(pentabarf_original.find('day[2]/room/event/persons/person').text, 'Pranav Mistry')
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room/event/title').text, 'Future Session'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room/event/persons/person').text,
+                'Pranav Mistry',
+            )
 
-            self.assertEqual(pentabarf_original.find('day[2]/room[2]').attrib['name'], 'Assembly Hall')
-            self.assertEqual(pentabarf_original.find('day[2]/room[2]/event/title').text, 'Bye Bye Session')
-            self.assertEqual(pentabarf_original.find('day[2]/room[2]/event/duration').text, '01:30')
-            self.assertEqual(pentabarf_original.find('day[2]/room[2]/event/persons/person').text, 'Mario Behling')
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room[2]').attrib['name'], 'Assembly Hall'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room[2]/event/title').text,
+                'Bye Bye Session',
+            )
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room[2]/event/duration').text, '01:30'
+            )
+            self.assertEqual(
+                pentabarf_original.find('day[2]/room[2]/event/persons/person').text,
+                'Mario Behling',
+            )
 
 
 if __name__ == '__main__':
