@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from xml.etree.ElementTree import fromstring, tostring
+from xml.etree.ElementTree import fromstring
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.pentabarfxml import PentabarfExporter

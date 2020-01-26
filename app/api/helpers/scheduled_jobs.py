@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from flask import render_template
 from flask_celeryext import RequestContextTask
 
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import (
     send_email_after_event,
@@ -27,7 +27,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees, get_fee
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings

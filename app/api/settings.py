@@ -1,6 +1,4 @@
-from flask import Blueprint
-from flask import current_app as app
-from flask import jsonify, make_response, request
+from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail
 

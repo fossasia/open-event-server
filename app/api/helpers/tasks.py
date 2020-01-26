@@ -1,6 +1,5 @@
 import base64
 import csv
-import json
 import logging
 import os
 import urllib.error

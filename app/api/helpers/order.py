@@ -30,7 +30,7 @@ def delete_related_attendees_for_order(order):
         db.session.delete(ticket_holder)
         try:
             db.session.commit()
-        except Exception as e:
+        except Exception:
             logging.exception('DB Exception!')
             db.session.rollback()
 
@@ -156,7 +156,7 @@ def create_onsite_attendees_for_order(data):
                 db.session.delete(ticket_holder)
                 try:
                     db.session.commit()
-                except Exception as e:
+                except Exception:
                     logging.exception('DB Exception!')
                     db.session.rollback()
 

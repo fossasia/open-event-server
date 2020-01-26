@@ -844,7 +844,7 @@ def omise_checkout(order_identifier):
             f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors"""
         )
         return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
-    except Exception as e:
+    except Exception:
         logging.exception('Error while charging omise')
     if charge.failure_code is not None:
         logging.warning(

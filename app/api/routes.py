@@ -83,7 +83,7 @@ from app.api.event_sub_topics import (
 )
 from app.api.event_topics import EventTopicDetail, EventTopicList, EventTopicRelationship
 from app.api.event_types import EventTypeDetail, EventTypeList, EventTypeRelationship
-from app.api.events import EventCopyResource, EventDetail, EventList, EventRelationship
+from app.api.events import EventDetail, EventList, EventRelationship
 from app.api.events_role_permission import (
     EventsRolePermissionDetail,
     EventsRolePermissionList,

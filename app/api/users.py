@@ -12,7 +12,7 @@ from app.api.helpers.exceptions import (
     ForbiddenException,
     UnprocessableEntity,
 )
-from app.api.helpers.files import create_save_image_sizes, make_frontend_url
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
     send_email_change_user_email,
     send_email_confirmation,

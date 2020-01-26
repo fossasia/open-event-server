@@ -2,7 +2,6 @@ from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import (
     ConflictException,

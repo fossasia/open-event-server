@@ -217,7 +217,6 @@ class AttendeeDetail(ResourceDetail):
         #         raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
         if 'ticket' in data:
-            user = safe_query(self, User, 'id', current_user.id, 'user_id')
             ticket = (
                 db.session.query(Ticket)
                 .filter_by(id=int(data['ticket']), deleted_at=None)

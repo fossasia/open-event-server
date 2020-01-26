@@ -67,7 +67,6 @@ class SessionListPost(ResourceList):
             event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            frontend_url = get_settings()['frontend_url']
             event = session.event
             link = make_frontend_url(
                 "/events/{}/sessions/{}".format(event.identifier, session.id)

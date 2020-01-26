@@ -2,7 +2,6 @@
 import os
 import unittest
 from tempfile import TemporaryDirectory
-from unittest.mock import patch
 
 from app.api.helpers.storage import UploadedFile, create_url, generate_hash
 

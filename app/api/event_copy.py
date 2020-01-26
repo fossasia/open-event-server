@@ -2,7 +2,6 @@ from flask import Blueprint, abort, jsonify, make_response
 from sqlalchemy.orm import make_transient
 
 from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.files import create_save_resized_image
 from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.custom_form import CustomForms

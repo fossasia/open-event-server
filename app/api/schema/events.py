@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema

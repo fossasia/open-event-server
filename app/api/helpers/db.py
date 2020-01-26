@@ -1,5 +1,4 @@
 import logging
-import traceback
 
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -23,7 +22,7 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception as e:
+    except Exception:
         logging.exception('DB Exception!')
         db.session.rollback()
         return False

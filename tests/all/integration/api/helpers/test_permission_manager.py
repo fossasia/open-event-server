@@ -11,7 +11,6 @@ from app.api.helpers.permission_manager import (
 )
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
-from app.models import db
 from app.models.users_events_role import UsersEventsRoles
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase

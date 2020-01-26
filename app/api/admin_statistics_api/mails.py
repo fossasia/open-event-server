@@ -7,7 +7,6 @@ from marshmallow_jsonapi.flask import Schema
 
 from app.api.bootstrap import api
 from app.api.data_layers.NoModelLayer import NoModelLayer
-from app.api.helpers.db import get_count
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.mail import Mail
