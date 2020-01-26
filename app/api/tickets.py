@@ -70,7 +70,7 @@ class TicketListPost(ResourceList):
                     {'event_id': data['event']}, "Event does not exist"
                 )
 
-            if data.get('type') == 'paid':
+            if data.get('type') == 'paid' or data.get('type') == 'donation':
                 if not event.is_payment_enabled():
                     raise UnprocessableEntity(
                         {'event_id': data['event']},
@@ -231,7 +231,7 @@ class TicketDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if ticket.type == 'paid':
+        if ticket.type == 'paid' or ticket.type == 'donation':
             try:
                 event = (
                     db.session.query(Event)
