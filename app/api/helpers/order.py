@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime, timedelta, timezone
 
+from flask import render_template
+
 from app.api.helpers.db import (
     get_count,
     safe_query_without_soft_deleted_entries,
@@ -16,7 +18,6 @@ from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-from flask import render_template
 
 
 def delete_related_attendees_for_order(order):

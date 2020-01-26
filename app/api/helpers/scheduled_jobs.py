@@ -1,6 +1,10 @@
 import datetime
 
 import pytz
+from dateutil.relativedelta import relativedelta
+from flask import render_template
+from flask_celeryext import RequestContextTask
+
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import (
@@ -26,9 +30,6 @@ from app.models.speaker import Speaker
 from app.models.ticket_fee import TicketFees, get_fee
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-from dateutil.relativedelta import relativedelta
-from flask import render_template
-from flask_celeryext import RequestContextTask
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')

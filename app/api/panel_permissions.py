@@ -1,10 +1,11 @@
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.schema.panel_permissions import PanelPermissionSchema
 from app.models import db
 from app.models.custom_system_role import CustomSysRole
 from app.models.panel_permission import PanelPermission
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 
 class PanelPermissionList(ResourceList):

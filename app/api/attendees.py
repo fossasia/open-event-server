@@ -1,5 +1,9 @@
 import datetime
 
+from flask_jwt_extended import current_user
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy import and_, or_
+
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import (
@@ -18,9 +22,6 @@ from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
-from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy import and_, or_
 
 
 def get_sold_and_reserved_tickets_count(event_id):

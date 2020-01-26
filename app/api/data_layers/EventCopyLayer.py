@@ -1,5 +1,8 @@
 from datetime import date
 
+from flask_rest_jsonapi.data_layers.base import BaseDataLayer
+from sqlalchemy.orm import make_transient
+
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.models import db
@@ -12,8 +15,6 @@ from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.ticket import Ticket
 from app.models.track import Track
-from flask_rest_jsonapi.data_layers.base import BaseDataLayer
-from sqlalchemy.orm import make_transient
 
 
 def update_created_at(obj):

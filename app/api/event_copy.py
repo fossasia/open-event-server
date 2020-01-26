@@ -1,3 +1,6 @@
+from flask import Blueprint, abort, jsonify, make_response
+from sqlalchemy.orm import make_transient
+
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.permission_manager import has_access
 from app.models import db
@@ -12,8 +15,6 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.users_events_role import UsersEventsRoles
-from flask import Blueprint, abort, jsonify, make_response
-from sqlalchemy.orm import make_transient
 
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 

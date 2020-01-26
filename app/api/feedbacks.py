@@ -1,3 +1,7 @@
+from flask_jwt_extended import current_user
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
@@ -11,9 +15,6 @@ from app.models.event import Event
 from app.models.feedback import Feedback
 from app.models.session import Session
 from app.models.user import User
-from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 
 class FeedbackListPost(ResourceList):

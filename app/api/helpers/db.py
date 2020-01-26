@@ -1,10 +1,11 @@
 import logging
 
-from app.models import db
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
+
+from app.models import db
 
 # ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
 

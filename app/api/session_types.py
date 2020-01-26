@@ -1,3 +1,5 @@
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ForbiddenException
@@ -8,7 +10,6 @@ from app.api.schema.session_types import SessionTypeSchema
 from app.models import db
 from app.models.session import Session
 from app.models.session_type import SessionType
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 
 class SessionTypeListPost(ResourceList):

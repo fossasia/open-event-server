@@ -1,3 +1,7 @@
+from flask import request
+from flask_rest_jsonapi import ResourceDetail, ResourceList
+from sqlalchemy.orm.exc import NoResultFound
+
 from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import (
     ConflictException,
@@ -15,9 +19,6 @@ from app.api.schema.stripe_authorization import (
 from app.models import db
 from app.models.event import Event
 from app.models.stripe_authorization import StripeAuthorization
-from flask import request
-from flask_rest_jsonapi import ResourceDetail, ResourceList
-from sqlalchemy.orm.exc import NoResultFound
 
 
 class StripeAuthorizationListPost(ResourceList):

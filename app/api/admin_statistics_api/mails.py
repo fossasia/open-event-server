@@ -1,14 +1,15 @@
 from datetime import datetime, timedelta
 
 import pytz
+from flask_rest_jsonapi import ResourceDetail
+from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
+
 from app.api.bootstrap import api
 from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.mail import Mail
-from flask_rest_jsonapi import ResourceDetail
-from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema
 
 
 class AdminStatisticsMailSchema(Schema):

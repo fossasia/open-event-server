@@ -6,6 +6,20 @@ import urllib.error
 import uuid
 
 import requests
+from flask import current_app, render_template
+from flask_celeryext import FlaskCeleryExt, RequestContextTask
+from marrow.mailer import Mailer, Message
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (
+    Attachment,
+    Disposition,
+    FileContent,
+    FileName,
+    FileType,
+    From,
+    Mail,
+)
+
 from app.api.exports import event_export_task_base
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import (
@@ -32,19 +46,6 @@ from app.models.sponsor import Sponsor
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
-from flask import current_app, render_template
-from flask_celeryext import FlaskCeleryExt, RequestContextTask
-from marrow.mailer import Mailer, Message
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import (
-    Attachment,
-    Disposition,
-    FileContent,
-    FileName,
-    FileType,
-    From,
-    Mail,
-)
 
 from .import_helpers import update_import_job
 

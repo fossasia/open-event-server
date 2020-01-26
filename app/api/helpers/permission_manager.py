@@ -1,3 +1,7 @@
+from flask import request
+from flask_jwt_extended import current_user, verify_jwt_in_request
+from sqlalchemy.orm.exc import NoResultFound
+
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.jwt import get_identity
 from app.api.helpers.permissions import jwt_required
@@ -6,9 +10,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
-from flask import request
-from flask_jwt_extended import current_user, verify_jwt_in_request
-from sqlalchemy.orm.exc import NoResultFound
 
 
 @jwt_required

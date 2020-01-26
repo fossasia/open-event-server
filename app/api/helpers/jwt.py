@@ -1,9 +1,10 @@
-from app.models.user import User
 from flask import _app_ctx_stack as ctx_stack
 from flask_jwt_extended.config import config
 from flask_jwt_extended.exceptions import JWTExtendedException, UserLoadError
 from flask_jwt_extended.view_decorators import _decode_jwt_from_request, _load_user
 from jwt.exceptions import PyJWTError
+
+from app.models.user import User
 
 
 def jwt_authenticate(email, password):

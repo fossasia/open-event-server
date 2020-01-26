@@ -1,14 +1,15 @@
 import pytz
-from app.api.helpers.exceptions import UnprocessableEntity
-from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
-from app.models.event import Event
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
+
+from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from app.models.event import Event
 from utils.common import use_defaults
 
 
