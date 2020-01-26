@@ -1,12 +1,10 @@
 import logging
-import traceback
 
+from app.models import db
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
-
-from app.models import db
 
 # ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
 
@@ -23,7 +21,7 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception as e:
+    except Exception:
         logging.exception('DB Exception!')
         db.session.rollback()
         return False

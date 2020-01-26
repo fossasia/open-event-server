@@ -1,17 +1,15 @@
-from flask_rest_jsonapi import ResourceDetail
-from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema
-
 from app.api.bootstrap import api
 from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.api.helpers.db import get_count
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.models.event import Event
 from app.models.role import Role
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
+from flask_rest_jsonapi import ResourceDetail
+from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 
 
 class AdminStatisticsUserSchema(Schema):

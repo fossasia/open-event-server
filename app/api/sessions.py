@@ -1,6 +1,3 @@
-from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-
 from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.db import get_count, safe_query, save_to_db
@@ -25,6 +22,8 @@ from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
 from app.settings import get_settings
+from flask_jwt_extended import current_user
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 
 class SessionListPost(ResourceList):
@@ -67,7 +66,6 @@ class SessionListPost(ResourceList):
             event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            frontend_url = get_settings()['frontend_url']
             event = session.event
             link = make_frontend_url(
                 "/events/{}/sessions/{}".format(event.identifier, session.id)

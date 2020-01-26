@@ -3,14 +3,12 @@
 import random
 import re
 import string
-import sys
 
 import bleach
 import requests
+from app.api.helpers.exceptions import UnprocessableEntity
 from flask import current_app
 from itsdangerous import Serializer
-
-from app.api.helpers.exceptions import UnprocessableEntity
 
 
 def dasherize(text):

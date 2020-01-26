@@ -1,9 +1,3 @@
-from flask import Blueprint
-from flask import current_app as app
-from flask import jsonify, make_response, request
-from flask_jwt_extended import current_user, verify_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail
-
 from app.api.bootstrap import api
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.mail import send_test_email
@@ -16,6 +10,9 @@ from app.api.schema.settings import (
 from app.models import db
 from app.models.setting import Setting
 from app.settings import refresh_settings
+from flask import Blueprint, jsonify, make_response, request
+from flask_jwt_extended import current_user, verify_jwt_in_request
+from flask_rest_jsonapi import ResourceDetail
 
 admin_misc_routes = Blueprint('admin_misc', __name__, url_prefix='/v1')
 

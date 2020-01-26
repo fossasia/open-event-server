@@ -1,11 +1,7 @@
-import json
 import os
 import unittest
 from io import BytesIO
 from urllib.parse import urlparse
-
-from flask import Request, jsonify, request
-from PIL import Image
 
 from app.api.helpers.files import (
     create_save_image_sizes,
@@ -14,6 +10,8 @@ from app.api.helpers.files import (
     uploaded_image,
 )
 from app.api.helpers.utilities import image_link
+from flask import Request, jsonify, request
+from PIL import Image
 from tests.all.integration.utils import OpenEventTestCase
 
 

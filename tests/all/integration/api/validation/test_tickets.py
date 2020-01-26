@@ -1,9 +1,5 @@
 import unittest
-from datetime import datetime
 
-from pytz import timezone
-
-from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.tickets import TicketSchema
 from app.factories.ticket import TicketFactory
 from tests.all.integration.utils import OpenEventTestCase

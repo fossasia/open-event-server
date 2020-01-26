@@ -1,4 +1,3 @@
-import urllib.parse
 import uuid
 
 from app.api.helpers.db import get_count

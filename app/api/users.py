@@ -1,10 +1,5 @@
 import base64
 
-from flask import Blueprint, abort, jsonify, make_response, request
-from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy.orm.exc import NoResultFound
-
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
 from app.api.helpers.exceptions import (
@@ -12,7 +7,7 @@ from app.api.helpers.exceptions import (
     ForbiddenException,
     UnprocessableEntity,
 )
-from app.api.helpers.files import create_save_image_sizes, make_frontend_url
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
     send_email_change_user_email,
     send_email_confirmation,
@@ -41,6 +36,10 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
 from app.settings import get_settings
+from flask import Blueprint, abort, jsonify, make_response, request
+from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy.orm.exc import NoResultFound
 
 user_misc_routes = Blueprint('user_misc', __name__, url_prefix='/v1')
 
