@@ -31,7 +31,11 @@ class RoleInvite(SoftDeletionModel):
     role = db.relationship("Role")
 
     hash = db.Column(db.String)
+<<<<<<< HEAD
     created_at = db.Column(db.DateTime(timezone=True))
+=======
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+>>>>>>> made changes as recommended
     status = db.Column(db.String, default="pending")
 
     def __init__(
