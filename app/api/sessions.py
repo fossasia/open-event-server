@@ -126,7 +126,7 @@ class SessionList(ResourceList):
         if view_kwargs.get('user_id') is not None:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = (
-                query_.distinct(Session.id).join(User)
+                query_.join(User)
                 .join(Speaker)
                 .filter(
                     (
