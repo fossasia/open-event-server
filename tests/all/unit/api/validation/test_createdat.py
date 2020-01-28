@@ -3,7 +3,7 @@ import unittest
 from app.models import db
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.db import save_to_db
-from datetime import datetime,  timedelta
+from datetime import datetime,  timedelta, timezone
 #importing all models containing createdat variable
 from app.models.user import User
 from app.models.event import Event
@@ -19,24 +19,20 @@ from app.models.event_invoice import EventInvoice
 class TestCreatedatValidation(OpenEventTestCase):
 
     def test_createdat_in_user(self):
-        """ Created at validate time : Tests if created_at is set  
-            to current time in User model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in User model"""
         with self.app.test_request_context():
             test_user = User(email = 'authtest@gmail.com', password = 'password')
             save_to_db(test_user, "User created")
             user_id = test_user.id
             db_created_at = db.session.query(User).get(user_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds=50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
                  "User model created_at not set to current time")
 
     def test_createdat_in_event(self):
-        """ Created at validate time : Tests if created_at is set 
-                to current time in Event model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in Event model"""
         with self.app.test_request_context():
             test_event = Event(name = 'test event',
                                     starts_at = datetime.now(),
@@ -45,61 +41,53 @@ class TestCreatedatValidation(OpenEventTestCase):
             save_to_db(test_event)
             event_id = test_event.id
             db_created_at = db.session.query(Event).get(event_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
                 "Event model created_at not set to current time")
  
     def test_createdat_in_session(self):
-        """ Created at validate time : Tests if created_at is set 
-            to current time in Session model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in Session model"""
         with self.app.test_request_context():
             test_session = Session(title = "Test Session")
             save_to_db(test_session)
             session_id = test_session.id
             db_created_at = db.session.query(Session).get(session_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
                 "Session model created_at not set to current time")
  
     def test_createdat_in_access_code(self):
-        """ Created at validate time : Tests if created_at is set 
-                to current time in AccessCode model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in AccessCode model"""
         with self.app.test_request_context(): 
             test_access_code = AccessCode(code = 123)
             save_to_db(test_access_code)
             access_code_id = test_access_code.id
             db_created_at = db.session.query(AccessCode).get(access_code_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
                 "AccessCode model created_at not set to current time")
  
     def test_createdat_in_order(self):
-        """ Created at validate time : Tests if created_at is set 
-            to current time in Order model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in Order model"""
         with self.app.test_request_context():
             test_order = Order()
             save_to_db(test_order)
             order_id = test_order.id
             db_created_at = db.session.query(Order).get(order_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
                 "Order model created_at not set to current time")
 
     def test_createdat_in_ticket_holder(self):
-        """ Created at validate time : Tests if created_at is set 
-            to current time in TickerHolder model
-        """
+        """ Created at validate time : Tests if created_at is set to current time in TickerHolder model"""
         with self.app.test_request_context():
             test_ticket_holder = TicketHolder(firstname = "John", lastname = "Snow")
             save_to_db(test_ticket_holder)
@@ -112,15 +100,14 @@ class TestCreatedatValidation(OpenEventTestCase):
                 "TicketHolder model created_at not set to current time")
  
     def test_createdat_in_role_invite(self):
-        """ Created at validate time : Tests if created_at is set 
-            to current time in RoleInvite model
-        """
+        """ Created at validate time : Tests if created_at is set to ...
+        current time in RoleInvite model"""
         with self.app.test_request_context():
             test_role_invite = RoleInvite(email = "testrole@mail.com", role_name = "Nothing")
             save_to_db(test_role_invite)
             role_invite_id = test_role_invite.id
             db_created_at = db.session.query(RoleInvite).get(role_invite_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff = current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
@@ -152,7 +139,7 @@ class TestCreatedatValidation(OpenEventTestCase):
             save_to_db(test_user_token_blacklist)
             user_token_blacklist_id = test_user_token_blacklist.id
             db_created_at = db.session.query(UserTokenBlackListTime).get(user_token_blacklist_id).created_at
-            current_time = datetime.utcnow().astimezone()
+            current_time = datetime.now(timezone.utc).astimezone()
             time_diff= current_time - db_created_at
             allowed_time_lag = timedelta(milliseconds = 50)
             self.assertLessEqual(time_diff, allowed_time_lag, 
