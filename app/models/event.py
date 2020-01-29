@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import flask_login as login
-import pytz
 from flask import current_app
 from sqlalchemy import event
 from sqlalchemy.sql import func
@@ -44,6 +43,7 @@ class Event(SoftDeletionModel):
 
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
+
     id: int = db.Column(db.Integer, primary_key=True)
     identifier: str = db.Column(db.String)
     name: str = db.Column(db.String, nullable=False)
