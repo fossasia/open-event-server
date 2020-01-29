@@ -10,6 +10,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     name = common.string_
+    identifier = common.string_
     external_event_url = common.url_
     starts_at = common.dateFuture_
     ends_at = common.dateEndFuture_
