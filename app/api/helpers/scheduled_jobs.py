@@ -255,45 +255,47 @@ def send_monthly_event_invoice():
                 ticket_fee_object = (
                     db.session.query(TicketFees).filter_by(currency=currency).one()
                 )
-                ticket_fee_percentage = ticket_fee_object.service_fee
-                ticket_fee_maximum = ticket_fee_object.maximum_fee
-                orders = Order.query.filter_by(event=event).all()
-                gross_revenue = event.calc_monthly_revenue()
-                ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
-                if ticket_fees > ticket_fee_maximum:
-                    ticket_fees = ticket_fee_maximum
-                net_revenue = gross_revenue - ticket_fees
-                payment_details = {
-                    'tickets_sold': event.tickets_sold,
-                    'gross_revenue': gross_revenue,
-                    'net_revenue': net_revenue,
-                    'amount_payable': ticket_fees,
-                }
-                # save invoice as pdf
-                pdf = create_save_pdf(
-                    render_template(
-                        'pdf/event_invoice.html',
-                        orders=orders,
-                        user=user,
-                        admin_info=admin_info,
-                        currency=currency,
-                        event=event,
-                        ticket_fee_object=ticket_fee_object,
-                        payment_details=payment_details,
-                        net_revenue=net_revenue,
-                    ),
-                    UPLOAD_PATHS['pdf']['event_invoice'],
-                    dir_path='/static/uploads/pdf/event_invoices/',
-                    identifier=event.identifier,
-                )
-                # save event_invoice info to DB
-
-                event_invoice = EventInvoice(
-                    amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id
-                )
-                save_to_db(event_invoice)
             except NoResultFound:
-                return NotFoundError({'source': ''}, 'Ticket Fee not set for {}'.format(currency)).respond()
+                raise NotFoundError(
+                    {'source': ''}, 'Ticket Fee not set for {}'.format(currency)
+                ).respond()
+            ticket_fee_percentage = ticket_fee_object.service_fee
+            ticket_fee_maximum = ticket_fee_object.maximum_fee
+            orders = Order.query.filter_by(event=event).all()
+            gross_revenue = event.calc_monthly_revenue()
+            ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
+            if ticket_fees > ticket_fee_maximum:
+                ticket_fees = ticket_fee_maximum
+            net_revenue = gross_revenue - ticket_fees
+            payment_details = {
+                'tickets_sold': event.tickets_sold,
+                'gross_revenue': gross_revenue,
+                'net_revenue': net_revenue,
+                'amount_payable': ticket_fees,
+            }
+            # save invoice as pdf
+            pdf = create_save_pdf(
+                render_template(
+                    'pdf/event_invoice.html',
+                    orders=orders,
+                    user=user,
+                    admin_info=admin_info,
+                    currency=currency,
+                    event=event,
+                    ticket_fee_object=ticket_fee_object,
+                    payment_details=payment_details,
+                    net_revenue=net_revenue,
+                ),
+                UPLOAD_PATHS['pdf']['event_invoice'],
+                dir_path='/static/uploads/pdf/event_invoices/',
+                identifier=event.identifier,
+            )
+            # save event_invoice info to DB
+
+            event_invoice = EventInvoice(
+                amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id
+            )
+            save_to_db(event_invoice)
 
 
 @celery.on_after_configure.connect

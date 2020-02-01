@@ -3,7 +3,7 @@ import datetime
 from app.api.helpers.scheduled_jobs import (
     delete_ticket_holders_no_order_id,
     event_invoices_mark_due,
-    send_monthly_event_invoice
+    send_monthly_event_invoice,
 )
 from app.factories.attendee import AttendeeFactory
 from app.factories.ticket_fee import TicketFeesFactory
@@ -11,7 +11,6 @@ from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.user import UserFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
-from app.factories.ticket_holder import TicketHolderFactory
 from app.models import db
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
@@ -85,30 +84,28 @@ class TestScheduledJobs(OpenEventTestCase):
             self.assertIsNot(ticket_holder, None)
 
     def test_send_monthly_invoice(self):
-        """Method to test marking of event invoices as due"""
+        """Method to test monthly invoices"""
 
         with self.app.test_request_context():
             # ticket fee factory
             ticket_fee_test = TicketFeesFactory()
+            ticket_fee_test.service_fee = 10.23
             # event factory
-            test_event = EventFactoryBasic(
-                state='published'
-            )
-            test_event.tickets_sold = 1
+            test_event = EventFactoryBasic(state='published')
             # user factory
             test_user = UserFactory()
             # order factory
-            test_order = OrderFactory(
-                status='completed'
+            test_order = OrderFactory(status='completed')
+            test_order.completed_at = datetime.datetime.now() - datetime.timedelta(
+                days=30
             )
-            test_order.completed_at = datetime.datetime.now() - datetime.timedelta(days=30)
             test_order.amount = 100
             test_order.event = test_event
             # ticket holder factory
-            test_ticket_holder = TicketHolderFactory()
+            test_ticket_holder = AttendeeFactory()
             test_event.owner = test_user
             db.session.commit()
 
             send_monthly_event_invoice()
             event_invoice = EventInvoice.query.get(1)
-            self.assertEqual(event_invoice.amount, 100.0123)
+            self.assertEqual(event_invoice.amount, 100.1)
