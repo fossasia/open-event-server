@@ -8,7 +8,6 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = User
         sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     email = common.email_
     password = 'password'

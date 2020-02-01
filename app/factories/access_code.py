@@ -11,7 +11,6 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = AccessCode
         sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     tickets = factory.RelatedFactory(TicketFactory)
     user = factory.RelatedFactory(UserFactory)
@@ -22,5 +21,7 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     tickets_number = 30
     min_quantity = 10
     max_quantity = 20
+    marketer_id = 1
     valid_from = common.date_
     valid_till = common.dateEnd_
+    event_id = 1

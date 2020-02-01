@@ -12,7 +12,6 @@ class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Session
         sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     title = common.string_
     subtitle = common.string_
@@ -30,6 +29,10 @@ class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     state = "accepted"
     submitted_at = common.date_
     is_mail_sent = True
+    event_id = 1
+    session_type_id = 1
+    track_id = 1
+    microlocation_id = 1
 
 
 class SessionFactory(SessionFactoryBase):

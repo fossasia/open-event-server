@@ -11,7 +11,6 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = DiscountCode
         sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     marketer = factory.RelatedFactory(UserFactory)
     code = common.string_
@@ -25,6 +24,8 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     valid_from = common.date_
     valid_till = common.dateEnd_
     used_for = "event"
+    marketer_id = 1
+    event_id = None
 
 
 class DiscountCodeTicketFactory(factory.alchemy.SQLAlchemyModelFactory):

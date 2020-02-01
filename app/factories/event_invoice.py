@@ -11,7 +11,6 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = EventInvoice
         sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = 'commit'
 
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
@@ -31,3 +30,6 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
     last4 = "1234"
     stripe_token = common.string_
     paypal_token = common.string_
+    event_id = 1
+    user_id = 2
+    discount_code_id = 1

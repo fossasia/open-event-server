@@ -1,11 +1,12 @@
 import unittest
+from app.models import db
 from datetime import datetime, timedelta, timezone
 from app.factories.session import SessionFactory
 from app.factories.user import UserFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.access_code import AccessCodeFactory
 from app.factories.event_invoice import EventInvoiceFactory
-from app.factories.ticket_holder import TicketHolderFactory
+from app.factories.attendee import AttendeeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.order import OrderFactory
 from app.factories.role_invite import RoleInviteFactory
@@ -26,18 +27,19 @@ class TestCreatedatValidation(OpenEventTestCase):
                 OrderFactory,
                 RoleInviteFactory,
                 DiscountCodeFactory,
-                TicketHolderFactory,
+                AttendeeFactory,
                 SessionFactory,
                 UserTokenBlacklistFactory,
             ]
             models_with_utcnow = [
-                TicketHolderFactory,
+                AttendeeFactory,
                 DiscountCodeFactory,
                 EventInvoiceFactory,
             ]
             for model_factory in model_factories:
                 with self.subTest(model_factory=model_factory):
                     test_model = model_factory()
+                    db.session.commit()
                     if model_factory in models_with_utcnow:
                         current_time = datetime.utcnow().astimezone()
                     else:
