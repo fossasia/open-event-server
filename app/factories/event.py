@@ -8,6 +8,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Event
         sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = 'commit'
 
     name = common.string_
     external_event_url = common.url_
