@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from dateutil.relativedelta import relativedelta
+from sqlalchemy.orm.exc import NoResultFound
 from flask import render_template
 from flask_celeryext import RequestContextTask
 
@@ -12,6 +13,7 @@ from app.api.helpers.mail import (
     send_email_for_monthly_fee_payment,
     send_followup_email_for_monthly_fee_payment,
 )
+from app.api.helpers.errors import NotFoundError
 from app.api.helpers.notification import (
     send_followup_notif_monthly_fee_payment,
     send_notif_after_event,
@@ -249,46 +251,49 @@ def send_monthly_event_invoice():
             user = event.owner
             admin_info = get_settings()
             currency = event.payment_currency
-            ticket_fee_object = (
-                db.session.query(TicketFees).filter_by(currency=currency).one()
-            )
-            ticket_fee_percentage = ticket_fee_object.service_fee
-            ticket_fee_maximum = ticket_fee_object.maximum_fee
-            orders = Order.query.filter_by(event=event).all()
-            gross_revenue = event.calc_monthly_revenue()
-            ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
-            if ticket_fees > ticket_fee_maximum:
-                ticket_fees = ticket_fee_maximum
-            net_revenue = gross_revenue - ticket_fees
-            payment_details = {
-                'tickets_sold': event.tickets_sold,
-                'gross_revenue': gross_revenue,
-                'net_revenue': net_revenue,
-                'amount_payable': ticket_fees,
-            }
-            # save invoice as pdf
-            pdf = create_save_pdf(
-                render_template(
-                    'pdf/event_invoice.html',
-                    orders=orders,
-                    user=user,
-                    admin_info=admin_info,
-                    currency=currency,
-                    event=event,
-                    ticket_fee_object=ticket_fee_object,
-                    payment_details=payment_details,
-                    net_revenue=net_revenue,
-                ),
-                UPLOAD_PATHS['pdf']['event_invoice'],
-                dir_path='/static/uploads/pdf/event_invoices/',
-                identifier=event.identifier,
-            )
-            # save event_invoice info to DB
+            try:
+                ticket_fee_object = (
+                    db.session.query(TicketFees).filter_by(currency=currency).one()
+                )
+                ticket_fee_percentage = ticket_fee_object.service_fee
+                ticket_fee_maximum = ticket_fee_object.maximum_fee
+                orders = Order.query.filter_by(event=event).all()
+                gross_revenue = event.calc_monthly_revenue()
+                ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
+                if ticket_fees > ticket_fee_maximum:
+                    ticket_fees = ticket_fee_maximum
+                net_revenue = gross_revenue - ticket_fees
+                payment_details = {
+                    'tickets_sold': event.tickets_sold,
+                    'gross_revenue': gross_revenue,
+                    'net_revenue': net_revenue,
+                    'amount_payable': ticket_fees,
+                }
+                # save invoice as pdf
+                pdf = create_save_pdf(
+                    render_template(
+                        'pdf/event_invoice.html',
+                        orders=orders,
+                        user=user,
+                        admin_info=admin_info,
+                        currency=currency,
+                        event=event,
+                        ticket_fee_object=ticket_fee_object,
+                        payment_details=payment_details,
+                        net_revenue=net_revenue,
+                    ),
+                    UPLOAD_PATHS['pdf']['event_invoice'],
+                    dir_path='/static/uploads/pdf/event_invoices/',
+                    identifier=event.identifier,
+                )
+                # save event_invoice info to DB
 
-            event_invoice = EventInvoice(
-                amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id
-            )
-            save_to_db(event_invoice)
+                event_invoice = EventInvoice(
+                    amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id
+                )
+                save_to_db(event_invoice)
+            except NoResultFound:
+                return NotFoundError({'source': ''}, 'Ticket Fee not set for {}'.format(currency)).respond()
 
 
 @celery.on_after_configure.connect
