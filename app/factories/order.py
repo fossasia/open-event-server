@@ -9,8 +9,8 @@ class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = Order
         sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = 'commit'
 
     event = factory.RelatedFactory(EventFactoryBasic)
-    event_id = 1
     payment_mode = 'free'
     status = 'initializing'
