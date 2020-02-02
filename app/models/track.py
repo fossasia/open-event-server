@@ -4,6 +4,7 @@ from app.models.base import SoftDeletionModel
 
 class Track(SoftDeletionModel):
     """Track model class"""
+
     __tablename__ = 'tracks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -12,8 +13,15 @@ class Track(SoftDeletionModel):
     sessions = db.relationship('Session', backref='track')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
-    def __init__(self, name=None, description=None, event_id=None,
-                 session=None, color=None, deleted_at=None):
+    def __init__(
+        self,
+        name=None,
+        description=None,
+        event_id=None,
+        session=None,
+        color=None,
+        deleted_at=None,
+    ):
         self.name = name
         self.description = description
         self.event_id = event_id
@@ -35,11 +43,27 @@ class Track(SoftDeletionModel):
     def font_color(self):
         if self.color.startswith('#'):
             h = self.color.lstrip('#')
-            a = 1 - (0.299 * int(h[0:2], 16) + 0.587 * int(h[2:4], 16) + 0.114 * int(h[4:6], 16))/255
+            a = (
+                1
+                - (
+                    0.299 * int(h[0:2], 16)
+                    + 0.587 * int(h[2:4], 16)
+                    + 0.114 * int(h[4:6], 16)
+                )
+                / 255
+            )
         elif self.color.startswith('rgba'):
             h = self.color.lstrip('rgba').replace('(', '', 1).replace(')', '', 1)
             h = h.split(',')
-            a = 1 - (0.299 * int(int(h[0]), 16) + 0.587 * int(int(h[1]), 16) + 0.114 * int(int(h[2]), 16)) / 255
+            a = (
+                1
+                - (
+                    0.299 * int(int(h[0]), 16)
+                    + 0.587 * int(int(h[1]), 16)
+                    + 0.114 * int(int(h[2]), 16)
+                )
+                / 255
+            )
         return '#000000' if (a < 0.5) else '#ffffff'
 
     @property
@@ -48,5 +72,5 @@ class Track(SoftDeletionModel):
             'id': self.id,
             'name': self.name,
             'color': self.color,
-            'font_color': self.font_color
+            'font_color': self.font_color,
         }

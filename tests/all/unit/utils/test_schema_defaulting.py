@@ -17,6 +17,7 @@ class TestSchema(Schema):
         """
         Meta class for the test Schema
         """
+
         type_ = 'test-schema'
         inflect = dasherize
 
@@ -26,22 +27,19 @@ class TestSchema(Schema):
 
 
 class TestUtils(TestCase):
-
     def test_patch_defaults_adds_defaults(self):
         schema = TestSchema()
-        data = {
-            'field_without_default': 'value_field_without_default'
-        }
+        data = {'field_without_default': 'value_field_without_default'}
         patched_data = patch_defaults(schema, data)
         self.assertEqual(patched_data.get('field_with_default'), False)
 
     def test_patch_defaults_leaves_other_fields_untouched(self):
         schema = TestSchema()
-        data = {
-            'field_without_default': 'value_field_without_default'
-        }
+        data = {'field_without_default': 'value_field_without_default'}
         patched_data = patch_defaults(schema, data)
-        self.assertEqual(patched_data.get('field_without_default'), 'value_field_without_default')
+        self.assertEqual(
+            patched_data.get('field_without_default'), 'value_field_without_default'
+        )
 
 
 if __name__ == '__main__':

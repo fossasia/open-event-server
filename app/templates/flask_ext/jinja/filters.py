@@ -1,5 +1,5 @@
-from forex_python.converter import CurrencyCodes
 import arrow
+from forex_python.converter import CurrencyCodes
 
 
 def init_filters(app):

@@ -1,9 +1,10 @@
-from flask import Blueprint
-from flask import make_response, request, jsonify, abort
-from flask_jwt_extended import jwt_required
-from app.api.helpers.files import uploaded_image, uploaded_file
-from app.api.helpers.storage import UPLOAD_PATHS, upload_local, upload
 import uuid
+
+from flask import Blueprint, abort, jsonify, make_response, request
+from flask_jwt_extended import jwt_required
+
+from app.api.helpers.files import uploaded_file, uploaded_image
+from app.api.helpers.storage import UPLOAD_PATHS, upload, upload_local
 
 upload_routes = Blueprint('upload', __name__, url_prefix='/v1/upload')
 
@@ -17,13 +18,11 @@ def upload_image():
     force_local = request.args.get('force_local', 'false')
     if force_local == 'true':
         image_url = upload_local(
-            image_file,
-            UPLOAD_PATHS['temp']['image'].format(uuid=uuid.uuid4())
+            image_file, UPLOAD_PATHS['temp']['image'].format(uuid=uuid.uuid4())
         )
     else:
         image_url = upload(
-            image_file,
-            UPLOAD_PATHS['temp']['image'].format(uuid=uuid.uuid4())
+            image_file, UPLOAD_PATHS['temp']['image'].format(uuid=uuid.uuid4())
         )
     return jsonify({"url": image_url})
 
@@ -37,13 +36,11 @@ def upload_file():
         file_uploaded = uploaded_file(files=files)
         if force_local == 'true':
             files_url = upload_local(
-                file_uploaded,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+                file_uploaded, UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
             )
         else:
             files_url = upload(
-                file_uploaded,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+                file_uploaded, UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
             )
     elif 'files[]' in request.files:
         files = request.files.getlist('files[]')
@@ -51,18 +48,20 @@ def upload_file():
         files_url = []
         for file_uploaded in files_uploaded:
             if force_local == 'true':
-                files_url.append(upload_local(
-                    file_uploaded,
-                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
-                ))
+                files_url.append(
+                    upload_local(
+                        file_uploaded,
+                        UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4()),
+                    )
+                )
             else:
-                files_url.append(upload(
-                    file_uploaded,
-                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
-                ))
+                files_url.append(
+                    upload(
+                        file_uploaded,
+                        UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4()),
+                    )
+                )
     else:
-        abort(
-            make_response(jsonify(error="Bad Request"), 400)
-        )
+        abort(make_response(jsonify(error="Bad Request"), 400))
 
     return jsonify({"url": files_url})

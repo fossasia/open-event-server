@@ -1,5 +1,5 @@
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from marshmallow import validates_schema, validate
+from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
@@ -27,23 +27,29 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
     code = fields.Str(required=True)
     discount_url = fields.Url(allow_none=True)
     value = fields.Float(required=True)
-    type = fields.Str(validate=validate.OneOf(choices=["amount", "percent"]), required=True)
+    type = fields.Str(
+        validate=validate.OneOf(choices=["amount", "percent"]), required=True
+    )
     is_active = fields.Boolean()
     tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(allow_none=True)
     valid_till = fields.DateTime(allow_none=True)
-    used_for = fields.Str(validate=validate.OneOf(choices=["event", "ticket"]), allow_none=False)
+    used_for = fields.Str(
+        validate=validate.OneOf(choices=["event", "ticket"]), allow_none=False
+    )
     created_at = fields.DateTime(allow_none=True)
 
-    event = Relationship(attribute='event',
-                         self_view='v1.discount_code_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'discount_code_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.discount_code_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'discount_code_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
 
     @classmethod
     def quantity_validation_helper(obj, data):
@@ -53,7 +59,7 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
             if min_quantity > max_quantity:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/min-quantity'},
-                    "min-quantity cannot be more than max-quantity"
+                    "min-quantity cannot be more than max-quantity",
                 )
 
 
@@ -72,7 +78,9 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
     def validate_quantity(self, data, original_data):
         if 'id' in original_data['data']:
             try:
-                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+                discount_code = DiscountCode.query.filter_by(
+                    id=original_data['data']['id']
+                ).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
             if 'min_quantity' not in data:
@@ -88,14 +96,18 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
 
         if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                          "tickets-number should be greater than max-quantity")
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/tickets-number'},
+                    "tickets-number should be greater than max-quantity",
+                )
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
             try:
-                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+                discount_code = DiscountCode.query.filter_by(
+                    id=original_data['data']['id']
+                ).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -106,17 +118,21 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
                 data['valid_till'] = discount_code.valid_till
 
         if data['valid_from'] >= data['valid_till']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
-                                      "valid_till should be after valid_from")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/valid-till'},
+                "valid_till should be after valid_from",
+            )
 
-    events = Relationship(attribute='events',
-                          self_view='v1.discount_code_events',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.event_list',
-                          related_view_kwargs={'discount_code_id': '<id>'},
-                          schema='EventSchemaPublic',
-                          many=True,
-                          type_='event')
+    events = Relationship(
+        attribute='events',
+        self_view='v1.discount_code_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        related_view_kwargs={'discount_code_id': '<id>'},
+        schema='EventSchemaPublic',
+        many=True,
+        type_='event',
+    )
 
 
 class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
@@ -134,7 +150,9 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
     def validate_quantity(self, data, original_data):
         if 'id' in original_data['data']:
             try:
-                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+                discount_code = DiscountCode.query.filter_by(
+                    id=original_data['data']['id']
+                ).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -151,14 +169,18 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
 
         if data.get('tickets_number') and data.get('max_quantity'):
             if data['tickets_number'] < data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                          "tickets-number should be greater than max-quantity")
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/tickets-number'},
+                    "tickets-number should be greater than max-quantity",
+                )
 
     @validates_schema(pass_original=True)
     def validate_value(self, data, original_data):
         if 'id' in original_data['data']:
             try:
-                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+                discount_code = DiscountCode.query.filter_by(
+                    id=original_data['data']['id']
+                ).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -175,12 +197,12 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                     if not ticket_object.price:
                         raise UnprocessableEntity(
                             {'pointer': '/data/attributes/tickets'},
-                            "discount code cannot be applied on free tickets"
+                            "discount code cannot be applied on free tickets",
                         )
             if data['value'] < 0 or data['value'] > 100:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/value'},
-                    "discount percent must be within range of 0 and 100"
+                    "discount percent must be within range of 0 and 100",
                 )
 
         if data['type'] == "amount":
@@ -190,24 +212,26 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                     if not ticket_object.price:
                         raise UnprocessableEntity(
                             {'pointer': '/data/attributes/tickets'},
-                            "discount code cannot be applied on free tickets"
+                            "discount code cannot be applied on free tickets",
                         )
                     if ticket_object.price < data['value']:
                         raise UnprocessableEntity(
                             {'pointer': '/data/attributes/value'},
-                            "discount amount cannot be more than ticket amount"
+                            "discount amount cannot be more than ticket amount",
                         )
             if data['value'] < 0:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/value'},
-                    "discount amount cannot be less than zero"
+                    "discount amount cannot be less than zero",
                 )
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
             try:
-                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+                discount_code = DiscountCode.query.filter_by(
+                    id=original_data['data']['id']
+                ).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -218,22 +242,28 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                 data['valid_till'] = discount_code.valid_till
 
         if data['valid_from'] >= data['valid_till']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
-                                      "valid_till should be after valid_from")
+            raise UnprocessableEntity(
+                {'pointer': '/data/attributes/valid-till'},
+                "valid_till should be after valid_from",
+            )
 
-    marketer = Relationship(attribute='user',
-                            self_view='v1.discount_code_user',
-                            self_view_kwargs={'id': '<id>'},
-                            related_view='v1.user_detail',
-                            related_view_kwargs={'discount_code_id': '<id>'},
-                            schema='UserSchemaPublic',
-                            type_='user')
+    marketer = Relationship(
+        attribute='user',
+        self_view='v1.discount_code_user',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_detail',
+        related_view_kwargs={'discount_code_id': '<id>'},
+        schema='UserSchemaPublic',
+        type_='user',
+    )
 
-    tickets = Relationship(attribute='tickets',
-                           self_view='v1.discount_code_tickets',
-                           self_view_kwargs={'id': '<id>'},
-                           related_view='v1.ticket_list',
-                           related_view_kwargs={'discount_code_id': '<id>'},
-                           schema='TicketSchemaPublic',
-                           many=True,
-                           type_='ticket')
+    tickets = Relationship(
+        attribute='tickets',
+        self_view='v1.discount_code_tickets',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.ticket_list',
+        related_view_kwargs={'discount_code_id': '<id>'},
+        schema='TicketSchemaPublic',
+        many=True,
+        type_='ticket',
+    )

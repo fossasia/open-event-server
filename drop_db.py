@@ -1,13 +1,14 @@
-from app.instance import current_app
-from app.models import db
 from sqlalchemy.engine import reflection
 from sqlalchemy.schema import (
-    MetaData,
-    Table,
+    DropConstraint,
     DropTable,
     ForeignKeyConstraint,
-    DropConstraint,
+    MetaData,
+    Table,
 )
+
+from app.instance import current_app
+from app.models import db
 
 
 def db_drop_everything(db):
@@ -34,9 +35,7 @@ def db_drop_everything(db):
         for fk in inspector.get_foreign_keys(table_name):
             if not fk['name']:
                 continue
-            fks.append(
-                ForeignKeyConstraint((), (), name=fk['name'])
-            )
+            fks.append(ForeignKeyConstraint((), (), name=fk['name']))
         t = Table(table_name, metadata, *fks)
         tbs.append(t)
         all_fks.extend(fks)

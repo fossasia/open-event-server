@@ -1,50 +1,48 @@
-from celery.signals import after_task_publish
 import logging
 import os.path
 import secrets
-from envparse import env
-
 import sys
-from flask import Flask, json, make_response
-import sentry_sdk
-from sentry_sdk.integrations.flask import FlaskIntegration
-from sentry_sdk.integrations.celery import CeleryIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
-from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
-
-from app.settings import get_settings, get_setts
-from flask_migrate import Migrate
-from flask_login import current_user
-from flask_jwt_extended import JWTManager
 from datetime import timedelta
+
+import sentry_sdk
+import sqlalchemy as sa
+import stripe
+from celery.signals import after_task_publish
+from envparse import env
+from flask import Flask, json, make_response
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from flask_login import current_user
+from flask_migrate import Migrate
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck
-from apscheduler.schedulers.background import BackgroundScheduler
-from elasticsearch_dsl.connections import connections
 from pytz import utc
-
-import sqlalchemy as sa
-
-import stripe
-from app.settings import get_settings
-from app.models import db
-from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
-from app.api.helpers.jwt import jwt_user_loader
-from app.api.helpers.cache import cache
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
-from app.views.blueprints import BlueprintsManager
+
 from app.api import routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
+from app.api.helpers.cache import cache
+from app.api.helpers.jwt import jwt_user_loader
+from app.extensions import limiter, shell
+from app.models import db
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
-from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
-from app.views.elastic_search import client
-from app.views.redis_store import redis_store
+from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
-from app.extensions import shell, limiter
-
+from app.views.blueprints import BlueprintsManager
+from app.views.elastic_search import client
+from app.views.healthcheck import (
+    check_migrations,
+    health_check_celery,
+    health_check_db,
+    health_check_migrations,
+)
+from app.views.redis_store import redis_store
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -86,12 +84,16 @@ def create_app():
 
     if not app.config['SECRET_KEY']:
         if app.config['PRODUCTION']:
-            app.logger.error('SECRET_KEY must be set in .env or environment variables in production')
+            app.logger.error(
+                'SECRET_KEY must be set in .env or environment variables in production'
+            )
             exit(1)
         else:
             random_secret = secrets.token_hex()
-            app.logger.warning(f'Using random secret "{ random_secret }" for development server. '
-                               'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables')
+            app.logger.warning(
+                f'Using random secret "{ random_secret }" for development server. '
+                'This is NOT recommended. Set proper SECRET_KEY in .env or environment variables'
+            )
             app.config['SECRET_KEY'] = random_secret
 
     db.init_app(app)
@@ -186,14 +188,21 @@ def create_app():
     sa.orm.configure_mappers()
 
     if app.config['SERVE_STATIC']:
-        app.add_url_rule('/static/<path:filename>',
-                         endpoint='static',
-                         view_func=app.send_static_file)
+        app.add_url_rule(
+            '/static/<path:filename>', endpoint='static', view_func=app.send_static_file
+        )
 
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
-        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration(), RedisIntegration(),
-                                                                CeleryIntegration(), SqlalchemyIntegration()])
+        sentry_sdk.init(
+            app.config['SENTRY_DSN'],
+            integrations=[
+                FlaskIntegration(),
+                RedisIntegration(),
+                CeleryIntegration(),
+                SqlalchemyIntegration(),
+            ],
+        )
 
     # redis
     redis_store.init_app(app)
@@ -230,9 +239,11 @@ health.add_check(health_check_migrations)
 # it is important to register them after celery is defined to resolve circular imports
 
 from .api.helpers import tasks
+
 celery = tasks.celery
 # register scheduled jobs
 from app.api.helpers.scheduled_jobs import setup_scheduled_task
+
 setup_scheduled_task(celery)
 
 
@@ -253,20 +264,20 @@ def internal_server_error(error):
         exc = JsonApiException({'pointer': ''}, str(error))
     else:
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
-    return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
-                         {'Content-Type': 'application/vnd.api+json'})
+    return make_response(
+        json.dumps(jsonapi_errors([exc.to_dict()])),
+        exc.status,
+        {'Content-Type': 'application/vnd.api+json'},
+    )
 
 
 @app.errorhandler(429)
 def ratelimit_handler(error):
-    return make_response(json.dumps({
-            'status': 429,
-            'title': 'Request Limit Exceeded'
-        }),
+    return make_response(
+        json.dumps({'status': 429, 'title': 'Request Limit Exceeded'}),
         429,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
+        {'Content-Type': 'application/vnd.api+json'},
+    )
 
 
 if __name__ == '__main__':

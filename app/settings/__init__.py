@@ -2,8 +2,8 @@ import stripe
 from flask import current_app
 from sqlalchemy import desc
 
+from app.models.setting import Environment, Setting
 from app.models.ticket_fee import TicketFees
-from app.models.setting import Setting, Environment
 
 
 def get_settings(from_db=False):
@@ -42,6 +42,7 @@ def set_settings(**kwargs):
         ticket_maximum_fees = kwargs.get('maximum_fee')
         from app.api.helpers.data_getter import DataGetter
         from app.api.helpers.db import save_to_db
+
         currencies = DataGetter.get_payment_currencies()
         ticket_fees = DataGetter.get_fee_settings()
         if not ticket_fees:
@@ -49,9 +50,11 @@ def set_settings(**kwargs):
                 currency = currency.split(' ')[0]
                 if float(ticket_maximum_fees[i]) == 0.0:
                     ticket_maximum_fees[i] = ticket_service_fees[i]
-                ticket_fee = TicketFees(currency=currency,
-                                        service_fee=ticket_service_fees[i],
-                                        maximum_fee=ticket_maximum_fees[i])
+                ticket_fee = TicketFees(
+                    currency=currency,
+                    service_fee=ticket_service_fees[i],
+                    maximum_fee=ticket_maximum_fees[i],
+                )
                 save_to_db(ticket_fee, "Ticket Fees settings saved")
         else:
             i = 0
@@ -70,19 +73,32 @@ def set_settings(**kwargs):
             for key, value in list(kwargs.items()):
                 setattr(setting, key, value)
         from app.api.helpers.db import save_to_db
+
         save_to_db(setting, 'Setting saved')
         stripe.api_key = setting.stripe_secret_key
 
-        if setting.app_environment == Environment.DEVELOPMENT and not current_app.config['DEVELOPMENT']:
+        if (
+            setting.app_environment == Environment.DEVELOPMENT
+            and not current_app.config['DEVELOPMENT']
+        ):
             current_app.config.from_object('config.DevelopmentConfig')
 
-        if setting.app_environment == Environment.STAGING and not current_app.config['STAGING']:
+        if (
+            setting.app_environment == Environment.STAGING
+            and not current_app.config['STAGING']
+        ):
             current_app.config.from_object('config.StagingConfig')
 
-        if setting.app_environment == Environment.PRODUCTION and not current_app.config['PRODUCTION']:
+        if (
+            setting.app_environment == Environment.PRODUCTION
+            and not current_app.config['PRODUCTION']
+        ):
             current_app.config.from_object('config.ProductionConfig')
 
-        if setting.app_environment == Environment.TESTING and not current_app.config['TESTING']:
+        if (
+            setting.app_environment == Environment.TESTING
+            and not current_app.config['TESTING']
+        ):
             current_app.config.from_object('config.TestingConfig')
 
         current_app.config['custom_settings'] = make_dict(setting)

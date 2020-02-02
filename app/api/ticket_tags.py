@@ -15,6 +15,7 @@ class TicketTagListPost(ResourceList):
     """
     List and create TicketTag
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method for checking required relationship
@@ -29,15 +30,17 @@ class TicketTagListPost(ResourceList):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
     schema = TicketTagSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': TicketTag}
+    methods = [
+        'POST',
+    ]
+    data_layer = {'session': db.session, 'model': TicketTag}
 
 
 class TicketTagList(ResourceList):
     """
     List TicketTags based on event_id or ticket_id
     """
+
     def query(self, view_kwargs):
         """
         method to query Ticket tags based on different params
@@ -53,12 +56,10 @@ class TicketTagList(ResourceList):
 
     view_kwargs = True
     schema = TicketTagSchema
-    methods = ['GET', ]
-    data_layer = {'session': db.session,
-                  'model': TicketTag,
-                  'methods': {
-                      'query': query
-                  }}
+    methods = [
+        'GET',
+    ]
+    data_layer = {'session': db.session, 'model': TicketTag, 'methods': {'query': query}}
 
 
 class TicketTagDetail(ResourceDetail):
@@ -66,33 +67,53 @@ class TicketTagDetail(ResourceDetail):
     TicketTag detail by id
     """
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=TicketTag),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=TicketTag,
+        ),
+    )
     schema = TicketTagSchema
-    data_layer = {'session': db.session,
-                  'model': TicketTag}
+    data_layer = {'session': db.session, 'model': TicketTag}
 
 
 class TicketTagRelationshipRequired(ResourceRelationship):
     """
     TicketTag Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=TicketTag),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=TicketTag,
+        ),
+    )
     schema = TicketTagSchema
     methods = ['GET', 'PATCH']
     schema = TicketTagSchema
-    data_layer = {'session': db.session,
-                  'model': TicketTag}
+    data_layer = {'session': db.session, 'model': TicketTag}
 
 
 class TicketTagRelationshipOptional(ResourceRelationship):
     """
     TicketTag Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=TicketTag),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=TicketTag,
+        ),
+    )
     schema = TicketTagSchema
     schema = TicketTagSchema
-    data_layer = {'session': db.session,
-                  'model': TicketTag}
+    data_layer = {'session': db.session, 'model': TicketTag}

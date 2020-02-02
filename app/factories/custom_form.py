@@ -2,11 +2,10 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.custom_form import db, CustomForms
+from app.models.custom_form import CustomForms, db
 
 
 class CustomFormFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = CustomForms
         sqlalchemy_session = db.session

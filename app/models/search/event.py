@@ -29,6 +29,7 @@ class SearchableEvent(DocType):
         self.owner_name = db_event.owner_name
         self.owner_description = db_event.owner_description
 
+
 def find_all(search_strings, client=client):
     search = Search().using(client)
 

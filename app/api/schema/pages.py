@@ -11,10 +11,12 @@ class PageSchema(Schema):
     """
     Api schema for page Model
     """
+
     class Meta:
         """
         Meta class for page Api Schema
         """
+
         type_ = 'page'
         self_view = 'v1.page_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -25,6 +27,8 @@ class PageSchema(Schema):
     title = fields.Str(allow_none=True)
     url = fields.String(required=True)
     description = fields.Str(allow_none=True)
-    place = fields.Str(validate=validate.OneOf(choices=["footer", "event"]), allow_none=True)
+    place = fields.Str(
+        validate=validate.OneOf(choices=["footer", "event"]), allow_none=True
+    )
     language = fields.Str(allow_none=True)
     index = fields.Integer(default=0)

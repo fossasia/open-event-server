@@ -3,7 +3,7 @@ import factory
 import app.factories.common as common
 from app.factories.ticket import TicketFactory
 from app.factories.user import UserFactory
-from app.models.discount_code import db, DiscountCode
+from app.models.discount_code import DiscountCode, db
 
 
 class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):

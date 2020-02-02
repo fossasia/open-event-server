@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.tax import db, Tax
+from app.models.tax import Tax, db
 
 
 class TaxFactory(factory.alchemy.SQLAlchemyModelFactory):

@@ -1,23 +1,25 @@
 from flask_rest_jsonapi import ResourceDetail
-from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 
-from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
-from app.models import db
-from app.models.session import Session
 from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.api.helpers.db import get_count
+from app.api.helpers.utilities import dasherize
+from app.models import db
+from app.models.session import Session
 
 
 class AdminStatisticsSessionSchema(Schema):
     """
     Api schema
     """
+
     class Meta:
         """
         Meta class
         """
+
         type_ = 'admin-statistics-session'
         self_view = 'v1.admin_statistics_session_detail'
         inflect = dasherize
@@ -53,10 +55,8 @@ class AdminStatisticsSessionDetail(ResourceDetail):
     """
     Detail by id
     """
+
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)
     schema = AdminStatisticsSessionSchema
-    data_layer = {
-        'class': NoModelLayer,
-        'session': db.session
-    }
+    data_layer = {'class': NoModelLayer, 'session': db.session}

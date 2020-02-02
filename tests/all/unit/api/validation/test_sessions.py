@@ -1,26 +1,24 @@
 import unittest
 from datetime import datetime
-from pytz import timezone
 from unittest import TestCase
+
+from pytz import timezone
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.sessions import SessionSchema
 
 
 class TestSessionValidation(TestCase):
-
     def test_date_pass(self):
         """
         Sessions Validate Date - Tests if the function runs without an exception
         :return:
         """
         schema = SessionSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
             'starts_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'ends_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
         }
         SessionSchema.validate_fields(schema, data, original_data)
 
@@ -30,12 +28,10 @@ class TestSessionValidation(TestCase):
         :return:
         """
         schema = SessionSchema()
-        original_data = {
-            'data': {}
-        }
+        original_data = {'data': {}}
         data = {
             'starts_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'ends_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
         }
         with self.assertRaises(UnprocessableEntity):
             SessionSchema.validate_fields(schema, data, original_data)

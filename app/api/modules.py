@@ -4,7 +4,7 @@ from app.api.bootstrap import api
 from app.api.schema.modules import ModuleSchema
 from app.models import db
 from app.models.module import Module
-from app.api.helpers.exceptions import ConflictException
+
 
 class ModuleDetail(ResourceDetail):
     """
@@ -32,6 +32,8 @@ class ModuleDetail(ResourceDetail):
     decorators = (api.has_permission('is_admin', methods='PATCH', id='1'),)
     methods = ['GET', 'PATCH']
     schema = ModuleSchema
-    data_layer = {'session': db.session,
-                  'model': Module,
-                  'methods': {'before_patch': before_patch}}
+    data_layer = {
+        'session': db.session,
+        'model': Module,
+        'methods': {'before_patch': before_patch},
+    }

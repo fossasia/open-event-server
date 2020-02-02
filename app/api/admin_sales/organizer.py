@@ -1,18 +1,17 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
-from flask_rest_jsonapi import ResourceList
 
-from app.api.helpers.utilities import dasherize
+from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.order import Order, OrderTicket
 from app.models.role import Role
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
-
-from app.api.admin_sales.utils import summary
 
 
 class AdminSalesByOrganizersSchema(Schema):
@@ -54,18 +53,14 @@ class AdminSalesByOrganizersList(ResourceList):
 
     def query(self, _):
         query_ = self.session.query(User)
-        query_ = query_.join(UsersEventsRoles).filter(or_(Role.name == 'organizer', Role.name == 'owner'))
+        query_ = query_.join(UsersEventsRoles).filter(
+            or_(Role.name == 'organizer', Role.name == 'owner')
+        )
         query_ = query_.join(Event).outerjoin(Order).outerjoin(OrderTicket)
 
         return query_
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByOrganizersSchema
-    data_layer = {
-        'model': User,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': User, 'session': db.session, 'methods': {'query': query}}

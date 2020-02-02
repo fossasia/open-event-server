@@ -3,8 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.event_copyright import EventCopyrightSchema
@@ -18,6 +17,7 @@ class EventCopyrightListPost(ResourceList):
     Event Copyright List Post class for creating an event copyright
     Only POST method allowed
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -38,27 +38,34 @@ class EventCopyrightListPost(ResourceList):
         :return:
         """
         try:
-            self.session.query(EventCopyright).filter_by(event_id=data['event'], deleted_at=None).one()
+            self.session.query(EventCopyright).filter_by(
+                event_id=data['event'], deleted_at=None
+            ).one()
         except NoResultFound:
             pass
         else:
-            raise UnprocessableEntity({'parameter': 'event_identifier'},
-                                      "Event Copyright already exists for the provided Event ID")
+            raise UnprocessableEntity(
+                {'parameter': 'event_identifier'},
+                "Event Copyright already exists for the provided Event ID",
+            )
 
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     view_kwargs = True
     schema = EventCopyrightSchema
-    data_layer = {'session': db.session,
-                  'model': EventCopyright,
-                  'methods': {
-                      'before_create_object': before_create_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EventCopyright,
+        'methods': {'before_create_object': before_create_object},
+    }
 
 
 class EventCopyrightDetail(ResourceDetail):
     """
     Event Copyright Detail Class
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method to get the copyright id to fetch details
@@ -69,29 +76,51 @@ class EventCopyrightDetail(ResourceDetail):
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(
+                self,
+                Event,
+                'identifier',
+                view_kwargs['event_identifier'],
+                'event_identifier',
+            )
 
         if event:
-            event_copyright = safe_query(self, EventCopyright, 'event_id', event.id, 'event_id')
+            event_copyright = safe_query(
+                self, EventCopyright, 'event_id', event.id, 'event_id'
+            )
             view_kwargs['id'] = event_copyright.id
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
-                                     model=EventCopyright, methods="PATCH,DELETE"),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch="event_id",
+            fetch_as="event_id",
+            model=EventCopyright,
+            methods="PATCH,DELETE",
+        ),
+    )
     schema = EventCopyrightSchema
-    data_layer = {'session': db.session,
-                  'model': EventCopyright,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EventCopyright,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class EventCopyrightRelationshipRequired(ResourceRelationship):
     """
     Event Copyright Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
-                                     model=EventCopyright, methods="PATCH"),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            fetch="event_id",
+            fetch_as="event_id",
+            model=EventCopyright,
+            methods="PATCH",
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = EventCopyrightSchema
-    data_layer = {'session': db.session,
-                  'model': EventCopyright}
+    data_layer = {'session': db.session, 'model': EventCopyright}

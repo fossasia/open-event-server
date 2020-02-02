@@ -5,16 +5,15 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
-import requests
 
 import PIL
-from PIL import Image
+import requests
 from flask import current_app
-from flask import current_app as app
+from PIL import Image
 from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
-from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
+from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, generate_hash, upload
 from app.models.image_size import ImageSizes
 from app.settings import get_settings
 
@@ -61,8 +60,16 @@ def uploaded_file(files, multiple=False):
     return files_uploaded
 
 
-def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, height_size=None, upload_path=None,
-                              ext='jpg', remove_after_upload=False, resize=True):
+def create_save_resized_image(
+    image_file,
+    basewidth=None,
+    maintain_aspect=None,
+    height_size=None,
+    upload_path=None,
+    ext='jpg',
+    remove_after_upload=False,
+    resize=True,
+):
     """
     Create and Save the resized version of the background image
     :param resize:
@@ -93,13 +100,15 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
 
     if resize:
         if maintain_aspect:
-            width_percent = (basewidth / float(img.size[0]))
+            width_percent = basewidth / float(img.size[0])
             height_size = int((float(img.size[1]) * float(width_percent)))
 
         img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
 
-    temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
-    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+    temp_file_relative_path = (
+        'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
+    )
+    temp_file_path = current_app.config['BASE_DIR'] + '/' + temp_file_relative_path
     dir_path = temp_file_path.rsplit('/', 1)[0]
 
     # create dirs if not present
@@ -130,14 +139,28 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     try:
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
-        image_sizes = ImageSizes(image_sizes_type, full_width=1300,
-                                 full_height=500, full_aspect=True, full_quality=80,
-                                 icon_width=75, icon_height=30, icon_aspect=True,
-                                 icon_quality=80, thumbnail_width=500, thumbnail_height=200,
-                                 thumbnail_aspect=True, thumbnail_quality=80, logo_width=500,
-                                 logo_height=200, icon_size_width_height=35, icon_size_quality=80,
-                                 small_size_width_height=50, small_size_quality=80,
-                                 thumbnail_size_width_height=500)
+        image_sizes = ImageSizes(
+            image_sizes_type,
+            full_width=1300,
+            full_height=500,
+            full_aspect=True,
+            full_quality=80,
+            icon_width=75,
+            icon_height=30,
+            icon_aspect=True,
+            icon_quality=80,
+            thumbnail_width=500,
+            thumbnail_height=200,
+            thumbnail_aspect=True,
+            thumbnail_quality=80,
+            logo_width=500,
+            logo_height=200,
+            icon_size_width_height=35,
+            icon_size_quality=80,
+            small_size_width_height=50,
+            small_size_quality=80,
+            thumbnail_size_width_height=500,
+        )
 
     # Get an unique identifier from uuid if not provided
     if unique_identifier is None:
@@ -145,60 +168,111 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
 
     if image_sizes_type == 'speaker-image':
         thumbnail_aspect = icon_aspect = small_aspect = True
-        thumbnail_basewidth = thumbnail_height_size = image_sizes.thumbnail_size_width_height
+        thumbnail_basewidth = (
+            thumbnail_height_size
+        ) = image_sizes.thumbnail_size_width_height
         icon_basewidth = icon_height_size = image_sizes.icon_size_width_height
         small_basewidth = small_height_size = image_sizes.small_size_width_height
         original_upload_path = UPLOAD_PATHS['user']['original'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         small_upload_path = UPLOAD_PATHS['user']['small'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         thumbnail_upload_path = UPLOAD_PATHS['user']['thumbnail'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         icon_upload_path = UPLOAD_PATHS['user']['icon'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         new_images = {
-            'original_image_url': create_save_resized_image(image_file, 0, 0, 0, original_upload_path, resize=False),
-            'small_image_url': create_save_resized_image(image_file, small_basewidth, small_aspect, small_height_size,
-                                                         small_upload_path),
-            'thumbnail_image_url': create_save_resized_image(image_file, thumbnail_basewidth, thumbnail_aspect,
-                                                             thumbnail_height_size, thumbnail_upload_path),
-            'icon_image_url': create_save_resized_image(image_file, icon_basewidth, icon_aspect, icon_height_size,
-                                                        icon_upload_path)
+            'original_image_url': create_save_resized_image(
+                image_file, 0, 0, 0, original_upload_path, resize=False
+            ),
+            'small_image_url': create_save_resized_image(
+                image_file,
+                small_basewidth,
+                small_aspect,
+                small_height_size,
+                small_upload_path,
+            ),
+            'thumbnail_image_url': create_save_resized_image(
+                image_file,
+                thumbnail_basewidth,
+                thumbnail_aspect,
+                thumbnail_height_size,
+                thumbnail_upload_path,
+            ),
+            'icon_image_url': create_save_resized_image(
+                image_file,
+                icon_basewidth,
+                icon_aspect,
+                icon_height_size,
+                icon_upload_path,
+            ),
         }
 
     else:
         large_aspect = image_sizes.full_aspect if image_sizes.full_aspect else False
         large_basewidth = image_sizes.full_width if image_sizes.full_width else 1300
         large_height_size = image_sizes.full_height if image_sizes.full_width else 500
-        thumbnail_aspect = image_sizes.thumbnail_aspect if image_sizes.full_aspect else False
-        thumbnail_basewidth = image_sizes.thumbnail_width if image_sizes.thumbnail_width else 500
-        thumbnail_height_size = image_sizes.thumbnail_height if image_sizes.thumbnail_height else 200
+        thumbnail_aspect = (
+            image_sizes.thumbnail_aspect if image_sizes.full_aspect else False
+        )
+        thumbnail_basewidth = (
+            image_sizes.thumbnail_width if image_sizes.thumbnail_width else 500
+        )
+        thumbnail_height_size = (
+            image_sizes.thumbnail_height if image_sizes.thumbnail_height else 200
+        )
         icon_aspect = image_sizes.icon_aspect if image_sizes.icon_aspect else False
         icon_basewidth = image_sizes.icon_width if image_sizes.icon_width else 75
         icon_height_size = image_sizes.icon_height if image_sizes.icon_height else 30
         original_upload_path = UPLOAD_PATHS['event']['original'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         large_upload_path = UPLOAD_PATHS['event']['large'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         thumbnail_upload_path = UPLOAD_PATHS['event']['thumbnail'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         icon_upload_path = UPLOAD_PATHS['event']['icon'].format(
-            identifier=unique_identifier)
+            identifier=unique_identifier
+        )
         new_images = {
-            'original_image_url': create_save_resized_image(image_file, 0, 0, 0, original_upload_path, resize=False),
-            'large_image_url': create_save_resized_image(image_file, large_basewidth, large_aspect, large_height_size,
-                                                         large_upload_path),
-            'thumbnail_image_url': create_save_resized_image(image_file, thumbnail_basewidth, thumbnail_aspect,
-                                                             thumbnail_height_size, thumbnail_upload_path),
-            'icon_image_url': create_save_resized_image(image_file, icon_basewidth, icon_aspect, icon_height_size,
-                                                        icon_upload_path)
+            'original_image_url': create_save_resized_image(
+                image_file, 0, 0, 0, original_upload_path, resize=False
+            ),
+            'large_image_url': create_save_resized_image(
+                image_file,
+                large_basewidth,
+                large_aspect,
+                large_height_size,
+                large_upload_path,
+            ),
+            'thumbnail_image_url': create_save_resized_image(
+                image_file,
+                thumbnail_basewidth,
+                thumbnail_aspect,
+                thumbnail_height_size,
+                thumbnail_upload_path,
+            ),
+            'icon_image_url': create_save_resized_image(
+                image_file,
+                icon_basewidth,
+                icon_aspect,
+                icon_height_size,
+                icon_upload_path,
+            ),
         }
 
     return new_images
 
 
-def create_system_image(image_file=None, upload_path=None, unique_identifier=None,
-                        ext='jpg'):
+def create_system_image(
+    image_file=None, upload_path=None, unique_identifier=None, ext='jpg'
+):
     """
     Create System Images for Event Topics
     :param upload_path:
@@ -214,7 +288,7 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
             image_file = io.BytesIO(img_data.read())
     else:
         file_relative_path = 'static/default_system_image.png'
-        image_file = app.config['BASE_DIR'] + '/' + file_relative_path
+        image_file = current_app.config['BASE_DIR'] + '/' + file_relative_path
     try:
         im = Image.open(image_file)
     except IOError:
@@ -226,8 +300,10 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
     else:
         img = im
 
-    temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
-    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+    temp_file_relative_path = (
+        'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
+    )
+    temp_file_path = current_app.config['BASE_DIR'] + '/' + temp_file_relative_path
     dir_path = temp_file_path.rsplit('/', 1)[0]
 
     # create dirs if not present
@@ -238,7 +314,9 @@ def create_system_image(image_file=None, upload_path=None, unique_identifier=Non
     upfile = UploadedFile(file_path=temp_file_path, filename=filename)
 
     if not upload_path:
-        upload_path = UPLOAD_PATHS['event_topic']['system_image'].format(event_topic_id=unique_identifier)
+        upload_path = UPLOAD_PATHS['event_topic']['system_image'].format(
+            event_topic_id=unique_identifier
+        )
 
     uploaded_url = upload(upfile, upload_path)
     os.remove(temp_file_path)
@@ -255,17 +333,25 @@ def make_frontend_url(path, parameters=None):
     frontend_url = urllib.parse.urlparse(settings.get('frontend_url') or '')
 
     full_path = '/'.join(x.strip('/') for x in (frontend_url.path, str(path)) if x)
-    return urllib.parse.urlunparse((
-        frontend_url.scheme,
-        frontend_url.netloc,
-        full_path,
-        '',
-        str(urllib.parse.urlencode(parameters) if parameters else ''),
-        ''
-    ))
+    return urllib.parse.urlunparse(
+        (
+            frontend_url.scheme,
+            frontend_url.netloc,
+            full_path,
+            '',
+            str(urllib.parse.urlencode(parameters) if parameters else ''),
+            '',
+        )
+    )
 
 
-def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identifier=get_file_name(), upload_dir='static/media/'):
+def create_save_pdf(
+    pdf_data,
+    key,
+    dir_path='/static/uploads/pdf/temp/',
+    identifier=get_file_name(),
+    upload_dir='static/media/',
+):
     """
     Create and Saves PDFs from html
     :param pdf_data:

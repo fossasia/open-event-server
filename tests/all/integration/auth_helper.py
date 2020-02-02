@@ -6,9 +6,7 @@ def create_user(email, password, is_verified=True):
     """
     Registers the user but not logs in
     """
-    user = User(email=email,
-                password=password,
-                is_verified=is_verified)
+    user = User(email=email, password=password, is_verified=is_verified)
     save_to_db(user, "User created")
     return user
 

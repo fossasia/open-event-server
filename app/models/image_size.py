@@ -3,6 +3,7 @@ from app.models import db
 
 class ImageSizes(db.Model):
     """image size model class"""
+
     __tablename__ = 'image_sizes'
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
@@ -27,28 +28,30 @@ class ImageSizes(db.Model):
     icon_size_width_height = db.Column(db.Integer)
     icon_size_quality = db.Column(db.Integer)
 
-    def __init__(self,
-                 type=None,
-                 full_width=None,
-                 full_height=None,
-                 full_aspect=False,
-                 full_quality=None,
-                 icon_width=None,
-                 icon_height=None,
-                 icon_aspect=False,
-                 icon_quality=None,
-                 thumbnail_width=None,
-                 thumbnail_height=None,
-                 thumbnail_aspect=False,
-                 thumbnail_quality=None,
-                 logo_width=None,
-                 logo_height=None,
-                 small_size_width_height=None,
-                 small_size_quality=None,
-                 thumbnail_size_width_height=None,
-                 thumbnail_size_quality=None,
-                 icon_size_width_height=None,
-                 icon_size_quality=None):
+    def __init__(
+        self,
+        type=None,
+        full_width=None,
+        full_height=None,
+        full_aspect=False,
+        full_quality=None,
+        icon_width=None,
+        icon_height=None,
+        icon_aspect=False,
+        icon_quality=None,
+        thumbnail_width=None,
+        thumbnail_height=None,
+        thumbnail_aspect=False,
+        thumbnail_quality=None,
+        logo_width=None,
+        logo_height=None,
+        small_size_width_height=None,
+        small_size_quality=None,
+        thumbnail_size_width_height=None,
+        thumbnail_size_quality=None,
+        icon_size_width_height=None,
+        icon_size_quality=None,
+    ):
         self.type = type
         self.full_width = full_width
         self.full_height = full_height
@@ -99,5 +102,5 @@ class ImageSizes(db.Model):
             'thumbnail_size_width_height': self.thumbnail_size_width_height,
             'thumbnail_size_quality': self.thumbnail_size_quality,
             'icon_size_width_height': self.icon_size_width_height,
-            'icon_size_quality': self.icon_size_quality
+            'icon_size_quality': self.icon_size_quality,
         }

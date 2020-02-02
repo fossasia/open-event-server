@@ -1,14 +1,13 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from flask_rest_jsonapi import ResourceList
 
-from app.api.helpers.utilities import dasherize
+from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.order import Order, OrderTicket
-
-from app.api.admin_sales.utils import summary
 
 
 class AdminSalesByEventsSchema(Schema):
@@ -52,12 +51,6 @@ class AdminSalesByEventsList(ResourceList):
         return self.session.query(Event).outerjoin(Order).outerjoin(OrderTicket)
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByEventsSchema
-    data_layer = {
-        'model': Event,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': Event, 'session': db.session, 'methods': {'query': query}}

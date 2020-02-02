@@ -8,10 +8,12 @@ class UserPermissionSchema(SoftDeletionSchema):
     """
     Api schema for user permission Model
     """
+
     class Meta:
         """
         Meta class for user permission Api Schema
         """
+
         type_ = 'user-permission'
         self_view = 'v1.user_permission_detail'
         self_view_kwargs = {'id': '<id>'}

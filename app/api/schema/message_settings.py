@@ -1,9 +1,9 @@
-from marshmallow_jsonapi import fields
 from marshmallow import validate as validate
+from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
-from utils.common import use_defaults
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
@@ -42,6 +42,7 @@ class MessageSettingSchema(Schema):
         """
         Meta class for Message Setting API schema
         """
+
         type_ = 'message-setting'
         self_view = 'v1.message_setting_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -49,19 +50,38 @@ class MessageSettingSchema(Schema):
 
     id = fields.Str(dump_only=True)
     action = fields.Str(
-        allow_none=True, dump_only=True,
+        allow_none=True,
+        dump_only=True,
         validate=validate.OneOf(
-            choices=[INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, USER_REGISTER,
-                     PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT,
-                     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT,
-                     USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD,
-                     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL,
-                     MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL,
-                     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
-                     EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
-                     TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,
-                     PASSWORD_CHANGE]
-        ))
+            choices=[
+                INVITE_PAPERS,
+                NEW_SESSION,
+                USER_CONFIRM,
+                USER_REGISTER,
+                PASSWORD_RESET,
+                EVENT_ROLE,
+                SESSION_ACCEPT_REJECT,
+                SESSION_SCHEDULE,
+                NEXT_EVENT,
+                EVENT_PUBLISH,
+                AFTER_EVENT,
+                USER_CHANGE_EMAIL,
+                USER_REGISTER_WITH_PASSWORD,
+                TICKET_PURCHASED,
+                EVENT_EXPORTED,
+                EVENT_EXPORT_FAIL,
+                MAIL_TO_EXPIRED_ORDERS,
+                MONTHLY_PAYMENT_EMAIL,
+                MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+                EVENT_IMPORTED,
+                EVENT_IMPORT_FAIL,
+                TICKET_PURCHASED_ORGANIZER,
+                TICKET_CANCELLED,
+                TICKET_PURCHASED_ATTENDEE,
+                PASSWORD_CHANGE,
+            ]
+        ),
+    )
     mail_status = fields.Boolean(default=False)
     notification_status = fields.Boolean(default=False)
     user_control_status = fields.Boolean(default=False)

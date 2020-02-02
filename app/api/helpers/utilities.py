@@ -1,17 +1,15 @@
 # PLEASE PUT ALL FUNCTIONS WHICH PERFORM GENERAL FORMATTING ON ANY DATATYPE WITHOUT USING ANY
 # MODULES RELATED TO THE EVENT-SYSTEM i.e FUNCTIONS SPECIFIC TO DB MODELS E.G A FUNCTION JUST FOR ROLE_INVITES
 import random
+import re
 import string
-import sys
 
 import bleach
-from itsdangerous import Serializer
 import requests
-import re
+from flask import current_app
+from itsdangerous import Serializer
 
 from app.api.helpers.exceptions import UnprocessableEntity
-
-from flask import current_app
 
 
 def dasherize(text):
@@ -21,8 +19,10 @@ def dasherize(text):
 def require_relationship(resource_list, data):
     for resource in resource_list:
         if resource not in data:
-            raise UnprocessableEntity({'pointer': '/data/relationships/{}'.format(resource)},
-                                      "A valid relationship with {} resource is required".format(resource))
+            raise UnprocessableEntity(
+                {'pointer': '/data/relationships/{}'.format(resource)},
+                "A valid relationship with {} resource is required".format(resource),
+            )
 
 
 def string_empty(value):
@@ -48,8 +48,23 @@ def monthdelta(date, delta):
     m, y = (date.month + delta) % 12, date.year + (date.month + delta - 1) // 12
     if not m:
         m = 12
-    d = min(date.day, [31,
-                       29 if y % 4 == 0 and not y % 400 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1])
+    d = min(
+        date.day,
+        [
+            31,
+            29 if y % 4 == 0 and not y % 400 == 0 else 28,
+            31,
+            30,
+            31,
+            30,
+            31,
+            31,
+            30,
+            31,
+            30,
+            31,
+        ][m - 1],
+    )
     return date.replace(day=d, month=m, year=y)
 
 
@@ -103,9 +118,8 @@ def update_state(task_handle, state, result=None):
     if result is None:
         result = {}
     if not current_app.config.get('CELERY_ALWAYS_EAGER'):
-        task_handle.update_state(
-            state=state, meta=result
-        )
+        task_handle.update_state(state=state, meta=result)
+
 
 static_page = 'https://eventyay.com/'
 image_link = 'https://www.gstatic.com/webp/gallery/1.jpg'

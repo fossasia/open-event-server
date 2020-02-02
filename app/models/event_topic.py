@@ -1,6 +1,4 @@
 import uuid
-from flask import current_app as app, request
-import urllib.parse
 
 from app.api.helpers.db import get_count
 from app.models import db
@@ -8,7 +6,13 @@ from app.models.base import SoftDeletionModel
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
     count = get_count(EventTopic.query.filter_by(slug=slug))
     if count == 0:
         return slug
@@ -28,11 +32,7 @@ class EventTopic(SoftDeletionModel):
     events = db.relationship('Event', backref='event_topics')
     event_sub_topics = db.relationship('EventSubTopic', backref='event-topic')
 
-    def __init__(self,
-                 name=None,
-                 system_image_url=None,
-                 slug=None,
-                 deleted_at=None):
+    def __init__(self, name=None, system_image_url=None, slug=None, deleted_at=None):
 
         self.name = name
         self.system_image_url = system_image_url

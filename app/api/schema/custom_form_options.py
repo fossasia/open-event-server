@@ -16,6 +16,7 @@ class CustomFormOptionSchema(SoftDeletionSchema):
         """
         Meta class for CustomForm Schema
         """
+
         type_ = 'custom-form-option'
         self_view = 'v1.custom_form_option_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -23,10 +24,12 @@ class CustomFormOptionSchema(SoftDeletionSchema):
 
     id = fields.Integer(dump_only=True)
     value = fields.Str(required=True)
-    custom_form = Relationship(attribute='custom_form',
-                               self_view='v1.custom_form_option_form',
-                               self_view_kwargs={'id': '<id>'},
-                               related_view='v1.custom_form_detail',
-                               related_view_kwargs={'custom_form_option_id': '<id>'},
-                               schema='CustomFormSchema',
-                               type_='custom_form')
+    custom_form = Relationship(
+        attribute='custom_form',
+        self_view='v1.custom_form_option_form',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.custom_form_detail',
+        related_view_kwargs={'custom_form_option_id': '<id>'},
+        schema='CustomFormSchema',
+        type_='custom_form',
+    )
