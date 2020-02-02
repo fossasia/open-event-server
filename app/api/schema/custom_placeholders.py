@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 
@@ -14,10 +15,10 @@ class CustomPlaceholderSchema(Schema):
 
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True)
-    original_image_url = fields.Url(required=True, schemes='https')
-    thumbnail_image_url = fields.Url(dump_only=True, schemes='https')
-    large_image_url = fields.Url(dump_only=True, schemes='https')
-    icon_image_url = fields.Url(dump_only=True, schemes='https')
+    original_image_url = fields.Url(required=True, validate=validate.URL(schemes=["https"]))
+    thumbnail_image_url = fields.Url(dump_only=True, validate=validate.URL(schemes=["https"]))
+    large_image_url = fields.Url(dump_only=True, validate=validate.URL(schemes=["https"]))
+    icon_image_url = fields.Url(dump_only=True, validate=validate.URL(schemes=["https"]))
     copyright = fields.String(allow_none=True)
     origin = fields.String(allow_none=True)
     event_sub_topic = Relationship(
