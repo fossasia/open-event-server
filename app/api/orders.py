@@ -410,19 +410,14 @@ class OrderDetail(ResourceDetail):
         elif view_kwargs.get('id'):
             order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
 
-<<<<<<< HEAD
-        if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
-            raise ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
-=======
         if not has_access(
             'is_coorganizer_or_user_itself',
             event_id=order.event_id,
             user_id=order.user_id,
         ):
-            return ForbiddenException(
+            raise ForbiddenException(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
->>>>>>> a60e6303df4fe0d9cec7a2f07d786dac2432edc3
 
         # expire the initializing order if time limit is over.
         set_expiry_for_order(order)
