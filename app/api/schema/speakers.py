@@ -1,4 +1,4 @@
-from marshmallow import validates_schema
+from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
@@ -31,20 +31,20 @@ class SpeakerSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     email = fields.Str(required=True)
-    photo_url = fields.Url(allow_none=True, schemes='https')
-    thumbnail_image_url = fields.Url(allow_none=True, schemes='https')
-    small_image_url = fields.Url(allow_none=True, schemes='https')
-    icon_image_url = fields.Url(allow_none=True, schemes='https')
+    photo_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    thumbnail_image_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    small_image_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    icon_image_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     short_biography = fields.Str(allow_none=True)
     long_biography = fields.Str(allow_none=True)
     speaking_experience = fields.Str(allow_none=True)
     mobile = fields.Str(allow_none=True)
-    website = fields.Url(allow_none=True, schemes='https')
-    twitter = fields.Url(allow_none=True, schemes='https')
-    facebook = fields.Url(allow_none=True, schemes='https')
-    github = fields.Url(allow_none=True, schemes='https')
-    linkedin = fields.Url(allow_none=True, schemes='https')
-    instagram = fields.Url(allow_none=True, schemes='https')
+    website = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    twitter = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    facebook = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    github = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    linkedin = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    instagram = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     organisation = fields.Str(allow_none=True)
     is_featured = fields.Boolean(default=False)
     is_email_overridden = fields.Boolean(default=False)
