@@ -56,7 +56,7 @@ class SettingSchemaPublic(Schema):
     youtube_url = fields.Str(allow_none=True)
 
     # Url of Frontend
-    frontend_url = fields.Url(allow_none=True)
+    frontend_url = fields.Url(allow_none=True, schemes='https')
 
     #
     # Cookie Policy
