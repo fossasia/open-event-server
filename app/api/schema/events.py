@@ -70,7 +70,7 @@ class EventSchemaPublic(SoftDeletionSchema):
         allow_none=True,
         default='draft',
     )
-    ticket_url = fields.Url(allow_none=True)
+    ticket_url = fields.Url(allow_none=True, schemes='https')
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
     is_featured = fields.Bool(default=False)
@@ -95,9 +95,9 @@ class EventSchemaPublic(SoftDeletionSchema):
     onsite_details = fields.Str(allow_none=True)
     is_sponsors_enabled = fields.Bool(default=False)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    pentabarf_url = fields.Url(dump_only=True)
-    ical_url = fields.Url(dump_only=True)
-    xcal_url = fields.Url(dump_only=True)
+    pentabarf_url = fields.Url(dump_only=True, schemes='https')
+    ical_url = fields.Url(dump_only=True, schemes='https')
+    xcal_url = fields.Url(dump_only=True, schemes='https')
     refund_policy = fields.String(
         dump_only=True,
         default='All sales are final. No refunds shall be issued in any case.',
