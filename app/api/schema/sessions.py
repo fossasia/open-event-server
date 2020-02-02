@@ -77,7 +77,7 @@ class SessionSchema(SoftDeletionSchema):
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                  raise ForbiddenException(
+                raise ForbiddenException(
                     {'source': ''}, 'Co-organizer access is required.'
                 )
 
