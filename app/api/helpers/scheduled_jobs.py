@@ -14,7 +14,6 @@ from app.api.helpers.mail import (
     send_email_for_monthly_fee_payment,
     send_followup_email_for_monthly_fee_payment,
 )
-from app.api.helpers.errors import NotFoundError
 from app.api.helpers.notification import (
     send_followup_notif_monthly_fee_payment,
     send_notif_after_event,
