@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.settings import Environment
@@ -56,7 +57,7 @@ class SettingSchemaPublic(Schema):
     youtube_url = fields.Str(allow_none=True)
 
     # Url of Frontend
-    frontend_url = fields.Url(allow_none=True, schemes='https')
+    frontend_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
 
     #
     # Cookie Policy
