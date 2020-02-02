@@ -1,6 +1,6 @@
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from flask_rest_jsonapi import ResourceList
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -35,8 +35,7 @@ class AdminSalesFeesSchema(Schema):
     @staticmethod
     def calc_revenue(obj):
         """Returns total revenues of all completed orders for the given event"""
-        return sum(
-            [o.get_revenue() for o in obj.orders if o.status == 'completed'])
+        return sum([o.get_revenue() for o in obj.orders if o.status == 'completed'])
 
     @staticmethod
     def get_event_date(obj):
@@ -49,6 +48,6 @@ class AdminSalesFeesList(ResourceList):
     """
 
     methods = ['GET']
-    decorators = (api.has_permission('is_admin'), )
+    decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesFeesSchema
     data_layer = {'model': Event, 'session': db.session}

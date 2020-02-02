@@ -6,21 +6,14 @@ from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 
 
 class TestDiscountCodeValidation(TestCase):
-
     def test_quantity_pass(self):
         """
         Discount Code Validate Quantity - Tests if the function runs without an exception
         :return:
         """
         schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 20,
-            'tickets_number': 30
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 10, 'max_quantity': 20, 'tickets_number': 30}
         DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
     def test_quantity_min_gt_max(self):
@@ -29,14 +22,8 @@ class TestDiscountCodeValidation(TestCase):
         :return:
         """
         schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 20,
-            'max_quantity': 10,
-            'tickets_number': 30
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 20, 'max_quantity': 10, 'tickets_number': 30}
         with self.assertRaises(UnprocessableEntity):
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
@@ -46,14 +33,8 @@ class TestDiscountCodeValidation(TestCase):
         :return:
         """
         schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'min_quantity': 10,
-            'max_quantity': 30,
-            'tickets_number': 20
-        }
+        original_data = {'data': {}}
+        data = {'min_quantity': 10, 'max_quantity': 30, 'tickets_number': 20}
         with self.assertRaises(UnprocessableEntity):
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
@@ -63,14 +44,8 @@ class TestDiscountCodeValidation(TestCase):
         :return:
         """
         schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'type': 'percent',
-            'value': 90,
-            'tickets': []
-        }
+        original_data = {'data': {}}
+        data = {'type': 'percent', 'value': 90, 'tickets': []}
         DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_percent_value_gt_hundred(self):
@@ -79,14 +54,8 @@ class TestDiscountCodeValidation(TestCase):
         :return:
         """
         schema = DiscountCodeSchemaTicket()
-        original_data = {
-            'data': {}
-        }
-        data = {
-            'type': 'percent',
-            'value': 110,
-            'tickets': []
-        }
+        original_data = {'data': {}}
+        data = {'type': 'percent', 'value': 110, 'tickets': []}
         with self.assertRaises(UnprocessableEntity):
             DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 

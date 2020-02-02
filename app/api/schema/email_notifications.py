@@ -16,6 +16,7 @@ class EmailNotificationSchema(SoftDeletionSchema):
         """
         Meta class for email notification API schema
         """
+
         type_ = 'email-notification'
         self_view = 'v1.email_notification_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -28,19 +29,21 @@ class EmailNotificationSchema(SoftDeletionSchema):
     session_schedule = fields.Boolean(default=False, allow_none=True)
     after_ticket_purchase = fields.Boolean(default=True, allow_none=True)
     event_id = fields.Integer(allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.email_notification_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'email_notification_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event'
-                         )
-    user = Relationship(attribute='user',
-                        self_view='v1.email_notification_user',
-                        self_view_kwargs={'id': '<id>'},
-                        related_view='v1.user_detail',
-                        related_view_kwargs={'email_notification_id': '<id>'},
-                        schema='UserSchema',
-                        type_='user'
-                        )
+    event = Relationship(
+        attribute='event',
+        self_view='v1.email_notification_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'email_notification_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
+    user = Relationship(
+        attribute='user',
+        self_view='v1.email_notification_user',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_detail',
+        related_view_kwargs={'email_notification_id': '<id>'},
+        schema='UserSchema',
+        type_='user',
+    )

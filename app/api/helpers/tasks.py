@@ -1,60 +1,68 @@
+import base64
 import csv
-import json
+import logging
 import os
-import requests
+import urllib.error
 import uuid
 
+import requests
 from flask import current_app, render_template
 from flask_celeryext import FlaskCeleryExt, RequestContextTask
 from marrow.mailer import Mailer, Message
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
-    Mail, Attachment, FileContent, FileName, From,
-    FileType, Disposition)
+    Attachment,
+    Disposition,
+    FileContent,
+    FileName,
+    FileType,
+    From,
+    Mail,
+)
 
-from app.instance import create_app
+from app.api.exports import event_export_task_base
+from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.files import (
+    create_save_image_sizes,
+    create_save_pdf,
+    create_save_resized_image,
+)
+from app.api.helpers.ICalExporter import ICalExporter
+from app.api.helpers.mail import check_smtp_config, send_export_mail, send_import_mail
+from app.api.helpers.notification import send_notif_after_export, send_notif_after_import
+from app.api.helpers.pentabarfxml import PentabarfExporter
+from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
 from app.api.helpers.utilities import strip_tags
+from app.api.helpers.xcal import XCalExporter
+from app.api.imports import import_event_task_base
+from app.instance import create_app
+from app.models import db
+from app.models.discount_code import DiscountCode
+from app.models.event import Event
+from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.api.helpers.mail import check_smtp_config
+from app.models.sponsor import Sponsor
+from app.models.ticket_holder import TicketHolder
+from app.models.user import User
 from app.settings import get_settings
+
+from .import_helpers import update_import_job
 
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
 """
-import logging
-import traceback
 
-from app.api.helpers.files import create_save_image_sizes, create_save_resized_image
-from app.api.helpers.mail import send_export_mail, send_import_mail
-from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
-from app.api.helpers.db import safe_query
-from .import_helpers import update_import_job
-from app.models.user import User
-from app.models import db
-from app.api.exports import event_export_task_base
-from app.api.imports import import_event_task_base
-from app.models.event import Event
-from app.models.order import Order
-from app.models.sponsor import Sponsor
-from app.models.discount_code import DiscountCode
-from app.models.ticket_holder import TicketHolder
-from app.api.helpers.ICalExporter import ICalExporter
-from app.api.helpers.xcal import XCalExporter
-from app.api.helpers.pentabarfxml import PentabarfExporter
-from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
-from app.api.helpers.db import save_to_db
-from app.api.helpers.files import create_save_pdf
-import urllib.error
-import base64
 
 logger = logging.getLogger(__name__)
+
 
 def make_celery(app=None):
     app = app or create_app()
     ext = FlaskCeleryExt(app)
     return ext.celery
+
 
 celery = make_celery()
 
@@ -63,17 +71,22 @@ def empty_attachments_send(mail_client, message):
     """
     Empty attachments and send mail
     """
-    logging.warning("Attachments could not be sent. Sending confirmation mail without attachments...")
+    logging.warning(
+        "Attachments could not be sent. Sending confirmation mail without attachments..."
+    )
     message.attachments = []
     mail_client.send(message)
+
 
 @celery.task(name='send.email.post.sendgrid')
 def send_email_task_sendgrid(payload, headers, smtp_config):
     try:
-        message = Mail(from_email=From(payload['from'], payload['fromname']),
-                       to_emails=payload['to'],
-                       subject=payload['subject'],
-                       html_content=payload["html"])
+        message = Mail(
+            from_email=From(payload['from'], payload['fromname']),
+            to_emails=payload['to'],
+            subject=payload['subject'],
+            html_content=payload["html"],
+        )
         if payload['attachments'] is not None:
             for attachment in payload['attachments']:
                 with open(attachment, 'rb') as f:
@@ -87,31 +100,39 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
                 attachment.disposition = Disposition('attachment')
                 message.add_attachment(attachment)
         sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
-        logging.info('Sending an email regarding {} on behalf of {}'.format(payload["subject"], payload["from"]))
+        logging.info(
+            'Sending an email regarding {} on behalf of {}'.format(
+                payload["subject"], payload["from"]
+            )
+        )
         sendgrid_client.send(message)
         logging.info('Email sent successfully')
     except urllib.error.HTTPError as e:
         if e.code == 429:
             logging.warning("Sendgrid quota has exceeded")
-            send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+            send_email_task_smtp.delay(
+                payload=payload, headers=None, smtp_config=smtp_config
+            )
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
-            logging.exception("The following error has occurred with sendgrid-{}".format(str(e)))
+            logging.exception(
+                "The following error has occurred with sendgrid-{}".format(str(e))
+            )
 
 
 @celery.task(name='send.email.post.smtp')
 def send_email_task_smtp(payload, smtp_config, headers=None):
     mailer_config = {
-            'transport': {
-                'use': 'smtp',
-                'host': smtp_config['host'],
-                'username': smtp_config['username'],
-                'password': smtp_config['password'],
-                'tls': smtp_config['encryption'],
-                'port': smtp_config['port']
-            }
+        'transport': {
+            'use': 'smtp',
+            'host': smtp_config['host'],
+            'username': smtp_config['username'],
+            'password': smtp_config['password'],
+            'tls': smtp_config['encryption'],
+            'port': smtp_config['port'],
         }
+    }
 
     try:
         mailer = Mailer(mailer_config)
@@ -130,19 +151,28 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
             empty_attachments_send(mailer, message)
     mailer.stop()
 
+
 @celery.task(base=RequestContextTask, name='resize.event.images', bind=True)
 def resize_event_images_task(self, event_id, original_image_url):
     event = Event.query.get(event_id)
     try:
         logging.info('Event image resizing tasks started {}'.format(original_image_url))
-        uploaded_images = create_save_image_sizes(original_image_url, 'event-image', event.id)
+        uploaded_images = create_save_image_sizes(
+            original_image_url, 'event-image', event.id
+        )
         event.large_image_url = uploaded_images['large_image_url']
         event.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
-        logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
+        logging.info(
+            'Resized images saved successfully for event with id: {}'.format(event_id)
+        )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
-        logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
+        logging.exception(
+            'Error encountered while generating resized images for event with id: {}'.format(
+                event_id
+            )
+        )
 
 
 @celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
@@ -150,16 +180,24 @@ def resize_user_images_task(self, user_id, original_image_url):
     user = safe_query(db, User, 'id', user_id, 'user_id')
     try:
         logging.info('User image resizing tasks started {}'.format(original_image_url))
-        uploaded_images = create_save_image_sizes(original_image_url, 'speaker-image', user.id)
+        uploaded_images = create_save_image_sizes(
+            original_image_url, 'speaker-image', user.id
+        )
         user.original_image_url = uploaded_images['original_image_url']
         user.avatar_url = uploaded_images['original_image_url']
         user.small_image_url = uploaded_images['thumbnail_image_url']
         user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
-        logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
+        logging.info(
+            'Resized images saved successfully for user with id: {}'.format(user_id)
+        )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
-        logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
+        logging.exception(
+            'Error encountered while generating resized images for user with id: {}'.format(
+                user_id
+            )
+        )
 
 
 @celery.task(base=RequestContextTask, name='sponsor.logo.urls', bind=True)
@@ -167,12 +205,16 @@ def sponsor_logos_url_task(self, event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id, deleted_at=None).all()
     for sponsor in sponsors:
         try:
-            logging.info('Sponsor logo url generation task started {}'.format(sponsor.logo_url))
-            new_logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
+            logging.info(
+                'Sponsor logo url generation task started {}'.format(sponsor.logo_url)
+            )
+            new_logo_url = create_save_resized_image(
+                image_file=sponsor.logo_url, resize=False
+            )
             sponsor.logo_url = new_logo_url
             save_to_db(sponsor)
             logging.info('Sponsor logo url successfully generated')
-        except(requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
+        except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
             logging.exception('Error encountered while logo generation')
 
 
@@ -180,15 +222,25 @@ def sponsor_logos_url_task(self, event_id):
 def resize_speaker_images_task(self, speaker_id, photo_url):
     speaker = Speaker.query.get(speaker_id)
     try:
-        logging.info('Speaker image resizing tasks started for speaker with id {}'.format(speaker_id))
+        logging.info(
+            'Speaker image resizing tasks started for speaker with id {}'.format(
+                speaker_id
+            )
+        )
         uploaded_images = create_save_image_sizes(photo_url, 'speaker-image', speaker_id)
         speaker.small_image_url = uploaded_images['small_image_url']
         speaker.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         speaker.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(speaker)
-        logging.info('Resized images saved successfully for speaker with id: {}'.format(speaker_id))
+        logging.info(
+            'Resized images saved successfully for speaker with id: {}'.format(speaker_id)
+        )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
-        logging.exception('Error encountered while generating resized images for event with id: {}'.format(speaker_id))
+        logging.exception(
+            'Error encountered while generating resized images for event with id: {}'.format(
+                speaker_id
+            )
+        )
 
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
@@ -202,16 +254,18 @@ def export_event_task(self, email, event_id, settings):
         # task_id = self.request.id.__str__()  # str(async result)
         download_url = path
 
-        result = {
-            'download_url': download_url
-        }
+        result = {'download_url': download_url}
 
         logging.info('Exporting done.. sending email')
         if check_smtp_config(smtp_encryption):
-            send_export_mail(email=email, event_name=event.name, download_url=download_url)
+            send_export_mail(
+                email=email, event_name=event.name, download_url=download_url
+            )
         else:
             logging.warning('Error in sending export success email')
-        send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
+        send_notif_after_export(
+            user=user, event_name=event.name, download_url=download_url
+        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in exporting.. sending email')
@@ -233,13 +287,18 @@ def import_event_task(self, email, file, source_type, creator_id):
         result = import_event_task_base(self, file, source_type, creator_id)
         update_import_job(task_id, result['id'], 'SUCCESS')
         logging.info('Importing done..Sending email')
-        send_import_mail(email=email, event_name=result['event_name'], event_url=result['url'])
-        send_notif_after_import(user=user, event_name=result[
-            'event_name'], event_url=result['url'])
+        send_import_mail(
+            email=email, event_name=result['event_name'], event_url=result['url']
+        )
+        send_notif_after_import(
+            user=user, event_name=result['event_name'], event_url=result['url']
+        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in importing the event')
-        update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
+        update_import_job(
+            task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE'
+        )
         send_import_mail(email=email, error_text=str(e))
         send_notif_after_import(user=user, error_text=str(e))
 
@@ -252,9 +311,14 @@ def export_ical_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'),
+                'static/uploads/temp/' + event_id + '/',
+            )
         else:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
+            )
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
@@ -264,12 +328,14 @@ def export_ical_task(self, event_id, temp=True):
             temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
         ical_file = UploadedFile(file_path=file_path, filename=filename)
         if temp:
-            ical_url = upload(ical_file, UPLOAD_PATHS['exports-temp']['ical'].format(event_id=event_id))
+            ical_url = upload(
+                ical_file, UPLOAD_PATHS['exports-temp']['ical'].format(event_id=event_id)
+            )
         else:
-            ical_url = upload(ical_file, UPLOAD_PATHS['exports']['ical'].format(event_id=event_id))
-        result = {
-            'download_url': ical_url
-        }
+            ical_url = upload(
+                ical_file, UPLOAD_PATHS['exports']['ical'].format(event_id=event_id)
+            )
+        result = {'download_url': ical_url}
         if not temp:
             event.ical_url = ical_url
             save_to_db(event)
@@ -287,9 +353,14 @@ def export_xcal_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'),
+                'static/uploads/temp/' + event_id + '/',
+            )
         else:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
+            )
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
@@ -299,12 +370,14 @@ def export_xcal_task(self, event_id, temp=True):
             temp_file.write(str(XCalExporter.export(event_id), 'utf-8'))
         xcal_file = UploadedFile(file_path=file_path, filename=filename)
         if temp:
-            xcal_url = upload(xcal_file, UPLOAD_PATHS['exports-temp']['xcal'].format(event_id=event_id))
+            xcal_url = upload(
+                xcal_file, UPLOAD_PATHS['exports-temp']['xcal'].format(event_id=event_id)
+            )
         else:
-            xcal_url = upload(xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id))
-        result = {
-            'download_url': xcal_url
-        }
+            xcal_url = upload(
+                xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id)
+            )
+        result = {'download_url': xcal_url}
         if not temp:
             event.xcal_url = xcal_url
             save_to_db(event)
@@ -322,9 +395,14 @@ def export_pentabarf_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'),
+                'static/uploads/temp/' + event_id + '/',
+            )
         else:
-            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
+            filedir = os.path.join(
+                current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
+            )
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
@@ -334,12 +412,16 @@ def export_pentabarf_task(self, event_id, temp=True):
             temp_file.write(str(PentabarfExporter.export(event_id), 'utf-8'))
         pentabarf_file = UploadedFile(file_path=file_path, filename=filename)
         if temp:
-            pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports-temp']['pentabarf'].format(event_id=event_id))
+            pentabarf_url = upload(
+                pentabarf_file,
+                UPLOAD_PATHS['exports-temp']['pentabarf'].format(event_id=event_id),
+            )
         else:
-            pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id))
-        result = {
-            'download_url': pentabarf_url
-        }
+            pentabarf_url = upload(
+                pentabarf_file,
+                UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id),
+            )
+        result = {'download_url': pentabarf_url}
         if not temp:
             event.pentabarf_url = pentabarf_url
             save_to_db(event)
@@ -365,15 +447,16 @@ def export_order_csv_task(self, event_id):
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_orders_csv
+
             content = export_orders_csv(orders)
             for row in content:
                 writer.writerow(row)
         order_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        order_csv_url = upload(order_csv_file,
-                               UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': order_csv_url
-        }
+        order_csv_url = upload(
+            order_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': order_csv_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting as CSV')
@@ -388,12 +471,16 @@ def export_order_pdf_task(self, event_id):
     discount_code = db.session.query(DiscountCode).filter_by(event_id=event_id)
     try:
         order_pdf_url = create_save_pdf(
-            render_template('pdf/orders.html', event=event, event_id=event_id, orders=orders,
-                            discount_code=discount_code),
-            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': order_pdf_url
-        }
+            render_template(
+                'pdf/orders.html',
+                event=event,
+                event_id=event_id,
+                orders=orders,
+                discount_code=discount_code,
+            ),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': order_pdf_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting order as pdf')
@@ -414,19 +501,19 @@ def export_attendees_csv_task(self, event_id):
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_attendees_csv
+
             content = export_attendees_csv(attendees)
             for row in content:
                 writer.writerow(row)
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        attendees_csv_url = upload(attendees_csv_file,
-                                   UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': attendees_csv_url
-        }
+        attendees_csv_url = upload(
+            attendees_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': attendees_csv_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting attendees list as CSV')
-
 
     return result
 
@@ -437,15 +524,12 @@ def export_attendees_pdf_task(self, event_id):
     try:
         attendees_pdf_url = create_save_pdf(
             render_template('pdf/attendees_pdf.html', holders=attendees),
-            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': attendees_pdf_url
-        }
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': attendees_pdf_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting attendees list as PDF')
-
-
 
     return result
 
@@ -463,15 +547,16 @@ def export_sessions_csv_task(self, event_id):
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_sessions_csv
+
             content = export_sessions_csv(sessions)
             for row in content:
                 writer.writerow(row)
         sessions_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        sessions_csv_url = upload(sessions_csv_file,
-                                  UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': sessions_csv_url
-        }
+        sessions_csv_url = upload(
+            sessions_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': sessions_csv_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.exception('Error in exporting sessions as CSV')
@@ -492,15 +577,16 @@ def export_speakers_csv_task(self, event_id):
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_speakers_csv
+
             content = export_speakers_csv(speakers)
             for row in content:
                 writer.writerow(row)
         speakers_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        speakers_csv_url = upload(speakers_csv_file,
-                                  UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': speakers_csv_url
-        }
+        speakers_csv_url = upload(
+            speakers_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': speakers_csv_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting speakers list as CSV')
@@ -514,10 +600,9 @@ def export_sessions_pdf_task(self, event_id):
     try:
         sessions_pdf_url = create_save_pdf(
             render_template('pdf/sessions_pdf.html', sessions=sessions),
-            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': sessions_pdf_url
-        }
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': sessions_pdf_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting sessions as PDF')
@@ -531,10 +616,9 @@ def export_speakers_pdf_task(self, event_id):
     try:
         speakers_pdf_url = create_save_pdf(
             render_template('pdf/speakers_pdf.html', speakers=speakers),
-            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
-        result = {
-            'download_url': speakers_pdf_url
-        }
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': speakers_pdf_url}
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logger.exception('Error in exporting speakers as PDF')

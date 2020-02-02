@@ -1,7 +1,6 @@
 import datetime
-import uuid
-
 import time
+import uuid
 
 from app.api.helpers.db import get_count
 from app.models import db
@@ -21,15 +20,38 @@ def get_updatable_fields():
     """
     :return: The list of fields which can be modified by the order user using the pre payment form.
     """
-    return ['country', 'address', 'city', 'state', 'zipcode', 'company', 'tax_business_info', 'status', 'paid_via',
-            'order_notes', 'deleted_at', 'user', 'payment_mode', 'event', 'discount_code_id', 'discount_code',
-            'ticket_holders', 'user', 'tickets_pdf_url', 'is_billing_enabled']
+    return [
+        'country',
+        'address',
+        'city',
+        'state',
+        'zipcode',
+        'company',
+        'tax_business_info',
+        'status',
+        'paid_via',
+        'order_notes',
+        'deleted_at',
+        'user',
+        'payment_mode',
+        'event',
+        'discount_code_id',
+        'discount_code',
+        'ticket_holders',
+        'user',
+        'tickets_pdf_url',
+        'is_billing_enabled',
+    ]
 
 
 class OrderTicket(SoftDeletionModel):
     __tablename__ = 'orders_tickets'
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True)
+    order_id = db.Column(
+        db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True
+    )
+    ticket_id = db.Column(
+        db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True
+    )
     quantity = db.Column(db.Integer)
 
 
@@ -68,38 +90,46 @@ class Order(SoftDeletionModel):
     tickets_pdf_url = db.Column(db.String)
 
     discount_code_id = db.Column(
-        db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
+        db.Integer,
+        db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
+        nullable=True,
+        default=None,
+    )
     discount_code = db.relationship('DiscountCode', backref='orders')
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
     invoices = db.relationship("EventInvoice", backref='invoice_order')
-    marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
+    marketer = db.relationship(
+        'User', backref='marketed_orders', foreign_keys=[marketer_id]
+    )
     tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
     order_tickets = db.relationship("OrderTicket", backref='order')
 
-    def __init__(self,
-                 quantity=None,
-                 amount=None,
-                 address=None,
-                 city=None,
-                 state=None,
-                 country=None,
-                 zipcode=None,
-                 company=None,
-                 tax_business_info=None,
-                 transaction_id=None,
-                 paid_via=None,
-                 is_billing_enabled=False,
-                 created_at=None,
-                 user_id=None,
-                 discount_code_id=None,
-                 event_id=None,
-                 status='pending',
-                 payment_mode=None,
-                 deleted_at=None,
-                 order_notes=None,
-                 tickets_pdf_url=None):
+    def __init__(
+        self,
+        quantity=None,
+        amount=None,
+        address=None,
+        city=None,
+        state=None,
+        country=None,
+        zipcode=None,
+        company=None,
+        tax_business_info=None,
+        transaction_id=None,
+        paid_via=None,
+        is_billing_enabled=False,
+        created_at=None,
+        user_id=None,
+        discount_code_id=None,
+        event_id=None,
+        status='pending',
+        payment_mode=None,
+        deleted_at=None,
+        order_notes=None,
+        tickets_pdf_url=None,
+    ):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -132,7 +162,9 @@ class Order(SoftDeletionModel):
         return str(self.identifier)
 
     def get_invoice_number(self):
-        return 'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
+        return (
+            'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
+        )
 
     @property
     def invoice_number(self):
@@ -148,7 +180,9 @@ class Order(SoftDeletionModel):
 
     def get_revenue(self):
         if self.amount:
-            return self.amount - min(self.amount * (self.event.fee / 100.0), self.event.maximum_fee)
+            return self.amount - min(
+                self.amount * (self.event.fee / 100.0), self.event.maximum_fee
+            )
         else:
             return 0.0
 

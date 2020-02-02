@@ -3,7 +3,7 @@ import factory
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.factories.ticket import TicketFactory
-from app.models.ticket import db, TicketTag
+from app.models.ticket import TicketTag, db
 
 
 class TicketTagFactory(factory.alchemy.SQLAlchemyModelFactory):

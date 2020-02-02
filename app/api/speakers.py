@@ -4,17 +4,18 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count, save_to_db
+from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
+from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
 from app.models import db
 from app.models.event import Event
 from app.models.session import Session
-from app.models.speaker import Speaker
 from app.models.session_speaker_link import SessionsSpeakersLink
+from app.models.speaker import Speaker
 from app.models.user import User
 
 
@@ -36,30 +37,58 @@ class SpeakerListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             event = db.session.query(Event).filter_by(id=data['event']).one()
             if event.state == "draft":
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(data['event_id']))
+                raise ObjectNotFound(
+                    {'parameter': 'event_id'},
+                    "Event: {} not found".format(data['event_id']),
+                )
 
-        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
-            raise ForbiddenException({'pointer': ''}, "Speakers are disabled for this Event")
+        if (
+            get_count(
+                db.session.query(Event).filter_by(
+                    id=int(data['event']), is_sessions_speakers_enabled=False
+                )
+            )
+            > 0
+        ):
+            raise ForbiddenException(
+                {'pointer': ''}, "Speakers are disabled for this Event"
+            )
 
-        if not data.get('is_email_overridden') and \
-            get_count(db.session.query(Speaker).filter_by(event_id=int(data['event']), email=data['email'],
-                                                          deleted_at=None)) > 0:
-            raise ForbiddenException({'pointer': ''}, 'Speaker with this Email ID already exists')
+        if (
+            not data.get('is_email_overridden')
+            and get_count(
+                db.session.query(Speaker).filter_by(
+                    event_id=int(data['event']), email=data['email'], deleted_at=None
+                )
+            )
+            > 0
+        ):
+            raise ForbiddenException(
+                {'pointer': ''}, 'Speaker with this Email ID already exists'
+            )
 
-        if data.get('is_email_overridden') and not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'pointer': 'data/attributes/is_email_overridden'},
-                                     'Organizer access required to override email')
-        elif data.get('is_email_overridden') and has_access('is_organizer', event_id=data['event']) and \
-                not data.get('email'):
+        if data.get('is_email_overridden') and not has_access(
+            'is_organizer', event_id=data['event']
+        ):
+            raise ForbiddenException(
+                {'pointer': 'data/attributes/is_email_overridden'},
+                'Organizer access required to override email',
+            )
+        elif (
+            data.get('is_email_overridden')
+            and has_access('is_organizer', event_id=data['event'])
+            and not data.get('email')
+        ):
             data['email'] = current_user.email
 
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
                 if not has_access('is_session_self_submitted', session_id=session_id):
-                    raise ObjectNotFound({'parameter': 'session_id'},
-                                         "Session: {} not found".format(session_id))
+                    raise ObjectNotFound(
+                        {'parameter': 'session_id'},
+                        "Session: {} not found".format(session_id),
+                    )
 
     def after_create_object(self, speaker, data, view_kwargs):
         """
@@ -74,12 +103,14 @@ class SpeakerListPost(ResourceList):
             start_image_resizing_tasks(speaker, data['photo_url'])
 
     schema = SpeakerSchema
-    methods = ['POST', ]
-    data_layer = {'session': db.session,
-                  'model': Speaker,
-                  'methods': {
-                      'after_create_object': after_create_object
-                  }}
+    methods = [
+        'POST',
+    ]
+    data_layer = {
+        'session': db.session,
+        'model': Speaker,
+        'methods': {'after_create_object': after_create_object},
+    }
 
 
 class SpeakerList(ResourceList):
@@ -101,29 +132,34 @@ class SpeakerList(ResourceList):
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('session_id'):
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query(
+                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+            )
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
-            if 'Authorization' in request.headers and not has_access('is_coorganizer', event_id=session.event_id):
+            if 'Authorization' in request.headers and not has_access(
+                'is_coorganizer', event_id=session.event_id
+            ):
                 if not has_access('is_session_self_submitted', session_id=session.id):
-                    query_ = query_.filter(Session.state == "approved" or Session.state == "accepted")
+                    query_ = query_.filter(
+                        Session.state == "approved" or Session.state == "accepted"
+                    )
 
         return query_
 
     view_kwargs = True
     schema = SpeakerSchema
-    methods = ['GET', ]
-    data_layer = {'session': db.session,
-                  'model': Speaker,
-                  'methods': {
-                      'query': query,
-                  }}
+    methods = [
+        'GET',
+    ]
+    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query,}}
 
 
 class SpeakerDetail(ResourceDetail):
     """
     Speakers Detail by id
     """
+
     def before_update_object(self, speaker, data, view_kwargs):
         """
         method to save image urls before updating speaker object
@@ -132,14 +168,26 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if not can_edit_after_cfs_ends(speaker.event_id):
+            raise ForbiddenException(
+                {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
+            )
+
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
-        if data.get('is_email_overridden') and not has_access('is_organizer', event_id=speaker.event_id):
-            raise ForbiddenException({'pointer': 'data/attributes/is_email_overridden'},
-                                     'Organizer access required to override email')
-        elif data.get('is_email_overridden') and has_access('is_organizer', event_id=speaker.event_id) and \
-                not data.get('email'):
+        if data.get('is_email_overridden') and not has_access(
+            'is_organizer', event_id=speaker.event_id
+        ):
+            raise ForbiddenException(
+                {'pointer': 'data/attributes/is_email_overridden'},
+                'Organizer access required to override email',
+            )
+        elif (
+            data.get('is_email_overridden')
+            and has_access('is_organizer', event_id=speaker.event_id)
+            and not data.get('email')
+        ):
             data['email'] = current_user.email
 
     def after_patch(self, result):
@@ -155,48 +203,77 @@ class SpeakerDetail(ResourceDetail):
             all_sessions = Session.query.filter_by(deleted_at=None)
             for session in all_sessions:
                 if speaker in session.speakers:
-                    session_speaker_link = SessionsSpeakersLink(session_state=session.state,
-                                                                session_id=session.id,
-                                                                event_id=session.event.id,
-                                                                speaker_id=speaker.id)
+                    session_speaker_link = SessionsSpeakersLink(
+                        session_state=session.state,
+                        session_id=session.id,
+                        event_id=session.event.id,
+                        speaker_id=speaker.id,
+                    )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
-    decorators = (api.has_permission('is_speaker_itself_or_admin', methods="PATCH,DELETE", fetch="event_id",
-                                     fetch_as="event_id", model=Speaker),
-                  api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
-                                     fetch_as="event_id", model=Speaker),)
+    decorators = (
+        api.has_permission(
+            'is_speaker_itself_or_admin',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Speaker,
+        ),
+        api.has_permission(
+            'is_coorganizer_or_user_itself',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Speaker,
+        ),
+    )
     schema = SpeakerSchema
-    data_layer = {'session': db.session,
-                  'model': Speaker,
-                  'methods': {
-                      'before_update_object': before_update_object
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Speaker,
+        'methods': {'before_update_object': before_update_object},
+    }
 
 
 class SpeakerRelationshipRequired(ResourceRelationship):
     """
     Speaker Relationship class for required entities
     """
-    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
-                                     fetch_as="event_id", model=Speaker),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer_or_user_itself',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Speaker,
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = SpeakerSchema
-    data_layer = {'session': db.session,
-                  'model': Speaker}
+    data_layer = {'session': db.session, 'model': Speaker}
 
 
 class SpeakerRelationshipOptional(ResourceRelationship):
     """
     Speaker Relationship class
     """
-    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
-                                     fetch_as="event_id", model=Speaker),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer_or_user_itself',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Speaker,
+        ),
+    )
     schema = SpeakerSchema
-    data_layer = {'session': db.session,
-                  'model': Speaker}
+    data_layer = {'session': db.session, 'model': Speaker}
 
 
 def start_image_resizing_tasks(speaker, photo_url):
     speaker_id = str(speaker.id)
     from .helpers.tasks import resize_speaker_images_task
+
     resize_speaker_images_task.delay(speaker_id, photo_url)

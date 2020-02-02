@@ -6,7 +6,13 @@ from app.models.base import SoftDeletionModel
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
     count = get_count(EventSubTopic.query.filter_by(slug=slug))
     if count == 0:
         return slug
@@ -24,13 +30,11 @@ class EventSubTopic(SoftDeletionModel):
     slug = db.Column(db.String, unique=True, nullable=False)
     events = db.relationship('Event', backref='event-sub-topic')
     event_topic = db.relationship('EventTopic', backref='event-sub-topics')
-    event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
+    event_topic_id = db.Column(
+        db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE')
+    )
 
-    def __init__(self,
-                 name=None,
-                 slug=None,
-                 event_topic_id=None,
-                 deleted_at=None):
+    def __init__(self, name=None, slug=None, event_topic_id=None, deleted_at=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)
@@ -46,4 +50,9 @@ class EventSubTopic(SoftDeletionModel):
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
-        return {'id': self.id, 'name': self.name, 'slug': self.slug, 'event_topic_id': self.event_topic_id}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'slug': self.slug,
+            'event_topic_id': self.event_topic_id,
+        }

@@ -12,10 +12,12 @@ class UserSchemaPublic(SoftDeletionSchema):
     Api schema for User Model which can be accessed by any resource to which user is related.
     Co-organizers of events to which the user will be related will have access to this info.
     """
+
     class Meta:
         """
         Meta class for User Api Schema
         """
+
         type_ = 'user'
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -33,15 +35,16 @@ class UserSchemaPublic(SoftDeletionSchema):
     was_registered_with_order = fields.Boolean()
 
 
-
 class UserSchema(UserSchemaPublic):
     """
     Api schema for User Model
     """
+
     class Meta:
         """
         Meta class for User Api Schema
         """
+
         type_ = 'user'
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -88,7 +91,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='NotificationSchema',
         many=True,
-        type_='notification')
+        type_='notification',
+    )
     feedbacks = Relationship(
         attribute='feedback',
         self_view='v1.user_feedback',
@@ -97,7 +101,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='FeedbackSchema',
         many=True,
-        type_='feedback')
+        type_='feedback',
+    )
     event_invoice = Relationship(
         attribute='event_invoice',
         self_view='v1.user_event_invoices',
@@ -106,7 +111,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='EventInvoiceSchema',
         many=True,
-        type_='event-invoice')
+        type_='event-invoice',
+    )
     speakers = Relationship(
         attribute='speaker',
         self_view='v1.user_speaker',
@@ -115,7 +121,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='SpeakerSchema',
         many=True,
-        type_='speaker')
+        type_='speaker',
+    )
     access_codes = Relationship(
         attribute='access_codes',
         self_view='v1.user_access_codes',
@@ -123,7 +130,8 @@ class UserSchema(UserSchemaPublic):
         related_view='v1.access_code_list',
         related_view_kwargs={'user_id': '<id>'},
         schema='AccessCodeSchema',
-        type_='access-codes')
+        type_='access-codes',
+    )
     discount_codes = Relationship(
         attribute='discount_codes',
         self_view='v1.user_discount_codes',
@@ -131,7 +139,8 @@ class UserSchema(UserSchemaPublic):
         related_view='v1.discount_code_list',
         related_view_kwargs={'user_id': '<id>'},
         schema='DiscountCodeSchemaPublic',
-        type_='discount-codes')
+        type_='discount-codes',
+    )
     email_notifications = Relationship(
         attribute='email_notifications',
         self_view='v1.user_email_notifications',
@@ -140,7 +149,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='EmailNotificationSchema',
         many=True,
-        type_='email-notification')
+        type_='email-notification',
+    )
     alternate_emails = Relationship(
         attribute='alternate_emails',
         self_view='v1.user_emails',
@@ -149,7 +159,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='UserEmailSchema',
         many=True,
-        type_='user-emails')
+        type_='user-emails',
+    )
     sessions = Relationship(
         attribute='session',
         self_view='v1.user_session',
@@ -158,7 +169,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='SessionSchema',
         many=True,
-        type_='session')
+        type_='session',
+    )
     owner_events = Relationship(
         self_view='v1.user_owner_events',
         self_view_kwargs={'id': '<id>'},
@@ -166,7 +178,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_owner_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     organizer_events = Relationship(
         self_view='v1.user_organizer_events',
         self_view_kwargs={'id': '<id>'},
@@ -174,7 +187,8 @@ class UserSchema(UserSchemaPublic):
         related_view='v1.event_list',
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     coorganizer_events = Relationship(
         self_view='v1.user_coorganizer_events',
         self_view_kwargs={'id': '<id>'},
@@ -182,7 +196,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_coorganizer_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     track_organizer_events = Relationship(
         self_view='v1.user_track_organizer_events',
         self_view_kwargs={'id': '<id>'},
@@ -190,7 +205,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_track_organizer_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     registrar_events = Relationship(
         self_view='v1.user_registrar_events',
         self_view_kwargs={'id': '<id>'},
@@ -198,7 +214,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_registrar_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     moderator_events = Relationship(
         self_view='v1.user_moderator_events',
         self_view_kwargs={'id': '<id>'},
@@ -206,7 +223,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_moderator_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     attendees = Relationship(
         self_view='v1.user_attendees',
         self_view_kwargs={'id': '<id>'},
@@ -214,7 +232,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='AttendeeSchemaPublic',
         many=True,
-        type_='attendee')
+        type_='attendee',
+    )
     events = Relationship(
         self_view='v1.user_events',
         self_view_kwargs={'id': '<id>'},
@@ -222,7 +241,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='EventSchema',
         many=True,
-        type_='event')
+        type_='event',
+    )
     favourite_events = Relationship(
         self_view='v1.user_user_favourite_events',
         self_view_kwargs={'id': '<id>'},
@@ -230,7 +250,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='UserFavouriteEventSchema',
         many=True,
-        type_='user-favourite-event')
+        type_='user-favourite-event',
+    )
     orders = Relationship(
         attribute='orders',
         self_view='v1.user_orders',
@@ -239,7 +260,8 @@ class UserSchema(UserSchemaPublic):
         related_view_kwargs={'user_id': '<id>'},
         schema='OrderSchema',
         many=True,
-        type_='order')
+        type_='order',
+    )
     marketer_events = Relationship(
         attribute='marketer_events',
         self_view='v1.user_marketer_events',
@@ -247,7 +269,8 @@ class UserSchema(UserSchemaPublic):
         related_view='v1.event_list',
         schema='EventSchema',
         type_='event',
-        many=True)
+        many=True,
+    )
     sales_admin_events = Relationship(
         attribute='sales_admin_events',
         self_view='v1.user_sales_admin_events',
@@ -255,4 +278,5 @@ class UserSchema(UserSchemaPublic):
         related_view='v1.event_list',
         schema='EventSchema',
         type_='event',
-        many=True)
+        many=True,
+    )

@@ -14,6 +14,7 @@ class SponsorSchema(SoftDeletionSchema):
         """
         Meta class for Sponsor schema
         """
+
         type_ = 'sponsor'
         self_view = 'v1.sponsor_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -26,10 +27,12 @@ class SponsorSchema(SoftDeletionSchema):
     level = fields.Integer(allow_none=True)
     logo_url = fields.Url(allow_none=True)
     type = fields.Str(allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.sponsor_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'sponsor_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.sponsor_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'sponsor_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )

@@ -10,9 +10,9 @@ def image_default(context):
 
 class CustomPlaceholder(db.Model):
     """email notifications model class"""
+
     __tablename__ = 'custom_placeholders'
-    id = db.Column(db.Integer,
-                   primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     original_image_url = db.Column(db.String, nullable=False)
     thumbnail_image_url = db.Column(db.String, nullable=False, default=image_default)
@@ -20,18 +20,24 @@ class CustomPlaceholder(db.Model):
     icon_image_url = db.Column(db.String, nullable=False, default=image_default)
     copyright = db.Column(db.String)
     origin = db.Column(db.String)
-    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE'))
-    event_sub_topic = db.relationship('EventSubTopic', backref=backref('custom_placeholder', uselist=False))
+    event_sub_topic_id = db.Column(
+        db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
+    )
+    event_sub_topic = db.relationship(
+        'EventSubTopic', backref=backref('custom_placeholder', uselist=False)
+    )
 
-    def __init__(self,
-                 name=None,
-                 original_image_url=None,
-                 thumbnail_image_url=None,
-                 large_image_url=None,
-                 icon_image_url=None,
-                 copyright=None,
-                 origin=None,
-                 event_sub_topic_id=None):
+    def __init__(
+        self,
+        name=None,
+        original_image_url=None,
+        thumbnail_image_url=None,
+        large_image_url=None,
+        icon_image_url=None,
+        copyright=None,
+        origin=None,
+        event_sub_topic_id=None,
+    ):
         self.name = name
         self.original_image_url = original_image_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -53,5 +59,5 @@ class CustomPlaceholder(db.Model):
             'url': self.url,
             'thumbnail': self.thumbnail,
             'copyright': self.copyright,
-            'origin': self.origin
+            'origin': self.origin,
         }

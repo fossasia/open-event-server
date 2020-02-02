@@ -1,7 +1,6 @@
+import logging
 import os
 import sys
-
-import logging
 
 from app.instance import current_app as app
 from app.models import db

@@ -1,8 +1,8 @@
 import random
 from datetime import datetime, timedelta
-from sqlalchemy.schema import UniqueConstraint
 
 import pytz
+from sqlalchemy.schema import UniqueConstraint
 
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -15,7 +15,9 @@ def generate_hash():
 
 class RoleInvite(SoftDeletionModel):
     __tablename__ = 'role_invites'
-    __table_args__ = (UniqueConstraint('email', 'role_id', 'event_id', name='email_role_event_uc'),)
+    __table_args__ = (
+        UniqueConstraint('email', 'role_id', 'event_id', name='email_role_event_uc'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
 
@@ -32,8 +34,17 @@ class RoleInvite(SoftDeletionModel):
     created_at = db.Column(db.DateTime(timezone=True))
     status = db.Column(db.String, default="pending")
 
-    def __init__(self, email=None, role_name=None, event_id=None, role_id=None, created_at=None,
-                 status="pending", hash=None, deleted_at=None):
+    def __init__(
+        self,
+        email=None,
+        role_name=None,
+        event_id=None,
+        role_id=None,
+        created_at=None,
+        status="pending",
+        hash=None,
+        deleted_at=None,
+    ):
         self.email = email
         self.role_name = role_name
         self.event_id = event_id
@@ -48,9 +59,7 @@ class RoleInvite(SoftDeletionModel):
         return datetime.now(pytz.utc) > self.created_at + timedelta(hours=24)
 
     def __repr__(self):
-        return '<RoleInvite %r:%r:%r>' % (self.email,
-                                          self.event_id,
-                                          self.role_id,)
+        return '<RoleInvite %r:%r:%r>' % (self.email, self.event_id, self.role_id,)
 
     def __str__(self):
         return self.__repr__()

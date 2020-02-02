@@ -4,6 +4,7 @@ from app.models.base import SoftDeletionModel
 
 class EmailNotification(SoftDeletionModel):
     """email notifications model class"""
+
     __tablename__ = 'email_notifications'
     id = db.Column(db.Integer, primary_key=True)
     next_event = db.Column(db.Boolean, default=False)
@@ -16,15 +17,17 @@ class EmailNotification(SoftDeletionModel):
     event = db.relationship("Event")
     user = db.relationship("User", backref="email_notifications")
 
-    def __init__(self,
-                 next_event=False,
-                 new_paper=False,
-                 session_accept_reject=False,
-                 session_schedule=False,
-                 after_ticket_purchase=True,
-                 user_id=None,
-                 event_id=None,
-                 deleted_at=None):
+    def __init__(
+        self,
+        next_event=False,
+        new_paper=False,
+        session_accept_reject=False,
+        session_schedule=False,
+        after_ticket_purchase=True,
+        user_id=None,
+        event_id=None,
+        deleted_at=None,
+    ):
         self.next_event = next_event
         self.new_paper = new_paper
         self.session_accept_reject = session_accept_reject

@@ -1,15 +1,16 @@
 import unittest
-from tests.all.integration.auth_helper import create_user
-from app.api.helpers.user import modify_email_for_user_to_be_deleted, \
-     modify_email_for_user_to_be_restored
+
 from app.api.helpers.db import save_to_db
 from app.api.helpers.exceptions import ForbiddenException
-
+from app.api.helpers.user import (
+    modify_email_for_user_to_be_deleted,
+    modify_email_for_user_to_be_restored,
+)
+from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestUserUtilitiesHelper(OpenEventTestCase):
-
     def test_modify_email_for_user_to_be_deleted(self):
         """Method to test modification of email for user to be deleted"""
 
@@ -32,7 +33,9 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
             save_to_db(user1)
             user2 = create_user(email="test_user@gmail.com.deleted", password="testpass")
             save_to_db(user2)
-            self.assertRaises(ForbiddenException, modify_email_for_user_to_be_restored, user2)
+            self.assertRaises(
+                ForbiddenException, modify_email_for_user_to_be_restored, user2
+            )
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.role import db, Role
+from app.models.role import Role, db
 from app.models.user import ORGANIZER
 
 

@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.social_link import db, SocialLink
+from app.models.social_link import SocialLink, db
 
 
 class SocialLinkFactory(factory.alchemy.SQLAlchemyModelFactory):

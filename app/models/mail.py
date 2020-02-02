@@ -43,8 +43,9 @@ class Mail(db.Model):
     subject = db.Column(db.String)
     message = db.Column(db.String)
 
-    def __init__(self, recipient=None, time=None, action=None, subject=None,
-                 message=None):
+    def __init__(
+        self, recipient=None, time=None, action=None, subject=None, message=None
+    ):
         self.recipient = recipient
         self.time = time
         if self.time is None:

@@ -1,17 +1,17 @@
 import unittest
 
-from app.factories.attendee import AttendeeFactory
-from app.models.ticket_holder import TicketHolder
-from tests.all.integration.utils import OpenEventTestCase
-from app.factories.event import EventFactoryBasic
-from app.api.helpers.db import save_to_db, safe_query, get_or_create, get_count
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.db import get_count, get_or_create, safe_query, save_to_db
+from app.factories.attendee import AttendeeFactory
+from app.factories.event import EventFactoryBasic
 from app.models import db
 from app.models.event import Event
+from app.models.ticket_holder import TicketHolder
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestDBHelperValidation(OpenEventTestCase):
-
     def test_save_to_db(self):
         """Method to test the function save_to_db"""
 
@@ -34,7 +34,9 @@ class TestDBHelperValidation(OpenEventTestCase):
         """Method to test the exception in function safe_query"""
 
         with self.app.test_request_context():
-            self.assertRaises(ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id'))
+            self.assertRaises(
+                ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id')
+            )
 
     def test_get_or_create(self):
         """Method to test the function get_or_create"""
@@ -46,7 +48,9 @@ class TestDBHelperValidation(OpenEventTestCase):
             self.assertEqual(event.id, obj.id)
             self.assertFalse(is_created)
 
-            obj, is_created = get_or_create(Event, name="new event", starts_at=event.starts_at, ends_at=event.ends_at)
+            obj, is_created = get_or_create(
+                Event, name="new event", starts_at=event.starts_at, ends_at=event.ends_at
+            )
             self.assertNotEqual(event.id, obj.id)
             self.assertTrue(is_created)
 

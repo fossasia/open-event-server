@@ -1,7 +1,7 @@
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
-from marshmallow_jsonapi.flask import Schema
 
 
 class ImportJobSchema(Schema):
@@ -13,6 +13,7 @@ class ImportJobSchema(Schema):
         """
         Meta class for ImportJob Api Schema
         """
+
         type_ = 'import-job'
         self_view = 'v1.import_job_detail'
         self_view_kwargs = {'id': '<id>'}

@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.user import UserFactory
-from app.models.notification import db, Notification
+from app.models.notification import Notification, db
 
 
 class NotificationFactory(factory.alchemy.SQLAlchemyModelFactory):

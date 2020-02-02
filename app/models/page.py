@@ -3,6 +3,7 @@ from app.models import db
 
 class Page(db.Model):
     """Page model class"""
+
     __tablename__ = 'pages'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -13,7 +14,16 @@ class Page(db.Model):
     language = db.Column(db.String)
     index = db.Column(db.Integer, default=0)
 
-    def __init__(self, name=None, title=None, description=None, url=None, place=None, index=None, language=None):
+    def __init__(
+        self,
+        name=None,
+        title=None,
+        description=None,
+        url=None,
+        place=None,
+        index=None,
+        language=None,
+    ):
         self.name = name
         self.description = description
         self.title = title
@@ -38,5 +48,5 @@ class Page(db.Model):
             'title': self.title,
             'url': self.url,
             'place': self.place,
-            'language': self.language
+            'language': self.language,
         }

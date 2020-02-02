@@ -3,7 +3,8 @@ This API is meant to store the Task Result for a celery task
 and used for purposes such as polling
 """
 from celery.result import AsyncResult
-from flask import jsonify, current_app, Blueprint
+from flask import Blueprint, current_app, jsonify
+
 from app.api.helpers.utilities import TASK_RESULTS
 
 celery_routes = Blueprint('tasks', __name__, url_prefix='/v1')
@@ -20,7 +21,8 @@ def celery_task(task_id):
         state = TASK_RESULTS[task_id]['state']
         info = TASK_RESULTS[task_id]['result']
     else:
-        from app.views.celery_ import celery
+        from app.api.helpers.tasks import celery
+
         result = AsyncResult(id=task_id, app=celery)
         state = result.state
         info = result.info

@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.export_job import db, ExportJob
+from app.models.export_job import ExportJob, db
 
 
 class ExportJobFactory(factory.alchemy.SQLAlchemyModelFactory):
