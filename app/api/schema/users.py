@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
@@ -25,13 +26,13 @@ class UserSchemaPublic(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)
-    avatar_url = fields.Url(allow_none=True, schemes='https')
+    avatar_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
-    original_image_url = fields.Url(dump_only=True, allow_none=True, schemes='https')
-    thumbnail_image_url = fields.Url(dump_only=True, allow_none=True, schemes='https')
-    small_image_url = fields.Url(dump_only=True, allow_none=True, schemes='https')
-    icon_image_url = fields.Url(dump_only=True, allow_none=True, schemes='https')
+    original_image_url = fields.Url(dump_only=True, allow_none=True, validate=validate.URL(schemes=["https"]))
+    thumbnail_image_url = fields.Url(dump_only=True, allow_none=True, validate=validate.URL(schemes=["https"]))
+    small_image_url = fields.Url(dump_only=True, allow_none=True, validate=validate.URL(schemes=["https"]))
+    icon_image_url = fields.Url(dump_only=True, allow_none=True, validate=validate.URL(schemes=["https"]))
     was_registered_with_order = fields.Boolean()
 
 
@@ -50,10 +51,10 @@ class UserSchema(UserSchemaPublic):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    facebook_url = fields.Url(allow_none=True)
-    twitter_url = fields.Url(allow_none=True)
-    instagram_url = fields.Url(allow_none=True)
-    google_plus_url = fields.Url(allow_none=True)
+    facebook_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    twitter_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    instagram_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    google_plus_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean()
