@@ -22,7 +22,7 @@ class SocialLinkSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    link = fields.Url(required=True)
+    link = fields.Url(required=True, schemes='https')
     identifier = fields.Str(allow_none=True)
     event = Relationship(
         attribute='event',
