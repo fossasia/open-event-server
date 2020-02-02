@@ -11,16 +11,18 @@ from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.event import Event
 from utils.common import use_defaults
+from marshmallow_sqlalchemy import ModelSchemaOpts
 
 
 @use_defaults()
-class EventSchemaPublic(SoftDeletionSchema):
+class EventSchemaPublic(ModelSchemaOpts, SoftDeletionSchema):
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.event_list'
         inflect = dasherize
+        model = Event
 
     @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):
@@ -40,70 +42,14 @@ class EventSchemaPublic(SoftDeletionSchema):
                 "Unknown timezone: '{}'".format(data['timezone']),
             )
 
-    id = fields.Str(dump_only=True)
-    identifier = fields.Str(dump_only=True)
-    name = fields.Str(required=True)
-    external_event_url = fields.Url(allow_none=True)
-    starts_at = fields.DateTime(required=True, timezone=True)
-    ends_at = fields.DateTime(required=True, timezone=True)
-    timezone = fields.Str(required=True)
-    is_event_online = fields.Boolean(default=False)
-    latitude = fields.Float(validate=lambda n: -90 <= n <= 90, allow_none=True)
-    longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
-    logo_url = fields.Url(allow_none=True)
-    location_name = fields.Str(allow_none=True)
-    searchable_location_name = fields.Str(allow_none=True)
-    description = fields.Str(allow_none=True)
-    original_image_url = fields.Url(allow_none=True)
-    thumbnail_image_url = fields.Url(dump_only=True)
-    large_image_url = fields.Url(dump_only=True)
-    icon_image_url = fields.Url(dump_only=True)
-    show_remaining_tickets = fields.Bool(allow_none=False, default=False)
-    owner_name = fields.Str(allow_none=True)
-    is_map_shown = fields.Bool(default=False)
-    has_owner_info = fields.Bool(default=False)
-    owner_description = fields.Str(allow_none=True)
-    is_sessions_speakers_enabled = fields.Bool(default=False)
-    privacy = fields.Str(default="public")
-    state = fields.Str(
-        validate=validate.OneOf(choices=["published", "draft"]),
-        allow_none=True,
-        default='draft',
-    )
-    ticket_url = fields.Url(allow_none=True)
-    code_of_conduct = fields.Str(allow_none=True)
-    schedule_published_on = fields.DateTime(allow_none=True)
-    is_featured = fields.Bool(default=False)
-    is_promoted = fields.Bool(default=False)
-    is_ticket_form_enabled = fields.Bool(default=True)
-    payment_country = fields.Str(allow_none=True)
-    payment_currency = fields.Str(allow_none=True)
-    paypal_email = fields.Str(allow_none=True)
-    is_tax_enabled = fields.Bool(default=False)
-    is_billing_info_mandatory = fields.Bool(default=False)
-    is_donation_enabled = fields.Bool(default=False)
-    can_pay_by_paypal = fields.Bool(default=False)
-    can_pay_by_stripe = fields.Bool(default=False)
-    can_pay_by_cheque = fields.Bool(default=False)
-    can_pay_by_bank = fields.Bool(default=False)
-    can_pay_onsite = fields.Bool(default=False)
-    can_pay_by_omise = fields.Bool(default=False)
-    can_pay_by_alipay = fields.Bool(default=False)
-    can_pay_by_paytm = fields.Bool(default=False)
-    cheque_details = fields.Str(allow_none=True)
-    bank_details = fields.Str(allow_none=True)
-    onsite_details = fields.Str(allow_none=True)
-    is_sponsors_enabled = fields.Bool(default=False)
-    created_at = fields.DateTime(dump_only=True, timezone=True)
-    pentabarf_url = fields.Url(dump_only=True)
-    ical_url = fields.Url(dump_only=True)
-    xcal_url = fields.Url(dump_only=True)
-    refund_policy = fields.String(
-        dump_only=True,
-        default='All sales are final. No refunds shall be issued in any case.',
-    )
-    is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
-
+    has_sessions = fields.Bool(default=0, dump_only=True)
+    has_speakers = fields.Bool(default=0, dump_only=True)
+    state = fields.Str(validate=validate.OneOf(choices=["published", "draft"]), allow_none=True, default='draft')
+    tickets_available = fields.Float(dump_only=True)
+    tickets_sold = fields.Float(dump_only=True)
+    revenue = fields.Float(dump_only=True)
+    average_rating = fields.Float(dump_only=True)
+    
     tickets = Relationship(
         attribute='tickets',
         self_view='v1.event_ticket',
