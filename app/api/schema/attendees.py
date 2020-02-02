@@ -44,11 +44,11 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     company = fields.Str(allow_none=True)
     work_address = fields.Str(allow_none=True)
     work_phone = fields.Str(allow_none=True)
-    website = fields.Url(allow_none=True, schemes='https')
-    blog = fields.Url(allow_none=True, schemes='https')
-    twitter = fields.Url(allow_none=True, schemes='https')
-    facebook = fields.Url(allow_none=True, schemes='https')
-    github = fields.Url(allow_none=True, schemes='https')
+    website = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    blog = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    twitter = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    facebook = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    github = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     gender = fields.Str(allow_none=True)
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
@@ -62,7 +62,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     checkout_times = fields.Str(allow_none=True, dump_only=True)
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
-    pdf_url = fields.Url(dump_only=True)
+    pdf_url = fields.Url(dump_only=True, validate=validate.URL(schemes=["https"]))
     complex_field_values = fields.Dict(allow_none=True)
     event = Relationship(
         attribute='event',
