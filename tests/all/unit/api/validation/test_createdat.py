@@ -46,7 +46,7 @@ class TestCreatedatValidation(OpenEventTestCase):
                         current_time = datetime.now(timezone.utc).astimezone()
                     createdat_db = test_model.created_at
                     time_diff = current_time - createdat_db
-                    allowed_time_lag = timedelta(milliseconds=500)
+                    allowed_time_lag = timedelta(milliseconds=250)
                     message = "created_at not set" " to current time in {} \n".format(
                         model_factory
                     )
