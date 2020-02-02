@@ -44,12 +44,15 @@ class EventSchemaPublic(ModelSchemaOpts, SoftDeletionSchema):
 
     has_sessions = fields.Bool(default=0, dump_only=True)
     has_speakers = fields.Bool(default=0, dump_only=True)
-    state = fields.Str(validate=validate.OneOf(choices=["published", "draft"]), allow_none=True, default='draft')
+    state = fields.Str(
+        validate=validate.OneOf(choices=["published", "draft"]),
+        allow_none=True,
+        default='draft')
     tickets_available = fields.Float(dump_only=True)
     tickets_sold = fields.Float(dump_only=True)
     revenue = fields.Float(dump_only=True)
     average_rating = fields.Float(dump_only=True)
-    
+
     tickets = Relationship(
         attribute='tickets',
         self_view='v1.event_ticket',
