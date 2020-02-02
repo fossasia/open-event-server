@@ -22,7 +22,7 @@ class EventTopicSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    system_image_url = fields.Url()
+    system_image_url = fields.Url(schemes='https')
     slug = fields.Str(dump_only=True)
     events = Relationship(
         attribute='event',
