@@ -2,6 +2,7 @@ from datetime import datetime
 
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
@@ -16,13 +17,13 @@ class EventCopyrightSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     holder = fields.Str(allow_none=True)
-    holder_url = fields.Url(allow_none=True, schemes='https')
+    holder_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     licence = fields.Str(required=True)
-    licence_url = fields.Url(allow_none=True, schemes='https')
+    licence_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
     year = fields.Int(
         validate=lambda n: 1900 <= n <= datetime.now().year, allow_none=True
     )
-    logo_url = fields.Url(attribute='logo', allow_none=True, schemes='https')
+    logo_url = fields.Url(attribute='logo', allow_none=True, validate=validate.URL(schemes=["https"]))
     event = Relationship(
         attribute='event',
         self_view='v1.copyright_event',
