@@ -681,8 +681,12 @@ class OrderRelationship(ResourceRelationship):
         elif kwargs.get('id'):
             order = safe_query(db, Order, 'id', kwargs['id'], 'id')
 
-        if not has_access('is_coorganizer', event_id=order.event_id, user_id=order.user_id):
-            raise ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+        if not has_access(
+            'is_coorganizer', event_id=order.event_id, user_id=order.user_id
+        ):
+            raise ForbiddenException(
+                {'source': ''}, 'You can only access your orders or your event\'s orders'
+            )
 
     decorators = (jwt_required,)
     schema = OrderSchema

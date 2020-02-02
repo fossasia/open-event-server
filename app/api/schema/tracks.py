@@ -27,7 +27,10 @@ class TrackSchema(SoftDeletionSchema):
     @validates_schema
     def valid_color(self, data):
         if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', data['color']):
-            raise UnprocessableEntity({'pointer': 'data/attributes/color'}, "Color should be proper HEX color code")
+            raise UnprocessableEntity(
+                {'pointer': 'data/attributes/color'},
+                "Color should be proper HEX color code",
+            )
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
