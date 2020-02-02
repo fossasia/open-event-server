@@ -3,6 +3,7 @@ import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask import render_template
 from flask_celeryext import RequestContextTask
 
@@ -256,16 +257,14 @@ def send_monthly_event_invoice():
                     db.session.query(TicketFees).filter_by(currency=currency).one()
                 )
             except NoResultFound:
-                raise NotFoundError(
+                raise ObjectNotFound(
                     {'source': ''}, 'Ticket Fee not set for {}'.format(currency)
-                ).respond()
+                )
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
             gross_revenue = event.calc_monthly_revenue()
-            invoice_amount = (
-                event.tickets_sold * gross_revenue * (ticket_fee_percentage / 100)
-            )
+            invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
             net_revenue = gross_revenue - invoice_amount

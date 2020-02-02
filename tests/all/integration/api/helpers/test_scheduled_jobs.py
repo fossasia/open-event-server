@@ -87,8 +87,7 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test monthly invoices"""
 
         with self.app.test_request_context():
-            ticket_fee_test = TicketFeesFactory()
-            ticket_fee_test.service_fee = 10.23
+            TicketFeesFactory(service_fee=10.23, maximum_fee=11)
 
             test_event = EventFactoryBasic(state='published')
 
