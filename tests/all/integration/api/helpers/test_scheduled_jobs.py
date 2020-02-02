@@ -110,4 +110,4 @@ class TestScheduledJobs(OpenEventTestCase):
 
             send_monthly_event_invoice()
             event_invoice = EventInvoice.query.get(1)
-            self.assertEqual(event_invoice.amount, 0.1023)
+            self.assertEqual(event_invoice.amount, 10.23)

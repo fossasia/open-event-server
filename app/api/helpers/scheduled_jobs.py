@@ -263,7 +263,9 @@ def send_monthly_event_invoice():
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
             gross_revenue = event.calc_monthly_revenue()
-            invoice_amount = event.tickets_sold * (ticket_fee_percentage / 100)
+            invoice_amount = (
+                event.tickets_sold * gross_revenue * (ticket_fee_percentage / 100)
+            )
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
             net_revenue = gross_revenue - invoice_amount
