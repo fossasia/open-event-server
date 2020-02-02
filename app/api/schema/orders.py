@@ -100,7 +100,7 @@ class OrderSchema(SoftDeletionSchema):
     payment_url = fields.Str(dump_only=True)
     cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
-    tickets_pdf_url = fields.Url(dump_only=True, schemes='https')
+    tickets_pdf_url = fields.Url(dump_only=True, validate=validate.URL(schemes=["https"]))
 
     # only used in the case of an on site attendee.
     on_site_tickets = fields.List(
