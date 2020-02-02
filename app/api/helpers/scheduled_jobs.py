@@ -213,6 +213,7 @@ def delete_ticket_holders_no_order_id():
 
     with app.app_context():
         order_expiry_time = get_settings()['order_expiry_time']
+        print(order_expiry_time)
         TicketHolder.query.filter(
             TicketHolder.order_id == None,
             TicketHolder.deleted_at.is_(None),

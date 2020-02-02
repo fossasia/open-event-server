@@ -39,7 +39,7 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test deleting ticket holders with no order id after expiry time"""
 
         with self.app.test_request_context():
-            attendee = AttendeeFactory()
+            attendee = AttendeeFactory(created_at=datetime.datetime.utcnow())
             db.session.commit()
             attendee_id = attendee.id
             delete_ticket_holders_no_order_id()
