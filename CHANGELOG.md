@@ -3,6 +3,7 @@
 #### v1.12.0 (2020-02-02):
 
 - Add check if donation ticket has payment method enabled
+- Fix general event statistics type
 - Internal refactoring and code cleanup
 
 #### v1.11.2 (2020-01-25):
