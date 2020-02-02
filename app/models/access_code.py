@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-
+from sqlalchemy.sql import func
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -29,7 +29,7 @@ class AccessCode(SoftDeletionModel):
         db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')
     )
     event_id: int = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    created_at: datetime = db.Column(db.DateTime(timezone=True))
+    created_at: datetime = db.Column(db.DateTime(timezone=True), default=func.now())
     marketer_id: int = db.Column(
         db.Integer, db.ForeignKey('users.id', ondelete='CASCADE')
     )

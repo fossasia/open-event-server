@@ -14,7 +14,6 @@ class RoleInviteFactory(factory.alchemy.SQLAlchemyModelFactory):
     event = factory.RelatedFactory(EventFactoryBasic)
     role = factory.RelatedFactory(RoleFactory)
     email = common.email_
-    created_at = common.date_
     hash = common.string_
     status = common.string_
     role_name = common.string_

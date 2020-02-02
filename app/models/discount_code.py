@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from sqlalchemy.sql import func
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -23,7 +23,7 @@ class DiscountCode(SoftDeletionModel):
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
-    created_at = db.Column(db.DateTime(timezone=True))
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='discount_codes_')
 
