@@ -16,13 +16,13 @@ class EventCopyrightSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     holder = fields.Str(allow_none=True)
-    holder_url = fields.Url(allow_none=True)
+    holder_url = fields.Url(allow_none=True, schemes='https')
     licence = fields.Str(required=True)
-    licence_url = fields.Url(allow_none=True)
+    licence_url = fields.Url(allow_none=True, schemes='https')
     year = fields.Int(
         validate=lambda n: 1900 <= n <= datetime.now().year, allow_none=True
     )
-    logo_url = fields.Url(attribute='logo', allow_none=True)
+    logo_url = fields.Url(attribute='logo', allow_none=True, schemes='https')
     event = Relationship(
         attribute='event',
         self_view='v1.copyright_event',
