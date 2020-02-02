@@ -93,10 +93,10 @@ class SessionSchema(SoftDeletionSchema):
     starts_at = fields.DateTime(allow_none=True)
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
-    slides_url = fields.Url(allow_none=True)
-    video_url = fields.Url(allow_none=True)
-    audio_url = fields.Url(allow_none=True)
-    signup_url = fields.Url(allow_none=True)
+    slides_url = fields.Url(allow_none=True, schemes='https')
+    video_url = fields.Url(allow_none=True, schemes='https')
+    audio_url = fields.Url(allow_none=True, schemes='https')
+    signup_url = fields.Url(allow_none=True, schemes='https')
     state = fields.Str(
         validate=validate.OneOf(
             choices=["pending", "accepted", "confirmed", "rejected", "draft"]
