@@ -338,7 +338,7 @@ class EventSchemaPublic(SoftDeletionSchema):
         related_view='v1.event_statistics_general_detail',
         related_view_kwargs={'id': '<id>'},
         schema='EventStatisticsGeneralSchema',
-        type_='general-statistics-event',
+        type_='event-statistics-general',
     )
 
 
