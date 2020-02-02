@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
@@ -22,7 +23,7 @@ class EventTopicSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    system_image_url = fields.Url(schemes='https')
+    system_image_url = fields.Url(validate=validate.URL(schemes=["https"]))
     slug = fields.Str(dump_only=True)
     events = Relationship(
         attribute='event',
