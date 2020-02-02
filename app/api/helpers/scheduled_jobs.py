@@ -263,15 +263,15 @@ def send_monthly_event_invoice():
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
             gross_revenue = event.calc_monthly_revenue()
-            ticket_fees = event.tickets_sold * (ticket_fee_percentage / 100)
-            if ticket_fees > ticket_fee_maximum:
-                ticket_fees = ticket_fee_maximum
-            net_revenue = gross_revenue - ticket_fees
+            invoice_amount = event.tickets_sold * (ticket_fee_percentage / 100)
+            if invoice_amount > ticket_fee_maximum:
+                invoice_amount = ticket_fee_maximum
+            net_revenue = gross_revenue - invoice_amount
             payment_details = {
                 'tickets_sold': event.tickets_sold,
                 'gross_revenue': gross_revenue,
                 'net_revenue': net_revenue,
-                'amount_payable': ticket_fees,
+                'amount_payable': invoice_amount,
             }
             # save invoice as pdf
             pdf = create_save_pdf(
@@ -293,7 +293,7 @@ def send_monthly_event_invoice():
             # save event_invoice info to DB
 
             event_invoice = EventInvoice(
-                amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id
+                amount=invoice_amount, invoice_pdf_url=pdf, event_id=event.id
             )
             save_to_db(event_invoice)
 

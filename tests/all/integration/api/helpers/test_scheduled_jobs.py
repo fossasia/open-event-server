@@ -87,25 +87,27 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test monthly invoices"""
 
         with self.app.test_request_context():
-            # ticket fee factory
             ticket_fee_test = TicketFeesFactory()
             ticket_fee_test.service_fee = 10.23
-            # event factory
+
             test_event = EventFactoryBasic(state='published')
-            # user factory
+
             test_user = UserFactory()
-            # order factory
+
             test_order = OrderFactory(status='completed')
             test_order.completed_at = datetime.datetime.now() - datetime.timedelta(
                 days=30
             )
             test_order.amount = 100
             test_order.event = test_event
-            # ticket holder factory
+
             test_ticket_holder = AttendeeFactory()
+            test_ticket_holder.event = test_event
+            test_ticket_holder.order = test_order
+
             test_event.owner = test_user
             db.session.commit()
 
             send_monthly_event_invoice()
             event_invoice = EventInvoice.query.get(1)
-            self.assertEqual(event_invoice.amount, 100.1)
+            self.assertEqual(event_invoice.amount, 0.1023)
