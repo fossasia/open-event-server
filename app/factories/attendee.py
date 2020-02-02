@@ -2,9 +2,9 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.factories.ticket import TicketFactory
 from app.factories.order import OrderFactory
-from app.models.ticket_holder import db, TicketHolder
+from app.factories.ticket import TicketFactory
+from app.models.ticket_holder import TicketHolder, db
 
 
 class AttendeeFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
@@ -24,7 +24,6 @@ class AttendeeFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     event_id = 1
     ticket_id = None
     order_id = None
-    created_at = common.date_
     modified_at = common.date_
 
 

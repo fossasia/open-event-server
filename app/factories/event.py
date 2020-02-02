@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.event import db, Event
+from app.models.event import Event, db
 
 
 class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):

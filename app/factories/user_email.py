@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.user import UserFactory
-from app.models.user_email import db, UserEmail
+from app.models.user_email import UserEmail, db
 
 
 class UserEmailFactory(factory.alchemy.SQLAlchemyModelFactory):

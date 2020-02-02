@@ -1,19 +1,17 @@
-from tests.all.integration.auth_helper import create_user
-from tests.all.integration.utils import OpenEventTestCase
+import unittest
+
+import app.factories.common as common
 from app.api.helpers.csv_jobs_util import *
 from app.factories.attendee import AttendeeFactory
 from app.factories.order import OrderFactory
 from app.factories.session import SessionFactory
 from app.factories.speaker import SpeakerFactory
 from app.models import db
-import app.factories.common as common
-
-import unittest
+from tests.all.integration.auth_helper import create_user
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestExportCSV(OpenEventTestCase):
-
-
     def test_export_orders_csv(self):
         """Method to check the orders data export"""
 
@@ -62,9 +60,13 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check that sessions details are correct"""
 
         with self.app.test_request_context():
-            test_session = SessionFactory(short_abstract='short_abstract',
-                                          long_abstract='long_abstract', comments='comment',
-                                          level='level')
+            test_session = SessionFactory(
+                short_abstract='short_abstract',
+                long_abstract='long_abstract',
+                comments='comment',
+                level='level',
+                created_at=common.date_,
+            )
             db.session.commit()
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
@@ -90,9 +92,17 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check speakers data export"""
 
         with self.app.test_request_context():
-            test_speaker = SpeakerFactory(name='Mario Behling', mobile='9004345009', short_biography='Speaker Bio',
-                                          organisation='FOSSASIA', position='position', speaking_experience='1',
-                                          sponsorship_required='No', city='Berlin', country='Germany')
+            test_speaker = SpeakerFactory(
+                name='Mario Behling',
+                mobile='9004345009',
+                short_biography='Speaker Bio',
+                organisation='FOSSASIA',
+                position='position',
+                speaking_experience='1',
+                sponsorship_required='No',
+                city='Berlin',
+                country='Germany',
+            )
             user = create_user(email='export@example.com', password='password')
             user.id = 2
             field_data = export_speakers_csv([test_speaker])
@@ -113,6 +123,7 @@ class TestExportCSV(OpenEventTestCase):
             self.assertEqual(speaker_row[13], common.url_)
             self.assertEqual(speaker_row[14], common.url_)
             self.assertEqual(speaker_row[15], common.url_)
+
 
 if __name__ == '__main__':
     unittest.main()

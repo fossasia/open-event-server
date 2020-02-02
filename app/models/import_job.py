@@ -7,6 +7,7 @@ from app.models import db
 
 class ImportJob(db.Model):
     """Import Jobs model class"""
+
     __tablename__ = 'import_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)

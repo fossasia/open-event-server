@@ -2,7 +2,7 @@ import factory
 
 from app.factories.role import RoleFactory
 from app.factories.service import ServiceFactory
-from app.models.permission import db, Permission
+from app.models.permission import Permission, db
 
 
 class EventRolePermissionsFactory(factory.alchemy.SQLAlchemyModelFactory):

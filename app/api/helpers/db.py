@@ -1,5 +1,4 @@
 import logging
-import traceback
 
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -7,7 +6,6 @@ from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.models import db
-
 
 # ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
 
@@ -24,13 +22,15 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception as e:
+    except Exception:
         logging.exception('DB Exception!')
         db.session.rollback()
         return False
 
 
-def safe_query_without_soft_deleted_entries(self, model, column_name, value, parameter_name):
+def safe_query_without_soft_deleted_entries(
+    self, model, column_name, value, parameter_name
+):
     """
     Wrapper query to properly raise exception after filtering the soft deleted entries
     :param self:
@@ -42,13 +42,23 @@ def safe_query_without_soft_deleted_entries(self, model, column_name, value, par
     """
     try:
         if hasattr(model, 'deleted_at'):
-            record = self.session.query(model).filter(getattr(model, column_name) == value)\
-                .filter_by(deleted_at=None).one()
+            record = (
+                self.session.query(model)
+                .filter(getattr(model, column_name) == value)
+                .filter_by(deleted_at=None)
+                .one()
+            )
         else:
-            record = self.session.query(model).filter(getattr(model, column_name) == value).one()
+            record = (
+                self.session.query(model)
+                .filter(getattr(model, column_name) == value)
+                .one()
+            )
     except NoResultFound:
-        raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
-                             "{}: {} not found".format(model.__name__, value))
+        raise ObjectNotFound(
+            {'parameter': '{}'.format(parameter_name)},
+            "{}: {} not found".format(model.__name__, value),
+        )
     else:
         return record
 
@@ -70,8 +80,10 @@ def safe_query(self, model, column_name, value, parameter_name):
                 record = record.filter(model.deleted_at == None)
         record = record.one()
     except NoResultFound:
-        raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
-                             "{}: {} not found".format(model.__name__, value))
+        raise ObjectNotFound(
+            {'parameter': '{}'.format(parameter_name)},
+            "{}: {} not found".format(model.__name__, value),
+        )
     else:
         return record
 

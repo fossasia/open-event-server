@@ -1,9 +1,10 @@
 import flask_login as login
 import requests
-from flask import url_for, redirect, Blueprint, request, make_response
-from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
+from flask import Blueprint, make_response, redirect, request, url_for
+from flask_admin import Admin, AdminIndexView, expose
+from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
-from wtforms import form, fields, validators
+from wtforms import fields, form, validators
 
 from app.models import db
 from app.models.user import User
@@ -19,8 +20,13 @@ class AdminModelView(ModelView):
 
 
 class LoginForm(form.Form):
-    login = fields.TextField(validators=[validators.required(), validators.email()], render_kw={"placeholder": "john.doe@example.com"})
-    password = fields.PasswordField(validators=[validators.required()], render_kw={"placeholder": "xyzzy"})
+    login = fields.TextField(
+        validators=[validators.required(), validators.email()],
+        render_kw={"placeholder": "john.doe@example.com"},
+    )
+    password = fields.PasswordField(
+        validators=[validators.required()], render_kw={"placeholder": "xyzzy"}
+    )
 
     def validate_login(self, field):
         """
@@ -87,7 +93,9 @@ def index():
     Index route
     :return:
     """
-    r = requests.get('https://raw.githubusercontent.com/fossasia/open-event-server/gh-pages/api/v1/index.html')
+    r = requests.get(
+        'https://raw.githubusercontent.com/fossasia/open-event-server/gh-pages/api/v1/index.html'
+    )
     response = make_response(r.content)
     response.headers["Content-Type"] = "text/html"
     return response
@@ -105,8 +113,13 @@ class BlueprintsManager:
         :return:
         """
         app.register_blueprint(home_routes)
-        admin = Admin(app, name='Open Event API', template_mode='bootstrap3', index_view=MyAdminIndexView(),
-                      base_template='admin_base.html')
+        admin = Admin(
+            app,
+            name='Open Event API',
+            template_mode='bootstrap3',
+            index_view=MyAdminIndexView(),
+            base_template='admin_base.html',
+        )
 
         # Get all the models in the db, all models should have a explicit __tablename__
         classes, models, table_names = [], [], []

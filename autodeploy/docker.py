@@ -21,11 +21,10 @@ def _docker_compose(cwd, *cmd):
         return out
 
     logger.error('docker-compose failed: %s', cwd)
-    raise DockerComposeError('docker-compose exited with a non-zero exit code',
-                             err)
+    raise DockerComposeError('docker-compose exited with a non-zero exit code', err)
 
 
-class DockerCompose():
+class DockerCompose:
     def __init__(self, cwd):
         self.cwd = cwd
 

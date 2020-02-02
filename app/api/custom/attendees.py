@@ -1,18 +1,13 @@
-from flask import Blueprint, request, jsonify, abort, make_response
+from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.permissions import jwt_required
-from app.api.helpers.errors import (
-    UnprocessableEntityError,
-    NotFoundError,
-    ForbiddenError,
-)
 from app.api.helpers.permission_manager import has_access
-
-from app.models.order import Order
+from app.api.helpers.permissions import jwt_required
 from app.models import db
+from app.models.order import Order
 
 attendee_blueprint = Blueprint('attendee_blueprint', __name__, url_prefix='/v1')
 
@@ -29,17 +24,27 @@ def send_receipt():
         try:
             order = db.session.query(Order).filter_by(identifier=order_identifier).one()
         except NoResultFound:
-            return NotFoundError({'parameter': '{order_identifier}'}, "Order not found").respond()
+            return NotFoundError(
+                {'parameter': '{order_identifier}'}, "Order not found"
+            ).respond()
 
-        if (order.user_id != current_user.id) and (not has_access('is_registrar', event_id=order.event_id)):
-            return ForbiddenError({'source': ''},
-                                  'You need to be the event organizer or order buyer to send receipts.').respond()
+        if (order.user_id != current_user.id) and (
+            not has_access('is_registrar', event_id=order.event_id)
+        ):
+            return ForbiddenError(
+                {'source': ''},
+                'You need to be the event organizer or order buyer to send receipts.',
+            ).respond()
         elif order.status != 'completed':
             abort(
-                make_response(jsonify(error="Cannot send receipt for an incomplete order"), 409)
+                make_response(
+                    jsonify(error="Cannot send receipt for an incomplete order"), 409
+                )
             )
         else:
             send_email_to_attendees(order, current_user.id)
             return jsonify(message="receipt sent to attendees")
     else:
-        return UnprocessableEntityError({'source': ''}, 'Order identifier missing').respond()
+        return UnprocessableEntityError(
+            {'source': ''}, 'Order identifier missing'
+        ).respond()

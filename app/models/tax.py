@@ -8,6 +8,7 @@ class Tax(SoftDeletionModel):
     """
     Tax Information about an event.
     """
+
     __tablename__ = 'tax'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,22 +29,24 @@ class Tax(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('tax', uselist=False))
 
-    def __init__(self,
-                 country=None,
-                 name=None,
-                 rate=None,
-                 tax_id=None,
-                 should_send_invoice=None,
-                 registered_company=None,
-                 address=None,
-                 city=None,
-                 state=None,
-                 zip=None,
-                 invoice_footer=None,
-                 is_tax_included_in_price=None,
-                 is_invoice_sent=None,
-                 event_id=None,
-                 deleted_at=None):
+    def __init__(
+        self,
+        country=None,
+        name=None,
+        rate=None,
+        tax_id=None,
+        should_send_invoice=None,
+        registered_company=None,
+        address=None,
+        city=None,
+        state=None,
+        zip=None,
+        invoice_footer=None,
+        is_tax_included_in_price=None,
+        is_invoice_sent=None,
+        event_id=None,
+        deleted_at=None,
+    ):
         self.country = country
         self.name = name
         self.rate = rate
@@ -83,5 +86,5 @@ class Tax(SoftDeletionModel):
             'zip': self.zip,
             'invoice_footer': self.invoice_footer,
             'is_tax_included_in_price': self.is_tax_included_in_price,
-            'is_invoice_sent': self.is_invoice_sent
+            'is_invoice_sent': self.is_invoice_sent,
         }

@@ -6,7 +6,13 @@ from app.models.base import SoftDeletionModel
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
     count = get_count(EventType.query.filter_by(slug=slug))
     if count == 0:
         return slug
@@ -24,10 +30,7 @@ class EventType(SoftDeletionModel):
     slug = db.Column(db.String, unique=True, nullable=False)
     events = db.relationship('Event', backref='event-type')
 
-    def __init__(self,
-                 name=None,
-                 slug=None,
-                 deleted_at=None):
+    def __init__(self, name=None, slug=None, deleted_at=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)

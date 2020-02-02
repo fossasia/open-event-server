@@ -9,10 +9,12 @@ class SocialLinkSchema(SoftDeletionSchema):
     """
     Social Link API Schema based on Social link model
     """
+
     class Meta:
         """
         Meta class for social link schema
         """
+
         type_ = 'social-link'
         self_view = 'v1.social_link_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -22,10 +24,12 @@ class SocialLinkSchema(SoftDeletionSchema):
     name = fields.Str(required=True)
     link = fields.Url(required=True)
     identifier = fields.Str(allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.social_link_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'social_link_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
+    event = Relationship(
+        attribute='event',
+        self_view='v1.social_link_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'social_link_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )

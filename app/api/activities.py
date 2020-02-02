@@ -10,19 +10,23 @@ class ActivityList(ResourceList):
     """
     List and create activity
     """
+
     schema = ActivitySchema
-    methods = ['GET', ]
-    decorators = (api.has_permission('is_admin', ),)
-    data_layer = {'session': db.session,
-                  'model': Activity}
+    methods = [
+        'GET',
+    ]
+    decorators = (api.has_permission('is_admin',),)
+    data_layer = {'session': db.session, 'model': Activity}
 
 
 class ActivityDetail(ResourceDetail):
     """
     Activity detail by id
     """
+
     schema = ActivitySchema
-    methods = ['GET', ]
-    decorators = (api.has_permission('is_admin', ),)
-    data_layer = {'session': db.session,
-                  'model': Activity}
+    methods = [
+        'GET',
+    ]
+    decorators = (api.has_permission('is_admin',),)
+    data_layer = {'session': db.session, 'model': Activity}

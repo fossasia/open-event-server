@@ -8,11 +8,27 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
-from app.api.helpers.utilities import string_empty, get_serializer, str_generator
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
-    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
-    TEST_MAIL
+from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.models.mail import (
+    AFTER_EVENT,
+    EVENT_EXPORT_FAIL,
+    EVENT_EXPORTED,
+    EVENT_IMPORT_FAIL,
+    EVENT_IMPORTED,
+    EVENT_ROLE,
+    MONTHLY_PAYMENT_EMAIL,
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+    NEW_SESSION,
+    SESSION_ACCEPT_REJECT,
+    TEST_MAIL,
+    TICKET_CANCELLED,
+    TICKET_PURCHASED,
+    TICKET_PURCHASED_ATTENDEE,
+    USER_CHANGE_EMAIL,
+    USER_CONFIRM,
+    USER_EVENT_ROLE,
+    Mail,
+)
 from app.models.user import User
 from app.settings import get_settings
 
@@ -22,11 +38,11 @@ def check_smtp_config(smtp_encryption):
     Checks config of SMTP
     """
     config = {
-                'host': get_settings()['smtp_host'],
-                'username': get_settings()['smtp_username'],
-                'password': get_settings()['smtp_password'],
-                'encryption': smtp_encryption,
-                'port': get_settings()['smtp_port'],
+        'host': get_settings()['smtp_host'],
+        'username': get_settings()['smtp_username'],
+        'password': get_settings()['smtp_password'],
+        'encryption': smtp_encryption,
+        'port': get_settings()['smtp_port'],
     }
     for field in config:
         if field is None:
@@ -39,6 +55,7 @@ def send_email(to, action, subject, html, attachments=None):
     Sends email and records it in DB
     """
     from .tasks import send_email_task_sendgrid, send_email_task_smtp
+
     if not string_empty(to):
         email_service = get_settings()['email_service']
         email_from_name = get_settings()['email_from_name']
@@ -51,7 +68,7 @@ def send_email(to, action, subject, html, attachments=None):
             'from': email_from,
             'subject': subject,
             'html': html,
-            'attachments': attachments
+            'attachments': attachments,
         }
 
         if not current_app.config['TESTING']:
@@ -75,25 +92,34 @@ def send_email(to, action, subject, html, attachments=None):
             smtp_status = check_smtp_config(smtp_encryption)
             if smtp_status:
                 if email_service == 'smtp':
-                    send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+                    send_email_task_smtp.delay(
+                        payload=payload, headers=None, smtp_config=smtp_config
+                    )
                 else:
                     key = get_settings().get('sendgrid_key')
                     if key:
                         headers = {
                             "Authorization": ("Bearer " + key),
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
                         }
                         payload['fromname'] = email_from_name
-                        send_email_task_sendgrid.delay(payload=payload, headers=headers, smtp_config=smtp_config)
+                        send_email_task_sendgrid.delay(
+                            payload=payload, headers=headers, smtp_config=smtp_config
+                        )
                     else:
-                        logging.exception('SMTP & sendgrid have not been configured properly')
+                        logging.exception(
+                            'SMTP & sendgrid have not been configured properly'
+                        )
 
             else:
                 logging.exception('SMTP is not configured properly. Cannot send email.')
         # record_mail(to, action, subject, html)
         mail = Mail(
-            recipient=to, action=action, subject=subject,
-            message=html, time=datetime.utcnow()
+            recipient=to,
+            action=action,
+            subject=subject,
+            message=html,
+            time=datetime.utcnow(),
         )
 
         save_to_db(mail, 'Mail Recorded')
@@ -116,7 +142,7 @@ def send_email_with_action(user, action, **kwargs):
         to=user,
         action=action,
         subject=MAILS[action]['subject'].format(**kwargs),
-        html=MAILS[action]['message'].format(**kwargs)
+        html=MAILS[action]['message'].format(**kwargs),
     )
 
 
@@ -126,9 +152,7 @@ def send_email_confirmation(email, link):
         to=email,
         action=USER_CONFIRM,
         subject=MAILS[USER_CONFIRM]['subject'],
-        html=MAILS[USER_CONFIRM]['message'].format(
-            email=email, link=link
-        )
+        html=MAILS[USER_CONFIRM]['message'].format(email=email, link=link),
     )
 
 
@@ -137,14 +161,10 @@ def send_email_new_session(email, event_name, link):
     send_email(
         to=email,
         action=NEW_SESSION,
-        subject=MAILS[NEW_SESSION]['subject'].format(
-            event_name=event_name
-        ),
+        subject=MAILS[NEW_SESSION]['subject'].format(event_name=event_name),
         html=MAILS[NEW_SESSION]['message'].format(
-            email=email,
-            event_name=event_name,
-            link=link
-        )
+            email=email, event_name=event_name, link=link
+        ),
     )
 
 
@@ -156,15 +176,14 @@ def send_email_session_accept_reject(email, session, link):
         to=email,
         action=SESSION_ACCEPT_REJECT,
         subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(
-            session_name=session_name,
-            acceptance=session_acceptance
+            session_name=session_name, acceptance=session_acceptance
         ),
         html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
             email=email,
             session_name=session_name,
             acceptance=session_acceptance,
-            link=link
-        )
+            link=link,
+        ),
     )
 
 
@@ -173,16 +192,10 @@ def send_email_role_invite(email, role_name, event_name, link):
     send_email(
         to=email,
         action=EVENT_ROLE,
-        subject=MAILS[EVENT_ROLE]['subject'].format(
-            role=role_name,
-            event=event_name
-        ),
+        subject=MAILS[EVENT_ROLE]['subject'].format(role=role_name, event=event_name),
         html=MAILS[EVENT_ROLE]['message'].format(
-            email=email,
-            role=role_name,
-            event=event_name,
-            link=link
-        )
+            email=email, role=role_name, event=event_name, link=link
+        ),
     )
 
 
@@ -192,15 +205,11 @@ def send_user_email_role_invite(email, role_name, event_name, link):
         to=email,
         action=USER_EVENT_ROLE,
         subject=MAILS[USER_EVENT_ROLE]['subject'].format(
-            role=role_name,
-            event=event_name
+            role=role_name, event=event_name
         ),
         html=MAILS[USER_EVENT_ROLE]['message'].format(
-            email=email,
-            role=role_name,
-            event=event_name,
-            link=link
-        )
+            email=email, role=role_name, event=event_name, link=link
+        ),
     )
 
 
@@ -209,25 +218,22 @@ def send_email_after_event(email, event_name, frontend_url):
     send_email(
         to=email,
         action=AFTER_EVENT,
-        subject=MAILS[AFTER_EVENT]['subject'].format(
-            event_name=event_name
-        ),
+        subject=MAILS[AFTER_EVENT]['subject'].format(event_name=event_name),
         html=MAILS[AFTER_EVENT]['message'].format(
-            email=email,
-            event_name=event_name,
-            url=frontend_url
-        )
+            email=email, event_name=event_name, url=frontend_url
+        ),
     )
 
 
-def send_email_for_monthly_fee_payment(email, event_name, previous_month, amount, app_name, link):
+def send_email_for_monthly_fee_payment(
+    email, event_name, previous_month, amount, app_name, link
+):
     """email for monthly fee payment"""
     send_email(
         to=email,
         action=MONTHLY_PAYMENT_EMAIL,
         subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(
-            date=previous_month,
-            event_name=event_name
+            date=previous_month, event_name=event_name
         ),
         html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(
             email=email,
@@ -235,19 +241,20 @@ def send_email_for_monthly_fee_payment(email, event_name, previous_month, amount
             date=previous_month,
             amount=amount,
             app_name=app_name,
-            payment_url=link
-        )
+            payment_url=link,
+        ),
     )
 
 
-def send_followup_email_for_monthly_fee_payment(email, event_name, previous_month, amount, app_name, link):
+def send_followup_email_for_monthly_fee_payment(
+    email, event_name, previous_month, amount, app_name, link
+):
     """followup email for monthly fee payment"""
     send_email(
         to=email,
         action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
         subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(
-            date=previous_month,
-            event_name=event_name
+            date=previous_month, event_name=event_name
         ),
         html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(
             email=email,
@@ -255,8 +262,8 @@ def send_followup_email_for_monthly_fee_payment(email, event_name, previous_mont
             date=previous_month,
             amount=amount,
             app_name=app_name,
-            payment_url=link
-        )
+            payment_url=link,
+        ),
     )
 
 
@@ -266,23 +273,15 @@ def send_export_mail(email, event_name, error_text=None, download_url=None):
         send_email(
             to=email,
             action=EVENT_EXPORT_FAIL,
-            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(
-                event_name=event_name
-            ),
-            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(
-                error_text=error_text
-            )
+            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(error_text=error_text),
         )
     elif download_url:
         send_email(
             to=email,
             action=EVENT_EXPORTED,
-            subject=MAILS[EVENT_EXPORTED]['subject'].format(
-                event_name=event_name
-            ),
-            html=MAILS[EVENT_EXPORTED]['message'].format(
-                download_url=download_url
-            )
+            subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=download_url),
         )
 
 
@@ -293,34 +292,32 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
             to=email,
             action=EVENT_IMPORT_FAIL,
             subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
-            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(
-                error_text=error_text
-            )
+            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(error_text=error_text),
         )
     elif event_url:
         send_email(
             to=email,
             action=EVENT_IMPORTED,
-            subject=MAILS[EVENT_IMPORTED]['subject'].format(
-                event_name=event_name
-            ),
-            html=MAILS[EVENT_IMPORTED]['message'].format(
-                event_url=event_url
-            )
+            subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=event_name),
+            html=MAILS[EVENT_IMPORTED]['message'].format(event_url=event_url),
         )
 
 
 def send_test_email(recipient):
-    send_email(to=recipient,
-               action=TEST_MAIL,
-               subject=MAILS[TEST_MAIL]['subject'],
-               html=MAILS[TEST_MAIL]['message']
-               )
+    send_email(
+        to=recipient,
+        action=TEST_MAIL,
+        subject=MAILS[TEST_MAIL]['subject'],
+        html=MAILS[TEST_MAIL]['message'],
+    )
 
 
 def send_email_change_user_email(user, email):
     serializer = get_serializer()
-    hash_ = str(base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')), 'utf-8')
+    hash_ = str(
+        base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')),
+        'utf-8',
+    )
     link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash_})
     send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
@@ -336,14 +333,14 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                 subject=MAILS[TICKET_PURCHASED]['subject'].format(
                     event_name=order.event.name,
                     invoice_id=order.invoice_number,
-                    frontend_url=get_settings()['frontend_url']
+                    frontend_url=get_settings()['frontend_url'],
                 ),
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name,
-                    frontend_url=get_settings()['frontend_url']
+                    frontend_url=get_settings()['frontend_url'],
                 ),
-                attachments=attachments
+                attachments=attachments,
             )
         else:
             # The Ticket holder is not the purchaser
@@ -351,33 +348,32 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                 to=holder.email,
                 action=TICKET_PURCHASED_ATTENDEE,
                 subject=MAILS[TICKET_PURCHASED_ATTENDEE]['subject'].format(
-                    event_name=order.event.name,
-                    invoice_id=order.invoice_number
+                    event_name=order.event.name, invoice_id=order.invoice_number
                 ),
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                    pdf_url=holder.pdf_url,
-                    event_name=order.event.name
+                    pdf_url=holder.pdf_url, event_name=order.event.name
                 ),
-                attachments=attachments
+                attachments=attachments,
             )
 
 
 def send_order_cancel_email(order):
     cancel_msg = ''
     if order.cancel_note:
-        cancel_msg = u"<br/>Message from the organizer: {cancel_note}".format(cancel_note=order.cancel_note)
+        cancel_msg = u"<br/>Message from the organizer: {cancel_note}".format(
+            cancel_note=order.cancel_note
+        )
 
     send_email(
         to=order.user.email,
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(
-            event_name=order.event.name,
-            invoice_id=order.invoice_number,
+            event_name=order.event.name, invoice_id=order.invoice_number,
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
             frontend_url=get_settings()['frontend_url'],
             cancel_msg=cancel_msg,
-            app_name=get_settings()['app_name']
-        )
+            app_name=get_settings()['app_name'],
+        ),
     )

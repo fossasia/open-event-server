@@ -6,6 +6,7 @@ class UserPermission(SoftDeletionModel):
     """
     User Permissions
     """
+
     __tablename__ = 'user_permissions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,8 +16,14 @@ class UserPermission(SoftDeletionModel):
     unverified_user = db.Column(db.Boolean)
     anonymous_user = db.Column(db.Boolean)
 
-    def __init__(self, name, description, unverified_user=False,
-                 anonymous_user=False, deleted_at=None):
+    def __init__(
+        self,
+        name,
+        description,
+        unverified_user=False,
+        anonymous_user=False,
+        deleted_at=None,
+    ):
         self.name = name
         self.description = description
         self.unverified_user = unverified_user

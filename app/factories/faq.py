@@ -2,11 +2,10 @@ import factory
 
 from app.factories.event import EventFactoryBasic
 from app.factories.faq_type import FaqTypeFactory
-from app.models.faq import db, Faq
+from app.models.faq import Faq, db
 
 
 class FaqFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = Faq
         sqlalchemy_session = db.session

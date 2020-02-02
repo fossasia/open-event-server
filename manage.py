@@ -1,19 +1,18 @@
 import logging
 import os
 
+from flask_migrate import MigrateCommand, stamp
 from flask_script import Manager
-from flask_migrate import stamp, MigrateCommand
-from sqlalchemy.engine import reflection
 from sqlalchemy import or_
+from sqlalchemy.engine import reflection
 
 from app.api.helpers.db import save_to_db
-from app.models.event import Event, get_new_event_identifier
 from app.instance import current_app as app
+from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
 from app.models import db
-from app.models.speaker import Speaker
+from app.models.event import Event, get_new_event_identifier
 from app.models.module import Module
-from app.api.helpers.tasks import resize_event_images_task
-from app.api.helpers.tasks import resize_speaker_images_task
+from app.models.speaker import Speaker
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
 
@@ -30,8 +29,9 @@ def list_routes():
     output = []
     for rule in app.url_map.iter_rules():
         methods = ','.join(rule.methods)
-        line = urllib.parse.unquote("{:50s} {:20s} {}".format(
-            rule.endpoint, methods, rule))
+        line = urllib.parse.unquote(
+            "{:50s} {:20s} {}".format(rule.endpoint, methods, rule)
+        )
         output.append(line)
 
     for line in sorted(output):
@@ -48,17 +48,27 @@ def add_event_identifier():
 
 @manager.command
 def fix_event_and_speaker_images():
-    events = Event.query.filter(Event.original_image_url.isnot(None),
-                                or_(Event.thumbnail_image_url == None, Event.large_image_url == None,
-                                    Event.icon_image_url == None)).all()
+    events = Event.query.filter(
+        Event.original_image_url.isnot(None),
+        or_(
+            Event.thumbnail_image_url == None,
+            Event.large_image_url == None,
+            Event.icon_image_url == None,
+        ),
+    ).all()
     logger.info('Resizing images of %s events...', len(events))
     for event in events:
         logger.info('Resizing Event %s', event.id)
         resize_event_images_task.delay(event.id, event.original_image_url)
 
-    speakers = Speaker.query.filter(Speaker.photo_url.isnot(None),
-                                    or_(Speaker.icon_image_url == None,
-                                        Speaker.small_image_url == None, Speaker.thumbnail_image_url == None)).all()
+    speakers = Speaker.query.filter(
+        Speaker.photo_url.isnot(None),
+        or_(
+            Speaker.icon_image_url == None,
+            Speaker.small_image_url == None,
+            Speaker.thumbnail_image_url == None,
+        ),
+    ).all()
 
     logger.info('Resizing images of %s speakers...', len(speakers))
     for speaker in speakers:
@@ -101,17 +111,26 @@ def fix_speaker_images(event):
     from app.helpers.sessions_speakers.speakers import save_resized_photo
     import urllib
     from app.helpers.storage import generate_hash
+
     event_id = int(event)
     image_sizes = speaker_image_sizes()
     speakers = Speaker.query.filter_by(event_id=event_id).all()
     for speaker in speakers:
         if speaker.photo and speaker.photo.strip() != '':
-            file_relative_path = 'static/media/temp/' + generate_hash(str(speaker.id)) + '.jpg'
+            file_relative_path = (
+                'static/media/temp/' + generate_hash(str(speaker.id)) + '.jpg'
+            )
             file_path = app.config['BASE_DIR'] + '/' + file_relative_path
             urllib.urlretrieve(speaker.photo, file_path)
-            speaker.small = save_resized_photo(file_path, event_id, speaker.id, 'small', image_sizes)
-            speaker.thumbnail = save_resized_photo(file_path, event_id, speaker.id, 'thumbnail', image_sizes)
-            speaker.icon = save_resized_photo(file_path, event_id, speaker.id, 'icon', image_sizes)
+            speaker.small = save_resized_photo(
+                file_path, event_id, speaker.id, 'small', image_sizes
+            )
+            speaker.thumbnail = save_resized_photo(
+                file_path, event_id, speaker.id, 'thumbnail', image_sizes
+            )
+            speaker.icon = save_resized_photo(
+                file_path, event_id, speaker.id, 'icon', image_sizes
+            )
             db.session.add(speaker)
             os.remove(file_path)
             print("Downloaded " + speaker.photo + " into " + file_relative_path)
@@ -119,7 +138,9 @@ def fix_speaker_images(event):
     db.session.commit()
 
 
-@manager.option('-c', '--credentials', help='Super admin credentials. Eg. username:password')
+@manager.option(
+    '-c', '--credentials', help='Super admin credentials. Eg. username:password'
+)
 def initialize_db(credentials):
     with app.app_context():
         populate_data = True
@@ -135,7 +156,9 @@ def initialize_db(credentials):
                 stamp()
             except Exception:
                 populate_data = False
-                print("[LOG] Could not create tables. Either database does not exist or tables already created")
+                print(
+                    "[LOG] Could not create tables. Either database does not exist or tables already created"
+                )
             if populate_data:
                 credentials = credentials.split(":")
                 admin_email = os.environ.get('SUPER_ADMIN_EMAIL', credentials[0])

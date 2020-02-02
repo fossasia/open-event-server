@@ -10,17 +10,17 @@ class TicketFeeList(ResourceList):
     """
     List and create TicketFees
     """
+
     decorators = (api.has_permission('is_admin'),)
     schema = TicketFeesSchema
-    data_layer = {'session': db.session,
-                  'model': TicketFees}
+    data_layer = {'session': db.session, 'model': TicketFees}
 
 
 class TicketFeeDetail(ResourceDetail):
     """
     ticket_fee detail by id
     """
+
     decorators = (api.has_permission('is_admin'),)
     schema = TicketFeesSchema
-    data_layer = {'session': db.session,
-                  'model': TicketFees}
+    data_layer = {'session': db.session, 'model': TicketFees}

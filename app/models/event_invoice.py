@@ -20,6 +20,7 @@ class EventInvoice(SoftDeletionModel):
     """
     Stripe authorization information for an event.
     """
+
     __tablename__ = 'event_invoices'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -55,33 +56,38 @@ class EventInvoice(SoftDeletionModel):
 
     user = db.relationship('User', backref='invoices')
 
-    discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
-                                 nullable=True, default=None)
+    discount_code_id = db.Column(
+        db.Integer,
+        db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
+        nullable=True,
+        default=None,
+    )
     discount_code = db.relationship('DiscountCode', backref='event_invoices')
 
-    def __init__(self,
-                 amount=None,
-                 address=None,
-                 city=None,
-                 state=None,
-                 country=None,
-                 zipcode=None,
-                 transaction_id=None,
-                 paid_via=None,
-                 user_id=None,
-                 discount_code_id=None,
-                 event_id=None,
-                 invoice_pdf_url=None,
-                 payment_mode=None,
-                 brand=None,
-                 exp_month=None,
-                 exp_year=None,
-                 last4=None,
-                 stripe_token=None,
-                 paypal_token=None,
-                 deleted_at=None,
-                 status='due'
-                 ):
+    def __init__(
+        self,
+        amount=None,
+        address=None,
+        city=None,
+        state=None,
+        country=None,
+        zipcode=None,
+        transaction_id=None,
+        paid_via=None,
+        user_id=None,
+        discount_code_id=None,
+        event_id=None,
+        invoice_pdf_url=None,
+        payment_mode=None,
+        brand=None,
+        exp_month=None,
+        exp_year=None,
+        last4=None,
+        stripe_token=None,
+        paypal_token=None,
+        deleted_at=None,
+        status='due',
+    ):
         self.identifier = get_new_identifier()
         self.amount = amount
         self.address = address
@@ -107,7 +113,9 @@ class EventInvoice(SoftDeletionModel):
         self.deleted_at = deleted_at
 
     def get_invoice_number(self):
-        return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
+        return (
+            'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
+        )
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url

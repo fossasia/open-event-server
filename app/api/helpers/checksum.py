@@ -1,12 +1,11 @@
 # Checksum module from https://github.com/Paytm-Payments/Paytm_Web_Sample_Kit_Python
 
 import base64
-import string
-import random
 import hashlib
+import random
+import string
 
 from Crypto.Cipher import AES
-
 
 IV = "@@@@&&&&####$$$$"
 BLOCK_SIZE = 16
@@ -27,7 +26,7 @@ def generate_checksum(param_dict, merchant_key, salt=None):
 
 def generate_refund_checksum(param_dict, merchant_key, salt=None):
     for i in param_dict:
-        if("|" in param_dict[i]):
+        if "|" in param_dict[i]:
             param_dict = {}
             exit()
     params_string = __get_param_string__(param_dict)
@@ -75,14 +74,16 @@ def verify_checksum_by_str(param_str, merchant_key, checksum):
     return calculated_checksum == checksum
 
 
-def __id_generator__(size=6, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+def __id_generator__(
+    size=6, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase
+):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
 def __get_param_string__(params):
     params_string = []
     for key in sorted(params.keys()):
-        if("REFUND" in params[key] or "|" in params[key]):
+        if "REFUND" in params[key] or "|" in params[key]:
             exit()
         value = params[key]
         params_string.append('' if value == 'null' else str(value))
@@ -90,12 +91,13 @@ def __get_param_string__(params):
 
 
 def __pad__(string_literal):
-    return (string_literal + (BLOCK_SIZE - len(string_literal) % BLOCK_SIZE) *
-            chr(BLOCK_SIZE - len(string_literal) % BLOCK_SIZE))
+    return string_literal + (BLOCK_SIZE - len(string_literal) % BLOCK_SIZE) * chr(
+        BLOCK_SIZE - len(string_literal) % BLOCK_SIZE
+    )
 
 
 def __unpad__(string_literal):
-    return string_literal[0:-ord(string_literal[-1])]
+    return string_literal[0 : -ord(string_literal[-1])]
 
 
 def __encode__(to_encode, iv, key):
@@ -130,10 +132,14 @@ if __name__ == "__main__":
         "TXN_AMOUNT": "1",
         "CHANNEL_ID": "WEB",
         "INDUSTRY_TYPE_ID": "Retail",
-        "WEBSITE": "xxxxxxxxxxx"
+        "WEBSITE": "xxxxxxxxxxx",
     }
 
-    print(verify_checksum(
-        params, 'xxxxxxxxxxxxxxxx',
-        "CD5ndX8VVjlzjWbbYoAtKQIlvtXPypQYOg0Fi2AUYKXZA5XSHiRF0FDj7vQu6\
-        6S8MHx9NaDZ/uYm3WBOWHf+sDQAmTyxqUipA7i1nILlxrk="))
+    print(
+        verify_checksum(
+            params,
+            'xxxxxxxxxxxxxxxx',
+            "CD5ndX8VVjlzjWbbYoAtKQIlvtXPypQYOg0Fi2AUYKXZA5XSHiRF0FDj7vQu6\
+        6S8MHx9NaDZ/uYm3WBOWHf+sDQAmTyxqUipA7i1nILlxrk=",
+        )
+    )

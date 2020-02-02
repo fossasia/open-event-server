@@ -1,11 +1,10 @@
 import factory
 
 import app.factories.common as common
-from app.models.setting import db, Setting
+from app.models.setting import Setting, db
 
 
 class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
-
     class Meta:
         model = Setting
         sqlalchemy_session = db.session
@@ -18,7 +17,7 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     # Static domain
     static_domain = common.url_
     # Order Expiry Time
-    order_expiry_time = 15  #min
+    order_expiry_time = 15  # min
 
     #
     #  STORAGE

@@ -1,15 +1,11 @@
 import unittest
-from datetime import datetime
-from pytz import timezone
 
-from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.speakers_calls import SpeakersCallSchema
 from app.factories.speakers_call import SpeakersCallFactory
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestSpeakersCallValidation(OpenEventTestCase):
-
     def test_date_db_populate(self):
         """
         Speakers Call Validate Date - Tests if validation works on values stored in db and not given in 'data'
@@ -19,11 +15,7 @@ class TestSpeakersCallValidation(OpenEventTestCase):
             schema = SpeakersCallSchema()
             SpeakersCallFactory()
 
-            original_data = {
-                'data': {
-                    'id': 1
-                }
-            }
+            original_data = {'data': {'id': 1}}
             data = {}
             SpeakersCallSchema.validate_date(schema, data, original_data)
 

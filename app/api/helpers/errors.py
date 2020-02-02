@@ -9,6 +9,7 @@ class ErrorResponse:
     Parent ErrorResponse class for handling json-api compliant errors.
     Inspired by the JsonApiException class of `flask-rest-jsonapi` itself
     """
+
     title = 'Unknown error'
     status = 500
     headers = {'Content-Type': 'application/vnd.api+json'}
@@ -31,22 +32,27 @@ class ErrorResponse:
         :return: a jsonapi compliant response object
         """
         dict_ = self.to_dict()
-        return make_response(json.dumps(jsonapi_errors([dict_])), self.status, self.headers)
+        return make_response(
+            json.dumps(jsonapi_errors([dict_])), self.status, self.headers
+        )
 
     def to_dict(self):
         """
         :return: Dict from details of the object
         """
-        return {'status': self.status,
-                'source': self.source,
-                'title': self.title,
-                'detail': self.detail}
+        return {
+            'status': self.status,
+            'source': self.source,
+            'title': self.title,
+            'detail': self.detail,
+        }
 
 
 class ForbiddenError(ErrorResponse):
     """
     Default class for 403 Error
     """
+
     title = 'Access Forbidden'
     status = 403
 
@@ -55,6 +61,7 @@ class NotFoundError(ErrorResponse):
     """
     Default class for 404 Error
     """
+
     title = 'Not Found'
     status = 404
 
@@ -68,6 +75,7 @@ class UnprocessableEntityError(ErrorResponse):
     """
     Default class for 422 Error
     """
+
     status = 422
     title = 'Unprocessable Entity'
 
@@ -76,5 +84,6 @@ class BadRequestError(ErrorResponse):
     """
     Default class for 400 Error
     """
+
     status = 400
     title = 'Bad Request'

@@ -1,9 +1,9 @@
-from app.models import db
 from sqlalchemy.ext.hybrid import hybrid_property
+
+from app.models import db
 
 
 class Environment:
-
     def __init__(self):
         pass
 
@@ -173,87 +173,104 @@ class Setting(db.Model):
     #
     # Cookie Policy
     #
-    cookie_policy = db.Column(db.String,
-                              default="This website, and certain approved third parties, use functional, "
-                                      "analytical and tracking cookies (or similar technologies) to understand your "
-                                      "event preferences and provide you with a customized experience. "
-                                      "By closing this banner or by continuing to use the site, you agree. "
-                                      "For more information please review our cookie policy.")
-    cookie_policy_link = db.Column(db.String, default="https://next.eventyay.com/cookie-policy")
+    cookie_policy = db.Column(
+        db.String,
+        default="This website, and certain approved third parties, use functional, "
+        "analytical and tracking cookies (or similar technologies) to understand your "
+        "event preferences and provide you with a customized experience. "
+        "By closing this banner or by continuing to use the site, you agree. "
+        "For more information please review our cookie policy.",
+    )
+    cookie_policy_link = db.Column(
+        db.String, default="https://next.eventyay.com/cookie-policy"
+    )
 
-    def __init__(self,
-                 app_environment=Environment.PRODUCTION,
-                 aws_key=None,
-                 aws_secret=None,
-                 aws_bucket_name=None,
-                 aws_region=None,
-                 gs_key=None,
-                 gs_secret=None,
-                 gs_bucket_name=None,
-                 is_google_recaptcha_enabled=False, google_recaptcha_secret=None, google_recaptcha_site=None,
-                 google_client_id=None, google_client_secret=None,
-                 fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
-                 stripe_client_id=None, stripe_test_client_id=None,
-                 stripe_secret_key=None, stripe_publishable_key=None,
-                 stripe_test_secret_key=None, stripe_test_publishable_key=None,
-                 in_client_id=None, in_client_secret=None,
-                 tw_consumer_secret=None, sendgrid_key=None,
-                 storage_place=None,
-                 app_name=None,
-                 static_domain=None,
-                 tagline=None,
-                 google_url=None, github_url=None,
-                 twitter_url=None, support_url=None,
-                 analytics_key=None,
-                 paypal_mode=None,
-                 paypal_client=None,
-                 paypal_secret=None,
-                 paypal_sandbox_client=None,
-                 paypal_sandbox_secret=None,
-                 email_service=None,
-                 email_from=None,
-                 email_from_name=None,
-                 smtp_host=None,
-                 smtp_username=None,
-                 smtp_password=None,
-                 smtp_port=None,
-                 smtp_encryption=None,
-                 frontend_url=None,
-                 facebook_url=None,
-                 youtube_url=None,
-                 android_app_url=None,
-                 web_app_url=None,
-                 cookie_policy=None,
-                 cookie_policy_link=None,
-                 omise_mode=None,
-                 omise_test_public=None,
-                 omise_test_secret=None,
-                 omise_live_public=None,
-                 omise_live_secret=None,
-                 alipay_publishable_key=None,
-                 alipay_secret_key=None,
-                 is_paytm_activated=False,
-                 paytm_mode=None,
-                 paytm_live_merchant=None,
-                 paytm_live_secret=None,
-                 paytm_sandbox_merchant=None,
-                 paytm_sandbox_secret=None,
-                 invoice_sending_day=None,
-                 invoice_sending_timezone=None,
-                 admin_billing_contact_name=None,
-                 admin_billing_phone=None,
-                 admin_billing_email=None,
-                 admin_billing_country=None,
-                 admin_billing_tax_info=None,
-                 admin_company=None,
-                 admin_billing_address=None,
-                 admin_billing_city=None,
-                 admin_billing_state=None,
-                 admin_billing_zip=None,
-                 admin_billing_additional_info=None,
-                 order_expiry_time=None,
-                 max_complex_custom_fields=30
-                 ):
+    def __init__(
+        self,
+        app_environment=Environment.PRODUCTION,
+        aws_key=None,
+        aws_secret=None,
+        aws_bucket_name=None,
+        aws_region=None,
+        gs_key=None,
+        gs_secret=None,
+        gs_bucket_name=None,
+        is_google_recaptcha_enabled=False,
+        google_recaptcha_secret=None,
+        google_recaptcha_site=None,
+        google_client_id=None,
+        google_client_secret=None,
+        fb_client_id=None,
+        fb_client_secret=None,
+        tw_consumer_key=None,
+        stripe_client_id=None,
+        stripe_test_client_id=None,
+        stripe_secret_key=None,
+        stripe_publishable_key=None,
+        stripe_test_secret_key=None,
+        stripe_test_publishable_key=None,
+        in_client_id=None,
+        in_client_secret=None,
+        tw_consumer_secret=None,
+        sendgrid_key=None,
+        storage_place=None,
+        app_name=None,
+        static_domain=None,
+        tagline=None,
+        google_url=None,
+        github_url=None,
+        twitter_url=None,
+        support_url=None,
+        analytics_key=None,
+        paypal_mode=None,
+        paypal_client=None,
+        paypal_secret=None,
+        paypal_sandbox_client=None,
+        paypal_sandbox_secret=None,
+        email_service=None,
+        email_from=None,
+        email_from_name=None,
+        smtp_host=None,
+        smtp_username=None,
+        smtp_password=None,
+        smtp_port=None,
+        smtp_encryption=None,
+        frontend_url=None,
+        facebook_url=None,
+        youtube_url=None,
+        android_app_url=None,
+        web_app_url=None,
+        cookie_policy=None,
+        cookie_policy_link=None,
+        omise_mode=None,
+        omise_test_public=None,
+        omise_test_secret=None,
+        omise_live_public=None,
+        omise_live_secret=None,
+        alipay_publishable_key=None,
+        alipay_secret_key=None,
+        is_paytm_activated=False,
+        paytm_mode=None,
+        paytm_live_merchant=None,
+        paytm_live_secret=None,
+        paytm_sandbox_merchant=None,
+        paytm_sandbox_secret=None,
+        invoice_sending_day=None,
+        invoice_sending_timezone=None,
+        admin_billing_contact_name=None,
+        admin_billing_phone=None,
+        admin_billing_email=None,
+        admin_billing_country=None,
+        admin_billing_tax_info=None,
+        admin_company=None,
+        admin_billing_address=None,
+        admin_billing_city=None,
+        admin_billing_state=None,
+        admin_billing_zip=None,
+        admin_billing_additional_info=None,
+        order_expiry_time=None,
+        max_complex_custom_fields=30,
+    ):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -357,7 +374,11 @@ class Setting(db.Model):
 
     @hybrid_property
     def is_paypal_activated(self):
-        if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
+        if (
+            self.paypal_mode == 'sandbox'
+            and self.paypal_sandbox_client
+            and self.paypal_sandbox_secret
+        ):
             return True
         elif self.paypal_client and self.paypal_secret:
             return True
@@ -383,7 +404,11 @@ class Setting(db.Model):
 
     @hybrid_property
     def is_omise_activated(self):
-        if self.omise_mode == 'test' and self.omise_test_public and self.omise_test_secret:
+        if (
+            self.omise_mode == 'test'
+            and self.omise_test_public
+            and self.omise_test_secret
+        ):
             return True
         elif self.omise_live_public and self.omise_live_secret:
             return True

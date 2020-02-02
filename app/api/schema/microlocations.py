@@ -14,6 +14,7 @@ class MicrolocationSchema(SoftDeletionSchema):
         """
         Meta class for Microlocation Api Schema
         """
+
         type_ = 'microlocation'
         self_view = 'v1.microlocation_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -26,18 +27,22 @@ class MicrolocationSchema(SoftDeletionSchema):
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
     floor = fields.Integer(allow_none=True)
     room = fields.Str(allow_none=True)
-    sessions = Relationship(attribute='session',
-                            many=True,
-                            self_view='v1.microlocation_session',
-                            self_view_kwargs={'id': '<id>'},
-                            related_view='v1.session_list',
-                            related_view_kwargs={'microlocation_id': '<id>'},
-                            schema='SessionSchema',
-                            type_='session')
-    event = Relationship(attribute='event',
-                         self_view='v1.microlocation_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'microlocation_id': '<id>'},
-                         schema='EventSchemaPublic',
-                         type_='event')
+    sessions = Relationship(
+        attribute='session',
+        many=True,
+        self_view='v1.microlocation_session',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_list',
+        related_view_kwargs={'microlocation_id': '<id>'},
+        schema='SessionSchema',
+        type_='session',
+    )
+    event = Relationship(
+        attribute='event',
+        self_view='v1.microlocation_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'microlocation_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )

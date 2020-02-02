@@ -16,6 +16,7 @@ class MicrolocationListPost(ResourceList):
     """
     List and create microlocations
     """
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission
@@ -28,16 +29,18 @@ class MicrolocationListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
-    methods = ['POST', ]
+    methods = [
+        'POST',
+    ]
     schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation}
+    data_layer = {'session': db.session, 'model': Microlocation}
 
 
 class MicrolocationList(ResourceList):
     """
     List Microlocations
     """
+
     def query(self, view_kwargs):
         """
         query method for resource list
@@ -47,18 +50,20 @@ class MicrolocationList(ResourceList):
         query_ = self.session.query(Microlocation)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('session_id'):
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query(
+                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+            )
             query_ = query_.join(Session).filter(Session.id == session.id)
         return query_
 
     view_kwargs = True
     methods = ['GET']
     schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': Microlocation,
+        'methods': {'query': query},
+    }
 
 
 class MicrolocationDetail(ResourceDetail):
@@ -73,38 +78,63 @@ class MicrolocationDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id') is not None:
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query(
+                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+            )
             if session.microlocation_id is not None:
                 view_kwargs['id'] = session.microlocation_id
             else:
                 view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=Microlocation),)
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Microlocation,
+        ),
+    )
     schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation,
-                  'methods': {'before_get_object': before_get_object}}
+    data_layer = {
+        'session': db.session,
+        'model': Microlocation,
+        'methods': {'before_get_object': before_get_object},
+    }
 
 
 class MicrolocationRelationshipRequired(ResourceRelationship):
     """
     Microlocation Relationship for required entities
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH", fetch="event_id", fetch_as="event_id",
-                                     model=Microlocation),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Microlocation,
+        ),
+    )
     methods = ['GET', 'PATCH']
     schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation}
+    data_layer = {'session': db.session, 'model': Microlocation}
 
 
 class MicrolocationRelationshipOptional(ResourceRelationship):
     """
     Microlocation Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=Microlocation),)
+
+    decorators = (
+        api.has_permission(
+            'is_coorganizer',
+            methods="PATCH,DELETE",
+            fetch="event_id",
+            fetch_as="event_id",
+            model=Microlocation,
+        ),
+    )
     schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation}
+    data_layer = {'session': db.session, 'model': Microlocation}

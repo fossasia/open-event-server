@@ -1,5 +1,15 @@
 ## Changelog
 
+#### v1.12.0 (2020-02-02):
+
+- Add check if donation ticket has payment method enabled
+- Fix general event statistics type
+- Internal refactoring and code cleanup
+
+#### v1.11.2 (2020-01-25):
+
+- Fix celery task status endpoint
+
 #### v1.11.1 (2020-01-23):
 
 - Fix event fee notification task being triggered every minute

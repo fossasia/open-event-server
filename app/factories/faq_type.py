@@ -2,7 +2,7 @@ import factory
 
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
-from app.models.faq_type import db, FaqType
+from app.models.faq_type import FaqType, db
 
 
 class FaqTypeFactory(factory.alchemy.SQLAlchemyModelFactory):

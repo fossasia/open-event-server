@@ -13,11 +13,13 @@ class EmailNotificationListAdmin(ResourceList):
     """
     List and create email notifications
     """
-    methods = ['GET', ]
+
+    methods = [
+        'GET',
+    ]
     schema = EmailNotificationSchema
     decorators = (api.has_permission('is_admin'),)
-    data_layer = {'session': db.session,
-                  'model': EmailNotification}
+    data_layer = {'session': db.session, 'model': EmailNotification}
 
 
 class EmailNotificationList(ResourceList):
@@ -38,42 +40,50 @@ class EmailNotificationList(ResourceList):
         return query_
 
     view_kwargs = True
-    methods = ['GET', ]
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
+    methods = [
+        'GET',
+    ]
+    decorators = (
+        api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),
+    )
     schema = EmailNotificationSchema
-    data_layer = {'session': db.session,
-                  'model': EmailNotification,
-                  'methods': {
-                      'query': query
-                  }}
+    data_layer = {
+        'session': db.session,
+        'model': EmailNotification,
+        'methods': {'query': query},
+    }
 
 
 class EmailNotificationDetail(ResourceDetail):
     """
     Email notification detail by ID
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
+
+    decorators = (
+        api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),
+    )
     schema = EmailNotificationSchema
-    data_layer = {'session': db.session,
-                  'model': EmailNotification}
+    data_layer = {'session': db.session, 'model': EmailNotification}
 
 
 class EmailNotificationRelationshipRequired(ResourceRelationship):
     """
     Email notification Relationship (Required)
     """
+
     decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
     schema = EmailNotificationSchema
-    data_layer = {'session': db.session,
-                  'model': EmailNotification}
+    data_layer = {'session': db.session, 'model': EmailNotification}
 
 
 class EmailNotificationRelationshipOptional(ResourceRelationship):
     """
     Email notification Relationship (Optional)
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
+
+    decorators = (
+        api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),
+    )
     schema = EmailNotificationSchema
-    data_layer = {'session': db.session,
-                  'model': EmailNotification}
+    data_layer = {'session': db.session, 'model': EmailNotification}

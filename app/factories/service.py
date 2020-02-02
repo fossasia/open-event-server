@@ -1,7 +1,7 @@
 import factory
 
 import app.factories.common as common
-from app.models.service import db, Service
+from app.models.service import Service, db
 
 
 class ServiceFactory(factory.alchemy.SQLAlchemyModelFactory):

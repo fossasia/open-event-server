@@ -1,10 +1,11 @@
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_html, clean_up_string
 
 
 class Sponsor(SoftDeletionModel):
     """Sponsor model class"""
+
     __tablename__ = 'sponsors'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,8 +17,17 @@ class Sponsor(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     type = db.Column(db.String)
 
-    def __init__(self, name=None, url=None, logo_url=None, event_id=None,
-                 description=None, type=None, level=None, deleted_at=None):
+    def __init__(
+        self,
+        name=None,
+        url=None,
+        logo_url=None,
+        event_id=None,
+        description=None,
+        type=None,
+        level=None,
+        deleted_at=None,
+    ):
         self.name = name
         self.url = url
         self.logo_url = logo_url
