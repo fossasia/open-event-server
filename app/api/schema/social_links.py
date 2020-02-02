@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
@@ -22,7 +23,7 @@ class SocialLinkSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    link = fields.Url(required=True, schemes='https')
+    link = fields.Url(required=True, validate=validate.URL(schemes=["https"]))
     identifier = fields.Str(allow_none=True)
     event = Relationship(
         attribute='event',
