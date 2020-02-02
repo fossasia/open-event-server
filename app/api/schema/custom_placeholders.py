@@ -14,10 +14,10 @@ class CustomPlaceholderSchema(Schema):
 
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True)
-    original_image_url = fields.Url(required=True)
-    thumbnail_image_url = fields.Url(dump_only=True)
-    large_image_url = fields.Url(dump_only=True)
-    icon_image_url = fields.Url(dump_only=True)
+    original_image_url = fields.Url(required=True, schemes='https')
+    thumbnail_image_url = fields.Url(dump_only=True, schemes='https')
+    large_image_url = fields.Url(dump_only=True, schemes='https')
+    icon_image_url = fields.Url(dump_only=True, schemes='https')
     copyright = fields.String(allow_none=True)
     origin = fields.String(allow_none=True)
     event_sub_topic = Relationship(
