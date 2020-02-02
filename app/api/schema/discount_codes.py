@@ -25,7 +25,7 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
 
     id = fields.Integer()
     code = fields.Str(required=True)
-    discount_url = fields.Url(allow_none=True)
+    discount_url = fields.Url(allow_none=True, schemes='https')
     value = fields.Float(required=True)
     type = fields.Str(
         validate=validate.OneOf(choices=["amount", "percent"]), required=True
