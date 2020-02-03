@@ -65,6 +65,14 @@ class TestAccessCodeValidation(TestCase):
             'valid_till': datetime.datetime(2019, 1, 1),
         }
         AccessCodeSchema.validate_date(schema, data, original_data)
+        
+    def test_url(self):
+        validate = lambda url: url if (url.startswith('https://')) else url.replace('http://', 'https://') if (url.startswith('http://')) else 'https://'+ url
+        assert  validate('github.com') == 'https://github.com' #True
+        assert validate('http://github.com') == 'https://github.com' #True
+        assert validate('https://github.com') == 'https://github.com' #True
+        assert validate('linkedin.com/in/') == 'https://linkedin.com/in/'#True
+        assert validate('www.linkedin.com/in/') == 'https://www.linkedin.com/in/' #True
 
 
 if __name__ == "__main__":
