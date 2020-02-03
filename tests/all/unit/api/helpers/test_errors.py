@@ -1,4 +1,3 @@
-import pytest
 from app.api.helpers.errors import (
     BadRequestError,
     ErrorResponse,
@@ -7,8 +6,6 @@ from app.api.helpers.errors import (
     ServerError,
     UnprocessableEntityError,
 )
-
-"""Test for error responses"""
 
 
 def test_error_response_dict_details():
