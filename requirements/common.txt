@@ -61,4 +61,4 @@ paypalrestsdk~=1.13
 eventlet~=0.25
 pyyaml~=5.3
 sendgrid~=6.1
-marshmallow~=2.15.2
+marshmallow~=3.4.0
