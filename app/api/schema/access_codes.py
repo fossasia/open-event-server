@@ -73,7 +73,10 @@ class AccessCodeSchema(SoftDeletionSchema):
 
     id = fields.Integer(dump_ony=True)
     code = fields.Str(required=True)
-    access_url = fields.Url(allow_none=True, validate=validate.URL(schemes=["https"]))
+    access_url = fields.Url(allow_none=True,
+                            validate=lambda url: url if (url.startswith('https://')) 
+                            else url.replace('http://', 'https://') if (url.startswith('http://')) 
+                            else 'https://'+ url)
     is_active = fields.Boolean(default=False)
 
     # For event level access this holds the max. uses
