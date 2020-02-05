@@ -24,7 +24,6 @@ class AttendeeFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     event_id = 1
     ticket_id = None
     order_id = None
-    created_at = common.date_
     modified_at = common.date_
 
 

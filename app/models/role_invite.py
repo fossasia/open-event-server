@@ -1,6 +1,6 @@
 import random
 from datetime import datetime, timedelta
-
+from sqlalchemy.sql import func
 import pytz
 from sqlalchemy.schema import UniqueConstraint
 
@@ -31,7 +31,7 @@ class RoleInvite(SoftDeletionModel):
     role = db.relationship("Role")
 
     hash = db.Column(db.String)
-    created_at = db.Column(db.DateTime(timezone=True))
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     status = db.Column(db.String, default="pending")
 
     def __init__(

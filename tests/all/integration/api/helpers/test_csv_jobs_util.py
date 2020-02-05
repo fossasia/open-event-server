@@ -65,6 +65,7 @@ class TestExportCSV(OpenEventTestCase):
                 long_abstract='long_abstract',
                 comments='comment',
                 level='level',
+                created_at=common.date_,
             )
             db.session.commit()
             field_data = export_sessions_csv([test_session])
