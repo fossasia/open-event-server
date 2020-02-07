@@ -336,7 +336,6 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                     frontend_url=get_settings()['frontend_url'],
                 ),
                 html=MAILS[TICKET_PURCHASED]['message'].format(
-                    pdf_url=holder.pdf_url,
                     event_name=order.event.name,
                     frontend_url=get_settings()['frontend_url'],
                 ),
@@ -351,7 +350,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                     event_name=order.event.name, invoice_id=order.invoice_number
                 ),
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                    mytickets_url=get_settings()['frontend_url'] + '/my-tickets',
+                    my_tickets_url=get_settings()['frontend_url'] + '/my-tickets',
                     event_name=order.event.name,
                 ),
                 attachments=attachments,
