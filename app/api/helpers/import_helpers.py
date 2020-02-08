@@ -9,7 +9,7 @@ import requests
 from flask import current_app as app
 from flask import request
 from flask_jwt_extended import current_user
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import NotFoundError, ServerError
