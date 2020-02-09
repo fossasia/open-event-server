@@ -353,7 +353,7 @@ class UserDetail(ResourceDetail):
 
         if (
             has_access('is_admin')
-            and ('us_marketer' in data)
+            and ('is_marketer' in data)
             and data.get('is_marketer') != user.is_marketer
         ):
             user.is_marketer = not user.is_marketer
