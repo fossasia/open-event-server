@@ -43,6 +43,7 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
+from app.api.helpers.errors import UnprocessableEntityError, BadRequestError
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -282,26 +283,16 @@ def ratelimit_handler(error):
 
 @app.errorhandler(422)
 def unprocessable_entity_handler(error):
-    return make_response(json.dumps({
-            'status': 422,
-            'title': 'Unprocessable Entity'
-        }),
-        422,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
+    return UnprocessableEntityError(
+        {'source': ''}, 'Unprocessable Entity'
+    ).respond()
 
 
 @app.errorhandler(400)
 def badrequest_handler(error):
-    return make_response(json.dumps({
-            'status': 400,
-            'title': 'Bad Request'
-        }),
-        400,
-        {
-            'Content-Type': 'application/vnd.api+json'
-        })
+    return BadRequestError(
+        {'source': ''}, 'Bad Request'
+    ).respond()
 
 
 if __name__ == '__main__':
