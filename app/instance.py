@@ -286,7 +286,7 @@ def ratelimit_handler(error):
 def handle_custom_error(error):
     response = error.get_response()
     response.data = json.dumps({
-        "code": error.code,
+        "status": error.code,
         "title": error.name,
     })
     response.content_type = "application/json"
