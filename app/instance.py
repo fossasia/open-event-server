@@ -281,18 +281,16 @@ def ratelimit_handler(error):
     )
 
 
-@app.errorhandler(422)
-def unprocessable_entity_handler(error):
-    return UnprocessableEntityError(
-        {'source': ''}, 'Unprocessable Entity'
-    ).respond()
-
-
 @app.errorhandler(400)
-def badrequest_handler(error):
-    return BadRequestError(
-        {'source': ''}, 'Bad Request'
-    ).respond()
+@app.errorhandler(422)
+def handle_custom_error(error):
+    response = error.get_response()
+    response.data = json.dumps({
+        "code": error.code,
+        "title": error.name,
+    })
+    response.content_type = "application/json"
+    return response
 
 
 if __name__ == '__main__':
