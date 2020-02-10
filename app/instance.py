@@ -43,7 +43,7 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
-from app.api.helpers.errors import UnprocessableEntityError, BadRequestError
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
