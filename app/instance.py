@@ -43,6 +43,7 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
+from app.api.helpers.errors import ErrorResponse
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -282,11 +283,8 @@ def ratelimit_handler(error):
 
 @app.errorhandler(JsonApiException)
 def handle_exception(error):
-    return make_response(
-        json.dumps({'status': error.status, 'title': error.title}),
-        error.status,
-        {'Content-Type': 'application/vnd.api+json'},
-    )
+    return ErrorResponse({'source': ''}, status=error.status,
+                         detail=error.detail, title=error.title).respond()
 
 
 if __name__ == '__main__':
