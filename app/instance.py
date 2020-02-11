@@ -283,7 +283,7 @@ def ratelimit_handler(error):
 
 @app.errorhandler(JsonApiException)
 def handle_exception(error):
-    return ErrorResponse({'source': ''}, status=error.status,
+    return ErrorResponse({'source': error.source}, status=error.status,
                          detail=error.detail, title=error.title).respond()
 
 
