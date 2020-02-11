@@ -15,7 +15,7 @@ class TestAuthentication(OpenEventTestCase):
 
         with self.app.test_request_context():
             user = create_user(email='authtest@gmail.com', password='password')
-            self.assertEqual(user, db.session.query(User).get(user.id))
+            assert user == db.session.query(User).get(user.id)
 
     def test_verified_user(self):
         """Method to test if user is verified"""
@@ -24,7 +24,7 @@ class TestAuthentication(OpenEventTestCase):
             user = create_user(email='authtest@gmail.com', password='password')
             user.is_verified = False
             login_user(user)
-            self.assertEqual(AuthManager.is_verified_user(), False)
+            assert AuthManager.is_verified_user() == False
 
     def test_is_accessible(self):
         """Method to test if user is accessible(authenticated)"""
@@ -33,7 +33,7 @@ class TestAuthentication(OpenEventTestCase):
             user = create_user(email='test@test.com', password='password')
             login_user(user)
             logout_user()
-            self.assertEqual(AuthManager.is_accessible(), False)
+            assert AuthManager.is_accessible() == False
 
     def test_check_auth_admin(self):
         """Method to test proper authentication & admin rights for a user"""
@@ -42,12 +42,12 @@ class TestAuthentication(OpenEventTestCase):
             user = create_user(email='authtest@gmail.com', password='password')
             user.is_admin = True
             status = AuthManager.check_auth_admin('authtest@gmail.com', 'password')
-            self.assertEqual(True, status)
+            assert True == status
 
             user = create_user(email='authtest2@gmail.com', password='password')
             user.is_admin = False
             status = AuthManager.check_auth_admin('authtest2@gmail.com', 'password')
-            self.assertEqual(False, status)
+            assert False == status
 
 
 if __name__ == '__main__':
