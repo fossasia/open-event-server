@@ -280,7 +280,7 @@ def ratelimit_handler(error):
     )
 
 
-@app.errorhandler(Exception)
+@app.errorhandler(JsonApiException)
 def handle_exception(error):
     return make_response(
         json.dumps({'status': error.status, 'title': error.title}),
