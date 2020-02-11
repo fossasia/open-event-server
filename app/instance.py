@@ -43,7 +43,8 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
-
+from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
+from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -281,16 +282,16 @@ def ratelimit_handler(error):
     )
 
 
-@app.errorhandler(400)
-@app.errorhandler(422)
-def handle_custom_error(error):
-    response = error.get_response()
-    response.data = json.dumps({
-        "code": error.code,
-        "title": error.name,
-    })
-    response.content_type = "application/json"
-    return response
+@app.errorhandler(UnprocessableEntity)
+@app.errorhandler(MethodNotAllowed)
+@app.errorhandler(ForbiddenException)
+@app.errorhandler(ConflictException)
+def handle_exception(error):
+    return make_response(
+        json.dumps(jsonapi_errors([error.to_dict()])),
+        error.status,
+        {'Content-Type': 'application/vnd.api+json'},
+    )
 
 
 if __name__ == '__main__':
