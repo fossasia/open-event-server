@@ -9,7 +9,7 @@ import sqlalchemy as sa
 import stripe
 from celery.signals import after_task_publish
 from envparse import env
-from flask import Flask, json, make_response
+from flask import Flask, json, make_response, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
@@ -283,8 +283,9 @@ def ratelimit_handler(error):
 
 @app.errorhandler(JsonApiException)
 def handle_exception(error):
-    return ErrorResponse({'source': error.source}, status=error.status,
-                         detail=error.detail, title=error.title).respond()
+    response = jsonify(error.to_dict())
+    response.status_code = error.status 
+    return response
 
 
 if __name__ == '__main__':
