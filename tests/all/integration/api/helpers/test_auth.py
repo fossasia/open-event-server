@@ -46,9 +46,9 @@ def test_check_auth_admin(app):
     """Method to test proper authentication & admin rights for a user"""
 
     with app.test_request_context():
-        user = create_user(email='authtest@gmail.com', password='password')
+        user = create_user(email='authtest1@gmail.com', password='password')
         user.is_admin = True
-        status = AuthManager.check_auth_admin('authtest@gmail.com', 'password')
+        status = AuthManager.check_auth_admin('authtest1@gmail.com', 'password')
         assert True == status
 
         user = create_user(email='authtest2@gmail.com', password='password')
