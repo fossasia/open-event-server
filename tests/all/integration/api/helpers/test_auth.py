@@ -1,7 +1,5 @@
 import pytest
-from flask import Flask
 from flask_login import login_user, logout_user
-from flask import Flask, session
 from app.api.helpers.auth import AuthManager
 from app.models import db
 from app.models.user import User
