@@ -1,6 +1,41 @@
 version: 2
 jobs:
-  build:
+  dependencies:
+    docker:
+      - image: circleci/python:3.7.4-node
+
+    working_directory: ~/code
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1.3-dependencies-
+
+      - run:
+          name: Install Python Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --exists-action w -r requirements/tests.txt
+
+      - run:
+          name: Install Node Dependencies
+          command: yarn
+
+      - save_cache:
+          paths:
+            - ./venv
+            - ./node_modules
+            - ~/.cache/yarn
+            - ~/.yarn/bin
+          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+
+  dredd:
     docker:
       - image: circleci/python:3.7.4-node
         environment:
@@ -27,28 +62,50 @@ jobs:
             - v1.3-dependencies-
 
       - run:
-          name: Install Python Dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --exists-action w -r requirements/tests.txt
-      
-      - run:
-          name: Install Node Dependencies
-          command: yarn
-
-      - save_cache:
-          paths:
-            - ./venv
-            - ./node_modules
-            - ~/.cache/yarn
-            - ~/.yarn/bin
-          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
-
-      - run:
           name: Create API blueprint
           command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
       
       - run:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd
+
+  pytype:
+    docker:
+      - image: circleci/python:3.7.4-node
+
+    working_directory: ~/code
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1.3-dependencies-
+
+      - restore_cache:
+          keys:
+            - v1-pytype
+
+      - run:
+          name: Test pytype
+          command: . venv/bin/activate && pytype
+
+      - save_cache:
+          paths:
+            - ./.pytype
+          key: v1-pytype
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - dependencies
+      - dredd:
+          requires:
+            - dependencies
+      - pytype:
+          requires:
+            - dependencies
