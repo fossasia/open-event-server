@@ -69,6 +69,35 @@ jobs:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd
 
+  pytype:
+    docker:
+      - image: circleci/python:3.7.4-node
+
+    working_directory: ~/code
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1.3-dependencies-
+
+      - restore_cache:
+        keys:
+          - v1-pytype
+
+      - run:
+          name: Test pytype
+          command: . venv/bin/activate && pytype
+
+      - save_cache:
+        paths:
+          - ./.pytype
+        key: v1-pytype
+
 workflows:
   version: 2
   build-and-test:
@@ -77,3 +106,6 @@ workflows:
       - build:
           requires:
             - dependencies
+      - pytest:
+        requires:
+          - dependencies
