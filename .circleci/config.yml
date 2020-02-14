@@ -9,10 +9,13 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          command: cat requirements/*.txt > requirements/combined.txt
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.3-dependencies-
 
@@ -33,7 +36,7 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+          key: v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
 
   dredd:
     docker:
@@ -54,10 +57,13 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          command: cat requirements/*.txt > requirements/combined.txt
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.3-dependencies-
 
@@ -78,10 +84,13 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          command: cat requirements/*.txt > requirements/combined.txt
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
+            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.3-dependencies-
 
