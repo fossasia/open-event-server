@@ -107,5 +107,5 @@ workflows:
           requires:
             - dependencies
       - pytest:
-        requires:
-          - dependencies
+          requires:
+            - dependencies
