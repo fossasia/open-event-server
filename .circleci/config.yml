@@ -17,11 +17,11 @@ jobs:
             - v1.3-dependencies-
 
       - run:
-        name: Install Python Dependencies
-        command: |
-          python3 -m venv venv
-          . venv/bin/activate
-          pip install --exists-action w -r requirements/tests.txt
+          name: Install Python Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --exists-action w -r requirements/tests.txt
 
       - run:
           name: Install Node Dependencies
