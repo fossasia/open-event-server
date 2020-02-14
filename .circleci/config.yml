@@ -102,10 +102,13 @@ jobs:
           name: Test pytype
           command: . venv/bin/activate && pytype
 
+      - run:
+          command: ls -alR .pytype/ | md5sum > requirements/pytype.txt
+
       - save_cache:
           paths:
             - ./.pytype
-          key: v1-pytype
+          key: v1-pytype-{{ checksum "requirements/pytype.txt" }}
 
 workflows:
   version: 2
