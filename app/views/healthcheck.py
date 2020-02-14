@@ -5,7 +5,6 @@ from redis.exceptions import ConnectionError
 from sentry_sdk import capture_exception, capture_message
 
 from app.models import db
-from app.api.helpers.tasks import celery
 
 
 def health_check_celery():
@@ -13,6 +12,8 @@ def health_check_celery():
     Check health status of celery and redis broker
     :return:
     """
+    from app.api.helpers.tasks import celery
+
     try:
         d = celery.control.inspect().stats()
         if not d:
