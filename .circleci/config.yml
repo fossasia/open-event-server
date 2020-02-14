@@ -35,7 +35,7 @@ jobs:
             - ~/.yarn/bin
           key: v1.3-dependencies-{{ checksum "requirements/tests.txt" }}-{{ checksum "package.json" }}
 
-  build:
+  dredd:
     docker:
       - image: circleci/python:3.7.4-node
         environment:
@@ -86,24 +86,24 @@ jobs:
             - v1.3-dependencies-
 
       - restore_cache:
-        keys:
-          - v1-pytype
+          keys:
+            - v1-pytype
 
       - run:
           name: Test pytype
           command: . venv/bin/activate && pytype
 
       - save_cache:
-        paths:
-          - ./.pytype
-        key: v1-pytype
+          paths:
+            - ./.pytype
+          key: v1-pytype
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - dependencies
-      - build:
+      - dredd:
           requires:
             - dependencies
       - pytype:
