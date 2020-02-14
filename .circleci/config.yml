@@ -106,6 +106,6 @@ workflows:
       - build:
           requires:
             - dependencies
-      - pytest:
+      - pytype:
           requires:
             - dependencies
