@@ -369,6 +369,7 @@ def import_event_json(task_handle, zip_path, creator_id):
     except Exception as e:
         raise make_error('event', er=e)
     # create other services
+    item = []  # TODO: Remove workaround for pytype
     try:
         service_ids = {}
         for item in IMPORT_SERIES:
@@ -384,7 +385,7 @@ def import_event_json(task_handle, zip_path, creator_id):
     except IOError:
         db.session.delete(new_event)
         db.session.commit()
-        raise NotFoundError('File %s missing in event zip' % item[0])
+        raise NotFoundError('file', 'File %s missing in event zip' % item[0])
     except ValueError:
         db.session.delete(new_event)
         db.session.commit()
