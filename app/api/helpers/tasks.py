@@ -80,31 +80,31 @@ def empty_attachments_send(mail_client, message):
 
 @celery.task(name='send.email.post.sendgrid')
 def send_email_task_sendgrid(payload, headers, smtp_config):
+    message = Mail(
+        from_email=From(payload['from'], payload['fromname']),
+        to_emails=payload['to'],
+        subject=payload['subject'],
+        html_content=payload["html"],
+    )
+    if payload['attachments'] is not None:
+        for attachment in payload['attachments']:
+            with open(attachment, 'rb') as f:
+                file_data = f.read()
+                f.close()
+            encoded = base64.b64encode(file_data).decode()
+            attachment = Attachment()
+            attachment.file_content = FileContent(encoded)
+            attachment.file_type = FileType('application/pdf')
+            attachment.file_name = FileName(payload['to'])
+            attachment.disposition = Disposition('attachment')
+            message.add_attachment(attachment)
+    sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
+    logging.info(
+        'Sending an email regarding {} on behalf of {}'.format(
+            payload["subject"], payload["from"]
+        )
+    )
     try:
-        message = Mail(
-            from_email=From(payload['from'], payload['fromname']),
-            to_emails=payload['to'],
-            subject=payload['subject'],
-            html_content=payload["html"],
-        )
-        if payload['attachments'] is not None:
-            for attachment in payload['attachments']:
-                with open(attachment, 'rb') as f:
-                    file_data = f.read()
-                    f.close()
-                encoded = base64.b64encode(file_data).decode()
-                attachment = Attachment()
-                attachment.file_content = FileContent(encoded)
-                attachment.file_type = FileType('application/pdf')
-                attachment.file_name = FileName(payload['to'])
-                attachment.disposition = Disposition('attachment')
-                message.add_attachment(attachment)
-        sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
-        logging.info(
-            'Sending an email regarding {} on behalf of {}'.format(
-                payload["subject"], payload["from"]
-            )
-        )
         sendgrid_client.send(message)
         logging.info('Email sent successfully')
     except urllib.error.HTTPError as e:
@@ -134,16 +134,16 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
         }
     }
 
+    mailer = Mailer(mailer_config)
+    mailer.start()
+    message = Message(author=payload['from'], to=payload['to'])
+    message.subject = payload['subject']
+    message.plain = strip_tags(payload['html'])
+    message.rich = payload['html']
+    if payload['attachments'] is not None:
+        for attachment in payload['attachments']:
+            message.attach(name=attachment)
     try:
-        mailer = Mailer(mailer_config)
-        mailer.start()
-        message = Message(author=payload['from'], to=payload['to'])
-        message.subject = payload['subject']
-        message.plain = strip_tags(payload['html'])
-        message.rich = payload['html']
-        if payload['attachments'] is not None:
-            for attachment in payload['attachments']:
-                message.attach(name=attachment)
         mailer.send(message)
         logging.info('Message sent via SMTP')
     except urllib.error.HTTPError as e:

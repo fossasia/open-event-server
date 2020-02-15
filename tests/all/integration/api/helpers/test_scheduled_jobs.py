@@ -3,9 +3,15 @@ import datetime
 from app.api.helpers.scheduled_jobs import (
     delete_ticket_holders_no_order_id,
     event_invoices_mark_due,
+    send_monthly_event_invoice,
 )
+import app.factories.common as common
 from app.factories.attendee import AttendeeFactory
+from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.event_invoice import EventInvoiceFactory
+from app.factories.user import UserFactory
+from app.factories.event import EventFactoryBasic
+from app.factories.order import OrderFactory
 from app.models import db
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
@@ -39,7 +45,7 @@ class TestScheduledJobs(OpenEventTestCase):
         """Method to test deleting ticket holders with no order id after expiry time"""
 
         with self.app.test_request_context():
-            attendee = AttendeeFactory()
+            attendee = AttendeeFactory(created_at=common.date_)
             db.session.commit()
             attendee_id = attendee.id
             delete_ticket_holders_no_order_id()
@@ -77,3 +83,31 @@ class TestScheduledJobs(OpenEventTestCase):
             delete_ticket_holders_no_order_id()
             ticket_holder = TicketHolder.query.get(attendee_id)
             self.assertIsNot(ticket_holder, None)
+
+    def test_send_monthly_invoice(self):
+        """Method to test monthly invoices"""
+
+        with self.app.test_request_context():
+            TicketFeesFactory(service_fee=10.23, maximum_fee=11)
+
+            test_event = EventFactoryBasic(state='published')
+
+            test_user = UserFactory()
+
+            test_order = OrderFactory(status='completed')
+            test_order.completed_at = datetime.datetime.now() - datetime.timedelta(
+                days=30
+            )
+            test_order.amount = 100
+            test_order.event = test_event
+
+            test_ticket_holder = AttendeeFactory()
+            test_ticket_holder.event = test_event
+            test_ticket_holder.order = test_order
+
+            test_event.owner = test_user
+            db.session.commit()
+
+            send_monthly_event_invoice()
+            event_invoice = EventInvoice.query.get(1)
+            self.assertEqual(event_invoice.amount, 10.23)

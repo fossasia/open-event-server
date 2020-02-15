@@ -27,7 +27,6 @@ class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
     audio_url = common.url_
     signup_url = common.url_
     state = "accepted"
-    created_at = common.date_
     submitted_at = common.date_
     is_mail_sent = True
     event_id = 1
