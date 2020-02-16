@@ -29,8 +29,9 @@ before_script:
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
   
-script:
-  - nosetests tests/ -v --with-coverage
+script: |
+  nosetests tests/ -v --with-coverage -I tests/all/integration/api/helpers/test_auth.py
+  pytest tests/all/integration/api/helpers/test_auth.py
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
@@ -40,3 +41,4 @@ branches:
   only:
     - master
     - development
+    - pytest
