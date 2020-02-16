@@ -41,4 +41,3 @@ branches:
   only:
     - master
     - development
-    - pytest
