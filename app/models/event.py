@@ -465,7 +465,7 @@ class Event(SoftDeletionModel):
 
     def calc_tickets_sold_prev_month(self):
         """Calculate tickets sold in the previous month"""
-        previous_month = datetime.datetime.now().month - 1
+        previous_month = datetime.now().month - 1
         return self.tickets_sold_object.filter_by(completed_at=previous_month).count()
 
     def calc_total_tickets_count(self):

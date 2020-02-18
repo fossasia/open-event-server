@@ -84,9 +84,9 @@ def is_downloadable(url):
     header = h.headers
     content_type = header.get('content-type')
     # content_length = header.get('content-length', 1e10)
-    if 'text' in content_type.lower():
+    if content_type and 'text' in content_type.lower():
         return False
-    if 'html' in content_type.lower():
+    if content_type and 'html' in content_type.lower():
         return False
     return True
 

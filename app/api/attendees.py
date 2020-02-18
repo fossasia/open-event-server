@@ -285,7 +285,7 @@ class AttendeeDetail(ResourceDetail):
                 checkout_times = (
                     obj.checkout_times.split(',') if obj.checkout_times else []
                 )
-                checkout_times.append(str(datetime.utcnow()))
+                checkout_times.append(str(datetime.datetime.utcnow()))
                 data['checkout_times'] = ','.join(checkout_times)
 
         if 'attendee_notes' in data:
