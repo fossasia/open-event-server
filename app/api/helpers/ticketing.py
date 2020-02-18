@@ -33,7 +33,9 @@ class TicketingManager:
         qty = 0
         ticket_ids = [ticket.id for ticket in discount_code.tickets]
         old_holders = get_count(
-            TicketHolder.query.filter(TicketHolder.ticket_id.in_(ticket_ids))
+            TicketHolder.query.filter(
+                TicketHolder.ticket_id.in_(ticket_ids)  # pytype: disable=attribute-error
+            )
             .join(Order)
             .filter(Order.status.in_(['completed', 'placed']))
         )
