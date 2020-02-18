@@ -284,7 +284,7 @@ def ratelimit_handler(error):
 
 @app.errorhandler(JsonApiException)
 def handle_exception(error):
-    return error.to_dict()
+    return error.respond()
 
 
 if __name__ == '__main__':
