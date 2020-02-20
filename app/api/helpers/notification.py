@@ -123,7 +123,7 @@ def send_notif_after_import(
 
 
 def send_notif_after_export(user, event_name, download_url=None, error_text=None):
-    """send notification after event import"""
+    """send notification after event export"""
     if error_text:
         send_notification(
             user=user,
@@ -162,7 +162,7 @@ def send_notif_monthly_fee_payment(
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_notification_actions(event_id, link)
         notification = NOTIFS[MONTHLY_PAYMENT_NOTIF]
-        title = notification['title'].format(date=previous_month, event_name=event_name)
+        title = notification['subject'].format(date=previous_month, event_name=event_name)
         message = notification['message'].format(
             event_name=event_name, date=previous_month, amount=amount, app_name=app_name,
         )
@@ -190,7 +190,7 @@ def send_followup_notif_monthly_fee_payment(
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_follow_up_notification_actions(event_id, link)
         notification = NOTIFS[MONTHLY_PAYMENT_FOLLOWUP_NOTIF]
-        title = notification['title'].format(date=previous_month, event_name=event_name)
+        title = notification['subject'].format(date=previous_month, event_name=event_name)
         message = notification['message'].format(
             event_name=event_name, date=previous_month, amount=amount, app_name=app_name
         )
