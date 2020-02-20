@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-SERVER_VERSION = '1.12.0'
+SERVER_VERSION = '1.13.1'
 
 info_route = Blueprint('info', __name__)
 _build = {'version': SERVER_VERSION}

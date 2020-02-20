@@ -1,5 +1,16 @@
 ## Changelog
 
+#### v1.13.1 (2020-02-20):
+
+- Fix keyerror due to my_tickets_url resulting in failure of order patch.
+
+#### v1.13.0 (2020-02-20):
+
+- Fix cron job timings preventing multiple emails to attendees
+- Change email links to be more accessible
+- Fix invoice email generation errors
+- Add proper etag support by changing to weak etags
+
 #### v1.12.0 (2020-02-02):
 
 - Add check if donation ticket has payment method enabled
