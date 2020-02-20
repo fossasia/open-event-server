@@ -30,7 +30,7 @@ before_script:
   - bash scripts/test_multiple_heads.sh
   
 script: 
-  - nosetests tests/ --ignore-files="test_auth\.py" -v --with-coverage 
+  - nosetests tests/ --ignore-files="test_auth\.py" -v --with-coverage && pytest tests/all/integration/api/helpers/test_auth.py
 
 
 after_success:
