@@ -217,7 +217,6 @@ class User(SoftDeletionModel):
         return self._is_role(OWNER, event_id)
 
     def is_organizer(self, event_id):
-        # type: (object) -> object
         return self._is_role(ORGANIZER, event_id)
 
     def is_coorganizer(self, event_id):
@@ -248,7 +247,6 @@ class User(SoftDeletionModel):
 
     @hybrid_property
     def is_user_organizer(self):
-        # type: (object) -> object
         return self._is_role(ORGANIZER)
 
     @hybrid_property

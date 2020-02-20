@@ -22,7 +22,7 @@ float_ = '1.23456789'
 timezone_ = 'UTC'
 environment_ = 'testing'
 secret_ = 'ABCDefghIJKLmnop'
-fee_ = '1.23'
+fee_ = 1.23
 slug_ = factory.Sequence(lambda n: 'example_slug{0}'.format(n))
 
 
