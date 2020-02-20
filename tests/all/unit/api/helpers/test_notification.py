@@ -1,5 +1,4 @@
 import unittest
-from app.models import db
 from flask import current_app
 from app.api.helpers.notification import (
     send_notif_new_session_organizer,
@@ -12,7 +11,6 @@ from app.api.helpers.notification import (
     send_notif_session_accept_reject,
     send_notif_ticket_purchase_organizer,
 )
-from app.api.helpers.db import save_to_db
 import app.factories.common as common
 from app.factories.session import SessionFactory
 from app.factories.user import UserFactory
