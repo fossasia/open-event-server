@@ -1,7 +1,8 @@
 from flask_rest_jsonapi.exceptions import JsonApiException
+from app.api.helpers.errors import ErrorResponse
 
 
-class UnprocessableEntity(JsonApiException):
+class UnprocessableEntity(JsonApiException, ErrorResponse):
     """
     Default class for 422 Error
     """
@@ -10,7 +11,7 @@ class UnprocessableEntity(JsonApiException):
     status = 422
 
 
-class ConflictException(JsonApiException):
+class ConflictException(JsonApiException, ErrorResponse):
     """
     Default class for 409 Error
     """
@@ -19,7 +20,7 @@ class ConflictException(JsonApiException):
     status = 409
 
 
-class ForbiddenException(JsonApiException):
+class ForbiddenException(JsonApiException, ErrorResponse):
     """
     Default class for 403 Error
     """
@@ -28,7 +29,7 @@ class ForbiddenException(JsonApiException):
     status = 403
 
 
-class MethodNotAllowed(JsonApiException):
+class MethodNotAllowed(JsonApiException, ErrorResponse):
     """
     Default Class to throw HTTP 405 Exception
     """
