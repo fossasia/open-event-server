@@ -1,4 +1,4 @@
-pycparser==2.19
+pycparser==2.20
 Flask~=1.1.1
 Flask-Limiter~=1.2.1
 Flask-Script~=2.0.6
