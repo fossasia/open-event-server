@@ -11,7 +11,7 @@ class UnprocessableEntity(JsonApiException):
     status = 422
 
 
-class ConflictException(JsonApiException, ErrorResponse):
+class ConflictException(JsonApiException):
     """
     Default class for 409 Error
     """
@@ -20,7 +20,7 @@ class ConflictException(JsonApiException, ErrorResponse):
     status = 409
 
 
-class ForbiddenException(JsonApiException, ErrorResponse):
+class ForbiddenException(JsonApiException):
     """
     Default class for 403 Error
     """
@@ -29,7 +29,7 @@ class ForbiddenException(JsonApiException, ErrorResponse):
     status = 403
 
 
-class MethodNotAllowed(JsonApiException, ErrorResponse):
+class MethodNotAllowed(JsonApiException):
     """
     Default Class to throw HTTP 405 Exception
     """
