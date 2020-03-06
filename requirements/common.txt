@@ -1,4 +1,4 @@
-pycparser==2.19
+pycparser==2.20
 Flask~=1.1.1
 Flask-Limiter~=1.2.1
 Flask-Script~=2.0.6
@@ -16,7 +16,7 @@ requests[security]~=2.23
 psycopg2-binary~=2.8.4
 SQLAlchemy-Utils~=0.36.1
 itsdangerous~=1.1
-humanize~=1.0.0
+humanize~=2.0.0
 celery~=4.4
 redis>=3.4.1
 apscheduler~=3.6.3
@@ -36,7 +36,7 @@ pycryptodome~=3.9.7
 oauth2~=1.9
 qrcode~=6.1
 python-magic~=0.4
-python-dotenv~=0.11.0
+python-dotenv~=0.12.0
 python-geoip~=1.2
 marrow.mailer~=4.0
 flask-cors~=3.0.8
