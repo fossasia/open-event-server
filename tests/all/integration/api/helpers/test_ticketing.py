@@ -10,7 +10,7 @@ from tests.all.integration.utils import OpenEventTestCase
 
 class TestTicketing(OpenEventTestCase):
     def test_match_discount_quantity(self):
-        """Method to test the count query of sold tickets"""
+        """Method to test the quantity calculation of discount code"""
 
         with self.app.test_request_context():
             ticket = TicketFactory()
