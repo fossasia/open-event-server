@@ -1,5 +1,14 @@
 ## Changelog
 
+#### v1.14.0 (2020-03-08):
+
+- Fix discount code quantity calculation
+- Dependency updates
+
+#### v1.13.1 (2020-03-05):
+
+- Fix ticket sold count query
+
 #### v1.13.1 (2020-02-20):
 
 - Fix keyerror due to my_tickets_url resulting in failure of order patch.
