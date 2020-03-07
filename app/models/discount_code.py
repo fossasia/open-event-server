@@ -1,7 +1,10 @@
 from datetime import datetime
 from sqlalchemy.sql import func
+from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
+from app.models.order import Order
+from app.models.ticket_holder import TicketHolder
 
 TICKET = 'ticket'
 EVENT = 'event'
@@ -74,6 +77,22 @@ class DiscountCode(SoftDeletionModel):
 
     def __str__(self):
         return self.__repr__()
+
+    def get_confirmed_attendees_query(self):
+        return (
+            TicketHolder.query.filter_by(deleted_at=None)
+            .join(Order)
+            .filter_by(discount_code_id=self.id, deleted_at=None)
+            .filter(Order.status.in_(['completed', 'placed']))
+        )
+
+    @property
+    def confirmed_attendees(self):
+        return self.get_confirmed_attendees_query().all()
+
+    @property
+    def confirmed_attendees_count(self):
+        return get_count(self.get_confirmed_attendees_query())
 
     @property
     def serialize(self):
