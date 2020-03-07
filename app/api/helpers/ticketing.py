@@ -34,12 +34,14 @@ class TicketingManager:
         ticket_ids = [ticket.id for ticket in discount_code.tickets]
         old_holders = discount_code.confirmed_attendees_count
         if ticket_holders:
+            # pytype: disable=attribute-error
             qty = get_count(
                 TicketHolder.query.filter(
                     TicketHolder.id.in_(ticket_holders),
                     TicketHolder.ticket_id.in_(ticket_ids),
                 )
             )
+            # pytype: enable=attribute-error
         elif tickets:
             for ticket in tickets:
                 if int(ticket['id']) in ticket_ids:
