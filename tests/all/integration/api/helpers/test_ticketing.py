@@ -1,11 +1,9 @@
 from app.api.helpers.ticketing import TicketingManager
-from app.factories.attendee import AttendeeFactory, AttendeeFactoryBase
+from app.factories.attendee import AttendeeFactoryBase
 from app.factories.order import OrderFactory
 from app.factories.ticket import TicketFactory
 from app.factories.discount_code import DiscountCodeTicketFactory
 from app.models import db
-
-from app.models.discount_code import DiscountCode
 
 from tests.all.integration.utils import OpenEventTestCase
 
