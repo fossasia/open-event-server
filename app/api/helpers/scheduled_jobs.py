@@ -302,17 +302,27 @@ def send_monthly_event_invoice():
 def setup_scheduled_task(sender, **kwargs):
     from celery.schedules import crontab
 
-    sender.add_periodic_task(crontab(hour='*/5', minute=30), send_after_event_mail)
-    sender.add_periodic_task(crontab(minute=0, hour=0), send_event_fee_notification)
+    # Every day at 5:30
+    sender.add_periodic_task(crontab(hour=5, minute=30), send_after_event_mail)
+    # Every 1st day of month at 0:00
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0, day_of_month=1), send_event_fee_notification
+    )
+    # Every 1st day of month at 0:00
     sender.add_periodic_task(
         crontab(minute=0, hour=0, day_of_month=1), send_event_fee_notification_followup
     )
+    # Every day at 5:30
     sender.add_periodic_task(
-        crontab(hour='*/5', minute=30), change_session_state_on_event_completion
+        crontab(hour=5, minute=30), change_session_state_on_event_completion
     )
+    # Every 45 minutes
     sender.add_periodic_task(crontab(minute='*/45'), expire_pending_tickets)
+    # Every 1st day of month at 0:00
     sender.add_periodic_task(
         crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice
     )
-    sender.add_periodic_task(crontab(minute=0, hour='*/5'), event_invoices_mark_due)
+    # Every day at 5:00
+    sender.add_periodic_task(crontab(minute=0, hour=5), event_invoices_mark_due)
+    # Every 5 minutes
     sender.add_periodic_task(crontab(minute='*/5'), delete_ticket_holders_no_order_id)
