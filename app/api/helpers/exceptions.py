@@ -1,5 +1,4 @@
 from flask_rest_jsonapi.exceptions import JsonApiException
-from app.api.helpers.errors import ErrorResponse
 
 
 class UnprocessableEntity(JsonApiException):
