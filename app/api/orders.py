@@ -1032,8 +1032,8 @@ def process_transaction(order_identifier, txn_token):
     '/orders/<string:order_identifier>/paytm/transaction-status', methods=['GET']
 )
 def get_transaction_status(order_identifier):
-    paytm_params = dict()
-    paytm_checksum_params = dict()
+    paytm_params = {}
+    paytm_checksum_params = {}
     url = ""
     paytm_mode = get_settings()['paytm_mode']
     merchant_id = (
