@@ -171,7 +171,7 @@ def create_order():
             )
     attendee_list = []
     for ticket in tickets:
-        for ticket_amount in range(ticket['quantity']):
+        for _ in range(ticket['quantity']):
             attendee = TicketHolder(
                 **result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id'])
             )
