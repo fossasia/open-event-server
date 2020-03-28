@@ -200,6 +200,7 @@ def create_app():
                 CeleryIntegration(),
                 SqlalchemyIntegration(),
             ],
+            traces_sample_rate=0.1
         )
 
     # redis
