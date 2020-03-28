@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "open-event.name" . }}-web
+    helm.sh/chart: {{ include "open-event.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: {{ include "open-event.name" . }}
+  name: open-event-server
+spec:
+  ports:
+  - name: rest
+    port: {{ .Values.server.servicePort }}
+    targetPort: {{ .Values.server.containerPort }}
+  selector:
+    app.kubernetes.io/name: {{ include "open-event.name" . }}-web
