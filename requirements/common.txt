@@ -63,3 +63,8 @@ eventlet~=0.25
 pyyaml~=5.3
 sendgrid~=6.2
 marshmallow~=2.15.2
+
+# GraphQL support
+graphene-sqlalchemy~=2.2.2
+flask-graphql~=2.0.1
+graphene-sqlalchemy-filter~=1.10.2

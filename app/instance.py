@@ -39,6 +39,7 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
+from app.graphql import views as graphql_views
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -74,6 +75,7 @@ def create_app():
     global app_created
     if not app_created:
         BlueprintsManager.register(app)
+        graphql_views.init_app(app)
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
