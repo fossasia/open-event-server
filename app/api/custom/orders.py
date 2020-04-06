@@ -64,7 +64,7 @@ def resend_emails():
     """
     Sends confirmation email for pending and completed orders on organizer request
     :param order_identifier:
-    :return: JSON response if the email was succesfully sent
+    :return: JSON response if the email was successfully sent
     """
     order_identifier = request.json['data']['order']
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
@@ -93,7 +93,7 @@ def resend_emails():
             )
             return jsonify(
                 status=True,
-                message="Verification emails for order : {} has been sent succesfully".format(
+                message="Verification emails for order : {} has been sent successfully".format(
                     order_identifier
                 ),
             )
