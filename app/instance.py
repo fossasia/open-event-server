@@ -202,7 +202,7 @@ def create_app():
                 CeleryIntegration(),
                 SqlalchemyIntegration(),
             ],
-            traces_sample_rate=0.1
+            traces_sample_rate=app.config['SENTRY_TRACES_SAMPLE_RATE'],
         )
 
     # redis

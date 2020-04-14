@@ -1,6 +1,6 @@
 ## Changelog
 
-#### v1.15.0 (Unreleased)
+#### v1.15.0 (2020-04-15):
 
 **BREAKING CHANGE**
 We are making two-fold change in the underlying DB, we are upgrading from postgres 10 to 12, which was a long time due. And also, we are going to use postgis in future for nearby event fetching, hence we are doing this now in order to avoid changing DB layer later again in future.
@@ -20,6 +20,12 @@ Note that if you changed the user and DB name using enironment variables, you ha
 `docker-compose exec -T postgres psql -U open_event_user -d open_event < bak.sql`
 7. Start the servers up  
 `docker-compose up -d`
+
+- GraphQL alpha trial
+- Allow old dates in session PATCH requests
+- Add postgis DB for future use
+- Integrate Sentry APM tracing support
+- Bug fixes and dependency updates
 
 #### v1.14.0 (2020-03-08):
 
