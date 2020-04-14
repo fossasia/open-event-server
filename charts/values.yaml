@@ -166,13 +166,8 @@ frontend:
   exportPort: 4200
   serviceType: NodePort
   serviceName: rest
-  repo: ""
-  tag: ""
+  repo: eventyay/open-event-frontend
+  tag: latest
   imagePullPolicy: Always
   securityContext: {}
   imagePullSecrets: []
-  env:
-    - name: api_host
-      value: "api_host"
-    - name: google_api_key
-      value: "google_api_key"
