@@ -141,7 +141,6 @@ class Event(SoftDeletionModel):
     )
     owner = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -151,7 +150,6 @@ class Event(SoftDeletionModel):
     )
     organizers = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -160,7 +158,6 @@ class Event(SoftDeletionModel):
     )
     coorganizers = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -169,7 +166,6 @@ class Event(SoftDeletionModel):
     )
     track_organizers = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id,'
         ' Role.name == "track_organizer"))',
@@ -179,7 +175,6 @@ class Event(SoftDeletionModel):
     )
     registrars = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -188,7 +183,6 @@ class Event(SoftDeletionModel):
     )
     moderators = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -198,7 +192,6 @@ class Event(SoftDeletionModel):
     # staff
     users = db.relationship(
         'User',
-        viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
         ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
@@ -496,8 +489,8 @@ class Event(SoftDeletionModel):
         orders = Order.query.filter_by(event_id=self.id, status='completed').all()
         monthly_revenue = sum(
             o.amount
-                for o in orders
-                if o.completed_at and o.completed_at.month == previous_month
+            for o in orders
+            if o.completed_at and o.completed_at.month == previous_month
         )
         return monthly_revenue
 

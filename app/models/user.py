@@ -102,7 +102,6 @@ class User(SoftDeletionModel):
     discount_codes = db.relationship('DiscountCode', backref="user")
     marketer_events = db.relationship(
         'Event',
-        viewonly=True,
         secondary='join(UserSystemRole, CustomSysRole,'
         ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
         primaryjoin='UserSystemRole.user_id == User.id',
@@ -110,7 +109,6 @@ class User(SoftDeletionModel):
     )
     sales_admin_events = db.relationship(
         'Event',
-        viewonly=True,
         secondary='join(UserSystemRole, CustomSysRole,'
         ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
         primaryjoin='UserSystemRole.user_id == User.id',
