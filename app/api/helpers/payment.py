@@ -283,6 +283,7 @@ class PayPalPaymentsManager:
         :param paypal_payer_id: payer_id
         :return: Result of the transaction.
         """
+        PayPalPaymentsManager.configure_paypal()
 
         payment = paypalrestsdk.Payment.find(paypal_payment_id)
 
