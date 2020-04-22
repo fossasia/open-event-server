@@ -60,7 +60,7 @@ Flask-Elasticsearch==0.2
 paypalrestsdk==1.13
 eventlet==0.25
 pyyaml==5.3
-sendgrid==6.2
+sendgrid==6.2.2
 marshmallow==2.15.2
 
 # GraphQL support
