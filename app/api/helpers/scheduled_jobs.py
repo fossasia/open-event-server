@@ -3,7 +3,6 @@ import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask import render_template
 from flask_celeryext import RequestContextTask
 
@@ -32,7 +31,9 @@ from app.models.speaker import Speaker
 from app.models.ticket_fee import TicketFees, get_fee
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
+import logging
 
+logger = logging.getLogger(__name__)
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')
 def send_after_event_mail():
@@ -256,9 +257,9 @@ def send_monthly_event_invoice():
                     db.session.query(TicketFees).filter_by(currency=currency).one()
                 )
             except NoResultFound:
-                raise ObjectNotFound(
-                    {'source': ''}, 'Ticket Fee not set for {}'.format(currency)
-                )
+                logger.error('Ticket Fee not found for event id {id}'.format(id=event.id))
+                continue
+
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
