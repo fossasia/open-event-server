@@ -28,7 +28,7 @@ SQLAlchemy-Continuum==1.3.9
 arrow==0.15.5 # TODO(Areeb): Only used in 1 place. Removes
 bleach==3.1.4
 stripe==2.45.0
-xhtml2pdf==0.2
+xhtml2pdf==0.2.4
 flask-caching==1.8
 forex-python==1.5
 pycryptodome==3.9.7
