@@ -25,26 +25,25 @@ gunicorn==20.0
 boto==2.49
 geoip2==3.0.0
 SQLAlchemy-Continuum==1.3.9
-arrow==0.15.5
-unicode-slugify==0.1
+arrow==0.15.5 # TODO(Areeb): Only used in 1 place. Removes
 bleach==3.1
 stripe==2.45.0
 xhtml2pdf==0.2
 flask-caching==1.8
 forex-python==1.5
 pycryptodome==3.9.7
-oauth2==1.9
+oauth2~=1.9.0
 qrcode==6.1
-python-magic==0.4
+python-magic==0.4.15
 python-dotenv==0.13.0
 python-geoip==1.2
 marrow.mailer==4.0
 flask-cors==3.0.8
-python-pentabarf-xml==0.20  # leave versions untouched.
-python-geoip-geolite2
-pycountry
-pytz
-diff-match-patch
+python-pentabarf-xml==0.20
+python-geoip-geolite2==2015.303
+pycountry==19.8.18
+pytz==2019.3
+diff-match-patch==20181111
 blinker==1.4
 envparse==0.2
 git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.2

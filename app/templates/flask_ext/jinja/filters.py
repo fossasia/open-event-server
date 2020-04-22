@@ -20,4 +20,5 @@ def init_filters(app):
     def humanize_filter(time):
         if not time:
             return "N/A"
+        # TODO(Areeb): Only usage of arrow. Remove
         return arrow.get(time).humanize()
