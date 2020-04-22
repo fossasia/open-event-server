@@ -58,7 +58,7 @@ flask-redis==0.4
 SQLAlchemy==1.3.16
 Flask-Elasticsearch==0.2
 paypalrestsdk==1.13
-eventlet==0.25
+eventlet==0.25.2
 pyyaml==5.3
 sendgrid==6.2.2
 marshmallow==2.15.2
