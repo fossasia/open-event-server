@@ -14,8 +14,8 @@ from app.factories.user_token_blacklist import UserTokenBlacklistFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 
-class TestCreatedatValidation(OpenEventTestCase):
-    def test_createdat(self):
+class TestCreatedAtValidation(OpenEventTestCase):
+    def test_created_at(self):
         """ Validate time : Tests if created_at is set to current time in all models
         """
         with self.app.test_request_context():
@@ -44,8 +44,8 @@ class TestCreatedatValidation(OpenEventTestCase):
                         current_time = datetime.utcnow().astimezone()
                     else:
                         current_time = datetime.now(timezone.utc).astimezone()
-                    createdat_db = test_model.created_at
-                    time_diff = current_time - createdat_db
+                    created_at_db = test_model.created_at
+                    time_diff = current_time - created_at_db
                     allowed_time_lag = timedelta(milliseconds=250)
                     message = "created_at not set" " to current time in {} \n".format(
                         model_factory

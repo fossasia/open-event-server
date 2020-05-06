@@ -22,15 +22,15 @@ install:
 
 env:
   - APP_CONFIG="config.TestingConfig" SECRET_KEY="super secret key" PATH=$PATH:${HOME}/google-cloud-sdk/bin
-  
+
 before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
-  
-script: 
-  - nosetests tests/ --ignore-files="test_auth\.py" -v --with-coverage && pytest tests/all/integration/api/helpers/test_auth.py
+
+script:
+  - pytest tests -v --cov=app
 
 
 after_success:
