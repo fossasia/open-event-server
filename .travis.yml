@@ -30,7 +30,7 @@ before_script:
   - bash scripts/test_multiple_heads.sh
 
 script:
-  - pytest tests -v --cov=.
+  - pytest tests -v --cov=app
 
 
 after_success:
