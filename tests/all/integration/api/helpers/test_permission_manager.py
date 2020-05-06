@@ -1,9 +1,9 @@
 import unittest
 
-from flask import Response
 from flask_jwt_extended import create_access_token
 
 from app.api.helpers.db import get_or_create, save_to_db
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import (
     accessible_role_based_events,
     has_access,
@@ -53,7 +53,7 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test whether a user is organizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
             uer.role_id = 1
             save_to_db(uer)
             self.assertTrue(has_access('is_organizer', event_id=1))
@@ -62,7 +62,7 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test whether a user is coorganizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
             uer.role_id = 2
             save_to_db(uer)
             self.assertTrue(has_access('is_coorganizer', event_id=1))
@@ -71,7 +71,7 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test whether a user is moderator of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
             uer.role_id = 4
             save_to_db(uer)
             self.assertTrue(has_access('is_moderator', event_id=1))
@@ -80,7 +80,7 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test whether a user is track organizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
             uer.role_id = 4
             save_to_db(uer)
             self.assertTrue(has_access('is_moderator', event_id=1))
@@ -89,7 +89,7 @@ class TestPermissionManager(OpenEventTestCase):
         """Method to test whether a user is registrar of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
             uer.role_id = 6
             save_to_db(uer)
             self.assertTrue(has_access('is_registrar', event_id=1))
@@ -103,8 +103,8 @@ class TestPermissionManager(OpenEventTestCase):
             self.assertTrue(perm)
 
             kwargs = {'check': lambda a: False}
-            perm = permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
-            self.assertIsInstance(perm, Response)
+            with self.assertRaises(ForbiddenError):
+                permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
 
 
 if __name__ == '__main__':

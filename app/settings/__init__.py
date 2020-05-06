@@ -36,72 +36,42 @@ def set_settings(**kwargs):
     """
     Update system settings
     """
-
-    if 'service_fee' in kwargs:
-        ticket_service_fees = kwargs.get('service_fee')
-        ticket_maximum_fees = kwargs.get('maximum_fee')
-        from app.api.helpers.data_getter import DataGetter
-        from app.api.helpers.db import save_to_db
-
-        currencies = DataGetter.get_payment_currencies()
-        ticket_fees = DataGetter.get_fee_settings()
-        if not ticket_fees:
-            for i, (currency, has_paypal, has_stripe) in enumerate(currencies):
-                currency = currency.split(' ')[0]
-                if float(ticket_maximum_fees[i]) == 0.0:
-                    ticket_maximum_fees[i] = ticket_service_fees[i]
-                ticket_fee = TicketFees(
-                    currency=currency,
-                    service_fee=ticket_service_fees[i],
-                    maximum_fee=ticket_maximum_fees[i],
-                )
-                save_to_db(ticket_fee, "Ticket Fees settings saved")
-        else:
-            i = 0
-            for fee in ticket_fees:
-                if float(ticket_maximum_fees[i]) == 0.0:
-                    ticket_maximum_fees[i] = ticket_service_fees[i]
-                fee.service_fee = ticket_service_fees[i]
-                fee.maximum_fee = ticket_maximum_fees[i]
-                save_to_db(fee, "Fee Options Updated")
-                i += 1
+    setting = Setting.query.order_by(desc(Setting.id)).first()
+    if not setting:
+        setting = Setting(**kwargs)
     else:
-        setting = Setting.query.order_by(desc(Setting.id)).first()
-        if not setting:
-            setting = Setting(**kwargs)
-        else:
-            for key, value in list(kwargs.items()):
-                setattr(setting, key, value)
-        from app.api.helpers.db import save_to_db
+        for key, value in list(kwargs.items()):
+            setattr(setting, key, value)
+    from app.api.helpers.db import save_to_db
 
-        save_to_db(setting, 'Setting saved')
-        stripe.api_key = setting.stripe_secret_key
+    save_to_db(setting, 'Setting saved')
+    stripe.api_key = setting.stripe_secret_key
 
-        if (
-            setting.app_environment == Environment.DEVELOPMENT
-            and not current_app.config['DEVELOPMENT']
-        ):
-            current_app.config.from_object('config.DevelopmentConfig')
+    if (
+        setting.app_environment == Environment.DEVELOPMENT
+        and not current_app.config['DEVELOPMENT']
+    ):
+        current_app.config.from_object('config.DevelopmentConfig')
 
-        if (
-            setting.app_environment == Environment.STAGING
-            and not current_app.config['STAGING']
-        ):
-            current_app.config.from_object('config.StagingConfig')
+    if (
+        setting.app_environment == Environment.STAGING
+        and not current_app.config['STAGING']
+    ):
+        current_app.config.from_object('config.StagingConfig')
 
-        if (
-            setting.app_environment == Environment.PRODUCTION
-            and not current_app.config['PRODUCTION']
-        ):
-            current_app.config.from_object('config.ProductionConfig')
+    if (
+        setting.app_environment == Environment.PRODUCTION
+        and not current_app.config['PRODUCTION']
+    ):
+        current_app.config.from_object('config.ProductionConfig')
 
-        if (
-            setting.app_environment == Environment.TESTING
-            and not current_app.config['TESTING']
-        ):
-            current_app.config.from_object('config.TestingConfig')
+    if (
+        setting.app_environment == Environment.TESTING
+        and not current_app.config['TESTING']
+    ):
+        current_app.config.from_object('config.TestingConfig')
 
-        current_app.config['custom_settings'] = make_dict(setting)
+    current_app.config['custom_settings'] = make_dict(setting)
 
 
 def make_dict(s):

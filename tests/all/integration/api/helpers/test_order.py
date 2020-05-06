@@ -62,6 +62,7 @@ class TestOrderUtilities(OpenEventTestCase):
 
         with self.app.test_request_context():
             ticket = TicketFactory()
+            other_ticket = TicketFactory()
 
             completed_order = OrderFactory(status='completed')
             placed_order = OrderFactory(status='placed')
@@ -79,23 +80,47 @@ class TestOrderUtilities(OpenEventTestCase):
             db.session.commit()
 
             # will not be counted as they have no order_id
-            AttendeeFactoryBase.create_batch(2)
+            AttendeeFactoryBase.create_batch(2, ticket_id=ticket.id)
             # will be counted as attendee have valid orders
-            AttendeeFactoryBase.create_batch(6, order_id=completed_order.id)
+            AttendeeFactoryBase.create_batch(
+                6, order_id=completed_order.id, ticket_id=ticket.id
+            )
             # will be counted as attendee has valid placed order
-            AttendeeFactoryBase(order_id=placed_order.id)
+            AttendeeFactoryBase(order_id=placed_order.id, ticket_id=ticket.id)
+            # will not be counted as they are deleted
+            AttendeeFactoryBase.create_batch(
+                3,
+                order_id=placed_order.id,
+                ticket_id=ticket.id,
+                deleted_at=datetime.utcnow(),
+            )
             # will be counted as attendee has initializing order under order expiry time
-            AttendeeFactoryBase.create_batch(4, order_id=initializing_order.id)
+            AttendeeFactoryBase.create_batch(
+                4, order_id=initializing_order.id, ticket_id=ticket.id
+            )
             # will be counted as attendee has pending order under 30+order expiry time
-            AttendeeFactoryBase.create_batch(2, order_id=pending_order.id)
+            AttendeeFactoryBase.create_batch(
+                2, order_id=pending_order.id, ticket_id=ticket.id
+            )
             # will not be counted as the order is not under order expiry time
-            AttendeeFactoryBase.create_batch(3, order_id=expired_time_order.id)
+            AttendeeFactoryBase.create_batch(
+                3, order_id=expired_time_order.id, ticket_id=ticket.id
+            )
             # will not be counted as the order has an expired state
-            AttendeeFactoryBase.create_batch(5, order_id=expired_order.id)
+            AttendeeFactoryBase.create_batch(
+                5, order_id=expired_order.id, ticket_id=ticket.id
+            )
+            # will not be counted as the attendees have different ticket ID
+            AttendeeFactoryBase.create_batch(
+                2, order_id=completed_order.id, ticket_id=other_ticket.id
+            )
 
-            count = get_sold_and_reserved_tickets_count(ticket.event_id)
+            count = get_sold_and_reserved_tickets_count(ticket.id)
 
             self.assertEqual(count, 13)
+
+            # Last 2 attendees belong to other ticket
+            self.assertEqual(get_sold_and_reserved_tickets_count(other_ticket.id), 2)
 
 
 if __name__ == '__main__':

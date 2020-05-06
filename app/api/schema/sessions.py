@@ -33,7 +33,8 @@ class SessionSchema(SoftDeletionSchema):
 
     @validates_schema(pass_original=True)
     def validate_fields(self, data, original_data):
-        if 'id' in original_data['data']:
+        is_patch_request = 'id' in original_data['data']
+        if is_patch_request:
             try:
                 session = Session.query.filter_by(id=original_data['data']['id']).one()
             except NoResultFound:
@@ -54,9 +55,9 @@ class SessionSchema(SoftDeletionSchema):
                     {'pointer': '/data/attributes/ends-at'},
                     "ends-at should be after starts-at",
                 )
-            if datetime.timestamp(data['starts_at']) <= datetime.timestamp(
-                datetime.now()
-            ):
+            if not is_patch_request and datetime.timestamp(
+                data['starts_at']
+            ) <= datetime.timestamp(datetime.now()):
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/starts-at'},
                     "starts-at should be after current date-time",
@@ -65,19 +66,19 @@ class SessionSchema(SoftDeletionSchema):
         if 'state' in data:
             if data['state'] not in ('draft', 'pending'):
                 if not has_access('is_coorganizer', event_id=data['event']):
-                    return ForbiddenException(
+                    raise ForbiddenException(
                         {'source': ''}, 'Co-organizer access is required.'
                     )
 
         if 'track' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
+                raise ForbiddenException(
                     {'source': ''}, 'Co-organizer access is required.'
                 )
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
+                raise ForbiddenException(
                     {'source': ''}, 'Co-organizer access is required.'
                 )
 

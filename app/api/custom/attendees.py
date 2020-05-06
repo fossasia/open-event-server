@@ -24,17 +24,15 @@ def send_receipt():
         try:
             order = db.session.query(Order).filter_by(identifier=order_identifier).one()
         except NoResultFound:
-            return NotFoundError(
-                {'parameter': '{order_identifier}'}, "Order not found"
-            ).respond()
+            raise NotFoundError({'parameter': '{order_identifier}'}, "Order not found")
 
         if (order.user_id != current_user.id) and (
             not has_access('is_registrar', event_id=order.event_id)
         ):
-            return ForbiddenError(
+            raise ForbiddenError(
                 {'source': ''},
                 'You need to be the event organizer or order buyer to send receipts.',
-            ).respond()
+            )
         elif order.status != 'completed':
             abort(
                 make_response(
@@ -45,6 +43,4 @@ def send_receipt():
             send_email_to_attendees(order, current_user.id)
             return jsonify(message="receipt sent to attendees")
     else:
-        return UnprocessableEntityError(
-            {'source': ''}, 'Order identifier missing'
-        ).respond()
+        raise UnprocessableEntityError({'source': ''}, 'Order identifier missing')
