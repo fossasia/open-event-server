@@ -1,5 +1,32 @@
 ## Changelog
 
+#### v1.15.0 (2020-04-15):
+
+**BREAKING CHANGE**
+We are making two-fold change in the underlying DB, we are upgrading from postgres 10 to 12, which was a long time due. And also, we are going to use postgis in future for nearby event fetching, hence we are doing this now in order to avoid changing DB layer later again in future.
+
+These are the steps you need to take before upgrading to this release:
+1. Backup the current database  
+`docker exec -it opev-postgres pg_dump -U open_event_user -d open_event > bak.sql`  
+Note that if you changed the user and DB name using enironment variables, you have to use those values here  
+2. Shutdown the server  
+`docker-compose down`
+3. Remove the DB volume  
+`docker volume rm server_pg`
+4. Now pull the latest changes to your local docker-compose file changing the postgres image to `postgis/postis:12-2.5-alpine`. You don't have to do this change manually if you are using the tracked version of docker-compose.yml from our git repository
+5. Start just the postgres server  
+`docker-compose up -d postgres`
+6. Restore the backup on DB  
+`docker-compose exec -T postgres psql -U open_event_user -d open_event < bak.sql`
+7. Start the servers up  
+`docker-compose up -d`
+
+- GraphQL alpha trial
+- Allow old dates in session PATCH requests
+- Add postgis DB for future use
+- Integrate Sentry APM tracing support
+- Bug fixes and dependency updates
+
 #### v1.14.0 (2020-03-08):
 
 - Fix discount code quantity calculation

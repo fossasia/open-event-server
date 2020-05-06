@@ -35,7 +35,7 @@ def get_identity():
     """
     token = None
     try:
-        token, header = _decode_jwt_from_request('access')
+        token, _ = _decode_jwt_from_request('access')
     except (JWTExtendedException, PyJWTError):
         token = getattr(ctx_stack.top, 'expired_jwt', None)
 

@@ -16,7 +16,6 @@ from app.api.helpers.order import (
 )
 from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
-from app.models.order import Order
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 
