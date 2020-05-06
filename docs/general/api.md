@@ -27,7 +27,7 @@ Then use the `access_token` in a request by setting the header `Authorization` t
 ## Swagger Docs
 
 Swagger API documentation with live-testing feature is available at `/api/v1` endpoint of the server where Open Event is hosted.
-For the current dev deployement, it is at http://open-event-dev.herokuapp.com/api/v1/ and for the master deployement, it is at
+For the current dev deployment, it is at http://open-event-dev.herokuapp.com/api/v1/ and for the master deployment, it is at
 http://open-event.herokuapp.com/api/v1/
 
 Don't forget to login into the swagger UI (through the top right link) to get access to all authorized API methods (like POST, PUT).

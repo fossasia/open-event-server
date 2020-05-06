@@ -21,7 +21,7 @@ ssh root@104.236.228.132
 # Enter password you got in the email and enter
 ```
 
-* If you are ssh'ing into your droplet for the first time, you will get a prompt to change password. The step is compulsary so change the password here.
+* If you are ssh'ing into your droplet for the first time, you will get a prompt to change password. The step is compulsory so change the password here.
 Once this step is done, you will be running the droplet's shell.
 
 

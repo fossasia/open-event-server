@@ -1,6 +1,5 @@
 -r dev.txt
 
-coverage~=5.0
-dredd_hooks~=0.2
-pytest ~= 5.2.1
-
+coverage==5.1
+dredd_hooks==0.2
+pytest==5.2.1

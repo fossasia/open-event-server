@@ -24,14 +24,17 @@ from app.models.user import User
 from app.settings import get_settings
 
 
-def get_sold_and_reserved_tickets_count(event_id):
+def get_sold_and_reserved_tickets_count(ticket_id):
     order_expiry_time = get_settings()['order_expiry_time']
     return (
         db.session.query(TicketHolder.id)
         .join(Order)
-        .filter(TicketHolder.order_id == Order.id)
         .filter(
-            Order.event_id == int(event_id),
+            TicketHolder.ticket_id == ticket_id,
+            TicketHolder.order_id == Order.id,
+            TicketHolder.deleted_at.is_(None),
+        )
+        .filter(
             Order.deleted_at.is_(None),
             or_(
                 Order.status == 'placed',
@@ -82,7 +85,7 @@ class AttendeeListPost(ResourceList):
                 "Ticket belongs to a different Event",
             )
         # Check if the ticket is already sold out or not.
-        if get_sold_and_reserved_tickets_count(ticket.event_id) >= ticket.quantity:
+        if get_sold_and_reserved_tickets_count(ticket.id) >= ticket.quantity:
             raise ConflictException(
                 {'pointer': '/data/attributes/ticket_id'}, "Ticket already sold out"
             )
@@ -285,7 +288,7 @@ class AttendeeDetail(ResourceDetail):
                 checkout_times = (
                     obj.checkout_times.split(',') if obj.checkout_times else []
                 )
-                checkout_times.append(str(datetime.utcnow()))
+                checkout_times.append(str(datetime.datetime.utcnow()))
                 data['checkout_times'] = ','.join(checkout_times)
 
         if 'attendee_notes' in data:

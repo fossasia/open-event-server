@@ -36,7 +36,7 @@ class EventLocationList(ResourceList):
         schema = EventLocationSchema()
         result = schema.dump(locations, many=True).data
         view_kwargs = (
-            request.view_args if getattr(self, 'view_kwargs', None) is True else dict()
+            request.view_args if getattr(self, 'view_kwargs', None) is True else {}
         )
         add_pagination_links(
             result, len(locations), qs, url_for(self.view, **view_kwargs)

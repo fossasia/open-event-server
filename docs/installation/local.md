@@ -86,7 +86,7 @@ To setup a virtual environment and install the dependices, enter in a terminal
 pipenv --python 3.7.3 install
 ```
 
-Now to activate the virtual environemnt, type
+Now to activate the virtual environment, type
 
 ```sh
 pipenv shell
