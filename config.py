@@ -7,7 +7,7 @@ env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '2.1.0-alpha.0'
+VERSION_NAME = '1.14.0'
 
 LANGUAGES = {
     'en': 'English',
@@ -72,6 +72,7 @@ class Config:
         'API_PROPOGATE_UNCAUGHT_EXCEPTIONS', default=True
     )
     ETAG = True
+    SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.01)
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')

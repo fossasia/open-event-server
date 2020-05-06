@@ -93,10 +93,16 @@ class Ticket(SoftDeletionModel):
         min_price=0,
         max_price=0,
         is_fee_absorbed=False,
-        tags=[],
-        access_codes=[],
-        discount_codes=[],
+        tags=None,
+        access_codes=None,
+        discount_codes=None,
     ):
+        if tags is None:
+            tags = []
+        if access_codes is None:
+            access_codes = []
+        if discount_codes is None:
+            discount_codes = []
 
         self.name = name
         self.quantity = quantity

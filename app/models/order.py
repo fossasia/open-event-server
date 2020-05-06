@@ -172,7 +172,7 @@ class Order(SoftDeletionModel):
 
     @property
     def tickets_count(self):
-        return sum([t.quantity for t in self.order_tickets])
+        return sum(t.quantity for t in self.order_tickets)
 
     @property
     def is_free(self):

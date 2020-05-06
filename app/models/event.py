@@ -495,11 +495,9 @@ class Event(SoftDeletionModel):
         previous_month = datetime.now().month - 1
         orders = Order.query.filter_by(event_id=self.id, status='completed').all()
         monthly_revenue = sum(
-            [
-                o.amount
+            o.amount
                 for o in orders
                 if o.completed_at and o.completed_at.month == previous_month
-            ]
         )
         return monthly_revenue
 

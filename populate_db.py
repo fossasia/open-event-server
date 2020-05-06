@@ -1,4 +1,3 @@
-from envparse import env
 
 from app.api.helpers.db import get_or_create
 
