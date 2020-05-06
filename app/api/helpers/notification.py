@@ -46,13 +46,12 @@ def send_notification(user, title, message, actions=None):
     :param actions:
     :return:
     """
-    if not current_app.config['TESTING']:
-        notification = Notification(user_id=user.id, title=title, message=message)
-        if not actions:
-            actions = []
-        notification.actions = actions
-        save_to_db(notification, msg="Notification saved")
-        record_activity('notification_event', user=user, title=title, actions=actions)
+    notification = Notification(user_id=user.id, title=title, message=message)
+    if not actions:
+        actions = []
+    notification.actions = actions
+    save_to_db(notification, msg="Notification saved")
+    record_activity('notification_event', user=user, title=title, actions=actions)
 
 
 def send_notif_new_session_organizer(user, event_name, link, session_id):
@@ -107,7 +106,7 @@ def send_notif_after_import(
     if error_text:
         send_notification(
             user=user,
-            title=NOTIFS[EVENT_IMPORT_FAIL]['title'],
+            title=NOTIFS[EVENT_IMPORT_FAIL]['title'].format(event_name=event_name),
             message=NOTIFS[EVENT_IMPORT_FAIL]['message'].format(error_text=error_text),
         )
     elif event_name:
