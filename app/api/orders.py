@@ -744,7 +744,7 @@ def create_paypal_payment(order_identifier):
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
     status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
@@ -767,7 +767,7 @@ def verify_mobile_paypal_payment(order_identifier):
     try:
         payment_id = request.json['data']['attributes']['payment-id']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
     order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
     status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
     return jsonify(status=status, error=error)
@@ -798,7 +798,7 @@ def create_source(order_identifier):
         save_to_db(order)
         return jsonify(link=source_object.redirect['url'])
     except TypeError:
-        return BadRequestError({'source': ''}, 'Source creation error').respond()
+        raise BadRequestError({'source': ''}, 'Source creation error')
 
 
 @alipay_blueprint.route(

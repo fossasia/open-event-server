@@ -27,6 +27,7 @@ from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.api import routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
+from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
 from app.extensions import limiter, shell
 from app.models import db
@@ -263,14 +264,10 @@ def update_sent_state(sender=None, headers=None, **kwargs):
 @app.errorhandler(500)
 def internal_server_error(error):
     if current_app.config['PROPOGATE_ERROR'] is True:
-        exc = JsonApiException({'pointer': ''}, str(error))
+        exc = ErrorResponse(str(error))
     else:
-        exc = JsonApiException({'pointer': ''}, 'Unknown error')
-    return make_response(
-        json.dumps(jsonapi_errors([exc.to_dict()])),
-        exc.status,
-        {'Content-Type': 'application/vnd.api+json'},
-    )
+        exc = ErrorResponse('Unknown error')
+    return exc.respond()
 
 
 @app.errorhandler(429)
@@ -282,8 +279,8 @@ def ratelimit_handler(error):
     )
 
 
-@app.errorhandler(JsonApiException)
-def handle_exception(error):
+@app.errorhandler(ErrorResponse)
+def handle_exception(error: ErrorResponse):
     return error.respond()
 
 
