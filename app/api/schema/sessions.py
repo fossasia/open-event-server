@@ -66,19 +66,19 @@ class SessionSchema(SoftDeletionSchema):
         if 'state' in data:
             if data['state'] not in ('draft', 'pending'):
                 if not has_access('is_coorganizer', event_id=data['event']):
-                    return ForbiddenException(
+                    raise ForbiddenException(
                         {'source': ''}, 'Co-organizer access is required.'
                     )
 
         if 'track' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
+                raise ForbiddenException(
                     {'source': ''}, 'Co-organizer access is required.'
                 )
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
+                raise ForbiddenException(
                     {'source': ''}, 'Co-organizer access is required.'
                 )
 
