@@ -111,7 +111,11 @@ def calculate_order_amount_wrapper(data):
     discount_code = None
     if 'discount-code' in data:
         discount_code_id = data['discount-code']
-        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
+        discount_code = (
+            DiscountCode.query.filter_by(deleted_at=None)
+            .filter_by(code=discount_code_id)
+            .one()
+        )
     return tickets, discount_code
 
 
@@ -120,7 +124,7 @@ def calculate_order_amount_wrapper(data):
 def calculate_amount():
     data = request.get_json()
     tickets, discount_code = calculate_order_amount_wrapper(data)
-    return jsonify(calculate_order_amount(tickets, discount_code))
+    return calculate_order_amount(tickets, discount_code)
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
