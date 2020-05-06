@@ -517,7 +517,10 @@ def has_access(access_level, **kwargs):
     :return: bool: True if passes the access else False
     """
     if access_level in permissions:
-        auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
-        if type(auth) is bool and auth is True:
-            return True
+        try:
+            auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
+            if type(auth) is bool and auth is True:
+                return True
+        except ForbiddenError:
+            pass
     return False
