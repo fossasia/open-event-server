@@ -1,6 +1,5 @@
 import unittest
 
-from flask import Response
 from flask_jwt_extended import create_access_token
 
 from app.api.helpers.db import get_or_create, save_to_db

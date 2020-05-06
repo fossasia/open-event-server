@@ -14,10 +14,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
 from flask_migrate import Migrate
-from flask_rest_jsonapi.errors import jsonapi_errors
-from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck
-from pytz import utc
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
@@ -36,7 +33,6 @@ from app.models.role_invite import RoleInvite
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.views.blueprints import BlueprintsManager
-from app.views.elastic_search import client
 from app.views.healthcheck import (
     check_migrations,
     health_check_celery,
