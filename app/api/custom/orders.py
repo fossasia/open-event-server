@@ -100,7 +100,7 @@ def resend_emails():
             return jsonify(
                 status=True,
                 message="Verification emails for order : {} has been sent successfully"
-                        .format(order_identifier),
+                    .format(order_identifier),
             )
         else:
             raise UnprocessableEntityError(
@@ -144,10 +144,8 @@ def create_order():
     ticket_ids = {int(ticket['id']) for ticket in tickets}
     quantity = {int(ticket['id']): ticket['quantity'] for ticket in tickets}
     ticket_list = (
-        db.session.query(Ticket)
-            .filter(Ticket.id.in_(ticket_ids))
-            .filter_by(event_id=data['event_id'], deleted_at=None)
-            .all()
+        db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids))
+        .filter_by(event_id=data['event_id'], deleted_at=None).all()
     )
     ticket_ids_found = {ticket_information.id for ticket_information in ticket_list}
     tickets_not_found = ticket_ids - ticket_ids_found
@@ -165,10 +163,10 @@ def create_order():
         if (
             ticket_info.quantity
             - get_count(
-            db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(ticket_info.id), deleted_at=None
+                db.session.query(TicketHolder.id).filter_by(
+                    ticket_id=int(ticket_info.id), deleted_at=None
+                )
             )
-        )
         ) < quantity[ticket_info.id]:
             return make_response(
                 jsonify(status='Order Unsuccessful', error='Ticket already sold out.'),
@@ -252,12 +250,13 @@ def complete_order(order_id):
     updated_attendees = data['attendees']
     for updated_attendee in updated_attendees:
         for attribute in updated_attendee:
-            updated_attendee[attribute.replace('-', '_')] = updated_attendee\
-                                                            .pop(attribute)
+            updated_attendee[attribute.replace('-', '_')] = updated_attendee \
+                .pop(attribute)
     if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != \
-            len(updated_attendees):
-        return make_response(jsonify(status='Unprocessable Entity', error=
-                             'You need to provide info of all attendees.'), 422)
+        len(updated_attendees):
+        return make_response(jsonify(status='Unprocessable Entity',
+                                     error='You need to provide info of all attendees.')
+                             , 422)
     else:
         attendees = db.session.query(TicketHolder).filter_by(order_id=order_id,
                                                              deleted_at=None).all()
@@ -267,7 +266,7 @@ def complete_order(order_id):
     for attendee, updated_attendee in zip(attendees, updated_attendees):
         for field in form_fields:
             if field.is_required is True and field.field_identifier \
-                    not in updated_attendee:
+                not in updated_attendee:
                 return make_response(jsonify(status='Unprocessable Entity',
                                              error='{} is a required field.'
                                              .format(field.field_identifier)), 422)
@@ -291,8 +290,8 @@ def complete_order(order_id):
         if 'is_billing_enabled' in data:
             if data['is_billing_enabled']:
                 if ('company' not in data) or ('address' not in data) or \
-                        ('city' not in data) or ('zipcode' not in data) or \
-                        ('country' not in data):
+                    ('city' not in data) or ('zipcode' not in data) or \
+                    ('country' not in data):
                     return make_response(jsonify(status='Unprocessable Entity',
                                                  error='Billing information incomplete.')
                                          , 422)
@@ -303,7 +302,7 @@ def complete_order(order_id):
         else:
             return make_response(jsonify(status='Unprocessable Entity',
                                          error='Billing information is mandatory '
-                                         'for this order.'), 422)
+                                               'for this order.'), 422)
         order.company = data['company']
         order.address = data['address']
         order.city = data['city']
@@ -318,7 +317,7 @@ def complete_order(order_id):
     db.session.commit()
     create_pdf_tickets_for_holder(order)
     if (order.status == 'completed' or order.status == 'placed') and \
-            (order.deleted_at is None):
+        (order.deleted_at is None):
         order_identifier = order.identifier
 
         key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
