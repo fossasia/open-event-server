@@ -10,8 +10,8 @@ from app.api.helpers.notification import (
     send_notif_session_accept_reject,
     send_notif_ticket_purchase_organizer,
 )
-from app.factories.session import SessionFactory
-from app.factories.user import UserFactory
+from tests.factories.session import SessionFactory
+from tests.factories.user import UserFactory
 from app.models.notification import Notification
 from tests.all.integration.utils import OpenEventTestCase
 

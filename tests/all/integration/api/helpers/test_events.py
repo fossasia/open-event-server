@@ -2,7 +2,7 @@ import unittest
 
 from app.api.helpers.db import get_count, save_to_db
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.factories.event import EventFactoryBasic
+from tests.factories.event import EventFactoryBasic
 from app.models.custom_form import CustomForms
 from tests.all.integration.utils import OpenEventTestCase
 

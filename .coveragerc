@@ -4,4 +4,3 @@ omit =
     */site-packages/*
     */vintage/*
     tests/*
-    app/factories/*

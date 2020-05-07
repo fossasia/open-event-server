@@ -1,16 +1,16 @@
 import unittest
 from app.models import db
 from datetime import datetime, timedelta, timezone
-from app.factories.session import SessionFactory
-from app.factories.user import UserFactory
-from app.factories.event import EventFactoryBasic
-from app.factories.access_code import AccessCodeFactory
-from app.factories.event_invoice import EventInvoiceFactory
-from app.factories.attendee import AttendeeFactory
-from app.factories.discount_code import DiscountCodeFactory
-from app.factories.order import OrderFactory
-from app.factories.role_invite import RoleInviteFactory
-from app.factories.user_token_blacklist import UserTokenBlacklistFactory
+from tests.factories.session import SessionFactory
+from tests.factories.user import UserFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.access_code import AccessCodeFactory
+from tests.factories.event_invoice import EventInvoiceFactory
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.discount_code import DiscountCodeFactory
+from tests.factories.order import OrderFactory
+from tests.factories.role_invite import RoleInviteFactory
+from tests.factories.user_token_blacklist import UserTokenBlacklistFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 
