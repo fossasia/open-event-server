@@ -233,7 +233,7 @@ python manage.py module -n all -s off
 And set appropriate value of `TEST_DATABASE` in `.env`
 
 ```shell script
-TEST_DATABASE_URL=postgresql://test:test@localhost:5433/test
+TEST_DATABASE_URL=postgresql://test@localhost:5433/test
 ```
 
 * Then go to the project directory and run the following command:

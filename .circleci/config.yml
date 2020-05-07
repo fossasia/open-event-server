@@ -50,6 +50,7 @@ jobs:
         environment:
             POSTGRES_USER: postgres
             POSTGRES_DB: test
+            POSTGRES_HOST_AUTH_METHOD: trust
       - image: circleci/redis:5.0.6-alpine
 
     working_directory: ~/code
