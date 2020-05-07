@@ -35,6 +35,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 @celery.task(base=RequestContextTask, name='send.after.event.mail')
 def send_after_event_mail():
     from app.instance import current_app as app

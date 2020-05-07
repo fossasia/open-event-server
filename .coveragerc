@@ -3,3 +3,5 @@ omit =
     */migrations/*
     */site-packages/*
     */vintage/*
+    tests/*
+    app/factories/*

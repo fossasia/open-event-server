@@ -1,4 +1,3 @@
-
 from app.api.helpers.db import get_or_create
 
 # Admin message settings
