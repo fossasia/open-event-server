@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.notification import Notification
+from tests.factories.base import BaseFactory
 from tests.factories.user import UserFactory
-from app.models.notification import Notification, db
 
 
-class NotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
+class NotificationFactory(BaseFactory):
     class Meta:
         model = Notification
-        sqlalchemy_session = db.session
 
     user = factory.RelatedFactory(UserFactory)
     title = common.string_

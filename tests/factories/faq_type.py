@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.faq_type import FaqType
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.faq_type import FaqType, db
 
 
-class FaqTypeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class FaqTypeFactory(BaseFactory):
     class Meta:
         model = FaqType
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_

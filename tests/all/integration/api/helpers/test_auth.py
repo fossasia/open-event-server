@@ -1,23 +1,7 @@
-import pytest
 from flask_login import login_user, logout_user
 from app.api.helpers.auth import AuthManager
-from app.models import db as database
 from app.models.user import User
 from tests.all.integration.auth_helper import create_user
-from tests.all.integration.setup_database import Setup
-
-
-@pytest.fixture(scope='module')
-def app():
-    app = Setup.create_app()
-    with app.test_request_context():
-        yield app
-    Setup.drop_db()
-
-
-@pytest.fixture(scope='module')
-def db(app):
-    return database
 
 
 def test_load_user(db):
@@ -26,7 +10,7 @@ def test_load_user(db):
     assert user == db.session.query(User).get(user.id)
 
 
-def test_verified_user():
+def test_verified_user(db):
     """Method to test if user is verified"""
 
     user = create_user(email='authtest@gmail.com', password='password')
@@ -35,7 +19,7 @@ def test_verified_user():
     assert AuthManager.is_verified_user() == False
 
 
-def test_is_accessible():
+def test_is_accessible(db):
     """Method to test if user is accessible(authenticated)"""
 
     user = create_user(email='test@test.com', password='password')
@@ -44,7 +28,7 @@ def test_is_accessible():
     assert AuthManager.is_accessible() == False
 
 
-def test_check_auth_admin():
+def test_check_auth_admin(db):
     """Method to test proper authentication & admin rights for a user"""
 
     user = create_user(email='authtest1@gmail.com', password='password')

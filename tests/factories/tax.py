@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.tax import Tax
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.tax import Tax, db
 
 
-class TaxFactory(factory.alchemy.SQLAlchemyModelFactory):
+class TaxFactory(BaseFactory):
     class Meta:
         model = Tax
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     country = common.country_

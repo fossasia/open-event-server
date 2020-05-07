@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.export_job import ExportJob
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.export_job import ExportJob, db
 
 
-class ExportJobFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ExportJobFactory(BaseFactory):
     class Meta:
         model = ExportJob
-        sqlalchemy_session = db.session
 
     task = common.string_
     user_email = common.string_

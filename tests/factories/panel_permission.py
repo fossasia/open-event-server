@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.panel_permission import PanelPermission, db
+from app.models.panel_permission import PanelPermission
+from tests.factories.base import BaseFactory
 
 
-class PanelPermissionFactory(factory.alchemy.SQLAlchemyModelFactory):
+class PanelPermissionFactory(BaseFactory):
     class Meta:
         model = PanelPermission
-        sqlalchemy_session = db.session
 
     panel_name = common.string_
     can_access = True

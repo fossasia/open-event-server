@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.page import Page, db
+from app.models.page import Page
+from tests.factories.base import BaseFactory
 
 
-class PageFactory(factory.alchemy.SQLAlchemyModelFactory):
+class PageFactory(BaseFactory):
     class Meta:
         model = Page
-        sqlalchemy_session = db.session
 
     name = common.string_
     title = common.string_

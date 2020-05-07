@@ -1,17 +1,17 @@
 import factory
 
 import tests.factories.common as common
+from app.models.session import Session
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
-from app.models.session import Session, db
 
 
-class SessionFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
+class SessionFactoryBase(BaseFactory):
     class Meta:
         model = Session
-        sqlalchemy_session = db.session
 
     title = common.string_
     subtitle = common.string_

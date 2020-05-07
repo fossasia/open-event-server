@@ -1,16 +1,16 @@
 import factory
 
 import tests.factories.common as common
+from tests.factories.base import BaseFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.user import UserFactory
-from app.models.discount_code import DiscountCode, db
+from app.models.discount_code import DiscountCode
 
 
-class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class DiscountCodeFactory(BaseFactory):
     # class name to be DiscountCodeEventFactory?
     class Meta:
         model = DiscountCode
-        sqlalchemy_session = db.session
 
     marketer = factory.RelatedFactory(UserFactory)
     code = common.string_
@@ -28,10 +28,9 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     event_id = None
 
 
-class DiscountCodeTicketFactory(factory.alchemy.SQLAlchemyModelFactory):
+class DiscountCodeTicketFactory(BaseFactory):
     class Meta:
         model = DiscountCode
-        sqlalchemy_session = db.session
 
     marketer = factory.RelatedFactory(UserFactory)
     tickets = factory.RelatedFactory(TicketFactory)

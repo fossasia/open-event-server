@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.custom_form import CustomForms, db
+from app.models.custom_form import CustomForms
 
 
-class CustomFormFactory(factory.alchemy.SQLAlchemyModelFactory):
+class CustomFormFactory(BaseFactory):
     class Meta:
         model = CustomForms
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     form = common.string_

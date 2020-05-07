@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.event_copyright import EventCopyright
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.event_copyright import EventCopyright, db
 
 
-class EventCopyrightFactory(factory.alchemy.SQLAlchemyModelFactory):
+class EventCopyrightFactory(BaseFactory):
     class Meta:
         model = EventCopyright
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     holder = common.string_

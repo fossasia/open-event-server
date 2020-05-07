@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.custom_placeholder import CustomPlaceholder, db
+from app.models.custom_placeholder import CustomPlaceholder
+from tests.factories.base import BaseFactory
 
 
-class CustomPlaceholderFactory(factory.alchemy.SQLAlchemyModelFactory):
+class CustomPlaceholderFactory(BaseFactory):
     class Meta:
         model = CustomPlaceholder
-        sqlalchemy_session = db.session
 
     name = common.string_
     origin = common.string_

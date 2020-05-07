@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.user_permission import UserPermission, db
+from app.models.user_permission import UserPermission
+from tests.factories.base import BaseFactory
 
 
-class UserPermissionFactory(factory.alchemy.SQLAlchemyModelFactory):
+class UserPermissionFactory(BaseFactory):
     class Meta:
         model = UserPermission
-        sqlalchemy_session = db.session
 
     name = common.string_
     description = common.string_

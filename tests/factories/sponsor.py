@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.sponsor import Sponsor
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.sponsor import Sponsor, db
 
 
-class SponsorFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SponsorFactory(BaseFactory):
     class Meta:
         model = Sponsor
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_

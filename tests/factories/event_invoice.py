@@ -1,16 +1,16 @@
 import factory
 
 import tests.factories.common as common
+from app.models.event_invoice import EventInvoice
+from tests.factories.base import BaseFactory
 from tests.factories.discount_code import DiscountCodeFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
-from app.models.event_invoice import EventInvoice, db
 
 
-class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
+class EventInvoiceFactory(BaseFactory):
     class Meta:
         model = EventInvoice
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)

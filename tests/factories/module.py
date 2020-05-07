@@ -1,12 +1,10 @@
-import factory
+from app.models.module import Module
+from tests.factories.base import BaseFactory
 
-from app.models.module import Module, db
 
-
-class ModuleFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ModuleFactory(BaseFactory):
     class Meta:
         model = Module
-        sqlalchemy_session = db.session
 
     donation_include = True
     ticket_include = True

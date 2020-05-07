@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.social_link import SocialLink
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.social_link import SocialLink, db
 
 
-class SocialLinkFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SocialLinkFactory(BaseFactory):
     class Meta:
         model = SocialLink
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_

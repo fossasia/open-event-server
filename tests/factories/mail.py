@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.mail import Mail, db
+from app.models.mail import Mail
+from tests.factories.base import BaseFactory
 
 
-class MailFactory(factory.alchemy.SQLAlchemyModelFactory):
+class MailFactory(BaseFactory):
     class Meta:
         model = Mail
-        sqlalchemy_session = db.session
 
     recipient = common.email_
     time = common.date_

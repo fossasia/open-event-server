@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.image_size import ImageSizes, db
+from app.models.image_size import ImageSizes
+from tests.factories.base import BaseFactory
 
 
-class EventImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class EventImageSizeFactory(BaseFactory):
     class Meta:
         model = ImageSizes
-        sqlalchemy_session = db.session
 
     type = common.string_
     full_width = 10
@@ -26,10 +24,9 @@ class EventImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
     logo_height = 10
 
 
-class SpeakerImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SpeakerImageSizeFactory(BaseFactory):
     class Meta:
         model = ImageSizes
-        sqlalchemy_session = db.session
 
     type = common.string_
     icon_size_quality = 80

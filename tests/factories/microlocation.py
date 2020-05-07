@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.microlocation import Microlocation
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.microlocation import Microlocation, db
 
 
-class MicrolocationFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
+class MicrolocationFactoryBase(BaseFactory):
     class Meta:
         model = Microlocation
-        sqlalchemy_session = db.session
 
     name = common.string_
     latitude = common.float_

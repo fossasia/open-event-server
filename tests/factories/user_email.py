@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.user_email import UserEmail
+from tests.factories.base import BaseFactory
 from tests.factories.user import UserFactory
-from app.models.user_email import UserEmail, db
 
 
-class UserEmailFactory(factory.alchemy.SQLAlchemyModelFactory):
+class UserEmailFactory(BaseFactory):
     class Meta:
         model = UserEmail
-        sqlalchemy_session = db.session
 
     user = factory.RelatedFactory(UserFactory)
     user_id = 1

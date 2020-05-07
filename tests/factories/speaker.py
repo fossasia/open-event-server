@@ -1,16 +1,16 @@
 import factory
 
 import tests.factories.common as common
+from app.models.speaker import Speaker
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.session import SessionFactory
 from tests.factories.user import UserFactory
-from app.models.speaker import Speaker, db
 
 
-class SpeakerFactoryBase(factory.alchemy.SQLAlchemyModelFactory):
+class SpeakerFactoryBase(BaseFactory):
     class Meta:
         model = Speaker
-        sqlalchemy_session = db.session
 
     name = common.string_
     email = common.email_
