@@ -4,16 +4,13 @@ dist: bionic
 
 services:
   - docker
-  - postgresql
 
 addons:
-  postgresql: "12"
   apt:
     packages:
       - python3-dev
       - libssl-dev
       - libffi-dev
-      - postgresql-12-postgis-2.5
 
 python: 3.7
 
@@ -26,14 +23,13 @@ env:
   - APP_CONFIG="config.TestingConfig" SECRET_KEY="super secret key" PATH=$PATH:${HOME}/google-cloud-sdk/bin
 
 before_script:
-  - psql -c 'create database test;' -U postgres
-  - export DATABASE_URL=postgresql://postgres@localhost:5432/test
-  - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
+  - ./scripts/test_db.sh
+  - export DATABASE_URL=postgresql://test:test@localhost:5433/test
+  - export TEST_DATABASE_URL=postgresql://test:test@localhost:5433/test
   - bash scripts/test_multiple_heads.sh
 
 script:
   - pytest tests -v --cov=.
-
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
