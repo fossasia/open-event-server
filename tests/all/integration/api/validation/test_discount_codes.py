@@ -2,12 +2,12 @@ import unittest
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
+from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.discount_code import DiscountCodeFactory
 from tests.factories.ticket import TicketFactory
-from tests.all.integration.utils import OpenEventTestCase
 
 
-class TestDiscountCodeValidation(OpenEventTestCase):
+class TestDiscountCodeValidation(OpenEventLegacyTestCase):
     def test_amount_lte_ticket_price(self):
         """
         Discount Code Validate Amount Value - Tests if function runs without an exception
