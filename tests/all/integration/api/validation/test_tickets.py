@@ -1,7 +1,7 @@
 import unittest
 
 from app.api.schema.tickets import TicketSchema
-from app.factories.ticket import TicketFactory
+from tests.factories.ticket import TicketFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 

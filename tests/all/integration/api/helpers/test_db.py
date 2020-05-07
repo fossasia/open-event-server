@@ -3,8 +3,8 @@ import unittest
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, get_or_create, safe_query, save_to_db
-from app.factories.attendee import AttendeeFactory
-from app.factories.event import EventFactoryBasic
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.event import EventFactoryBasic
 from app.models import db
 from app.models.event import Event
 from app.models.ticket_holder import TicketHolder

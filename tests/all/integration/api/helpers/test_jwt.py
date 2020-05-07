@@ -4,8 +4,8 @@ from flask_jwt_extended import create_access_token
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.jwt import get_identity, jwt_authenticate
-from app.factories.event import EventFactoryBasic
-from app.factories.user import UserFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.user import UserFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 

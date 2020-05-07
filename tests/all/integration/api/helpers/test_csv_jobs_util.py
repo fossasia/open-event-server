@@ -1,11 +1,11 @@
 import unittest
 
-import app.factories.common as common
+import tests.factories.common as common
 from app.api.helpers.csv_jobs_util import *
-from app.factories.attendee import AttendeeFactory
-from app.factories.order import OrderFactory
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.order import OrderFactory
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
 from app.models import db
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
