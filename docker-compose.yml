@@ -24,7 +24,7 @@ x-defaults: &defaults
 services:
 
   postgres:
-    image: postgis/postgis:12-2.5-alpine
+    image: postgis/postgis:12-3.0-alpine
     container_name: opev-postgres
     restart: unless-stopped
     volumes:
