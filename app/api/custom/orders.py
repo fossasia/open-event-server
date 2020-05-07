@@ -7,14 +7,17 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
 from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
-from app.api.helpers.mail import send_email_to_attendees
+from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
+from app.api.helpers.notification import send_notif_ticket_cancel, send_notif_to_attendees, \
+    send_notif_ticket_purchase_organizer
 from app.models import db
 from app.models.order import Order, OrderTicket
 from app.models.custom_form import CustomForms
@@ -204,8 +207,6 @@ def create_order():
         else:
             order_tickets[holder.ticket_id] += 1
 
-    create_pdf_tickets_for_holder(order)
-
     for ticket in order_tickets:
         od = OrderTicket(
             order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
@@ -241,6 +242,8 @@ def complete_order(order_id):
                 attendee.deleted_at = datetime.now(pytz.utc)
                 db.session.add(attendee)
             db.session.commit()
+            send_order_cancel_email(order)
+            send_notif_ticket_cancel(order)
             return order_schema.dump(order)
     updated_attendees = data['attendees']
     for updated_attendee in updated_attendees:
@@ -264,11 +267,13 @@ def complete_order(order_id):
     # modified_at not getting filled
     if order.amount == 0:
         order.status = 'completed'
+        order.completed_at = datetime.utcnow()
     elif order.amount > 0:
         if 'payment_mode' not in data:
             return make_response(jsonify(status='Unprocessable Entity', error='Payment mode not specified.'), 422)
         if data['payment_mode'] in ['bank', 'cheque', 'onsite']:
             order.status = 'placed'
+            order.completed_at = datetime.utcnow()
         else:
             order.status = 'pending'
         if 'is_billing_enabled' in data:
@@ -293,7 +298,52 @@ def complete_order(order_id):
             order.state = data['state']
         if 'tax_business_info' in data:
             order.tax_business_info = data['tax_business_info']
-    # add ticketing pdf logic
     db.session.add(order)
     db.session.commit()
+    create_pdf_tickets_for_holder(order)
+    if (order.status == 'completed' or order.status == 'placed') and (order.deleted_at is None):
+        order_identifier = order.identifier
+
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
+        ticket_path = (
+            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            + order_identifier
+            + '.pdf'
+        )
+
+        key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+        invoice_path = (
+            'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+            + order_identifier
+            + '.pdf'
+        )
+
+        # send email and notifications.
+        send_email_to_attendees(
+            order=order,
+            purchaser_id=current_user.id,
+            attachments=[ticket_path, invoice_path],
+        )
+
+        send_notif_to_attendees(order, current_user.id)
+        order_url = make_frontend_url(
+            path='/orders/{identifier}'.format(identifier=order.identifier)
+        )
+        for organizer in order.event.organizers:
+            send_notif_ticket_purchase_organizer(
+                organizer,
+                order.invoice_number,
+                order_url,
+                order.event.name,
+                order.identifier,
+            )
+        if order.event.owner:
+            send_notif_ticket_purchase_organizer(
+                order.event.owner,
+                order.invoice_number,
+                order_url,
+                order.event.name,
+                order.identifier,
+            )
+
     return order_schema.dump(order)
