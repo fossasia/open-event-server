@@ -1,3 +1,6 @@
+import pytz
+from datetime import datetime
+
 from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
@@ -233,8 +236,11 @@ def complete_order(order_id):
         elif data['status'] == 'cancelled':
             order.status = 'cancelled'
             db.session.add(order)
+            attendees = db.session.query(TicketHolder).filter_by(order_id=order_id, deleted_at=None).all()
+            for attendee in attendees:
+                attendee.deleted_at = datetime.now(pytz.utc)
+                db.session.add(attendee)
             db.session.commit()
-            # delete attendee after cancellation of order
             return order_schema.dump(order)
     updated_attendees = data['attendees']
     for updated_attendee in updated_attendees:
