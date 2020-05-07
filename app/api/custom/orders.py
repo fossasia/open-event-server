@@ -100,7 +100,7 @@ def resend_emails():
             return jsonify(
                 status=True,
                 message="Verification emails for order : {} has been sent successfully"
-                    .format(order_identifier),
+                .format(order_identifier),
             )
         else:
             raise UnprocessableEntityError(
@@ -228,7 +228,7 @@ def complete_order(order_id):
     order = Order.query.filter_by(id=order_id).first()
     order_schema = OrderSchema()
     if (not has_access('is_coorganizer', event_id=order.event_id)) and \
-        (not current_user.id == order.user_id):
+            (not current_user.id == order.user_id):
         return make_response(jsonify(status='Access Forbidden',
                                      error='You cannot update an order.'), 403)
     if has_access('is_coorganizer', event_id=order.event_id) and 'status' in data:
@@ -253,7 +253,7 @@ def complete_order(order_id):
             updated_attendee[attribute.replace('-', '_')] = updated_attendee \
                 .pop(attribute)
     if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != \
-        len(updated_attendees):
+            len(updated_attendees):
         return make_response(jsonify(status='Unprocessable Entity',
                                      error='You need to provide info of all attendees.')
                              , 422)
@@ -266,7 +266,7 @@ def complete_order(order_id):
     for attendee, updated_attendee in zip(attendees, updated_attendees):
         for field in form_fields:
             if field.is_required is True and field.field_identifier \
-                not in updated_attendee:
+                    not in updated_attendee:
                 return make_response(jsonify(status='Unprocessable Entity',
                                              error='{} is a required field.'
                                              .format(field.field_identifier)), 422)
@@ -290,8 +290,8 @@ def complete_order(order_id):
         if 'is_billing_enabled' in data:
             if data['is_billing_enabled']:
                 if ('company' not in data) or ('address' not in data) or \
-                    ('city' not in data) or ('zipcode' not in data) or \
-                    ('country' not in data):
+                        ('city' not in data) or ('zipcode' not in data) or \
+                        ('country' not in data):
                     return make_response(jsonify(status='Unprocessable Entity',
                                                  error='Billing information incomplete.')
                                          , 422)
@@ -317,7 +317,7 @@ def complete_order(order_id):
     db.session.commit()
     create_pdf_tickets_for_holder(order)
     if (order.status == 'completed' or order.status == 'placed') and \
-        (order.deleted_at is None):
+            (order.deleted_at is None):
         order_identifier = order.identifier
 
         key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
