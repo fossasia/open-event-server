@@ -60,3 +60,4 @@ docker-compose.override.yml
 celerybeat-schedule.*
 .coverage
 .pytype
+.tool-versions

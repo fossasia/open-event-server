@@ -192,20 +192,20 @@ def accept_invite():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'Role Invite Not Found').respond()
+        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
     else:
         try:
             user = User.query.filter_by(email=role_invite.email).first()
         except NoResultFound:
-            return NotFoundError(
+            raise NotFoundError(
                 {'source': ''}, 'User corresponding to role invite not Found'
-            ).respond()
+            )
         try:
             role = Role.query.filter_by(name=role_invite.role_name).first()
         except NoResultFound:
-            return NotFoundError(
+            raise NotFoundError(
                 {'source': ''}, 'Role corresponding to role invite not Found'
-            ).respond()
+            )
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = (
             UsersEventsRoles.query.filter_by(user=user)
@@ -245,6 +245,6 @@ def fetch_user():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'Role Invite Not Found').respond()
+        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
     else:
         return jsonify({"email": role_invite.email})

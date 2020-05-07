@@ -1,7 +1,7 @@
 import unittest
 
 from app.api.schema.sessions import SessionSchema
-from app.factories.session import SessionFactory
+from tests.factories.session import SessionFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 

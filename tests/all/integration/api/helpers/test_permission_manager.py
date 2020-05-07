@@ -1,16 +1,16 @@
 import unittest
 
-from flask import Response
 from flask_jwt_extended import create_access_token
 
 from app.api.helpers.db import get_or_create, save_to_db
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import (
     accessible_role_based_events,
     has_access,
     permission_manager,
 )
-from app.factories.event import EventFactoryBasic
-from app.factories.user import UserFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.user import UserFactory
 from app.models.users_events_role import UsersEventsRoles
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
@@ -103,8 +103,8 @@ class TestPermissionManager(OpenEventTestCase):
             self.assertTrue(perm)
 
             kwargs = {'check': lambda a: False}
-            perm = permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
-            self.assertIsInstance(perm, Response)
+            with self.assertRaises(ForbiddenError):
+                permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
 
 
 if __name__ == '__main__':

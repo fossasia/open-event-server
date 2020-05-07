@@ -3,8 +3,8 @@ import unittest
 import icalendar
 
 from app.api.helpers.ICalExporter import ICalExporter
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 

@@ -22,15 +22,16 @@ install:
 
 env:
   - APP_CONFIG="config.TestingConfig" SECRET_KEY="super secret key" PATH=$PATH:${HOME}/google-cloud-sdk/bin
-  
+
 before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
-  
+
 script:
-  - nosetests tests/ -v --with-coverage
+  - pytest tests -v --cov=.
+
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'

@@ -19,54 +19,54 @@ from app.api import routes  # noqa Workaround for importing all required models
 
 # imports from factories
 
-from app.factories.event_location import EventLocationFactory
-from app.factories.custom_system_role import CustomSysRoleFactory
-from app.factories.panel_permission import PanelPermissionFactory
-from app.factories.user import UserFactory
-from app.factories.notification_action import NotificationActionFactory
-from app.factories.notification import NotificationFactory
-from app.factories.event import EventFactoryBasic
-from app.factories.social_link import SocialLinkFactory
-from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
-from app.factories.page import PageFactory
-from app.factories.event_copyright import EventCopyrightFactory
-from app.factories.setting import SettingFactory
-from app.factories.event_type import EventTypeFactory
-from app.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
-from app.factories.access_code import AccessCodeFactory
-from app.factories.custom_form import CustomFormFactory
-from app.factories.faq import FaqFactory
-from app.factories.event_topic import EventTopicFactory
-from app.factories.event_invoice import EventInvoiceFactory
-from app.factories.event_sub_topic import EventSubTopicFactory
-from app.factories.sponsor import SponsorFactory
-from app.factories.speakers_call import SpeakersCallFactory
-from app.factories.tax import TaxFactory
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
-from app.factories.ticket import TicketFactory
-from app.factories.attendee import AttendeeFactory
-from app.factories.session_type import SessionTypeFactory
-from app.factories.track import TrackFactory
-from app.factories.ticket_tag import TicketTagFactory
-from app.factories.role import RoleFactory
-from app.factories.module import ModuleFactory
-from app.factories.ticket_fee import TicketFeesFactory
-from app.factories.role_invite import RoleInviteFactory
-from app.factories.custom_placeholder import CustomPlaceholderFactory
-from app.factories.user_permission import UserPermissionFactory
-from app.factories.email_notification import EmailNotificationFactory
-from app.factories.activities import ActivityFactory
-from app.factories.stripe_authorization import StripeAuthorizationFactory
-from app.factories.mail import MailFactory
-from app.factories.order import OrderFactory
-from app.factories.faq_type import FaqTypeFactory
-from app.factories.user_email import UserEmailFactory
-from app.factories.feedback import FeedbackFactory
-from app.factories.service import ServiceFactory
-from app.factories.message_setting import MessageSettingsFactory
-from app.factories.user_favourite_events import UserFavouriteEventFactory
+from tests.factories.event_location import EventLocationFactory
+from tests.factories.custom_system_role import CustomSysRoleFactory
+from tests.factories.panel_permission import PanelPermissionFactory
+from tests.factories.user import UserFactory
+from tests.factories.notification_action import NotificationActionFactory
+from tests.factories.notification import NotificationFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.social_link import SocialLinkFactory
+from tests.factories.microlocation import MicrolocationFactory
+from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
+from tests.factories.page import PageFactory
+from tests.factories.event_copyright import EventCopyrightFactory
+from tests.factories.setting import SettingFactory
+from tests.factories.event_type import EventTypeFactory
+from tests.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
+from tests.factories.access_code import AccessCodeFactory
+from tests.factories.custom_form import CustomFormFactory
+from tests.factories.faq import FaqFactory
+from tests.factories.event_topic import EventTopicFactory
+from tests.factories.event_invoice import EventInvoiceFactory
+from tests.factories.event_sub_topic import EventSubTopicFactory
+from tests.factories.sponsor import SponsorFactory
+from tests.factories.speakers_call import SpeakersCallFactory
+from tests.factories.tax import TaxFactory
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
+from tests.factories.ticket import TicketFactory
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.session_type import SessionTypeFactory
+from tests.factories.track import TrackFactory
+from tests.factories.ticket_tag import TicketTagFactory
+from tests.factories.role import RoleFactory
+from tests.factories.module import ModuleFactory
+from tests.factories.ticket_fee import TicketFeesFactory
+from tests.factories.role_invite import RoleInviteFactory
+from tests.factories.custom_placeholder import CustomPlaceholderFactory
+from tests.factories.user_permission import UserPermissionFactory
+from tests.factories.email_notification import EmailNotificationFactory
+from tests.factories.activities import ActivityFactory
+from tests.factories.stripe_authorization import StripeAuthorizationFactory
+from tests.factories.mail import MailFactory
+from tests.factories.order import OrderFactory
+from tests.factories.faq_type import FaqTypeFactory
+from tests.factories.user_email import UserEmailFactory
+from tests.factories.feedback import FeedbackFactory
+from tests.factories.service import ServiceFactory
+from tests.factories.message_setting import MessageSettingsFactory
+from tests.factories.user_favourite_events import UserFavouriteEventFactory
 
 
 stash = {}

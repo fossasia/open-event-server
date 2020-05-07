@@ -1,7 +1,7 @@
 import unittest
 
 from app.api.schema.access_codes import AccessCodeSchema
-from app.factories.access_code import AccessCodeFactory
+from tests.factories.access_code import AccessCodeFactory
 from tests.all.integration.utils import OpenEventTestCase
 
 

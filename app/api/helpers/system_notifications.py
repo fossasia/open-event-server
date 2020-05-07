@@ -255,7 +255,7 @@ NOTIFS = {
     },
     EVENT_IMPORT_FAIL: {
         'recipient': 'User',
-        'title': u'Import of event failed',
+        'title': u'Import of event {event_name} failed',
         'message': (u"The following error occurred:<br>" + u"<pre>{error_text}</pre>"),
     },
     MONTHLY_PAYMENT_NOTIF: {
@@ -290,12 +290,12 @@ NOTIFS = {
     },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer',
-        'title': u'New ticket purchase for {event_name} : ({invoice_id}) ',
+        'title': u'New ticket purchase for {event_name} : ({invoice_id})',
         'message': (u"The order has been processed successfully."),
     },
     TICKET_RESEND_ORGANIZER: {
         'recipient': 'Owner, Organizer',
-        'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id}) ',
+        'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id})',
         'message': (u"Email has been sent successfully."),
     },
     TICKET_CANCELLED: {
