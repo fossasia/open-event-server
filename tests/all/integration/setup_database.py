@@ -10,13 +10,18 @@ from app.settings import set_settings
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+def create_app():
+    app.config.from_object('config.TestingConfig')
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
+    return app
+
+
 class Setup(object):
     @staticmethod
     def create_app():
-        app.config.from_object('config.TestingConfig')
-        app.logger.addHandler(logging.StreamHandler(sys.stdout))
-        app.logger.setLevel(logging.ERROR)
-        with app.test_request_context():
+        test_app = create_app()
+        with test_app.test_request_context():
             db.create_all()
             set_settings(app_name='Open Event', app_environment=Environment.TESTING)
 

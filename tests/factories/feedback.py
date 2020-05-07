@@ -1,14 +1,14 @@
 import factory
 
+from app.models.feedback import Feedback
+from tests.factories.base import BaseFactory
 from tests.factories.session import SessionFactory
 from tests.factories.user import UserFactory
-from app.models.feedback import Feedback, db
 
 
-class FeedbackFactory(factory.alchemy.SQLAlchemyModelFactory):
+class FeedbackFactory(BaseFactory):
     class Meta:
         model = Feedback
-        sqlalchemy_session = db.session
 
     session = factory.RelatedFactory(SessionFactory)
     user = factory.RelatedFactory(UserFactory)

@@ -1,15 +1,14 @@
 import factory
 
 import tests.factories.common as common
-from tests.factories.event import EventFactoryBasic
-from app.models import db
 from app.models.stripe_authorization import StripeAuthorization
+from tests.factories.base import BaseFactory
+from tests.factories.event import EventFactoryBasic
 
 
-class StripeAuthorizationFactory(factory.alchemy.SQLAlchemyModelFactory):
+class StripeAuthorizationFactory(BaseFactory):
     class Meta:
         model = StripeAuthorization
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     stripe_secret_key = common.string_

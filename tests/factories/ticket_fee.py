@@ -2,12 +2,12 @@ import factory
 
 import tests.factories.common as common
 from app.models.ticket_fee import TicketFees, db
+from tests.factories.base import BaseFactory
 
 
-class TicketFeesFactory(factory.alchemy.SQLAlchemyModelFactory):
+class TicketFeesFactory(BaseFactory):
     class Meta:
         model = TicketFees
-        sqlalchemy_session = db.session
 
     currency = common.currency_
     service_fee = common.fee_

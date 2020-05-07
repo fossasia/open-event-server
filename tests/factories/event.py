@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.event import Event, db
+from app.models.event import Event
+from tests.factories.base import BaseFactory
 
 
-class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
+class EventFactoryBasic(BaseFactory):
     class Meta:
         model = Event
-        sqlalchemy_session = db.session
 
     name = common.string_
     external_event_url = common.url_

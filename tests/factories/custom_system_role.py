@@ -1,12 +1,10 @@
-import factory
-
 import tests.factories.common as common
-from app.models.custom_system_role import CustomSysRole, db
+from app.models.custom_system_role import CustomSysRole
+from tests.factories.base import BaseFactory
 
 
-class CustomSysRoleFactory(factory.alchemy.SQLAlchemyModelFactory):
+class CustomSysRoleFactory(BaseFactory):
     class Meta:
         model = CustomSysRole
-        sqlalchemy_session = db.session
 
     name = common.string_

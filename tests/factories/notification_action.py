@@ -1,14 +1,11 @@
-import factory
-
-import tests.factories.common as common
 import app.models.notification as notification
-from app.models import db
+import tests.factories.common as common
+from tests.factories.base import BaseFactory
 
 
-class NotificationActionFactory(factory.alchemy.SQLAlchemyModelFactory):
+class NotificationActionFactory(BaseFactory):
     class Meta:
         model = notification.NotificationAction
-        sqlalchemy_session = db.session
 
     subject = ('event',)
     link = (common.url_,)

@@ -1,14 +1,14 @@
 import factory
 
 import tests.factories.common as common
+from app.models.speakers_call import SpeakersCall
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.speakers_call import SpeakersCall, db
 
 
-class SpeakersCallFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SpeakersCallFactory(BaseFactory):
     class Meta:
         model = SpeakersCall
-        sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
     announcement = common.string_

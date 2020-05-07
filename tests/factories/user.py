@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.user import User, db
+from app.models.user import User
+from tests.factories.base import BaseFactory
 
 
-class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
+class UserFactory(BaseFactory):
     class Meta:
         model = User
-        sqlalchemy_session = db.session
 
     email = common.email_
     password = 'password'

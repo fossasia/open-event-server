@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.event_topic import EventTopic, db
+from app.models.event_topic import EventTopic
+from tests.factories.base import BaseFactory
 
 
-class EventTopicFactory(factory.alchemy.SQLAlchemyModelFactory):
+class EventTopicFactory(BaseFactory):
     class Meta:
         model = EventTopic
-        sqlalchemy_session = db.session
 
     name = common.string_
     slug = common.slug_

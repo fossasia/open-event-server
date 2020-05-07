@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.activity import Activity, db
+from app.models.activity import Activity
+from tests.factories.base import BaseFactory
 
 
-class ActivityFactory(factory.alchemy.SQLAlchemyModelFactory):
+class ActivityFactory(BaseFactory):
     class Meta:
         model = Activity
-        sqlalchemy_session = db.session
 
     actor = common.string_
     action = common.string_

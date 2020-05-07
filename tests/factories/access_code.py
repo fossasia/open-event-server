@@ -1,16 +1,16 @@
 import factory
 
 import tests.factories.common as common
+from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.ticket import TicketFactory
 from tests.factories.user import UserFactory
-from app.models.access_code import AccessCode, db
+from app.models.access_code import AccessCode
 
 
-class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class AccessCodeFactory(BaseFactory):
     class Meta:
         model = AccessCode
-        sqlalchemy_session = db.session
 
     tickets = factory.RelatedFactory(TicketFactory)
     user = factory.RelatedFactory(UserFactory)

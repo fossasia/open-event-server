@@ -1,13 +1,11 @@
-import factory
-
 import tests.factories.common as common
-from app.models.setting import Setting, db
+from app.models.setting import Setting
+from tests.factories.base import BaseFactory
 
 
-class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
+class SettingFactory(BaseFactory):
     class Meta:
         model = Setting
-        sqlalchemy_session = db.session
 
     app_environment = common.environment_
     # Name of the application. (Eg. Event Yay!, Open Event)

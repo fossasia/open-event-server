@@ -28,7 +28,6 @@ class TestSchema(Schema):
 
 
 class TestUtils(TestCase):
-
     @pytest.mark.skip(reason="no way of currently testing this")
     def test_patch_defaults_adds_defaults(self):
         schema = TestSchema()

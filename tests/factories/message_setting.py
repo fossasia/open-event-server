@@ -1,12 +1,10 @@
-import factory
+from app.models.message_setting import MessageSettings
+from tests.factories.base import BaseFactory
 
-from app.models.message_setting import MessageSettings, db
 
-
-class MessageSettingsFactory(factory.alchemy.SQLAlchemyModelFactory):
+class MessageSettingsFactory(BaseFactory):
     class Meta:
         model = MessageSettings
-        sqlalchemy_session = db.session
 
     action = "After Event"
     mail_status = True
