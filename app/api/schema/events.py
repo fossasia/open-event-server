@@ -34,7 +34,7 @@ class EventSchemaPublic(SoftDeletionSchema):
                 data['timezone'] = event.timezone
         try:
             timezone(data['timezone'])
-        except pytz.exceptions.UnknownTimeZoneError:
+        except pytz.UnknownTimeZoneError:
             raise UnprocessableEntity(
                 {'pointer': '/data/attributes/timezone'},
                 "Unknown timezone: '{}'".format(data['timezone']),

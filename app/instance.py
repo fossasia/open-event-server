@@ -17,7 +17,6 @@ from flask_migrate import Migrate
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck
-from pytz import utc
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
@@ -30,12 +29,9 @@ from app.api.helpers.cache import cache
 from app.api.helpers.jwt import jwt_user_loader
 from app.extensions import limiter, shell
 from app.models import db
-from app.models.event import Event
-from app.models.role_invite import RoleInvite
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.views.blueprints import BlueprintsManager
-from app.views.elastic_search import client
 from app.views.healthcheck import (
     check_migrations,
     health_check_celery,
@@ -43,6 +39,7 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
+from app.graphql import views as graphql_views
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -78,6 +75,7 @@ def create_app():
     global app_created
     if not app_created:
         BlueprintsManager.register(app)
+        graphql_views.init_app(app)
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
@@ -182,7 +180,9 @@ def create_app():
 
         add_engine_pidguard(db.engine)
 
-        if app.config['SQLALCHEMY_DATABASE_URI'].startswith("sqlite://"):
+        if app.config[
+            'SQLALCHEMY_DATABASE_URI'  # pytype: disable=attribute-error
+        ].startswith("sqlite://"):
             sqlite_datetime_fix()
 
     sa.orm.configure_mappers()
@@ -202,6 +202,7 @@ def create_app():
                 CeleryIntegration(),
                 SqlalchemyIntegration(),
             ],
+            traces_sample_rate=app.config['SENTRY_TRACES_SAMPLE_RATE'],
         )
 
     # redis

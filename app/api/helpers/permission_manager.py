@@ -1,3 +1,4 @@
+from typing import Union
 from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from sqlalchemy.orm.exc import NoResultFound
@@ -357,7 +358,7 @@ permissions = {
 }
 
 
-def is_multiple(data):
+def is_multiple(data: Union[str, list]) -> bool:
     if type(data) is list:
         return True
     if type(data) is str:
@@ -465,8 +466,10 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             if not is_multiple(model):
                 model = [model]
 
-            if is_multiple(fetch_key_url):
-                fetch_key_url = fetch_key_url.split(",")
+            if type(fetch_key_url) == str and is_multiple(fetch_key_url):
+                fetch_key_url = fetch_key_url.split(  # pytype: disable=attribute-error
+                    ","
+                )
 
             found = False
             for index, mod in enumerate(model):
@@ -477,7 +480,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 if not view_kwargs.get(f_url):
                     continue
                 try:
-                    data = mod.query.filter(
+                    data = mod.query.filter(  # pytype: disable=attribute-error
                         getattr(mod, fetch_key_model) == view_kwargs[f_url]
                     ).one()
                 except NoResultFound:

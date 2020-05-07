@@ -16,7 +16,6 @@ from app.api.helpers.order import (
 )
 from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
-from app.models.order import Order
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 
@@ -32,16 +31,16 @@ class TicketingManager:
     def match_discount_quantity(discount_code, tickets=None, ticket_holders=None):
         qty = 0
         ticket_ids = [ticket.id for ticket in discount_code.tickets]
-        old_holders = get_count(
-            TicketHolder.query.filter(TicketHolder.ticket_id.in_(ticket_ids))
-            .join(Order)
-            .filter(Order.status.in_(['completed', 'placed']))
-        )
+        old_holders = discount_code.confirmed_attendees_count
         if ticket_holders:
-            for holder in ticket_holders:
-                ticket_holder = TicketHolder.query.filter_by(id=holder).one()
-                if ticket_holder.ticket.id in ticket_ids:
-                    qty += 1
+            # pytype: disable=attribute-error
+            qty = get_count(
+                TicketHolder.query.filter(
+                    TicketHolder.id.in_(ticket_holders),
+                    TicketHolder.ticket_id.in_(ticket_ids),
+                )
+            )
+            # pytype: enable=attribute-error
         elif tickets:
             for ticket in tickets:
                 if int(ticket['id']) in ticket_ids:
