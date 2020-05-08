@@ -140,7 +140,7 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
         image_sizes = ImageSizes(
-            image_sizes_type,
+            type=image_sizes_type,
             full_width=1300,
             full_height=500,
             full_aspect=True,

@@ -1,7 +1,3 @@
-from datetime import datetime
-
-import pytz
-
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -54,12 +50,6 @@ class NotificationAction(db.Model):
         'Notification', backref='actions', foreign_keys=[notification_id]
     )
 
-    def __init__(self, action_type=None, subject=None, subject_id=None, link=None):
-        self.action_type = action_type
-        self.subject = subject
-        self.subject_id = subject_id
-        self.link = link
-
 
 class Notification(SoftDeletionModel):
     """
@@ -78,18 +68,5 @@ class Notification(SoftDeletionModel):
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __init__(
-        self, user_id=None, title=None, message=None, is_read=False, deleted_at=None
-    ):
-        self.user_id = user_id
-        self.title = title
-        self.message = message
-        self.received_at = datetime.now(pytz.utc)
-        self.is_read = is_read
-        self.deleted_at = deleted_at
-
     def __repr__(self):
         return '<Notif %s:%s>' % (self.user, self.title)
-
-    def __str__(self):
-        return self.__repr__()

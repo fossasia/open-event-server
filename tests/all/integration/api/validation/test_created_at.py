@@ -46,6 +46,7 @@ class TestCreatedAtValidation(OpenEventLegacyTestCase):
                     else:
                         current_time = datetime.now(timezone.utc).astimezone()
                     created_at_db = test_model.created_at
+                    self.assertIsNotNone(created_at_db, 'created_at None for ' + str(model_factory))
                     time_diff = current_time - created_at_db
                     allowed_time_lag = timedelta(milliseconds=250)
                     message = "created_at not set" " to current time in {} \n".format(

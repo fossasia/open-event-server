@@ -29,18 +29,7 @@ class PanelPermission(db.Model):
         backref=db.backref('panel_permissions', lazy='dynamic'),
     )
 
-    can_access = db.Column(db.Boolean)
-
-    def __init__(self, panel_name, custom_system_roles=None, can_access=True):
-        self.panel_name = panel_name
-        if custom_system_roles is None:
-            self.custom_system_roles = []
-        else:
-            self.custom_system_roles = custom_system_roles
-        self.can_access = can_access
+    can_access = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return '<PanelPerm %r for %r>' % (self.custom_system_roles, self.panel_name)
-
-    def __str__(self):
-        return self.__repr__()

@@ -28,13 +28,10 @@ class EventLocation(db.Model):
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, unique=True, nullable=False)
 
-    def __init__(self, name=None, slug=None):
-
-        self.name = name
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.slug = get_new_slug(name=self.name)
 
     def __repr__(self):
         return '<EventLocation %r>' % self.slug
 
-    def __str__(self):
-        return self.__repr__()

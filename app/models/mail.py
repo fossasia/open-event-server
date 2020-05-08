@@ -1,6 +1,4 @@
-from datetime import datetime
-
-import pytz
+from sqlalchemy.sql import func
 
 from app.models import db
 
@@ -38,24 +36,10 @@ class Mail(db.Model):
     __tablename__ = 'mails'
     id = db.Column(db.Integer, primary_key=True)
     recipient = db.Column(db.String)
-    time = db.Column(db.DateTime(timezone=True))
+    time = db.Column(db.DateTime(timezone=True), default=func.now())
     action = db.Column(db.String)
     subject = db.Column(db.String)
     message = db.Column(db.String)
 
-    def __init__(
-        self, recipient=None, time=None, action=None, subject=None, message=None
-    ):
-        self.recipient = recipient
-        self.time = time
-        if self.time is None:
-            self.time = datetime.now(pytz.utc)
-        self.action = action
-        self.subject = subject
-        self.message = message
-
     def __repr__(self):
         return '<Mail %r to %r>' % (self.id, self.recipient)
-
-    def __str__(self):
-        return self.__repr__()

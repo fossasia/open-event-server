@@ -9,7 +9,7 @@ from app.models import db
 from app.models.base import SoftDeletionModel
 
 
-@dataclass(init=True, repr=True, unsafe_hash=True)
+@dataclass(init=False, unsafe_hash=True)
 class TicketHolder(SoftDeletionModel):
     __tablename__ = "ticket_holders"
 

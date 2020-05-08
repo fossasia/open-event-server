@@ -1,6 +1,7 @@
-import datetime
 import time
 import uuid
+
+from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
@@ -59,7 +60,7 @@ class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True)
+    identifier = db.Column(db.String, unique=True, default=get_new_order_identifier)
     amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -71,7 +72,7 @@ class Order(SoftDeletionModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
-    created_at = db.Column(db.DateTime(timezone=True))
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
     trashed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
     transaction_id = db.Column(db.String)
@@ -84,7 +85,7 @@ class Order(SoftDeletionModel):
     last4 = db.Column(db.String)
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
-    status = db.Column(db.String)
+    status = db.Column(db.String, default='pending')
     cancel_note = db.Column(db.String, nullable=True)
     order_notes = db.Column(db.String)
     tickets_pdf_url = db.Column(db.String)
@@ -106,60 +107,8 @@ class Order(SoftDeletionModel):
     tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
     order_tickets = db.relationship("OrderTicket", backref='order')
 
-    def __init__(
-        self,
-        quantity=None,
-        amount=None,
-        address=None,
-        city=None,
-        state=None,
-        country=None,
-        zipcode=None,
-        company=None,
-        tax_business_info=None,
-        transaction_id=None,
-        paid_via=None,
-        is_billing_enabled=False,
-        created_at=None,
-        user_id=None,
-        discount_code_id=None,
-        event_id=None,
-        status='pending',
-        payment_mode=None,
-        deleted_at=None,
-        order_notes=None,
-        tickets_pdf_url=None,
-    ):
-        self.identifier = get_new_order_identifier()
-        self.quantity = quantity
-        self.amount = amount
-        self.city = city
-        self.address = address
-        self.state = state
-        self.country = country
-        self.zipcode = zipcode
-        self.company = company
-        self.tax_business_info = tax_business_info
-        self.user_id = user_id
-        self.event_id = event_id
-        self.transaction_id = transaction_id
-        self.paid_via = paid_via
-        self.is_billing_enabled = is_billing_enabled
-        if created_at is None:
-            created_at = datetime.datetime.now(datetime.timezone.utc)
-        self.created_at = created_at
-        self.discount_code_id = discount_code_id
-        self.status = status
-        self.payment_mode = payment_mode
-        self.deleted_at = deleted_at
-        self.order_notes = order_notes
-        self.tickets_pdf_url = tickets_pdf_url
-
     def __repr__(self):
         return '<Order %r>' % self.id
-
-    def __str__(self):
-        return str(self.identifier)
 
     def get_invoice_number(self):
         return (
@@ -185,27 +134,3 @@ class Order(SoftDeletionModel):
             )
         else:
             return 0.0
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'identifier': self.identifier,
-            'quantity': self.quantity,
-            'amount': self.amount,
-            'address': self.address,
-            'state': self.state,
-            'zipcode': self.zipcode,
-            'country': self.country,
-            'company': self.company,
-            'taxBusinessInfo': self.tax_business_info,
-            'transaction_id': self.transaction_id,
-            'paid_via': self.paid_via,
-            'isBillingEnabled': self.is_billing_enabled,
-            'payment_mode': self.payment_mode,
-            'brand': self.brand,
-            'exp_month': self.exp_month,
-            'exp_year': self.exp_year,
-            'last4': self.last4,
-        }

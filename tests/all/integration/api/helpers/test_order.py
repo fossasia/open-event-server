@@ -37,6 +37,7 @@ class TestOrderUtilities(OpenEventTestCase):
             obj = OrderFactory()
             event = EventFactoryBasic()
             obj.event = event
+            db.session.commit()
             set_expiry_for_order(obj)
             self.assertEqual(obj.status, 'initializing')
 
