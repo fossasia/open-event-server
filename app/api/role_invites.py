@@ -223,7 +223,7 @@ def accept_invite():
                     delete_previous_uer(past_owner)
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
-            uer = UsersEventsRoles(user, event, role)
+            uer = UsersEventsRoles(user=user, event=event, role=role)
             save_to_db(uer, 'User Event Role Created')
             if not user.is_verified:
                 user.is_verified = True

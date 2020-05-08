@@ -5,6 +5,7 @@ from app.models import db
 from app.models.base import SoftDeletionModel
 
 
+# TODO(Areeb): Deduplicate this
 def get_new_slug(name):
     slug = (
         name.lower()
@@ -34,25 +35,9 @@ class EventSubTopic(SoftDeletionModel):
         db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE')
     )
 
-    def __init__(self, name=None, slug=None, event_topic_id=None, deleted_at=None):
-
-        self.name = name
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.slug = get_new_slug(name=self.name)
-        self.event_topic_id = event_topic_id
-        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<EventSubTopic %r>' % self.name
-
-    def __str__(self):
-        return self.__repr__()
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'name': self.name,
-            'slug': self.slug,
-            'event_topic_id': self.event_topic_id,
-        }

@@ -1,6 +1,4 @@
-from datetime import datetime
-
-import pytz
+from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.api.helpers.system_mails import MAILS
@@ -45,29 +43,13 @@ class MessageSettings(db.Model):
     mail_status = db.Column(db.Boolean, default=False)
     notification_status = db.Column(db.Boolean, default=False)
     user_control_status = db.Column(db.Boolean, default=False)
-    sent_at = db.Column(db.DateTime(timezone=True))
-
-    def __init__(
-        self,
-        action=None,
-        mail_status=None,
-        notification_status=None,
-        user_control_status=None,
-    ):
-        self.action = action
-        self.mail_status = mail_status
-        self.notification_status = notification_status
-        self.user_control_status = user_control_status
-        self.sent_at = datetime.now(pytz.utc)
+    sent_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
     def __repr__(self):
         return '<Message Setting %r >' % self.action
 
-    def __str__(self):
-        return self.__repr__()
-
     @classmethod
-    def _email_message(self, action, attr=None):
+    def _email_message(cls, action, attr=None):
         message = {}
         if action in [
             INVITE_PAPERS,
@@ -118,7 +100,7 @@ class MessageSettings(db.Model):
         return message
 
     @classmethod
-    def _notification_message(self, action, attr=None):
+    def _notification_message(cls, action, attr=None):
         message = {}
         if action in [
             EVENT_ROLE,
@@ -159,15 +141,3 @@ class MessageSettings(db.Model):
     def notification_title(self):
         message = self._notification_message(self.action, attr='title')
         return message
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-
-        return {
-            'id': self.id,
-            'action': self.action,
-            'mail_status': self.mail_status,
-            'notification_status': self.notification_status,
-            'user_control_status': self.user_control_status,
-        }

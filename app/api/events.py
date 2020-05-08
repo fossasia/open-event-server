@@ -378,14 +378,13 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         role = Role.query.filter_by(name=OWNER).first()
-        uer = UsersEventsRoles(user, event, role)
+        uer = UsersEventsRoles(user=user, event=event, role=role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(
-            user.email,
-            role.title_name,
-            event.id,
-            role.id,
-            datetime.now(pytz.utc),
+            email=user.email,
+            role_name=role.title_name,
+            event=event,
+            role=role,
             status='accepted',
         )
         save_to_db(role_invite, 'Owner Role Invite Added')

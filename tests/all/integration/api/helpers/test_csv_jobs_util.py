@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 
 import tests.factories.common as common
 from app.api.helpers.csv_jobs_util import *
@@ -16,7 +17,7 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check the orders data export"""
 
         with self.app.test_request_context():
-            test_order = OrderFactory()
+            test_order = OrderFactory(created_at=datetime.now())
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
             self.assertEqual(field_data[1][2], 'initializing')
