@@ -10,10 +10,10 @@ from tests.factories.session import SessionFactory, SessionFactoryBase
 from tests.factories.speaker import SpeakerFactoryBase
 from tests.factories.user import UserFactory
 from app.models import db
-from tests.all.integration.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventLegacyTestCase
 
 
-class TestPentabarfXML(OpenEventTestCase):
+class TestPentabarfXML(OpenEventLegacyTestCase):
     def test_export(self):
         """Test to check event contents in pentabarfxml format"""
         with self.app.test_request_context():

@@ -9,16 +9,15 @@ from app.api.helpers.permission_manager import (
     has_access,
     permission_manager,
 )
+from app.models.users_events_role import UsersEventsRoles
+from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
-from app.models.users_events_role import UsersEventsRoles
-from tests.all.integration.setup_database import Setup
-from tests.all.integration.utils import OpenEventTestCase
 
 
-class TestPermissionManager(OpenEventTestCase):
+class TestPermissionManager(OpenEventLegacyTestCase):
     def setUp(self):
-        self.app = Setup.create_app()
+        super(TestPermissionManager, self).setUp()
         with self.app.test_request_context():
             user = UserFactory()
             save_to_db(user)

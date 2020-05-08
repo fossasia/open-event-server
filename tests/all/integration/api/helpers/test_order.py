@@ -5,7 +5,7 @@ import tests.factories.common as common
 from app.api.attendees import get_sold_and_reserved_tickets_count
 from app.api.helpers.db import save_to_db
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
-from tests.factories.attendee import AttendeeFactory, AttendeeFactoryBase
+from tests.factories.attendee import AttendeeFactoryBase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory
 from tests.factories.ticket import TicketFactory
@@ -44,10 +44,9 @@ class TestOrderUtilities(OpenEventTestCase):
         """Method to test to delete related attendees of an event"""
 
         with self.app.test_request_context():
-            attendee = AttendeeFactory()
-            save_to_db(attendee)
+            attendee = AttendeeFactoryBase(event_id=EventFactoryBasic().id)
 
-            obj = OrderFactory()
+            obj = OrderFactory(event_id=attendee.event_id)
             obj.ticket_holders = [
                 attendee,
             ]
