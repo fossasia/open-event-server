@@ -34,4 +34,3 @@ class EventLocation(db.Model):
 
     def __repr__(self):
         return '<EventLocation %r>' % self.slug
-

@@ -58,9 +58,7 @@ class Session(SoftDeletionModel):
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
-    last_modified_at = db.Column(
-        db.DateTime(timezone=True), default=func.now()
-    )
+    last_modified_at = db.Column(db.DateTime(timezone=True), default=func.now())
     send_email = db.Column(db.Boolean, nullable=True)
     is_locked = db.Column(db.Boolean, default=False, nullable=False)
     complex_field_values = db.Column(db.JSON)
