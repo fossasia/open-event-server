@@ -343,26 +343,6 @@ pre-commit installed at .git/hooks/pre-commit
 * it's usually a good idea to run the hooks against all of the files when adding new hooks (usually pre-commit will only run on the changed files during git hooks)
 ```sh
 $ pre-commit run --all-files
-[INFO] Initializing environment for https://github.com/pre-commit/pre-commit-hooks.
-[INFO] Initializing environment for https://github.com/psf/black.
-[INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
-[INFO] Once installed this environment will be reused.
-[INFO] This may take a few minutes...
-[INFO] Installing environment for https://github.com/psf/black.
-[INFO] Once installed this environment will be reused.
-[INFO] This may take a few minutes...
-Check Yaml...............................................................Passed
-Fix End of Files.........................................................Passed
-Trim Trailing Whitespace.................................................Failed
-- hook id: trailing-whitespace
-- exit code: 1
-
-Files were modified by this hook. Additional output:
-
-Fixing sample.py
-
-black....................................................................Passed
-
 ```
 
 ### Contributions, Bug Reports, Feature Requests
