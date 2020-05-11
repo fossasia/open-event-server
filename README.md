@@ -40,6 +40,13 @@ A demo version is automatically deployed from our repositories:
 
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
+
+**NOTE :** If you are heading towards Local Installation, Be sure that you use one of the  following operating systems :
+
+
+* Debian based Linux Distribution
+* Macintosh Operating System
+
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
