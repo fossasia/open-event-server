@@ -44,7 +44,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 **NOTE :** If you are heading towards Local Installation, Be sure that you use one of the  following operating systems :
 
 
-* Debian based Linux Distribution
+* Debian based Linux Distros (like Ubuntu)
 * Macintosh Operating System
 
 1. [Generic Installation Instructions](/docs/installation/basic.md)
