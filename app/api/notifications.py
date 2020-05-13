@@ -32,7 +32,7 @@ class NotificationList(ResourceList):
         """
         query_ = self.session.query(Notification)
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
@@ -44,7 +44,7 @@ class NotificationList(ResourceList):
         :return:
         """
         if view_kwargs.get('user_id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             data['user_id'] = user.id
 
     view_kwargs = True
@@ -68,7 +68,6 @@ class NotificationDetail(ResourceDetail):
     def before_get(self, args, kwargs):
         if kwargs.get('notification_action_id'):
             notification_action = safe_query(
-                db,
                 NotificationAction,
                 'id',
                 kwargs['notification_action_id'],
@@ -84,7 +83,6 @@ class NotificationDetail(ResourceDetail):
         """
         if view_kwargs.get('notification_action_id'):
             notification_action = safe_query(
-                self,
                 NotificationAction,
                 'id',
                 view_kwargs['notification_action_id'],

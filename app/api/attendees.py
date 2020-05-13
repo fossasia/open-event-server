@@ -134,11 +134,7 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(
-                self,
-                Order,
-                'identifier',
-                view_kwargs['order_identifier'],
-                'order_identifier',
+                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
             )
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id
@@ -147,20 +143,20 @@ class AttendeeList(ResourceList):
             query_ = query_.join(Order).filter(Order.id == order.id)
 
         if view_kwargs.get('ticket_id'):
-            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query(Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             # if not has_access('is_registrar', event_id=ticket.event_id):
             #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
 
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(
                 User.id == user.id
             )
 
-        query_ = event_query(self, query_, view_kwargs, permission='is_registrar')
+        query_ = event_query(query_, view_kwargs, permission='is_registrar')
         return query_
 
     view_kwargs = True
@@ -186,7 +182,7 @@ class AttendeeDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        attendee = safe_query(self, TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
+        attendee = safe_query(TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
         if not has_access(
             'is_registrar_or_user_itself',
             user_id=current_user.id,
@@ -283,7 +279,7 @@ class AttendeeDetail(ResourceDetail):
                         data['device_name_checkin'] = '-'
 
         if 'is_checked_out' in data and data['is_checked_out']:
-            attendee = safe_query(db, TicketHolder, 'id', kwargs['id'], 'attendee_id')
+            attendee = safe_query(TicketHolder, 'id', kwargs['id'], 'attendee_id')
             if not attendee.is_checked_out:
                 checkout_times = (
                     obj.checkout_times.split(',') if obj.checkout_times else []

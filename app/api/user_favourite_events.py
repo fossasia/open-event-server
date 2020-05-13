@@ -69,7 +69,7 @@ class UserFavouriteEventList(ResourceList):
         """
         query_ = self.session.query(UserFavouriteEvent)
         if view_kwargs.get('user_id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         elif has_access('is_admin'):
             pass

@@ -42,7 +42,7 @@ class FaqTypeList(ResourceList):
         :return:
         """
         query_ = self.session.query(FaqType)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -66,7 +66,7 @@ class FaqTypeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('faq_id'):
-            faq = safe_query(self, Faq, 'id', view_kwargs['faq_id'], 'faq_id')
+            faq = safe_query(Faq, 'id', view_kwargs['faq_id'], 'faq_id')
             if faq.faq_type_id:
                 view_kwargs['id'] = faq.faq_type_id
             else:

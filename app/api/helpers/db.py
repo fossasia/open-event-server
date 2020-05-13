@@ -28,56 +28,26 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         return False
 
 
+def safe_query_by_id(model, id):
+    return safe_query_without_soft_deleted_entries(model, 'id', id, 'id')
+
+
 def safe_query_without_soft_deleted_entries(
-    self, model, column_name, value, parameter_name
+    model, column_name, value, parameter_name, filter_deleted=True
 ):
     """
     Wrapper query to properly raise exception after filtering the soft deleted entries
-    :param self:
     :param model: db Model to be queried
     :param column_name: name of the column to be queried for the given value
     :param value: value to be queried against the given column name, e.g view_kwargs['event_id']
     :param parameter_name: Name of parameter to be printed in json-api error message eg 'event_id'
+    :param filter_deleted: Deleted records are filtered if set to true
     :return:
     """
     try:
-        if hasattr(model, 'deleted_at'):
-            record = (
-                self.session.query(model)
-                .filter(getattr(model, column_name) == value)
-                .filter_by(deleted_at=None)
-                .one()
-            )
-        else:
-            record = (
-                self.session.query(model)
-                .filter(getattr(model, column_name) == value)
-                .one()
-            )
-    except NoResultFound:
-        raise ObjectNotFound(
-            {'parameter': '{}'.format(parameter_name)},
-            "{}: {} not found".format(model.__name__, value),
-        )
-    else:
-        return record
-
-
-def safe_query(self, model, column_name, value, parameter_name):
-    """
-    Wrapper query to properly raise exception
-    :param self:
-    :param model: db Model to be queried
-    :param column_name: name of the column to be queried for the given value
-    :param value: value to be queried against the given column name, e.g view_kwargs['event_id']
-    :param parameter_name: Name of parameter to be printed in json-api error message eg 'event_id'
-    :return:
-    """
-    try:
-        record = self.session.query(model).filter(getattr(model, column_name) == value)
-        if request.args.get('get_trashed') != 'true':
-            if hasattr(model, 'deleted_at'):
-                record = record.filter(model.deleted_at == None)
+        record = model.query.filter(getattr(model, column_name) == value)
+        if filter_deleted and hasattr(model, 'deleted_at'):
+            record = record.filter_by(deleted_at=None)
         record = record.one()
     except NoResultFound:
         raise ObjectNotFound(
@@ -86,6 +56,25 @@ def safe_query(self, model, column_name, value, parameter_name):
         )
     else:
         return record
+
+
+def safe_query(model, column_name, value, parameter_name):
+    """
+    Wrapper query to properly raise exception
+    :param model: db Model to be queried
+    :param column_name: name of the column to be queried for the given value
+    :param value: value to be queried against the given column name, e.g view_kwargs['event_id']
+    :param parameter_name: Name of parameter to be printed in json-api error message eg 'event_id'
+    :return:
+    """
+    return safe_query_without_soft_deleted_entries(
+        model,
+        column_name,
+        value,
+        parameter_name,
+        # TODO(Areeb): Check that only admin can pass this parameter
+        request.args.get('get_trashed') != 'true',
+    )
 
 
 def get_or_create(model, **kwargs):

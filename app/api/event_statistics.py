@@ -20,7 +20,7 @@ class EventStatisticsGeneralDetail(ResourceDetail):
         """
         if view_kwargs.get('identifier'):
             event = safe_query(
-                self, Event, 'identifier', view_kwargs['identifier'], 'identifier'
+                Event, 'identifier', view_kwargs['identifier'], 'identifier'
             )
             view_kwargs['id'] = event.id
 
