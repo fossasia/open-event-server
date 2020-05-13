@@ -5,6 +5,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.order import calculate_order_amount
+from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.tax import TaxSubFactory
 from tests.factories.ticket import TicketSubFactory
@@ -40,7 +41,10 @@ def test_single_ticket(db):
 
 
 def _create_ticket_dict(tickets, quantities):
-    return [dict(id=ticket.id, quantity=quantity) for ticket, quantity in zip(tickets, quantities)]
+    return [
+        dict(id=ticket.id, quantity=quantity)
+        for ticket, quantity in zip(tickets, quantities)
+    ]
 
 
 def test_multiple_tickets_different_event(db):
@@ -51,7 +55,9 @@ def test_multiple_tickets_different_event(db):
 
     ticket_dict = _create_ticket_dict([ticket1, ticket2], [1, 2])
 
-    with pytest.raises(UnprocessableEntity, match='All tickets must belong to same event'):
+    with pytest.raises(
+        UnprocessableEntity, match='All tickets must belong to same event'
+    ):
         calculate_order_amount(ticket_dict)
 
 
@@ -89,15 +95,20 @@ def _create_tickets(prices, **kwargs):
 def _create_donation_tickets(db):
     event = EventFactoryBasic()
     tickets = _create_tickets([10, 20], event=event)
-    tickets.append(TicketSubFactory(type='donation', max_price=20, min_price=10, event=event))
+    tickets.append(
+        TicketSubFactory(type='donation', max_price=20, min_price=10, event=event)
+    )
     db.session.commit()
 
     return _create_ticket_dict(tickets, [3, 1, 2])
 
 
 def _expect_donation_error(ticket_dict):
-    with pytest.raises(UnprocessableEntity, match='Price for donation ticket should be present and within range '
-                                                  '10.0 to 20.0'):
+    with pytest.raises(
+        UnprocessableEntity,
+        match='Price for donation ticket should be present and within range '
+        '10.0 to 20.0',
+    ):
         calculate_order_amount(ticket_dict)
 
 
@@ -142,7 +153,11 @@ def test_donation_ticket(db):
 def _create_taxed_tickets(db, tax_included=True):
     tax = TaxSubFactory(rate=18.0, is_tax_included_in_price=tax_included)
     tickets = _create_tickets([123.5, 456.3], event=tax.event)
-    tickets.append(TicketSubFactory(type='donation', event=tax.event, min_price=500.0, max_price=1000.0))
+    tickets.append(
+        TicketSubFactory(
+            type='donation', event=tax.event, min_price=500.0, max_price=1000.0
+        )
+    )
     db.session.commit()
 
     tickets_dict = _create_ticket_dict(tickets, [2, 4, 3])
@@ -175,6 +190,68 @@ def test_tax_excluded(db):
     assert amount_data['tax_percent'] == 18.0
     assert amount_data['tax'] == 799.43
     assert amount_data['discount'] == 0.0
+
+
+def test_discount_code(db):
+    ticket = TicketSubFactory(price=100.0)
+    discount_code = DiscountCodeTicketSubFactory(
+        type='percent', value=10.0, tickets=[ticket]
+    )
+    db.session.commit()
+
+    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code)
+
+    assert amount_data['total'] == 90.0
+    assert amount_data['tax_included'] is None
+    assert amount_data['tax'] == 0.0
+    assert amount_data['discount'] == 10.0
+    ticket_dict = amount_data['tickets'][0]
+    assert ticket_dict['id'] == ticket.id
+    assert ticket_dict['name'] == ticket.name
+    assert ticket_dict['price'] == ticket.price
+    assert ticket_dict['quantity'] == 1
+    assert ticket_dict['ticket_fee'] == 0.0
+    assert ticket_dict['sub_total'] == 90.0
+    assert ticket_dict['discount']['total'] == 10.0
+    assert ticket_dict['discount']['amount'] == 10.0
+    assert ticket_dict['discount']['percent'] == 10.0
+    assert ticket_dict['discount']['code'] == discount_code.code
+
+
+def test_multiple_tickets_discount(db):
+    ticket_a = TicketSubFactory(price=50.0)
+    ticket_b = TicketSubFactory(price=495.8, event=ticket_a.event)
+    ticket_c = TicketSubFactory(price=321.3, event=ticket_a.event)
+
+    discount = DiscountCodeTicketSubFactory(
+        type='percent', value=50.0, tickets=[ticket_a, ticket_b]
+    )
+    DiscountCodeTicketSubFactory(type='amount', value=100.0, tickets=[ticket_c])
+
+    db.session.commit()
+
+    tickets_dict = _create_ticket_dict([ticket_a, ticket_b, ticket_c], [2, 3, 1])
+
+    amount_data = calculate_order_amount(tickets_dict, discount)
+
+    assert amount_data['total'] == 1115.0
+    assert amount_data['discount'] == 793.7
+    assert amount_data['tickets'][0]['quantity'] == 2
+    assert amount_data['tickets'][0]['price'] == 50.0
+    assert amount_data['tickets'][0]['sub_total'] == 50.0
+    assert amount_data['tickets'][0]['discount']['total'] == 50.0
+    assert amount_data['tickets'][0]['discount']['amount'] == 25.0
+    assert amount_data['tickets'][0]['discount']['percent'] == 50.0
+    assert amount_data['tickets'][1]['quantity'] == 3
+    assert amount_data['tickets'][1]['price'] == 495.8
+    assert amount_data['tickets'][1]['sub_total'] == 743.7
+    assert amount_data['tickets'][1]['discount']['total'] == 743.7
+    assert amount_data['tickets'][1]['discount']['amount'] == 247.9
+    assert amount_data['tickets'][1]['discount']['percent'] == 50.0
+    assert amount_data['tickets'][2]['quantity'] == 1
+    assert amount_data['tickets'][2]['price'] == 321.3
+    assert amount_data['tickets'][2]['sub_total'] == 321.3
+    assert amount_data['tickets'][2]['discount'] is None
 
 
 def test_deleted_ticket(db):
