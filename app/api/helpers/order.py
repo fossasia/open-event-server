@@ -197,7 +197,7 @@ def calculate_order_amount(tickets, discount_code=None):
     ticket_list = []
     for ticket_info in tickets:
         discount_amount = 0.0
-        discount_data = {}
+        discount_data = None
         ticket_fee = 0.0
 
         ticket_identifier = ticket_info['id']
@@ -209,11 +209,15 @@ def calculate_order_amount(tickets, discount_code=None):
             event = ticket.event
 
             if event.deleted_at:
-                raise ObjectNotFound({'pointer': 'tickets/event'}, f'Event: {event.id} not found')
+                raise ObjectNotFound(
+                    {'pointer': 'tickets/event'}, f'Event: {event.id} not found'
+                )
 
             fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
         elif ticket.event.id != event.id:
-            raise UnprocessableEntity({'pointer': 'tickets'}, "All tickets must belong to same event")
+            raise UnprocessableEntity(
+                {'pointer': 'tickets'}, "All tickets must belong to same event"
+            )
 
         if not tax and event.tax:
             tax = event.tax
@@ -223,8 +227,9 @@ def calculate_order_amount(tickets, discount_code=None):
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
                 raise UnprocessableEntity(
-                    {'pointer': 'tickets/price'}, f"Price for donation ticket should be present and within range "
-                                                  f"{ticket.min_price} to {ticket.max_price}"
+                    {'pointer': 'tickets/price'},
+                    f"Price for donation ticket should be present and within range "
+                    f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
             price = ticket.price
@@ -242,9 +247,11 @@ def calculate_order_amount(tickets, discount_code=None):
                         'code': discount_code.code,
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
+                        'total': round(discount_amount * quantity, 2),
                     }
+                    break
 
-        total_discount = total_discount + discount_amount * quantity
+        total_discount += round(discount_amount * quantity, 2)
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
             if ticket_fee > fees.maximum_fee:
@@ -265,7 +272,7 @@ def calculate_order_amount(tickets, discount_code=None):
 
     sub_total = total_amount
     if tax:
-        total_tax = total_amount * tax.rate/100
+        total_tax = total_amount * tax.rate / 100
         if not tax_included:
             total_amount += total_tax
 

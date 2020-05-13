@@ -24,10 +24,6 @@ class TicketingManager:
     """All ticketing and orders related helper functions"""
 
     @staticmethod
-    def get_order_expiry():
-        return 10
-
-    @staticmethod
     def match_discount_quantity(discount_code, tickets=None, ticket_holders=None):
         qty = 0
         ticket_ids = [ticket.id for ticket in discount_code.tickets]
@@ -44,14 +40,13 @@ class TicketingManager:
         elif tickets:
             for ticket in tickets:
                 if int(ticket['id']) in ticket_ids:
-                    qty += ticket['quantity']
-        if (
+                    qty += ticket.get('quantity', 1)
+        return (
             (qty + old_holders) <= discount_code.tickets_number
             and discount_code.min_quantity <= qty <= discount_code.max_quantity
-        ):
-            return True
-        return False
+        )
 
+    # TODO(Areeb): Remove after validating logic
     @staticmethod
     def calculate_update_amount(order):
         discount = None
