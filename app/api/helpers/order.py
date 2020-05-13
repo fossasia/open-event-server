@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 
 from flask import render_template
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import (
     get_count,
@@ -206,6 +207,10 @@ def calculate_order_amount(tickets, discount_code=None):
         )
         if not event:
             event = ticket.event
+
+            if event.deleted_at:
+                raise ObjectNotFound({'pointer': 'tickets/event'}, f'Event: {event.id} not found')
+
             fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
         elif ticket.event.id != event.id:
             raise UnprocessableEntity({'pointer': 'tickets'}, "All tickets must belong to same event")

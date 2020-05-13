@@ -1,4 +1,7 @@
+from datetime import datetime
+
 import pytest
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.order import calculate_order_amount
@@ -172,3 +175,19 @@ def test_tax_excluded(db):
     assert amount_data['tax_percent'] == 18.0
     assert amount_data['tax'] == 799.43
     assert amount_data['discount'] == 0.0
+
+
+def test_deleted_ticket(db):
+    ticket = TicketSubFactory(deleted_at=datetime.now())
+    db.session.commit()
+
+    with pytest.raises(ObjectNotFound):
+        calculate_order_amount([{'id': ticket.id}])
+
+
+def test_ticket_of_deleted_event(db):
+    ticket = TicketSubFactory(event__deleted_at=datetime.now())
+    db.session.commit()
+
+    with pytest.raises(ObjectNotFound):
+        calculate_order_amount([{'id': ticket.id}])
