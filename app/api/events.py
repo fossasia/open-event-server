@@ -385,7 +385,7 @@ class EventList(ResourceList):
             role_name=role.title_name,
             event=event,
             role=role,
-            status='accepted',
+            status='accepted'
         )
         save_to_db(role_invite, 'Owner Role Invite Added')
 

@@ -182,7 +182,7 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code):
+def calculate_order_amount(tickets, discount_code=None):
     from app.api.helpers.ticketing import TicketingManager
 
     if discount_code:
@@ -202,7 +202,7 @@ def calculate_order_amount(tickets, discount_code):
         sub_total = ticket_fee = 0.0
 
         ticket_identifier = ticket_info['id']
-        quantity = ticket_info['quantity']
+        quantity = ticket_info.get('quantity', 1)  # Default to single ticket
         ticket = safe_query_without_soft_deleted_entries(
             db, Ticket, 'id', ticket_identifier, 'id'
         )
@@ -245,7 +245,7 @@ def calculate_order_amount(tickets, discount_code):
                 tax_amount = ((price - discount_amount) * tax.rate) / 100
                 tax_percent = tax.rate
             else:
-                tax_amount = ((price - discount_amount) * tax.rate) / (100 + tax.rate)
+                tax_amount = (price - discount_amount) * (tax.rate/100)
                 tax_percent = tax.rate
             tax_data = {
                 'percent': round(tax_percent, 2),
