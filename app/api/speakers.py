@@ -125,16 +125,14 @@ class SpeakerList(ResourceList):
         :return:
         """
         query_ = self.session.query(Speaker)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
 
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('session_id'):
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
             if 'Authorization' in request.headers and not has_access(

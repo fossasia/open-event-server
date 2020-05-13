@@ -177,7 +177,7 @@ def resize_event_images_task(self, event_id, original_image_url):
 
 @celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
 def resize_user_images_task(self, user_id, original_image_url):
-    user = safe_query(db, User, 'id', user_id, 'user_id')
+    user = safe_query(User, 'id', user_id, 'user_id')
     try:
         logging.info('User image resizing tasks started {}'.format(original_image_url))
         uploaded_images = create_save_image_sizes(
@@ -245,7 +245,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, email, event_id, settings):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
     user = db.session.query(User).filter_by(email=email).first()
     smtp_encryption = get_settings()['smtp_encryption']
     try:
@@ -307,7 +307,7 @@ def import_event_task(self, email, file, source_type, creator_id):
 
 @celery.task(base=RequestContextTask, name='export.ical', bind=True)
 def export_ical_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:
@@ -349,7 +349,7 @@ def export_ical_task(self, event_id, temp=True):
 
 @celery.task(base=RequestContextTask, name='export.xcal', bind=True)
 def export_xcal_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:
@@ -391,7 +391,7 @@ def export_xcal_task(self, event_id, temp=True):
 
 @celery.task(base=RequestContextTask, name='export.pentabarf', bind=True)
 def export_pentabarf_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:

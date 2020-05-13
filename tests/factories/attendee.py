@@ -27,6 +27,10 @@ class AttendeeFactoryBase(BaseFactory):
     modified_at = common.date_
 
 
+class AttendeeSubFactory(AttendeeFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)
+
+
 class AttendeeFactory(AttendeeFactoryBase):
     event = factory.RelatedFactory(EventFactoryBasic)
     ticket = factory.RelatedFactory(TicketFactory)

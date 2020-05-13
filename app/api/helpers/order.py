@@ -8,12 +8,14 @@ from app.api.helpers.db import (
     get_count,
     safe_query_without_soft_deleted_entries,
     save_to_db,
+    safe_query_by_id,
 )
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
+from app.models.discount_code import DiscountCode
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
@@ -138,7 +140,7 @@ def create_onsite_attendees_for_order(data):
         quantity = int(on_site_ticket['quantity'])
 
         ticket = safe_query_without_soft_deleted_entries(
-            db, Ticket, 'id', ticket_id, 'ticket_id'
+            Ticket, 'id', ticket_id, 'ticket_id'
         )
 
         ticket_sold_count = get_count(
@@ -187,6 +189,7 @@ def calculate_order_amount(tickets, discount_code=None):
     from app.api.helpers.ticketing import TicketingManager
 
     if discount_code:
+        discount_code = safe_query_by_id(DiscountCode, discount_code)
         if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
             raise UnprocessableEntityError(
                 {'source': 'discount-code'}, 'Discount Usage Exceeded'
@@ -202,9 +205,7 @@ def calculate_order_amount(tickets, discount_code=None):
 
         ticket_identifier = ticket_info['id']
         quantity = ticket_info.get('quantity', 1)  # Default to single ticket
-        ticket = safe_query_without_soft_deleted_entries(
-            db, Ticket, 'id', ticket_identifier, 'id'
-        )
+        ticket = safe_query_by_id(Ticket, ticket_identifier)
         if not event:
             event = ticket.event
 

@@ -50,10 +50,10 @@ class FaqList(ResourceList):
         :return:
         """
         query_ = self.session.query(Faq)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('faq_type_id') is not None:
             faq_type = safe_query(
-                self, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id'
+                FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id'
             )
             query_ = query_.join(FaqType).filter(FaqType.id == faq_type.id)
         return query_

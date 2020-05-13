@@ -1,30 +1,29 @@
-import pytz
 from datetime import datetime
 
+import pytz
 from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
 from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.files import make_frontend_url
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
+from app.api.helpers.notification import (
+    send_notif_ticket_cancel,
+    send_notif_to_attendees,
+    send_notif_ticket_purchase_organizer,
+)
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
-from app.api.helpers.notification import (
-    send_notif_ticket_cancel,
-    send_notif_to_attendees,
-    send_notif_ticket_purchase_organizer,
-)
 from app.models import db
-from app.models.order import Order, OrderTicket
 from app.models.custom_form import CustomForms
-from app.models.discount_code import DiscountCode
+from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
@@ -75,7 +74,7 @@ def resend_emails():
     :return: JSON response if the email was successfully sent
     """
     order_identifier = request.json['data']['order']
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     if has_access('is_coorganizer', event_id=order.event_id):
         if order.status == 'completed' or order.status == 'placed':
             # fetch tickets attachment
@@ -114,28 +113,18 @@ def resend_emails():
         raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
 
-def calculate_order_amount_wrapper(data):
-    tickets = data['tickets']
-    discount_code = None
-    if 'discount-code' in data:
-        discount_code_id = data['discount-code']
-        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
-    return tickets, discount_code
-
-
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 @jwt_required
 def calculate_amount():
     data = request.get_json()
-    tickets, discount_code = calculate_order_amount_wrapper(data)
-    return jsonify(calculate_order_amount(tickets, discount_code))
+    return jsonify(calculate_order_amount(data['tickets'], data['discount-code']))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
     data = request.get_json()
-    tickets, discount_code = calculate_order_amount_wrapper(data)
+    tickets, discount_code = data['tickets'], data['discount-code']
     attendee = data['attendee']
     for attribute in attendee:
         attendee[attribute.replace('-', '_')] = attendee.pop(attribute)

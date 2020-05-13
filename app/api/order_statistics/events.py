@@ -195,7 +195,7 @@ class OrderStatisticsEventDetail(ResourceDetail):
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(
-                self, Event, 'identifier', view_kwargs['identifier'], 'identifier'
+                Event, 'identifier', view_kwargs['identifier'], 'identifier'
             )
             view_kwargs['id'] = event.id
 

@@ -23,7 +23,6 @@ class CustomPlaceholderList(ResourceList):
         query_ = self.session.query(CustomPlaceholder)
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query(
-                self,
                 EventSubTopic,
                 'id',
                 view_kwargs['event_sub_topic_id'],
@@ -43,7 +42,6 @@ class CustomPlaceholderList(ResourceList):
         """
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query(
-                self,
                 EventSubTopic,
                 'id',
                 view_kwargs['event_sub_topic_id'],
@@ -95,7 +93,6 @@ class CustomPlaceholderDetail(ResourceDetail):
         event_sub_topic = None
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query(
-                self,
                 EventSubTopic,
                 'id',
                 view_kwargs['event_sub_topic_id'],
@@ -104,7 +101,6 @@ class CustomPlaceholderDetail(ResourceDetail):
 
         if event_sub_topic:
             custom_placeholder = safe_query(
-                self,
                 CustomPlaceholder,
                 'event_sub_topic_id',
                 event_sub_topic.id,

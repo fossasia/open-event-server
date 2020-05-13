@@ -199,7 +199,7 @@ def test_discount_code(db):
     )
     db.session.commit()
 
-    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code)
+    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code.id)
 
     assert amount_data['total'] == 90.0
     assert amount_data['tax_included'] is None
@@ -232,7 +232,7 @@ def test_multiple_tickets_discount(db):
 
     tickets_dict = _create_ticket_dict([ticket_a, ticket_b, ticket_c], [2, 3, 1])
 
-    amount_data = calculate_order_amount(tickets_dict, discount)
+    amount_data = calculate_order_amount(tickets_dict, discount.id)
 
     assert amount_data['total'] == 1115.0
     assert amount_data['discount'] == 793.7
@@ -268,3 +268,13 @@ def test_ticket_of_deleted_event(db):
 
     with pytest.raises(ObjectNotFound):
         calculate_order_amount([{'id': ticket.id}])
+
+
+def test_ticket_with_deleted_discount_code(db):
+    ticket = TicketSubFactory()
+    discount = DiscountCodeTicketSubFactory(deleted_at=datetime.now(), tickets=[ticket])
+
+    db.session.commit()
+
+    with pytest.raises(ObjectNotFound):
+        calculate_order_amount([{'id': ticket.id}], discount.id)

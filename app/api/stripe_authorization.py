@@ -133,17 +133,13 @@ class StripeAuthorizationDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
             stripe_authorization = safe_query(
-                self, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+                StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
             )
             view_kwargs['id'] = stripe_authorization.id
 
@@ -187,14 +183,14 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('event_identifier') is not None:
         event = safe_query(
-            db, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier'
+            Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier'
         )
         if event.id is not None:
             view_kwargs['event_id'] = event.id
 
     if view_kwargs.get('event_id') is not None:
         stripe_authorization = safe_query(
-            db, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+            StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
         )
         view_kwargs['id'] = stripe_authorization.id
     return view_kwargs

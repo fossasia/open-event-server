@@ -85,21 +85,19 @@ class FeedbackList(ResourceList):
         query_ = self.session.query(Feedback)
         if view_kwargs.get('user_id'):
             # feedbacks under an user
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User, User.id == Feedback.user_id).filter(
                 User.id == user.id
             )
         elif view_kwargs.get('session_id'):
             # feedbacks under a session
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
             query_ = query_.join(Session, Session.id == Feedback.session_id).filter(
                 Session.id == session.id
             )
         else:
             # feedbacks under an event
-            query_ = event_query(self, query_, view_kwargs)
+            query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -123,18 +121,14 @@ class FeedbackDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
 
         if event:
-            feedback = safe_query(self, Feedback, 'event_id', event.id, 'event_id')
+            feedback = safe_query(Feedback, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = feedback.id
 
     def before_update_object(self, feedback, data, view_kwargs):

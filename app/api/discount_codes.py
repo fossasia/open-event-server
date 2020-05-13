@@ -97,7 +97,7 @@ class DiscountCodeListPost(ResourceList):
     def after_create_object(self, discount, data, view_kwargs):
         if data['used_for'] == 'event' and 'events' in data:
             for event_id in data['events']:
-                event = safe_query(self, Event, 'id', event_id, 'event_id')
+                event = safe_query(Event, 'id', event_id, 'event_id')
                 event.discount_code_id = discount.id
 
     def before_get(self, args, kwargs):
@@ -133,18 +133,14 @@ class DiscountCodeList(ResourceList):
         # user can only access his/her discount codes.
         if view_kwargs.get('user_id'):
             if has_access('is_user_itself', user_id=view_kwargs['user_id']):
-                user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+                user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
                 query_ = query_.join(User).filter(User.id == user.id)
             else:
                 raise ForbiddenException({'source': ''}, 'You are not authorized')
 
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
             view_kwargs['event_id'] = event.id
 
@@ -161,7 +157,7 @@ class DiscountCodeList(ResourceList):
         # discount_code - ticket :: many-to-many relationship
         if view_kwargs.get('ticket_id') and has_access('is_coorganizer'):
             self.schema = DiscountCodeSchemaTicket
-            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query(Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.filter(DiscountCode.tickets.any(id=ticket.id))
 
         return query_
@@ -215,7 +211,7 @@ class DiscountCodeDetail(ResourceDetail):
     def before_get(self, args, kwargs):
         if kwargs.get('ticket_id'):
             if has_access('is_coorganizer'):
-                ticket = safe_query(db, Ticket, 'id', kwargs['ticket_id'], 'ticket_id')
+                ticket = safe_query(Ticket, 'id', kwargs['ticket_id'], 'ticket_id')
                 if ticket.discount_code_id:
                     kwargs['id'] = ticket.discount_code_id
                 else:
@@ -228,7 +224,7 @@ class DiscountCodeDetail(ResourceDetail):
                 )
         if kwargs.get('event_id'):
             if has_access('is_admin'):
-                event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
+                event = safe_query(Event, 'id', kwargs['event_id'], 'event_id')
                 if event.discount_code_id:
                     kwargs['id'] = event.discount_code_id
                 else:
@@ -241,13 +237,12 @@ class DiscountCodeDetail(ResourceDetail):
 
         if kwargs.get('event_identifier'):
             event = safe_query(
-                db, Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
+                Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
             )
             kwargs['event_id'] = event.id
 
         if kwargs.get('discount_event_identifier'):
             event = safe_query(
-                db,
                 Event,
                 'identifier',
                 kwargs['discount_event_identifier'],
@@ -256,7 +251,7 @@ class DiscountCodeDetail(ResourceDetail):
             kwargs['discount_event_id'] = event.id
 
         if kwargs.get('event_id') and has_access('is_admin'):
-            event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', kwargs['event_id'], 'event_id')
             if event.discount_code_id:
                 kwargs['id'] = event.discount_code_id
             else:
@@ -323,16 +318,12 @@ class DiscountCodeDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id') and has_access('is_admin'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
             if event.discount_code_id:
                 view_kwargs['id'] = event.discount_code_id
             else:
@@ -340,11 +331,7 @@ class DiscountCodeDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') and has_access('is_admin'):
             event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'id',
-                view_kwargs['event_invoice_id'],
-                'event_invoice_id',
+                EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id',
             )
             if event_invoice.discount_code_id:
                 view_kwargs['id'] = event_invoice.discount_code_id
@@ -353,7 +340,6 @@ class DiscountCodeDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_identifier') and has_access('is_admin'):
             event_invoice = safe_query(
-                self,
                 EventInvoice,
                 'identifier',
                 view_kwargs['event_invoice_identifier'],
