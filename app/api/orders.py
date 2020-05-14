@@ -679,7 +679,7 @@ class OrderRelationship(ResourceRelationship):
             )
             kwargs['id'] = order.id
         elif kwargs.get('id'):
-            order = safe_query(db, Order, 'id', kwargs['id'], 'id')
+            order = safe_query(Order, 'id', kwargs['id'], 'id')
 
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
@@ -746,7 +746,7 @@ def create_paypal_payment(order_identifier):
     except TypeError:
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
 
     if status:
@@ -768,7 +768,7 @@ def verify_mobile_paypal_payment(order_identifier):
         payment_id = request.json['data']['attributes']['payment-id']
     except TypeError:
         raise BadRequestError({'source': ''}, 'Bad Request Error')
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
     return jsonify(status=status, error=error)
 
@@ -784,7 +784,7 @@ def create_source(order_identifier):
     :return: The alipay redirection link.
     """
     try:
-        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        order = safe_query(Order, 'identifier', order_identifier, 'identifier')
         source_object = AliPayPaymentsManager.create_source(
             amount=int(order.amount),
             currency='usd',
@@ -813,7 +813,7 @@ def alipay_return_uri(order_identifier):
     try:
         charge_response = AliPayPaymentsManager.charge_source(order_identifier)
         if charge_response.status == 'succeeded':
-            order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+            order = safe_query(Order, 'identifier', order_identifier, 'identifier')
             order.status = 'completed'
             save_to_db(order)
             return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
@@ -834,7 +834,7 @@ def omise_checkout(order_identifier):
     :return: JSON response of the payment status.
     """
     token = request.form.get('omiseToken')
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     order.status = 'completed'
     save_to_db(order)
     try:
@@ -875,7 +875,7 @@ def initiate_transaction(order_identifier):
     :param order_identifier:
     :return: JSON response containing the signature & txn token
     """
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     paytm_mode = get_settings()['paytm_mode']
     paytm_params = {}
     # body parameters

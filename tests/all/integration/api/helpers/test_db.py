@@ -27,7 +27,7 @@ class TestDBHelperValidation(OpenEventTestCase):
         with self.app.test_request_context():
             event = EventFactoryBasic()
             save_to_db(event)
-            obj = safe_query(db, Event, 'id', event.id, 'event_id')
+            obj = safe_query(Event, 'id', event.id, 'event_id')
             self.assertEqual(obj.name, event.name)
 
     def test_safe_query_exception(self):
@@ -35,7 +35,7 @@ class TestDBHelperValidation(OpenEventTestCase):
 
         with self.app.test_request_context():
             self.assertRaises(
-                ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id')
+                ObjectNotFound, lambda: safe_query(Event, 'id', 1, 'event_id')
             )
 
     def test_get_or_create(self):

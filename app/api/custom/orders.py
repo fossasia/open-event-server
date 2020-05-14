@@ -73,7 +73,7 @@ def resend_emails():
     :return: JSON response if the email was successfully sent
     """
     order_identifier = request.json['data']['order']
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     if has_access('is_coorganizer', event_id=order.event_id):
         if order.status == 'completed' or order.status == 'placed':
             # fetch tickets attachment
@@ -116,7 +116,7 @@ def calculate_order_amount_wrapper(data):
     discount_code = None
     if 'discount-code' in data:
         discount_code_id = data['discount-code']
-        discount_code = safe_query(db, DiscountCode, 'id', discount_code_id, 'id')
+        discount_code = safe_query(DiscountCode, 'id', discount_code_id, 'id')
     return tickets, discount_code
 
 

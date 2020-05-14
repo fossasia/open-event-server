@@ -215,7 +215,7 @@ class DiscountCodeDetail(ResourceDetail):
     def before_get(self, args, kwargs):
         if kwargs.get('ticket_id'):
             if has_access('is_coorganizer'):
-                ticket = safe_query(db, Ticket, 'id', kwargs['ticket_id'], 'ticket_id')
+                ticket = safe_query(Ticket, 'id', kwargs['ticket_id'], 'ticket_id')
                 if ticket.discount_code_id:
                     kwargs['id'] = ticket.discount_code_id
                 else:
@@ -228,7 +228,7 @@ class DiscountCodeDetail(ResourceDetail):
                 )
         if kwargs.get('event_id'):
             if has_access('is_admin'):
-                event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
+                event = safe_query(Event, 'id', kwargs['event_id'], 'event_id')
                 if event.discount_code_id:
                     kwargs['id'] = event.discount_code_id
                 else:
@@ -256,7 +256,7 @@ class DiscountCodeDetail(ResourceDetail):
             kwargs['discount_event_id'] = event.id
 
         if kwargs.get('event_id') and has_access('is_admin'):
-            event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', kwargs['event_id'], 'event_id')
             if event.discount_code_id:
                 kwargs['id'] = event.discount_code_id
             else:

@@ -310,7 +310,7 @@ class AliPayPaymentsManager:
 
     @staticmethod
     def charge_source(order_identifier):
-        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        order = safe_query(Order, 'identifier', order_identifier, 'identifier')
         stripe.api_key = get_settings()['alipay_secret_key']
         charge = stripe.Charge.create(
             amount=int(order.amount),
@@ -333,7 +333,7 @@ class OmisePaymentsManager:
         else:
             omise.api_secret = get_settings()['omise_test_secret']
             omise.api_public = get_settings()['omise_test_public']
-        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        order = safe_query(Order, 'identifier', order_identifier, 'identifier')
         charge = omise.Charge.create(
             amount=int(round(order.amount)),
             currency=order.event.payment_currency,

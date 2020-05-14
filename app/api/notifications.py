@@ -68,7 +68,6 @@ class NotificationDetail(ResourceDetail):
     def before_get(self, args, kwargs):
         if kwargs.get('notification_action_id'):
             notification_action = safe_query(
-                db,
                 NotificationAction,
                 'id',
                 kwargs['notification_action_id'],

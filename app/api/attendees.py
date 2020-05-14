@@ -283,7 +283,7 @@ class AttendeeDetail(ResourceDetail):
                         data['device_name_checkin'] = '-'
 
         if 'is_checked_out' in data and data['is_checked_out']:
-            attendee = safe_query(db, TicketHolder, 'id', kwargs['id'], 'attendee_id')
+            attendee = safe_query(TicketHolder, 'id', kwargs['id'], 'attendee_id')
             if not attendee.is_checked_out:
                 checkout_times = (
                     obj.checkout_times.split(',') if obj.checkout_times else []
