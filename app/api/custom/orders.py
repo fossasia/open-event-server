@@ -114,10 +114,9 @@ def resend_emails():
 
 
 @order_blueprint.route('/calculate-amount', methods=['POST'])
-@jwt_required
 def calculate_amount():
     data = request.get_json()
-    return jsonify(calculate_order_amount(data['tickets'], data['discount-code']))
+    return jsonify(calculate_order_amount(data['tickets'], data.get('discount-code')))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])

@@ -183,6 +183,7 @@ def create_onsite_attendees_for_order(data):
 
 
 def calculate_order_amount(tickets, discount_code=None):
+    from app.models.discount_code import DiscountCode
     from app.api.helpers.ticketing import validate_tickets, validate_discount_code
 
     ticket_ids = [ticket['id'] for ticket in tickets]
@@ -223,13 +224,18 @@ def calculate_order_amount(tickets, discount_code=None):
                     f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price
+            price = ticket.price if ticket.type != 'free' else 0.0
 
-        if discount_code:
-            for code in ticket.discount_codes:
+        if discount_code and ticket.type != 'free':
+            code = (
+                DiscountCode.query.with_parent(ticket)
+                .filter_by(id=discount_code.id)
+                .first()
+            )
+            if code:
                 if discount_code.id == code.id:
                     if code.type == 'amount':
-                        discount_amount = code.value
+                        discount_amount = min(code.value, price)
                         discount_percent = (discount_amount / price) * 100
                     else:
                         discount_amount = (price * code.value) / 100
@@ -240,7 +246,6 @@ def calculate_order_amount(tickets, discount_code=None):
                         'amount': round(discount_amount, 2),
                         'total': round(discount_amount * quantity, 2),
                     }
-                    break
 
         total_discount += round(discount_amount * quantity, 2)
         if fees and not ticket.is_fee_absorbed:
