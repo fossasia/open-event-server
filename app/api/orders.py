@@ -4,20 +4,17 @@ import time
 from datetime import datetime
 
 import omise
-import pytz
 import requests
 from flask import Blueprint, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import (
     safe_query,
-    safe_query_without_soft_deleted_entries,
     save_to_db,
 )
 from app.api.helpers.errors import BadRequestError
@@ -49,11 +46,10 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
-from app.api.helpers.ticketing import TicketingManager
+from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
-from app.models.discount_code import DiscountCode
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
@@ -155,28 +151,8 @@ class OrdersListPost(ResourceList):
 
         free_ticket_quantity = 0
 
-        for ticket_holder in data['ticket_holders']:
-            # Ensuring that the attendee exists and doesn't have an associated order.
-            try:
-                ticket_holder_object = (
-                    self.session.query(TicketHolder)
-                    .filter_by(id=int(ticket_holder), deleted_at=None)
-                    .one()
-                )
-                if ticket_holder_object.order_id:
-                    raise ConflictException(
-                        {'pointer': '/data/relationships/attendees'},
-                        "Order already exists for attendee with id {}".format(
-                            str(ticket_holder)
-                        ),
-                    )
-            except NoResultFound:
-                raise ConflictException(
-                    {'pointer': '/data/relationships/attendees'},
-                    "Attendee with id {} does not exists".format(str(ticket_holder)),
-                )
-
-            if ticket_holder_object.ticket.type == 'free':
+        for ticket_holder in validate_ticket_holders(data['ticket_holders']):
+            if ticket_holder.ticket.type == 'free':
                 free_ticket_quantity += 1
 
         if not current_user.is_verified and free_ticket_quantity == len(
@@ -202,31 +178,11 @@ class OrdersListPost(ResourceList):
         if data.get('discount_code') and not has_access(
             'is_coorganizer', event_id=data['event']
         ):
-            discount_code = safe_query_without_soft_deleted_entries(
-                self, DiscountCode, 'id', data['discount_code'], 'discount_code_id'
+            validate_discount_code(
+                data['discount_code'],
+                ticket_holders=data['ticket_holders'],
+                event_id=data['event'],
             )
-            if not discount_code.is_active:
-                raise UnprocessableEntity(
-                    {'source': 'discount_code_id'}, "Inactive Discount Code"
-                )
-            else:
-                now = pytz.utc.localize(datetime.utcnow())
-                valid_from = discount_code.valid_from
-                valid_till = discount_code.valid_till
-                if not (valid_from <= now <= valid_till):
-                    raise UnprocessableEntity(
-                        {'source': 'discount_code_id'}, "Inactive Discount Code"
-                    )
-                if not TicketingManager.match_discount_quantity(
-                    discount_code, None, data['ticket_holders']
-                ):
-                    raise UnprocessableEntity(
-                        {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
-                    )
-            if discount_code.event.id != int(data['event']):
-                raise UnprocessableEntity(
-                    {'source': 'discount_code_id'}, "Invalid Discount Code"
-                )
 
     def after_create_object(self, order, data, view_kwargs):
         """
@@ -365,7 +321,7 @@ class OrdersList(ResourceList):
             )
         else:
             # orders under an event
-            query_ = event_query(self, query_, view_kwargs)
+            query_ = event_query(query_, view_kwargs)
 
         # expire the initializing orders if the time limit is over.
         orders = query_.all()
@@ -400,10 +356,7 @@ class OrderDetail(ResourceDetail):
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query(
-                Order,
-                'identifier',
-                view_kwargs['order_identifier'],
-                'order_identifier',
+                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):

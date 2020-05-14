@@ -40,16 +40,13 @@ class EventInvoiceList(ResourceList):
         :return:
         """
         query_ = self.session.query(EventInvoice)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('user_id'):
             user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query(
-                DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
-                'discount_code_id',
+                DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id',
             )
             query_ = query_.join(DiscountCode).filter(DiscountCode.id == discount_code.id)
         return query_
@@ -172,7 +169,7 @@ def create_paypal_payment_invoice(invoice_identifier):
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     event_invoice = safe_query(
-        db, EventInvoice, 'identifier', invoice_identifier, 'identifier'
+        EventInvoice, 'identifier', invoice_identifier, 'identifier'
     )
     status, response = PayPalPaymentsManager.create_payment(
         event_invoice, return_url, cancel_url
@@ -199,7 +196,7 @@ def charge_paypal_payment_invoice(invoice_identifier):
     except Exception as e:
         raise BadRequestError({'source': e}, 'Bad Request Error')
     event_invoice = safe_query(
-        db, EventInvoice, 'identifier', invoice_identifier, 'identifier'
+        EventInvoice, 'identifier', invoice_identifier, 'identifier'
     )
     # save the paypal payment_id with the order
     event_invoice.paypal_token = paypal_payment_id

@@ -51,7 +51,7 @@ class TicketTagList(ResourceList):
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True

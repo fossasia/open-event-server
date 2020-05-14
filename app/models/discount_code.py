@@ -1,9 +1,11 @@
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.ticketing import is_discount_available, validate_discount_code
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order
+from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
 
@@ -51,3 +53,17 @@ class DiscountCode(SoftDeletionModel):
     @property
     def confirmed_attendees_count(self) -> int:
         return get_count(self.get_confirmed_attendees_query())
+
+    def get_supported_tickets(self, ticket_ids=None):
+        query = Ticket.query.with_parent(self).filter_by(deleted_at=None)
+        if ticket_ids:
+            query = query.filter(Ticket.id.in_(ticket_ids))
+        return query
+
+    def is_available(self, tickets=None, ticket_holders=None):
+        return is_discount_available(self, tickets=tickets, ticket_holders=ticket_holders)
+
+    def validate(self, tickets=None, ticket_holders=None, event_id=None):
+        return validate_discount_code(
+            self, tickets=tickets, ticket_holders=ticket_holders, event_id=event_id
+        )

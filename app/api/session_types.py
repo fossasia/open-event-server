@@ -49,7 +49,7 @@ class SessionTypeList(ResourceList):
         :return:
         """
         query_ = self.session.query(SessionType)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -77,9 +77,7 @@ class SessionTypeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id'):
-            session = safe_query(
-                Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
             if session.session_type_id:
                 view_kwargs['id'] = session.session_type_id
             else:

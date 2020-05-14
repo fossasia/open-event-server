@@ -5,11 +5,18 @@ from tests.factories.event import EventFactoryBasic
 from app.models.order import Order
 
 
-class OrderFactory(BaseFactory):
+class OrderFactoryBase(BaseFactory):
     class Meta:
         model = Order
 
-    event = factory.RelatedFactory(EventFactoryBasic)
-    event_id = 1
     payment_mode = 'free'
     status = 'initializing'
+
+
+class OrderSubFactory(OrderFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)
+
+
+class OrderFactory(OrderFactoryBase):
+    event = factory.RelatedFactory(EventFactoryBasic)
+    event_id = 1

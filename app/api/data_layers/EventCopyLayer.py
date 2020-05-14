@@ -31,7 +31,7 @@ class EventCopyLayer(BaseDataLayer):
             identifier = 'id'
 
         event = safe_query(
-            db, Event, identifier, view_kwargs['identifier'], 'event_' + identifier
+            Event, identifier, view_kwargs['identifier'], 'event_' + identifier
         )
         tickets = Ticket.query.filter_by(event_id=event.id).all()
         social_links = SocialLink.query.filter_by(event_id=event.id).all()

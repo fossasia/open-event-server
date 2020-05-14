@@ -141,7 +141,7 @@ class TicketList(ResourceList):
                 TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id'
             )
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('access_code_id'):
             access_code = safe_query(
                 AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
@@ -151,20 +151,14 @@ class TicketList(ResourceList):
 
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query(
-                DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
-                'discount_code_id',
+                DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id',
             )
             # discount_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(
-                Order,
-                'identifier',
-                view_kwargs['order_identifier'],
-                'order_identifier',
+                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
             )
             ticket_ids = []
             for ticket in order.tickets:

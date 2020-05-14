@@ -57,7 +57,7 @@ class SponsorList(ResourceList):
         :return:
         """
         query_ = self.session.query(Sponsor)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True

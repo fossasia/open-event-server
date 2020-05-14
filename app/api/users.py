@@ -152,10 +152,7 @@ class UserDetail(ResourceDetail):
         """
         if view_kwargs.get('notification_id') is not None:
             notification = safe_query(
-                Notification,
-                'id',
-                view_kwargs['notification_id'],
-                'notification_id',
+                Notification, 'id', view_kwargs['notification_id'], 'notification_id',
             )
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
@@ -186,10 +183,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') is not None:
             event_invoice = safe_query(
-                EventInvoice,
-                'id',
-                view_kwargs['event_invoice_id'],
-                'event_invoice_id',
+                EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id',
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
@@ -221,18 +215,14 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('speaker_id') is not None:
-            speaker = safe_query(
-                Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id'
-            )
+            speaker = safe_query(Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             if speaker.user_id is not None:
                 view_kwargs['id'] = speaker.user_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('session_id') is not None:
-            session = safe_query(
-                Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
             if session.creator_id is not None:
                 view_kwargs['id'] = session.creator_id
             else:
@@ -256,10 +246,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('discount_code_id') is not None:
             discount_code = safe_query(
-                DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
-                'discount_code_id',
+                DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id',
             )
             if discount_code.marketer_id is not None:
                 view_kwargs['id'] = discount_code.marketer_id

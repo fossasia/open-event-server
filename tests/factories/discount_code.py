@@ -19,7 +19,7 @@ class DiscountCodeFactory(BaseFactory):
     type = "amount"
     is_active = True
     tickets_number = 30
-    min_quantity = 10
+    min_quantity = 1
     max_quantity = 20
     valid_from = common.date_
     valid_till = common.dateEnd_
@@ -28,22 +28,29 @@ class DiscountCodeFactory(BaseFactory):
     event_id = None
 
 
-class DiscountCodeTicketFactory(BaseFactory):
+class DiscountCodeTicketFactoryBase(BaseFactory):
     class Meta:
         model = DiscountCode
 
-    marketer = factory.RelatedFactory(UserFactory)
-    tickets = factory.RelatedFactory(TicketFactory)
     code = common.string_
     discount_url = common.url_
     value = common.float_
     type = "amount"
     is_active = True
     tickets_number = 30
-    min_quantity = 1
+    min_quantity = 0
     max_quantity = 20
     valid_from = common.date_
     valid_till = common.dateEnd_
     used_for = "ticket"
+
+
+class DiscountCodeTicketSubFactory(DiscountCodeTicketFactoryBase):
+    tickets = factory.SubFactory(TicketFactory)
+
+
+class DiscountCodeTicketFactory(DiscountCodeTicketFactoryBase):
+    marketer = factory.RelatedFactory(UserFactory)
+    tickets = factory.RelatedFactory(TicketFactory)
     marketer_id = 1
     event_id = None

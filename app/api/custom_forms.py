@@ -51,7 +51,7 @@ class CustomFormList(ResourceList):
         :return:
         """
         query_ = self.session.query(CustomForms)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -83,10 +83,7 @@ class CustomFormDetail(ResourceDetail):
             event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
 
         if event:

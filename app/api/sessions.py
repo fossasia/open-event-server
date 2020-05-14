@@ -114,10 +114,7 @@ class SessionList(ResourceList):
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
             microlocation = safe_query(
-                Microlocation,
-                'id',
-                view_kwargs['microlocation_id'],
-                'microlocation_id',
+                Microlocation, 'id', view_kwargs['microlocation_id'], 'microlocation_id',
             )
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == microlocation.id
@@ -134,11 +131,9 @@ class SessionList(ResourceList):
                     )
                 )
             )
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
-            speaker = safe_query(
-                Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id'
-            )
+            speaker = safe_query(Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
 

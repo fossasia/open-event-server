@@ -6,11 +6,10 @@ from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 
 
-class TaxFactory(BaseFactory):
+class TaxFactoryBase(BaseFactory):
     class Meta:
         model = Tax
 
-    event = factory.RelatedFactory(EventFactoryBasic)
     country = common.country_
     name = common.string_
     rate = common.float_
@@ -23,4 +22,12 @@ class TaxFactory(BaseFactory):
     zip = "123456"
     invoice_footer = common.string_
     is_tax_included_in_price = False
+
+
+class TaxFactory(TaxFactoryBase):
+    event = factory.RelatedFactory(EventFactoryBasic)
     event_id = 1
+
+
+class TaxSubFactory(TaxFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)

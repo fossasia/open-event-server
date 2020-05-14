@@ -91,15 +91,13 @@ class FeedbackList(ResourceList):
             )
         elif view_kwargs.get('session_id'):
             # feedbacks under a session
-            session = safe_query(
-                Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
             query_ = query_.join(Session, Session.id == Feedback.session_id).filter(
                 Session.id == session.id
             )
         else:
             # feedbacks under an event
-            query_ = event_query(self, query_, view_kwargs)
+            query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -126,10 +124,7 @@ class FeedbackDetail(ResourceDetail):
             event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
 
         if event:

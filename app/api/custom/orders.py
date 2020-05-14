@@ -1,28 +1,29 @@
-import pytz
 from datetime import datetime
 
+import pytz
 from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
 from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.errors import ForbiddenError, NotFoundError, \
-    UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
+from app.api.helpers.notification import (
+    send_notif_ticket_cancel,
+    send_notif_to_attendees,
+    send_notif_ticket_purchase_organizer,
+)
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
-from app.api.helpers.notification import send_notif_ticket_cancel, \
-    send_notif_to_attendees, send_notif_ticket_purchase_organizer
 from app.models import db
-from app.models.order import Order, OrderTicket
 from app.models.custom_form import CustomForms
-from app.models.discount_code import DiscountCode
+from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
@@ -99,8 +100,9 @@ def resend_emails():
             )
             return jsonify(
                 status=True,
-                message="Verification emails for order : {} has been sent successfully"
-                .format(order_identifier),
+                message="Verification emails for order : {} has been sent successfully".format(
+                    order_identifier
+                ),
             )
         else:
             raise UnprocessableEntityError(
@@ -111,28 +113,18 @@ def resend_emails():
         raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
 
-def calculate_order_amount_wrapper(data):
-    tickets = data['tickets']
-    discount_code = None
-    if 'discount-code' in data:
-        discount_code_id = data['discount-code']
-        discount_code = safe_query(DiscountCode, 'id', discount_code_id, 'id')
-    return tickets, discount_code
-
-
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 @jwt_required
 def calculate_amount():
     data = request.get_json()
-    tickets, discount_code = calculate_order_amount_wrapper(data)
-    return jsonify(calculate_order_amount(tickets, discount_code))
+    return jsonify(calculate_order_amount(data['tickets'], data['discount-code']))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
     data = request.get_json()
-    tickets, discount_code = calculate_order_amount_wrapper(data)
+    tickets, discount_code = data['tickets'], data['discount-code']
     attendee = data['attendee']
     for attribute in attendee:
         attendee[attribute.replace('-', '_')] = attendee.pop(attribute)
@@ -144,8 +136,10 @@ def create_order():
     ticket_ids = {int(ticket['id']) for ticket in tickets}
     quantity = {int(ticket['id']): ticket['quantity'] for ticket in tickets}
     ticket_list = (
-        db.session.query(Ticket).filter(Ticket.id.in_(ticket_ids))
-        .filter_by(event_id=data['event_id'], deleted_at=None).all()
+        db.session.query(Ticket)
+        .filter(Ticket.id.in_(ticket_ids))
+        .filter_by(event_id=data['event_id'], deleted_at=None)
+        .all()
     )
     ticket_ids_found = {ticket_information.id for ticket_information in ticket_list}
     tickets_not_found = ticket_ids - ticket_ids_found
@@ -227,19 +221,26 @@ def complete_order(order_id):
         data[attribute.replace('-', '_')] = data.pop(attribute)
     order = Order.query.filter_by(id=order_id).first()
     order_schema = OrderSchema()
-    if (not has_access('is_coorganizer', event_id=order.event_id)) and \
-            (not current_user.id == order.user_id):
-        return make_response(jsonify(status='Access Forbidden',
-                                     error='You cannot update an order.'), 403)
+    if (not has_access('is_coorganizer', event_id=order.event_id)) and (
+        not current_user.id == order.user_id
+    ):
+        return make_response(
+            jsonify(status='Access Forbidden', error='You cannot update an order.'), 403
+        )
     if has_access('is_coorganizer', event_id=order.event_id) and 'status' in data:
         if data['status'] != 'cancelled':
-            return make_response(jsonify(status='Access Forbidden',
-                                         error='You can only cancel an order.'), 403)
+            return make_response(
+                jsonify(status='Access Forbidden', error='You can only cancel an order.'),
+                403,
+            )
         elif data['status'] == 'cancelled':
             order.status = 'cancelled'
             db.session.add(order)
-            attendees = db.session.query(TicketHolder).filter_by(
-                order_id=order_id, deleted_at=None).all()
+            attendees = (
+                db.session.query(TicketHolder)
+                .filter_by(order_id=order_id, deleted_at=None)
+                .all()
+            )
             for attendee in attendees:
                 attendee.deleted_at = datetime.now(pytz.utc)
                 db.session.add(attendee)
@@ -250,29 +251,51 @@ def complete_order(order_id):
     updated_attendees = data['attendees']
     for updated_attendee in updated_attendees:
         for attribute in updated_attendee:
-            updated_attendee[attribute.replace('-', '_')] = updated_attendee \
-                .pop(attribute)
-    if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != \
-            len(updated_attendees):
-        return make_response(jsonify(status='Unprocessable Entity',
-                                     error='You need to provide info of all attendees.')
-                             , 422)
+            updated_attendee[attribute.replace('-', '_')] = updated_attendee.pop(
+                attribute
+            )
+    if get_count(db.session.query(TicketHolder).filter_by(order_id=order_id)) != len(
+        updated_attendees
+    ):
+        return make_response(
+            jsonify(
+                status='Unprocessable Entity',
+                error='You need to provide info of all attendees.',
+            ),
+            422,
+        )
     else:
-        attendees = db.session.query(TicketHolder).filter_by(order_id=order_id,
-                                                             deleted_at=None).all()
-    form_fields = db.session.query(CustomForms).filter_by(
-        event_id=order.event_id, form='attendee', is_included=True,
-        deleted_at=None).all()
+        attendees = (
+            db.session.query(TicketHolder)
+            .filter_by(order_id=order_id, deleted_at=None)
+            .all()
+        )
+    form_fields = (
+        db.session.query(CustomForms)
+        .filter_by(
+            event_id=order.event_id, form='attendee', is_included=True, deleted_at=None
+        )
+        .all()
+    )
     for attendee, updated_attendee in zip(attendees, updated_attendees):
         for field in form_fields:
-            if field.is_required is True and field.field_identifier \
-                    not in updated_attendee:
-                return make_response(jsonify(status='Unprocessable Entity',
-                                             error='{} is a required field.'
-                                             .format(field.field_identifier)), 422)
+            if (
+                field.is_required is True
+                and field.field_identifier not in updated_attendee
+            ):
+                return make_response(
+                    jsonify(
+                        status='Unprocessable Entity',
+                        error='{} is a required field.'.format(field.field_identifier),
+                    ),
+                    422,
+                )
             if field.field_identifier in updated_attendee:
-                setattr(attendee, field.field_identifier,
-                        updated_attendee[field.field_identifier])
+                setattr(
+                    attendee,
+                    field.field_identifier,
+                    updated_attendee[field.field_identifier],
+                )
         db.session.add(attendee)
     # modified_at not getting filled
     if order.amount == 0:
@@ -280,8 +303,12 @@ def complete_order(order_id):
         order.completed_at = datetime.utcnow()
     elif order.amount > 0:
         if 'payment_mode' not in data:
-            return make_response(jsonify(status='Unprocessable Entity',
-                                         error='Payment mode not specified.'), 422)
+            return make_response(
+                jsonify(
+                    status='Unprocessable Entity', error='Payment mode not specified.'
+                ),
+                422,
+            )
         if data['payment_mode'] in ['bank', 'cheque', 'onsite']:
             order.status = 'placed'
             order.completed_at = datetime.utcnow()
@@ -289,20 +316,36 @@ def complete_order(order_id):
             order.status = 'pending'
         if 'is_billing_enabled' in data:
             if data['is_billing_enabled']:
-                if ('company' not in data) or ('address' not in data) or \
-                        ('city' not in data) or ('zipcode' not in data) or \
-                        ('country' not in data):
-                    return make_response(jsonify(status='Unprocessable Entity',
-                                                 error='Billing information incomplete.')
-                                         , 422)
+                if (
+                    ('company' not in data)
+                    or ('address' not in data)
+                    or ('city' not in data)
+                    or ('zipcode' not in data)
+                    or ('country' not in data)
+                ):
+                    return make_response(
+                        jsonify(
+                            status='Unprocessable Entity',
+                            error='Billing information incomplete.',
+                        ),
+                        422,
+                    )
             else:
-                return make_response(jsonify(status='Unprocessable Entity',
-                                             error='Billing information incomplete.')
-                                     , 422)
+                return make_response(
+                    jsonify(
+                        status='Unprocessable Entity',
+                        error='Billing information incomplete.',
+                    ),
+                    422,
+                )
         else:
-            return make_response(jsonify(status='Unprocessable Entity',
-                                         error='Billing information is mandatory '
-                                               'for this order.'), 422)
+            return make_response(
+                jsonify(
+                    status='Unprocessable Entity',
+                    error='Billing information is mandatory ' 'for this order.',
+                ),
+                422,
+            )
         order.company = data['company']
         order.address = data['address']
         order.city = data['city']
@@ -316,8 +359,9 @@ def complete_order(order_id):
     db.session.add(order)
     db.session.commit()
     create_pdf_tickets_for_holder(order)
-    if (order.status == 'completed' or order.status == 'placed') and \
-            (order.deleted_at is None):
+    if (order.status == 'completed' or order.status == 'placed') and (
+        order.deleted_at is None
+    ):
         order_identifier = order.identifier
 
         key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)

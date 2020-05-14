@@ -11,7 +11,6 @@ from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.exceptions import ConflictException, ForbiddenException
 from app.api.helpers.utilities import represents_int
-from app.models import db
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import Environment, get_settings

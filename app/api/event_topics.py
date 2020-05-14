@@ -73,10 +73,7 @@ class EventTopicDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
             )
             view_kwargs['event_id'] = event.id
 
