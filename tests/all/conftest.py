@@ -16,6 +16,11 @@ def app():
 
 
 @pytest.fixture(scope='module')
+def client(app):
+    return app.test_client()
+
+
+@pytest.fixture(scope='module')
 def database(app):
     _db.create_all()
     set_settings(app_name='Open Event', app_environment=Environment.TESTING)
