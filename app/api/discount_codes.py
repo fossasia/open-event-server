@@ -240,13 +240,12 @@ class DiscountCodeDetail(ResourceDetail):
 
         if kwargs.get('event_identifier'):
             event = safe_query(
-                db, Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
+                Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
             )
             kwargs['event_id'] = event.id
 
         if kwargs.get('discount_event_identifier'):
             event = safe_query(
-                db,
                 Event,
                 'identifier',
                 kwargs['discount_event_identifier'],

@@ -133,7 +133,6 @@ class AccessCodeDetail(ResourceDetail):
 
         if kwargs.get('access_event_identifier'):
             event = safe_query(
-                db,
                 Event,
                 'identifier',
                 kwargs['access_event_identifier'],

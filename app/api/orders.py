@@ -674,7 +674,7 @@ class OrderRelationship(ResourceRelationship):
         """
         if kwargs.get('order_identifier'):
             order = safe_query(
-                db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
+                Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
             )
             kwargs['id'] = order.id
         elif kwargs.get('id'):

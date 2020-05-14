@@ -836,7 +836,7 @@ class EventRelationship(ResourceRelationship):
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(
-                db, Event, 'identifier', view_kwargs['identifier'], 'identifier'
+                Event, 'identifier', view_kwargs['identifier'], 'identifier'
             )
             view_kwargs['id'] = event.id
 
