@@ -8,14 +8,11 @@ from app.api.helpers.db import (
     get_count,
     safe_query_without_soft_deleted_entries,
     save_to_db,
-    safe_query_by_id,
 )
-from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
-from app.models.discount_code import DiscountCode
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
@@ -186,26 +183,23 @@ def create_onsite_attendees_for_order(data):
 
 
 def calculate_order_amount(tickets, discount_code=None):
-    from app.api.helpers.ticketing import TicketingManager
+    from app.api.helpers.ticketing import validate_tickets, validate_discount_code
+
+    ticket_ids = [ticket['id'] for ticket in tickets]
+    fetched_tickets = validate_tickets(ticket_ids)
 
     if discount_code:
-        discount_code = safe_query_by_id(DiscountCode, discount_code)
-        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
-            raise UnprocessableEntityError(
-                {'source': 'discount-code'}, 'Discount Usage Exceeded'
-            )
+        discount_code = validate_discount_code(discount_code, tickets=tickets)
 
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
-    for ticket_info in tickets:
+    for ticket_info, ticket in zip(tickets, fetched_tickets):
         discount_amount = 0.0
         discount_data = None
         ticket_fee = 0.0
 
-        ticket_identifier = ticket_info['id']
         quantity = ticket_info.get('quantity', 1)  # Default to single ticket
-        ticket = safe_query_by_id(Ticket, ticket_identifier)
         if not event:
             event = ticket.event
 
@@ -215,10 +209,6 @@ def calculate_order_amount(tickets, discount_code=None):
                 )
 
             fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
-        elif ticket.event.id != event.id:
-            raise UnprocessableEntity(
-                {'pointer': 'tickets'}, "All tickets must belong to same event"
-            )
 
         if not tax and event.tax:
             tax = event.tax

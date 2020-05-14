@@ -1,9 +1,12 @@
+import logging
 from datetime import datetime
 
+import pytz
 from flask_jwt_extended import current_user
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.db import get_count, save_to_db
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.db import get_count, save_to_db, safe_query_by_id
+from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import (
@@ -16,35 +19,185 @@ from app.api.helpers.order import (
 )
 from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
+from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 
 
+logger = logging.getLogger(__name__)
+
+
+def validate_ticket_holders(ticket_holder_ids):
+    # pytype: disable=attribute-error
+    ticket_holders = (
+        TicketHolder.query.filter_by(deleted_at=None)
+        .filter(TicketHolder.id.in_(ticket_holder_ids))
+        .all()
+    )
+    # pytype: enable=attribute-error
+
+    if len(ticket_holders) != len(ticket_holder_ids):
+        logger.warning(
+            "Ticket Holders not found in", extra=dict(ticket_holder_ids=ticket_holder_ids)
+        )
+        raise ObjectNotFound(
+            {'pointer': '/data/relationships/attendees'},
+            "Some attendee among ids {} do not exist".format(str(ticket_holder_ids)),
+        )
+
+    for ticket_holder in ticket_holders:
+        # Ensuring that the attendee exists and doesn't have an associated order.
+        if ticket_holder.order_id:
+            logger.warning(
+                "Order already exists for attendee",
+                extra=dict(attendee_id=ticket_holder.id),
+            )
+            raise ConflictException(
+                {'pointer': '/data/relationships/attendees'},
+                "Order already exists for attendee with id {}".format(
+                    str(ticket_holder.id)
+                ),
+            )
+    return ticket_holders
+
+
+def validate_tickets(tickets):
+    """Validates that all tickets are not deleted and belong to same event"""
+    if not tickets:
+        return tickets
+    fetched_tickets = (
+        Ticket.query.filter_by(deleted_at=None).filter(Ticket.id.in_(tickets)).all()
+    )
+    # All passed tickets should not be deleted and their event should be same
+    if len(fetched_tickets) != len(tickets):
+        logger.warning("Deleted tickets requested for Order", extra=dict(tickets=tickets))
+        raise ObjectNotFound(
+            {'pointer': 'tickets'}, f'Tickets not found for IDs: {tickets}'
+        )
+    ticket_events = {ticket.event_id for ticket in fetched_tickets}
+    if len(ticket_events) != 1:
+        logger.warning(
+            "Tickets with different event IDs requested for Order",
+            extra=dict(ticket_events=ticket_events),
+        )
+        raise UnprocessableEntity(
+            {'pointer': 'tickets'},
+            f'All tickets must belong to same event. Found: {ticket_events}',
+        )
+    return fetched_tickets
+
+
+def validate_discount_code(
+    discount_code, tickets=None, ticket_holders=None, event_id=None
+):
+    """Tickets validation should be performed before calling this function"""
+    from app.models.discount_code import DiscountCode
+
+    if isinstance(discount_code, int) or (
+        isinstance(discount_code, str) and discount_code.isdigit()
+    ):
+        # Discount Code ID is passed
+        discount_code = safe_query_by_id(DiscountCode, discount_code)
+
+    if not tickets and not ticket_holders:
+        raise ValueError('Need to provide either tickets or ticket_holders')
+
+    # Otherwise actual instance of Discount Code is passed
+
+    if event_id:
+        if discount_code.event.id != int(event_id):
+            logger.warning(
+                "Discount code Event ID mismatch",
+                extra=dict(event_id=event_id, discount_code=discount_code),
+            )
+            raise UnprocessableEntity(
+                {'pointer': 'discount_code_id'}, "Invalid Discount Code"
+            )
+
+    if tickets:
+        ticket_applicable = discount_code.get_supported_tickets(
+            [ticket['id'] for ticket in tickets]
+        ).all()
+        if len(ticket_applicable) < 1:
+            logger.warning(
+                "Discount code is not applicable to these tickets",
+                extra=dict(
+                    tickets=tickets,
+                    applicable_tickets=ticket_applicable,
+                    discount_code=discount_code,
+                ),
+            )
+            raise UnprocessableEntity(
+                {'pointer': 'discount_code_id'}, 'Invalid Discount Code'
+            )
+
+    now = pytz.utc.localize(datetime.utcnow())
+    valid_from = discount_code.valid_from
+    valid_till = discount_code.valid_till
+    if not discount_code.is_active or not valid_from <= now <= valid_till:
+        logger.warning(
+            "Discount code inactive or expired",
+            extra=dict(
+                discount_code=discount_code,
+                active=discount_code.is_active,
+                valid_from=valid_from,
+                valid_till=valid_till,
+                now=now,
+            ),
+        )
+        raise UnprocessableEntity(
+            {'pointer': 'discount_code_id'}, "Invalid Discount Code"
+        )
+    if not discount_code.is_available(tickets, ticket_holders):
+        raise UnprocessableEntity(
+            {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
+        )
+
+    return discount_code
+
+
+def is_discount_available(discount_code, tickets=None, ticket_holders=None):
+    """
+    Validation of discount code belonging to the tickets and events should be done
+    before calling this method
+    """
+    qty = 0
+    # TODO(Areeb): Extremely confusing here what should we do about deleted tickets here
+    ticket_ids = [ticket.id for ticket in discount_code.tickets]
+    old_holders = discount_code.confirmed_attendees_count
+    if ticket_holders:
+        # pytype: disable=attribute-error
+        qty = get_count(
+            TicketHolder.query.filter(
+                TicketHolder.id.in_(ticket_holders),
+                TicketHolder.ticket_id.in_(ticket_ids),
+            )
+        )
+        # pytype: enable=attribute-error
+    elif tickets:
+        for ticket in tickets:
+            if int(ticket['id']) in ticket_ids:
+                qty += ticket.get('quantity', 1)
+    available = (
+        (qty + old_holders) <= discount_code.tickets_number
+        and discount_code.min_quantity <= qty <= discount_code.max_quantity
+    )
+    if not available:
+        logger.warning(
+            "Discount code usage exhausted",
+            extra=dict(
+                discount_code=discount_code,
+                ticket_ids=ticket_ids,
+                ticket_holders=ticket_holders,
+                quantity=qty,
+                old_holders=old_holders,
+            ),
+        )
+    return available
+
+
 class TicketingManager:
     """All ticketing and orders related helper functions"""
-
-    @staticmethod
-    def match_discount_quantity(discount_code, tickets=None, ticket_holders=None):
-        qty = 0
-        ticket_ids = [ticket.id for ticket in discount_code.tickets]
-        old_holders = discount_code.confirmed_attendees_count
-        if ticket_holders:
-            # pytype: disable=attribute-error
-            qty = get_count(
-                TicketHolder.query.filter(
-                    TicketHolder.id.in_(ticket_holders),
-                    TicketHolder.ticket_id.in_(ticket_ids),
-                )
-            )
-            # pytype: enable=attribute-error
-        elif tickets:
-            for ticket in tickets:
-                if int(ticket['id']) in ticket_ids:
-                    qty += ticket.get('quantity', 1)
-        return (
-            (qty + old_holders) <= discount_code.tickets_number
-            and discount_code.min_quantity <= qty <= discount_code.max_quantity
-        )
 
     # TODO(Areeb): Remove after validating logic
     @staticmethod
