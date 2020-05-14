@@ -133,7 +133,6 @@ class StripeAuthorizationDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -143,7 +142,7 @@ class StripeAuthorizationDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             stripe_authorization = safe_query(
-                self, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+                StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
             )
             view_kwargs['id'] = stripe_authorization.id
 

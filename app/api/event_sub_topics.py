@@ -53,7 +53,7 @@ class EventSubTopicList(ResourceList):
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
             event_topic = safe_query(
-                self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id'
+                EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id'
             )
             query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
@@ -83,7 +83,6 @@ class EventSubTopicDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -92,7 +91,7 @@ class EventSubTopicDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
             if event.event_sub_topic_id:
                 view_kwargs['id'] = event.event_sub_topic_id
             else:
@@ -100,7 +99,6 @@ class EventSubTopicDetail(ResourceDetail):
 
         if view_kwargs.get('custom_placeholder_id'):
             custom_placeholder = safe_query(
-                self,
                 CustomPlaceholder,
                 'id',
                 view_kwargs['custom_placeholder_id'],

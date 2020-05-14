@@ -22,7 +22,6 @@ class PanelPermissionList(ResourceList):
         query_ = self.session.query(PanelPermission)
         if view_kwargs.get('custom_system_role_id'):
             role = safe_query(
-                self,
                 CustomSysRole,
                 'id',
                 view_kwargs['custom_system_role_id'],

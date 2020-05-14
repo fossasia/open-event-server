@@ -32,7 +32,6 @@ class EventTypeDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -41,7 +40,7 @@ class EventTypeDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
             if event.event_type_id:
                 view_kwargs['id'] = event.event_type_id
             else:

@@ -51,7 +51,7 @@ class MicrolocationList(ResourceList):
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('session_id'):
             session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+                Session, 'id', view_kwargs['session_id'], 'session_id'
             )
             query_ = query_.join(Session).filter(Session.id == session.id)
         return query_
@@ -79,7 +79,7 @@ class MicrolocationDetail(ResourceDetail):
         """
         if view_kwargs.get('session_id') is not None:
             session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+                Session, 'id', view_kwargs['session_id'], 'session_id'
             )
             if session.microlocation_id is not None:
                 view_kwargs['id'] = session.microlocation_id

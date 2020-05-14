@@ -22,7 +22,7 @@ class CustomSystemRoleList(ResourceList):
         query_ = self.session.query(CustomSysRole)
         if view_kwargs.get('panel_id'):
             panel = safe_query(
-                self, PanelPermission, 'id', view_kwargs['panel_id'], 'panel_id'
+                PanelPermission, 'id', view_kwargs['panel_id'], 'panel_id'
             )
             query_ = CustomSysRole.query.filter(
                 CustomSysRole.panel_permissions.any(id=panel.id)
@@ -52,7 +52,7 @@ class CustomSystemRoleDetail(ResourceDetail):
         """
         if view_kwargs.get('role_id') is not None:
             panel_perm = safe_query(
-                self, PanelPermission, 'id', view_kwargs['role_id'], 'role_id'
+                PanelPermission, 'id', view_kwargs['role_id'], 'role_id'
             )
             if panel_perm.role_id is not None:
                 view_kwargs['id'] = panel_perm.role_id

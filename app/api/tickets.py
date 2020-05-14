@@ -138,20 +138,19 @@ class TicketList(ResourceList):
 
         if view_kwargs.get('ticket_tag_id'):
             ticket_tag = safe_query(
-                self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id'
+                TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id'
             )
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('access_code_id'):
             access_code = safe_query(
-                self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
+                AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
             )
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query(
-                self,
                 DiscountCode,
                 'id',
                 view_kwargs['discount_code_id'],
@@ -162,7 +161,6 @@ class TicketList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(
-                self,
                 Order,
                 'identifier',
                 view_kwargs['order_identifier'],
@@ -216,7 +214,7 @@ class TicketDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id') is not None:
             attendee = safe_query(
-                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
+                TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
             )
             if attendee.ticket_id is not None:
                 view_kwargs['id'] = attendee.ticket_id

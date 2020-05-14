@@ -30,7 +30,7 @@ def event_query(
     :return:
     """
     if view_kwargs.get(event_id):
-        event = safe_query(self, Event, 'id', view_kwargs[event_id], event_id)
+        event = safe_query(Event, 'id', view_kwargs[event_id], event_id)
         if event.state != 'published' and (
             'Authorization' not in request.headers
             or not has_access(permission, event_id=event.id)

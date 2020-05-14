@@ -80,10 +80,9 @@ class CustomFormDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -91,7 +90,7 @@ class CustomFormDetail(ResourceDetail):
             )
 
         if event:
-            custom_form = safe_query(self, CustomForms, 'event_id', event.id, 'event_id')
+            custom_form = safe_query(CustomForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = custom_form.id
 
     decorators = (

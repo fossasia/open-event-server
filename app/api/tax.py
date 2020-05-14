@@ -99,10 +99,9 @@ class TaxDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -110,7 +109,7 @@ class TaxDetail(ResourceDetail):
             )
 
         if event:
-            tax = safe_query(self, Tax, 'event_id', event.id, 'event_id')
+            tax = safe_query(Tax, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = tax.id
 
     def before_get(self, args, kwargs):

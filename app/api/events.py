@@ -732,7 +732,6 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('order_identifier') is not None:
             order = safe_query(
-                self,
                 Order,
                 'identifier',
                 view_kwargs['order_identifier'],

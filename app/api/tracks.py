@@ -69,7 +69,7 @@ class TrackDetail(ResourceDetail):
         """
         if view_kwargs.get('session_id'):
             session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+                Session, 'id', view_kwargs['session_id'], 'session_id'
             )
             if session.event_id:
                 view_kwargs['id'] = session.track_id

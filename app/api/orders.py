@@ -357,7 +357,7 @@ class OrdersList(ResourceList):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
             # orders under a user
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
@@ -395,12 +395,11 @@ class OrderDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(
-                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
+                TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
             )
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query(
-                self,
                 Order,
                 'identifier',
                 view_kwargs['order_identifier'],
@@ -408,7 +407,7 @@ class OrderDetail(ResourceDetail):
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
-            order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
+            order = safe_query(Order, 'id', view_kwargs['id'], 'id')
 
         if not has_access(
             'is_coorganizer_or_user_itself',

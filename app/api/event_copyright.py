@@ -74,10 +74,9 @@ class EventCopyrightDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -85,8 +84,7 @@ class EventCopyrightDetail(ResourceDetail):
             )
 
         if event:
-            event_copyright = safe_query(
-                self, EventCopyright, 'event_id', event.id, 'event_id'
+            event_copyright = safe_query(EventCopyright, 'event_id', event.id, 'event_id'
             )
             view_kwargs['id'] = event_copyright.id
 

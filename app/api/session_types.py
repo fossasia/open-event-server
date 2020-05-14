@@ -78,7 +78,7 @@ class SessionTypeDetail(ResourceDetail):
         """
         if view_kwargs.get('session_id'):
             session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
+                Session, 'id', view_kwargs['session_id'], 'session_id'
             )
             if session.session_type_id:
                 view_kwargs['id'] = session.session_type_id

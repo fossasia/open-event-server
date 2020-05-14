@@ -42,11 +42,10 @@ class EventInvoiceList(ResourceList):
         query_ = self.session.query(EventInvoice)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query(
-                self,
                 DiscountCode,
                 'id',
                 view_kwargs['discount_code_id'],
@@ -81,7 +80,6 @@ class EventInvoiceDetail(ResourceDetail):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query(
-                self,
                 EventInvoice,
                 'identifier',
                 view_kwargs['event_invoice_identifier'],
@@ -111,7 +109,6 @@ class EventInvoiceRelationshipRequired(ResourceRelationship):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query(
-                self,
                 EventInvoice,
                 'identifier',
                 view_kwargs['event_invoice_identifier'],
@@ -142,7 +139,6 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query(
-                self,
                 EventInvoice,
                 'identifier',
                 view_kwargs['event_invoice_identifier'],

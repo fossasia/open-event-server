@@ -73,7 +73,6 @@ class EventTopicDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query(
-                self,
                 Event,
                 'identifier',
                 view_kwargs['event_identifier'],
@@ -82,7 +81,7 @@ class EventTopicDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
             if event.event_topic_id:
                 view_kwargs['id'] = event.event_topic_id
             else:
@@ -90,7 +89,6 @@ class EventTopicDetail(ResourceDetail):
 
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query(
-                self,
                 EventSubTopic,
                 'id',
                 view_kwargs['event_sub_topic_id'],
