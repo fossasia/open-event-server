@@ -38,7 +38,7 @@ class DiscountCodeTicketFactoryBase(BaseFactory):
     type = "amount"
     is_active = True
     tickets_number = 30
-    min_quantity = 1
+    min_quantity = 0
     max_quantity = 20
     valid_from = common.date_
     valid_till = common.dateEnd_

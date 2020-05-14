@@ -29,7 +29,11 @@ def save_to_db(item, msg="Saved to db", print_error=True):
 
 
 def safe_query_by_id(model, id):
-    return safe_query_without_soft_deleted_entries(model, 'id', id, 'id')
+    return safe_query_by(model, id)
+
+
+def safe_query_by(model, value, param='id'):
+    return safe_query_without_soft_deleted_entries(model, param, value, param)
 
 
 def safe_query_without_soft_deleted_entries(

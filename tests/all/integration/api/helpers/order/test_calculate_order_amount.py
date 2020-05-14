@@ -11,7 +11,7 @@ from tests.factories.tax import TaxSubFactory
 from tests.factories.ticket import TicketSubFactory
 
 
-def test_no_amount():
+def test_no_amount(db):
     amount_data = calculate_order_amount([])
 
     assert amount_data['total'] == 0.0
@@ -56,7 +56,7 @@ def test_multiple_tickets_different_event(db):
     ticket_dict = _create_ticket_dict([ticket1, ticket2], [1, 2])
 
     with pytest.raises(
-        UnprocessableEntity, match='All tickets must belong to same event'
+        UnprocessableEntity, match=r".*All tickets must belong to same event.*"
     ):
         calculate_order_amount(ticket_dict)
 
@@ -277,4 +277,13 @@ def test_ticket_with_deleted_discount_code(db):
     db.session.commit()
 
     with pytest.raises(ObjectNotFound):
+        calculate_order_amount([{'id': ticket.id}], discount.id)
+
+
+def test_ticket_with_different_discount_code(db):
+    ticket = TicketSubFactory()
+    discount = DiscountCodeTicketSubFactory(tickets=[])
+    db.session.commit()
+
+    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
         calculate_order_amount([{'id': ticket.id}], discount.id)
