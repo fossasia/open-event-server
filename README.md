@@ -276,74 +276,21 @@ Once you have activated your account just proceed to the [translation section](h
 
 Git hook scripts are useful for identifying simple issues before submission to code review. We run our hooks on every commit to automatically point out issues in code such as missing semicolons, trailing whitespace, and debug statements. By pointing these issues out before code review, this allows a code reviewer to focus on the architecture of a change while not wasting time with trivial style nitpicks.
 
-### Installation
-
-Before you can run hooks, you need to have the pre-commit package manager installed.
-
-#### Using pip:
-```sh
-pip install pre-commit
-```
-#### Non-administrative installation:
-* to upgrade: run again, to uninstall: pass uninstall to python
-* does not work on platforms without symlink support (windows)
-```sh
-curl https://pre-commit.com/install-local.py | python -
-```
-#### In a python project, add the following to your requirements.txt (or requirements-dev.txt):
-```sh
-pre-commit
-```
-#### Using homebrew:
-```sh
-brew install pre-commit
-```
-#### Using conda (via conda-forge):
-```sh
-conda install -c conda-forge pre-commit
-```
 ### Quick Start
-#### 1. Install pre-commit ¶
 
-* follow the install instructions above
-* pre-commit --version should show you what version you're using
-```sh
-$ pre-commit --version
-pre-commit 2.3.0
-```
- #### 2. Add a pre-commit configuration ¶
+ #### 1. Add a pre-commit configuration ¶
 
 * create a file named .pre-commit-config.yaml
 * you can generate a very basic configuration using pre-commit sample-config
-* the full set of options for the configuration are listed below
-* this example uses a formatter for python code, however pre-commit works for any programming language
-* other supported hooks are available
-```sh
-repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
-    hooks:
-    -   id: check-yaml
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
--   repo: https://github.com/psf/black
-    rev: 19.3b0
-    hooks:
-    -   id: black
-```
- #### 3. Install the git hook scripts ¶
+
+ #### 2. Install the git hook scripts ¶
 * run pre-commit install to set up the git hook scripts
 ```sh
 $ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
 ```
 * now pre-commit will run automatically on git commit!
-
-#### 4. (optional) Run against all the files ¶
-* it's usually a good idea to run the hooks against all of the files when adding new hooks (usually pre-commit will only run on the changed files during git hooks)
-```sh
-$ pre-commit run --all-files
-```
+#### For more details, [Click Here](https://pre-commit.com/)
 
 ### Contributions, Bug Reports, Feature Requests
 
