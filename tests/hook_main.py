@@ -2872,14 +2872,9 @@ def event_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():	+    transaction['skip'] = True
-#        event = EventFactoryBasic()
-#        db.session.add(event)
-#        db.session.commit()
+    with stash['app'].app_context():
+        EventFactoryBasic()
+        db.session.commit()
 
 
 @hooks.before(
@@ -2891,11 +2886,9 @@ def ticket_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-    # with stash['app'].app_context():
-    #     event = EventFactoryBasic()
-    #     db.session.add(event)
-    #     db.session.commit()
+    with stash['app'].app_context():
+        TicketFactory()
+        db.session.commit()
 
 
 @hooks.before(

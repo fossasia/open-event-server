@@ -69,7 +69,7 @@ class DiscountCodeListPost(ResourceList):
                 {'source': ''}, "Please verify your permission or check your relationship"
             )
 
-        data['user_id'] = current_user.id
+        data['marketer_id'] = current_user.id
 
     def before_create_object(self, data, view_kwargs):
         if data['used_for'] == 'event':

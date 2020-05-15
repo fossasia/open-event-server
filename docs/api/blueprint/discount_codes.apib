@@ -167,18 +167,12 @@ Create a new Discount Code for event. (Only Admin)
         {
             "data": {
                 "relationships": {
-                    "events": {
+                    "event": {
                         "links": {
-                            "self": "/v1/discount-codes/4/relationships/events",
-                            "related": "/v1/discount-codes/4/events"
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
                         }
-                    },
-                    "tickets": {
-                        "links": {
-                            "self": "/v1/discount-codes/1/relationships/tickets",
-                            "related": "/v1/discount-codes/1/tickets"
-                        }
-                    }
+                     }
                 },
                 "attributes": {
                     "code": "DC101",
@@ -217,7 +211,7 @@ Create a new Discount Code for event. (Only Admin)
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Create Ticket Discount Code [POST /v1/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+### Create Ticket Discount Code [POST /v1/discount-codes]
 Create a new Discount Code for event. (Only by Co-organizers)
 
 + Request (application/vnd.api+json)
@@ -234,7 +228,7 @@ Create a new Discount Code for event. (Only by Co-organizers)
                   "code": "DC101",
                   "discount-url": "https://my-discount-url.com",
                   "value": "100",
-                  "type": "amount",
+                  "type": "percent",
                   "is-active": "false",
                   "tickets-number": "404",
                   "min-quantity": "0",
@@ -276,7 +270,7 @@ Create a new Discount Code for event. (Only by Co-organizers)
                     "max-quantity": 100,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "is-active": false,
-                    "type": "amount",
+                    "type": "percent",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "tickets-number": 404,
