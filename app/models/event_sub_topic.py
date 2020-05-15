@@ -19,7 +19,7 @@ class EventSubTopic(SoftDeletionModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.slug = get_new_slug(name=self.name,EventSubTopic)
+        self.slug = get_new_slug(name=self.name, EventSubTopic)
 
     def __repr__(self):
         return '<EventSubTopic %r>' % self.name

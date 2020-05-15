@@ -13,7 +13,7 @@ class EventLocation(db.Model):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.slug = get_new_slug(name=self.name,EventLocation)
+        self.slug = get_new_slug(name=self.name, EventLocation)
 
     def __repr__(self):
         return '<EventLocation %r>' % self.slug
