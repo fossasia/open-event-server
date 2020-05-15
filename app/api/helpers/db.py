@@ -118,11 +118,11 @@ def get_count(query):
     return count
 
 
-def get_new_slug(name, model):
+def get_new_slug(model, name):
     """
     Helper function to create a new slug if required, else return orignal.
+    :param model: Specify model from db.
     :param name: Identifier to generate slug.
-    :param model: Specify model from db
     """
     slug = (
         name.lower()
