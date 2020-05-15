@@ -276,27 +276,27 @@ Once you have activated your account just proceed to the [translation section](h
 
 Git hook scripts are useful for identifying simple issues before submission to code review. We run our hooks on every commit to automatically point out issues in code such as missing semicolons, trailing whitespace, and debug statements. By pointing these issues out before code review, this allows a code reviewer to focus on the architecture of a change while not wasting time with trivial style nitpicks.
 
-### Quick Start
+## Quick Start
 
- #### 1. Add a pre-commit configuration ¶
+ ### 1. Add a pre-commit configuration ¶
 
 * create a file named .pre-commit-config.yaml
 * you can generate a very basic configuration using pre-commit sample-config
 
- #### 2. Install the git hook scripts ¶
+ ### 2. Install the git hook scripts ¶
 * run pre-commit install to set up the git hook scripts
 ```sh
 $ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
 ```
 * now pre-commit will run automatically on git commit!
-#### For more details, [Click Here](https://pre-commit.com/)
+### For more details, [Click Here](https://pre-commit.com/)
 
-### Contributions, Bug Reports, Feature Requests
+## Contributions, Bug Reports, Feature Requests
 
 This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues. It is also recommended to go through the [developer handbook](https://github.com/fossasia/open-event/tree/master/docs/dev-handbook) in order to get a basic understanding of the ecosystem.
 
-### Branch Policy
+## Branch Policy
 
 We have the following branches :
  * **development**
