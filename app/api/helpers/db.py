@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -115,3 +116,20 @@ def get_count(query):
     count_q = query.statement.with_only_columns([func.count()]).order_by(None)
     count = query.session.execute(count_q).scalar()
     return count
+
+
+def get_new_slug(name,model):
+    """
+    """
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
+    count = get_count(model.query.filter_by(slug=slug))
+    if count == 0:
+        return slug
+    else:
+        return '{}-{}'.format(slug, uuid.uuid4().hex)
