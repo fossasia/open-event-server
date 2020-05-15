@@ -72,7 +72,7 @@ from tests.factories.user_favourite_events import UserFavouriteEventFactory
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
 api_password = "fossasia"
-api_uri = "http://localhost:5000/v1/auth/login"
+api_uri = "http://localhost:5555/v1/auth/login"
 
 
 def obtain_token():
