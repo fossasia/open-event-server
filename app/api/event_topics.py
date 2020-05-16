@@ -33,18 +33,18 @@ class EventTopicList(ResourceList):
                     data['system_image_url'], unique_identifier=event_topic.id
                 )
             except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
             except IOError:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
             except IOError:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': ''}, 'Default Image is absent in server'
                 )
 
@@ -110,18 +110,18 @@ class EventTopicDetail(ResourceDetail):
                     data['system_image_url'], unique_identifier=event_topic.id
                 )
             except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
             except IOError:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
             except IOError:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': ''}, 'Default Image is absent in server'
                 )
 
