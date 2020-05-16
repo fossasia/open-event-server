@@ -1,8 +1,10 @@
 import os
+import uuid
 import warnings
 from datetime import datetime, timedelta
 
 from sqlalchemy import Table, event, types
+from app.models import db
 
 
 # https://docs.sqlalchemy.org/en/13/faq/connections.html#how-do-i-use-engines-connections-sessions-with-python-multiprocessing-or-os-fork
@@ -59,3 +61,16 @@ def sqlite_datetime_fix():
     def setup_epoch(inspector, table, column_info):
         if is_sqlite(inspector) and is_datetime(column_info):
             column_info['type'] = SQLiteDateTimeType()
+
+
+class UUIDIdentifierMixin(object):
+
+    def __init__(self):
+        self.identifier = self.get_new_identifier()
+
+    def get_new_identifier(self):
+        identifier = str(uuid.uuid4())
+        if self.query.filter_by(identifier=identifier).first() is None:
+            return identifier
+        else:
+            return self.get_new_identifier()
