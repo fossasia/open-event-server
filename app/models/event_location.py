@@ -1,22 +1,5 @@
-import uuid
-
-from app.api.helpers.db import get_count
+from app.api.helpers.db import get_new_slug
 from app.models import db
-
-
-def get_new_slug(name):
-    slug = (
-        name.lower()
-        .replace("& ", "")
-        .replace(",", "")
-        .replace("/", "-")
-        .replace(" ", "-")
-    )
-    count = get_count(EventLocation.query.filter_by(slug=slug))
-    if count == 0:
-        return slug
-    else:
-        return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
 class EventLocation(db.Model):
@@ -30,7 +13,7 @@ class EventLocation(db.Model):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.slug = get_new_slug(name=self.name)
+        self.slug = get_new_slug(EventLocation, self.name)
 
     def __repr__(self):
         return '<EventLocation %r>' % self.slug
