@@ -6,7 +6,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -222,7 +222,7 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('session_id') is not None:
-            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             if session.creator_id is not None:
                 view_kwargs['id'] = session.creator_id
             else:

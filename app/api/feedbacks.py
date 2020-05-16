@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.feedback import delete_feedback
 from app.api.helpers.permission_manager import has_access
@@ -91,7 +91,7 @@ class FeedbackList(ResourceList):
             )
         elif view_kwargs.get('session_id'):
             # feedbacks under a session
-            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             query_ = query_.join(Session, Session.id == Feedback.session_id).filter(
                 Session.id == session.id
             )

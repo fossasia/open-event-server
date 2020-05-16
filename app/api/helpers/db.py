@@ -129,3 +129,21 @@ def get_new_slug(model, name):
         return slug
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
+
+def safe_query_kwargs(model, kwargs, parameter_name):
+    """
+    :param model: db Model to be queried
+    :param kwargs: it contains parameter_name's value eg kwargs['event_id']
+                where parameter_name='event_id'
+    :param parameter_name: Name of parameter to be printed in json-api error
+                message eg 'event_id'
+    :return:
+    """
+    return safe_query_without_soft_deleted_entries(
+        model,
+        'id',
+        kwargs[parameter_name],
+        parameter_name,
+        # TODO(Areeb): Check that only admin can pass this parameter
+        request.args.get('get_trashed') != 'true',
+    )

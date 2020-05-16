@@ -4,7 +4,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query, save_to_db
+from app.api.helpers.db import get_count, safe_query, save_to_db, safe_query_kwargs
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -132,7 +132,7 @@ class SpeakerList(ResourceList):
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('session_id'):
-            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
             if 'Authorization' in request.headers and not has_access(

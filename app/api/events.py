@@ -12,7 +12,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.exceptions import (
     ConflictException,
@@ -495,7 +495,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('session_id') is not None:
-        sessions = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+        sessions = safe_query_kwargs(Session, view_kwargs, 'session_id')
         if sessions.event_id is not None:
             view_kwargs['id'] = sessions.event_id
         else:
