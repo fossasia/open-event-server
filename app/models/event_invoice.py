@@ -1,20 +1,7 @@
 import time
-import uuid
-
 from sqlalchemy.sql import func
-
-from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-
-
-def get_new_identifier():
-    identifier = str(uuid.uuid4())
-    count = get_count(EventInvoice.query.filter_by(identifier=identifier))
-    if count == 0:
-        return identifier
-    else:
-        return get_new_identifier()
 
 
 class EventInvoice(SoftDeletionModel):
@@ -25,7 +12,7 @@ class EventInvoice(SoftDeletionModel):
     __tablename__ = 'event_invoices'
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_identifier)
+    identifier = db.Column(db.String, unique=True)
     amount = db.Column(db.Float)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -64,6 +51,10 @@ class EventInvoice(SoftDeletionModel):
         default=None,
     )
     discount_code = db.relationship('DiscountCode', backref='event_invoices')
+
+    def __init__(self, **kwargs):
+        super(EventInvoice, self).__init__(**kwargs)
+        self.identifier = kwargs.get('identifier') or self.get_new_identifier()
 
     def get_invoice_number(self):
         return (
