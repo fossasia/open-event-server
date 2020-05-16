@@ -6,7 +6,7 @@ from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
-from app.models.event import Event, get_new_event_identifier
+from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.social_link import SocialLink
 from app.models.speakers_call import SpeakersCall
@@ -64,7 +64,7 @@ def create_event_copy(identifier):
     db.session.expunge(event)  # expunge the object from session
     make_transient(event)
     delattr(event, 'id')
-    event.identifier = get_new_event_identifier()
+    event.get_new_identifier()
     save_to_db(event)
 
     # Ensure tax information is copied

@@ -10,7 +10,7 @@ from app.api.helpers.db import save_to_db
 from app.instance import current_app as app
 from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
 from app.models import db
-from app.models.event import Event, get_new_event_identifier
+from app.models.event import Event
 from app.models.module import Module
 from app.models.speaker import Speaker
 from populate_db import populate
@@ -42,7 +42,7 @@ def list_routes():
 def add_event_identifier():
     events = Event.query.all()
     for event in events:
-        event.identifier = get_new_event_identifier()
+        event.get_new_identifier()
         save_to_db(event)
 
 
@@ -80,7 +80,7 @@ def fix_event_and_speaker_images():
 def fix_digit_identifier():
     events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
     for event in events:
-        event.identifier = get_new_event_identifier()
+        event.get_new_identifier()
         db.session.add(event)
     db.session.commit()
 

@@ -8,7 +8,7 @@ from app.api.helpers.files import create_save_resized_image
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
-from app.models.event import Event, get_new_event_identifier
+from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.social_link import SocialLink
 from app.models.speakers_call import SpeakersCall
@@ -45,7 +45,7 @@ class EventCopyLayer(BaseDataLayer):
         db.session.expunge(event)  # expunge the object from session
         make_transient(event)
         delattr(event, 'id')
-        event.identifier = get_new_event_identifier()
+        event.identifier = event.get_new_identifier()
         save_to_db(event)
 
         # Removes access_codes, order_tickets, ticket_tags for the new tickets created.

@@ -25,24 +25,13 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import ATTENDEE, ORGANIZER, OWNER
 
 
-def get_new_event_identifier(length=8):
-    identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    if (
-        not identifier.isdigit()
-        and get_count(Event.query.filter_by(identifier=identifier)) == 0
-    ):
-        return identifier
-    else:
-        return get_new_event_identifier(length)
-
-
 class Event(SoftDeletionModel):
     """Event object table"""
 
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, default=get_new_event_identifier)
+    identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
     external_event_url = db.Column(db.String)
     logo_url = db.Column(db.String)
@@ -207,7 +196,7 @@ class Event(SoftDeletionModel):
 
     def __init__(self, **kwargs):
         super(Event, self).__init__(**kwargs)
-
+        self.identifier = self.get_new_identifier()
         original_image_url = kwargs.get('original_image_url')
         self.original_image_url = (
             self.set_default_event_image(kwargs.get('event_topic_id'))
