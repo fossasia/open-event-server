@@ -15,7 +15,7 @@ class EventType(SoftDeletionModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.slug = get_new_slug(EventType, name=self.name)
+        self.slug = get_new_slug(EventType, self.name)
 
     def __repr__(self):
         return '<EventType %r>' % self.name
