@@ -60,7 +60,7 @@ class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_order_identifier)
+    identifier = db.Column(db.String, unique=True)
     amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -106,6 +106,10 @@ class Order(SoftDeletionModel):
     )
     tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
     order_tickets = db.relationship("OrderTicket", backref='order')
+
+    def __init__(self, **kwargs):
+        super(Order, self).__init__(**kwargs)
+        self.identifier = self.get_new_identifier()
 
     def __repr__(self):
         return '<Order %r>' % self.id
