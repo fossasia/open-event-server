@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.roles import RoleSchema
 from app.models import db
 from app.models.role import Role
@@ -65,7 +65,7 @@ class RoleDetail(ResourceDetail):
                 'attendee',
                 'track_organizer',
             ]:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'data': 'name'}, "The given name cannot be updated"
                 )
 
@@ -85,7 +85,7 @@ class RoleDetail(ResourceDetail):
             'attendee',
             'track_organizer',
         ]:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'data': 'name'}, "The resource with given name cannot be deleted"
             )
 

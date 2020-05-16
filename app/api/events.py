@@ -14,10 +14,10 @@ from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import (
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError,
     ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
 )
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access
@@ -70,9 +70,9 @@ from app.models.users_events_role import UsersEventsRoles
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
-        raise ForbiddenException({'source': ''}, "Please verify your Email")
+        raise ForbiddenError({'source': ''}, "Please verify your Email")
     elif not modules.ticket_include:
-        raise ForbiddenException({'source': ''}, "Ticketing is not enabled in the system")
+        raise ForbiddenError({'source': ''}, "Ticketing is not enabled in the system")
     if (
         data.get('can_pay_by_paypal', False)
         or data.get('can_pay_by_cheque', False)
@@ -80,17 +80,17 @@ def validate_event(user, modules, data):
         or data.get('can_pay_by_stripe', False)
     ):
         if not modules.payment_include:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, "Payment is not enabled in the system"
             )
     if data.get('is_donation_enabled', False) and not modules.donation_include:
-        raise ForbiddenException(
+        raise ForbiddenError(
             {'source': '/data/attributes/is-donation-enabled'},
             "Donation is not enabled in the system",
         )
 
     if data.get('state', None) == 'published' and not user.can_publish_event():
-        raise ForbiddenException(
+        raise ForbiddenError(
             {'source': ''}, "Only verified accounts can publish events"
         )
 
@@ -132,13 +132,13 @@ def validate_date(event, data):
             data['ends_at'] = event.ends_at
 
     if not data.get('starts_at') or not data.get('ends_at'):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/date'},
             "enter required fields starts-at/ends-at",
         )
 
     if data['starts_at'] >= data['ends_at']:
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at"
         )
 
@@ -148,7 +148,7 @@ def validate_date(event, data):
         elif event and not event.deleted_at and data.get('deleted_at'):
             pass
         else:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/starts-at'},
                 "starts-at should be after current date-time",
             )
@@ -195,7 +195,7 @@ class EventList(ResourceList):
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
                 query_.join(Event.roles)
@@ -208,7 +208,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_owner_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_owner_id')
             query_ = (
                 query_.join(Event.roles)
@@ -221,8 +221,9 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_organizer_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_organizer_id')
+
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -234,7 +235,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_coorganizer_id')
             query_ = (
                 query_.join(Event.roles)
@@ -247,7 +248,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_track_organizer_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query(
                 User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id',
             )
@@ -262,7 +263,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_registrar_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_registrar_id')
             query_ = (
                 query_.join(Event.roles)
@@ -275,7 +276,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_moderator_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_moderator_id')
             query_ = (
                 query_.join(Event.roles)
@@ -288,7 +289,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_marketer_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_marketer_id')
             query_ = (
                 query_.join(Event.roles)
@@ -301,7 +302,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])
             ):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_sales_admin_id')
             query_ = (
                 query_.join(Event.roles)
@@ -328,7 +329,7 @@ class EventList(ResourceList):
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
             event_id = get_id(view_kwargs)['id']
             if not has_access('is_coorganizer', event_id=event_id):
-                raise ForbiddenException({'source': ''}, 'Coorganizer access is required')
+                raise ForbiddenError({'source': ''}, 'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
             )
@@ -720,7 +721,7 @@ class EventDetail(ResourceDetail):
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "Event associated with orders cannot be deleted"
                 )
             else:

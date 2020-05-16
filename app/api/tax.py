@@ -5,9 +5,9 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
-from app.api.helpers.exceptions import (
+from app.api.helpers.errors import (
+    ForbiddenError,
     ConflictException,
-    ForbiddenException,
     MethodNotAllowed,
 )
 from app.api.helpers.permission_manager import has_access
@@ -34,7 +34,7 @@ class TaxList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
         if (
             get_count(
                 db.session.query(Event).filter_by(

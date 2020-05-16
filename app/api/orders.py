@@ -14,11 +14,8 @@ from marshmallow_jsonapi.flask import Schema
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs, safe_query_by_id
-from app.api.helpers.errors import BadRequestError
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.errors import (
+    ForbiddenError, UnprocessableEntityError, ConflictException, BadRequestError
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
@@ -60,7 +57,7 @@ def check_event_user_ticket_holders(order, data, element):
     if element in ['event', 'user'] and data[element] != str(
         getattr(order, element, None).id
     ):
-        raise ForbiddenException(
+        raise ForbiddenError(
             {'pointer': 'data/{}'.format(element)},
             "You cannot update {} of an order".format(element),
         )
@@ -69,7 +66,7 @@ def check_event_user_ticket_holders(order, data, element):
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': 'data/{}'.format(element)},
                 "You cannot update {} of an order".format(element),
             )
@@ -95,7 +92,7 @@ def check_billing_info(data):
         and data.get('amount') > 0
         and not data.get('is_billing_enabled')
     ):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/is_billing_enabled'},
             "Billing information is mandatory for this order",
         )
@@ -106,7 +103,7 @@ def check_billing_info(data):
         and data.get('zipcode')
         and data.get('country')
     ):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/is_billing_enabled'},
             "Billing information incomplete",
         )
@@ -155,7 +152,7 @@ class OrdersListPost(ResourceList):
         if not current_user.is_verified and free_ticket_quantity == len(
             data['ticket_holders']
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders",
             )
@@ -304,7 +301,7 @@ class OrdersList(ResourceList):
         if kwargs.get('event_id') and not has_access(
             'is_coorganizer', event_id=kwargs['event_id']
         ):
-            raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
+            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
@@ -312,7 +309,7 @@ class OrdersList(ResourceList):
             # orders under a user
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
                 User.id == user.id
             )
@@ -362,7 +359,7 @@ class OrderDetail(ResourceDetail):
             event_id=order.event_id,
             user_id=order.user_id,
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -390,7 +387,7 @@ class OrderDetail(ResourceDetail):
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (
             not current_user.id == order.user_id
         ):
-            raise ForbiddenException({'pointer': ''}, "Access Forbidden")
+            raise ForbiddenError({'pointer': ''}, "Access Forbidden")
 
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
             if current_user.id == order.user_id:
@@ -402,7 +399,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -417,7 +414,7 @@ class OrderDetail(ResourceDetail):
                             element
                         ] != getattr(order, element, None):
                             if element != 'status' and element != 'deleted_at':
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/{}'.format(element)},
                                     "You cannot update {} of an order".format(element),
                                 )
@@ -427,13 +424,13 @@ class OrderDetail(ResourceDetail):
                                 and order.status == 'completed'
                             ):
                                 # Since we don't have a refund system.
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a completed paid order",
                                 )
                             elif element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a cancelled order",
                                 )
@@ -442,7 +439,7 @@ class OrderDetail(ResourceDetail):
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
@@ -454,7 +451,7 @@ class OrderDetail(ResourceDetail):
                             and order.status == 'completed'
                             and data[element] != getattr(order, element, None)
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of a completed order".format(
                                     element
@@ -465,7 +462,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -481,7 +478,7 @@ class OrderDetail(ResourceDetail):
                 )
 
         if data.get('payment_mode') == 'free' and data.get('amount') > 0:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "payment-mode cannot be free for order with amount > 0",
             )
@@ -490,7 +487,7 @@ class OrderDetail(ResourceDetail):
             and data.get('payment_mode') == 'stripe'
             and not is_payment_valid(order, 'stripe')
         ):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify stripe payment",
             )
@@ -499,7 +496,7 @@ class OrderDetail(ResourceDetail):
             and data.get('payment_mode') == 'paypal'
             and not is_payment_valid(order, 'paypal')
         ):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify paypal payment",
             )
@@ -581,7 +578,7 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
         elif (
             order.amount
             and order.amount > 0
@@ -629,7 +626,7 @@ class OrderRelationship(ResourceRelationship):
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -834,8 +831,8 @@ def initiate_transaction(order_identifier):
         "websiteName": "eventyay",
         "orderId": order_identifier,
         "callbackUrl": "",
-        "txnAmount": {"value": order.amount, "currency": "INR",},
-        "userInfo": {"custId": order.user.id,},
+        "txnAmount": {"value": order.amount, "currency": "INR", },
+        "userInfo": {"custId": order.user.id, },
     }
     checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
     # head parameters

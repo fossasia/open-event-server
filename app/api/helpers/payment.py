@@ -9,7 +9,8 @@ from forex_python.converter import CurrencyRates
 from app.api.helpers import checksum
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.exceptions import ConflictException, ForbiddenException
+from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.utilities import represents_int
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
@@ -81,7 +82,7 @@ class StripePaymentsManager:
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': ''},
                 "Stripe payment isn't configured properly for the Platform",
             )

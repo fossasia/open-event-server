@@ -4,7 +4,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.feedback import delete_feedback
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -37,12 +37,12 @@ class FeedbackListPost(ResourceList):
                 "User: {} doesn't match auth key".format(data['user']),
             )
         if 'event' in data and 'session' in data:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': ''},
                 "Only one relationship between event and session is allowed",
             )
         if 'event' not in data and 'session' not in data:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': ''}, "A valid relationship with event and session is required"
             )
 
@@ -56,7 +56,7 @@ class FeedbackListPost(ResourceList):
         if data.get('session', None):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "Event co-organizer access required"
                 )
 
@@ -142,18 +142,18 @@ class FeedbackDetail(ResourceDetail):
         if feedback and feedback.session_id:
             session = Session.query.filter_by(id=feedback.session_id).first()
             if session and not current_user.id == feedback.user_id:
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "Feedback can be updated only by user himself"
                 )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "Event co-organizer access required"
                 )
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):
                 delete_feedback(feedback)
             else:
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "Feedback can be deleted only by user himself"
                 )
 
