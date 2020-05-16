@@ -11,7 +11,6 @@ from itsdangerous import Serializer
 
 from app.api.helpers.errors import (
     UnprocessableEntityError
-  
 )
 
 

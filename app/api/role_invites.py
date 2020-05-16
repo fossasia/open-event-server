@@ -5,8 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import NotFoundError
-from app.api.helpers.errors import ForbiddenError,UnprocessableEntityError
-
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
@@ -149,7 +148,8 @@ class RoleInviteDetail(ResourceDetail):
         if not has_access('is_organizer', event_id=role_invite.event_id) and (
             len(list(data.keys())) > 1 or 'status' not in data
         ):
-            raise UnprocessableEntityError({'source': ''}, "You can only change your status")
+            raise UnprocessableEntityError(
+                {'source': ''}, "You can only change your status")
         if data.get('deleted_at'):
             if role_invite.role_name == 'owner' and not has_access(
                 'is_owner', event_id=role_invite.event_id

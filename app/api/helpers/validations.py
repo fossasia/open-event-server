@@ -2,7 +2,6 @@ from app.api.helpers.errors import UnprocessableEntityError
 from app.settings import get_settings
 
 
-
 def validate_complex_fields_json(self, data, original_data):
     if data.get('complex_field_values'):
         if any(

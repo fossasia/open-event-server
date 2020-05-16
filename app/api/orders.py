@@ -22,7 +22,7 @@ from app.api.helpers.exceptions import (
     ConflictException
 )
 from app.api.helpers.errors import (
-    ForbiddenError,UnprocessableEntityError
+    ForbiddenError, UnprocessableEntityError
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
@@ -64,7 +64,7 @@ def check_event_user_ticket_holders(order, data, element):
     if element in ['event', 'user'] and data[element] != str(
         getattr(order, element, None).id
     ):
-        raiseForbiddenError(
+        raise ForbiddenError(
             {'pointer': 'data/{}'.format(element)},
             "You cannot update {} of an order".format(element),
         )
@@ -73,7 +73,7 @@ def check_event_user_ticket_holders(order, data, element):
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
-            raiseForbiddenError(
+            raise ForbiddenError(
                 {'pointer': 'data/{}'.format(element)},
                 "You cannot update {} of an order".format(element),
             )
@@ -159,7 +159,7 @@ class OrdersListPost(ResourceList):
         if not current_user.is_verified and free_ticket_quantity == len(
             data['ticket_holders']
         ):
-            raiseForbiddenError(
+            raise ForbiddenError(
                 {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders",
             )
@@ -308,7 +308,7 @@ class OrdersList(ResourceList):
         if kwargs.get('event_id') and not has_access(
             'is_coorganizer', event_id=kwargs['event_id']
         ):
-            raiseForbiddenError({'source': ''}, "Co-Organizer Access Required")
+            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
@@ -316,7 +316,7 @@ class OrdersList(ResourceList):
             # orders under a user
             user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raiseForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
                 User.id == user.id
             )
@@ -368,7 +368,7 @@ class OrderDetail(ResourceDetail):
             event_id=order.event_id,
             user_id=order.user_id,
         ):
-            raiseForbiddenError(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -396,7 +396,7 @@ class OrderDetail(ResourceDetail):
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (
             not current_user.id == order.user_id
         ):
-            raiseForbiddenError({'pointer': ''}, "Access Forbidden")
+            raise ForbiddenError({'pointer': ''}, "Access Forbidden")
 
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
             if current_user.id == order.user_id:
@@ -408,7 +408,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raiseForbiddenError(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -423,7 +423,7 @@ class OrderDetail(ResourceDetail):
                             element
                         ] != getattr(order, element, None):
                             if element != 'status' and element != 'deleted_at':
-                                raiseForbiddenError(
+                                raise ForbiddenError(
                                     {'pointer': 'data/{}'.format(element)},
                                     "You cannot update {} of an order".format(element),
                                 )
@@ -433,13 +433,13 @@ class OrderDetail(ResourceDetail):
                                 and order.status == 'completed'
                             ):
                                 # Since we don't have a refund system.
-                                raiseForbiddenError(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a completed paid order",
                                 )
                             elif element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
-                                raiseForbiddenError(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a cancelled order",
                                 )
@@ -448,7 +448,7 @@ class OrderDetail(ResourceDetail):
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
-                raiseForbiddenError(
+                raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
@@ -460,7 +460,7 @@ class OrderDetail(ResourceDetail):
                             and order.status == 'completed'
                             and data[element] != getattr(order, element, None)
                         ):
-                            raiseForbiddenError(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of a completed order".format(
                                     element
@@ -471,7 +471,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raiseForbiddenError(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -587,7 +587,7 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
-            raiseForbiddenError({'source': ''}, 'Access Forbidden')
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
         elif (
             order.amount
             and order.amount > 0
@@ -637,7 +637,7 @@ class OrderRelationship(ResourceRelationship):
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
         ):
-            raiseForbiddenError(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -842,8 +842,8 @@ def initiate_transaction(order_identifier):
         "websiteName": "eventyay",
         "orderId": order_identifier,
         "callbackUrl": "",
-        "txnAmount": {"value": order.amount, "currency": "INR",},
-        "userInfo": {"custId": order.user.id,},
+        "txnAmount": {"value": order.amount, "currency": "INR", },
+        "userInfo": {"custId": order.user.id, },
     }
     checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
     # head parameters
