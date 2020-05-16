@@ -8,9 +8,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
 from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+    ConflictException
+)
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
@@ -59,7 +61,7 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'source': '/data/attributes/password'},
                 'Password should be at least 8 characters long',
             )
@@ -111,7 +113,7 @@ class UserList(ResourceList):
         #     try:
         #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
         #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
+        #         raise UnprocessableEntityError(
         #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
         #         )
         #     uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
@@ -176,7 +178,7 @@ class UserDetail(ResourceDetail):
                 if not has_access(
                     'is_user_itself', user_id=attendee.user.id
                 ) or not has_access('is_coorganizer', event_id=attendee.event_id):
-                    raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                    raise ForbiddenError({'source': ''}, 'Access Forbidden')
                 view_kwargs['id'] = attendee.user.id
             else:
                 view_kwargs['id'] = None
@@ -271,7 +273,7 @@ class UserDetail(ResourceDetail):
         #     try:
         #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
         #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
+        #         raise UnprocessableEntityError(
         #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
         #         )
         #     data['original_image_url'] = uploaded_images['original_image_url']
@@ -283,12 +285,12 @@ class UserDetail(ResourceDetail):
             if has_access('is_user_itself', user_id=user.id) or has_access('is_admin'):
                 if data.get('deleted_at'):
                     if len(user.events) != 0:
-                        raise ForbiddenException(
+                        raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
                         )
                     elif len(user.orders) != 0:
-                        raise ForbiddenException(
+                        raise ForbiddenError(
                             {'source': ''},
                             "Users associated with orders cannot be deleted",
                         )
@@ -299,7 +301,7 @@ class UserDetail(ResourceDetail):
                     data['email'] = user.email
                 user.deleted_at = data.get('deleted_at')
             else:
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "You are not authorized to update this information."
                 )
 

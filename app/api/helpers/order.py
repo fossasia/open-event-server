@@ -9,7 +9,8 @@ from app.api.helpers.db import (
     safe_query_without_soft_deleted_entries,
     save_to_db,
 )
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
+from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
@@ -126,7 +127,7 @@ def create_onsite_attendees_for_order(data):
     on_site_tickets = data.get('on_site_tickets')
 
     if not on_site_tickets:
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': 'data/attributes/on_site_tickets'}, 'on_site_tickets info missing'
         )
 
@@ -218,7 +219,7 @@ def calculate_order_amount(tickets, discount_code=None):
         if ticket.type == 'donation':
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': 'tickets/price'},
                     f"Price for donation ticket should be present and within range "
                     f"{ticket.min_price} to {ticket.max_price}",

@@ -4,9 +4,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import get_count, safe_query, save_to_db
 from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+    ConflictException
+)
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError
 )
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
@@ -36,7 +38,7 @@ class StripeAuthorizationListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
+            raise ForbiddenError({'source': ''}, "Minimum Organizer access required")
         if (
             get_count(
                 db.session.query(Event).filter_by(
@@ -45,7 +47,7 @@ class StripeAuthorizationListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': ''}, "Stripe payment is disabled for this Event"
             )
 
@@ -67,7 +69,7 @@ class StripeAuthorizationListPost(ResourceList):
                 data['stripe_auth_code']
             )
             if 'error' in credentials:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/stripe_auth_code'},
                     credentials['error_description'],
                 )

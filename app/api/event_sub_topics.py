@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.custom_placeholders import CustomPlaceholder
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.event_sub_topics import EventSubTopicSchema
@@ -28,7 +28,7 @@ class EventSubTopicListPost(ResourceList):
         """
         require_relationship(['event_topic'], data)
         if not has_access('is_admin'):
-            raise ForbiddenException({'source': ''}, 'Admin access is required.')
+            raise ForbiddenError({'source': ''}, 'Admin access is required.')
 
     view_kwargs = True
     methods = [

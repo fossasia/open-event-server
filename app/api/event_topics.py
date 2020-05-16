@@ -4,7 +4,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_system_image
 from app.api.schema.event_topics import EventTopicSchema
 from app.models import db

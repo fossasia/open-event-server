@@ -3,7 +3,8 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.exceptions import ConflictException, ForbiddenException
+from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers_calls import SpeakersCallSchema
@@ -27,7 +28,7 @@ class SpeakersCallList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -47,7 +48,7 @@ class SpeakersCallList(ResourceList):
                 speakers_call.starts_at > event.starts_at
                 or speakers_call.ends_at > event.starts_at
             ):
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''},
                     "Speakers call date can\'t be after the event start date",
                 )
@@ -93,7 +94,7 @@ class SpeakersCallDetail(ResourceDetail):
                     speakers_call.starts_at > event.starts_at
                     or speakers_call.ends_at > event.starts_at
                 ):
-                    raise ForbiddenException(
+                    raise ForbiddenError(
                         {'source': ''},
                         "Speakers call date can\'t be after the event start date",
                     )

@@ -6,7 +6,8 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, save_to_db, safe_query_by_id
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
+from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import UnprocessableEntityError 
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import (
@@ -80,7 +81,7 @@ def validate_tickets(tickets):
             "Tickets with different event IDs requested for Order",
             extra=dict(ticket_events=ticket_events),
         )
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': 'tickets'},
             f'All tickets must belong to same event. Found: {ticket_events}',
         )
@@ -110,7 +111,7 @@ def validate_discount_code(
                 "Discount code Event ID mismatch",
                 extra=dict(event_id=event_id, discount_code=discount_code),
             )
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': 'discount_code_id'}, "Invalid Discount Code"
             )
 
@@ -127,7 +128,7 @@ def validate_discount_code(
                     discount_code=discount_code,
                 ),
             )
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': 'discount_code_id'}, 'Invalid Discount Code'
             )
 
@@ -145,11 +146,11 @@ def validate_discount_code(
                 now=now,
             ),
         )
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': 'discount_code_id'}, "Invalid Discount Code"
         )
     if not discount_code.is_available(tickets, ticket_holders):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
         )
 

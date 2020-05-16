@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -27,7 +27,7 @@ class TicketTagListPost(ResourceList):
         require_relationship(['event'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     schema = TicketTagSchema
     methods = [

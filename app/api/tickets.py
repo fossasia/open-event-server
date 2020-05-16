@@ -6,7 +6,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -66,19 +67,19 @@ class TicketListPost(ResourceList):
                     .one()
                 )
             except NoResultFound:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': data['event']}, "Event does not exist"
                 )
 
             if data.get('type') == 'paid' or data.get('type') == 'donation':
                 if not event.is_payment_enabled():
-                    raise UnprocessableEntity(
+                    raise UnprocessableEntityError(
                         {'event_id': data['event']},
                         "Event having paid ticket must have a payment method",
                     )
 
             if data.get('sales_ends_at') > event.ends_at:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'sales_ends_at': '/data/attributes/sales-ends-at'},
                     "Ticket end date cannot be greater than event end date",
                 )
@@ -231,11 +232,11 @@ class TicketDetail(ResourceDetail):
                     .one()
                 )
             except NoResultFound:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': ticket.event.id}, "Event does not exist"
                 )
             if not event.is_payment_enabled():
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': ticket.event.id},
                     "Event having paid ticket must have a payment method",
                 )

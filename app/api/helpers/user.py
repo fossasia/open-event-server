@@ -1,7 +1,7 @@
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.models import db
 from app.models.user import User
 
@@ -44,7 +44,7 @@ def modify_email_for_user_to_be_restored(user):
             user.email = user_email
             save_to_db(user)
         else:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': '/data/attributes/email'},
                 "This email is already registered! Manually edit and then try restoring",
             )
