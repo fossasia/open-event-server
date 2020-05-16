@@ -130,6 +130,7 @@ def get_new_slug(model, name):
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
+
 def safe_query_kwargs(model, kwargs, parameter_name):
     """
     :param model: db Model to be queried
