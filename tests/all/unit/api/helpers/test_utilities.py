@@ -2,7 +2,7 @@ import datetime
 import string
 import unittest
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import (
     dasherize,
     get_filename_from_cd,
@@ -76,7 +76,7 @@ class TestUtilitiesHelperValidation(unittest.TestCase):
     def test_require_relationship(self):
         """Method to test relationship in request data"""
 
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             data = ['event']
             require_relationship(['sponsor', 'event'], data)
 

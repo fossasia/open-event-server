@@ -1,7 +1,7 @@
 import unittest
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.user import (
     modify_email_for_user_to_be_deleted,
     modify_email_for_user_to_be_restored,
@@ -34,7 +34,7 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
             user2 = create_user(email="test_user@gmail.com.deleted", password="testpass")
             save_to_db(user2)
             self.assertRaises(
-                ForbiddenException, modify_email_for_user_to_be_restored, user2
+                ForbiddenError, modify_email_for_user_to_be_restored, user2
             )
 
 
