@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_email import UserEmailSchema
@@ -36,7 +36,7 @@ class UserEmailList(ResourceList):
         """
         query_ = self.session.query(UserEmail)
         if view_kwargs.get('user_id'):
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 

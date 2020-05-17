@@ -2,7 +2,7 @@ from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import get_count, safe_query, save_to_db
+from app.api.helpers.db import get_count, save_to_db, safe_query_kwargs
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -132,14 +132,14 @@ class StripeAuthorizationDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            stripe_authorization = safe_query(
-                StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+            stripe_authorization = safe_query_kwargs(
+                StripeAuthorization, view_kwargs, 'event_id', 'event_id'
             )
             view_kwargs['id'] = stripe_authorization.id
 
@@ -182,15 +182,15 @@ def get_id(view_kwargs):
     """
 
     if view_kwargs.get('event_identifier') is not None:
-        event = safe_query(
-            Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier'
+        event = safe_query_kwargs(
+            Event, view_kwargs, 'event_identifier', 'identifier'
         )
         if event.id is not None:
             view_kwargs['event_id'] = event.id
 
     if view_kwargs.get('event_id') is not None:
-        stripe_authorization = safe_query(
-            StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+        stripe_authorization = safe_query_kwargs(
+            StripeAuthorization, view_kwargs, 'event_id', 'event_id'
         )
         view_kwargs['id'] = stripe_authorization.id
     return view_kwargs

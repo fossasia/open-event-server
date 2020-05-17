@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -80,10 +80,10 @@ class CustomFormDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier',
             )
 
         if event:

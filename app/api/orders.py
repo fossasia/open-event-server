@@ -16,6 +16,8 @@ from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import (
     safe_query,
     save_to_db,
+    safe_query_kwargs,
+    safe_query_by_id
 )
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import (
@@ -313,7 +315,7 @@ class OrdersList(ResourceList):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
             # orders under a user
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
@@ -350,17 +352,17 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id'):
-            attendee = safe_query(
-                TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
+            attendee = safe_query_kwargs(
+                TicketHolder, view_kwargs, 'attendee_id'
             )
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
-            order = safe_query(Order, 'id', view_kwargs['id'], 'id')
+            order = safe_query_by_id(Order, view_kwargs['id'])
 
         if not has_access(
             'is_coorganizer_or_user_itself',
@@ -626,12 +628,12 @@ class OrderRelationship(ResourceRelationship):
         :return:
         """
         if kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
+            order = safe_query_kwargs(
+                Order, kwargs, 'order_identifier', 'identifier'
             )
             kwargs['id'] = order.id
         elif kwargs.get('id'):
-            order = safe_query(Order, 'id', kwargs['id'], 'id')
+            order = safe_query_by_id(Order, kwargs['id'])
 
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
