@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.custom_placeholders import CustomPlaceholder
-from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
@@ -82,8 +82,8 @@ class EventSubTopicDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 

@@ -356,8 +356,8 @@ class OrderDetail(ResourceDetail):
             )
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
@@ -627,8 +627,8 @@ class OrderRelationship(ResourceRelationship):
         :return:
         """
         if kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
+            order = safe_query_kwargs(
+                Order, kwargs, 'order_identifier', 'identifier'
             )
             kwargs['id'] = order.id
         elif kwargs.get('id'):

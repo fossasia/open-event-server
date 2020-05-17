@@ -5,7 +5,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -157,8 +157,8 @@ class TicketList(ResourceList):
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             ticket_ids = []
             for ticket in order.tickets:

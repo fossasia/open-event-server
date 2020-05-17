@@ -123,8 +123,8 @@ class FeedbackDetail(ResourceDetail):
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
 
         if event:

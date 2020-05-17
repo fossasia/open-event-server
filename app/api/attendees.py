@@ -133,8 +133,8 @@ class AttendeeList(ResourceList):
         query_ = self.session.query(TicketHolder)
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier',
             )
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id

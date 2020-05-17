@@ -6,7 +6,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -191,11 +191,11 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_identifier') is not None:
-            event_invoice = safe_query(
+            event_invoice = safe_query_kwargs(
                 EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
+                view_kwargs,
                 'event_invoice_identifier',
+                'identifier'
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id

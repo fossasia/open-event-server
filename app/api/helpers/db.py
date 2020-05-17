@@ -37,18 +37,19 @@ def safe_query_by(model, value, param='id'):
     return safe_query_without_soft_deleted_entries(model, param, value, param)
 
 
-def safe_query_kwargs(model, kwargs, parameter_name):
+def safe_query_kwargs(model, kwargs, parameter_name, column_name='id'):
     """
     :param model: db Model to be queried
     :param kwargs: it contains parameter_name's value eg kwargs['event_id']
                 where parameter_name='event_id'
     :param parameter_name: Name of parameter to be printed in json-api error
                 message eg 'event_id'
+    :param column_name: Name of column default is 'id'.
     :return:
     """
     return safe_query(
         model,
-        'id',
+        column_name,
         kwargs[parameter_name],
         parameter_name,
     )

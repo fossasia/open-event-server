@@ -139,8 +139,8 @@ class DiscountCodeList(ResourceList):
                 raise ForbiddenException({'source': ''}, 'You are not authorized')
 
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier',
             )
             view_kwargs['event_id'] = event.id
 
@@ -236,8 +236,8 @@ class DiscountCodeDetail(ResourceDetail):
                 )
 
         if kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', kwargs['event_identifier'], 'event_identifier'
+            event = safe_query_kwargs(
+                Event, kwargs, 'event_identifier', 'identifier'
             )
             kwargs['event_id'] = event.id
 
@@ -317,8 +317,8 @@ class DiscountCodeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier',
             )
             view_kwargs['event_id'] = event.id
 
@@ -339,11 +339,11 @@ class DiscountCodeDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_identifier') and has_access('is_admin'):
-            event_invoice = safe_query(
+            event_invoice = safe_query_kwargs(
                 EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
+                view_kwargs,
                 'event_invoice_identifier',
+                'identifier'
             )
             if event_invoice.discount_code_id:
                 view_kwargs['id'] = event_invoice.discount_code_id

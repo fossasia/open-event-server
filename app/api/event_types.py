@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.db import safe_query_kwargs
 from app.api.schema.event_types import EventTypeSchema
 from app.models import db
 from app.models.event import Event
@@ -31,8 +31,8 @@ class EventTypeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 

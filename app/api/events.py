@@ -410,7 +410,7 @@ def get_id(view_kwargs):
     :return:
     """
     if view_kwargs.get('identifier'):
-        event = safe_query(Event, 'identifier', view_kwargs['identifier'], 'identifier')
+        event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
         view_kwargs['id'] = event.id
 
     if view_kwargs.get('sponsor_id') is not None:
@@ -473,11 +473,11 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('event_invoice_identifier') is not None:
-        event_invoice = safe_query(
+        event_invoice = safe_query_kwargs(
             EventInvoice,
-            'identifier',
-            view_kwargs['event_invoice_identifier'],
+            view_kwargs,
             'event_invoice_identifier',
+            'identifier'
         )
         if event_invoice.event_id is not None:
             view_kwargs['id'] = event_invoice.event_id
@@ -677,8 +677,8 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('order_identifier') is not None:
-        order = safe_query(
-            Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier'
+        order = safe_query_kwargs(
+            Order, view_kwargs, 'order_identifier', 'identifier'
         )
         if order.event_id is not None:
             view_kwargs['id'] = order.event_id
@@ -724,8 +724,8 @@ class EventDetail(ResourceDetail):
         get_id(view_kwargs)
 
         if view_kwargs.get('order_identifier') is not None:
-            order = safe_query(
-                Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             if order.event_id is not None:
                 view_kwargs['id'] = order.event_id
@@ -825,8 +825,8 @@ class EventRelationship(ResourceRelationship):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['identifier'], 'identifier'
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'identifier', 'identifier'
             )
             view_kwargs['id'] = event.id
 
