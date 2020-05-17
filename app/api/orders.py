@@ -16,7 +16,8 @@ from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import (
     safe_query,
     save_to_db,
-    safe_query_kwargs
+    safe_query_kwargs,
+    safe_query_by_id
 )
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import (
@@ -361,7 +362,7 @@ class OrderDetail(ResourceDetail):
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
-            order = safe_query_kwargs(Order, view_kwargs, 'id')
+            order = safe_query_by_id(Order, view_kwargs['id'])
 
         if not has_access(
             'is_coorganizer_or_user_itself',
@@ -632,7 +633,7 @@ class OrderRelationship(ResourceRelationship):
             )
             kwargs['id'] = order.id
         elif kwargs.get('id'):
-            order = safe_query_kwargs(Order, kwargs, 'id')
+            order = safe_query_by_id(Order, kwargs['id'])
 
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
