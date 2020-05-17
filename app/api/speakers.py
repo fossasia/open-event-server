@@ -4,7 +4,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query, save_to_db, safe_query_kwargs
+from app.api.helpers.db import get_count, save_to_db, safe_query_kwargs
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -128,7 +128,7 @@ class SpeakerList(ResourceList):
         query_ = event_query(query_, view_kwargs)
 
         if view_kwargs.get('user_id'):
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('session_id'):

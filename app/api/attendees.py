@@ -5,7 +5,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -143,13 +143,13 @@ class AttendeeList(ResourceList):
             query_ = query_.join(Order).filter(Order.id == order.id)
 
         if view_kwargs.get('ticket_id'):
-            ticket = safe_query(Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             # if not has_access('is_registrar', event_id=ticket.event_id):
             #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
 
         if view_kwargs.get('user_id'):
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(

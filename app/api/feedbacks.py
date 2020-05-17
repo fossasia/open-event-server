@@ -85,7 +85,7 @@ class FeedbackList(ResourceList):
         query_ = self.session.query(Feedback)
         if view_kwargs.get('user_id'):
             # feedbacks under an user
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User, User.id == Feedback.user_id).filter(
                 User.id == user.id
             )
@@ -121,7 +121,7 @@ class FeedbackDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query(
                 Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',

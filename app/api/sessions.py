@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import get_count, safe_query, save_to_db
+from app.api.helpers.db import get_count, safe_query, save_to_db, safe_query_kwargs
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
@@ -105,22 +105,22 @@ class SessionList(ResourceList):
         """
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
-            track = safe_query(Track, 'id', view_kwargs['track_id'], 'track_id')
+            track = safe_query_kwargs(Track, view_kwargs, 'track_id')
             query_ = query_.join(Track).filter(Track.id == track.id)
         if view_kwargs.get('session_type_id') is not None:
-            session_type = safe_query(
-                SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id'
+            session_type = safe_query_kwargs(
+                SessionType, view_kwargs, 'session_type_id'
             )
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
-            microlocation = safe_query(
-                Microlocation, 'id', view_kwargs['microlocation_id'], 'microlocation_id',
+            microlocation = safe_query_kwargs(
+                Microlocation, view_kwargs, 'microlocation_id',
             )
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == microlocation.id
             )
         if view_kwargs.get('user_id') is not None:
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
                 query_.join(User)
                 .join(Speaker)
@@ -133,7 +133,7 @@ class SessionList(ResourceList):
             )
         query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
-            speaker = safe_query(Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
+            speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
 

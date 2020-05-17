@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.email_notifications import EmailNotificationSchema
 from app.models import db
@@ -35,7 +35,7 @@ class EmailNotificationList(ResourceList):
         """
         query_ = self.session.query(EmailNotification)
         if view_kwargs.get('user_id'):
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
