@@ -1,17 +1,15 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
-
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import (
-    ConflictException,
+    ConflictException
 )
 from app.api.helpers.errors import (
-    UnprocessableEntityError ,
+    UnprocessableEntityError,
     ForbiddenError
 )
-
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -115,7 +113,7 @@ class AccessCodeList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': AccessCode,
-        'methods': {'query': query,},
+        'methods': {'query': query, },
     }
 
 
@@ -163,7 +161,8 @@ class AccessCodeDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': '{id}'}, "Access Code:  not found")
 
             if not has_access('is_coorganizer', event_id=access.event_id):
-                raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+                raise UnprocessableEntityError(
+                    {'source': ''}, "Please verify your permission")
 
     decorators = (
         api.has_permission(

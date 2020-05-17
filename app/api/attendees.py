@@ -6,8 +6,7 @@ from sqlalchemy import and_, or_
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import (
-    ConflictException,
-
+    ConflictException
 )
 from app.api.helpers.errors import (
     ForbiddenError,

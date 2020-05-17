@@ -60,7 +60,7 @@ class SessionTypeList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': SessionType,
-        'methods': {'query': query,},
+        'methods': {'query': query, },
     }
 
 

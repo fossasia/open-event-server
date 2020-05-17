@@ -1,9 +1,6 @@
 from .errors import ErrorResponse
 
 
-
-
-
 class ConflictException(ErrorResponse):
     """
     Default class for 409 Error
@@ -11,9 +8,6 @@ class ConflictException(ErrorResponse):
 
     title = "Conflict"
     status = 409
-
-
-
 
 
 class MethodNotAllowed(ErrorResponse):

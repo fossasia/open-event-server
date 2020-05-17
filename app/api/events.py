@@ -20,7 +20,6 @@ from app.api.helpers.exceptions import (
 from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError
-
 )
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access

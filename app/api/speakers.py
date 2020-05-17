@@ -150,7 +150,7 @@ class SpeakerList(ResourceList):
     methods = [
         'GET',
     ]
-    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query,}}
+    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query, }}
 
 
 class SpeakerDetail(ResourceDetail):

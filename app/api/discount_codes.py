@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import (
     ConflictException,
-    MethodNotAllowed,
+    MethodNotAllowed
 )
 from app.api.helpers.errors import (
     ForbiddenError,
@@ -310,7 +310,8 @@ class DiscountCodeDetail(ResourceDetail):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+                raise UnprocessableEntityError(
+                    {'source': ''}, "Please verify your permission")
 
     def before_get_object(self, view_kwargs):
         """
@@ -374,7 +375,8 @@ class DiscountCodeDetail(ResourceDetail):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+                raise UnprocessableEntityError(
+                    {'source': ''}, "Please verify your permission")
 
         elif not view_kwargs.get('id') and not has_access('is_admin'):
             raise UnprocessableEntityError(
@@ -411,7 +413,8 @@ class DiscountCodeDetail(ResourceDetail):
             self.schema = DiscountCodeSchemaEvent
             self.resource.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+            raise UnprocessableEntityError(
+                {'source': ''}, "Please verify your permission")
 
     def before_delete_object(self, discount, view_kwargs):
         """
@@ -428,7 +431,8 @@ class DiscountCodeDetail(ResourceDetail):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+            raise UnprocessableEntityError(
+                {'source': ''}, "Please verify your permission")
 
     #     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
@@ -467,7 +471,8 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+            raise UnprocessableEntityError(
+                {'source': ''}, "Please verify your permission")
 
     methods = ['GET', 'PATCH']
     decorators = (jwt_required,)
@@ -500,7 +505,8 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': ''}, "Please verify your permission")
+            raise UnprocessableEntityError(
+                {'source': ''}, "Please verify your permission")
 
     schema = DiscountCodeSchemaEvent
     data_layer = {'session': db.session, 'model': DiscountCode}
