@@ -3,9 +3,11 @@ from unittest import TestCase
 
 from app.api.helpers.exceptions import (
     ConflictException,
-    ForbiddenException,
-    MethodNotAllowed,
-    UnprocessableEntity,
+    MethodNotAllowed
+)
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError
 )
 
 
@@ -14,8 +16,8 @@ class TestExceptionsHelperValidation(TestCase):
         """Method to test all exceptions."""
 
         # Unprocessable Entity Exception
-        with self.assertRaises(UnprocessableEntity):
-            raise UnprocessableEntity(
+        with self.assertRaises(UnprocessableEntityError):
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/min-quantity'},
                 "min-quantity should be less than max-quantity",
             )
@@ -27,8 +29,8 @@ class TestExceptionsHelperValidation(TestCase):
             )
 
         # Forbidden Exception
-        with self.assertRaises(ForbiddenException):
-            raise ForbiddenException({'source': ''}, "Access Forbidden")
+        with self.assertRaises(ForbiddenError):
+            raise ForbiddenError({'source': ''}, "Access Forbidden")
 
         # Method Not Allowed Exception
         with self.assertRaises(MethodNotAllowed):
