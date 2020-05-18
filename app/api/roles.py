@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.db import safe_query_kwargs
 from app.api.schema.roles import RoleSchema
 from app.models import db
 from app.models.role import Role
@@ -32,8 +32,8 @@ class RoleDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('role_invite_id') is not None:
-            role_invite = safe_query(
-                RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id'
+            role_invite = safe_query_kwargs(
+                RoleInvite, view_kwargs, 'role_invite_id'
             )
             if role_invite.role_id is not None:
                 view_kwargs['id'] = role_invite.role_id
@@ -41,10 +41,9 @@ class RoleDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('users_events_role_id') is not None:
-            users_events_role = safe_query(
+            users_events_role = safe_query_kwargs(
                 UsersEventsRoles,
-                'id',
-                view_kwargs['users_events_role_id'],
+                view_kwargs,
                 'users_events_role_id',
             )
             if users_events_role.role_id is not None:

@@ -2,7 +2,7 @@ import urllib.error
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_system_image
 from app.api.schema.event_topics import EventTopicSchema
@@ -71,23 +71,22 @@ class EventTopicDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             if event.event_topic_id:
                 view_kwargs['id'] = event.event_topic_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(
+            event_sub_topic = safe_query_kwargs(
                 EventSubTopic,
-                'id',
-                view_kwargs['event_sub_topic_id'],
+                view_kwargs,
                 'event_sub_topic_id',
             )
             if event_sub_topic.event_topic_id:

@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.files import create_save_image_sizes
 from app.api.schema.custom_placeholders import CustomPlaceholderSchema
 from app.models import db
@@ -22,10 +22,9 @@ class CustomPlaceholderList(ResourceList):
         """
         query_ = self.session.query(CustomPlaceholder)
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(
+            event_sub_topic = safe_query_kwargs(
                 EventSubTopic,
-                'id',
-                view_kwargs['event_sub_topic_id'],
+                view_kwargs,
                 'event_sub_topic_id',
             )
             query_ = query_.join(EventSubTopic).filter(
@@ -41,10 +40,9 @@ class CustomPlaceholderList(ResourceList):
         :return:
         """
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(
+            event_sub_topic = safe_query_kwargs(
                 EventSubTopic,
-                'id',
-                view_kwargs['event_sub_topic_id'],
+                view_kwargs,
                 'event_sub_topic_id',
             )
             data['event_sub_topic_id'] = event_sub_topic.id
@@ -92,10 +90,9 @@ class CustomPlaceholderDetail(ResourceDetail):
         """
         event_sub_topic = None
         if view_kwargs.get('event_sub_topic_id'):
-            event_sub_topic = safe_query(
+            event_sub_topic = safe_query_kwargs(
                 EventSubTopic,
-                'id',
-                view_kwargs['event_sub_topic_id'],
+                view_kwargs,
                 'event_sub_topic_id',
             )
 

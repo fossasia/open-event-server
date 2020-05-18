@@ -3,8 +3,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.feedback import delete_feedback
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -85,13 +85,13 @@ class FeedbackList(ResourceList):
         query_ = self.session.query(Feedback)
         if view_kwargs.get('user_id'):
             # feedbacks under an user
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User, User.id == Feedback.user_id).filter(
                 User.id == user.id
             )
         elif view_kwargs.get('session_id'):
             # feedbacks under a session
-            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             query_ = query_.join(Session, Session.id == Feedback.session_id).filter(
                 Session.id == session.id
             )
@@ -121,10 +121,10 @@ class FeedbackDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(
-                Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
 
         if event:

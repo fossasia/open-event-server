@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -68,7 +68,7 @@ class TrackDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id'):
-            session = safe_query(Session, 'id', view_kwargs['session_id'], 'session_id')
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             if session.event_id:
                 view_kwargs['id'] = session.track_id
             else:

@@ -3,8 +3,7 @@ from flask_jwt_extended import current_user, jwt_required, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
-
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError, ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
@@ -69,7 +68,7 @@ class UserFavouriteEventList(ResourceList):
         """
         query_ = self.session.query(UserFavouriteEvent)
         if view_kwargs.get('user_id') is not None:
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         elif has_access('is_admin'):
             pass

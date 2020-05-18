@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -34,6 +35,24 @@ def safe_query_by_id(model, id):
 
 def safe_query_by(model, value, param='id'):
     return safe_query_without_soft_deleted_entries(model, param, value, param)
+
+
+def safe_query_kwargs(model, kwargs, parameter_name, column_name='id'):
+    """
+    :param model: db Model to be queried
+    :param kwargs: it contains parameter_name's value eg kwargs['event_id']
+                where parameter_name='event_id'
+    :param parameter_name: Name of parameter to be printed in json-api error
+                message eg 'event_id'
+    :param column_name: Name of column default is 'id'.
+    :return:
+    """
+    return safe_query(
+        model,
+        column_name,
+        kwargs[parameter_name],
+        parameter_name,
+    )
 
 
 def safe_query_without_soft_deleted_entries(
@@ -108,3 +127,23 @@ def get_count(query):
     count_q = query.statement.with_only_columns([func.count()]).order_by(None)
     count = query.session.execute(count_q).scalar()
     return count
+
+
+def get_new_slug(model, name):
+    """
+    Helper function to create a new slug if required, else return orignal.
+    :param model: Specify model from db.
+    :param name: Identifier to generate slug.
+    """
+    slug = (
+        name.lower()
+        .replace("& ", "")
+        .replace(",", "")
+        .replace("/", "-")
+        .replace(" ", "-")
+    )
+    count = get_count(model.query.filter_by(slug=slug))
+    if count == 0:
+        return slug
+    else:
+        return '{}-{}'.format(slug, uuid.uuid4().hex)

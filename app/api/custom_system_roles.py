@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.schema.custom_system_roles import CustomSystemRoleSchema
 from app.models import db
 from app.models.custom_system_role import CustomSysRole
@@ -21,7 +21,7 @@ class CustomSystemRoleList(ResourceList):
         """
         query_ = self.session.query(CustomSysRole)
         if view_kwargs.get('panel_id'):
-            panel = safe_query(PanelPermission, 'id', view_kwargs['panel_id'], 'panel_id')
+            panel = safe_query_kwargs(PanelPermission, view_kwargs, 'panel_id')
             query_ = CustomSysRole.query.filter(
                 CustomSysRole.panel_permissions.any(id=panel.id)
             )
@@ -49,8 +49,8 @@ class CustomSystemRoleDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('role_id') is not None:
-            panel_perm = safe_query(
-                PanelPermission, 'id', view_kwargs['role_id'], 'role_id'
+            panel_perm = safe_query_kwargs(
+                PanelPermission, view_kwargs, 'role_id'
             )
             if panel_perm.role_id is not None:
                 view_kwargs['id'] = panel_perm.role_id

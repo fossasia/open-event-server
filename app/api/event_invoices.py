@@ -4,7 +4,7 @@ from flask import jsonify, request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permissions import is_admin, jwt_required
@@ -42,11 +42,11 @@ class EventInvoiceList(ResourceList):
         query_ = self.session.query(EventInvoice)
         query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('user_id'):
-            user = safe_query(User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('discount_code_id'):
-            discount_code = safe_query(
-                DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id',
+            discount_code = safe_query_kwargs(
+                DiscountCode, view_kwargs, 'discount_code_id',
             )
             query_ = query_.join(DiscountCode).filter(DiscountCode.id == discount_code.id)
         return query_
@@ -76,11 +76,11 @@ class EventInvoiceDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
+            event_invoice = safe_query_kwargs(
                 EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
+                view_kwargs,
                 'event_invoice_identifier',
+                'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -105,11 +105,11 @@ class EventInvoiceRelationshipRequired(ResourceRelationship):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
+            event_invoice = safe_query_kwargs(
                 EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
+                view_kwargs,
                 'event_invoice_identifier',
+                'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -135,11 +135,11 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
+            event_invoice = safe_query_kwargs(
                 EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
+                view_kwargs,
                 'event_invoice_identifier',
+                'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 

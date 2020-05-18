@@ -3,7 +3,7 @@ import datetime
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.permission_manager import has_access
 from app.models.event import Event
 from app.models.role import Role
@@ -28,7 +28,7 @@ def event_query(
     :return:
     """
     if view_kwargs.get(event_id):
-        event = safe_query(Event, 'id', view_kwargs[event_id], event_id)
+        event = safe_query_kwargs(Event, view_kwargs, event_id)
         if event.state != 'published' and (
             'Authorization' not in request.headers
             or not has_access(permission, event_id=event.id)
@@ -39,8 +39,8 @@ def event_query(
             )
         query_ = query_.join(Event).filter(Event.id == event.id)
     elif view_kwargs.get(event_identifier):
-        event = safe_query(
-            Event, 'identifier', view_kwargs[event_identifier], event_identifier
+        event = safe_query_kwargs(
+            Event, view_kwargs, event_identifier, 'identifier'
         )
         if event.state != 'published' and (
             'Authorization' not in request.headers

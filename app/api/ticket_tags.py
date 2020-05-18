@@ -1,7 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -49,7 +49,7 @@ class TicketTagList(ResourceList):
         """
         query_ = self.session.query(TicketTag)
         if view_kwargs.get('ticket_id'):
-            ticket = safe_query(Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
         query_ = event_query(query_, view_kwargs)
         return query_
