@@ -2,8 +2,7 @@ from datetime import datetime
 
 import pytest
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import ConflictException
 from app.api.helpers.ticketing import validate_ticket_holders
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic

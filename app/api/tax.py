@@ -3,11 +3,19 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
+<<<<<<< HEAD
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
 from app.api.helpers.errors import (
     ForbiddenError,
     ConflictException,
     MethodNotAllowed,
+=======
+from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.errors import (
+    ForbiddenError,
+    ConflictException,
+    MethodNotAllowed
+>>>>>>> moved all errors from exception.py to errors.py
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship

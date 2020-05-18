@@ -1,13 +1,11 @@
 import unittest
 from unittest import TestCase
 
-from app.api.helpers.exceptions import (
-    ConflictException,
-    MethodNotAllowed
-)
 from app.api.helpers.errors import (
     ForbiddenError,
-    UnprocessableEntityError
+    UnprocessableEntityError,
+    ConflictException,
+    MethodNotAllowed
 )
 
 

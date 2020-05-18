@@ -8,6 +8,7 @@ from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
 =======
 from app.api.helpers.db import safe_query
+<<<<<<< HEAD
 from app.api.helpers.exceptions import (
     ConflictException
 )
@@ -16,6 +17,12 @@ from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError,
     ConflictException,
+=======
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError,
+    ConflictException
+>>>>>>> moved all errors from exception.py to errors.py
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
