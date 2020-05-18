@@ -108,9 +108,7 @@ class SessionList(ResourceList):
             track = safe_query_kwargs(Track, view_kwargs, 'track_id')
             query_ = query_.join(Track).filter(Track.id == track.id)
         if view_kwargs.get('session_type_id') is not None:
-            session_type = safe_query_kwargs(
-                SessionType, view_kwargs, 'session_type_id'
-            )
+            session_type = safe_query_kwargs(SessionType, view_kwargs, 'session_type_id')
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
             microlocation = safe_query_kwargs(

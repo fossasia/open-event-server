@@ -137,15 +137,11 @@ class TicketList(ResourceList):
             query_ = self.session.query(Ticket).filter_by(is_hidden=False)
 
         if view_kwargs.get('ticket_tag_id'):
-            ticket_tag = safe_query_kwargs(
-                TicketTag, view_kwargs, 'ticket_tag_id'
-            )
+            ticket_tag = safe_query_kwargs(TicketTag, view_kwargs, 'ticket_tag_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
         query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('access_code_id'):
-            access_code = safe_query_kwargs(
-                AccessCode, view_kwargs, 'access_code_id'
-            )
+            access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
@@ -207,9 +203,7 @@ class TicketDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query_kwargs(
-                TicketHolder, view_kwargs, 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             if attendee.ticket_id is not None:
                 view_kwargs['id'] = attendee.ticket_id
             else:

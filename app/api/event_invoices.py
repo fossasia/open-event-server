@@ -77,10 +77,7 @@ class EventInvoiceDetail(ResourceDetail):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query_kwargs(
-                EventInvoice,
-                view_kwargs,
-                'event_invoice_identifier',
-                'identifier'
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -106,10 +103,7 @@ class EventInvoiceRelationshipRequired(ResourceRelationship):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query_kwargs(
-                EventInvoice,
-                view_kwargs,
-                'event_invoice_identifier',
-                'identifier'
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -136,10 +130,7 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
         """
         if view_kwargs.get('event_invoice_identifier'):
             event_invoice = safe_query_kwargs(
-                EventInvoice,
-                view_kwargs,
-                'event_invoice_identifier',
-                'identifier'
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 

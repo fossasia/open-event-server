@@ -47,12 +47,7 @@ def safe_query_kwargs(model, kwargs, parameter_name, column_name='id'):
     :param column_name: Name of column default is 'id'.
     :return:
     """
-    return safe_query(
-        model,
-        column_name,
-        kwargs[parameter_name],
-        parameter_name,
-    )
+    return safe_query(model, column_name, kwargs[parameter_name], parameter_name,)
 
 
 def safe_query_without_soft_deleted_entries(

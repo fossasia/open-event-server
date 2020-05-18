@@ -160,18 +160,14 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('feedback_id') is not None:
-            feedback = safe_query_kwargs(
-                Feedback, view_kwargs, 'feedback_id'
-            )
+            feedback = safe_query_kwargs(Feedback, view_kwargs, 'feedback_id')
             if feedback.user_id is not None:
                 view_kwargs['id'] = feedback.user_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query_kwargs(
-                TicketHolder, view_kwargs, 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             if attendee.user is not None:
                 if not has_access(
                     'is_user_itself', user_id=attendee.user.id
@@ -192,10 +188,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_identifier') is not None:
             event_invoice = safe_query_kwargs(
-                EventInvoice,
-                view_kwargs,
-                'event_invoice_identifier',
-                'identifier'
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
@@ -204,9 +197,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query_kwargs(
-                UsersEventsRoles,
-                view_kwargs,
-                'users_events_role_id',
+                UsersEventsRoles, view_kwargs, 'users_events_role_id',
             )
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
@@ -228,9 +219,7 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('access_code_id') is not None:
-            access_code = safe_query_kwargs(
-                AccessCode, view_kwargs, 'access_code_id'
-            )
+            access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
             if access_code.marketer_id is not None:
                 view_kwargs['id'] = access_code.marketer_id
             else:
@@ -254,9 +243,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('email_notification_id') is not None:
             email_notification = safe_query_kwargs(
-                EmailNotification,
-                view_kwargs,
-                'email_notification_id',
+                EmailNotification, view_kwargs, 'email_notification_id',
             )
             if email_notification.user_id is not None:
                 view_kwargs['id'] = email_notification.user_id

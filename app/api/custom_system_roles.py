@@ -49,9 +49,7 @@ class CustomSystemRoleDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('role_id') is not None:
-            panel_perm = safe_query_kwargs(
-                PanelPermission, view_kwargs, 'role_id'
-            )
+            panel_perm = safe_query_kwargs(PanelPermission, view_kwargs, 'role_id')
             if panel_perm.role_id is not None:
                 view_kwargs['id'] = panel_perm.role_id
             else:
