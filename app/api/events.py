@@ -222,9 +222,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_organizer_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_organizer_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_organizer_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -237,9 +235,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_coorganizer_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_coorganizer_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -267,9 +263,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_registrar_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_registrar_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_registrar_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -282,9 +276,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_moderator_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_moderator_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_moderator_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -297,9 +289,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_marketer_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_marketer_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_marketer_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -312,9 +302,7 @@ class EventList(ResourceList):
                 'is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])
             ):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
-            user = safe_query_kwargs(
-                User, view_kwargs, 'user_sales_admin_id'
-            )
+            user = safe_query_kwargs(User, view_kwargs, 'user_sales_admin_id')
             query_ = (
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
@@ -422,9 +410,7 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('user_favourite_event_id') is not None:
         user_favourite_event = safe_query_kwargs(
-            UserFavouriteEvent,
-            view_kwargs,
-            'user_favourite_event_id',
+            UserFavouriteEvent, view_kwargs, 'user_favourite_event_id',
         )
         if user_favourite_event.event_id is not None:
             view_kwargs['id'] = user_favourite_event.event_id
@@ -432,9 +418,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('copyright_id') is not None:
-        copyright = safe_query_kwargs(
-            EventCopyright, view_kwargs, 'copyright_id'
-        )
+        copyright = safe_query_kwargs(EventCopyright, view_kwargs, 'copyright_id')
         if copyright.event_id is not None:
             view_kwargs['id'] = copyright.event_id
         else:
@@ -448,9 +432,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('session_type_id') is not None:
-        session_type = safe_query_kwargs(
-            SessionType, view_kwargs, 'session_type_id'
-        )
+        session_type = safe_query_kwargs(SessionType, view_kwargs, 'session_type_id')
         if session_type.event_id is not None:
             view_kwargs['id'] = session_type.event_id
         else:
@@ -464,9 +446,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('event_invoice_id') is not None:
-        event_invoice = safe_query_kwargs(
-            EventInvoice, view_kwargs, 'event_invoice_id'
-        )
+        event_invoice = safe_query_kwargs(EventInvoice, view_kwargs, 'event_invoice_id')
         if event_invoice.event_id is not None:
             view_kwargs['id'] = event_invoice.event_id
         else:
@@ -474,10 +454,7 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('event_invoice_identifier') is not None:
         event_invoice = safe_query_kwargs(
-            EventInvoice,
-            view_kwargs,
-            'event_invoice_identifier',
-            'identifier'
+            EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
         )
         if event_invoice.event_id is not None:
             view_kwargs['id'] = event_invoice.event_id
@@ -485,9 +462,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('discount_code_id') is not None:
-        discount_code = safe_query_kwargs(
-            DiscountCode, view_kwargs, 'discount_code_id'
-        )
+        discount_code = safe_query_kwargs(DiscountCode, view_kwargs, 'discount_code_id')
         if discount_code.event_id is not None:
             view_kwargs['id'] = discount_code.event_id
         else:
@@ -501,9 +476,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('social_link_id') is not None:
-        social_link = safe_query_kwargs(
-            SocialLink, view_kwargs, 'social_link_id'
-        )
+        social_link = safe_query_kwargs(SocialLink, view_kwargs, 'social_link_id')
         if social_link.event_id is not None:
             view_kwargs['id'] = social_link.event_id
         else:
@@ -518,9 +491,7 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('stripe_authorization_id') is not None:
         stripe_authorization = safe_query_kwargs(
-            StripeAuthorization,
-            view_kwargs,
-            'stripe_authorization_id',
+            StripeAuthorization, view_kwargs, 'stripe_authorization_id',
         )
         if stripe_authorization.event_id is not None:
             view_kwargs['id'] = stripe_authorization.event_id
@@ -546,9 +517,7 @@ def get_id(view_kwargs):
                 view_kwargs['id'] = None
 
     if view_kwargs.get('speakers_call_id') is not None:
-        speakers_call = safe_query_kwargs(
-            SpeakersCall, view_kwargs, 'speakers_call_id'
-        )
+        speakers_call = safe_query_kwargs(SpeakersCall, view_kwargs, 'speakers_call_id')
         if speakers_call.event_id is not None:
             view_kwargs['id'] = speakers_call.event_id
         else:
@@ -562,18 +531,14 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('ticket_tag_id') is not None:
-        ticket_tag = safe_query_kwargs(
-            TicketTag, view_kwargs, 'ticket_tag_id'
-        )
+        ticket_tag = safe_query_kwargs(TicketTag, view_kwargs, 'ticket_tag_id')
         if ticket_tag.event_id is not None:
             view_kwargs['id'] = ticket_tag.event_id
         else:
             view_kwargs['id'] = None
 
     if view_kwargs.get('role_invite_id') is not None:
-        role_invite = safe_query_kwargs(
-            RoleInvite, view_kwargs, 'role_invite_id'
-        )
+        role_invite = safe_query_kwargs(RoleInvite, view_kwargs, 'role_invite_id')
         if role_invite.event_id is not None:
             view_kwargs['id'] = role_invite.event_id
         else:
@@ -581,17 +546,13 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('users_events_role_id') is not None:
         users_events_role = safe_query_kwargs(
-            UsersEventsRoles,
-            view_kwargs,
-            'users_events_role_id',
+            UsersEventsRoles, view_kwargs, 'users_events_role_id',
         )
         if users_events_role.event_id is not None:
             view_kwargs['id'] = users_events_role.event_id
 
     if view_kwargs.get('access_code_id') is not None:
-        access_code = safe_query_kwargs(
-            AccessCode, view_kwargs, 'access_code_id'
-        )
+        access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
         if access_code.event_id is not None:
             view_kwargs['id'] = access_code.event_id
         else:
@@ -652,18 +613,14 @@ def get_id(view_kwargs):
                 view_kwargs['id'] = None
 
     if view_kwargs.get('attendee_id'):
-        attendee = safe_query_kwargs(
-            TicketHolder, view_kwargs, 'attendee_id'
-        )
+        attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
         if attendee.event_id is not None:
             view_kwargs['id'] = attendee.event_id
         else:
             view_kwargs['id'] = None
 
     if view_kwargs.get('custom_form_id') is not None:
-        custom_form = safe_query_kwargs(
-            CustomForms, view_kwargs, 'custom_form_id'
-        )
+        custom_form = safe_query_kwargs(CustomForms, view_kwargs, 'custom_form_id')
         if custom_form.event_id is not None:
             view_kwargs['id'] = custom_form.event_id
         else:
@@ -677,9 +634,7 @@ def get_id(view_kwargs):
             view_kwargs['id'] = None
 
     if view_kwargs.get('order_identifier') is not None:
-        order = safe_query_kwargs(
-            Order, view_kwargs, 'order_identifier', 'identifier'
-        )
+        order = safe_query_kwargs(Order, view_kwargs, 'order_identifier', 'identifier')
         if order.event_id is not None:
             view_kwargs['id'] = order.event_id
         else:
@@ -825,9 +780,7 @@ class EventRelationship(ResourceRelationship):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query_kwargs(
-                Event, view_kwargs, 'identifier', 'identifier'
-            )
+            event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
             view_kwargs['id'] = event.id
 
     decorators = (

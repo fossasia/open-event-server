@@ -194,9 +194,7 @@ class OrderStatisticsEventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query_kwargs(
-                Event, view_kwargs, 'identifier', 'identifier'
-            )
+            event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
             view_kwargs['id'] = event.id
 
     methods = ['GET']

@@ -13,12 +13,7 @@ from marshmallow_jsonapi.flask import Schema
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import (
-    safe_query,
-    save_to_db,
-    safe_query_kwargs,
-    safe_query_by_id
-)
+from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs, safe_query_by_id
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import (
     ConflictException,
@@ -352,9 +347,7 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id'):
-            attendee = safe_query_kwargs(
-                TicketHolder, view_kwargs, 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query_kwargs(
@@ -628,9 +621,7 @@ class OrderRelationship(ResourceRelationship):
         :return:
         """
         if kwargs.get('order_identifier'):
-            order = safe_query_kwargs(
-                Order, kwargs, 'order_identifier', 'identifier'
-            )
+            order = safe_query_kwargs(Order, kwargs, 'order_identifier', 'identifier')
             kwargs['id'] = order.id
         elif kwargs.get('id'):
             order = safe_query_by_id(Order, kwargs['id'])

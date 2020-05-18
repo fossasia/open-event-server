@@ -19,9 +19,7 @@ class EventStatisticsGeneralDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('identifier'):
-            event = safe_query_kwargs(
-                Event, view_kwargs, 'identifier', 'identifier'
-            )
+            event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
             view_kwargs['id'] = event.id
 
     methods = ['GET']

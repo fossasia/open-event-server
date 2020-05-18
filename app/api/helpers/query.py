@@ -39,9 +39,7 @@ def event_query(
             )
         query_ = query_.join(Event).filter(Event.id == event.id)
     elif view_kwargs.get(event_identifier):
-        event = safe_query_kwargs(
-            Event, view_kwargs, event_identifier, 'identifier'
-        )
+        event = safe_query_kwargs(Event, view_kwargs, event_identifier, 'identifier')
         if event.state != 'published' and (
             'Authorization' not in request.headers
             or not has_access(permission, event_id=event.id)

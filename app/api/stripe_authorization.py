@@ -182,9 +182,7 @@ def get_id(view_kwargs):
     """
 
     if view_kwargs.get('event_identifier') is not None:
-        event = safe_query_kwargs(
-            Event, view_kwargs, 'event_identifier', 'identifier'
-        )
+        event = safe_query_kwargs(Event, view_kwargs, 'event_identifier', 'identifier')
         if event.id is not None:
             view_kwargs['event_id'] = event.id
 

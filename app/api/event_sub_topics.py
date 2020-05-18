@@ -52,9 +52,7 @@ class EventSubTopicList(ResourceList):
 
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            event_topic = safe_query_kwargs(
-                EventTopic, view_kwargs, 'event_topic_id'
-            )
+            event_topic = safe_query_kwargs(EventTopic, view_kwargs, 'event_topic_id')
             query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
@@ -96,9 +94,7 @@ class EventSubTopicDetail(ResourceDetail):
 
         if view_kwargs.get('custom_placeholder_id'):
             custom_placeholder = safe_query_kwargs(
-                CustomPlaceholder,
-                view_kwargs,
-                'custom_placeholder_id',
+                CustomPlaceholder, view_kwargs, 'custom_placeholder_id',
             )
             if custom_placeholder.event_sub_topic_id:
                 view_kwargs['id'] = custom_placeholder.event_sub_topic_id

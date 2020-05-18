@@ -32,9 +32,7 @@ class RoleDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('role_invite_id') is not None:
-            role_invite = safe_query_kwargs(
-                RoleInvite, view_kwargs, 'role_invite_id'
-            )
+            role_invite = safe_query_kwargs(RoleInvite, view_kwargs, 'role_invite_id')
             if role_invite.role_id is not None:
                 view_kwargs['id'] = role_invite.role_id
             else:
@@ -42,9 +40,7 @@ class RoleDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query_kwargs(
-                UsersEventsRoles,
-                view_kwargs,
-                'users_events_role_id',
+                UsersEventsRoles, view_kwargs, 'users_events_role_id',
             )
             if users_events_role.role_id is not None:
                 view_kwargs['id'] = users_events_role.role_id
