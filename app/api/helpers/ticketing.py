@@ -4,8 +4,7 @@ import pytz
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.api.helpers.db import get_count, save_to_db, safe_query_by_id
-from app.api.helpers.exceptions import ConflictException
-from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.errors import UnprocessableEntityError, ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import (

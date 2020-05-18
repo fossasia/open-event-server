@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import ConflictException
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_email import UserEmailSchema
 from app.models import db

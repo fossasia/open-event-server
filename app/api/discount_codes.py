@@ -6,13 +6,11 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import (
-    ConflictException,
-    MethodNotAllowed
-)
 from app.api.helpers.errors import (
     ForbiddenError,
-    UnprocessableEntityError
+    UnprocessableEntityError,
+    ConflictException,
+    MethodNotAllowed
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required

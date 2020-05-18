@@ -9,8 +9,7 @@ from app.api.helpers.db import (
     safe_query_without_soft_deleted_entries,
     save_to_db,
 )
-from app.api.helpers.exceptions import ConflictException
-from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.errors import UnprocessableEntityError, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db

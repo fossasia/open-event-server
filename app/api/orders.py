@@ -18,11 +18,10 @@ from app.api.helpers.db import (
     save_to_db,
 )
 from app.api.helpers.errors import BadRequestError
-from app.api.helpers.exceptions import (
-    ConflictException
-)
 from app.api.helpers.errors import (
-    ForbiddenError, UnprocessableEntityError
+    ForbiddenError,
+    UnprocessableEntityError,
+    ConflictException
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email

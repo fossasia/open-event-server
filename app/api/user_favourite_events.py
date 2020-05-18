@@ -5,8 +5,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query
-from app.api.helpers.errors import ForbiddenError
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import ForbiddenError, ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_favourite_events import UserFavouriteEventSchema
