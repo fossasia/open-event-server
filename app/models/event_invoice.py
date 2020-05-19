@@ -1,5 +1,7 @@
 import time
 import uuid
+from app.api.helpers.db import get_new_identifier
+
 
 from sqlalchemy.sql import func
 
@@ -7,14 +9,6 @@ from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
 
-
-def get_new_identifier():
-    identifier = str(uuid.uuid4())
-    count = get_count(EventInvoice.query.filter_by(identifier=identifier))
-    if count == 0:
-        return identifier
-    else:
-        return get_new_identifier()
 
 
 class EventInvoice(SoftDeletionModel):
@@ -72,3 +66,8 @@ class EventInvoice(SoftDeletionModel):
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
+
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.identifier=get_new_identifier(EventInvoice)

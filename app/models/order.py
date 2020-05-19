@@ -4,17 +4,10 @@ import uuid
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
 
-
-def get_new_order_identifier():
-    identifier = str(uuid.uuid4())
-    count = get_count(Order.query.filter_by(identifier=identifier))
-    if count == 0:
-        return identifier
-    else:
-        return get_new_order_identifier()
 
 
 def get_updatable_fields():
@@ -134,3 +127,8 @@ class Order(SoftDeletionModel):
             )
         else:
             return 0.0
+
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.identifier=get_new_identifier(Order)        
