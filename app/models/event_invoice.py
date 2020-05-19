@@ -66,8 +66,7 @@ class EventInvoice(SoftDeletionModel):
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
-
-
+        
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.identifier=get_new_identifier(EventInvoice)
+        self.identifier = get_new_identifier(EventInvoice)

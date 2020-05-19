@@ -127,8 +127,6 @@ class Order(SoftDeletionModel):
             )
         else:
             return 0.0
-
-
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.identifier=get_new_identifier(Order)        
+        self.identifier = get_new_identifier(Order)
