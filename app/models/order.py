@@ -1,14 +1,8 @@
 import time
-import uuid
-
 from sqlalchemy.sql import func
-
-from app.api.helpers.db import get_count
 from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
-
-
 
 def get_updatable_fields():
     """
