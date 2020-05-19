@@ -47,7 +47,7 @@ class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_order_identifier)
+    identifier = db.Column(db.String, unique=True, default=get_new_identifier)
     amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
