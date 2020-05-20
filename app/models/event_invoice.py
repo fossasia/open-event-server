@@ -12,7 +12,7 @@ class EventInvoice(SoftDeletionModel):
     __tablename__ = 'event_invoices'
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_identifier)
+    identifier = db.Column(db.String, unique=True, default = get_new_identifier(EventInvoice))
     amount = db.Column(db.Float)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -59,7 +59,3 @@ class EventInvoice(SoftDeletionModel):
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.identifier = get_new_identifier(EventInvoice)

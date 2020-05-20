@@ -144,12 +144,10 @@ def get_new_slug(model, name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 def get_new_identifier(model):
-    """
-    :param model: Specify model from db.
-    """
+    """ param model: Specify model from db"""
     identifier = str(uuid.uuid4())
     count = get_count(model.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
     else:
-        return get_new_identifier(model)
+        return get_new_identifier()
