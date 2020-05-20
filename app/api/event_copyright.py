@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
+
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
