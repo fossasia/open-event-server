@@ -150,4 +150,4 @@ def get_new_identifier(model):
     if count == 0:
         return identifier
     else:
-        return get_new_identifier(model)
+        return get_new_identifier()
