@@ -3,6 +3,7 @@ import datetime
 from app.api.helpers.humanize_helper import humanize_helper
 from tests.factories.order import OrderFactory
 
+
 class TestHumanizeHelper(OpenEventTestCase): 
     def test_humanize_helper(self):
         """Method to test humanization of order creation time"""
