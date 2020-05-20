@@ -148,7 +148,8 @@ class RoleInviteDetail(ResourceDetail):
             len(list(data.keys())) > 1 or 'status' not in data
         ):
             raise UnprocessableEntityError(
-                {'source': ''}, "You can only change your status")
+                {'source': ''}, "You can only change your status"
+            )
         if data.get('deleted_at'):
             if role_invite.role_name == 'owner' and not has_access(
                 'is_owner', event_id=role_invite.event_id

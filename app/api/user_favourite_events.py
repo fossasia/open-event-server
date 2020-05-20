@@ -112,7 +112,7 @@ class UserFavouriteEventDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': UserFavouriteEvent,
-        'methods': {'before_get_object': before_get_object, },
+        'methods': {'before_get_object': before_get_object,},
     }
 
 

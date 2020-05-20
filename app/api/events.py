@@ -17,11 +17,7 @@ from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError,
-<<<<<<< HEAD
     ConflictException,
-=======
-    ConflictException
->>>>>>> moved all errors from exception.py to errors.py
 )
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access
@@ -84,9 +80,7 @@ def validate_event(user, modules, data):
         or data.get('can_pay_by_stripe', False)
     ):
         if not modules.payment_include:
-            raise ForbiddenError(
-                {'source': ''}, "Payment is not enabled in the system"
-            )
+            raise ForbiddenError({'source': ''}, "Payment is not enabled in the system")
     if data.get('is_donation_enabled', False) and not modules.donation_include:
         raise ForbiddenError(
             {'source': '/data/attributes/is-donation-enabled'},
@@ -94,9 +88,7 @@ def validate_event(user, modules, data):
         )
 
     if data.get('state', None) == 'published' and not user.can_publish_event():
-        raise ForbiddenError(
-            {'source': ''}, "Only verified accounts can publish events"
-        )
+        raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
 
     if (
         not data.get('is_event_online')

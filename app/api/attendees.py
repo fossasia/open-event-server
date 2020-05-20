@@ -1,40 +1,26 @@
+from app.settings import get_settings
+from app.models.user import User
+from app.models.ticket_holder import TicketHolder
+from app.models.ticket import Ticket
+from app.models.order import Order
+from app.models import db
+from app.api.schema.attendees import AttendeeSchema
+from app.api.helpers.utilities import require_relationship
+from app.api.helpers.query import event_query
+from app.api.helpers.permissions import jwt_required
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.errors import (
+    ForbiddenError,
+    UnprocessableEntityError,
+    ConflictException,
+)
+from app.api.helpers.db import safe_query, safe_query_kwargs
 import datetime
 
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import and_, or_
 from app.api.bootstrap import api
-<<<<<<< HEAD
-from app.api.helpers.db import safe_query, safe_query_kwargs
-=======
-from app.api.helpers.db import safe_query
-<<<<<<< HEAD
-from app.api.helpers.exceptions import (
-    ConflictException
-)
->>>>>>> fixed some indentation and removed blank spaces
-from app.api.helpers.errors import (
-    ForbiddenError,
-    UnprocessableEntityError,
-    ConflictException,
-=======
-from app.api.helpers.errors import (
-    ForbiddenError,
-    UnprocessableEntityError,
-    ConflictException
->>>>>>> moved all errors from exception.py to errors.py
-)
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.permissions import jwt_required
-from app.api.helpers.query import event_query
-from app.api.helpers.utilities import require_relationship
-from app.api.schema.attendees import AttendeeSchema
-from app.models import db
-from app.models.order import Order
-from app.models.ticket import Ticket
-from app.models.ticket_holder import TicketHolder
-from app.models.user import User
-from app.settings import get_settings
 
 
 def get_sold_and_reserved_tickets_count(ticket_id):

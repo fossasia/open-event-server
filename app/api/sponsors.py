@@ -36,9 +36,7 @@ class SponsorListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenError(
-                {'pointer': ''}, "Sponsors are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Sponsors are disabled for this Event")
 
     methods = ['POST']
     schema = SponsorSchema

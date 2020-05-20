@@ -33,9 +33,7 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
             save_to_db(user1)
             user2 = create_user(email="test_user@gmail.com.deleted", password="testpass")
             save_to_db(user2)
-            self.assertRaises(
-                ForbiddenError, modify_email_for_user_to_be_restored, user2
-            )
+            self.assertRaises(ForbiddenError, modify_email_for_user_to_be_restored, user2)
 
 
 if __name__ == '__main__':

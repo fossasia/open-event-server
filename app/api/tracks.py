@@ -27,9 +27,7 @@ class TrackListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_track_organizer', event_id=data['event']):
-            raise ForbiddenError(
-                {'source': ''}, 'Track-organizer access is required.'
-            )
+            raise ForbiddenError({'source': ''}, 'Track-organizer access is required.')
 
     schema = TrackSchema
     data_layer = {'session': db.session, 'model': Track}

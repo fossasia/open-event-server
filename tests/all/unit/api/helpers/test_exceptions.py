@@ -5,7 +5,7 @@ from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError,
     ConflictException,
-    MethodNotAllowed
+    MethodNotAllowed,
 )
 
 

@@ -56,9 +56,7 @@ class FeedbackListPost(ResourceList):
         if data.get('session', None):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenError(
-                    {'source': ''}, "Event co-organizer access required"
-                )
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
 
     schema = FeedbackSchema
     methods = [
@@ -146,9 +144,7 @@ class FeedbackDetail(ResourceDetail):
                     {'source': ''}, "Feedback can be updated only by user himself"
                 )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenError(
-                    {'source': ''}, "Event co-organizer access required"
-                )
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):
                 delete_feedback(feedback)

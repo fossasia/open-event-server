@@ -25,7 +25,8 @@ def test_reject_tickets_of_different_events(db):
     db.session.commit()
 
     with pytest.raises(
-        UnprocessableEntityError, match=r'All tickets must belong to same event. Found: .*'
+        UnprocessableEntityError,
+        match=r'All tickets must belong to same event. Found: .*',
     ):
         validate_tickets([ticket.id for ticket in tickets])
 

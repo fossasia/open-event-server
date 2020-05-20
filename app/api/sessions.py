@@ -50,9 +50,7 @@ class SessionListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenError(
-                {'pointer': ''}, "Sessions are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
     def after_create_object(self, session, data, view_kwargs):
         """

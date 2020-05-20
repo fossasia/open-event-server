@@ -4,17 +4,12 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
-<<<<<<< HEAD
 from app.api.helpers.db import safe_query, safe_query_kwargs
-=======
-
-from app.api.helpers.db import safe_query
->>>>>>> moved all errors from exception.py to errors.py
 from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError,
     ConflictException,
-    MethodNotAllowed
+    MethodNotAllowed,
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -154,9 +149,7 @@ class DiscountCodeList(ResourceList):
                 self.schema = DiscountCodeSchemaTicket
                 query_ = query_.filter_by(event_id=view_kwargs['event_id'])
             else:
-                raise ForbiddenError(
-                    {'source': ''}, 'Event organizer access required'
-                )
+                raise ForbiddenError({'source': ''}, 'Event organizer access required')
 
         # discount_code - ticket :: many-to-many relationship
         if view_kwargs.get('ticket_id') and has_access('is_coorganizer'):
@@ -311,7 +304,8 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntityError(
-                    {'source': ''}, "Please verify your permission")
+                    {'source': ''}, "Please verify your permission"
+                )
 
     def before_get_object(self, view_kwargs):
         """
@@ -373,7 +367,8 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntityError(
-                    {'source': ''}, "Please verify your permission")
+                    {'source': ''}, "Please verify your permission"
+                )
 
         elif not view_kwargs.get('id') and not has_access('is_admin'):
             raise UnprocessableEntityError(
@@ -411,7 +406,8 @@ class DiscountCodeDetail(ResourceDetail):
             self.resource.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntityError(
-                {'source': ''}, "Please verify your permission")
+                {'source': ''}, "Please verify your permission"
+            )
 
     def before_delete_object(self, discount, view_kwargs):
         """
@@ -429,7 +425,8 @@ class DiscountCodeDetail(ResourceDetail):
             self.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntityError(
-                {'source': ''}, "Please verify your permission")
+                {'source': ''}, "Please verify your permission"
+            )
 
     #     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
@@ -469,7 +466,8 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
             self.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntityError(
-                {'source': ''}, "Please verify your permission")
+                {'source': ''}, "Please verify your permission"
+            )
 
     methods = ['GET', 'PATCH']
     decorators = (jwt_required,)
@@ -503,7 +501,8 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
             self.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntityError(
-                {'source': ''}, "Please verify your permission")
+                {'source': ''}, "Please verify your permission"
+            )
 
     schema = DiscountCodeSchemaEvent
     data_layer = {'session': db.session, 'model': DiscountCode}

@@ -111,7 +111,7 @@ class AccessCodeList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': AccessCode,
-        'methods': {'query': query, },
+        'methods': {'query': query,},
     }
 
 
@@ -160,7 +160,8 @@ class AccessCodeDetail(ResourceDetail):
 
             if not has_access('is_coorganizer', event_id=access.event_id):
                 raise UnprocessableEntityError(
-                    {'source': ''}, "Please verify your permission")
+                    {'source': ''}, "Please verify your permission"
+                )
 
     decorators = (
         api.has_permission(

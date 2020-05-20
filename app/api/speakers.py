@@ -50,9 +50,7 @@ class SpeakerListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenError(
-                {'pointer': ''}, "Speakers are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Speakers are disabled for this Event")
 
         if (
             not data.get('is_email_overridden')
@@ -150,7 +148,7 @@ class SpeakerList(ResourceList):
     methods = [
         'GET',
     ]
-    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query, }}
+    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query,}}
 
 
 class SpeakerDetail(ResourceDetail):

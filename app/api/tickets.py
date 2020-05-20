@@ -177,7 +177,7 @@ class TicketList(ResourceList):
         ),
     )
     schema = TicketSchema
-    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query, }}
+    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query,}}
 
 
 class TicketDetail(ResourceDetail):

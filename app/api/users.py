@@ -9,7 +9,7 @@ from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.errors import (
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException
+    ConflictException,
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
