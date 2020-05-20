@@ -3,7 +3,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.db import safe_query_kwargs
-from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -51,7 +50,7 @@ class FaqTypeList(ResourceList):
         'GET',
     ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query,}}
+    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query, }}
 
 
 class FaqTypeDetail(ResourceDetail):
