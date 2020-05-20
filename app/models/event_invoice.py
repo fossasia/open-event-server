@@ -12,7 +12,7 @@ class EventInvoice(SoftDeletionModel):
     __tablename__ = 'event_invoices'
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_identifier(EventInvoice))
+    identifier = db.Column(db.String, unique=True, default=get_new_identifier())
     amount = db.Column(db.Float)
     address = db.Column(db.String)
     city = db.Column(db.String)
