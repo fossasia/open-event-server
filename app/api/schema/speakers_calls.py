@@ -2,7 +2,7 @@ from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.speakers_call import SpeakersCall
@@ -40,17 +40,17 @@ class SpeakersCallSchema(SoftDeletionSchema):
             #     data['event_starts_at'] = speakers_calls.event.starts_at
 
         if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/ends-at'},
                 "ends-at should be after starts-at",
             )
 
         # if 'event_starts_at' in data and data['starts_at'] > data['event_starts_at']:
-        #     raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+        #     raise UnprocessableEntityError({'pointer': '/data/attributes/starts-at'},
         #                               "speakers-call starts-at should be before event starts-at")
 
         # if 'event_starts_at' in data and data['ends_at'] > data['event_starts_at']:
-        #     raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+        #     raise UnprocessableEntityError({'pointer': '/data/attributes/ends-at'},
         #                               "speakers-call ends-at should be before event starts-at")
 
     id = fields.Str(dump_only=True)

@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.errors import ConflictError
 from app.api.helpers.ticketing import validate_ticket_holders
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
@@ -23,7 +23,7 @@ def test_reject_attendees_with_order(db):
     db.session.commit()
 
     with pytest.raises(
-        ConflictException,
+        ConflictError,
         match=f'Order already exists for attendee with id {attendees[-1].id}',
     ):
         validate_ticket_holders([att.id for att in attendees])

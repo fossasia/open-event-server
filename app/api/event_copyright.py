@@ -3,7 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.event_copyright import EventCopyrightSchema
@@ -28,7 +28,7 @@ class EventCopyrightListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -44,7 +44,7 @@ class EventCopyrightListPost(ResourceList):
         except NoResultFound:
             pass
         else:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'parameter': 'event_identifier'},
                 "Event Copyright already exists for the provided Event ID",
             )

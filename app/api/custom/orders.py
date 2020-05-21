@@ -12,8 +12,8 @@ from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
 from app.api.helpers.notification import (
     send_notif_ticket_cancel,
-    send_notif_to_attendees,
     send_notif_ticket_purchase_organizer,
+    send_notif_to_attendees,
 )
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access

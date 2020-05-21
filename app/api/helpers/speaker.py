@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.models.speakers_call import SpeakersCall
 
@@ -22,7 +22,7 @@ def can_edit_after_cfs_ends(event_id):
             )
         )
     else:
-        raise ForbiddenException(
+        raise ForbiddenError(
             {'source': '/data/event-id'},
             'Speaker Calls for event {id} not found'.format(id=event_id),
         )
