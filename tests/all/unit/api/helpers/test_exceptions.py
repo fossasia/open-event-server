@@ -2,10 +2,10 @@ import unittest
 from unittest import TestCase
 
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
-    UnprocessableEntityError,
-    ConflictException,
     MethodNotAllowed,
+    UnprocessableEntityError,
 )
 
 
@@ -21,8 +21,8 @@ class TestExceptionsHelperValidation(TestCase):
             )
 
         # Conflict Exception
-        with self.assertRaises(ConflictException):
-            raise ConflictException(
+        with self.assertRaises(ConflictError):
+            raise ConflictError(
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 

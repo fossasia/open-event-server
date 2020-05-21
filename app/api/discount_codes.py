@@ -4,12 +4,13 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
+
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
-    UnprocessableEntityError,
-    ConflictException,
     MethodNotAllowed,
+    UnprocessableEntityError,
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -44,7 +45,7 @@ class DiscountCodeListPost(ResourceList):
             elif used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
         else:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/used-for'},
                 "used-for attribute is required and should be equal to 'ticket' or 'event' to create discount code",
             )
@@ -195,7 +196,7 @@ class DiscountCodeDetail(ResourceDetail):
         if not used_for:
             used_for = discount.used_for
         elif used_for != discount.used_for:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/used-for'},
                 "Cannot modify discount code usage type",
             )

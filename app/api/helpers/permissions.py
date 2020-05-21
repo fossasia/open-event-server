@@ -3,6 +3,7 @@ from functools import wraps
 
 from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
+
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.models import db

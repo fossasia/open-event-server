@@ -4,12 +4,13 @@ from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
+
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException,
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
@@ -66,7 +67,7 @@ class UserList(ResourceList):
             db.session.query(User.id).filter_by(email=data['email'].strip()).scalar()
             is not None
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 
@@ -298,7 +299,7 @@ class UserDetail(ResourceDetail):
                 verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
-                raise ConflictException(
+                raise ConflictError(
                     {'pointer': '/data/attributes/email'}, "Email already exists"
                 )
 

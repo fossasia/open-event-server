@@ -2,11 +2,11 @@ from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import get_count, save_to_db, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException,
 )
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
@@ -52,7 +52,7 @@ class StripeAuthorizationListPost(ResourceList):
     def before_create_object(self, data, view_kwargs):
         """
         method to check if stripe authorization object already exists for an event.
-        Raises ConflictException if it already exists.
+        Raises ConflictError if it already exists.
         If it doesn't, then uses the StripePaymentManager to get the other credentials from Stripe.
         :param data:
         :param view_kwargs:
@@ -76,7 +76,7 @@ class StripeAuthorizationListPost(ResourceList):
             data['stripe_publishable_key'] = credentials['stripe_publishable_key']
             data['stripe_user_id'] = credentials['stripe_user_id']
         else:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/event'},
                 "Stripe Authorization already exists for this event",
             )

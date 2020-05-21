@@ -3,13 +3,13 @@ import datetime
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import and_, or_
-from app.api.bootstrap import api
 
+from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -86,7 +86,7 @@ class AttendeeListPost(ResourceList):
             )
         # Check if the ticket is already sold out or not.
         if get_sold_and_reserved_tickets_count(ticket.id) >= ticket.quantity:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/ticket_id'}, "Ticket already sold out"
             )
 

@@ -1,10 +1,12 @@
 import logging
 from datetime import datetime
+
 import pytz
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from app.api.helpers.db import get_count, save_to_db, safe_query_by_id
-from app.api.helpers.errors import UnprocessableEntityError, ConflictException
+
+from app.api.helpers.db import get_count, safe_query_by_id, save_to_db
+from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import (
@@ -20,7 +22,6 @@ from app.models import db
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
-
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ def validate_ticket_holders(ticket_holder_ids):
                 "Order already exists for attendee",
                 extra=dict(attendee_id=ticket_holder.id),
             )
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/attendees'},
                 "Order already exists for attendee with id {}".format(
                     str(ticket_holder.id)
@@ -267,7 +268,7 @@ class TicketingManager:
         # charge the user
         try:
             charge = StripePaymentsManager.capture_payment(order)
-        except ConflictException as e:
+        except ConflictError as e:
             # payment failed hence expire the order
             order.status = 'expired'
             save_to_db(order)

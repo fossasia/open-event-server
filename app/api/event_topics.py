@@ -1,6 +1,7 @@
 import urllib.error
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import UnprocessableEntityError

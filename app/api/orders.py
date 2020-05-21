@@ -13,12 +13,12 @@ from marshmallow_jsonapi.flask import Schema
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs, safe_query_by_id
+from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
+    BadRequestError,
+    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException,
-    BadRequestError,
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
@@ -164,7 +164,7 @@ class OrdersListPost(ResourceList):
             del data['cancel_note']
 
         if data.get('payment_mode') != 'free' and not data.get('amount'):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/amount'},
                 "Amount cannot be null for a paid order",
             )
@@ -587,7 +587,7 @@ class OrderDetail(ResourceDetail):
             and order.amount > 0
             and (order.status == 'completed' or order.status == 'placed')
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'source': ''}, 'You cannot delete a placed/completed paid order.'
             )
 

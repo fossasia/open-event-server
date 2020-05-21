@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
-from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.roles import RoleSchema
 from app.models import db
 from app.models.role import Role

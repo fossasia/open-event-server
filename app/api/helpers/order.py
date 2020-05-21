@@ -9,7 +9,7 @@ from app.api.helpers.db import (
     safe_query_without_soft_deleted_entries,
     save_to_db,
 )
-from app.api.helpers.errors import UnprocessableEntityError, ConflictException
+from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
@@ -160,7 +160,7 @@ def create_onsite_attendees_for_order(data):
                     logging.exception('DB Exception!')
                     db.session.rollback()
 
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/on_site_tickets'},
                 "Ticket with id: {} already sold out. You can buy at most {} tickets".format(
                     ticket_id, ticket.quantity - ticket_sold_count

@@ -12,13 +12,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
-from app.api.helpers.db import safe_query, save_to_db, safe_query_kwargs
-from app.api.helpers.events import create_custom_forms_for_attendees
+from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
+    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
-    ConflictException,
 )
+from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
@@ -95,25 +95,25 @@ def validate_event(user, modules, data):
         and data.get('state', None) == 'published'
         and not data.get('location_name', None)
     ):
-        raise ConflictException(
+        raise ConflictError(
             {'pointer': '/data/attributes/location-name'},
             "Location is required to publish the event",
         )
 
     if data.get('location_name', None) and data.get('is_event_online'):
-        raise ConflictException(
+        raise ConflictError(
             {'pointer': '/data/attributes/location-name'},
             "Online Event does not have any locaton",
         )
 
     if not data.get('name', None) and data.get('state', None) == 'published':
-        raise ConflictException(
+        raise ConflictError(
             {'pointer': '/data/attributes/location-name'},
             "Event Name is required to publish the event",
         )
 
     if data.get('searchable_location_name') and data.get('is_event_online'):
-        raise ConflictException(
+        raise ConflictError(
             {'pointer': '/data/attributes/searchable-location-name'},
             "Online Event does not have any locaton",
         )
@@ -732,7 +732,7 @@ class EventDetail(ResourceDetail):
             if data.get('state', None) == 'published' and not data.get(
                 'location_name', None
             ):
-                raise ConflictException(
+                raise ConflictError(
                     {'pointer': '/data/attributes/location-name'},
                     "Location is required to publish the event",
                 )
