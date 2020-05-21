@@ -13,7 +13,7 @@ def test_humanize_helper(db):
     actual_response = humanize_helper(test_order.created_at)
     expected_response = '10 days ago'
     assert actual_response == expected_response
-    
+         
     actual_response = humanize_helper(test_order.completed_at)
     expected_response = 'N/A'
     assert actual_response == expected_response
