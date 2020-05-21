@@ -168,7 +168,7 @@ class SpeakerDetail(ResourceDetail):
         """
         if not can_edit_after_cfs_ends(speaker.event_id):
             raise ForbiddenException(
-                {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
+                "Cannot edit speaker after the call for speaker is ended"
             )
 
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:

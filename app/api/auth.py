@@ -196,7 +196,7 @@ def login_user(provider):
             'code': request.args.get('code'),
         }
         if not payload['client_id'] or not payload['client_secret']:
-            raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
+            raise NotImplementedError({'source': 'client_id or client_secret'}, 'Facebook Login Not Configured')
         access_token = requests.get(
             'https://graph.facebook.com/v3.0/oauth/access_token', params=payload
         ).json()
@@ -278,19 +278,19 @@ def login_user(provider):
 def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
-    except base64.binascii.Error:
-        raise BadRequestError({'source': ''}, 'Invalid Token')
+    except base64.binascii.Error as e:
+        raise BadRequestError({'source': e}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
-    except Exception:
-        raise BadRequestError({'source': ''}, 'Invalid Token')
+    except Exception as e:
+        raise BadRequestError({'source': e}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
-    except Exception:
-        raise BadRequestError({'source': ''}, 'Invalid Token')
+    except Exception as e:
+        raise BadRequestError({'source': e}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
@@ -301,14 +301,14 @@ def verify_email():
 def resend_verification_email():
     try:
         email = request.json['data']['email']
-    except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error')
+    except TypeError as e:
+        raise BadRequestError({'source': e}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
-    except NoResultFound:
+    except NoResultFound as e:
         raise UnprocessableEntityError(
-            {'source': ''}, 'User with email: ' + email + ' not found.'
+            {'source': e}, 'User with email: ' + email + ' not found.'
         )
     else:
         serializer = get_serializer()
@@ -334,8 +334,8 @@ def resend_verification_email():
 def reset_password_post():
     try:
         email = request.json['data']['email']
-    except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error')
+    except TypeError as e:
+        raise BadRequestError({'source': e}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
@@ -376,8 +376,8 @@ def reset_password_patch():
 
     try:
         user = User.query.filter_by(reset_password=token).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'User Not Found')
+    except NoResultFound as e:
+        raise NotFoundError({'source': e}, 'User Not Found')
     else:
         user.password = password
         if not user.is_verified:
@@ -401,17 +401,17 @@ def change_password():
 
     try:
         user = User.query.filter_by(id=current_user.id).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'User Not Found')
+    except NoResultFound as e:
+        raise NotFoundError({'source': e}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
                 raise BadRequestError(
-                    {'source': ''}, 'Old and New passwords must be different'
+                    {'source': 'password'}, 'Old and New passwords must be different'
                 )
             if len(new_password) < 8:
                 raise BadRequestError(
-                    {'source': ''}, 'Password should have minimum 8 characters'
+                    {'source': 'password'}, 'Password should have minimum 8 characters'
                 )
             user.password = new_password
             save_to_db(user)
@@ -423,7 +423,7 @@ def change_password():
             )
         else:
             raise BadRequestError(
-                {'source': ''}, 'Wrong Password. Please enter correct current password.'
+                {'source': 'password'}, 'Wrong Password. Please enter correct current password.'
             )
 
     return jsonify(

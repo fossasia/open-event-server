@@ -39,7 +39,7 @@ class RoleInviteListPost(ResourceList):
         """
         require_relationship(['event', 'role'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Organizer access is required.')
+            raise ForbiddenException({'source': 'event_id'}, 'Organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -51,7 +51,7 @@ class RoleInviteListPost(ResourceList):
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
-            raise ForbiddenException({'source': ''}, 'Owner access is required.')
+            raise ForbiddenException({'source': 'event_id'}, 'Owner access is required.')
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
@@ -134,7 +134,7 @@ class RoleInviteDetail(ResourceDetail):
                 'is_organizer', event_id=role_invite.event_id
             ) and not has_access('is_user_itself', user_id=user.id):
                 raise UnprocessableEntity(
-                    {'source': ''},
+                    {'source': 'User'},
                     "Status can be updated only by event organizer or user hiself",
                 )
         if (
@@ -142,22 +142,22 @@ class RoleInviteDetail(ResourceDetail):
             and data['role_name'] == 'owner'
             and not has_access('is_owner', event_id=data['event'])
         ):
-            raise ForbiddenException({'source': ''}, 'Owner access is required.')
+            raise ForbiddenException({'source': 'event_id'}, 'Owner access is required.')
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
-            raise UnprocessableEntity({'source': ''}, "User not registered")
+            raise UnprocessableEntity({'source': 'event_id'}, "User not registered")
         if not has_access('is_organizer', event_id=role_invite.event_id) and (
             len(list(data.keys())) > 1 or 'status' not in data
         ):
-            raise UnprocessableEntity({'source': ''}, "You can only change your status")
+            raise UnprocessableEntity({'source': 'event_id'}, "You can only change your status")
         if data.get('deleted_at'):
             if role_invite.role_name == 'owner' and not has_access(
                 'is_owner', event_id=role_invite.event_id
             ):
-                raise ForbiddenException({'source': ''}, 'Owner access is required.')
+                raise ForbiddenException({'source': 'event_id'}, 'Owner access is required.')
             if role_invite.role_name != 'owner' and not has_access(
                 'is_organizer', event_id=role_invite.event_id
             ):
-                raise ForbiddenException({'source': ''}, 'Organizer access is required.')
+                raise ForbiddenException({'source': 'event_id'}, 'Organizer access is required.')
 
     decorators = (
         api.has_permission(
@@ -191,20 +191,20 @@ def accept_invite():
     token = request.json['data']['token']
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
+    except NoResultFound as e:
+        raise NotFoundError({'source': e}, 'Role Invite Not Found')
     else:
         try:
             user = User.query.filter_by(email=role_invite.email).first()
-        except NoResultFound:
+        except NoResultFound as e:
             raise NotFoundError(
-                {'source': ''}, 'User corresponding to role invite not Found'
+                {'source': e}, 'User corresponding to role invite not Found'
             )
         try:
             role = Role.query.filter_by(name=role_invite.role_name).first()
-        except NoResultFound:
+        except NoResultFound as e:
             raise NotFoundError(
-                {'source': ''}, 'Role corresponding to role invite not Found'
+                {'source': e}, 'Role corresponding to role invite not Found'
             )
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = (
@@ -244,7 +244,7 @@ def fetch_user():
     token = request.json['data']['token']
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
+    except NoResultFound as e:
+        raise NotFoundError({'source': e}, 'Role Invite Not Found')
     else:
         return jsonify({"email": role_invite.email})

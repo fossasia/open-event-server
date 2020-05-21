@@ -28,7 +28,7 @@ class EventSubTopicListPost(ResourceList):
         """
         require_relationship(['event_topic'], data)
         if not has_access('is_admin'):
-            raise ForbiddenException({'source': ''}, 'Admin access is required.')
+            raise ForbiddenException('Admin access is required.')
 
     view_kwargs = True
     methods = [

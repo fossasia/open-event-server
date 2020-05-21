@@ -172,7 +172,7 @@ class UserDetail(ResourceDetail):
                 if not has_access(
                     'is_user_itself', user_id=attendee.user.id
                 ) or not has_access('is_coorganizer', event_id=attendee.event_id):
-                    raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                    raise ForbiddenException({'source': 'event_id'}, 'Access Forbidden')
                 view_kwargs['id'] = attendee.user.id
             else:
                 view_kwargs['id'] = None
@@ -269,12 +269,12 @@ class UserDetail(ResourceDetail):
                 if data.get('deleted_at'):
                     if len(user.events) != 0:
                         raise ForbiddenException(
-                            {'source': ''},
+                            {'source': 'User'},
                             "Users associated with events cannot be deleted",
                         )
                     elif len(user.orders) != 0:
                         raise ForbiddenException(
-                            {'source': ''},
+                            {'source': 'User'},
                             "Users associated with orders cannot be deleted",
                         )
                     else:
@@ -285,7 +285,7 @@ class UserDetail(ResourceDetail):
                 user.deleted_at = data.get('deleted_at')
             else:
                 raise ForbiddenException(
-                    {'source': ''}, "You are not authorized to update this information."
+                    {'source': 'User'}, "You are not authorized to update this information."
                 )
 
         users_email = data.get('email', None)

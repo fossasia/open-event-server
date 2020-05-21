@@ -57,7 +57,7 @@ class FeedbackListPost(ResourceList):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
                 raise ForbiddenException(
-                    {'source': ''}, "Event co-organizer access required"
+                    {'parameter': 'event_id'}, "Event co-organizer access required"
                 )
 
     schema = FeedbackSchema
@@ -143,18 +143,18 @@ class FeedbackDetail(ResourceDetail):
             session = Session.query.filter_by(id=feedback.session_id).first()
             if session and not current_user.id == feedback.user_id:
                 raise ForbiddenException(
-                    {'source': ''}, "Feedback can be updated only by user himself"
+                    {'source': 'User'}, "Feedback can be updated only by user himself"
                 )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
                 raise ForbiddenException(
-                    {'source': ''}, "Event co-organizer access required"
+                    {'parameter': 'event_id'}, "Event co-organizer access required"
                 )
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):
                 delete_feedback(feedback)
             else:
                 raise ForbiddenException(
-                    {'source': ''}, "Feedback can be deleted only by user himself"
+                    {'source': 'User'}, "Feedback can be deleted only by user himself"
                 )
 
     decorators = (

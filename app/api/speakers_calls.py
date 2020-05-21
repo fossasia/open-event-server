@@ -27,7 +27,7 @@ class SpeakersCallList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenException({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -48,7 +48,7 @@ class SpeakersCallList(ResourceList):
                 or speakers_call.ends_at > event.starts_at
             ):
                 raise ForbiddenException(
-                    {'source': ''},
+                    {'source': 'event_id'},
                     "Speakers call date can\'t be after the event start date",
                 )
         except NoResultFound:
@@ -94,11 +94,11 @@ class SpeakersCallDetail(ResourceDetail):
                     or speakers_call.ends_at > event.starts_at
                 ):
                     raise ForbiddenException(
-                        {'source': ''},
+                        {'source': 'event_id'},
                         "Speakers call date can\'t be after the event start date",
                     )
-            except NoResultFound:
-                raise ObjectNotFound({'source': ''}, "Object: not found")
+            except NoResultFound as e:
+                raise ObjectNotFound({'source': e}, "Object: not found")
             kwargs['id'] = speakers_call.id
 
     def before_get_object(self, view_kwargs):

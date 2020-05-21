@@ -34,7 +34,7 @@ class UserFavouriteEventListPost(ResourceList):
             verify_jwt_in_request()
         else:
             raise ForbiddenException(
-                {'source': ''}, 'Only Authorized Users can favourite an event'
+                {'source': 'User'}, 'Only Authorized Users can favourite an event'
             )
 
         data['user'] = current_user.id

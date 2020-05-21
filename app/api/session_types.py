@@ -28,7 +28,7 @@ class SessionTypeListPost(ResourceList):
         require_relationship(['event'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenException({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
     methods = [
         'POST',

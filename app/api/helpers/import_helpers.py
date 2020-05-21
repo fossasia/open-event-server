@@ -89,12 +89,12 @@ def get_file_from_request(ext=None, folder=None, name='file'):
     print("get_file_from_request() INVOKED. We have: request.files = %r" % request.files)
 
     if name not in request.files:
-        raise NotFoundError(source='{}', detail='File not found')
+        raise NotFoundError('File not found')
     uploaded_file = request.files[name]
     if uploaded_file.filename == '':
-        raise NotFoundError(source='{}', detail='File not found')
+        raise NotFoundError('File not found')
     if not _allowed_file(uploaded_file.filename, ext):
-        raise NotFoundError(source='{}', detail='Invalid file type')
+        raise NotFoundError('Invalid file type')
 
     if not folder:
         if 'UPLOAD_FOLDER' in app.config:
