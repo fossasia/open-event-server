@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 
 
@@ -24,7 +24,7 @@ class TestDiscountCodeValidation(TestCase):
         schema = DiscountCodeSchemaTicket()
         original_data = {'data': {}}
         data = {'min_quantity': 20, 'max_quantity': 10, 'tickets_number': 30}
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
     def test_quantity_max_gt_tickets_number(self):
@@ -35,7 +35,7 @@ class TestDiscountCodeValidation(TestCase):
         schema = DiscountCodeSchemaTicket()
         original_data = {'data': {}}
         data = {'min_quantity': 10, 'max_quantity': 30, 'tickets_number': 20}
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
 
     def test_percent_value_lte_hundred(self):
@@ -56,7 +56,7 @@ class TestDiscountCodeValidation(TestCase):
         schema = DiscountCodeSchemaTicket()
         original_data = {'data': {}}
         data = {'type': 'percent', 'value': 110, 'tickets': []}
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
 

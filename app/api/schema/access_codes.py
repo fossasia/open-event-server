@@ -2,7 +2,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.access_code import AccessCode
@@ -37,7 +37,7 @@ class AccessCodeSchema(SoftDeletionSchema):
                 data['valid_till'] = access_code.valid_till
 
         if data['valid_from'] > data['valid_till']:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",
             )
@@ -60,13 +60,13 @@ class AccessCodeSchema(SoftDeletionSchema):
         max_quantity = data.get('max_quantity', None)
         tickets_number = data.get('tickets_number', None)
         if min_quantity and max_quantity and (min_quantity > max_quantity):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/min-quantity'},
                 "min-quantity should be less than max-quantity",
             )
 
         if tickets_number and max_quantity and (tickets_number < max_quantity):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/tickets-number'},
                 "tickets-number should be greater than max-quantity",
             )

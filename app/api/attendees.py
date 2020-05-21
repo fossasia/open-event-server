@@ -6,10 +6,10 @@ from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    UnprocessableEntityError,
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -76,35 +76,35 @@ class AttendeeListPost(ResourceList):
             .first()
         )
         if ticket is None:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
             )
         if ticket.event_id != int(data['event']):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/relationships/ticket'},
                 "Ticket belongs to a different Event",
             )
         # Check if the ticket is already sold out or not.
         if get_sold_and_reserved_tickets_count(ticket.id) >= ticket.quantity:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/ticket_id'}, "Ticket already sold out"
             )
 
         if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
             if 'is_checked_in' not in data or not data['is_checked_in']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Attendee needs to be checked in first",
                 )
             elif 'checkin_times' not in data or data['checkin_times'] is None:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Check in Times missing",
                 )
             elif len(data['checkin_times'].split(",")) != len(
                 data['device_name_checkin'].split(",")
             ):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Check in Times missing for the corresponding device name",
                 )
@@ -139,19 +139,20 @@ class AttendeeList(ResourceList):
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id
             ):
-                raise ForbiddenException({'parameter': 'event_id and user_id'}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'event_id and user_id'},
+                                     'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             # if not has_access('is_registrar', event_id=ticket.event_id):
-            #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            #     raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
 
         if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenException({'parameter': 'user_id'}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_id'}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(
                 User.id == user.id
             )
@@ -188,7 +189,7 @@ class AttendeeDetail(ResourceDetail):
             user_id=current_user.id,
             event_id=attendee.event_id,
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': 'User'}, 'You are not authorized to access this.'
             )
 
@@ -200,7 +201,7 @@ class AttendeeDetail(ResourceDetail):
         :return:
         """
         if not has_access('is_registrar', event_id=obj.event_id):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': 'User'}, 'You are not authorized to access this.'
             )
 
@@ -213,7 +214,7 @@ class AttendeeDetail(ResourceDetail):
         :return:
         """
         #         if not has_access('is_registrar', event_id=obj.event_id):
-        #         raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+        #         raise ForbiddenError({'source': 'User'}, 'You are not authorized to access this.')
 
         if 'ticket' in data:
             ticket = (
@@ -222,20 +223,20 @@ class AttendeeDetail(ResourceDetail):
                 .first()
             )
             if ticket is None:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
                 )
 
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Check in Times missing",
                 )
 
         if 'is_checked_in' in data and data['is_checked_in']:
             if 'checkin_times' not in data or data['checkin_times'] is None:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/checkin_times'},
                     "Check in time missing while trying to check in attendee",
                 )
@@ -249,7 +250,7 @@ class AttendeeDetail(ResourceDetail):
                 elif obj.checkin_times and data[
                     'checkin_times'
                 ] in obj.checkin_times.split(","):
-                    raise UnprocessableEntity(
+                    raise UnprocessableEntityError(
                         {'pointer': '/data/attributes/checkin_times'},
                         "Check in time already present",
                     )
@@ -266,7 +267,7 @@ class AttendeeDetail(ResourceDetail):
                     if len(data['checkin_times'].split(",")) != len(
                         data['device_name_checkin'].split(",")
                     ):
-                        raise UnprocessableEntity(
+                        raise UnprocessableEntityError(
                             {'pointer': '/data/attributes/device_name_checkin'},
                             "Check in Time missing for the corresponding device name",
                         )

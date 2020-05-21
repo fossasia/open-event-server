@@ -5,11 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    MethodNotAllowed,
-)
+from app.api.helpers.errors import ConflictError, ForbiddenError, MethodNotAllowed
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tax import TaxSchema, TaxSchemaPublic
@@ -34,7 +30,7 @@ class TaxList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'parameter': 'event_id'}, 'Co-organizer access is required.')
+            raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
         if (
             get_count(
                 db.session.query(Event).filter_by(
@@ -59,7 +55,7 @@ class TaxList(ResourceList):
             .filter_by(event_id=data['event'], deleted_at=None)
             .first()
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/event'},
                 "Tax already exists for this event",
             )

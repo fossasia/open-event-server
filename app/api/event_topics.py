@@ -4,7 +4,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.files import create_system_image
 from app.api.schema.event_topics import EventTopicSchema
 from app.models import db
@@ -33,18 +33,18 @@ class EventTopicList(ResourceList):
                     data['system_image_url'], unique_identifier=event_topic.id
                 )
             except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
             except IOError as e:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': e}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
             except IOError as e:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': e}, 'Default Image is absent in server'
                 )
 
@@ -107,18 +107,18 @@ class EventTopicDetail(ResourceDetail):
                     data['system_image_url'], unique_identifier=event_topic.id
                 )
             except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
             except IOError as e:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': e}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
             except IOError as e:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'source': e}, 'Default Image is absent in server'
                 )
 

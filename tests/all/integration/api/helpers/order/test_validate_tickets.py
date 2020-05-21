@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.ticketing import validate_tickets
 from tests.factories.event import EventFactoryBasic
 from tests.factories.ticket import TicketSubFactory
@@ -25,7 +25,8 @@ def test_reject_tickets_of_different_events(db):
     db.session.commit()
 
     with pytest.raises(
-        UnprocessableEntity, match=r'All tickets must belong to same event. Found: .*'
+        UnprocessableEntityError,
+        match=r'All tickets must belong to same event. Found: .*',
     ):
         validate_tickets([ticket.id for ticket in tickets])
 

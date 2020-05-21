@@ -9,7 +9,7 @@ from forex_python.converter import CurrencyRates
 from app.api.helpers import checksum
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.exceptions import ConflictException, ForbiddenException
+from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.utilities import represents_int
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
@@ -81,7 +81,7 @@ class StripePaymentsManager:
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': ''},
                 "Stripe payment isn't configured properly for the Platform",
             )
@@ -108,7 +108,7 @@ class StripePaymentsManager:
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': ''}, 'Stripe credentials not found for the event.'
             )
         stripe.api_key = credentials['SECRET_KEY']
@@ -138,7 +138,7 @@ class StripePaymentsManager:
             )
             return charge
         except Exception as e:
-            raise ConflictException({'pointer': ''}, str(e))
+            raise ConflictError({'pointer': ''}, str(e))
 
 
 class PayPalPaymentsManager:
@@ -167,7 +167,7 @@ class PayPalPaymentsManager:
             paypal_key = 'paypal'
 
         if not paypal_key:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'"
             )
 
@@ -175,7 +175,7 @@ class PayPalPaymentsManager:
         paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
 
         if not paypal_client or not paypal_secret:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': ''},
                 "Payments through Paypal have not been configured on the platform",
             )
@@ -198,7 +198,7 @@ class PayPalPaymentsManager:
         :return: request_id or the error message along with an indicator.
         """
         if (not order.event.paypal_email) or order.event.paypal_email == '':
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': ''},
                 "Payments through Paypal hasn't been configured for the event",
             )

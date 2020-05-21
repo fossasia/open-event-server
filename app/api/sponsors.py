@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.db import get_count
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -27,7 +27,7 @@ class SponsorListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'parameter': 'event_id'}, 'Co-organizer access is required.')
+            raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
         if (
             get_count(
                 db.session.query(Event).filter_by(
@@ -36,9 +36,7 @@ class SponsorListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
-                {'pointer': ''}, "Sponsors are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Sponsors are disabled for this Event")
 
     methods = ['POST']
     schema = SponsorSchema

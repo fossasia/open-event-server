@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.ticketing import validate_discount_code
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.discount_code import DiscountCodeTicketSubFactory
@@ -42,10 +42,10 @@ def test_validate_discount_code_require_same_event_id(db):
     discount.event = EventFactoryBasic()
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(event_id='40', tickets=tickets)
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(event_id=100, tickets=tickets)
 
     assert discount.validate(event_id=discount.event_id, tickets=tickets) == discount
@@ -57,7 +57,7 @@ def test_validate_discount_code_reject_deleted_tickets(db):
     discount.tickets += deleted_tickets
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(tickets=[{'id': ticket.id} for ticket in deleted_tickets])
 
 
@@ -80,7 +80,7 @@ def test_validate_discount_code_reject_inactive(db):
     discount.is_active = False
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(tickets=tickets)
 
 
@@ -89,7 +89,7 @@ def test_validate_discount_code_reject_expired(db):
     discount.valid_till = datetime(2014, 1, 1)
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(tickets=tickets)
 
 
@@ -98,7 +98,7 @@ def test_validate_discount_code_reject_future(db):
     discount.valid_from = datetime(2099, 1, 1)
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         discount.validate(tickets=tickets)
 
 
@@ -118,7 +118,7 @@ def _create_discounted_attendees(db):
 def test_validate_discount_code_reject_exhausted(db):
     discount, tickets = _create_discounted_attendees(db)
 
-    with pytest.raises(UnprocessableEntity, match='Discount Usage Exceeded'):
+    with pytest.raises(UnprocessableEntityError, match='Discount Usage Exceeded'):
         discount.validate(tickets=tickets[:3])
 
 
