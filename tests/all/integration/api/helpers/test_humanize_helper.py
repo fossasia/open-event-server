@@ -1,6 +1,6 @@
 import datetime
 
-from app.api.helpers.humanize_helper import humanize_helper
+from app.templates.flask_ext.jinja.filters import humanize_helper
 from tests.factories.order import OrderFactory
 
 
@@ -12,4 +12,8 @@ def test_humanize_helper(db):
     )
     actual_response = humanize_helper(test_order.created_at)
     expected_response = '10 days ago'
+    assert actual_response == expected_response
+    
+    actual_response = humanize_helper(test_order.completed_at)
+    expected_response = 'N/A'
     assert actual_response == expected_response
