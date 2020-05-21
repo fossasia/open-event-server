@@ -22,4 +22,4 @@ def init_filters(app):
         if not time:
             return "N/A"
         return humanize_helper(time)
-        
+                
