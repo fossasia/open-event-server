@@ -270,7 +270,7 @@ pre-commit installed at .git/hooks/pre-commit
 ```
 * now pre-commit will run automatically on git commit!
 
-### For configuration, [Click Here](https://pre-commit.com/)
+#### For configuration, [Click Here](https://pre-commit.com/)
 
 ## Logging
 
