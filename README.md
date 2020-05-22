@@ -262,12 +262,7 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 
 Git hook scripts are useful for identifying simple issues before submission to code review. We run our hooks on every commit to automatically point out issues in code such as missing semicolons, trailing whitespace, and debug statements. By pointing these issues out before code review, this allows a code reviewer to focus on the architecture of a change while not wasting time with trivial style nitpicks.
 
-#### 1. Add a pre-commit configuration:
-
-* create a file named .pre-commit-config.yaml
-* you can generate a very basic configuration using pre-commit sample-config
-
-#### 2. Install the git hook scripts:
+#### Install the git hook scripts:
 * run pre-commit install to set up the git hook scripts
 ```sh
 $ pre-commit install
