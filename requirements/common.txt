@@ -1,6 +1,6 @@
 pycparser==2.20
 Flask==1.1.2
-Flask-Limiter==1.3
+Flask-Limiter==1.3.1
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.1
 Flask-Migrate==2.5.3
@@ -25,7 +25,6 @@ gunicorn==20.0.4
 boto==2.49
 geoip2==3.0.0
 SQLAlchemy-Continuum==1.3.10
-arrow==0.15.5 # TODO(Areeb): Only used in 1 place. Removes
 bleach==3.1.5
 stripe==2.48.0
 xhtml2pdf==0.2.4
