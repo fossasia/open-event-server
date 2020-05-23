@@ -66,7 +66,8 @@ class DiscountCodeListPost(ResourceList):
             and 'events' in data
         ):
             raise UnprocessableEntityError(
-                {'source': 'permission'}, "Please verify your permission or check your relationship"
+                {'source': 'permission'},
+                "Please verify your permission or check your relationship"
             )
 
         data['marketer_id'] = current_user.id
@@ -406,7 +407,8 @@ class DiscountCodeDetail(ResourceDetail):
             self.schema = DiscountCodeSchemaEvent
             self.resource.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'}, "Please verify your permission")
+            raise UnprocessableEntityError({'source': 'permission'},
+                                           "Please verify your permission")
 
     def before_delete_object(self, discount, view_kwargs):
         """
@@ -423,7 +425,8 @@ class DiscountCodeDetail(ResourceDetail):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'}, "Please verify your permission")
+            raise UnprocessableEntityError({'source': 'permission'},
+                                           "Please verify your permission")
 
     #     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
@@ -462,7 +465,8 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'}, "Please verify your permission")
+            raise UnprocessableEntityError({'source': 'permission'},
+                                           "Please verify your permission")
 
     methods = ['GET', 'PATCH']
     decorators = (jwt_required,)

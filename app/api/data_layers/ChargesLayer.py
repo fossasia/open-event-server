@@ -51,7 +51,8 @@ class ChargesLayer(BaseDataLayer):
         # charge through stripe
         if order.payment_mode == 'stripe':
             if not data.get('stripe'):
-                raise UnprocessableEntityError({'source': 'stripe'}, "stripe token is missing")
+                raise UnprocessableEntityError({'source': 'stripe'},
+                                               "stripe token is missing")
             if not order.event.can_pay_by_stripe:
                 raise ConflictError(
                     {'': ''}, "This event doesn't accept payments by Stripe"
@@ -67,7 +68,8 @@ class ChargesLayer(BaseDataLayer):
         elif order.payment_mode == 'paypal':
             if (not data.get('paypal_payer_id')) or (not data.get('paypal_payment_id')):
                 raise UnprocessableEntityError(
-                    {'source': 'paypal_payer_id or paypal_payment_id'}, "paypal_payer_id or paypal_payment_id or both missing"
+                    {'source': 'paypal_payer_id or paypal_payment_id'},
+                    "paypal_payer_id or paypal_payment_id or both missing"
                 )
             if not order.event.can_pay_by_paypal:
                 raise ConflictError(

@@ -196,7 +196,8 @@ def login_user(provider):
             'code': request.args.get('code'),
         }
         if not payload['client_id'] or not payload['client_secret']:
-            raise NotImplementedError({'source': 'client_id or client_secret'}, 'Facebook Login Not Configured')
+            raise NotImplementedError({'source': 'client_id or client_secret'},
+                                      'Facebook Login Not Configured')
         access_token = requests.get(
             'https://graph.facebook.com/v3.0/oauth/access_token', params=payload
         ).json()
@@ -423,7 +424,8 @@ def change_password():
             )
         else:
             raise BadRequestError(
-                {'source': 'password'}, 'Wrong Password. Please enter correct current password.'
+                {'source': 'password'},
+                'Wrong Password. Please enter correct current password.'
             )
 
     return jsonify(

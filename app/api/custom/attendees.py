@@ -43,4 +43,5 @@ def send_receipt():
             send_email_to_attendees(order, current_user.id)
             return jsonify(message="receipt sent to attendees")
     else:
-        raise UnprocessableEntityError({'source': 'order-identifier'}, 'Order identifier missing')
+        raise UnprocessableEntityError({'source': 'order-identifier'},
+                                       'Order identifier missing')
