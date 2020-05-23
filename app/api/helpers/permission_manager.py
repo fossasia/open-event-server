@@ -205,7 +205,8 @@ def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
         if query_user:
             return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id or model'}, 'Detail ownership is required, access denied.')
+    raise ForbiddenError({'source': 'event_id or model'},
+                         'Detail ownership is required, access denied.')
 
 
 @jwt_required

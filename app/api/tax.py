@@ -30,7 +30,8 @@ class TaxList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
+            raise ForbiddenError({'parameter': 'event_id'},
+                                 'Co-organizer access is required.')
         if (
             get_count(
                 db.session.query(Event).filter_by(

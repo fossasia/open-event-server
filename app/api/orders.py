@@ -304,7 +304,8 @@ class OrdersList(ResourceList):
         if kwargs.get('event_id') and not has_access(
             'is_coorganizer', event_id=kwargs['event_id']
         ):
-            raise ForbiddenError({'parameter': 'event_id'}, "Co-Organizer Access Required")
+            raise ForbiddenError({'parameter': 'event_id'},
+                                 "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)

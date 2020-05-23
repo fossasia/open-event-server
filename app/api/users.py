@@ -285,7 +285,8 @@ class UserDetail(ResourceDetail):
                 user.deleted_at = data.get('deleted_at')
             else:
                 raise ForbiddenError(
-                    {'source': 'User'}, "You are not authorized to update this information."
+                    {'source': 'User'},
+                    "You are not authorized to update this information."
                 )
 
         users_email = data.get('email', None)

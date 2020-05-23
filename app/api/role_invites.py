@@ -157,7 +157,8 @@ class RoleInviteDetail(ResourceDetail):
             if role_invite.role_name != 'owner' and not has_access(
                 'is_organizer', event_id=role_invite.event_id
             ):
-                raise ForbiddenError({'source': 'event_id'}, 'Organizer access is required.')
+                raise ForbiddenError({'source': 'event_id'},
+                                     'Organizer access is required.')
 
     decorators = (
         api.has_permission(

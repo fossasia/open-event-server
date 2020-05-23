@@ -241,7 +241,8 @@ def is_track_organizer(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Track Organizer access is Required.')
+        raise ForbiddenError({'source': 'event_id'},
+                             'Track Organizer access is Required.')
 
     return decorated_function
 
