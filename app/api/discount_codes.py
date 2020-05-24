@@ -59,7 +59,7 @@ class DiscountCodeListPost(ResourceList):
         if data['used_for'] == 'ticket':
             require_relationship(['event'], data)
             if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError({'parameter': 'event_id'}, 'You are not authorized')
+                raise ForbiddenError({'pointer': '/data/event'}, 'You are not authorized')
         elif (
             data['used_for'] == 'event'
             and not has_access('is_admin')

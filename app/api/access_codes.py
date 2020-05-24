@@ -36,7 +36,7 @@ class AccessCodeListPost(ResourceList):
         """
         require_relationship(['event', 'user'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenError({'parameter': 'event_id'},
+            raise ForbiddenError({'pointer': '/data/event'},
                                  "Minimum Organizer access required")
 
     def before_create_object(self, data, view_kwargs):

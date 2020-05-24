@@ -38,7 +38,7 @@ class SpeakerListPost(ResourceList):
             event = db.session.query(Event).filter_by(id=data['event']).one()
             if event.state == "draft":
                 raise ObjectNotFound(
-                    {'parameter': 'event_id'},
+                    {'pointer': '/data/event'},
                     "Event: {} not found".format(data['event_id']),
                 )
 

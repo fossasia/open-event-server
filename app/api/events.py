@@ -338,7 +338,7 @@ class EventList(ResourceList):
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
             event_id = get_id(view_kwargs)['id']
             if not has_access('is_coorganizer', event_id=event_id):
-                raise ForbiddenError({'parameter': 'event_id'},
+                raise ForbiddenError({'parameter': 'discount_code_id'},
                                      'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
