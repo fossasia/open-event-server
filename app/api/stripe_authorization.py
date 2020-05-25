@@ -36,7 +36,7 @@ class StripeAuthorizationListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenError({'source': 'event_id'},
+            raise ForbiddenError({'pointer': '/data/event'},
                                  "Minimum Organizer access required")
         if (
             get_count(

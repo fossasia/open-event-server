@@ -184,7 +184,7 @@ class SessionDetail(ResourceDetail):
 
         if not can_edit_after_cfs_ends(session.event_id):
             raise ForbiddenError(
-                {'source': 'event_id'},
+                {'source': 'session'},
                 "Cannot edit session after the call for speaker is ended"
             )
 

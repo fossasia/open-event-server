@@ -313,7 +313,7 @@ class OrdersList(ResourceList):
             # orders under a user
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenError({'source': 'User'}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_id'}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
                 User.id == user.id
             )

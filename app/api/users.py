@@ -172,7 +172,7 @@ class UserDetail(ResourceDetail):
                 if not has_access(
                     'is_user_itself', user_id=attendee.user.id
                 ) or not has_access('is_coorganizer', event_id=attendee.event_id):
-                    raise ForbiddenError({'source': 'event_id'}, 'Access Forbidden')
+                    raise ForbiddenError({'parameter': 'attendee_id'}, 'Access Forbidden')
                 view_kwargs['id'] = attendee.user.id
             else:
                 view_kwargs['id'] = None

@@ -30,7 +30,7 @@ def send_receipt():
             not has_access('is_registrar', event_id=order.event_id)
         ):
             raise ForbiddenError(
-                {'source': 'event_id'},
+                {'parameter': 'order_identifier'},
                 'You need to be the event organizer or order buyer to send receipts.',
             )
         elif order.status != 'completed':

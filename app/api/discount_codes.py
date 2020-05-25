@@ -66,7 +66,7 @@ class DiscountCodeListPost(ResourceList):
             and 'events' in data
         ):
             raise UnprocessableEntityError(
-                {'source': 'permission'},
+                {'pointer': '/data/used_for'},
                 "Please verify your permission or check your relationship"
             )
 
@@ -137,7 +137,7 @@ class DiscountCodeList(ResourceList):
                 user = safe_query_kwargs(User, view_kwargs, 'user_id')
                 query_ = query_.join(User).filter(User.id == user.id)
             else:
-                raise ForbiddenError({'source': 'User'}, 'You are not authorized')
+                raise ForbiddenError({'parameter': 'user_id'}, 'You are not authorized')
 
         if view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
@@ -219,7 +219,7 @@ class DiscountCodeDetail(ResourceDetail):
                     kwargs['id'] = None
             else:
                 raise UnprocessableEntityError(
-                    {'source': 'permission'},
+                    {'parameter': 'ticket_id'},
                     "Please verify your permission. You must have coorganizer "
                     "privileges to view ticket discount code details",
                 )
@@ -232,7 +232,7 @@ class DiscountCodeDetail(ResourceDetail):
                     kwargs['id'] = None
             else:
                 raise UnprocessableEntityError(
-                    {'source': 'permission'},
+                    {'paramter': 'event_id'},
                     "Please verify your permission. You must be admin to view event discount code details",
                 )
 
@@ -307,7 +307,7 @@ class DiscountCodeDetail(ResourceDetail):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntityError({'source': 'permission'},
+                raise UnprocessableEntityError({'parameter': '{id}'},
                                                "Please verify your permission")
 
     def before_get_object(self, view_kwargs):
@@ -369,12 +369,12 @@ class DiscountCodeDetail(ResourceDetail):
             elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
-                raise UnprocessableEntityError({'source': 'permission'},
+                raise UnprocessableEntityError({'parameter': '{id}'},
                                                "Please verify your permission")
 
         elif not view_kwargs.get('id') and not has_access('is_admin'):
             raise UnprocessableEntityError(
-                {'source': 'permission'},
+                {'parameter': '{id}'},
                 "Please verify your permission. You must be admin to view event\
                                       discount code details",
             )
@@ -407,7 +407,7 @@ class DiscountCodeDetail(ResourceDetail):
             self.schema = DiscountCodeSchemaEvent
             self.resource.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'},
+            raise UnprocessableEntityError({'pointer': '/data/used_for'},
                                            "Please verify your permission")
 
     def before_delete_object(self, discount, view_kwargs):
@@ -425,7 +425,7 @@ class DiscountCodeDetail(ResourceDetail):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'},
+            raise UnprocessableEntityError({'parameter': 'event_id'},
                                            "Please verify your permission")
 
     #     decorators = (jwt_required,)
@@ -465,7 +465,7 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'},
+            raise UnprocessableEntityError({'parameter': '{id}'},
                                            "Please verify your permission")
 
     methods = ['GET', 'PATCH']
@@ -499,7 +499,7 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntityError({'source': 'permission'},
+            raise UnprocessableEntityError({'parameter': '{id}'},
                                            "Please verify your permission")
 
     schema = DiscountCodeSchemaEvent

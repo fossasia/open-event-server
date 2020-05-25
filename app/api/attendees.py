@@ -139,7 +139,7 @@ class AttendeeList(ResourceList):
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id
             ):
-                raise ForbiddenError({'parameter': 'event_id and user_id'},
+                raise ForbiddenError({'parameter': 'order_identifier'},
                                      'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
@@ -190,7 +190,7 @@ class AttendeeDetail(ResourceDetail):
             event_id=attendee.event_id,
         ):
             raise ForbiddenError(
-                {'source': 'User'}, 'You are not authorized to access this.'
+                {'parameter': '{id}'}, 'You are not authorized to access this.'
             )
 
     def before_delete_object(self, obj, kwargs):

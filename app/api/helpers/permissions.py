@@ -122,7 +122,7 @@ def is_owner(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_owner(kwargs['event_id']):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Owner access is required')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Owner access is required')
 
     return decorated_function
 
@@ -143,7 +143,7 @@ def is_organizer(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_organizer(kwargs['event_id']):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Organizer access is required')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Organizer access is required')
 
     return decorated_function
 
@@ -193,7 +193,7 @@ def is_coorganizer(f):
             if 'event_identifier' in kwargs:
                 kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Co-organizer access is required.')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
     return decorated_function
 
@@ -217,7 +217,7 @@ def is_registrar(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Registrar Access is Required.')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Registrar Access is Required.')
 
     return decorated_function
 
@@ -241,7 +241,7 @@ def is_track_organizer(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'},
+        raise ForbiddenError({'parameter': 'event_id'},
                              'Track Organizer access is Required.')
 
     return decorated_function
@@ -266,7 +266,7 @@ def is_moderator(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        raise ForbiddenError({'source': 'event_id'}, 'Moderator Access is Required.')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Moderator Access is Required.')
 
     return decorated_function
 

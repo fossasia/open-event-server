@@ -110,7 +110,7 @@ def resend_emails():
                 "Only placed and completed orders have confirmation",
             )
     else:
-        raise ForbiddenError({'source': 'event_id'}, "Co-Organizer Access Required")
+        raise ForbiddenError({'pointer': '/data/order/{identifier}'}, "Co-Organizer Access Required")
 
 
 @order_blueprint.route('/calculate-amount', methods=['POST'])

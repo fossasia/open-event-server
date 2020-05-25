@@ -732,7 +732,7 @@ class EventDetail(ResourceDetail):
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
                 raise ForbiddenError(
-                    {'source': 'User'}, "Event associated with orders cannot be deleted"
+                    {'pointer': 'data/deleted_at'}, "Event associated with orders cannot be deleted"
                 )
             else:
                 event.deleted_at = data.get('deleted_at')

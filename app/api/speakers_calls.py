@@ -49,7 +49,7 @@ class SpeakersCallList(ResourceList):
                 or speakers_call.ends_at > event.starts_at
             ):
                 raise ForbiddenError(
-                    {'source': 'event_id'},
+                    {'pointer': '/data/event'},
                     "Speakers call date can\'t be after the event start date",
                 )
         except NoResultFound:
@@ -95,7 +95,7 @@ class SpeakersCallDetail(ResourceDetail):
                     or speakers_call.ends_at > event.starts_at
                 ):
                     raise ForbiddenError(
-                        {'source': 'event_id'},
+                        {'parameter': 'event_id'},
                         "Speakers call date can\'t be after the event start date",
                     )
             except NoResultFound as e:

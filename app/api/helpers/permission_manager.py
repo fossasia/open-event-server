@@ -49,7 +49,7 @@ def is_owner(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
 
     if not user.is_owner(kwargs['event_id']):
-        raise ForbiddenError({'source': 'event_id'}, 'Owner access is required')
+        raise ForbiddenError({'parameter': 'event_id'}, 'Owner access is required')
 
     return view(*view_args, **view_kwargs)
 
@@ -64,7 +64,7 @@ def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
     if user.is_owner(kwargs['event_id']) or user.is_organizer(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Organizer access is required')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Organizer access is required')
 
 
 @jwt_required
@@ -77,7 +77,7 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
     if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Co-organizer access is required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
 
 @jwt_required
@@ -87,7 +87,7 @@ def is_coorganizer_but_not_admin(view, view_args, view_kwargs, *args, **kwargs):
     if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Co-organizer access is required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
 
 def is_coorganizer_endpoint_related_to_event(
@@ -115,7 +115,7 @@ def is_coorganizer_endpoint_related_to_event(
         verify_jwt_in_request()
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Co-organizer access is required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
 
 @jwt_required
@@ -151,7 +151,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Co-organizer access is required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Co-organizer access is required.')
 
 
 @jwt_required
@@ -248,7 +248,7 @@ def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
     if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
-    raise ForbiddenError({'source': 'event_id'}, 'Registrar Access is Required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Registrar Access is Required.')
 
 
 @jwt_required
@@ -268,7 +268,7 @@ def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
 
-    raise ForbiddenError({'source': 'event_id'}, 'Registrar access is required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Registrar access is required.')
 
 
 @jwt_required
@@ -283,7 +283,7 @@ def is_track_organizer(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
     if user.is_track_organizer(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
-    raise ForbiddenError({'source': 'event_id'}, 'Track Organizer access is Required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Track Organizer access is Required.')
 
 
 @jwt_required
@@ -297,7 +297,7 @@ def is_moderator(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
     if user.is_moderator(event_id) or user.has_event_access(event_id):
         return view_kwargs(*view_args, **view_kwargs)
-    raise ForbiddenError({'source': 'event_id'}, 'Moderator Access is Required.')
+    raise ForbiddenError({'parameter': 'event_id'}, 'Moderator Access is Required.')
 
 
 @jwt_required

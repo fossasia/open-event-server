@@ -38,7 +38,7 @@ class RoleInviteListPost(ResourceList):
         """
         require_relationship(['event', 'role'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenError({'source': 'event_id'}, 'Organizer access is required.')
+            raise ForbiddenError({'pointer': '/data/event'}, 'Organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -50,7 +50,7 @@ class RoleInviteListPost(ResourceList):
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
-            raise ForbiddenError({'source': 'event_id'}, 'Owner access is required.')
+            raise ForbiddenError({'pointer': '/data/event'}, 'Owner access is required.')
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
@@ -141,23 +141,23 @@ class RoleInviteDetail(ResourceDetail):
             and data['role_name'] == 'owner'
             and not has_access('is_owner', event_id=data['event'])
         ):
-            raise ForbiddenError({'source': 'event_id'}, 'Owner access is required.')
+            raise ForbiddenError({'pointer': '/data/event'}, 'Owner access is required.')
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
-            raise UnprocessableEntityError({'source': 'event_id'}, "User not registered")
+            raise UnprocessableEntityError({'parameter': 'role_invite'}, "User not registered")
         if not has_access('is_organizer', event_id=role_invite.event_id) and (
             len(list(data.keys())) > 1 or 'status' not in data
         ):
-            raise UnprocessableEntityError({'source': 'event_id'},
+            raise UnprocessableEntityError({'parameter': 'role_invite'},
                                            "You can only change your status")
         if data.get('deleted_at'):
             if role_invite.role_name == 'owner' and not has_access(
                 'is_owner', event_id=role_invite.event_id
             ):
-                raise ForbiddenError({'source': 'event_id'}, 'Owner access is required.')
+                raise ForbiddenError({'parameter': 'role_invite'}, 'Owner access is required.')
             if role_invite.role_name != 'owner' and not has_access(
                 'is_organizer', event_id=role_invite.event_id
             ):
-                raise ForbiddenError({'source': 'event_id'},
+                raise ForbiddenError({'parameter': 'role_invite'},
                                      'Organizer access is required.')
 
     decorators = (
