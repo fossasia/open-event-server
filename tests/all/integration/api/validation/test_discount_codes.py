@@ -1,6 +1,6 @@
 import unittest
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.discount_code import DiscountCodeFactory
@@ -32,7 +32,7 @@ class TestDiscountCodeValidation(OpenEventLegacyTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntity):
+            with self.assertRaises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_free_ticket(self):
@@ -46,7 +46,7 @@ class TestDiscountCodeValidation(OpenEventLegacyTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntity):
+            with self.assertRaises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_quantity_db_populate(self):

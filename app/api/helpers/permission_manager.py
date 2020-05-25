@@ -1,4 +1,5 @@
 from typing import Union
+
 from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from sqlalchemy.orm.exc import NoResultFound

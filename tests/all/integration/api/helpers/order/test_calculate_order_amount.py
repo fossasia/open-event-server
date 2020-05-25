@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.order import calculate_order_amount
 from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
@@ -57,7 +57,7 @@ def test_multiple_tickets_different_event(db):
     ticket_dict = _create_ticket_dict([ticket1, ticket2], [1, 2])
 
     with pytest.raises(
-        UnprocessableEntity, match=r".*All tickets must belong to same event.*"
+        UnprocessableEntityError, match=r".*All tickets must belong to same event.*"
     ):
         calculate_order_amount(ticket_dict)
 
@@ -106,7 +106,7 @@ def _create_donation_tickets(db):
 
 def _expect_donation_error(ticket_dict):
     with pytest.raises(
-        UnprocessableEntity,
+        UnprocessableEntityError,
         match='Price for donation ticket should be present and within range '
         '10.0 to 20.0',
     ):
@@ -389,7 +389,7 @@ def test_ticket_with_different_discount_code(db):
     discount = DiscountCodeTicketSubFactory(tickets=[])
     db.session.commit()
 
-    with pytest.raises(UnprocessableEntity, match='Invalid Discount Code'):
+    with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
         calculate_order_amount([{'id': ticket.id}], discount.id)
 
 

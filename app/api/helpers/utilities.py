@@ -9,7 +9,7 @@ import requests
 from flask import current_app
 from itsdangerous import Serializer
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 
 
 def dasherize(text):
@@ -19,7 +19,7 @@ def dasherize(text):
 def require_relationship(resource_list, data):
     for resource in resource_list:
         if resource not in data:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/relationships/{}'.format(resource)},
                 "A valid relationship with {} resource is required".format(resource),
             )
