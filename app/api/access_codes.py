@@ -99,7 +99,7 @@ class AccessCodeList(ResourceList):
         if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             if not has_access('is_coorganizer', event_id=ticket.event_id):
-                raise ForbiddenError({'parameter': 'event_id'}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'ticket_id'}, 'Access Forbidden')
             # access_code - ticket :: many-to-many relationship
             query_ = AccessCode.query.filter(AccessCode.tickets.any(id=ticket.id))
             query_
@@ -161,7 +161,7 @@ class AccessCodeDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': '{id}'}, "Access Code:  not found")
 
             if not has_access('is_coorganizer', event_id=access.event_id):
-                raise UnprocessableEntityError({'parameter': 'event_id'},
+                raise UnprocessableEntityError({'parameter': 'id'},
                                                "Please verify your permission")
 
     decorators = (

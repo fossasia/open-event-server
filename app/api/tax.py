@@ -41,7 +41,7 @@ class TaxList(ResourceList):
             > 0
         ):
             raise MethodNotAllowed(
-                {'parameter': 'event_id'}, "Tax is disabled for this Event"
+                {'pointer': '/data/event'}, "Tax is disabled for this Event"
             )
 
     def before_create_object(self, data, view_kwargs):

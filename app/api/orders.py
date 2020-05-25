@@ -583,7 +583,7 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenError({'parameter': 'event_id'}, 'Access Forbidden')
+            raise ForbiddenError({'parameter': 'order'}, 'Access Forbidden')
         elif (
             order.amount
             and order.amount > 0

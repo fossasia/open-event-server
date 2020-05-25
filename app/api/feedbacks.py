@@ -33,7 +33,7 @@ class FeedbackListPost(ResourceList):
         require_relationship(['user'], data)
         if not has_access('is_user_itself', user_id=int(data['user'])):
             raise ObjectNotFound(
-                {'parameter': 'user_id'},
+                {'pointer': '/data/user'},
                 "User: {} doesn't match auth key".format(data['user']),
             )
         if 'event' in data and 'session' in data:
@@ -57,7 +57,7 @@ class FeedbackListPost(ResourceList):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
                 raise ForbiddenError(
-                    {'parameter': 'event_id'}, "Event co-organizer access required"
+                    {'pointer': '/data/session'}, "Event co-organizer access required"
                 )
 
     schema = FeedbackSchema
@@ -147,7 +147,7 @@ class FeedbackDetail(ResourceDetail):
                 )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
                 raise ForbiddenError(
-                    {'parameter': 'event_id'}, "Event co-organizer access required"
+                    {'parameter': 'feedback'}, "Event co-organizer access required"
                 )
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):

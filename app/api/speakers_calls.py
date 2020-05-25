@@ -132,7 +132,7 @@ class SpeakersCallDetail(ResourceDetail):
                 )
             except NoResultFound:
                 raise ObjectNotFound(
-                    {'parameter': 'event_identifier'}, "Object: not found"
+                    {'parameter': 'event_id'}, "Object: not found"
                 )
             view_kwargs['id'] = speakers_call.id
 
