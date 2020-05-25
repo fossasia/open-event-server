@@ -145,5 +145,5 @@ def get_new_slug(model, name):
 
 def get_new_identifier(model):
     def get_new_identifier():
-        return (str(uuid.uuid4()) , get_count(model.query.filter_by(identifier=identifier))
+        return f"str(uuid.uuid4()) , get_count(model.query.filter_by(identifier=identifier)"
     return get_new_identifier()
