@@ -4,7 +4,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 
@@ -27,7 +27,7 @@ class TrackSchema(SoftDeletionSchema):
     @validates_schema
     def valid_color(self, data):
         if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', data['color']):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/color'},
                 "Color should be proper HEX color code",
             )

@@ -3,8 +3,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import get_count, safe_query, save_to_db, safe_query_kwargs
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import (
@@ -50,9 +50,7 @@ class SessionListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
-                {'pointer': ''}, "Sessions are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
     def after_create_object(self, session, data, view_kwargs):
         """
@@ -173,19 +171,19 @@ class SessionDetail(ResourceDetail):
                 has_access('is_admin')
                 or has_access('is_organizer', event_id=session.event_id)
             ):
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': '/data/attributes/is-locked'},
                     "You don't have enough permissions to change this property",
                 )
 
         if session.is_locked and data.get('is_locked') == session.is_locked:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': '/data/attributes/is-locked'},
                 "Locked sessions cannot be edited",
             )
 
         if not can_edit_after_cfs_ends(session.event_id):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, "Cannot edit session after the call for speaker is ended"
             )
 

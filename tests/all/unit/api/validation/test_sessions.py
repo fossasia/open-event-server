@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from pytz import timezone
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.sessions import SessionSchema
 
 
@@ -33,7 +33,7 @@ class TestSessionValidation(TestCase):
             'starts_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
             'ends_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
         }
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             SessionSchema.validate_fields(schema, data, original_data)
 
 

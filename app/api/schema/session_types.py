@@ -4,7 +4,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 
@@ -29,7 +29,7 @@ class SessionTypeSchema(SoftDeletionSchema):
         try:
             datetime.strptime(data['length'], '%H:%M')
         except ValueError:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/length'},
                 "Length should be in the format %H:%M",
             )
