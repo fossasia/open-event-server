@@ -1,21 +1,8 @@
 import time
-import uuid
-
 from sqlalchemy.sql import func
-
-from app.api.helpers.db import get_count
+from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
-
-
-def get_new_order_identifier():
-    identifier = str(uuid.uuid4())
-    count = get_count(Order.query.filter_by(identifier=identifier))
-    if count == 0:
-        return identifier
-    else:
-        return get_new_order_identifier()
-
 
 def get_updatable_fields():
     """
@@ -60,7 +47,7 @@ class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_order_identifier)
+    identifier = db.Column(db.String, unique=True, default=get_new_identifier(Order))
     amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
