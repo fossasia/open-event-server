@@ -1,36 +1,92 @@
 {
-    "name": "Open Event Server",
-    "description": "A fully functional conference event management system using flask",
-    "repository": "https://github.com/fossasia/open-event-server/",
-    "logo": "http://labs.fossasia.org/images/fossasia.png",
-    "keywords": [
-        "open-event",
-        "fossasia",
-        "flask"
-    ],
-    "env": {
-        "APP_SECRET_TOKEN": {
-            "generator": "secret"
-        },
-        "SECRET_KEY": {
-            "generator": "secret"
-        },
-        "ON_HEROKU": "true",
-        "FORCE_SSL": "true",
-        "INVITATION_CODE": {
-            "generator": "secret"
-        }
-    },
-    "addons": [
-        "heroku-postgresql:hobby-dev",
-        "heroku-redis:hobby-dev"
-    ],
-    "buildpacks": [
-        {
-            "url": "heroku/python"
-        }
-    ],
-    "scripts": {
-        "postdeploy": "python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia"
-    }
+	"name": "Ventful",
+	"description": "Events Done Right",
+	"website": "https://ventful.co/",
+	"repository": "https://github.com/ventful/api",
+	"logo": "http://ventful.co/logo.png",
+	"keywords": [
+		"events",
+		"ventful",
+		"api"
+	],
+	"env": {
+
+		"APP_SECRET_TOKEN": {
+			"generator": "secret"
+		},
+		"WEB_CONCURRENCY": "3",
+		"SECRET_KEY": {
+			"generator": "secret"
+		},
+		"STATIC_DOMAIN": "https://ventful.co",
+		"ON_HEROKU": "true",
+		"FORCE_SSL": "true",
+		"INVITATION_CODE": {
+			"generator": "secret"
+		},
+
+		"APP_CONFIG": "config.ProductionConfig",
+		"APP_NAME": "Ventful",
+		"FRONTEND_URL": "https://ventful.co/",
+		"TAGLINE": "Events Done Right",
+		"WEBAPP_URL": "https://ventful.co/",
+		"SERVER_NAME": "api.ventful.co",
+
+		"STRIPE_PUBLISHABLE_KEY": "pk_live_IpnGuacdhcIGJpCmO2cnrkKz",
+		"STRIPE_SECRET_KEY": "sk_live_QvInLNHllF4w2FwtHL5w0kn400DwrMerG3",
+		"STRIPE_CLIENT_ID": "ca_DbAoWA7fskipI4ZklxJTrAlmtFoblLPg",
+
+
+		"ANALYTICS_KEY": "AIzaSyBICm9_KCZSaN7fryYDEXnUY-jO4TXXPNo",
+		"FB_CLIENT_ID": "184294455964966",
+		"FB_CLIENT_SECRET": "dec64c94c676070a9de3f4371b691018",
+
+		"EMAIL_SERVICE": "smtp",
+		"EMAIL_FROM": "mail@ventful.co",
+		"EMAIL_FROM_NAME": "mail@ventful.co",
+
+		"SMTP_HOST": "smtp.gmail.com",
+		"SMTP_USERNAME": "mail",
+		"SMTP_PASSWORD": "_SUPERUSER_ventful-241632_!",
+		"SMTP_PORT": "456",
+		"SMTP_ENCRYPTION": "ssl",
+
+		"STORAGE_PLACE": "google",
+		"GS_BUCKET_NAME": "ventful",
+		"GS_KEY": "GOOGG7H73EJTQH55AQ6EBKB7",
+		"GS_SECRET": "Muaynu2hr5Mtg8Lp2vN6fOUDK5MnAwFCtGyO3j8U",
+
+		"IS_GOOGLE_RECAPTCHA_ENABLED": "true",
+		"GOOGLE_RECAPTCH_SITE": "6LfM7-0UAAAAAH9kQZ_euY45HHEzCLG8dcGZu_iC",
+		"GOOGLE_RECAPTCH_SECRET": "6LfM7-0UAAAAAC61c_UBgEPabpjlEOMyI5EUpD1y",
+
+		"GOOGLE_CLIENT_ID": "197802934639-2qe9r5aq1hnsa8m92bdsb58nvqr5uggp.apps.googleusercontent.com",
+		"GOOGLE_CLIENT_SECRET": "70tE3ZFATSf9-GCMgWs9Bx9C",
+
+		"SUPPORT_URL": "https://ventful.co/support",
+		"FACEBOOK_URL": "https://www.facebook.com/v3ntful/",
+		"YOUTUBE_URL": "https://www.youtube.com/channel/UCjUKurrfDRvwOynrHeX9GnA",
+
+		"ADMIN_BILLING_CONTACT_NAME": "Ventful",
+		"ADMIN_BILLING_EMAIL": "mail@ventful.co",
+		"ADMIN_BILLING_COUNTRY": "US",
+		"ADMIN_BILLING_STATE": "SC",
+		"ADMIN_COMPANY": "Ventful LLC",
+		"ANDROID_APP_URL": "https://ventful.co/redirect/android",
+		"WEB_APP_URL": "https://login.ventful.co/",
+
+
+		"COOKIE_POLICY": "Ventful, and certain approved third parties, use functional analytical and tracking cookies (or similar technologies) to understand your  event preferences and provide you with a customized experience.  By closing this banner or by continuing to use the site, you agree.  For more information please review https://ventful.co/privacy.",
+		"COOKIE_POLICY_LINK": "https://ventful.co/privacy"
+	},
+	"addons": [
+		"heroku-postgresql:hobby-dev",
+		"heroku-redis:hobby-dev"
+	],
+	"buildpacks": [{
+		"url": "heroku/python"
+	}],
+	"scripts": {
+		"postdeploy": "python manage.py initialize_db -c henry@ventful.co:_HENRY-1998-!!**-ventful-api-admin_"
+	}
 }
