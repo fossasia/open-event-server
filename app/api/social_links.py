@@ -40,7 +40,7 @@ class SocialLinkList(ResourceList):
         :return:
         """
         query_ = self.session.query(SocialLink)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True

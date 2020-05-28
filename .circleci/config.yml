@@ -46,10 +46,11 @@ jobs:
             DATABASE_URL: postgresql://postgres@localhost/test
             TEST_DATABASE_URL: postgresql://postgres@localhost/test
       # Services
-      - image: circleci/postgres:11.5-alpine-ram
+      - image: circleci/postgres:12-postgis-ram
         environment:
             POSTGRES_USER: postgres
             POSTGRES_DB: test
+            POSTGRES_HOST_AUTH_METHOD: trust
       - image: circleci/redis:5.0.6-alpine
 
     working_directory: ~/code
@@ -70,7 +71,7 @@ jobs:
       - run:
           name: Create API blueprint
           command: npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib
-      
+
       - run:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd

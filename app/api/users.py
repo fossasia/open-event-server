@@ -6,11 +6,11 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.db import get_count, safe_query_kwargs
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    UnprocessableEntityError,
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
@@ -59,7 +59,7 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'source': '/data/attributes/password'},
                 'Password should be at least 8 characters long',
             )
@@ -67,7 +67,7 @@ class UserList(ResourceList):
             db.session.query(User.id).filter_by(email=data['email'].strip()).scalar()
             is not None
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 
@@ -111,7 +111,7 @@ class UserList(ResourceList):
         #     try:
         #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
         #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
+        #         raise UnprocessableEntityError(
         #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
         #         )
         #     uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
@@ -151,12 +151,8 @@ class UserDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('notification_id') is not None:
-            notification = safe_query(
-                self,
-                Notification,
-                'id',
-                view_kwargs['notification_id'],
-                'notification_id',
+            notification = safe_query_kwargs(
+                Notification, view_kwargs, 'notification_id',
             )
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
@@ -164,34 +160,26 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('feedback_id') is not None:
-            feedback = safe_query(
-                self, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id'
-            )
+            feedback = safe_query_kwargs(Feedback, view_kwargs, 'feedback_id')
             if feedback.user_id is not None:
                 view_kwargs['id'] = feedback.user_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query(
-                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             if attendee.user is not None:
                 if not has_access(
                     'is_user_itself', user_id=attendee.user.id
                 ) or not has_access('is_coorganizer', event_id=attendee.event_id):
-                    raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                    raise ForbiddenError({'source': ''}, 'Access Forbidden')
                 view_kwargs['id'] = attendee.user.id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_id') is not None:
-            event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'id',
-                view_kwargs['event_invoice_id'],
-                'event_invoice_id',
+            event_invoice = safe_query_kwargs(
+                EventInvoice, view_kwargs, 'event_invoice_id',
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
@@ -199,12 +187,8 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_identifier') is not None:
-            event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
-                'event_invoice_identifier',
+            event_invoice = safe_query_kwargs(
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
@@ -212,12 +196,8 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('users_events_role_id') is not None:
-            users_events_role = safe_query(
-                self,
-                UsersEventsRoles,
-                'id',
-                view_kwargs['users_events_role_id'],
-                'users_events_role_id',
+            users_events_role = safe_query_kwargs(
+                UsersEventsRoles, view_kwargs, 'users_events_role_id',
             )
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
@@ -225,46 +205,36 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('speaker_id') is not None:
-            speaker = safe_query(
-                self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id'
-            )
+            speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
             if speaker.user_id is not None:
                 view_kwargs['id'] = speaker.user_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('session_id') is not None:
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             if session.creator_id is not None:
                 view_kwargs['id'] = session.creator_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('access_code_id') is not None:
-            access_code = safe_query(
-                self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
-            )
+            access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
             if access_code.marketer_id is not None:
                 view_kwargs['id'] = access_code.marketer_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('event_id') is not None:
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             if event.owner is not None:
                 view_kwargs['id'] = event.owner.id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('discount_code_id') is not None:
-            discount_code = safe_query(
-                self,
-                DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
-                'discount_code_id',
+            discount_code = safe_query_kwargs(
+                DiscountCode, view_kwargs, 'discount_code_id',
             )
             if discount_code.marketer_id is not None:
                 view_kwargs['id'] = discount_code.marketer_id
@@ -272,12 +242,8 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('email_notification_id') is not None:
-            email_notification = safe_query(
-                self,
-                EmailNotification,
-                'id',
-                view_kwargs['email_notification_id'],
-                'email_notification_id',
+            email_notification = safe_query_kwargs(
+                EmailNotification, view_kwargs, 'email_notification_id',
             )
             if email_notification.user_id is not None:
                 view_kwargs['id'] = email_notification.user_id
@@ -290,7 +256,7 @@ class UserDetail(ResourceDetail):
         #     try:
         #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
         #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
+        #         raise UnprocessableEntityError(
         #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
         #         )
         #     data['original_image_url'] = uploaded_images['original_image_url']
@@ -302,12 +268,12 @@ class UserDetail(ResourceDetail):
             if has_access('is_user_itself', user_id=user.id) or has_access('is_admin'):
                 if data.get('deleted_at'):
                     if len(user.events) != 0:
-                        raise ForbiddenException(
+                        raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
                         )
                     elif len(user.orders) != 0:
-                        raise ForbiddenException(
+                        raise ForbiddenError(
                             {'source': ''},
                             "Users associated with orders cannot be deleted",
                         )
@@ -318,7 +284,7 @@ class UserDetail(ResourceDetail):
                     data['email'] = user.email
                 user.deleted_at = data.get('deleted_at')
             else:
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'source': ''}, "You are not authorized to update this information."
                 )
 
@@ -333,7 +299,7 @@ class UserDetail(ResourceDetail):
                 verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
-                raise ConflictException(
+                raise ConflictError(
                     {'pointer': '/data/attributes/email'}, "Email already exists"
                 )
 

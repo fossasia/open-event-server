@@ -461,9 +461,6 @@ class User(SoftDeletionModel):
     def __repr__(self):
         return '<User %r>' % self.email
 
-    def __str__(self):
-        return self.__repr__()
-
     def __setattr__(self, name, value):
         if name == 'details':
             super(User, self).__setattr__(name, clean_html(clean_up_string(value)))

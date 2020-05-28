@@ -6,7 +6,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
@@ -51,14 +51,14 @@ class SessionSchema(SoftDeletionSchema):
 
         if data['starts_at'] and data['ends_at']:
             if data['starts_at'] >= data['ends_at']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/ends-at'},
                     "ends-at should be after starts-at",
                 )
             if not is_patch_request and datetime.timestamp(
                 data['starts_at']
             ) <= datetime.timestamp(datetime.now()):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/starts-at'},
                     "starts-at should be after current date-time",
                 )
@@ -66,21 +66,17 @@ class SessionSchema(SoftDeletionSchema):
         if 'state' in data:
             if data['state'] not in ('draft', 'pending'):
                 if not has_access('is_coorganizer', event_id=data['event']):
-                    return ForbiddenException(
+                    raise ForbiddenError(
                         {'source': ''}, 'Co-organizer access is required.'
                     )
 
         if 'track' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
-                    {'source': ''}, 'Co-organizer access is required.'
-                )
+                raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
-                    {'source': ''}, 'Co-organizer access is required.'
-                )
+                raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
         validate_complex_fields_json(self, data, original_data)
 

@@ -1,8 +1,6 @@
 from datetime import date
-
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from sqlalchemy.orm import make_transient
-
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.models import db
@@ -31,7 +29,7 @@ class EventCopyLayer(BaseDataLayer):
             identifier = 'id'
 
         event = safe_query(
-            db, Event, identifier, view_kwargs['identifier'], 'event_' + identifier
+            Event, identifier, view_kwargs['identifier'], 'event_' + identifier
         )
         tickets = Ticket.query.filter_by(event_id=event.id).all()
         social_links = SocialLink.query.filter_by(event_id=event.id).all()

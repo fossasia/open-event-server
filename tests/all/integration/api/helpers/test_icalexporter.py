@@ -3,12 +3,12 @@ import unittest
 import icalendar
 
 from app.api.helpers.ICalExporter import ICalExporter
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
-from tests.all.integration.utils import OpenEventTestCase
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
+from tests.all.integration.utils import OpenEventLegacyTestCase
 
 
-class TestICalExporter(OpenEventTestCase):
+class TestICalExporter(OpenEventLegacyTestCase):
     def test_export_basic(self):
         """Test to export ical format event"""
         with self.app.test_request_context():

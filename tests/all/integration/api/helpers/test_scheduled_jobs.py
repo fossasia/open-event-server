@@ -1,24 +1,24 @@
 import datetime
 
+import tests.factories.common as common
 from app.api.helpers.scheduled_jobs import (
     delete_ticket_holders_no_order_id,
     event_invoices_mark_due,
     send_monthly_event_invoice,
 )
-import app.factories.common as common
-from app.factories.attendee import AttendeeFactory
-from app.factories.ticket_fee import TicketFeesFactory
-from app.factories.event_invoice import EventInvoiceFactory
-from app.factories.user import UserFactory
-from app.factories.event import EventFactoryBasic
-from app.factories.order import OrderFactory
 from app.models import db
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
-from tests.all.integration.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventLegacyTestCase
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.event_invoice import EventInvoiceFactory
+from tests.factories.order import OrderFactory
+from tests.factories.ticket_fee import TicketFeesFactory
+from tests.factories.user import UserFactory
 
 
-class TestScheduledJobs(OpenEventTestCase):
+class TestScheduledJobs(OpenEventLegacyTestCase):
     def test_event_invoices_mark_due(self):
         """Method to test marking of event invoices as due"""
 

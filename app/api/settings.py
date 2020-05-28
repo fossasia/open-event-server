@@ -64,8 +64,8 @@ class SettingDetail(ResourceDetail):
 def test_email_setup():
     recipient = request.json.get('recipient')
     if not recipient:
-        return UnprocessableEntityError(
+        raise UnprocessableEntityError(
             {'source': 'recipient'}, 'Required parameter recipient not found'
-        ).respond()
+        )
     send_test_email(recipient)
     return make_response(jsonify(message='Test mail sent, please verify delivery'), 200)

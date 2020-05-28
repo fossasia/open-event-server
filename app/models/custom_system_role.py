@@ -11,9 +11,6 @@ class CustomSysRole(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
 
-    def __init__(self, name):
-        self.name = name
-
     def can_access(self, panel_name):
         panel = PanelPermission.query.filter_by(panel_name=panel_name).first()
         for role in panel.custom_system_roles:
@@ -23,9 +20,6 @@ class CustomSysRole(db.Model):
 
     def __repr__(self):
         return '<CustomSysRole %r>' % self.name
-
-    def __str__(self):
-        return self.__repr__()
 
 
 class UserSystemRole(db.Model):
@@ -46,21 +40,5 @@ class UserSystemRole(db.Model):
     )
     role = db.relationship('CustomSysRole')
 
-    def __init__(
-        self, user=None, event=None, role=None, user_id=None, role_id=None, event_id=None
-    ):
-        if user:
-            self.user = user
-        if event:
-            self.event = event
-        if role:
-            self.role = role
-        if user_id:
-            self.user_id = user_id
-        if role_id:
-            self.role_id = role_id
-        if event_id:
-            self.event_id = event_id
-
-    def __str__(self):
+    def __repr__(self):
         return '%r as %r' % (self.user, self.role, self.event)

@@ -40,6 +40,13 @@ A demo version is automatically deployed from our repositories:
 
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
+
+**NOTE:** If you are heading towards `Local Installation`, be sure to use one of the following operating systems:
+
+
+* Debian based Linux Distros (like Ubuntu)
+* MacOS
+
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
@@ -224,23 +231,21 @@ python manage.py module -n all -s off
 
 #### Running unit tests
 
-* Open Event uses Postgres database for testing. So set `DATABASE_URL` as a postgres database. Here is an example.
+* If you have docker installed and want to run tests faster, run
 
-```sh
-export DATABASE_URL=postgresql://test_user:test@127.0.0.1:5432/opev_test
-# format is postgresql://USERNAME:PASSWORD@ADDRESS/DATABASE_NAME
-export APP_CONFIG=config.TestingConfig
+```shell script
+./scripts/test_db.sh
+```
+
+And set appropriate value of `TEST_DATABASE` in `.env`
+
+```shell script
+TEST_DATABASE_URL=postgresql://test@localhost:5433/test
 ```
 
 * Then go to the project directory and run the following command:
 ```
-python3 -m unittest discover tests/
-```
-* It will run each test one by one.
-
-* You can also use the following command to run tests using nosetests:
-```
-nosetests tests/
+pytest tests/
 ```
 
 #### Running robot framework tests
@@ -283,7 +288,7 @@ We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
 	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api-dev.herokuapp.com - Is running off of the development branch. It is hosted on Heroku.)
-	 
+
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://api.eventyay.com - Is running off of the `master` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**

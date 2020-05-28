@@ -4,8 +4,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ConflictException, ForbiddenException
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_favourite_events import UserFavouriteEventSchema
@@ -33,14 +33,14 @@ class UserFavouriteEventListPost(ResourceList):
         if 'Authorization' in request.headers:
             verify_jwt_in_request()
         else:
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, 'Only Authorized Users can favourite an event'
             )
 
         data['user'] = current_user.id
         user_favourite_event = find_user_favourite_event_by_id(event_id=data['event'])
         if user_favourite_event:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/event'}, "Event already favourited"
             )
 
@@ -69,7 +69,7 @@ class UserFavouriteEventList(ResourceList):
         """
         query_ = self.session.query(UserFavouriteEvent)
         if view_kwargs.get('user_id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         elif has_access('is_admin'):
             pass

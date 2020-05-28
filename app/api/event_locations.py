@@ -30,7 +30,7 @@ class EventLocationList(ResourceList):
         locations = []
         for location, _ in popular_locations:
             if location is not None:
-                new_location = EventLocation(location)
+                new_location = EventLocation(name=location)
                 new_location.id = len(locations)
                 locations.append(new_location)
         schema = EventLocationSchema()

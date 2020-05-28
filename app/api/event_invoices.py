@@ -4,7 +4,7 @@ from flask import jsonify, request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permissions import is_admin, jwt_required
@@ -40,17 +40,13 @@ class EventInvoiceList(ResourceList):
         :return:
         """
         query_ = self.session.query(EventInvoice)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('discount_code_id'):
-            discount_code = safe_query(
-                self,
-                DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
-                'discount_code_id',
+            discount_code = safe_query_kwargs(
+                DiscountCode, view_kwargs, 'discount_code_id',
             )
             query_ = query_.join(DiscountCode).filter(DiscountCode.id == discount_code.id)
         return query_
@@ -80,12 +76,8 @@ class EventInvoiceDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
-                'event_invoice_identifier',
+            event_invoice = safe_query_kwargs(
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -110,12 +102,8 @@ class EventInvoiceRelationshipRequired(ResourceRelationship):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
-                'event_invoice_identifier',
+            event_invoice = safe_query_kwargs(
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -141,12 +129,8 @@ class EventInvoiceRelationshipOptional(ResourceRelationship):
         :return:
         """
         if view_kwargs.get('event_invoice_identifier'):
-            event_invoice = safe_query(
-                self,
-                EventInvoice,
-                'identifier',
-                view_kwargs['event_invoice_identifier'],
-                'event_invoice_identifier',
+            event_invoice = safe_query_kwargs(
+                EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
             )
             view_kwargs['id'] = event_invoice.id
 
@@ -173,10 +157,10 @@ def create_paypal_payment_invoice(invoice_identifier):
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     event_invoice = safe_query(
-        db, EventInvoice, 'identifier', invoice_identifier, 'identifier'
+        EventInvoice, 'identifier', invoice_identifier, 'identifier'
     )
     status, response = PayPalPaymentsManager.create_payment(
         event_invoice, return_url, cancel_url
@@ -201,9 +185,9 @@ def charge_paypal_payment_invoice(invoice_identifier):
         paypal_payment_id = request.json['data']['attributes']['paypal_payment_id']
         paypal_payer_id = request.json['data']['attributes']['paypal_payer_id']
     except Exception as e:
-        return BadRequestError({'source': e}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': e}, 'Bad Request Error')
     event_invoice = safe_query(
-        db, EventInvoice, 'identifier', invoice_identifier, 'identifier'
+        EventInvoice, 'identifier', invoice_identifier, 'identifier'
     )
     # save the paypal payment_id with the order
     event_invoice.paypal_token = paypal_payment_id

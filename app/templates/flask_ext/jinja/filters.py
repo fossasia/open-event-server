@@ -1,6 +1,16 @@
-import arrow
-from forex_python.converter import CurrencyCodes
+from datetime import datetime
 
+from forex_python.converter import CurrencyCodes
+import humanize
+import pytz
+
+
+def humanize_helper(time):
+    """Returns time passed from now in a human readable duration"""
+
+    if not time:
+        return "N/A"
+    return humanize.naturaltime(datetime.now(pytz.utc) - time.astimezone(pytz.utc))
 
 def init_filters(app):
     @app.template_filter('currency_symbol')
@@ -18,6 +28,4 @@ def init_filters(app):
 
     @app.template_filter('humanize')
     def humanize_filter(time):
-        if not time:
-            return "N/A"
-        return arrow.get(time).humanize()
+        return humanize_helper(time)

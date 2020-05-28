@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -27,7 +27,7 @@ class MicrolocationListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     methods = [
         'POST',
@@ -48,11 +48,9 @@ class MicrolocationList(ResourceList):
         :return:
         """
         query_ = self.session.query(Microlocation)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('session_id'):
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             query_ = query_.join(Session).filter(Session.id == session.id)
         return query_
 
@@ -78,9 +76,7 @@ class MicrolocationDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id') is not None:
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             if session.microlocation_id is not None:
                 view_kwargs['id'] = session.microlocation_id
             else:

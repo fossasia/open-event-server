@@ -3,11 +3,11 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    UnprocessableEntityError,
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -36,7 +36,7 @@ class AccessCodeListPost(ResourceList):
         """
         require_relationship(['event', 'user'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
+            raise ForbiddenError({'source': ''}, "Minimum Organizer access required")
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -55,13 +55,13 @@ class AccessCodeListPost(ResourceList):
                         .one()
                     )
                     if not ticket_object.is_hidden:
-                        raise ConflictException(
+                        raise ConflictError(
                             {'pointer': '/data/relationships/tickets'},
                             "Ticket with id {} is public.".format(ticket)
                             + " Access code cannot be applied to public tickets",
                         )
                 except NoResultFound:
-                    raise ConflictException(
+                    raise ConflictError(
                         {'pointer': '/data/relationships/tickets'},
                         "Ticket with id {} does not exists".format(str(ticket)),
                     )
@@ -89,16 +89,16 @@ class AccessCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(AccessCode)
-        query_ = event_query(self, query_, view_kwargs, permission='is_coorganizer')
+        query_ = event_query(query_, view_kwargs, permission='is_coorganizer')
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('ticket_id'):
-            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             if not has_access('is_coorganizer', event_id=ticket.event_id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             # access_code - ticket :: many-to-many relationship
             query_ = AccessCode.query.filter(AccessCode.tickets.any(id=ticket.id))
             query_
@@ -133,7 +133,6 @@ class AccessCodeDetail(ResourceDetail):
 
         if kwargs.get('access_event_identifier'):
             event = safe_query(
-                db,
                 Event,
                 'identifier',
                 kwargs['access_event_identifier'],
@@ -161,7 +160,9 @@ class AccessCodeDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': '{id}'}, "Access Code:  not found")
 
             if not has_access('is_coorganizer', event_id=access.event_id):
-                raise UnprocessableEntity({'source': ''}, "Please verify your permission")
+                raise UnprocessableEntityError(
+                    {'source': ''}, "Please verify your permission"
+                )
 
     decorators = (
         api.has_permission(

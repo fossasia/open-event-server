@@ -4,27 +4,21 @@ import time
 from datetime import datetime
 
 import omise
-import pytz
 import requests
 from flask import Blueprint, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import (
-    safe_query,
-    safe_query_without_soft_deleted_entries,
-    save_to_db,
-)
-from app.api.helpers.errors import BadRequestError
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs, save_to_db
+from app.api.helpers.errors import (
+    BadRequestError,
+    ConflictError,
+    ForbiddenError,
+    UnprocessableEntityError,
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
@@ -49,11 +43,10 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
-from app.api.helpers.ticketing import TicketingManager
+from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
-from app.models.discount_code import DiscountCode
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
@@ -67,7 +60,7 @@ def check_event_user_ticket_holders(order, data, element):
     if element in ['event', 'user'] and data[element] != str(
         getattr(order, element, None).id
     ):
-        raise ForbiddenException(
+        raise ForbiddenError(
             {'pointer': 'data/{}'.format(element)},
             "You cannot update {} of an order".format(element),
         )
@@ -76,7 +69,7 @@ def check_event_user_ticket_holders(order, data, element):
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': 'data/{}'.format(element)},
                 "You cannot update {} of an order".format(element),
             )
@@ -102,7 +95,7 @@ def check_billing_info(data):
         and data.get('amount') > 0
         and not data.get('is_billing_enabled')
     ):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/is_billing_enabled'},
             "Billing information is mandatory for this order",
         )
@@ -113,7 +106,7 @@ def check_billing_info(data):
         and data.get('zipcode')
         and data.get('country')
     ):
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': '/data/attributes/is_billing_enabled'},
             "Billing information incomplete",
         )
@@ -155,34 +148,14 @@ class OrdersListPost(ResourceList):
 
         free_ticket_quantity = 0
 
-        for ticket_holder in data['ticket_holders']:
-            # Ensuring that the attendee exists and doesn't have an associated order.
-            try:
-                ticket_holder_object = (
-                    self.session.query(TicketHolder)
-                    .filter_by(id=int(ticket_holder), deleted_at=None)
-                    .one()
-                )
-                if ticket_holder_object.order_id:
-                    raise ConflictException(
-                        {'pointer': '/data/relationships/attendees'},
-                        "Order already exists for attendee with id {}".format(
-                            str(ticket_holder)
-                        ),
-                    )
-            except NoResultFound:
-                raise ConflictException(
-                    {'pointer': '/data/relationships/attendees'},
-                    "Attendee with id {} does not exists".format(str(ticket_holder)),
-                )
-
-            if ticket_holder_object.ticket.type == 'free':
+        for ticket_holder in validate_ticket_holders(data['ticket_holders']):
+            if ticket_holder.ticket.type == 'free':
                 free_ticket_quantity += 1
 
         if not current_user.is_verified and free_ticket_quantity == len(
             data['ticket_holders']
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
                 "Unverified user cannot place free orders",
             )
@@ -191,7 +164,7 @@ class OrdersListPost(ResourceList):
             del data['cancel_note']
 
         if data.get('payment_mode') != 'free' and not data.get('amount'):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/amount'},
                 "Amount cannot be null for a paid order",
             )
@@ -202,31 +175,11 @@ class OrdersListPost(ResourceList):
         if data.get('discount_code') and not has_access(
             'is_coorganizer', event_id=data['event']
         ):
-            discount_code = safe_query_without_soft_deleted_entries(
-                self, DiscountCode, 'id', data['discount_code'], 'discount_code_id'
+            validate_discount_code(
+                data['discount_code'],
+                ticket_holders=data['ticket_holders'],
+                event_id=data['event'],
             )
-            if not discount_code.is_active:
-                raise UnprocessableEntity(
-                    {'source': 'discount_code_id'}, "Inactive Discount Code"
-                )
-            else:
-                now = pytz.utc.localize(datetime.utcnow())
-                valid_from = discount_code.valid_from
-                valid_till = discount_code.valid_till
-                if not (valid_from <= now <= valid_till):
-                    raise UnprocessableEntity(
-                        {'source': 'discount_code_id'}, "Inactive Discount Code"
-                    )
-                if not TicketingManager.match_discount_quantity(
-                    discount_code, None, data['ticket_holders']
-                ):
-                    raise UnprocessableEntity(
-                        {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
-                    )
-            if discount_code.event.id != int(data['event']):
-                raise UnprocessableEntity(
-                    {'source': 'discount_code_id'}, "Invalid Discount Code"
-                )
 
     def after_create_object(self, order, data, view_kwargs):
         """
@@ -351,21 +304,21 @@ class OrdersList(ResourceList):
         if kwargs.get('event_id') and not has_access(
             'is_coorganizer', event_id=kwargs['event_id']
         ):
-            raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
+            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
             # orders under a user
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.id == Order.user_id).filter(
                 User.id == user.id
             )
         else:
             # orders under an event
-            query_ = event_query(self, query_, view_kwargs)
+            query_ = event_query(query_, view_kwargs)
 
         # expire the initializing orders if the time limit is over.
         orders = query_.all()
@@ -394,28 +347,22 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id'):
-            attendee = safe_query(
-                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                self,
-                Order,
-                'identifier',
-                view_kwargs['order_identifier'],
-                'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             view_kwargs['id'] = order.id
         elif view_kwargs.get('id'):
-            order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
+            order = safe_query_by_id(Order, view_kwargs['id'])
 
         if not has_access(
             'is_coorganizer_or_user_itself',
             event_id=order.event_id,
             user_id=order.user_id,
         ):
-            return ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -443,7 +390,7 @@ class OrderDetail(ResourceDetail):
         if (not has_access('is_coorganizer', event_id=order.event_id)) and (
             not current_user.id == order.user_id
         ):
-            raise ForbiddenException({'pointer': ''}, "Access Forbidden")
+            raise ForbiddenError({'pointer': ''}, "Access Forbidden")
 
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
             if current_user.id == order.user_id:
@@ -455,7 +402,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -470,7 +417,7 @@ class OrderDetail(ResourceDetail):
                             element
                         ] != getattr(order, element, None):
                             if element != 'status' and element != 'deleted_at':
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/{}'.format(element)},
                                     "You cannot update {} of an order".format(element),
                                 )
@@ -480,13 +427,13 @@ class OrderDetail(ResourceDetail):
                                 and order.status == 'completed'
                             ):
                                 # Since we don't have a refund system.
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a completed paid order",
                                 )
                             elif element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
-                                raise ForbiddenException(
+                                raise ForbiddenError(
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a cancelled order",
                                 )
@@ -495,7 +442,7 @@ class OrderDetail(ResourceDetail):
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
-                raise ForbiddenException(
+                raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
@@ -507,7 +454,7 @@ class OrderDetail(ResourceDetail):
                             and order.status == 'completed'
                             and data[element] != getattr(order, element, None)
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of a completed order".format(
                                     element
@@ -518,7 +465,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
-                            raise ForbiddenException(
+                            raise ForbiddenError(
                                 {'pointer': 'data/{}'.format(element)},
                                 "You cannot update {} of an order".format(element),
                             )
@@ -534,7 +481,7 @@ class OrderDetail(ResourceDetail):
                 )
 
         if data.get('payment_mode') == 'free' and data.get('amount') > 0:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "payment-mode cannot be free for order with amount > 0",
             )
@@ -543,7 +490,7 @@ class OrderDetail(ResourceDetail):
             and data.get('payment_mode') == 'stripe'
             and not is_payment_valid(order, 'stripe')
         ):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify stripe payment",
             )
@@ -552,7 +499,7 @@ class OrderDetail(ResourceDetail):
             and data.get('payment_mode') == 'paypal'
             and not is_payment_valid(order, 'paypal')
         ):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify paypal payment",
             )
@@ -634,13 +581,13 @@ class OrderDetail(ResourceDetail):
         :return:
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
         elif (
             order.amount
             and order.amount > 0
             and (order.status == 'completed' or order.status == 'placed')
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'source': ''}, 'You cannot delete a placed/completed paid order.'
             )
 
@@ -674,17 +621,15 @@ class OrderRelationship(ResourceRelationship):
         :return:
         """
         if kwargs.get('order_identifier'):
-            order = safe_query(
-                db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier'
-            )
+            order = safe_query_kwargs(Order, kwargs, 'order_identifier', 'identifier')
             kwargs['id'] = order.id
         elif kwargs.get('id'):
-            order = safe_query(db, Order, 'id', kwargs['id'], 'id')
+            order = safe_query_by_id(Order, kwargs['id'])
 
         if not has_access(
             'is_coorganizer', event_id=order.event_id, user_id=order.user_id
         ):
-            return ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
 
@@ -744,9 +689,9 @@ def create_paypal_payment(order_identifier):
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
 
     if status:
@@ -767,8 +712,8 @@ def verify_mobile_paypal_payment(order_identifier):
     try:
         payment_id = request.json['data']['attributes']['payment-id']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     status, error = PayPalPaymentsManager.verify_payment(payment_id, order)
     return jsonify(status=status, error=error)
 
@@ -784,7 +729,7 @@ def create_source(order_identifier):
     :return: The alipay redirection link.
     """
     try:
-        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        order = safe_query(Order, 'identifier', order_identifier, 'identifier')
         source_object = AliPayPaymentsManager.create_source(
             amount=int(order.amount),
             currency='usd',
@@ -798,7 +743,7 @@ def create_source(order_identifier):
         save_to_db(order)
         return jsonify(link=source_object.redirect['url'])
     except TypeError:
-        return BadRequestError({'source': ''}, 'Source creation error').respond()
+        raise BadRequestError({'source': ''}, 'Source creation error')
 
 
 @alipay_blueprint.route(
@@ -813,7 +758,7 @@ def alipay_return_uri(order_identifier):
     try:
         charge_response = AliPayPaymentsManager.charge_source(order_identifier)
         if charge_response.status == 'succeeded':
-            order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+            order = safe_query(Order, 'identifier', order_identifier, 'identifier')
             order.status = 'completed'
             save_to_db(order)
             return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
@@ -834,7 +779,7 @@ def omise_checkout(order_identifier):
     :return: JSON response of the payment status.
     """
     token = request.form.get('omiseToken')
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     order.status = 'completed'
     save_to_db(order)
     try:
@@ -875,7 +820,7 @@ def initiate_transaction(order_identifier):
     :param order_identifier:
     :return: JSON response containing the signature & txn token
     """
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     paytm_mode = get_settings()['paytm_mode']
     paytm_params = {}
     # body parameters

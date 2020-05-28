@@ -30,29 +30,9 @@ class RoleInvite(SoftDeletionModel):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
     role = db.relationship("Role")
 
-    hash = db.Column(db.String)
+    hash = db.Column(db.String, default=generate_hash)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     status = db.Column(db.String, default="pending")
-
-    def __init__(
-        self,
-        email=None,
-        role_name=None,
-        event_id=None,
-        role_id=None,
-        created_at=None,
-        status="pending",
-        hash=None,
-        deleted_at=None,
-    ):
-        self.email = email
-        self.role_name = role_name
-        self.event_id = event_id
-        self.role_id = role_id
-        self.created_at = created_at
-        self.status = status
-        self.hash = generate_hash()
-        self.deleted_at = deleted_at
 
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)
@@ -60,6 +40,3 @@ class RoleInvite(SoftDeletionModel):
 
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.email, self.event_id, self.role_id,)
-
-    def __str__(self):
-        return self.__repr__()

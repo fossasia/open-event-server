@@ -1,11 +1,12 @@
 import unittest
+from datetime import datetime
 
-import app.factories.common as common
+import tests.factories.common as common
 from app.api.helpers.csv_jobs_util import *
-from app.factories.attendee import AttendeeFactory
-from app.factories.order import OrderFactory
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
+from tests.factories.attendee import AttendeeFactory
+from tests.factories.order import OrderFactory
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
 from app.models import db
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
@@ -16,7 +17,7 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check the orders data export"""
 
         with self.app.test_request_context():
-            test_order = OrderFactory()
+            test_order = OrderFactory(created_at=datetime.now())
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
             self.assertEqual(field_data[1][2], 'initializing')

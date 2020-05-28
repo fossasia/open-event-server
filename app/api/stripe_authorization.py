@@ -2,11 +2,11 @@ from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import get_count, safe_query, save_to_db
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    UnprocessableEntity,
+from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    UnprocessableEntityError,
 )
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
@@ -36,7 +36,7 @@ class StripeAuthorizationListPost(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
+            raise ForbiddenError({'source': ''}, "Minimum Organizer access required")
         if (
             get_count(
                 db.session.query(Event).filter_by(
@@ -45,14 +45,14 @@ class StripeAuthorizationListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': ''}, "Stripe payment is disabled for this Event"
             )
 
     def before_create_object(self, data, view_kwargs):
         """
         method to check if stripe authorization object already exists for an event.
-        Raises ConflictException if it already exists.
+        Raises ConflictError if it already exists.
         If it doesn't, then uses the StripePaymentManager to get the other credentials from Stripe.
         :param data:
         :param view_kwargs:
@@ -67,7 +67,7 @@ class StripeAuthorizationListPost(ResourceList):
                 data['stripe_auth_code']
             )
             if 'error' in credentials:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/stripe_auth_code'},
                     credentials['error_description'],
                 )
@@ -76,7 +76,7 @@ class StripeAuthorizationListPost(ResourceList):
             data['stripe_publishable_key'] = credentials['stripe_publishable_key']
             data['stripe_user_id'] = credentials['stripe_user_id']
         else:
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/event'},
                 "Stripe Authorization already exists for this event",
             )
@@ -132,18 +132,14 @@ class StripeAuthorizationDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            stripe_authorization = safe_query(
-                self, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+            stripe_authorization = safe_query_kwargs(
+                StripeAuthorization, view_kwargs, 'event_id', 'event_id'
             )
             view_kwargs['id'] = stripe_authorization.id
 
@@ -186,15 +182,13 @@ def get_id(view_kwargs):
     """
 
     if view_kwargs.get('event_identifier') is not None:
-        event = safe_query(
-            db, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier'
-        )
+        event = safe_query_kwargs(Event, view_kwargs, 'event_identifier', 'identifier')
         if event.id is not None:
             view_kwargs['event_id'] = event.id
 
     if view_kwargs.get('event_id') is not None:
-        stripe_authorization = safe_query(
-            db, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id'
+        stripe_authorization = safe_query_kwargs(
+            StripeAuthorization, view_kwargs, 'event_id', 'event_id'
         )
         view_kwargs['id'] = stripe_authorization.id
     return view_kwargs

@@ -4,7 +4,7 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import func
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
+from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
@@ -194,9 +194,7 @@ class OrderStatisticsEventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query(
-                self, Event, 'identifier', view_kwargs['identifier'], 'identifier'
-            )
+            event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
             view_kwargs['id'] = event.id
 
     methods = ['GET']

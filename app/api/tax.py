@@ -4,12 +4,8 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import (
-    ConflictException,
-    ForbiddenException,
-    MethodNotAllowed,
-)
+from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
+from app.api.helpers.errors import ConflictError, ForbiddenError, MethodNotAllowed
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tax import TaxSchema, TaxSchemaPublic
@@ -34,7 +30,7 @@ class TaxList(ResourceList):
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
         if (
             get_count(
                 db.session.query(Event).filter_by(
@@ -59,7 +55,7 @@ class TaxList(ResourceList):
             .filter_by(event_id=data['event'], deleted_at=None)
             .first()
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/relationships/event'},
                 "Tax already exists for this event",
             )
@@ -99,18 +95,14 @@ class TaxDetail(ResourceDetail):
         """
         event = None
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
-            event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
 
         if event:
-            tax = safe_query(self, Tax, 'event_id', event.id, 'event_id')
+            tax = safe_query(Tax, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = tax.id
 
     def before_get(self, args, kwargs):

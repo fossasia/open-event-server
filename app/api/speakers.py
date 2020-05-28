@@ -4,8 +4,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query, save_to_db
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
@@ -50,9 +50,7 @@ class SpeakerListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
-                {'pointer': ''}, "Speakers are disabled for this Event"
-            )
+            raise ForbiddenError({'pointer': ''}, "Speakers are disabled for this Event")
 
         if (
             not data.get('is_email_overridden')
@@ -63,14 +61,14 @@ class SpeakerListPost(ResourceList):
             )
             > 0
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
 
         if data.get('is_email_overridden') and not has_access(
             'is_organizer', event_id=data['event']
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )
@@ -125,16 +123,14 @@ class SpeakerList(ResourceList):
         :return:
         """
         query_ = self.session.query(Speaker)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
 
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('session_id'):
-            session = safe_query(
-                self, Session, 'id', view_kwargs['session_id'], 'session_id'
-            )
+            session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
             if 'Authorization' in request.headers and not has_access(
@@ -169,7 +165,7 @@ class SpeakerDetail(ResourceDetail):
         :return:
         """
         if not can_edit_after_cfs_ends(speaker.event_id):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
             )
 
@@ -179,7 +175,7 @@ class SpeakerDetail(ResourceDetail):
         if data.get('is_email_overridden') and not has_access(
             'is_organizer', event_id=speaker.event_id
         ):
-            raise ForbiddenException(
+            raise ForbiddenError(
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )

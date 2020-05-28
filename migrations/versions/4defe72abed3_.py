@@ -23,9 +23,9 @@ def upgrade():
     op.add_column('sessions_version', sa.Column('creator_id', sa.Integer(), autoincrement=False, nullable=True))
     op.execute("""UPDATE events SET state = LOWER(state)""")
     op.execute("""UPDATE events SET state = 'draft' WHERE state != 'published'""")
-    op.execute("""UPDATE sessions SET state = LOWER(state)""")
-    op.execute("""UPDATE sessions SET state = 'draft' WHERE state not in
-    ('accepted', 'pending', 'confirmed', 'rejected')""")
+    # op.execute("""UPDATE sessions SET state = LOWER(state)""")
+    # op.execute("""UPDATE sessions SET state = 'draft' WHERE state not in
+    # ('accepted', 'pending', 'confirmed', 'rejected')""")
     # ### end Alembic commands ###
 
 

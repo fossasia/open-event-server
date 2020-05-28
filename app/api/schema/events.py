@@ -6,7 +6,7 @@ from marshmallow_jsonapi.flask import Relationship
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.event import Event
@@ -35,7 +35,7 @@ class EventSchemaPublic(SoftDeletionSchema):
         try:
             timezone(data['timezone'])
         except pytz.UnknownTimeZoneError:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/timezone'},
                 "Unknown timezone: '{}'".format(data['timezone']),
             )

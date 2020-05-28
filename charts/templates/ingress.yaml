@@ -1,0 +1,19 @@
+{{- if .Values.frontend.enable }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+  name: {{ template "open-event.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "open-event.name" . }}-frontend
+    helm.sh/chart: {{ include "open-event.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: {{ include "open-event.name" . }}
+spec:
+    backend:
+        serviceName: {{ .Values.frontend.serviceName }}
+        servicePort: {{ .Values.frontend.exportPort }}
+{{end}}
