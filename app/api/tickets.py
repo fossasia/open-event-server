@@ -36,7 +36,7 @@ class TicketListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound(
-                {'parameter': 'event_id'}, "Event: {} not found".format(data['event'])
+                {'pointer': '/data/event'}, "Event: {} not found".format(data['event'])
             )
 
         if (

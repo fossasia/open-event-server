@@ -38,7 +38,7 @@ class SpeakerListPost(ResourceList):
             event = db.session.query(Event).filter_by(id=data['event']).one()
             if event.state == "draft":
                 raise ObjectNotFound(
-                    {'parameter': 'event_id'},
+                    {'pointer': '/data/event'},
                     "Event: {} not found".format(data['event_id']),
                 )
 
@@ -166,7 +166,7 @@ class SpeakerDetail(ResourceDetail):
         """
         if not can_edit_after_cfs_ends(speaker.event_id):
             raise ForbiddenError(
-                {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
+                "Cannot edit speaker after the call for speaker is ended"
             )
 
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:

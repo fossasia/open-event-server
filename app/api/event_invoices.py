@@ -156,8 +156,8 @@ def create_paypal_payment_invoice(invoice_identifier):
     try:
         return_url = request.json['data']['attributes']['return-url']
         cancel_url = request.json['data']['attributes']['cancel-url']
-    except TypeError:
-        raise BadRequestError({'source': ''}, 'Bad Request Error')
+    except TypeError as e:
+        raise BadRequestError({'source': e}, 'Bad Request Error')
 
     event_invoice = safe_query(
         EventInvoice, 'identifier', invoice_identifier, 'identifier'

@@ -30,7 +30,7 @@ def send_receipt():
             not has_access('is_registrar', event_id=order.event_id)
         ):
             raise ForbiddenError(
-                {'source': ''},
+                {'parameter': 'order_identifier'},
                 'You need to be the event organizer or order buyer to send receipts.',
             )
         elif order.status != 'completed':
@@ -43,4 +43,5 @@ def send_receipt():
             send_email_to_attendees(order, current_user.id)
             return jsonify(message="receipt sent to attendees")
     else:
-        raise UnprocessableEntityError({'source': ''}, 'Order identifier missing')
+        raise UnprocessableEntityError({'source': 'order-identifier'},
+                                       'Order identifier missing')

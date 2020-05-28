@@ -33,7 +33,7 @@ class FeedbackListPost(ResourceList):
         require_relationship(['user'], data)
         if not has_access('is_user_itself', user_id=int(data['user'])):
             raise ObjectNotFound(
-                {'parameter': 'user_id'},
+                {'pointer': '/data/user'},
                 "User: {} doesn't match auth key".format(data['user']),
             )
         if 'event' in data and 'session' in data:
@@ -56,7 +56,9 @@ class FeedbackListPost(ResourceList):
         if data.get('session', None):
             session = Session.query.filter_by(id=data['session']).first()
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+                raise ForbiddenError(
+                    {'pointer': '/data/session'}, "Event co-organizer access required"
+                )
 
     schema = FeedbackSchema
     methods = [
@@ -141,16 +143,18 @@ class FeedbackDetail(ResourceDetail):
             session = Session.query.filter_by(id=feedback.session_id).first()
             if session and not current_user.id == feedback.user_id:
                 raise ForbiddenError(
-                    {'source': ''}, "Feedback can be updated only by user himself"
+                    {'source': 'User'}, "Feedback can be updated only by user himself"
                 )
             if session and not has_access('is_coorganizer', event_id=session.event_id):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+                raise ForbiddenError(
+                    {'parameter': 'feedback'}, "Event co-organizer access required"
+                )
         if feedback and data.get('deleted_at'):
             if has_access('is_user_itself', user_id=feedback.user_id):
                 delete_feedback(feedback)
             else:
                 raise ForbiddenError(
-                    {'source': ''}, "Feedback can be deleted only by user himself"
+                    {'pointer': '/data/deleted_at'}, "Feedback can be deleted only by user himself"
                 )
 
     decorators = (

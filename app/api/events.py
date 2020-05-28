@@ -70,9 +70,10 @@ from app.models.users_events_role import UsersEventsRoles
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
-        raise ForbiddenError({'source': ''}, "Please verify your Email")
+        raise ForbiddenError("Please verify your Email")
     elif not modules.ticket_include:
-        raise ForbiddenError({'source': ''}, "Ticketing is not enabled in the system")
+        raise ForbiddenError({'source': 'Ticket'},
+                             "Ticketing is not enabled in the system")
     if (
         data.get('can_pay_by_paypal', False)
         or data.get('can_pay_by_cheque', False)
@@ -80,7 +81,9 @@ def validate_event(user, modules, data):
         or data.get('can_pay_by_stripe', False)
     ):
         if not modules.payment_include:
-            raise ForbiddenError({'source': ''}, "Payment is not enabled in the system")
+            raise ForbiddenError(
+                {'source': 'Payment'}, "Payment is not enabled in the system"
+            )
     if data.get('is_donation_enabled', False) and not modules.donation_include:
         raise ForbiddenError(
             {'source': '/data/attributes/is-donation-enabled'},
@@ -88,7 +91,10 @@ def validate_event(user, modules, data):
         )
 
     if data.get('state', None) == 'published' and not user.can_publish_event():
-        raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
+        raise ForbiddenError(
+            {'source': '/data/attributes/state'},
+            "Only verified accounts can publish events"
+        )
 
     if (
         not data.get('is_event_online')
@@ -191,7 +197,7 @@ class EventList(ResourceList):
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_id'}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
                 query_.join(Event.roles)
@@ -204,7 +210,7 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_owner_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_owner_id'}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_owner_id')
             query_ = (
                 query_.join(Event.roles)
@@ -217,7 +223,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_organizer_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_organizer_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_organizer_id')
 
             query_ = (
@@ -231,7 +238,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_coorganizer_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_coorganizer_id')
             query_ = (
                 query_.join(Event.roles)
@@ -244,7 +252,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_track_organizer_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_track_organizer_id'},
+                                     'Access Forbidden')
             user = safe_query(
                 User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id',
             )
@@ -259,7 +268,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_registrar_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_registrar_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_registrar_id')
             query_ = (
                 query_.join(Event.roles)
@@ -272,7 +282,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_moderator_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_moderator_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_moderator_id')
             query_ = (
                 query_.join(Event.roles)
@@ -285,7 +296,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_marketer_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_marketer_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_marketer_id')
             query_ = (
                 query_.join(Event.roles)
@@ -298,7 +310,8 @@ class EventList(ResourceList):
             if not has_access(
                 'is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])
             ):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
+                raise ForbiddenError({'parameter': 'user_sales_admin_id'},
+                                     'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_sales_admin_id')
             query_ = (
                 query_.join(Event.roles)
@@ -325,7 +338,8 @@ class EventList(ResourceList):
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
             event_id = get_id(view_kwargs)['id']
             if not has_access('is_coorganizer', event_id=event_id):
-                raise ForbiddenError({'source': ''}, 'Coorganizer access is required')
+                raise ForbiddenError({'parameter': 'discount_code_id'},
+                                     'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
             )
@@ -718,7 +732,7 @@ class EventDetail(ResourceDetail):
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
                 raise ForbiddenError(
-                    {'source': ''}, "Event associated with orders cannot be deleted"
+                    {'pointer': 'data/deleted_at'}, "Event associated with orders cannot be deleted"
                 )
             else:
                 event.deleted_at = data.get('deleted_at')
