@@ -16,8 +16,7 @@ def test_no_amount(db):
     amount_data = calculate_order_amount([])
 
     assert amount_data['total'] == 0.0
-    assert amount_data['tax_included'] is None
-    assert amount_data['tax'] == 0.0
+    assert amount_data['tax'] is None
     assert amount_data['discount'] == 0.0
     assert amount_data['tickets'] == []
 
@@ -29,8 +28,7 @@ def test_single_ticket(db):
     amount_data = calculate_order_amount([{'id': ticket.id}])
 
     assert amount_data['total'] == 10.0
-    assert amount_data['tax_included'] is None
-    assert amount_data['tax'] == 0.0
+    assert amount_data['tax'] is None
     assert amount_data['discount'] == 0.0
     ticket_dict = amount_data['tickets'][0]
     assert ticket_dict['id'] == ticket.id
@@ -73,8 +71,7 @@ def test_multiple_tickets(db):
     amount_data = calculate_order_amount(tickets)
 
     assert amount_data['total'] == 628.8
-    assert amount_data['tax_included'] is None
-    assert amount_data['tax'] == 0.0
+    assert amount_data['tax'] is None
     assert amount_data['discount'] == 0.0
     ticket_dict = amount_data['tickets'][0]
     assert ticket_dict['id'] == ticket.id
@@ -139,8 +136,7 @@ def test_donation_ticket(db):
     amount_data = calculate_order_amount(ticket_dict)
 
     assert amount_data['total'] == 80.26
-    assert amount_data['tax_included'] is None
-    assert amount_data['tax'] == 0.0
+    assert amount_data['tax'] is None
     assert amount_data['discount'] == 0.0
     ticket_dict = amount_data['tickets'][0]
     assert ticket_dict['price'] == 10
@@ -152,7 +148,7 @@ def test_donation_ticket(db):
 
 
 def _create_taxed_tickets(db, tax_included=True, discount_code=None):
-    tax = TaxSubFactory(rate=18.0, is_tax_included_in_price=tax_included)
+    tax = TaxSubFactory(name='GST', rate=18.0, is_tax_included_in_price=tax_included)
     tickets = _create_tickets([123.5, 456.3], event=tax.event)
     tickets += [
         TicketSubFactory(
@@ -180,9 +176,10 @@ def test_tax_included(db):
 
     assert amount_data['sub_total'] == 4441.3
     assert amount_data['total'] == 4441.3
-    assert amount_data['tax_included'] is True
-    assert amount_data['tax_percent'] == 18.0
-    assert amount_data['tax'] == 799.43
+    assert amount_data['tax']['included'] is True
+    assert amount_data['tax']['percent'] == 18.0
+    assert amount_data['tax']['amount'] == 799.43
+    assert amount_data['tax']['name'] == 'GST'
     assert amount_data['discount'] == 0.0
 
 
@@ -193,9 +190,10 @@ def test_tax_excluded(db):
 
     assert amount_data['sub_total'] == 4441.3
     assert amount_data['total'] == pytest.approx(4441.3 + 799.43)
-    assert amount_data['tax_included'] is False
-    assert amount_data['tax_percent'] == 18.0
-    assert amount_data['tax'] == 799.43
+    assert amount_data['tax']['included'] is False
+    assert amount_data['tax']['percent'] == 18.0
+    assert amount_data['tax']['amount'] == 799.43
+    assert amount_data['tax']['name'] == 'GST'
     assert amount_data['discount'] == 0.0
 
 
@@ -209,8 +207,7 @@ def test_discount_code(db):
     amount_data = calculate_order_amount([{'id': ticket.id}], discount_code.id)
 
     assert amount_data['total'] == 90.0
-    assert amount_data['tax_included'] is None
-    assert amount_data['tax'] == 0.0
+    assert amount_data['tax'] is None
     assert amount_data['discount'] == 10.0
     ticket_dict = amount_data['tickets'][0]
     assert ticket_dict['id'] == ticket.id
@@ -309,8 +306,9 @@ def test_discount_code_more_amount(db):
 
 
 def _assert_tax_data_discount(amount_data):
-    assert amount_data['tax_percent'] == 18.0
-    assert amount_data['tax'] == 723.94
+    assert amount_data['tax']['percent'] == 18.0
+    assert amount_data['tax']['amount'] == 723.94
+    assert amount_data['tax']['name'] == 'GST'
     assert amount_data['discount'] == 419.43
     assert amount_data['tickets'][0]['discount'] is None
     assert amount_data['tickets'][0]['sub_total'] == 247.0
@@ -340,7 +338,7 @@ def test_tax_included_with_discount(db):
 
     assert amount_data['sub_total'] == 4021.87
     assert amount_data['total'] == 4021.87
-    assert amount_data['tax_included'] is True
+    assert amount_data['tax']['included'] is True
     _assert_tax_data_discount(amount_data)
 
 
@@ -354,7 +352,7 @@ def test_tax_excluded_with_discount(db):
 
     assert amount_data['sub_total'] == 4021.87
     assert amount_data['total'] == 4745.81
-    assert amount_data['tax_included'] is False
+    assert amount_data['tax']['included'] is False
     _assert_tax_data_discount(amount_data)
 
 
@@ -412,7 +410,7 @@ def test_request_calculate_order_amount(client, db):
     amount_data = json.loads(response.data)
     assert amount_data['sub_total'] == 4021.87
     assert amount_data['total'] == 4745.81
-    assert amount_data['tax_included'] is False
+    assert amount_data['tax']['included'] is False
     _assert_tax_data_discount(amount_data)
 
 
@@ -429,9 +427,9 @@ def test_request_calculate_order_amount_without_discount(client, db):
     amount_data = json.loads(response.data)
     assert amount_data['sub_total'] == 4441.3
     assert amount_data['total'] == pytest.approx(4441.3 + 799.43)
-    assert amount_data['tax_included'] is False
-    assert amount_data['tax_percent'] == 18.0
-    assert amount_data['tax'] == 799.43
+    assert amount_data['tax']['included'] is False
+    assert amount_data['tax']['percent'] == 18.0
+    assert amount_data['tax']['amount'] == 799.43
     assert amount_data['discount'] == 0.0
 
 
