@@ -18,6 +18,7 @@ from app.api.helpers.notification import (
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
+from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
@@ -115,8 +116,8 @@ def resend_emails():
 
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 def calculate_amount():
-    data = request.get_json()
-    return jsonify(calculate_order_amount(data['tickets'], data.get('discount-code')))
+    data, errors = OrderAmountInputSchema().load(request.get_json())
+    return jsonify(calculate_order_amount(data['tickets'], data.get('discount_code')))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
