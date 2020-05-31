@@ -66,7 +66,7 @@ def test_multiple_tickets(db):
     ticket3 = TicketSubFactory(price=233.15, event=ticket.event)
     db.session.commit()
 
-    tickets = _create_ticket_dict([ticket, ticket2, ticket3], [3, 1, 2])
+    tickets = _create_ticket_dict([ticket3, ticket2, ticket], [2, 1, 3])
 
     amount_data = calculate_order_amount(tickets)
 
@@ -98,7 +98,7 @@ def _create_donation_tickets(db):
     )
     db.session.commit()
 
-    return _create_ticket_dict(tickets, [3, 1, 2])
+    return _create_ticket_dict(tickets[::-1], [2, 1, 3])
 
 
 def _expect_donation_error(ticket_dict):
@@ -131,7 +131,7 @@ def test_donation_ticket_with_higher_price(db):
 
 def test_donation_ticket(db):
     ticket_dict = _create_donation_tickets(db)
-    ticket_dict[-1]['price'] = 15.13
+    ticket_dict[0]['price'] = 15.13
 
     amount_data = calculate_order_amount(ticket_dict)
 
