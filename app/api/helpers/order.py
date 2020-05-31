@@ -187,6 +187,7 @@ def calculate_order_amount(tickets, discount_code=None):
     from app.api.helpers.ticketing import validate_tickets, validate_discount_code
 
     ticket_ids = [ticket['id'] for ticket in tickets]
+    ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
 
     if tickets and discount_code:
@@ -195,7 +196,8 @@ def calculate_order_amount(tickets, discount_code=None):
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
-    for ticket_info, ticket in zip(tickets, fetched_tickets):
+    for ticket in fetched_tickets:
+        ticket_info = ticket_map[ticket.id]
         discount_amount = 0.0
         discount_data = None
         ticket_fee = 0.0
