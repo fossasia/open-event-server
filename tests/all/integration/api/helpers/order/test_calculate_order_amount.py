@@ -222,6 +222,21 @@ def test_discount_code(db):
     assert ticket_dict['discount']['code'] == discount_code.code
 
 
+def test_no_amount_with_discount(db):
+    ticket = TicketSubFactory(price=100.0)
+    discount_code = DiscountCodeTicketSubFactory(
+        type='percent', value=10.0, tickets=[ticket]
+    )
+    db.session.commit()
+
+    amount_data = calculate_order_amount([], discount_code.id)
+
+    assert amount_data['total'] == 0.0
+    assert amount_data['tax'] is None
+    assert amount_data['discount'] == 0.0
+    assert amount_data['tickets'] == []
+
+
 def test_multiple_tickets_discount(db):
     ticket_a = TicketSubFactory(price=50.0)
     ticket_b = TicketSubFactory(price=495.8, event=ticket_a.event)

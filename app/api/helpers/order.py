@@ -189,7 +189,7 @@ def calculate_order_amount(tickets, discount_code=None):
     ticket_ids = [ticket['id'] for ticket in tickets]
     fetched_tickets = validate_tickets(ticket_ids)
 
-    if discount_code:
+    if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
 
     event = tax = tax_included = fees = None
