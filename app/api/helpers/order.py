@@ -278,7 +278,7 @@ def calculate_order_amount(tickets, discount_code=None):
             included=tax_included,
             amount=round(total_tax, 2),
             percent=tax.rate if tax else 0.0,
-            name=tax.name
+            name=tax.name,
         )
 
     return dict(
