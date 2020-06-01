@@ -178,7 +178,7 @@ def test_tax_included(db):
     assert amount_data['total'] == 4441.3
     assert amount_data['tax']['included'] is True
     assert amount_data['tax']['percent'] == 18.0
-    assert amount_data['tax']['amount'] == 799.43
+    assert amount_data['tax']['amount'] == 677.49
     assert amount_data['tax']['name'] == 'GST'
     assert amount_data['discount'] == 0.0
 
@@ -322,7 +322,6 @@ def test_discount_code_more_amount(db):
 
 def _assert_tax_data_discount(amount_data):
     assert amount_data['tax']['percent'] == 18.0
-    assert amount_data['tax']['amount'] == 723.94
     assert amount_data['tax']['name'] == 'GST'
     assert amount_data['discount'] == 419.43
     assert amount_data['tickets'][0]['discount'] is None
@@ -355,6 +354,7 @@ def test_tax_included_with_discount(db):
     assert amount_data['total'] == 4021.87
     assert amount_data['tax']['included'] is True
     _assert_tax_data_discount(amount_data)
+    assert amount_data['tax']['amount'] == 613.51
 
 
 def test_tax_excluded_with_discount(db):
@@ -369,6 +369,7 @@ def test_tax_excluded_with_discount(db):
     assert amount_data['total'] == 4745.81
     assert amount_data['tax']['included'] is False
     _assert_tax_data_discount(amount_data)
+    assert amount_data['tax']['amount'] == 723.94
 
 
 def test_deleted_ticket(db):
@@ -427,6 +428,7 @@ def test_request_calculate_order_amount(client, db):
     assert amount_data['total'] == 4745.81
     assert amount_data['tax']['included'] is False
     _assert_tax_data_discount(amount_data)
+    assert amount_data['tax']['amount'] == 723.94
 
 
 def test_request_calculate_order_amount_without_discount(client, db):
