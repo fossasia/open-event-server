@@ -2,11 +2,12 @@ import json
 from datetime import datetime
 
 import pytz
-from flask import Blueprint, jsonify, make_response, request
+from flask import Blueprint, app, jsonify, make_response, request
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
+from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import get_count, safe_query
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
@@ -19,7 +20,7 @@ from app.api.helpers.notification import (
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
-from app.api.custom.schema.order_amount import OrderAmountInputSchema
+from app.api.orders import validate_attendees
 from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
@@ -156,7 +157,17 @@ def create_order():
         db.session.rollback()
         raise e
 
-    return jsonify(order_amount)
+    validate_attendees({attendee.id for attendee in attendees})
+    order = Order(
+        amount=order_amount['total'],
+        event=event,
+        discount_code_id=data.get('discount_code'),
+        ticket_holders=attendees,
+    )
+    db.session.commit()
+    order.populate_and_save()
+
+    return OrderSchema().dumps(order)
 
 
 @order_blueprint.route('/complete-order/<order_id>', methods=['PATCH'])

@@ -1,15 +1,17 @@
 import json
 
 import pytest
-
-from tests.factories.discount_code import DiscountCodeTicketSubFactory
-from .test_calculate_order_amount import _create_taxed_tickets, _create_tickets
-from tests.factories.user import UserFactory
 from flask_jwt_extended.utils import create_access_token
+
+from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
+from tests.factories.attendee import AttendeeFactoryBase
+from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory, OrderSubFactory
-from tests.factories.attendee import AttendeeFactoryBase
+from tests.factories.user import UserFactory
+
+from .test_calculate_order_amount import _create_taxed_tickets, _create_tickets
 
 
 @pytest.fixture
@@ -39,11 +41,34 @@ def test_create_order(client, db, jwt):
     assert TicketHolder.query.count() == 12
 
     assert response.status_code == 200
-    amount_data = json.loads(response.data)
-    assert amount_data['sub_total'] == 4021.87
-    assert amount_data['total'] == 4745.81
-    assert amount_data['tax']['included'] is False
-    assert amount_data['tax']['amount'] == 723.94
+    order_dict = json.loads(response.data)
+    order = Order.query.get(order_dict['data']['id'])
+    assert order_dict['data']['attributes']['amount'] == 4745.81
+    assert order.amount == 4745.81
+    assert len(order.ticket_holders) == 12
+    assert order.discount_code == discount_code
+
+
+def test_create_order_without_discount(client, db, jwt):
+    tickets_dict = _create_taxed_tickets(db, tax_included=False)
+    db.session.commit()
+
+    response = client.post(
+        '/v1/orders/create-order',
+        content_type='application/json',
+        headers=jwt,
+        data=json.dumps({'tickets': tickets_dict}),
+    )
+
+    assert TicketHolder.query.count() == 12
+
+    assert response.status_code == 200
+    order_dict = json.loads(response.data)
+    order = Order.query.get(order_dict['data']['id'])
+    assert order_dict['data']['attributes']['amount'] == 5240.73
+    assert order.amount == 5240.73
+    assert len(order.ticket_holders) == 12
+    assert order.discount_code is None
 
 
 def test_throw_ticket_sold_out(client, db, jwt):
@@ -71,17 +96,9 @@ def test_throw_ticket_sold_out(client, db, jwt):
     assert TicketHolder.query.count() == 0
 
     assert response.status_code == 409
-    assert json.loads(response.data) == {
-        'errors': [
-            {
-                'detail': 'Ticket 5 already sold out',
-                'source': {'id': 5},
-                'status': 409,
-                'title': 'Conflict',
-            }
-        ],
-        'jsonapi': {'version': '1.0'},
-    }
+    error_dict = json.loads(response.data)
+    assert error_dict['errors'][0]['title'] == 'Conflict'
+    assert 'already sold out' in error_dict['errors'][0]['detail']
 
 
 def test_throw_empty_tickets(client, db, jwt):
