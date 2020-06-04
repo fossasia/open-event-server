@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 import pytz
@@ -117,100 +118,45 @@ def resend_emails():
 @order_blueprint.route('/calculate-amount', methods=['POST'])
 def calculate_amount():
     data, errors = OrderAmountInputSchema().load(request.get_json())
+    if errors:
+        return make_response(jsonify(errors), 422)
     return jsonify(calculate_order_amount(data['tickets'], data.get('discount_code')))
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
-    data = request.get_json()
-    tickets, discount_code = data['tickets'], data['discount-code']
-    attendee = data['attendee']
-    for attribute in attendee:
-        attendee[attribute.replace('-', '_')] = attendee.pop(attribute)
-    schema = AttendeeSchema()
-    json_api_attendee = {"data": {"attributes": data['attendee'], "type": "attendee"}}
-    result = schema.load(json_api_attendee)
-    if result.errors:
-        return make_response(jsonify(result.errors), 422)
-    ticket_ids = {int(ticket['id']) for ticket in tickets}
-    quantity = {int(ticket['id']): ticket['quantity'] for ticket in tickets}
-    ticket_list = (
-        db.session.query(Ticket)
-        .filter(Ticket.id.in_(ticket_ids))
-        .filter_by(event_id=data['event_id'], deleted_at=None)
-        .all()
-    )
-    ticket_ids_found = {ticket_information.id for ticket_information in ticket_list}
-    tickets_not_found = ticket_ids - ticket_ids_found
-    if tickets_not_found:
-        return make_response(
-            jsonify(
-                status='Order Unsuccessful',
-                error='Tickets with id {} were not found in Event {}.'.format(
-                    tickets_not_found, data['event_id']
-                ),
-            ),
-            404,
-        )
-    for ticket_info in ticket_list:
-        if (
-            ticket_info.quantity
-            - get_count(
-                db.session.query(TicketHolder.id).filter_by(
-                    ticket_id=int(ticket_info.id), deleted_at=None
-                )
-            )
-        ) < quantity[ticket_info.id]:
-            return make_response(
-                jsonify(status='Order Unsuccessful', error='Ticket already sold out.'),
-                409,
-            )
-    attendee_list = []
-    for ticket in tickets:
-        for _ in range(ticket['quantity']):
-            attendee = TicketHolder(
-                **result[0], event_id=int(data['event_id']), ticket_id=int(ticket['id'])
-            )
-            db.session.add(attendee)
-            attendee_list.append(attendee)
-    # created_at not getting filled
-    ticket_pricing = calculate_order_amount(tickets, discount_code)
-    if not has_access('is_coorganizer', event_id=data['event_id']):
-        data['status'] = 'initializing'
-    # create on site attendees
-    # check if order already exists for this attendee.
-    # check for free tickets and verified user
-    order = Order(
-        amount=ticket_pricing['total_amount'],
-        user_id=current_user.id,
-        event_id=int(data['event_id']),
-        status=data['status'],
-    )
-    db.session.add(order)
-    db.session.commit()
-    db.session.refresh(order)
-    order_tickets = {}
-    for holder in attendee_list:
-        holder.order_id = order.id
-        db.session.add(holder)
-        if not order_tickets.get(holder.ticket_id):
-            order_tickets[holder.ticket_id] = 1
-        else:
-            order_tickets[holder.ticket_id] += 1
+    data, errors = OrderAmountInputSchema().load(request.get_json())
+    if errors:
+        return make_response(jsonify(errors), 422)
 
-    for ticket in order_tickets:
-        od = OrderTicket(
-            order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
-        )
-        db.session.add(od)
+    tickets_dict = data['tickets']
+    order_amount = calculate_order_amount(tickets_dict, data.get('discount_code'))
+    ticket_ids = {ticket['id'] for ticket in tickets_dict}
+    ticket_map = {int(ticket['id']): ticket for ticket in tickets_dict}
+    tickets = (
+        Ticket.query.filter_by(deleted_at=None).filter(Ticket.id.in_(ticket_ids)).all()
+    )
 
-    order.quantity = order.tickets_count
-    db.session.add(order)
-    db.session.commit()
-    db.session.refresh(order)
-    order_schema = OrderSchema()
-    return order_schema.dump(order)
+    if not tickets:
+        raise UnprocessableEntityError(
+            {'source': 'tickets'}, "Tickets missing in Order request",
+        )
+
+    event = tickets[0].event
+
+    try:
+        attendees = []
+        for ticket in tickets:
+            for _ in range(ticket_map[ticket.id]['quantity']):
+                ticket.raise_if_unavailable()
+                attendees.append(TicketHolder(firstname='', lastname='', ticket=ticket))
+                db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
+
+    return jsonify(order_amount)
 
 
 @order_blueprint.route('/complete-order/<order_id>', methods=['PATCH'])

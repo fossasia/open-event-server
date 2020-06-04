@@ -1,6 +1,7 @@
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
+from app.api.helpers.errors import ConflictError
 
 access_codes_tickets = db.Table(
     'access_codes_tickets',
@@ -107,6 +108,22 @@ class Ticket(SoftDeletionModel):
         """
         tag_names = [tag.name for tag in self.tags]
         return ','.join(tag_names)
+
+    @property
+    def reserved_count(self):
+        from app.api.attendees import get_sold_and_reserved_tickets_count
+
+        return get_sold_and_reserved_tickets_count(self.id)
+
+    @property
+    def is_available(self):
+        sold = self.reserved_count
+        print(sold, self.quantity)
+        return sold < self.quantity
+
+    def raise_if_unavailable(self):
+        if not self.is_available:
+            raise ConflictError({'id': self.id}, f"Ticket {self.id} already sold out")
 
     def __repr__(self):
         return '<Ticket %r>' % self.name
