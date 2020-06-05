@@ -1,8 +1,8 @@
 import factory
 
+from app.models.order import Order
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.order import Order
 
 
 class OrderFactoryBase(BaseFactory):

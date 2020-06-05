@@ -85,7 +85,7 @@ class Order(SoftDeletionModel):
     last4 = db.Column(db.String)
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
-    status = db.Column(db.String, default='pending')
+    status = db.Column(db.String, default='initializing')
     cancel_note = db.Column(db.String, nullable=True)
     order_notes = db.Column(db.String)
     tickets_pdf_url = db.Column(db.String)
@@ -134,3 +134,10 @@ class Order(SoftDeletionModel):
             )
         else:
             return 0.0
+
+    # Saves the order and generates and sends appropriate
+    # documents and notifications
+    def populate_and_save(self):
+        from app.api.orders import save_order
+
+        save_order(self)

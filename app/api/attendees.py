@@ -7,7 +7,6 @@ from sqlalchemy import and_, or_
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.errors import (
-    ConflictError,
     ForbiddenError,
     UnprocessableEntityError,
 )
@@ -85,10 +84,7 @@ class AttendeeListPost(ResourceList):
                 "Ticket belongs to a different Event",
             )
         # Check if the ticket is already sold out or not.
-        if get_sold_and_reserved_tickets_count(ticket.id) >= ticket.quantity:
-            raise ConflictError(
-                {'pointer': '/data/attributes/ticket_id'}, "Ticket already sold out"
-            )
+        ticket.raise_if_unavailable()
 
         if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
             if 'is_checked_in' not in data or not data['is_checked_in']:

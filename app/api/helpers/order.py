@@ -186,16 +186,18 @@ def calculate_order_amount(tickets, discount_code=None):
     from app.models.discount_code import DiscountCode
     from app.api.helpers.ticketing import validate_tickets, validate_discount_code
 
-    ticket_ids = [ticket['id'] for ticket in tickets]
+    ticket_ids = {ticket['id'] for ticket in tickets}
+    ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
 
-    if discount_code:
+    if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
 
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
-    for ticket_info, ticket in zip(tickets, fetched_tickets):
+    for ticket in fetched_tickets:
+        ticket_info = ticket_map[ticket.id]
         discount_amount = 0.0
         discount_data = None
         ticket_fee = 0.0
@@ -267,17 +269,24 @@ def calculate_order_amount(tickets, discount_code=None):
         )
 
     sub_total = total_amount
+    tax_dict = None
     if tax:
-        total_tax = total_amount * tax.rate / 100
-        if not tax_included:
+        if tax_included:
+            total_tax = total_amount - total_amount / (1 + tax.rate / 100)
+        else:
+            total_tax = total_amount * tax.rate / 100
             total_amount += total_tax
+        tax_dict = dict(
+            included=tax_included,
+            amount=round(total_tax, 2),
+            percent=tax.rate if tax else 0.0,
+            name=tax.name,
+        )
 
     return dict(
-        tax_included=tax_included,
+        tax=tax_dict,
         sub_total=round(sub_total, 2),
         total=round(total_amount, 2),
-        tax=round(total_tax, 2),
-        tax_percent=tax.rate if tax else 0.0,
         discount=round(total_discount, 2),
         tickets=ticket_list,
     )
