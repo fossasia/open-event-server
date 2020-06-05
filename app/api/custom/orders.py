@@ -20,12 +20,11 @@ from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.orders import validate_attendees
-from app.api.schema.attendees import AttendeeSchema
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
 from app.models.custom_form import CustomForms
-from app.models.order import Order, OrderTicket
+from app.models.order import Order
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
