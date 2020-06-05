@@ -186,7 +186,7 @@ def calculate_order_amount(tickets, discount_code=None):
     from app.models.discount_code import DiscountCode
     from app.api.helpers.ticketing import validate_tickets, validate_discount_code
 
-    ticket_ids = [ticket['id'] for ticket in tickets]
+    ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
 
