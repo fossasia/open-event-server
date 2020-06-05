@@ -83,7 +83,7 @@ from app.api.event_sub_topics import (
 )
 from app.api.event_topics import EventTopicDetail, EventTopicList, EventTopicRelationship
 from app.api.event_types import EventTypeDetail, EventTypeList, EventTypeRelationship
-from app.api.events import EventDetail, EventList, EventRelationship
+from app.api.events import EventDetail, EventList, EventRelationship, UpcomingEventList
 from app.api.events_role_permission import (
     EventsRolePermissionDetail,
     EventsRolePermissionList,
@@ -608,6 +608,12 @@ api.route(
     '/users/<int:user_moderator_id>/moderator-events',
     '/users/<int:user_marketer_id>/marketer-events',
     '/users/<int:user_sales_admin_id>/sales-admin-events',
+)
+
+api.route(
+    UpcomingEventList,
+    'upcoming_event_list',
+    '/events/upcoming',
 )
 
 api.route(
