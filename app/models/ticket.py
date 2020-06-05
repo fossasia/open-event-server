@@ -117,9 +117,7 @@ class Ticket(SoftDeletionModel):
 
     @property
     def is_available(self):
-        sold = self.reserved_count
-        print(sold, self.quantity)
-        return sold < self.quantity
+        return self.reserved_count < self.quantity
 
     def raise_if_unavailable(self):
         if not self.is_available:

@@ -8,15 +8,19 @@ from app.models.ticket_holder import TicketHolder
 from tests.factories.attendee import AttendeeFactoryBase
 from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
-from tests.factories.order import OrderFactory, OrderSubFactory
+from tests.factories.order import OrderSubFactory
 from tests.factories.user import UserFactory
 
-from .test_calculate_order_amount import _create_taxed_tickets, _create_tickets
+from .test_calculate_order_amount import (
+    _create_taxed_tickets,
+    _create_tickets,
+    _create_ticket_dict,
+)
 
 
 @pytest.fixture
 def jwt(db):
-    user = UserFactory()
+    user = UserFactory(is_verified=False)
     db.session.commit()
 
     return {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
@@ -117,6 +121,33 @@ def test_throw_empty_tickets(client, db, jwt):
                 "source": {"source": "tickets"},
                 "title": "Unprocessable Entity",
                 "detail": "Tickets missing in Order request",
+            }
+        ],
+        "jsonapi": {"version": "1.0"},
+    }
+
+
+def test_throw_free_tickets(client, db, jwt):
+    tickets = _create_tickets([0, 0], event=EventFactoryBasic(), type='free')
+    db.session.commit()
+    response = client.post(
+        '/v1/orders/create-order',
+        content_type='application/json',
+        headers=jwt,
+        data=json.dumps({'tickets': _create_ticket_dict(tickets, [1, 2])}),
+    )
+
+    assert response.status_code == 403
+    assert json.loads(response.data) == {
+        "errors": [
+            {
+                "status": 403,
+                "source": {
+                    "pointer": "/data/relationships/user",
+                    "code": "unverified-user",
+                },
+                "title": "Access Forbidden",
+                "detail": "Unverified user cannot place free orders",
             }
         ],
         "jsonapi": {"version": "1.0"},

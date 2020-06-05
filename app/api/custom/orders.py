@@ -1,8 +1,7 @@
-import json
 from datetime import datetime
 
 import pytz
-from flask import Blueprint, app, jsonify, make_response, request
+from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
