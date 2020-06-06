@@ -112,6 +112,96 @@ def check_billing_info(data):
         )
 
 
+def on_order_completed(order):
+    # send e-mail and notifications if the order status is completed
+    if not (order.status == 'completed' or order.status == 'placed'):
+        return
+    # fetch tickets attachment
+    order_identifier = order.identifier
+
+    key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
+    ticket_path = (
+        'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+        + order_identifier
+        + '.pdf'
+    )
+
+    key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+    invoice_path = (
+        'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+        + order_identifier
+        + '.pdf'
+    )
+
+    # send email and notifications.
+    send_email_to_attendees(
+        order=order,
+        purchaser_id=current_user.id,
+        attachments=[ticket_path, invoice_path],
+    )
+
+    send_notif_to_attendees(order, current_user.id)
+
+    if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+        order.completed_at = datetime.utcnow()
+
+    order_url = make_frontend_url(
+        path='/orders/{identifier}'.format(identifier=order.identifier)
+    )
+    for organizer in set(
+        order.event.organizers + order.event.coorganizers + [order.event.owner]
+    ):
+        if not organizer:
+            continue
+        send_notif_ticket_purchase_organizer(
+            organizer,
+            order.invoice_number,
+            order_url,
+            order.event.name,
+            order.identifier,
+        )
+
+
+def save_order(order):
+    order_tickets = {}
+    for holder in order.ticket_holders:
+        save_to_db(holder)
+        if not order_tickets.get(holder.ticket_id):
+            order_tickets[holder.ticket_id] = 1
+        else:
+            order_tickets[holder.ticket_id] += 1
+
+    order.user = current_user
+
+    # create pdf tickets.
+    create_pdf_tickets_for_holder(order)
+
+    for ticket in order_tickets:
+        od = OrderTicket(
+            order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
+        )
+        save_to_db(od)
+
+    order.quantity = order.tickets_count
+    save_to_db(order)
+
+    on_order_completed(order)
+
+
+def validate_attendees(ticket_holders):
+    free_ticket_quantity = 0
+
+    for ticket_holder in validate_ticket_holders(ticket_holders):
+        if ticket_holder.ticket.type == 'free':
+            free_ticket_quantity += 1
+
+    if not current_user.is_verified and free_ticket_quantity == len(ticket_holders):
+        raise ForbiddenError(
+            {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
+            "Unverified user cannot place free orders",
+        )
+
+
 class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
@@ -145,20 +235,7 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-
-        free_ticket_quantity = 0
-
-        for ticket_holder in validate_ticket_holders(data['ticket_holders']):
-            if ticket_holder.ticket.type == 'free':
-                free_ticket_quantity += 1
-
-        if not current_user.is_verified and free_ticket_quantity == len(
-            data['ticket_holders']
-        ):
-            raise ForbiddenError(
-                {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
-                "Unverified user cannot place free orders",
-            )
+        validate_attendees(data['ticket_holders'])
 
         if data.get('cancel_note'):
             del data['cancel_note']
@@ -189,88 +266,7 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        order_tickets = {}
-        for holder in order.ticket_holders:
-            save_to_db(holder)
-            if not order_tickets.get(holder.ticket_id):
-                order_tickets[holder.ticket_id] = 1
-            else:
-                order_tickets[holder.ticket_id] += 1
-
-        order.user = current_user
-
-        # create pdf tickets.
-        create_pdf_tickets_for_holder(order)
-
-        for ticket in order_tickets:
-            od = OrderTicket(
-                order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket]
-            )
-            save_to_db(od)
-
-        order.quantity = order.tickets_count
-        save_to_db(order)
-        #         if not has_access('is_coorganizer', event_id=data['event']):
-        #             TicketingManager.calculate_update_amount(order)
-
-        # send e-mail and notifications if the order status is completed
-        if order.status == 'completed' or order.status == 'placed':
-            # fetch tickets attachment
-            order_identifier = order.identifier
-
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = (
-                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = (
-                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            # send email and notifications.
-            send_email_to_attendees(
-                order=order,
-                purchaser_id=current_user.id,
-                attachments=[ticket_path, invoice_path],
-            )
-
-            send_notif_to_attendees(order, current_user.id)
-
-            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-                order.completed_at = datetime.utcnow()
-
-            order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
-            )
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
-            for coorganizer in order.event.coorganizers:
-                send_notif_ticket_purchase_organizer(
-                    coorganizer,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
+        save_order(order)
 
         data['user_id'] = current_user.id
 

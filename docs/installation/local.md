@@ -159,6 +159,7 @@ sudo dnf install redis
 
 # For macOS
 brew install redis
+brew services start redis
 
 # Run Celery
 # socketio has problems with celery "blocking" tasks

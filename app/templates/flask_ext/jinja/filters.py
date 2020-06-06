@@ -12,6 +12,7 @@ def humanize_helper(time):
         return "N/A"
     return humanize.naturaltime(datetime.now(pytz.utc) - time.astimezone(pytz.utc))
 
+
 def init_filters(app):
     @app.template_filter('currency_symbol')
     def currency_symbol_filter(currency_code):
