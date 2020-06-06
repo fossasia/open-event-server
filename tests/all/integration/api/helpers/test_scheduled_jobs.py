@@ -15,14 +15,13 @@ from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.attendee import (
-    AttendeeFactory,
     AttendeeFactoryBase,
     AttendeeOrderSubFactory,
     AttendeeSubFactory,
 )
 from tests.factories.event import EventFactoryBasic
-from tests.factories.event_invoice import EventInvoiceFactory, EventInvoiceSubFactory
-from tests.factories.order import OrderFactory, OrderSubFactory
+from tests.factories.event_invoice import EventInvoiceSubFactory
+from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.user import UserFactory
 
@@ -99,7 +98,7 @@ def test_send_monthly_invoice(db):
         completed_at=datetime.datetime.now() - datetime.timedelta(days=30),
         amount=100,
     )
-    test_ticket_holder = AttendeeSubFactory(event=test_order.event, order=test_order)
+    AttendeeSubFactory(event=test_order.event, order=test_order)
     db.session.commit()
 
     send_monthly_event_invoice()
@@ -113,9 +112,9 @@ def test_expire_initializing_tickets(db):
         created_at=datetime.datetime.now(timezone.utc)
         - timedelta(minutes=order_expiry_time)
     )
-    attendees_old = AttendeeSubFactory.create_batch(3, order=order_old)
+    AttendeeSubFactory.create_batch(3, order=order_old)
     order_new = OrderSubFactory()
-    attendees_new = AttendeeSubFactory.create_batch(2, order=order_new)
+    AttendeeSubFactory.create_batch(2, order=order_new)
     db.session.commit()
 
     expire_initializing_tickets()
@@ -131,12 +130,12 @@ def test_expire_pending_tickets(db):
         status='pending',
         created_at=datetime.datetime.now(timezone.utc) - timedelta(minutes=45),
     )
-    attendees_old = AttendeeSubFactory.create_batch(3, order=order_old)
+    AttendeeSubFactory.create_batch(3, order=order_old)
     order_new = OrderSubFactory(
         status='pending',
         created_at=datetime.datetime.now(timezone.utc) - timedelta(minutes=15),
     )
-    attendees_new = AttendeeSubFactory.create_batch(2, order=order_new)
+    AttendeeSubFactory.create_batch(2, order=order_new)
     db.session.commit()
 
     expire_pending_tickets()

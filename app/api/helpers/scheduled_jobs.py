@@ -217,14 +217,16 @@ def expire_initializing_tickets():
         (Order.created_at + datetime.timedelta(minutes=order_expiry_time))
         <= datetime.datetime.now(datetime.timezone.utc),
     )
+    # pytype: disable=attribute-error
     TicketHolder.query.filter(TicketHolder.order_id.in_(query.subquery())).delete(
         synchronize_session=False
     )
+    # pytype: enable=attribute-error
     query.update({'status': 'expired'})
 
     try:
         db.session.commit()
-    except:
+    except Exception:
         db.session.rollback()
         raise
 
