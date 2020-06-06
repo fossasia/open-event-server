@@ -9,21 +9,17 @@ from app.api.helpers.scheduled_jobs import (
     expire_pending_tickets,
     send_monthly_event_invoice,
 )
-from app.models import db
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.attendee import (
     AttendeeFactoryBase,
     AttendeeOrderSubFactory,
     AttendeeSubFactory,
 )
-from tests.factories.event import EventFactoryBasic
 from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
-from tests.factories.user import UserFactory
 
 
 def test_delete_ticket_holder_created_currently(db):
