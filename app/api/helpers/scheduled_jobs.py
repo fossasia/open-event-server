@@ -200,104 +200,114 @@ def send_event_fee_notification_followup():
 
 @celery.task(base=RequestContextTask, name='expire.pending.tickets')
 def expire_pending_tickets():
-    from app.instance import current_app as app
+    Order.query.filter(
+        Order.status == 'pending',
+        (Order.created_at + datetime.timedelta(minutes=30))
+        <= datetime.datetime.now(datetime.timezone.utc),
+    ).update({'status': 'expired'})
+    db.session.commit()
 
-    with app.app_context():
-        db.session.query(Order).filter(
-            Order.status == 'pending',
-            (Order.created_at + datetime.timedelta(minutes=30))
-            <= datetime.datetime.now(),
-        ).update({'status': 'expired'})
+
+@celery.task(base=RequestContextTask, name='expire.initializing.tickets')
+def expire_initializing_tickets():
+    order_expiry_time = get_settings()['order_expiry_time']
+    query = db.session.query(Order.id).filter(
+        Order.status == 'initializing',
+        Order.paid_via == None,
+        (Order.created_at + datetime.timedelta(minutes=order_expiry_time))
+        <= datetime.datetime.now(datetime.timezone.utc),
+    )
+    TicketHolder.query.filter(TicketHolder.order_id.in_(query.subquery())).delete(
+        synchronize_session=False
+    )
+    query.update({'status': 'expired'})
+
+    try:
         db.session.commit()
+    except:
+        db.session.rollback()
+        raise
 
 
 @celery.task(base=RequestContextTask, name='delete.ticket.holders.no.order.id')
 def delete_ticket_holders_no_order_id():
-    from app.instance import current_app as app
-
-    with app.app_context():
-        order_expiry_time = get_settings()['order_expiry_time']
-        TicketHolder.query.filter(
-            TicketHolder.order_id == None,
-            TicketHolder.deleted_at.is_(None),
-            TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
-            < datetime.datetime.utcnow(),
-        ).delete(synchronize_session=False)
-        db.session.commit()
+    order_expiry_time = get_settings()['order_expiry_time']
+    TicketHolder.query.filter(
+        TicketHolder.order_id == None,
+        TicketHolder.deleted_at.is_(None),
+        TicketHolder.created_at + datetime.timedelta(minutes=order_expiry_time)
+        < datetime.datetime.utcnow(),
+    ).delete(synchronize_session=False)
+    db.session.commit()
 
 
 @celery.task(base=RequestContextTask, name='event.invoices.mark.due')
 def event_invoices_mark_due():
-    from app.instance import current_app as app
-
-    with app.app_context():
-        db.session.query(EventInvoice).filter(
-            EventInvoice.status == 'upcoming',
-            Event.id == EventInvoice.event_id,
-            Event.ends_at >= datetime.datetime.now(),
-            (
-                EventInvoice.created_at + datetime.timedelta(days=30)
-                <= datetime.datetime.now()
-            ),
-        ).update({EventInvoice.status: 'due'}, synchronize_session=False)
+    db.session.query(EventInvoice).filter(
+        EventInvoice.status == 'upcoming',
+        Event.id == EventInvoice.event_id,
+        Event.ends_at >= datetime.datetime.now(),
+        (
+            EventInvoice.created_at + datetime.timedelta(days=30)
+            <= datetime.datetime.now()
+        ),
+    ).update({EventInvoice.status: 'due'}, synchronize_session=False)
 
 
 @celery.task(base=RequestContextTask, name='send.monthly.event.invoice')
 def send_monthly_event_invoice():
-    from app.instance import current_app as app
+    events = Event.query.filter_by(deleted_at=None, state='published').all()
 
-    with app.app_context():
-        events = Event.query.filter_by(deleted_at=None, state='published').all()
-        for event in events:
-            # calculate net & gross revenues
-            user = event.owner
-            admin_info = get_settings()
-            currency = event.payment_currency
-            try:
-                ticket_fee_object = (
-                    db.session.query(TicketFees).filter_by(currency=currency).one()
-                )
-            except NoResultFound:
-                logger.error('Ticket Fee not found for event id {id}'.format(id=event.id))
-                continue
-
-            ticket_fee_percentage = ticket_fee_object.service_fee
-            ticket_fee_maximum = ticket_fee_object.maximum_fee
-            orders = Order.query.filter_by(event=event).all()
-            gross_revenue = event.calc_monthly_revenue()
-            invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
-            if invoice_amount > ticket_fee_maximum:
-                invoice_amount = ticket_fee_maximum
-            net_revenue = gross_revenue - invoice_amount
-            payment_details = {
-                'tickets_sold': event.tickets_sold,
-                'gross_revenue': gross_revenue,
-                'net_revenue': net_revenue,
-                'amount_payable': invoice_amount,
-            }
-            # save invoice as pdf
-            pdf = create_save_pdf(
-                render_template(
-                    'pdf/event_invoice.html',
-                    orders=orders,
-                    user=user,
-                    admin_info=admin_info,
-                    currency=currency,
-                    event=event,
-                    ticket_fee_object=ticket_fee_object,
-                    payment_details=payment_details,
-                    net_revenue=net_revenue,
-                ),
-                UPLOAD_PATHS['pdf']['event_invoice'],
-                dir_path='/static/uploads/pdf/event_invoices/',
-                identifier=event.identifier,
+    for event in events:
+        # calculate net & gross revenues
+        user = event.owner
+        admin_info = get_settings()
+        currency = event.payment_currency
+        try:
+            ticket_fee_object = (
+                db.session.query(TicketFees).filter_by(currency=currency).one()
             )
-            # save event_invoice info to DB
+        except NoResultFound:
+            logger.error('Ticket Fee not found for event id {id}'.format(id=event.id))
+            continue
 
-            event_invoice = EventInvoice(
-                amount=invoice_amount, invoice_pdf_url=pdf, event_id=event.id
-            )
-            save_to_db(event_invoice)
+        ticket_fee_percentage = ticket_fee_object.service_fee
+        ticket_fee_maximum = ticket_fee_object.maximum_fee
+        orders = Order.query.filter_by(event=event).all()
+        gross_revenue = event.calc_monthly_revenue()
+        invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
+        if invoice_amount > ticket_fee_maximum:
+            invoice_amount = ticket_fee_maximum
+        net_revenue = gross_revenue - invoice_amount
+        payment_details = {
+            'tickets_sold': event.tickets_sold,
+            'gross_revenue': gross_revenue,
+            'net_revenue': net_revenue,
+            'amount_payable': invoice_amount,
+        }
+        # save invoice as pdf
+        pdf = create_save_pdf(
+            render_template(
+                'pdf/event_invoice.html',
+                orders=orders,
+                user=user,
+                admin_info=admin_info,
+                currency=currency,
+                event=event,
+                ticket_fee_object=ticket_fee_object,
+                payment_details=payment_details,
+                net_revenue=net_revenue,
+            ),
+            UPLOAD_PATHS['pdf']['event_invoice'],
+            dir_path='/static/uploads/pdf/event_invoices/',
+            identifier=event.identifier,
+        )
+        # save event_invoice info to DB
+
+        event_invoice = EventInvoice(
+            amount=invoice_amount, invoice_pdf_url=pdf, event_id=event.id
+        )
+        save_to_db(event_invoice)
 
 
 @celery.on_after_configure.connect
@@ -318,13 +328,15 @@ def setup_scheduled_task(sender, **kwargs):
     sender.add_periodic_task(
         crontab(hour=5, minute=30), change_session_state_on_event_completion
     )
-    # Every 45 minutes
-    sender.add_periodic_task(crontab(minute='*/45'), expire_pending_tickets)
     # Every 1st day of month at 0:00
     sender.add_periodic_task(
         crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice
     )
     # Every day at 5:00
     sender.add_periodic_task(crontab(minute=0, hour=5), event_invoices_mark_due)
+    # Every 25 minutes
+    sender.add_periodic_task(crontab(minute='*/25'), expire_pending_tickets)
+    # Every 10 minutes
+    sender.add_periodic_task(crontab(minute='*/10'), expire_initializing_tickets)
     # Every 5 minutes
     sender.add_periodic_task(crontab(minute='*/5'), delete_ticket_holders_no_order_id)
