@@ -1178,9 +1178,6 @@ Delete a single event.
 
 
 ## Upcoming Events Collection [/v1/events/upcoming{?page%5bsize%5d,page%5bnumber%5d}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     
 ### List All Upcoming Events [GET]
 Get a list of upcoming events.
@@ -1392,7 +1389,7 @@ Get a list of upcoming events.
                         "code-of-conduct": "example",
                         "state": "published",
                         "latitude": 1.23456789,
-                        "starts-at": "2020-07-14T23:59:59.123456+00:00",
+                        "starts-at": "2099-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "example",
                         "can-pay-by-cheque": true,
                         "can-pay-by-omise": false,
@@ -1406,7 +1403,7 @@ Get a list of upcoming events.
                         "ical-url": null,
                         "name": "example",
                         "can-pay-by-bank": true,
-                        "ends-at": "2020-07-15T23:59:59.123456+00:00",
+                        "ends-at": "2099-12-14T23:59:59.123456+00:00",
                         "created-at": "2020-06-07T15:22:37.205399+00:00",
                         "longitude": 1.23456789,
                         "bank-details": "example",
