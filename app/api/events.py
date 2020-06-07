@@ -871,13 +871,7 @@ class UpcomingEventList(EventList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and (
-            has_access('is_admin') or kwargs.get('user_id')
-        ):
-            self.schema = EventSchema
-        else:
-            self.schema = EventSchemaPublic
-
+        super().before_get(args, kwargs)
         self.schema.self_view_many = 'v1.upcoming_event_list'
 
     def query(self, view_kwargs):
@@ -889,11 +883,10 @@ class UpcomingEventList(EventList):
         current_time = datetime.now(pytz.utc)
         query_ = self.session.query(Event).filter(
             Event.ends_at > current_time,
-            Event.state=='published',
-            Event.privacy=='public').order_by(Event.starts_at)
+            Event.state == 'published',
+            Event.privacy == 'public').order_by(Event.starts_at)
         return query_
 
-    schema = EventSchema
     data_layer = {
         'session': db.session,
         'model': Event,
