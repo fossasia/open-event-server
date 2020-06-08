@@ -1,9 +1,9 @@
 import factory
 
 import tests.factories.common as common
+from app.models.custom_form import CustomForms
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
-from app.models.custom_form import CustomForms
 
 
 class CustomFormFactory(BaseFactory):

@@ -3,8 +3,8 @@ from xml.etree.ElementTree import fromstring, tostring
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.xcal import XCalExporter
-from tests.factories.event import EventFactoryBasic
 from tests.all.integration.utils import OpenEventTestCase
+from tests.factories.event import EventFactoryBasic
 
 
 class TestXCalExport(OpenEventTestCase):

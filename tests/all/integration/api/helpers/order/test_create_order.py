@@ -13,8 +13,8 @@ from tests.factories.user import UserFactory
 
 from .test_calculate_order_amount import (
     _create_taxed_tickets,
-    _create_tickets,
     _create_ticket_dict,
+    _create_tickets,
 )
 
 

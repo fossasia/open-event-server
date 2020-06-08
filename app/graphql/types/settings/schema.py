@@ -1,8 +1,8 @@
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from app.models.setting import Setting
 from app.api.schema.settings import SettingSchemaPublic
 from app.graphql.utils.fields import extract_from_marshmallow
+from app.models.setting import Setting
 
 
 class Settings(SQLAlchemyObjectType):

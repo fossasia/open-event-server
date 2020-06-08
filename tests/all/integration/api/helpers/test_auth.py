@@ -1,4 +1,5 @@
 from flask_login import login_user, logout_user
+
 from app.api.helpers.auth import AuthManager
 from app.models.user import User
 from tests.all.integration.auth_helper import create_user
