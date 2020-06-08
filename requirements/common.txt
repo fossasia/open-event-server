@@ -17,7 +17,7 @@ psycopg2-binary==2.8.5
 SQLAlchemy-Utils==0.36.6
 itsdangerous==1.1
 humanize==2.4.0
-celery==4.4.3
+celery==4.4.5
 redis==3.5.3
 apscheduler==3.6.3
 pillow==7.1.2
