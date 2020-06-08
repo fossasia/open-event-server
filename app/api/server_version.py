@@ -1,6 +1,5 @@
 from flask import Blueprint, current_app, jsonify
 
-
 info_route = Blueprint('info', __name__)
 
 

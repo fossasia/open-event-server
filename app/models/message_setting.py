@@ -1,5 +1,5 @@
-from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import func
 
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.system_notifications import NOTIFS

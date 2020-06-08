@@ -7,8 +7,8 @@ from app.api.helpers.db import (
     get_count,
     get_or_create,
     safe_query,
-    save_to_db,
     safe_query_by_id,
+    save_to_db,
 )
 from app.models.event import Event
 from app.models.ticket_holder import TicketHolder

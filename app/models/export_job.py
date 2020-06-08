@@ -1,5 +1,5 @@
-from sqlalchemy.sql import func
 from sqlalchemy.orm import backref
+from sqlalchemy.sql import func
 
 from app.models import db
 

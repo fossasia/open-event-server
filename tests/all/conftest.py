@@ -1,10 +1,11 @@
 import pytest
+
 from app.models import db as _db
 from tests.all.integration.setup_database import (
+    Environment,
     Setup,
     create_app,
     set_settings,
-    Environment,
 )
 
 
