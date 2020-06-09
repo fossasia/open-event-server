@@ -1,29 +1,17 @@
 import json
 
-import pytest
-from flask_jwt_extended.utils import create_access_token
-
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
 from tests.factories.attendee import AttendeeFactoryBase
 from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderSubFactory
-from tests.factories.user import UserFactory
 
 from .test_calculate_order_amount import (
     _create_taxed_tickets,
     _create_ticket_dict,
     _create_tickets,
 )
-
-
-@pytest.fixture
-def jwt(db):
-    user = UserFactory(is_verified=False)
-    db.session.commit()
-
-    return {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
 
 
 def test_create_order(client, db, jwt):
