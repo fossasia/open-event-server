@@ -43,15 +43,14 @@ def db(database, connection):
 
     options = dict(bind=connection, binds={})
     session = database.create_scoped_session(options=options)
-    old_session = database.session
-    database.session = session
+    old_session = database._session
     # For proxying session in factories and flask-json-restapi
     database._session = session
 
     yield database
 
     session.remove()
-    database.session = old_session
+    database._session = old_session
     transaction.rollback()
 
 

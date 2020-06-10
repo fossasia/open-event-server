@@ -445,7 +445,6 @@ class OrderDetail(ResourceDetail):
                 )
             else:
                 for element in data:
-                    print(element)
                     if data[element]:
                         if (
                             element == 'is_billing_enabled'

@@ -2,11 +2,8 @@ import json
 
 from app.models.order import Order
 from tests.factories.attendee import AttendeeSubFactory
-from tests.factories.discount_code import DiscountCodeTicketSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderSubFactory
-
-from .test_calculate_order_amount import _create_taxed_tickets
 
 
 def create_order(db, user):
