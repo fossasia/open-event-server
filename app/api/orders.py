@@ -64,7 +64,7 @@ def check_event_user_ticket_holders(order, data, element):
             {'pointer': 'data/{}'.format(element)},
             "You cannot update {} of an order".format(element),
         )
-    elif element in ['ticket_holders', 'attendees']:
+    elif element == 'ticket_holders':
         ticket_holders = []
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
@@ -388,14 +388,14 @@ class OrderDetail(ResourceDetail):
         ):
             raise ForbiddenError({'pointer': ''}, "Access Forbidden")
 
-        unupdatable_relationships = ['event', 'ticket_holders', 'user', 'attendees']
+        relationships = ['event', 'ticket_holders', 'user']
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
                     if data[element]:
                         if (
-                            element not in unupdatable_relationships
+                            element not in relationships
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
@@ -410,9 +410,9 @@ class OrderDetail(ResourceDetail):
                 # Order created from the public pages.
                 for element in data:
                     if data[element]:
-                        if element not in unupdatable_relationships and data[
-                            element
-                        ] != getattr(order, element, None):
+                        if element not in relationships and data[element] != getattr(
+                            order, element, None
+                        ):
                             if element != 'status' and element != 'deleted_at':
                                 raise ForbiddenError(
                                     {'pointer': 'data/{}'.format(element)},
@@ -445,6 +445,7 @@ class OrderDetail(ResourceDetail):
                 )
             else:
                 for element in data:
+                    print(element)
                     if data[element]:
                         if (
                             element == 'is_billing_enabled'
@@ -458,7 +459,7 @@ class OrderDetail(ResourceDetail):
                                 ),
                             )
                         elif (
-                            element not in unupdatable_relationships
+                            element not in relationships
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):

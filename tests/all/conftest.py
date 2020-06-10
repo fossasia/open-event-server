@@ -56,8 +56,13 @@ def db(database, connection):
 
 
 @pytest.fixture
-def jwt(db):
-    user = UserFactory(is_verified=False)
+def user(db):
+    user = UserFactory(is_admin=False, is_verified=False)
     db.session.commit()
 
+    return user
+
+
+@pytest.fixture
+def jwt(user):
     return {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
