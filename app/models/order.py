@@ -33,13 +33,7 @@ def get_updatable_fields():
         'paid_via',
         'order_notes',
         'deleted_at',
-        'user',
         'payment_mode',
-        'event',
-        'discount_code_id',
-        'discount_code',
-        'ticket_holders',
-        'user',
         'tickets_pdf_url',
         'is_billing_enabled',
     ]

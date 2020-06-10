@@ -1,4 +1,5 @@
 import pytest
+from flask_jwt_extended.utils import create_access_token
 
 from app.models import db as _db
 from tests.all.integration.setup_database import (
@@ -7,6 +8,7 @@ from tests.all.integration.setup_database import (
     create_app,
     set_settings,
 )
+from tests.factories.user import UserFactory
 
 
 @pytest.fixture(scope='module')
@@ -41,11 +43,25 @@ def db(database, connection):
 
     options = dict(bind=connection, binds={})
     session = database.create_scoped_session(options=options)
-    old_session = database.session
-    database.session = session
+    old_session = database._session
+    # For proxying session in factories and flask-json-restapi
+    database._session = session
 
     yield database
 
     session.remove()
-    database.session = old_session
+    database._session = old_session
     transaction.rollback()
+
+
+@pytest.fixture
+def user(db):
+    user = UserFactory(is_admin=False, is_verified=False)
+    db.session.commit()
+
+    return user
+
+
+@pytest.fixture
+def jwt(user):
+    return {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
