@@ -1,7 +1,6 @@
 import sys
 
 from flask_sqlalchemy import SQLAlchemy
-from objproxies import CallbackProxy
 from sqlalchemy_continuum import make_versioned
 from sqlalchemy_continuum.plugins import FlaskPlugin
 
@@ -13,5 +12,6 @@ db = SQLAlchemy()
 # to a nested transaction which is rolled backed
 # after each test
 if 'pytest' in sys.modules:
+    from objproxies import CallbackProxy
     db._session = db.session
     db.session = CallbackProxy(lambda: db._session)
