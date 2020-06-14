@@ -143,7 +143,8 @@ class RoleInviteDetail(ResourceDetail):
         ):
             raise ForbiddenError({'pointer': '/data/event'}, 'Owner access is required.')
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
-            raise UnprocessableEntityError({'parameter': 'role_invite'}, "User not registered")
+            raise UnprocessableEntityError({'parameter': 'role_invite'},
+                                           "User not registered")
         if not has_access('is_organizer', event_id=role_invite.event_id) and (
             len(list(data.keys())) > 1 or 'status' not in data
         ):
@@ -153,7 +154,8 @@ class RoleInviteDetail(ResourceDetail):
             if role_invite.role_name == 'owner' and not has_access(
                 'is_owner', event_id=role_invite.event_id
             ):
-                raise ForbiddenError({'parameter': 'role_invite'}, 'Owner access is required.')
+                raise ForbiddenError({'parameter': 'role_invite'},
+                                     'Owner access is required.')
             if role_invite.role_name != 'owner' and not has_access(
                 'is_organizer', event_id=role_invite.event_id
             ):
@@ -192,20 +194,20 @@ def accept_invite():
     token = request.json['data']['token']
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
-    except NoResultFound as e:
-        raise NotFoundError({'source': e}, 'Role Invite Not Found')
+    except NoResultFound:
+        raise NotFoundError({'source': 'role'}, 'Role Invite Not Found')
     else:
         try:
             user = User.query.filter_by(email=role_invite.email).first()
-        except NoResultFound as e:
+        except NoResultFound:
             raise NotFoundError(
-                {'source': e}, 'User corresponding to role invite not Found'
+                {'source': 'role'}, 'User corresponding to role invite not Found'
             )
         try:
             role = Role.query.filter_by(name=role_invite.role_name).first()
-        except NoResultFound as e:
+        except NoResultFound:
             raise NotFoundError(
-                {'source': e}, 'Role corresponding to role invite not Found'
+                {'source': 'role'}, 'Role corresponding to role invite not Found'
             )
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = (
@@ -245,7 +247,7 @@ def fetch_user():
     token = request.json['data']['token']
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
-    except NoResultFound as e:
-        raise NotFoundError({'source': e}, 'Role Invite Not Found')
+    except NoResultFound:
+        raise NotFoundError({'source': 'role'}, 'Role Invite Not Found')
     else:
         return jsonify({"email": role_invite.email})

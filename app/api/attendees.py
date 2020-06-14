@@ -135,7 +135,7 @@ class AttendeeList(ResourceList):
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id
             ):
-                raise ForbiddenError({'parameter': 'order_identifier'},
+                raise ForbiddenError({'source': 'order.event'},
                                      'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
@@ -148,7 +148,7 @@ class AttendeeList(ResourceList):
         if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
-                raise ForbiddenError({'parameter': 'user_id'}, 'Access Forbidden')
+                raise ForbiddenError({'source': 'attendee'}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(
                 User.id == user.id
             )

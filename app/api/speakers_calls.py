@@ -99,7 +99,7 @@ class SpeakersCallDetail(ResourceDetail):
                         "Speakers call date can\'t be after the event start date",
                     )
             except NoResultFound as e:
-                raise ObjectNotFound({'source': e}, "Object: not found")
+                raise ObjectNotFound("Object: not found")
             kwargs['id'] = speakers_call.id
 
     def before_get_object(self, view_kwargs):

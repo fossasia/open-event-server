@@ -154,7 +154,8 @@ class FeedbackDetail(ResourceDetail):
                 delete_feedback(feedback)
             else:
                 raise ForbiddenError(
-                    {'pointer': '/data/deleted_at'}, "Feedback can be deleted only by user himself"
+                    {'pointer': '/data/deleted_at'},
+                    "Feedback can be deleted only by user himself"
                 )
 
     decorators = (

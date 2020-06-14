@@ -24,8 +24,8 @@ def event_invoices(invoice_identifier):
             identifier=invoice_identifier
         ).first()
         event_id = event_invoice.event_id
-    except NoResultFound as e:
-        raise NotFoundError({'source': e}, 'Event Invoice not found')
+    except NoResultFound:
+        raise NotFoundError({'source': 'invoice'}, 'Event Invoice not found')
     if not current_user.is_organizer(event_id) and not current_user.is_staff:
         raise ForbiddenError('Unauthorized Access')
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
@@ -36,9 +36,9 @@ def event_invoices(invoice_identifier):
     )
     try:
         return return_file('event-invoice', file_path, invoice_identifier)
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         raise ObjectNotFound(
-            {'source': e},
+            {'source': 'invoice'},
             "The Event Invoice isn't available at the moment. \
                              Invoices are usually issued on the 1st of every month",
         )
@@ -50,8 +50,8 @@ def order_invoices(order_identifier):
     if current_user:
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
-        except NoResultFound as e:
-            raise NotFoundError({'source': e}, 'Order Invoice not found')
+        except NoResultFound:
+            raise NotFoundError({'source': 'invoice'}, 'Order Invoice not found')
         if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             file_path = (
