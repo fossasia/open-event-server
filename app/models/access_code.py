@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
+
 from sqlalchemy.sql import func
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 

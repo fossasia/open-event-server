@@ -1,8 +1,9 @@
 import random
 from datetime import datetime, timedelta
-from sqlalchemy.sql import func
+
 import pytz
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.sql import func
 
 from app.models import db
 from app.models.base import SoftDeletionModel

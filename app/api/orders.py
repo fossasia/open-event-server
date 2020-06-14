@@ -390,13 +390,14 @@ class OrderDetail(ResourceDetail):
         ):
             raise ForbiddenError({'pointer': ''}, "Access Forbidden")
 
+        relationships = ['event', 'ticket_holders', 'user']
         if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
                     if data[element]:
                         if (
-                            element not in ['event', 'ticket_holders', 'user']
+                            element not in relationships
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):
@@ -411,9 +412,9 @@ class OrderDetail(ResourceDetail):
                 # Order created from the public pages.
                 for element in data:
                     if data[element]:
-                        if element not in ['event', 'ticket_holders', 'user'] and data[
-                            element
-                        ] != getattr(order, element, None):
+                        if element not in relationships and data[element] != getattr(
+                            order, element, None
+                        ):
                             if element != 'status' and element != 'deleted_at':
                                 raise ForbiddenError(
                                     {'pointer': 'data/{}'.format(element)},
@@ -459,7 +460,7 @@ class OrderDetail(ResourceDetail):
                                 ),
                             )
                         elif (
-                            element not in ['event', 'ticket_holders', 'user']
+                            element not in relationships
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
                         ):

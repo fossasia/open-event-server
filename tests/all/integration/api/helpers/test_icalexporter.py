@@ -3,9 +3,9 @@ import unittest
 import icalendar
 
 from app.api.helpers.ICalExporter import ICalExporter
+from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
-from tests.all.integration.utils import OpenEventLegacyTestCase
 
 
 class TestICalExporter(OpenEventLegacyTestCase):

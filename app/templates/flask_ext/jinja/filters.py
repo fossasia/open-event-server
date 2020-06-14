@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from forex_python.converter import CurrencyCodes
 import humanize
 import pytz
+from forex_python.converter import CurrencyCodes
 
 
 def humanize_helper(time):

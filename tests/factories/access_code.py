@@ -1,11 +1,11 @@
 import factory
 
 import tests.factories.common as common
+from app.models.access_code import AccessCode
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.ticket import TicketFactory
 from tests.factories.user import UserFactory
-from app.models.access_code import AccessCode
 
 
 class AccessCodeFactory(BaseFactory):

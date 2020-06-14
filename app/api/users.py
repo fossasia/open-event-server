@@ -7,11 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
-from app.api.helpers.errors import (
-    ConflictError,
-    ForbiddenError,
-    UnprocessableEntityError,
-)
+from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import (
     send_email_change_user_email,

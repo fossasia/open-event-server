@@ -1,6 +1,8 @@
 from datetime import date
+
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from sqlalchemy.orm import make_transient
+
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.models import db

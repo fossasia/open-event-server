@@ -6,10 +6,7 @@ from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs
-from app.api.helpers.errors import (
-    ForbiddenError,
-    UnprocessableEntityError,
-)
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query

@@ -1,10 +1,11 @@
 import datetime
+import logging
 
 import pytz
 from dateutil.relativedelta import relativedelta
-from sqlalchemy.orm.exc import NoResultFound
 from flask import render_template
 from flask_celeryext import RequestContextTask
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
@@ -31,7 +32,6 @@ from app.models.speaker import Speaker
 from app.models.ticket_fee import TicketFees, get_fee
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-import logging
 
 logger = logging.getLogger(__name__)
 

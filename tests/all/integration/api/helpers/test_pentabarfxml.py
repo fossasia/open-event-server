@@ -4,13 +4,13 @@ from xml.etree.ElementTree import fromstring
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.pentabarfxml import PentabarfExporter
+from app.models import db
+from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.microlocation import MicrolocationFactoryBase
 from tests.factories.session import SessionFactory, SessionFactoryBase
 from tests.factories.speaker import SpeakerFactoryBase
 from tests.factories.user import UserFactory
-from app.models import db
-from tests.all.integration.utils import OpenEventLegacyTestCase
 
 
 class TestPentabarfXML(OpenEventLegacyTestCase):

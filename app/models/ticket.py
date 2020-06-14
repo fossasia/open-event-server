@@ -1,7 +1,7 @@
+from app.api.helpers.errors import ConflictError
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
-from app.api.helpers.errors import ConflictError
 
 access_codes_tickets = db.Table(
     'access_codes_tickets',
