@@ -1,3 +1,4 @@
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
@@ -11,6 +12,9 @@ from app.models.ticket_holder import TicketHolder
 
 class DiscountCode(SoftDeletionModel):
     __tablename__ = "discount_codes"
+    __table_args__ = (
+        UniqueConstraint('event_id', 'code', name='uq_event_discount_code'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, nullable=False)
