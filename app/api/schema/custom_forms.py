@@ -25,7 +25,10 @@ class CustomFormSchema(SoftDeletionSchema):
 
     id = fields.Integer(dump_only=True)
     field_identifier = fields.Str(required=True)
-    form = fields.Str(required=True)
+    form = fields.Str(
+        required=True,
+        validate=validate.OneOf(choices=["attendee", "session", "speaker"]),
+    )
     type = fields.Str(
         default="text",
         validate=validate.OneOf(
