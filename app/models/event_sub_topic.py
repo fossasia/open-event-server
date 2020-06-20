@@ -1,3 +1,5 @@
+from sqlalchemy.schema import UniqueConstraint
+
 from app.api.helpers.db import get_new_slug
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -7,10 +9,13 @@ class EventSubTopic(SoftDeletionModel):
     """Event sub topic object table"""
 
     __tablename__ = 'event_sub_topics'
+    __table_args__ = (
+        UniqueConstraint('slug', 'event_topic_id', name='slug_event_topic_id'),
+    )
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
-    slug = db.Column(db.String, unique=True, nullable=False)
+    slug = db.Column(db.String, nullable=False)
     events = db.relationship('Event', backref='event-sub-topic')
     event_topic = db.relationship('EventTopic', backref='event-sub-topics')
     event_topic_id = db.Column(

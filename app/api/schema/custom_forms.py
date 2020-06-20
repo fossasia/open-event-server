@@ -32,6 +32,7 @@ class CustomFormSchema(SoftDeletionSchema):
             choices=["text", "checkbox", "select", "file", "image", "email", "number"]
         ),
     )
+    name = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
