@@ -170,6 +170,7 @@ def get_set_field_name(target: CustomForms) -> str:
 
 
 @listens_for(CustomForms, 'before_insert')
+@listens_for(CustomForms, 'before_update')
 def generate_name(mapper, connect, target: CustomForms) -> None:
     get_set_field_name(target)
 
