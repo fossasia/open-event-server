@@ -1,4 +1,5 @@
 import json
+import re
 
 from sqlalchemy.event import listens_for
 from sqlalchemy.schema import UniqueConstraint
@@ -149,12 +150,16 @@ class CustomForms(SoftDeletionModel):
     type = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    is_required = db.Column(db.Boolean)
-    is_included = db.Column(db.Boolean)
-    is_fixed = db.Column(db.Boolean)
+    is_required = db.Column(db.Boolean, default=False)
+    is_included = db.Column(db.Boolean, default=False)
+    is_fixed = db.Column(db.Boolean, default=False)
     is_complex = db.Column(db.Boolean, nullable=False, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     custom_form_options = db.relationship('CustomFormOptions', backref="custom_form")
+
+    @property
+    def identifier(self):
+        return re.sub('([A-Z]+)', r'_\1', self.field_identifier).lower()
 
     def __repr__(self):
         return '<CustomForm %r>' % self.id

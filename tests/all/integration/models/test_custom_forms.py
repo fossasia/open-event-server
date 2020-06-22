@@ -73,7 +73,11 @@ def test_assigning_old_form_name(db):
         event=event, field_identifier='longAbstract', form='session', type='text'
     )
     none_custom_form = CustomForms(
-        event=event, field_identifier='showNumber', name='Show Number', form='attendee', type='text'
+        event=event,
+        field_identifier='showNumber',
+        name='Show Number',
+        form='attendee',
+        type='text',
     )
     db.session.commit()
 

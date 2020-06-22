@@ -30,7 +30,7 @@ class TestExportCSV(OpenEventTestCase):
             test_attendee = AttendeeFactory()
             field_data = export_attendees_csv([test_attendee])
             self.assertEqual(field_data[1][3], common.string_)
-            self.assertEqual(field_data[1][5], 'user0@example.com')
+            self.assertEqual(field_data[1][5], test_attendee.email)
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():

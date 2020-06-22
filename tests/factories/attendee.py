@@ -5,7 +5,7 @@ from app.models.ticket_holder import TicketHolder
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory, OrderSubFactory
-from tests.factories.ticket import TicketFactory
+from tests.factories.ticket import TicketFactory, TicketSubFactory
 
 
 class AttendeeFactoryBase(BaseFactory):
@@ -32,6 +32,10 @@ class AttendeeSubFactory(AttendeeFactoryBase):
 
 class AttendeeOrderSubFactory(AttendeeSubFactory):
     order = factory.SubFactory(OrderSubFactory)
+
+
+class AttendeeOrderTicketSubFactory(AttendeeOrderSubFactory):
+    ticket = factory.SubFactory(TicketSubFactory)
 
 
 class AttendeeFactory(AttendeeFactoryBase):
