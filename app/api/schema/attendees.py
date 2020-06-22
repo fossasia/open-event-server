@@ -72,6 +72,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='EventSchema',
         type_='event',
+        dump_only=True,
     )
     user = Relationship(
         attribute='user',
@@ -81,6 +82,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
     )
 
 
@@ -107,6 +109,7 @@ class AttendeeSchema(AttendeeSchemaPublic):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='TicketSchemaPublic',
         type_='ticket',
+        dump_only=True,
     )
     order = Relationship(
         self_view='v1.attendee_order',
@@ -115,4 +118,5 @@ class AttendeeSchema(AttendeeSchemaPublic):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='OrderSchema',
         type_='order',
+        dump_only=True,
     )
