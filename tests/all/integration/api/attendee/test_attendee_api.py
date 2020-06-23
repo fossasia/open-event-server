@@ -41,7 +41,7 @@ def test_edit_attendee_minimum_fields(db, client, jwt):
     assert attendee.lastname == 'Jamal'
 
 
-def test_edit_attendee_required_fields(db, client, jwt):
+def get_simple_custom_form_attendee(db):
     attendee = get_minimal_attendee(db)
     CustomForms(
         event=attendee.event,
@@ -61,12 +61,22 @@ def test_edit_attendee_required_fields(db, client, jwt):
     )
     db.session.commit()
 
+    return attendee
+
+
+def test_edit_attendee_required_fields_missing(db, client, jwt):
+    attendee = get_simple_custom_form_attendee(db)
+
     data = json.dumps(
         {
             'data': {
                 'type': 'attendee',
                 'id': str(attendee.id),
-                "attributes": {"firstname": "Areeb", "lastname": "Jamal"},
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "city": "hello@world.com",
+                },
             }
         }
     )
@@ -93,9 +103,13 @@ def test_edit_attendee_required_fields(db, client, jwt):
         'jsonapi': {'version': '1.0'},
     }
 
-    assert attendee.firstname == 'Areeb'
-    assert attendee.lastname == 'Jamal'
+    assert attendee.firstname != 'Areeb'
+    assert attendee.lastname != 'Jamal'
     assert attendee.email is None
+
+
+def test_edit_attendee_required_fields_complete(db, client, jwt):
+    attendee = get_simple_custom_form_attendee(db)
 
     data = json.dumps(
         {
@@ -127,6 +141,151 @@ def test_edit_attendee_required_fields(db, client, jwt):
     assert attendee.lastname == 'Jamal'
     assert attendee.email == 'test@test.org'
     assert attendee.tax_business_info == 'Hello'
+
+
+def get_complex_custom_form_attendee(db):
+    attendee = get_minimal_attendee(db)
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='jobTitle',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='bestFriend',
+        name='Best Friend',
+        type='text',
+        is_included=True,
+        is_required=True,
+        is_complex=True,
+    )
+    db.session.commit()
+
+    return attendee
+
+
+def test_custom_form_complex_fields_missing_required(db, client, jwt):
+    attendee = get_complex_custom_form_attendee(db)
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {"firstname": "Areeb", "lastname": "Jamal"},
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 422
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'detail': "Missing required fields ['best_friend', 'job_title']",
+                'source': {'pointer': '/data/attributes'},
+                'status': 422,
+                'title': 'Unprocessable Entity',
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
+
+    assert attendee.firstname != 'Areeb'
+    assert attendee.lastname != 'Jamal'
+    assert attendee.complex_field_values is None
+
+
+def test_custom_form_complex_fields_missing_required_one(db, client, jwt):
+    attendee = get_complex_custom_form_attendee(db)
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job_title": "Software Engineer",
+                    "complex-field-values": {"favourite-friend": "Tester"},
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 422
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'detail': "Missing required fields ['best_friend']",
+                'source': {'pointer': '/data/attributes'},
+                'status': 422,
+                'title': 'Unprocessable Entity',
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
+
+    assert attendee.firstname != 'Areeb'
+    assert attendee.lastname != 'Jamal'
+    assert attendee.complex_field_values is None
+
+
+def test_custom_form_complex_fields_complete(db, client, jwt):
+    attendee = get_complex_custom_form_attendee(db)
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job_title": "Software Engineer",
+                    "complex-field-values": {"best_friend": "Tester"},
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 200
+
+    assert attendee.firstname == 'Areeb'
+    assert attendee.lastname == 'Jamal'
+    assert attendee.job_title == 'Software Engineer'
+    assert attendee.complex_field_values['best_friend'] == 'Tester'
 
 
 def test_edit_attendee_ticket(db, client, jwt):
