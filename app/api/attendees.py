@@ -2,10 +2,10 @@ import datetime
 
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.schema import get_relationships
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
+from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
@@ -14,7 +14,6 @@ from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.attendees import AttendeeSchema
 from app.models import db
-from app.models.custom_form import CustomForms
 from app.models.order import Order
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
@@ -166,27 +165,6 @@ class AttendeeList(ResourceList):
     }
 
 
-def validate_custom_form_constraints(self, obj, data):
-    relationship_fields = get_relationships(self.resource.schema)
-    for key, value in data.items():
-        if hasattr(obj, key) and key not in relationship_fields:
-            setattr(obj, key, value)
-
-    required_form_fields = CustomForms.query.filter_by(
-        event_id=obj.event_id, is_included=True, is_required=True
-    )
-    missing_required_fields = []
-    for field in required_form_fields.all():
-        if not getattr(obj, field.identifier):
-            missing_required_fields.append(field.identifier)
-
-    if len(missing_required_fields) > 0:
-        raise UnprocessableEntityError(
-            {'pointer': '/data/attributes'},
-            f'Missing required fields {missing_required_fields}',
-        )
-
-
 class AttendeeDetail(ResourceDetail):
     """
     Attendee detail by id
@@ -297,7 +275,9 @@ class AttendeeDetail(ResourceDetail):
                     obj.attendee_notes, data['attendee_notes']
                 )
 
-        validate_custom_form_constraints(self, obj, data)
+        validate_custom_form_constraints_request(
+            'attendee', self.resource.schema, obj, data
+        )
 
     decorators = (jwt_required,)
     schema = AttendeeSchema

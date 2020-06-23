@@ -13,5 +13,6 @@ db = SQLAlchemy()
 # after each test
 if 'pytest' in sys.modules:
     from objproxies import CallbackProxy
+
     db._session = db.session
     db.session = CallbackProxy(lambda: db._session)
