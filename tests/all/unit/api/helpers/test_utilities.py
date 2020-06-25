@@ -1,7 +1,6 @@
 import datetime
 import re
 import string
-import unittest
 
 import pytest
 

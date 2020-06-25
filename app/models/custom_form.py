@@ -1,5 +1,4 @@
 import json
-import re
 
 from sqlalchemy.event import listens_for
 from sqlalchemy.schema import UniqueConstraint
