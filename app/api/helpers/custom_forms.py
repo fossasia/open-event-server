@@ -11,7 +11,11 @@ def object_as_dict(obj):
 
 def validate_custom_form_constraints(form, obj):
     required_form_fields = CustomForms.query.filter_by(
-        form=form, event_id=obj.event_id, is_included=True, is_required=True
+        form=form,
+        event_id=obj.event_id,
+        is_included=True,
+        is_required=True,
+        deleted_at=None,
     )
     missing_required_fields = []
     for field in required_form_fields.all():

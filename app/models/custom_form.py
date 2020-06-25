@@ -1,9 +1,9 @@
 import json
-import re
 
 from sqlalchemy.event import listens_for
 from sqlalchemy.schema import UniqueConstraint
 
+from app.api.helpers.utilities import to_snake_case
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -159,7 +159,7 @@ class CustomForms(SoftDeletionModel):
 
     @property
     def identifier(self):
-        return re.sub('([A-Z]+)', r'_\1', self.field_identifier).lower()
+        return to_snake_case(self.field_identifier)
 
     def __repr__(self):
         return '<CustomForm %r>' % self.id

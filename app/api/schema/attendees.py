@@ -2,6 +2,7 @@ from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.static import AGE_GROUP_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
@@ -63,7 +64,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
         attribute='event',
         self_view='v1.attendee_event',
