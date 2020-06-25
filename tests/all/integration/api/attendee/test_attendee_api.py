@@ -264,8 +264,8 @@ def test_custom_form_complex_fields_complete(db, client, jwt):
                 "attributes": {
                     "firstname": "Areeb",
                     "lastname": "Jamal",
-                    "job_title": "Software Engineer",
-                    "complex-field-values": {"best_friend": "Tester"},
+                    "job-title": "Software Engineer",
+                    "complex-field-values": {"best-friend": "Tester"},
                 },
             }
         }
