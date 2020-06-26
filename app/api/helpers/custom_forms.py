@@ -1,3 +1,4 @@
+import marshmallow
 from flask_rest_jsonapi.schema import get_relationships
 from sqlalchemy import inspect
 
@@ -9,21 +10,36 @@ def object_as_dict(obj):
     return {c.key: getattr(obj, c.key) for c in inspect(obj).mapper.column_attrs}
 
 
+def get_schema(form_fields):
+    attrs = {}
+
+    for field in form_fields:
+        if field.type in ['text', 'checkbox', 'select']:
+            field_type = marshmallow.fields.Str
+        elif field.type == 'email':
+            field_type = marshmallow.fields.Email
+        elif field.type == 'number':
+            field_type = marshmallow.fields.Float
+        else:
+            raise UnprocessableEntityError(
+                {'pointer': '/data/complex-field-values/' + field.identifier},
+                'Invalid Field Type: ' + field.type,
+            )
+        attrs[field.identifier] = field_type(required=field.is_required)
+    return type('DynamicSchema', (marshmallow.Schema,), attrs)
+
+
 def validate_custom_form_constraints(form, obj):
-    required_form_fields = CustomForms.query.filter_by(
-        form=form,
-        event_id=obj.event_id,
-        is_included=True,
-        is_required=True,
-        deleted_at=None,
-    )
+    form_fields = CustomForms.query.filter_by(
+        form=form, event_id=obj.event_id, is_included=True, deleted_at=None,
+    ).all()
+    required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
-    for field in required_form_fields.all():
+    for field in required_form_fields:
         if not field.is_complex:
             if not getattr(obj, field.identifier):
                 missing_required_fields.append(field.identifier)
         else:
-
             if not (obj.complex_field_values or {}).get(field.identifier):
                 missing_required_fields.append(field.identifier)
 
@@ -33,6 +49,17 @@ def validate_custom_form_constraints(form, obj):
             f'Missing required fields {missing_required_fields}',
         )
 
+    if obj.complex_field_values:
+        complex_form_fields = filter(lambda field: field.is_complex, form_fields)
+        schema = get_schema(complex_form_fields)()
+
+        data, errors = schema.load(obj.complex_field_values)
+
+        if errors:
+            raise UnprocessableEntityError({'errors': errors}, 'Schema Validation Error')
+
+        return data
+
 
 def validate_custom_form_constraints_request(form, schema, obj, data):
     new_obj = type(obj)(**object_as_dict(obj))
@@ -41,4 +68,4 @@ def validate_custom_form_constraints_request(form, schema, obj, data):
         if hasattr(new_obj, key) and key not in relationship_fields:
             setattr(new_obj, key, value)
 
-    validate_custom_form_constraints(form, new_obj)
+    return validate_custom_form_constraints(form, new_obj)

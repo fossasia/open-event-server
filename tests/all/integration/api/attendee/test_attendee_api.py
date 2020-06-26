@@ -163,6 +163,16 @@ def get_complex_custom_form_attendee(db):
         is_required=True,
         is_complex=True,
     )
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='transFatContent',
+        name='Trans Fat Content',
+        type='number',
+        is_included=True,
+        is_required=False,
+        is_complex=True,
+    )
     db.session.commit()
 
     return attendee
@@ -286,6 +296,48 @@ def test_custom_form_complex_fields_complete(db, client, jwt):
     assert attendee.lastname == 'Jamal'
     assert attendee.job_title == 'Software Engineer'
     assert attendee.complex_field_values['best_friend'] == 'Tester'
+
+
+def test_ignore_complex_custom_form_fields(db, client, jwt):
+    """Test to see that extra data from complex JSON is dropped"""
+    attendee = get_complex_custom_form_attendee(db)
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job-title": "Software Engineer",
+                    "complex-field-values": {
+                        "bestFriend": "Bester",
+                        "transFat-content": 20.08,
+                        "shalimar": "sophie",
+                    },
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 200
+
+    assert attendee.firstname == 'Areeb'
+    assert attendee.lastname == 'Jamal'
+    assert attendee.job_title == 'Software Engineer'
+    assert attendee.complex_field_values['best_friend'] == 'Bester'
+    assert attendee.complex_field_values['trans_fat_content'] == 20.08
+    assert attendee.complex_field_values.get('shalimar') is None
 
 
 def test_edit_attendee_ticket(db, client, jwt):
