@@ -340,6 +340,118 @@ def test_ignore_complex_custom_form_fields(db, client, jwt):
     assert attendee.complex_field_values.get('shalimar') is None
 
 
+def test_throw_complex_custom_form_fields(db, client, jwt):
+    attendee = get_complex_custom_form_attendee(db)
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='secondaryEmail',
+        name='Secondary Email',
+        type='email',
+        is_included=True,
+        is_required=False,
+        is_complex=True,
+    )
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job-title": "Software Engineer",
+                    "complex-field-values": {
+                        "bestFriend": "Bester",
+                        "secondary-email": "notanemail.com",
+                    },
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 422
+
+    assert json.loads(response.data) == {
+        "errors": [
+            {
+                "status": 422,
+                "source": {"errors": {"secondary_email": ["Not a valid email address."]}},
+                "title": "Unprocessable Entity",
+                "detail": "Schema Validation Error",
+            }
+        ],
+        "jsonapi": {"version": "1.0"},
+    }
+
+
+def test_throw_invalid_complex_custom_form_fields(db, client, jwt):
+    attendee = get_complex_custom_form_attendee(db)
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='genderFile',
+        name='Gender File',
+        type='file',
+        is_included=True,
+        is_required=False,
+        is_complex=True,
+    )
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job-title": "Software Engineer",
+                    "complex-field-values": {
+                        "bestFriend": "Bester",
+                        "gender-file": "notanemail.com",
+                    },
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 422
+
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'detail': 'Invalid Field Type: file',
+                'source': {'pointer': '/data/complex-field-values/gender_file'},
+                'status': 422,
+                'title': 'Unprocessable Entity',
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
+
+
 def test_edit_attendee_ticket(db, client, jwt):
     attendee = AttendeeOrderTicketSubFactory()
     ticket = TicketSubFactory(event=attendee.event)
