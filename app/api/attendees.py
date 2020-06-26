@@ -275,7 +275,7 @@ class AttendeeDetail(ResourceDetail):
                     obj.attendee_notes, data['attendee_notes']
                 )
 
-        validate_custom_form_constraints_request(
+        data['complex_field_values'] = validate_custom_form_constraints_request(
             'attendee', self.resource.schema, obj, data
         )
 
