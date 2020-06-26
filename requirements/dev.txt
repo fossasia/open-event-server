@@ -6,4 +6,4 @@ pep8==1.7.1
 isort==4.3.21
 black==19.10b0
 pre-commit==2.5.1
-pytype==2020.6.1
+pytype==2020.6.26
