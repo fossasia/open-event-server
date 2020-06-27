@@ -206,6 +206,12 @@ class AttendeeDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
+        order = safe_query(Order, 'id', obj.order_id, 'id')
+        if order.status != 'initializing':
+            raise UnprocessableEntityError(
+                {'pointer': '/data/id'}, "Order status is not initializing",
+            )
+
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
                 raise UnprocessableEntityError(
