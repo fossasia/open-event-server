@@ -105,10 +105,10 @@ def test_validate_discount_code_reject_future(db):
 def _create_discounted_attendees(db):
     discount, tickets = _create_discount_code(db)
     order_with_discount = OrderSubFactory(
-        status='completed', discount_code=discount, event=discount.event
+        status='completed', discount_code=discount
     )
     AttendeeSubFactory.create_batch(
-        3, order=order_with_discount, event=discount.event, ticket_id=tickets[0]['id']
+        3, order=order_with_discount, ticket_id=tickets[0]['id']
     )
     db.session.commit()
 

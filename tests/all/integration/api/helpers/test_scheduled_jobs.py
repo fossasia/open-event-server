@@ -52,7 +52,7 @@ def test_delete_ticket_holder_with_valid_order_id(db):
 
 def test_delete_ticket_holders_with_no_order_id(db):
     """Method to test deleting ticket holders with no order id after expiry time"""
-    attendee = AttendeeFactoryBase(created_at=common.date_)
+    attendee = AttendeeSubFactory(created_at=common.date_)
     db.session.commit()
     attendee_id = attendee.id
     delete_ticket_holders_no_order_id()
