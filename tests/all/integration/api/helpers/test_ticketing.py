@@ -17,7 +17,10 @@ def test_match_discount_quantity(db):
 
     # Attendees associated with the order without discount code should not be counted
     AttendeeFactoryBase.create_batch(
-        10, order_id=order_without_discount.id, ticket_id=ticket.id, event_id=ticket.event_id
+        10,
+        order_id=order_without_discount.id,
+        ticket_id=ticket.id,
+        event_id=ticket.event_id,
     )
 
     assert discount_code.is_available(ticket_holders=[1]) is True

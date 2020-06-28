@@ -87,12 +87,15 @@ class TestOrderUtilities(OpenEventTestCase):
                 6, order_id=completed_order.id, ticket_id=ticket.id, event_id=event.id
             )
             # will be counted as attendee has valid placed order
-            AttendeeFactoryBase(order_id=placed_order.id, ticket_id=ticket.id, event_id=event.id)
+            AttendeeFactoryBase(
+                order_id=placed_order.id, ticket_id=ticket.id, event_id=event.id
+            )
             # will not be counted as they are deleted
             AttendeeFactoryBase.create_batch(
                 3,
                 order_id=placed_order.id,
-                ticket_id=ticket.id, event_id=event.id,
+                ticket_id=ticket.id,
+                event_id=event.id,
                 deleted_at=datetime.utcnow(),
             )
             # will be counted as attendee has initializing order under order expiry time
@@ -113,7 +116,10 @@ class TestOrderUtilities(OpenEventTestCase):
             )
             # will not be counted as the attendees have different ticket ID
             AttendeeFactoryBase.create_batch(
-                2, order_id=completed_order.id, ticket_id=other_ticket.id, event_id=event.id
+                2,
+                order_id=completed_order.id,
+                ticket_id=other_ticket.id,
+                event_id=event.id,
             )
 
             count = get_sold_and_reserved_tickets_count(ticket.id)
