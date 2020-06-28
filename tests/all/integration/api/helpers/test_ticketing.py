@@ -1,13 +1,13 @@
 from tests.factories.attendee import AttendeeFactoryBase
 from tests.factories.discount_code import DiscountCodeTicketFactory
 from tests.factories.order import OrderFactory
-from tests.factories.ticket import TicketFactory
+from tests.factories.ticket import TicketSubFactory
 
 
 def test_match_discount_quantity(db):
     """Method to test the quantity calculation of discount code"""
 
-    ticket = TicketFactory()
+    ticket = TicketSubFactory()
     discount_code = DiscountCodeTicketFactory(tickets_number=5)
     discount_code.tickets.append(ticket)
 
@@ -17,7 +17,10 @@ def test_match_discount_quantity(db):
 
     # Attendees associated with the order without discount code should not be counted
     AttendeeFactoryBase.create_batch(
-        10, order_id=order_without_discount.id, ticket_id=ticket.id
+        10,
+        order_id=order_without_discount.id,
+        ticket_id=ticket.id,
+        event_id=ticket.event_id,
     )
 
     assert discount_code.is_available(ticket_holders=[1]) is True
@@ -30,7 +33,7 @@ def test_match_discount_quantity(db):
 
     # Attendees associated with the order with discount code should be counted
     AttendeeFactoryBase.create_batch(
-        5, order_id=order_with_discount.id, ticket_id=ticket.id
+        5, order_id=order_with_discount.id, ticket_id=ticket.id, event_id=ticket.event_id
     )
 
     assert discount_code.is_available(ticket_holders=[1]) is False

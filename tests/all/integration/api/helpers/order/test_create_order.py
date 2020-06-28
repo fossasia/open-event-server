@@ -59,8 +59,11 @@ def test_create_order_without_discount(client, db, jwt):
     order = Order.query.get(order_dict['data']['id'])
     assert order_dict['data']['attributes']['amount'] == 5240.73
     assert order.amount == 5240.73
-    assert len(order.ticket_holders) == 12
+    ticket_holders = order.ticket_holders
+    assert len(ticket_holders) == 12
     assert order.discount_code is None
+    for ticket_holder in ticket_holders:
+        assert ticket_holder.event_id is not None
 
 
 def test_throw_ticket_sold_out(client, db, jwt):

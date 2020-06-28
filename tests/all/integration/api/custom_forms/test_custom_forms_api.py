@@ -17,7 +17,6 @@ def test_custom_form_create(db, client, user, jwt):
                     "form": "attendee",
                     "type": "email",
                     "field-identifier": "email",
-                    "name": "Email",
                     "is-included": True,
                     "is-required": True,
                     "is-complex": True,
@@ -42,6 +41,7 @@ def test_custom_form_create(db, client, user, jwt):
 
     assert custom_form.form == 'attendee'
     assert custom_form.type == 'email'
+    assert custom_form.name == 'Email'
     assert custom_form.field_identifier == 'email'
     assert custom_form.is_complex is False
 
