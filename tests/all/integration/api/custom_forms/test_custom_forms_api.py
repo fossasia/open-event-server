@@ -30,15 +30,15 @@ def test_custom_form_create(db, client, user, jwt):
     )
 
     response = client.post(
-        f'/v1/custom-forms',
+        '/v1/custom-forms',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
     )
 
     assert response.status_code == 201
-    id = json.loads(response.data)['data']['id']
-    custom_form = CustomForms.query.get(id)
+    c_id = json.loads(response.data)['data']['id']
+    custom_form = CustomForms.query.get(c_id)
 
     assert custom_form.form == 'attendee'
     assert custom_form.type == 'email'
@@ -65,15 +65,15 @@ def test_custom_form_create(db, client, user, jwt):
     )
 
     response = client.post(
-        f'/v1/custom-forms',
+        '/v1/custom-forms',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
     )
 
     assert response.status_code == 201
-    id = json.loads(response.data)['data']['id']
-    custom_form = CustomForms.query.get(id)
+    c_id = json.loads(response.data)['data']['id']
+    custom_form = CustomForms.query.get(c_id)
 
     assert custom_form.form == 'attendee'
     assert custom_form.type == 'number'
