@@ -121,6 +121,9 @@ def test_edit_attendee_required_fields_complete(db, client, jwt):
                     "lastname": "Jamal",
                     "email": "test@test.org",
                     "tax_business_info": "Hello",
+                    "complex-field-values": {
+                        "ko": "mo"
+                    },  # Should be ignored and saved as None
                 },
             }
         }
@@ -141,6 +144,7 @@ def test_edit_attendee_required_fields_complete(db, client, jwt):
     assert attendee.lastname == 'Jamal'
     assert attendee.email == 'test@test.org'
     assert attendee.tax_business_info == 'Hello'
+    assert attendee.complex_field_values is None
 
 
 def get_complex_custom_form_attendee(db):
