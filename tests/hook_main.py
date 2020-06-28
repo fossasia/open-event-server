@@ -361,6 +361,19 @@ def event_post(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Upcoming Events Collection > List All Upcoming Events")
+def upcoming_event_get_list(transaction):
+    """
+    GET /events/upcoming
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic(state="published")
+        db.session.add(event)
+        db.session.commit()
+
+
 @hooks.before("Events > Event Details > Event Details")
 def event_get_detail(transaction):
     """
