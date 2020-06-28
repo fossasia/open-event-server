@@ -13,7 +13,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 from tests.factories.attendee import (
-    AttendeeFactoryBase,
     AttendeeOrderSubFactory,
     AttendeeSubFactory,
 )
