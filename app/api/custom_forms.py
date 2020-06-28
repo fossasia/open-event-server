@@ -9,7 +9,7 @@ from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.custom_forms import CustomFormSchema
 from app.models import db
-from app.models.custom_form import CustomForms
+from app.models.custom_form import CUSTOM_FORM_IDENTIFIER_NAME_MAP, CustomForms
 from app.models.event import Event
 
 
@@ -31,6 +31,12 @@ class CustomFormListPost(ResourceList):
             raise ObjectNotFound(
                 {'parameter': 'event_id'}, "Event: {} not found".format(data['event_id'])
             )
+
+        # Assign is_complex to True if not found in identifier map of form type
+        data['is_complex'] = (
+            CUSTOM_FORM_IDENTIFIER_NAME_MAP[data['form']].get(data['field_identifier'])
+            is None
+        )
 
     schema = CustomFormSchema
     methods = [
