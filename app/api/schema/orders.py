@@ -116,6 +116,7 @@ class OrderSchema(SoftDeletionSchema):
         schema='AttendeeSchemaPublic',
         many=True,
         type_='attendee',
+        dump_only=True,
     )
 
     tickets = Relationship(
@@ -127,6 +128,7 @@ class OrderSchema(SoftDeletionSchema):
         schema='TicketSchemaPublic',
         many=True,
         type_="ticket",
+        dump_only=True,
     )
 
     user = Relationship(
@@ -137,6 +139,7 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<user_id>'},
         schema='UserSchemaPublic',
         type_="user",
+        dump_only=True,
     )
 
     event = Relationship(
@@ -147,6 +150,7 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<event_id>'},
         schema='EventSchemaPublic',
         type_="event",
+        dump_only=True,
     )
 
     event_invoice = Relationship(
@@ -157,6 +161,7 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<id>'},
         schema='EventInvoiceSchema',
         type_="event_invoice",
+        dump_only=True,
     )
 
     marketer = Relationship(
@@ -167,6 +172,7 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<marketer_id>'},
         schema='UserSchemaPublic',
         type_="user",
+        dump_only=True,
     )
 
     discount_code = Relationship(
@@ -177,4 +183,5 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<discount_code_id>'},
         schema='DiscountCodeSchemaPublic',
         type_="discount-code",
+        dump_only=True,
     )
