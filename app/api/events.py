@@ -877,10 +877,15 @@ class UpcomingEventList(EventList):
         :return:
         """
         current_time = datetime.now(pytz.utc)
-        query_ = self.session.query(Event).filter(
-            Event.ends_at > current_time,
-            Event.state == 'published',
-            Event.privacy == 'public').order_by(Event.starts_at)
+        query_ = (
+            self.session.query(Event)
+            .filter(
+                Event.ends_at > current_time,
+                Event.state == 'published',
+                Event.privacy == 'public',
+            )
+            .order_by(Event.starts_at)
+        )
         return query_
 
     data_layer = {

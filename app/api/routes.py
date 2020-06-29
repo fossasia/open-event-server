@@ -611,9 +611,7 @@ api.route(
 )
 
 api.route(
-    UpcomingEventList,
-    'upcoming_event_list',
-    '/events/upcoming',
+    UpcomingEventList, 'upcoming_event_list', '/events/upcoming',
 )
 
 api.route(

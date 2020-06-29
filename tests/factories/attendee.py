@@ -28,6 +28,7 @@ class AttendeeFactoryBase(BaseFactory):
 
 class AttendeeSubFactory(AttendeeFactoryBase):
     event = factory.SubFactory(EventFactoryBasic)
+    ticket = factory.SubFactory(TicketSubFactory)
 
 
 class AttendeeOrderSubFactory(AttendeeSubFactory):
@@ -35,7 +36,7 @@ class AttendeeOrderSubFactory(AttendeeSubFactory):
 
 
 class AttendeeOrderTicketSubFactory(AttendeeOrderSubFactory):
-    ticket = factory.SubFactory(TicketSubFactory)
+    pass
 
 
 class AttendeeFactory(AttendeeFactoryBase):
@@ -43,3 +44,4 @@ class AttendeeFactory(AttendeeFactoryBase):
     ticket = factory.RelatedFactory(TicketFactory)
     order = factory.RelatedFactory(OrderFactory)
     event_id = 1
+    ticket_id = 1
