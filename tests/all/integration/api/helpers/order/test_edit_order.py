@@ -33,7 +33,7 @@ def test_throw_on_order_amount_update(client, db, user, jwt):
     )
 
 
-def test_throw_on_order_attendee_update(client, db, user, jwt):
+def test_ignore_on_order_attendee_update(client, db, user, jwt):
     order_id = create_order(db, user)
     attendee = AttendeeSubFactory()
     db.session.commit()
@@ -58,16 +58,14 @@ def test_throw_on_order_attendee_update(client, db, user, jwt):
     )
 
     order = Order.query.get(order_id)
-    assert response.status_code == 403
-    assert (
-        json.loads(response.data)['errors'][0]['detail']
-        == 'You cannot update ticket_holders of an order'
-    )
+    assert response.status_code == 200
     assert len(order.ticket_holders) == 3
 
 
-def test_throw_on_order_event_update(client, db, user, jwt):
+def test_ignore_on_order_event_update(client, db, user, jwt):
     order_id = create_order(db, user)
+    order = Order.query.get(order_id)
+    order_event = order.event
     event = EventFactoryBasic()
     db.session.commit()
 
@@ -90,8 +88,6 @@ def test_throw_on_order_event_update(client, db, user, jwt):
         data=data,
     )
 
-    assert response.status_code == 403
-    assert (
-        json.loads(response.data)['errors'][0]['detail']
-        == 'You cannot update event of an order'
-    )
+    db.session.refresh(order)
+    assert response.status_code == 200
+    assert order.event == order_event
