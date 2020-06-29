@@ -58,7 +58,8 @@ def validate_custom_form_constraints(form, obj):
         if errors:
             raise UnprocessableEntityError({'errors': errors}, 'Schema Validation Error')
 
-        return data
+        # We need to save null if resultant dictionary is empty
+        return data if data else None
 
 
 def validate_custom_form_constraints_request(form, schema, obj, data):
