@@ -46,7 +46,7 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
-from tests.factories.attendee import AttendeeFactory
+from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
@@ -1969,7 +1969,7 @@ def attendee_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 
@@ -1982,7 +1982,7 @@ def attendee_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 
