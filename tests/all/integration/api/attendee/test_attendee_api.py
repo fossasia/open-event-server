@@ -516,3 +516,75 @@ def test_edit_attendee_order(db, client, jwt):
     # Order should not be updated
     assert attendee.order.id != order.id
     assert attendee.order.id == attendee_order.id
+
+
+def test_edit_attendee_when_order_is_pending(db, client, jwt):
+    attendee = AttendeeOrderTicketSubFactory()
+    order = attendee.order
+
+    order.status = "pending"
+
+    db.session.commit()
+
+    attendee_order = attendee.order
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "relationships": {
+                    "order": {"data": {"id": str(order.id), "type": "order"}}
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    # Attendee should not be updated
+    assert response.status_code == 422
+    assert attendee.order.id == attendee_order.id
+
+
+def test_edit_attendee_when_order_is_completed(db, client, jwt):
+    attendee = AttendeeOrderTicketSubFactory()
+    order = attendee.order
+
+    order.status = "completed"
+
+    db.session.commit()
+
+    attendee_order = attendee.order
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "relationships": {
+                    "order": {"data": {"id": str(order.id), "type": "order"}}
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    # Attendee should not be updated
+    assert response.status_code == 422
+    assert attendee.order.id == attendee_order.id
