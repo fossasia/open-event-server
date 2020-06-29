@@ -1,4 +1,4 @@
 def create_app():
-    from .instance import app
+    from .instance import aop
 
-    return app
+    return aop
