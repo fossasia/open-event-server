@@ -530,13 +530,12 @@ def test_edit_attendee_when_order_is_pending(db, client, jwt):
 
     db.session.commit()
 
-    attendee_order = attendee.order
-
     data = json.dumps(
         {
             'data': {
                 'type': 'attendee',
                 'id': str(attendee.id),
+                'attributes': {"lastname": "Ali"},
                 "relationships": {
                     "order": {"data": {"id": str(order.id), "type": "order"}}
                 },
@@ -555,7 +554,7 @@ def test_edit_attendee_when_order_is_pending(db, client, jwt):
 
     # Attendee should not be updated
     assert response.status_code == 422
-    assert attendee.order.id == attendee_order.id
+    assert attendee.lastname != "Ali"
 
 
 def test_edit_attendee_when_order_is_completed(db, client, jwt):
@@ -566,13 +565,12 @@ def test_edit_attendee_when_order_is_completed(db, client, jwt):
 
     db.session.commit()
 
-    attendee_order = attendee.order
-
     data = json.dumps(
         {
             'data': {
                 'type': 'attendee',
                 'id': str(attendee.id),
+                'attributes': {"firstname": "Haider"},
                 "relationships": {
                     "order": {"data": {"id": str(order.id), "type": "order"}}
                 },
@@ -591,4 +589,4 @@ def test_edit_attendee_when_order_is_completed(db, client, jwt):
 
     # Attendee should not be updated
     assert response.status_code == 422
-    assert attendee.order.id == attendee_order.id
+    assert attendee.firstname != "Haider"
