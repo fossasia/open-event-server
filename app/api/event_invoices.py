@@ -1,10 +1,12 @@
 import datetime
 
 from flask import jsonify, request
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
+from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import BadRequestError
+from app.api.helpers.errors import BadRequestError, ForbiddenError
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permissions import is_admin, jwt_required
 from app.api.helpers.query import event_query
@@ -38,6 +40,10 @@ class EventInvoiceList(ResourceList):
         :param view_kwargs:
         :return:
         """
+        user = current_user
+        if not user.is_admin and not user.is_super_admin:
+            raise ForbiddenError({'source': ''}, 'Admin access is required')
+
         query_ = self.session.query(EventInvoice)
         query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('user_id'):
@@ -54,6 +60,7 @@ class EventInvoiceList(ResourceList):
     methods = [
         'GET',
     ]
+    decorators = (api.has_permission('is_organizer',),)
     schema = EventInvoiceSchema
     data_layer = {
         'session': db.session,
@@ -79,6 +86,7 @@ class EventInvoiceDetail(ResourceDetail):
             )
             view_kwargs['id'] = event_invoice.id
 
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {
         'session': db.session,
