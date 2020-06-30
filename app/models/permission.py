@@ -10,7 +10,7 @@ class Permission(SoftDeletionModel):
     __tablename__ = 'permissions'
     __table_args__ = (
         db.UniqueConstraint(
-            'role_id', 'service_id', 'deleted_at', name='role_service_deleted_at_uc'
+            'role_id', 'service_id', 'deleted_at', name='role_service_uc'
         ),
     )
 

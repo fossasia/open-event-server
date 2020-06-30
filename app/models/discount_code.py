@@ -13,9 +13,7 @@ from app.models.ticket_holder import TicketHolder
 class DiscountCode(SoftDeletionModel):
     __tablename__ = "discount_codes"
     __table_args__ = (
-        UniqueConstraint(
-            'event_id', 'code', 'deleted_at', name='uq_event_discount_code_deleted_at'
-        ),
+        UniqueConstraint('event_id', 'code', 'deleted_at', name='uq_event_discount_code'),
     )
 
     id = db.Column(db.Integer, primary_key=True)
