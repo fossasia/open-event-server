@@ -41,7 +41,7 @@ class EventInvoiceList(ResourceList):
         :return:
         """
         user = current_user
-        if not user.is_admin and not user.is_super_admin:
+        if not user.is_staff:
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
         query_ = self.session.query(EventInvoice)
