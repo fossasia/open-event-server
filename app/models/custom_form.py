@@ -5,7 +5,6 @@ from sqlalchemy.schema import UniqueConstraint
 
 from app.api.helpers.utilities import to_snake_case
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 SESSION_FORM = {
     "title": {"include": 1, "require": 1},

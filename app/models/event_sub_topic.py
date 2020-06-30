@@ -2,7 +2,6 @@ from sqlalchemy.schema import UniqueConstraint
 
 from app.api.helpers.db import get_new_slug
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
 class EventSubTopic(db.Model):
