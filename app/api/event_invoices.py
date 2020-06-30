@@ -3,7 +3,6 @@ import datetime
 from flask import jsonify, request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
-from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.payment import PayPalPaymentsManager
