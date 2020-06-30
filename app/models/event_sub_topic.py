@@ -5,7 +5,7 @@ from app.models import db
 from app.models.base import SoftDeletionModel
 
 
-class EventSubTopic(SoftDeletionModel):
+class EventSubTopic(db.Model):
     """Event sub topic object table"""
 
     __tablename__ = 'event_sub_topics'

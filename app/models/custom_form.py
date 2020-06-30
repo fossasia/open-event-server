@@ -135,7 +135,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
 }
 
 
-class CustomForms(SoftDeletionModel):
+class CustomForms(db.Model):
     """custom form model class"""
 
     __tablename__ = 'custom_forms'
