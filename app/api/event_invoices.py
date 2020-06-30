@@ -55,7 +55,6 @@ class EventInvoiceList(ResourceList):
     methods = [
         'GET',
     ]
-    decorators = (api.has_permission('is_organizer',),)
     schema = EventInvoiceSchema
     data_layer = {
         'session': db.session,
@@ -81,7 +80,6 @@ class EventInvoiceDetail(ResourceDetail):
             )
             view_kwargs['id'] = event_invoice.id
 
-    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {
         'session': db.session,
