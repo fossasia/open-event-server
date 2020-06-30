@@ -17,7 +17,13 @@ def generate_hash():
 class RoleInvite(SoftDeletionModel):
     __tablename__ = 'role_invites'
     __table_args__ = (
-        UniqueConstraint('email', 'role_id', 'event_id', name='email_role_event_uc'),
+        UniqueConstraint(
+            'email',
+            'role_id',
+            'event_id',
+            'deleted_at',
+            name='email_role_event_deleted_at_uc',
+        ),
     )
 
     id = db.Column(db.Integer, primary_key=True)

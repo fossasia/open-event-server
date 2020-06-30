@@ -1,13 +1,17 @@
 from app.models import db
 
+from app.models.base import SoftDeletionModel
 
-class Permission(db.Model):
+
+class Permission(SoftDeletionModel):
     """Role-Service Permissions
     """
 
     __tablename__ = 'permissions'
     __table_args__ = (
-        db.UniqueConstraint('role_id', 'service_id', name='role_service_uc'),
+        db.UniqueConstraint(
+            'role_id', 'service_id', 'deleted_at', name='role_service_deleted_at_uc'
+        ),
     )
 
     id = db.Column(db.Integer, primary_key=True)
