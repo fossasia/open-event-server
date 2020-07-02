@@ -1,14 +1,13 @@
 from marshmallow import validate as validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 from utils.common import use_defaults
 
 
 @use_defaults()
-class CustomFormSchema(SoftDeletionSchema):
+class CustomFormSchema(Schema):
     """
     API Schema for Custom Forms database model
     """

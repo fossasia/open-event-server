@@ -51,7 +51,7 @@ def create_event_copy(identifier):
         event_id=event.id, deleted_at=None
     ).all()
     tracks = Track.query.filter_by(event_id=event.id, deleted_at=None).all()
-    custom_forms = CustomForms.query.filter_by(event_id=event.id, deleted_at=None).all()
+    custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
     discount_codes = DiscountCode.query.filter_by(
         event_id=event.id, deleted_at=None
     ).all()
