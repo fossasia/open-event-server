@@ -16,7 +16,7 @@ requests[security]==2.24.0
 psycopg2-binary==2.8.5
 SQLAlchemy-Utils==0.36.6
 itsdangerous==1.1
-humanize==2.4.0
+humanize==2.4.1
 celery==4.4.6
 redis==3.5.3
 apscheduler==3.6.3
