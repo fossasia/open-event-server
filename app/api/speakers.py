@@ -1,12 +1,14 @@
 from flask import request
-from flask_login import current_user
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
+from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
@@ -32,6 +34,7 @@ class SpeakerListPost(ResourceList):
         :param data:
         :return:
         """
+        data['user'] = current_user.id
         require_relationship(['event', 'user'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
@@ -39,7 +42,7 @@ class SpeakerListPost(ResourceList):
             if event.state == "draft":
                 raise ObjectNotFound(
                     {'parameter': 'event_id'},
-                    "Event: {} not found".format(data['event_id']),
+                    "Event: {} not found".format(data['event']),
                 )
 
         if (
@@ -88,6 +91,10 @@ class SpeakerListPost(ResourceList):
                         "Session: {} not found".format(session_id),
                     )
 
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'speaker', SpeakerSchema, Speaker(event_id=data['event']), data
+        )
+
     def after_create_object(self, speaker, data, view_kwargs):
         """
         after create method to save resized images for speaker
@@ -101,6 +108,7 @@ class SpeakerListPost(ResourceList):
             start_image_resizing_tasks(speaker, data['photo_url'])
 
     schema = SpeakerSchema
+    decorators = (jwt_required,)
     methods = [
         'POST',
     ]
@@ -185,6 +193,10 @@ class SpeakerDetail(ResourceDetail):
             and not data.get('email')
         ):
             data['email'] = current_user.email
+
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'speaker', self.resource.schema, speaker, data
+        )
 
     def after_patch(self, result):
         """
