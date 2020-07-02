@@ -40,7 +40,7 @@ marrow.mailer==4.0.3
 flask-cors==3.0.8
 python-pentabarf-xml==0.20
 python-geoip-geolite2==2015.303
-pycountry==19.8.18
+pycountry==20.7.2
 pytz==2020.1
 diff-match-patch==20181111
 blinker==1.4
