@@ -1,14 +1,12 @@
 from sqlalchemy import desc
 from sqlalchemy.schema import UniqueConstraint
 
-from app.models.base import SoftDeletionModel
-
 from app.models import db
 
 DEFAULT_FEE = 0.0
 
 
-class TicketFees(SoftDeletionModel):
+class TicketFees(db.Model):
     """Persists service and maximum fees for a currency in a country"""
 
     __tablename__ = 'ticket_fees'
