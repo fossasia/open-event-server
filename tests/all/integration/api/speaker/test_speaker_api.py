@@ -16,6 +16,7 @@ def get_minimal_speaker(db, user):
         speaking_experience=None,
         city=None,
         heard_from=None,
+        email=user._email,
         user=user,
         event__state='published',
     )
