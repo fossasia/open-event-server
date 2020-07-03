@@ -210,7 +210,7 @@ class AttendeeDetail(ResourceDetail):
 
         if not (current_user.is_staff or current_user.id == order.user_id):
             raise ForbiddenError(
-                {'source': ''}, 'Only admin or that user itself can update attendee info',
+                'Only admin or that user itself can update attendee info',
             )
 
         if order.status != 'initializing':
