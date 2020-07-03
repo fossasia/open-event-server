@@ -590,3 +590,48 @@ def test_edit_attendee_when_order_is_completed(db, client, jwt):
     # Attendee should not be updated
     assert response.status_code == 422
     assert attendee.firstname != "Haider"
+
+
+def test_edit_attendee_by_some_other_user(db, client, jwt):
+    attendee = AttendeeOrderTicketSubFactory()
+    order = attendee.order
+
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                'attributes': {"firstname": "Haider"},
+                "relationships": {
+                    "order": {"data": {"id": str(order.id), "type": "order"}}
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 403
+
+    assert attendee.firstname != "Haider"
+
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'status': 403,
+                'source': None,
+                'title': 'Access Forbidden',
+                'detail': 'Only admin or that user itself can update attendee info',
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
