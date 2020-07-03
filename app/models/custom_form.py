@@ -162,7 +162,7 @@ class CustomForms(SoftDeletionModel):
         return to_snake_case(self.field_identifier)
 
     def __repr__(self):
-        return '<CustomForm %r>' % self.id
+        return '<CustomForm %r %r>' % (self.id, self.identifier)
 
 
 def get_set_field_name(target: CustomForms) -> str:
