@@ -207,6 +207,12 @@ class AttendeeDetail(ResourceDetail):
         :return:
         """
         order = safe_query_by_id(Order, obj.order_id)
+
+        if not (current_user.is_staff or current_user.id == order.user_id):
+            raise ForbiddenError(
+                {'source': ''}, 'Only admin or that user itself can update attendee info',
+            )
+
         if order.status != 'initializing':
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
