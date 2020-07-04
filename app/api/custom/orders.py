@@ -150,7 +150,9 @@ def create_order():
         for ticket in tickets:
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
-                attendees.append(TicketHolder(firstname='', lastname='', ticket=ticket))
+                attendees.append(
+                    TicketHolder(firstname='', lastname='', ticket=ticket, event=event)
+                )
                 db.session.commit()
     except Exception as e:
         db.session.rollback()

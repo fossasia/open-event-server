@@ -46,7 +46,7 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
-from tests.factories.attendee import AttendeeFactory
+from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
@@ -358,6 +358,19 @@ def event_post(transaction):
         module = ModuleFactory()
         db.session.add(module)
         RoleFactory(name=OWNER)  # TODO: Change to get_or_create in event after_created
+        db.session.commit()
+
+
+@hooks.before("Events > Upcoming Events Collection > List All Upcoming Events")
+def upcoming_event_get_list(transaction):
+    """
+    GET /events/upcoming
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic(state="published")
+        db.session.add(event)
         db.session.commit()
 
 
@@ -1956,7 +1969,7 @@ def attendee_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 
@@ -1969,7 +1982,7 @@ def attendee_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 

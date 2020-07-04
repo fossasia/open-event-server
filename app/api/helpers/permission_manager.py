@@ -23,7 +23,8 @@ def auth_required(view, view_args, view_kwargs, *args, **kwargs):
 def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
     """
     Permission function for things allowed exclusively to super admin.
-    Do not use this if the resource is also accessible by a normal admin, use the is_admin decorator instead.
+    Do not use this if the resource is also accessible by a normal admin,
+    use the is_admin decorator instead.
     :return:
     """
     user = current_user
@@ -61,7 +62,8 @@ def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if user.is_owner(kwargs['event_id']) or user.is_organizer(kwargs['event_id']):
+    event_id = kwargs.get('event_id')
+    if event_id and (user.is_owner(event_id) or user.is_organizer(event_id)):
         return view(*view_args, **view_kwargs)
 
     raise ForbiddenError({'parameter': 'event_id'}, 'Organizer access is required')
@@ -94,7 +96,8 @@ def is_coorganizer_endpoint_related_to_event(
     view, view_args, view_kwargs, *args, **kwargs
 ):
     """
-     If the authorization header is present (but expired) and the event being accessed is not published
+     If the authorization header is present (but expired)
+     and the eventbeing accessed is not published
      - And the user is related to the event (organizer, co-organizer etc) show a 401
      - Else show a 404
 
@@ -381,7 +384,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if 'id' in kwargs:
         view_kwargs['id'] = kwargs['id']
 
-    if 'methods' in kwargs:
+    if kwargs.get('methods'):
         methods = kwargs['methods']
 
     if request.method not in methods:
@@ -453,16 +456,16 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             fetch = kwargs['fetch']
             fetch_key_url = 'id'
             fetch_key_model = 'id'
-            if 'fetch_key_url' in kwargs:
+            if kwargs.get('fetch_key_url'):
                 fetch_key_url = kwargs['fetch_key_url']
 
-            if 'fetch_key_model' in kwargs:
+            if kwargs.get('fetch_key_model'):
                 fetch_key_model = kwargs['fetch_key_model']
 
             if not is_multiple(model):
                 model = [model]
 
-            if type(fetch_key_url) == str and is_multiple(fetch_key_url):
+            if isinstance(fetch_key_url, str) and is_multiple(fetch_key_url):
                 fetch_key_url = fetch_key_url.split(  # pytype: disable=attribute-error
                     ","
                 )
@@ -508,6 +511,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
         raise ForbiddenError({'source': 'permission'}, 'Access forbidden')
+
 
 
 def has_access(access_level, **kwargs):

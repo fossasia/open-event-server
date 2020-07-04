@@ -1,7 +1,9 @@
 import json
 
+from sqlalchemy.event import listens_for
 from sqlalchemy.schema import UniqueConstraint
 
+from app.api.helpers.utilities import to_snake_case
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -67,6 +69,72 @@ speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 attendee_form_str = json.dumps(ATTENDEE_FORM, separators=(',', ':'))
 
 
+CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
+    "session": {
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "shortAbstract": "Short Abstract",
+        "longAbstract": "Long Abstract",
+        "comments": "Comment",
+        "track": "Track",
+        "sessionType": "Session Type",
+        "level": "Level",
+        "language": "Language",
+        "slidesUrl": "Slide",
+        "videoUrl": "Video",
+        "audioUrl": "Audio",
+    },
+    "speaker": {
+        "name": "Name",
+        "email": "Email",
+        "photoUrl": "Photo",
+        "organisation": "Organisation",
+        "position": "Position",
+        "address": "Address",
+        "country": "Country",
+        "city": "City",
+        "longBiography": "Long Biography",
+        "shortBiography": "Short Biography",
+        "speakingExperience": "Speaking Experience",
+        "sponsorshipRequired": "Sponsorship Required",
+        "gender": "Gender",
+        "heardFrom": "Heard From",
+        "mobile": "Mobile",
+        "website": "Website",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "github": "GitHub",
+        "linkedin": "Linkedin",
+        "instagram": "Instagram",
+    },
+    "attendee": {
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "email": "Email",
+        "address": "Address",
+        "city": "City",
+        "state": "State",
+        "country": "Country",
+        "jobTitle": "Job Title",
+        "phone": "Phone",
+        "taxBusinessInfo": "Tax Business Info",
+        "billingAddress": "Billing Address",
+        "homeAddress": "Home Address",
+        "shippingAddress": "Shipping Address",
+        "company": "Company",
+        "workAddress": "Work Address",
+        "workPhone": "Work Phone",
+        "website": "Website",
+        "blog": "Blog",
+        "twitter": "Twitter",
+        "facebook": "Facebook",
+        "github": "GitHub",
+        "gender": "Gender",
+        "ageGroup": "Age Group",
+    },
+}
+
+
 class CustomForms(SoftDeletionModel):
     """custom form model class"""
 
@@ -80,13 +148,47 @@ class CustomForms(SoftDeletionModel):
     field_identifier = db.Column(db.String, nullable=False)
     form = db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    is_required = db.Column(db.Boolean)
-    is_included = db.Column(db.Boolean)
-    is_fixed = db.Column(db.Boolean)
-    is_complex = db.Column(db.Boolean)
+    is_required = db.Column(db.Boolean, default=False)
+    is_included = db.Column(db.Boolean, default=False)
+    is_fixed = db.Column(db.Boolean, default=False)
+    is_complex = db.Column(db.Boolean, nullable=False, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     custom_form_options = db.relationship('CustomFormOptions', backref="custom_form")
 
+    @property
+    def identifier(self):
+        return to_snake_case(self.field_identifier)
+
     def __repr__(self):
-        return '<CustomForm %r>' % self.id
+        return '<CustomForm %r %r>' % (self.id, self.identifier)
+
+
+def get_set_field_name(target: CustomForms) -> str:
+    form_map = CUSTOM_FORM_IDENTIFIER_NAME_MAP[target.form]
+    target_name = form_map.get(target.field_identifier)
+    if target_name:
+        target.name = target_name
+
+    return target.name
+
+
+@listens_for(CustomForms, 'before_insert')
+@listens_for(CustomForms, 'before_update')
+def generate_name(mapper, connect, target: CustomForms) -> None:
+    get_set_field_name(target)
+
+
+def assign_field_names(session) -> None:
+    "Used to migrate existing form fields in DB. Don't modify"
+    statements = []
+
+    for form, dict_map in CUSTOM_FORM_IDENTIFIER_NAME_MAP.items():
+        for identifier, name in dict_map.items():
+            statements.append(
+                f"UPDATE custom_forms SET name = '{name}' WHERE form = '{form}' and field_identifier = '{identifier}';"
+            )
+
+    for statement in statements:
+        session.execute(statement)

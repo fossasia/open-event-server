@@ -12,11 +12,7 @@ from app.api.helpers.scheduled_jobs import (
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-from tests.factories.attendee import (
-    AttendeeFactoryBase,
-    AttendeeOrderSubFactory,
-    AttendeeSubFactory,
-)
+from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
 from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
@@ -52,7 +48,7 @@ def test_delete_ticket_holder_with_valid_order_id(db):
 
 def test_delete_ticket_holders_with_no_order_id(db):
     """Method to test deleting ticket holders with no order id after expiry time"""
-    attendee = AttendeeFactoryBase(created_at=common.date_)
+    attendee = AttendeeSubFactory(created_at=common.date_)
     db.session.commit()
     attendee_id = attendee.id
     delete_ticket_holders_no_order_id()

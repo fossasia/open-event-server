@@ -5,7 +5,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.custom_forms import validate_custom_form_constraints_request
+from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -206,19 +207,12 @@ class AttendeeDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
-        #         if not has_access('is_registrar', event_id=obj.event_id):
-        #         raise ForbiddenError({'source': 'User'}, 'You are not authorized to access this.')
-
-        if 'ticket' in data:
-            ticket = (
-                db.session.query(Ticket)
-                .filter_by(id=int(data['ticket']), deleted_at=None)
-                .first()
+        order = safe_query_by_id(Order, obj.order_id)
+        if order.status != 'initializing':
+            raise UnprocessableEntityError(
+                {'pointer': '/data/id'},
+                "Attendee can't be updated because the corresponding order is not in initializing state",
             )
-            if ticket is None:
-                raise UnprocessableEntityError(
-                    {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
-                )
 
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
@@ -288,6 +282,10 @@ class AttendeeDetail(ResourceDetail):
                 data['attendee_notes'] = '{},{}'.format(
                     obj.attendee_notes, data['attendee_notes']
                 )
+
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'attendee', self.resource.schema, obj, data
+        )
 
     decorators = (jwt_required,)
     schema = AttendeeSchema

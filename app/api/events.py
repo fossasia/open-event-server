@@ -868,3 +868,43 @@ def clear_export_urls(event):
     event.xcal_url = None
     event.pentabarf_url = None
     save_to_db(event)
+
+
+class UpcomingEventList(EventList):
+    """
+    List Upcoming Events
+    """
+
+    def before_get(self, args, kwargs):
+        """
+        method for assigning schema based on admin access
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        super().before_get(args, kwargs)
+        self.schema.self_view_many = 'v1.upcoming_event_list'
+
+    def query(self, view_kwargs):
+        """
+        query method for upcoming events list
+        :param view_kwargs:
+        :return:
+        """
+        current_time = datetime.now(pytz.utc)
+        query_ = (
+            self.session.query(Event)
+            .filter(
+                Event.ends_at > current_time,
+                Event.state == 'published',
+                Event.privacy == 'public',
+            )
+            .order_by(Event.starts_at)
+        )
+        return query_
+
+    data_layer = {
+        'session': db.session,
+        'model': Event,
+        'methods': {'query': query},
+    }

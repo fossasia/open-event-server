@@ -2,6 +2,7 @@ from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.static import AGE_GROUP_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
@@ -63,7 +64,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
         attribute='event',
         self_view='v1.attendee_event',
@@ -72,6 +73,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='EventSchema',
         type_='event',
+        dump_only=True,
     )
     user = Relationship(
         attribute='user',
@@ -81,6 +83,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
     )
 
 
@@ -107,6 +110,7 @@ class AttendeeSchema(AttendeeSchemaPublic):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='TicketSchemaPublic',
         type_='ticket',
+        dump_only=True,
     )
     order = Relationship(
         self_view='v1.attendee_order',
@@ -115,4 +119,5 @@ class AttendeeSchema(AttendeeSchemaPublic):
         related_view_kwargs={'attendee_id': '<id>'},
         schema='OrderSchema',
         type_='order',
+        dump_only=True,
     )

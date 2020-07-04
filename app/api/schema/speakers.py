@@ -2,6 +2,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
@@ -54,7 +55,7 @@ class SpeakerSchema(SoftDeletionSchema):
     gender = fields.Str(allow_none=True)
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
         attribute='event',
         self_view='v1.speaker_event',

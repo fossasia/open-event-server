@@ -3,6 +3,7 @@
 import random
 import re
 import string
+from typing import Any, Dict
 
 import bleach
 import requests
@@ -14,6 +15,22 @@ from app.api.helpers.errors import UnprocessableEntityError
 
 def dasherize(text):
     return text.replace('_', '-')
+
+
+def to_snake_case(text):
+    text = text.replace('-', '_')
+    return re.sub('([A-Z]+)', r'_\1', text).lower()
+
+
+def dict_to_snake_case(input_dict: Dict[str, Any]) -> Dict[str, Any]:
+    if not input_dict:
+        return input_dict
+
+    output = {}
+    for key, val in input_dict.items():
+        output[to_snake_case(key)] = val
+
+    return output
 
 
 def require_relationship(resource_list, data):

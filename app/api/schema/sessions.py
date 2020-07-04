@@ -7,6 +7,7 @@ from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
@@ -113,7 +114,7 @@ class SessionSchema(SoftDeletionSchema):
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
         attribute='microlocation',
         self_view='v1.session_microlocation',

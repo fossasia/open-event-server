@@ -13,7 +13,7 @@ class DiscountCodeFactory(BaseFactory):
         model = DiscountCode
 
     marketer = factory.RelatedFactory(UserFactory)
-    code = common.string_
+    code = factory.Sequence(lambda n: 'john%s' % n)
     discount_url = common.url_
     value = common.float_
     type = "amount"
