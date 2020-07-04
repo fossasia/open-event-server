@@ -50,7 +50,7 @@ class SessionSchema(SoftDeletionSchema):
             if 'event' not in data:
                 data['event'] = session.event_id
 
-        if data['starts_at'] and data['ends_at']:
+        if data.get('starts_at') and data.get('ends_at'):
             if data['starts_at'] >= data['ends_at']:
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/ends-at'},

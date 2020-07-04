@@ -6,7 +6,7 @@ from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.session_type import SessionTypeFactory
-from tests.factories.track import TrackFactory
+from tests.factories.track import TrackFactory, TrackSubFactory
 
 
 class SessionFactoryBase(BaseFactory):
@@ -29,15 +29,19 @@ class SessionFactoryBase(BaseFactory):
     state = "accepted"
     submitted_at = common.date_
     is_mail_sent = True
-    event_id = 1
-    session_type_id = 1
-    track_id = 1
-    microlocation_id = 1
+
+
+class SessionSubFactory(SessionFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)
+    track = factory.SubFactory(TrackSubFactory)
 
 
 class SessionFactory(SessionFactoryBase):
-
     event = factory.RelatedFactory(EventFactoryBasic)
     session_type = factory.RelatedFactory(SessionTypeFactory)
     track = factory.RelatedFactory(TrackFactory)
     microlocation = factory.RelatedFactory(MicrolocationFactory)
+    event_id = 1
+    session_type_id = 1
+    track_id = 1
+    microlocation_id = 1
