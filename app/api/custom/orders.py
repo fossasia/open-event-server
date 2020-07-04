@@ -229,9 +229,7 @@ def complete_order(order_id):
         )
     form_fields = (
         db.session.query(CustomForms)
-        .filter_by(
-            event_id=order.event_id, form='attendee', is_included=True, deleted_at=None
-        )
+        .filter_by(event_id=order.event_id, form='attendee', is_included=True)
         .all()
     )
     for attendee, updated_attendee in zip(attendees, updated_attendees):
