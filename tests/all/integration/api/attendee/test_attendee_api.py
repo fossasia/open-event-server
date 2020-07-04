@@ -6,17 +6,17 @@ from tests.factories.order import OrderSubFactory
 from tests.factories.ticket import TicketSubFactory
 
 
-def get_minimal_attendee(db):
+def get_minimal_attendee(db, user):
     attendee = AttendeeOrderTicketSubFactory(
-        email=None, address=None, city=None, state=None, country=None
+        email=None, address=None, city=None, state=None, country=None, order__user=user
     )
     db.session.commit()
 
     return attendee
 
 
-def test_edit_attendee_minimum_fields(db, client, jwt):
-    attendee = get_minimal_attendee(db)
+def test_edit_attendee_minimum_fields(db, client, jwt, user):
+    attendee = get_minimal_attendee(db, user)
 
     data = json.dumps(
         {
@@ -41,8 +41,8 @@ def test_edit_attendee_minimum_fields(db, client, jwt):
     assert attendee.lastname == 'Jamal'
 
 
-def get_simple_custom_form_attendee(db):
-    attendee = get_minimal_attendee(db)
+def get_simple_custom_form_attendee(db, user):
+    attendee = get_minimal_attendee(db, user)
     CustomForms(
         event=attendee.event,
         form='attendee',
@@ -64,8 +64,8 @@ def get_simple_custom_form_attendee(db):
     return attendee
 
 
-def test_edit_attendee_required_fields_missing(db, client, jwt):
-    attendee = get_simple_custom_form_attendee(db)
+def test_edit_attendee_required_fields_missing(db, client, jwt, user):
+    attendee = get_simple_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -108,8 +108,8 @@ def test_edit_attendee_required_fields_missing(db, client, jwt):
     assert attendee.email is None
 
 
-def test_edit_attendee_required_fields_complete(db, client, jwt):
-    attendee = get_simple_custom_form_attendee(db)
+def test_edit_attendee_required_fields_complete(db, client, jwt, user):
+    attendee = get_simple_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -147,8 +147,8 @@ def test_edit_attendee_required_fields_complete(db, client, jwt):
     assert attendee.complex_field_values is None
 
 
-def get_complex_custom_form_attendee(db):
-    attendee = get_minimal_attendee(db)
+def get_complex_custom_form_attendee(db, user):
+    attendee = get_minimal_attendee(db, user)
     CustomForms(
         event=attendee.event,
         form='attendee',
@@ -182,8 +182,8 @@ def get_complex_custom_form_attendee(db):
     return attendee
 
 
-def test_custom_form_complex_fields_missing_required(db, client, jwt):
-    attendee = get_complex_custom_form_attendee(db)
+def test_custom_form_complex_fields_missing_required(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -222,8 +222,8 @@ def test_custom_form_complex_fields_missing_required(db, client, jwt):
     assert attendee.complex_field_values is None
 
 
-def test_custom_form_complex_fields_missing_required_one(db, client, jwt):
-    attendee = get_complex_custom_form_attendee(db)
+def test_custom_form_complex_fields_missing_required_one(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -267,8 +267,8 @@ def test_custom_form_complex_fields_missing_required_one(db, client, jwt):
     assert attendee.complex_field_values is None
 
 
-def test_custom_form_complex_fields_complete(db, client, jwt):
-    attendee = get_complex_custom_form_attendee(db)
+def test_custom_form_complex_fields_complete(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -302,9 +302,9 @@ def test_custom_form_complex_fields_complete(db, client, jwt):
     assert attendee.complex_field_values['best_friend'] == 'Tester'
 
 
-def test_ignore_complex_custom_form_fields(db, client, jwt):
+def test_ignore_complex_custom_form_fields(db, client, jwt, user):
     """Test to see that extra data from complex JSON is dropped"""
-    attendee = get_complex_custom_form_attendee(db)
+    attendee = get_complex_custom_form_attendee(db, user)
 
     data = json.dumps(
         {
@@ -344,8 +344,8 @@ def test_ignore_complex_custom_form_fields(db, client, jwt):
     assert attendee.complex_field_values.get('shalimar') is None
 
 
-def test_throw_complex_custom_form_fields(db, client, jwt):
-    attendee = get_complex_custom_form_attendee(db)
+def test_throw_complex_custom_form_fields(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
     CustomForms(
         event=attendee.event,
         form='attendee',
@@ -400,8 +400,8 @@ def test_throw_complex_custom_form_fields(db, client, jwt):
     }
 
 
-def test_throw_invalid_complex_custom_form_fields(db, client, jwt):
-    attendee = get_complex_custom_form_attendee(db)
+def test_throw_invalid_complex_custom_form_fields(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
     CustomForms(
         event=attendee.event,
         form='attendee',
@@ -522,8 +522,8 @@ def test_edit_attendee_order(db, client, jwt):
     assert attendee.order.id == attendee_order.id
 
 
-def test_edit_attendee_when_order_is_pending(db, client, jwt):
-    attendee = AttendeeOrderTicketSubFactory()
+def test_edit_attendee_when_order_is_pending(db, client, jwt, user):
+    attendee = AttendeeOrderTicketSubFactory(order__user=user)
     order = attendee.order
 
     order.status = "pending"
@@ -557,8 +557,8 @@ def test_edit_attendee_when_order_is_pending(db, client, jwt):
     assert attendee.lastname != "Ali"
 
 
-def test_edit_attendee_when_order_is_completed(db, client, jwt):
-    attendee = AttendeeOrderTicketSubFactory()
+def test_edit_attendee_when_order_is_completed(db, client, jwt, user):
+    attendee = AttendeeOrderTicketSubFactory(order__user=user)
     order = attendee.order
 
     order.status = "completed"
@@ -590,3 +590,48 @@ def test_edit_attendee_when_order_is_completed(db, client, jwt):
     # Attendee should not be updated
     assert response.status_code == 422
     assert attendee.firstname != "Haider"
+
+
+def test_edit_attendee_by_some_other_user(db, client, jwt):
+    attendee = AttendeeOrderTicketSubFactory()
+    order = attendee.order
+
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                'attributes': {"firstname": "Haider"},
+                "relationships": {
+                    "order": {"data": {"id": str(order.id), "type": "order"}}
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 403
+
+    assert attendee.firstname != "Haider"
+
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'status': 403,
+                'source': None,
+                'title': 'Access Forbidden',
+                'detail': 'Only admin or that user itself can update attendee info',
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }

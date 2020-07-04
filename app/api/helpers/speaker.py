@@ -10,7 +10,9 @@ def can_edit_after_cfs_ends(event_id):
     Method to check that user has permission to edit the speaker or session
     after the CFS ends
     """
-    speakers_call = SpeakersCall.query.filter_by(event_id=event_id, deleted_at=None).one()
+    speakers_call = SpeakersCall.query.filter_by(
+        event_id=event_id, deleted_at=None
+    ).one_or_none()
     if speakers_call:
         speakers_call_tz = speakers_call.ends_at.tzinfo
         return not (

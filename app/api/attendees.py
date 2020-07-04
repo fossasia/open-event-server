@@ -6,7 +6,7 @@ from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
-from app.api.helpers.db import safe_query, safe_query_kwargs, safe_query_by_id
+from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -207,6 +207,12 @@ class AttendeeDetail(ResourceDetail):
         :return:
         """
         order = safe_query_by_id(Order, obj.order_id)
+
+        if not (current_user.is_staff or current_user.id == order.user_id):
+            raise ForbiddenError(
+                'Only admin or that user itself can update attendee info',
+            )
+
         if order.status != 'initializing':
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
