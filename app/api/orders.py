@@ -12,6 +12,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
 from app.api.bootstrap import api
+from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
@@ -46,6 +47,7 @@ from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
+from app.api.schema.attendees import AttendeeSchema
 from app.models import db
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
@@ -379,6 +381,13 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('status') == 'pending':
+            attendees = order.ticket_holders
+            for attendee in attendees:
+                validate_custom_form_constraints_request(
+                    'attendee', AttendeeSchema, attendee, {}
+                )
+
         if data.get('amount') and (
             data.get('is_billing_enabled') or order.event.is_billing_info_mandatory
         ):
