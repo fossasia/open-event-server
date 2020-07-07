@@ -3,6 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
+from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.files import make_frontend_url
@@ -51,6 +52,10 @@ class SessionListPost(ResourceList):
             > 0
         ):
             raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
+
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'session', self.schema, Session(event_id=data['event']), data
+        )
 
     def after_create_object(self, session, data, view_kwargs):
         """
@@ -166,7 +171,7 @@ class SessionDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('is_locked') != session.is_locked:
+        if session.is_locked:
             if not (
                 has_access('is_admin')
                 or has_access('is_organizer', event_id=session.event_id)
@@ -176,7 +181,7 @@ class SessionDetail(ResourceDetail):
                     "You don't have enough permissions to change this property",
                 )
 
-        if session.is_locked and data.get('is_locked') == session.is_locked:
+        if session.is_locked and data.get('is_locked') != session.is_locked:
             raise ForbiddenError(
                 {'source': '/data/attributes/is-locked'},
                 "Locked sessions cannot be edited",
@@ -186,6 +191,10 @@ class SessionDetail(ResourceDetail):
             raise ForbiddenError(
                 {'source': ''}, "Cannot edit session after the call for speaker is ended"
             )
+
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'session', self.resource.schema, session, data
+        )
 
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """

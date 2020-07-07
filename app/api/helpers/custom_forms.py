@@ -29,13 +29,15 @@ def get_schema(form_fields):
     return type('DynamicSchema', (marshmallow.Schema,), attrs)
 
 
-def validate_custom_form_constraints(form, obj):
+def validate_custom_form_constraints(form, obj, relationship_fields):
     form_fields = CustomForms.query.filter_by(
         form=form, event_id=obj.event_id, is_included=True,
     ).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
     for field in required_form_fields:
+        if field.identifier in relationship_fields:
+            continue
         if not field.is_complex:
             if not getattr(obj, field.identifier):
                 missing_required_fields.append(field.identifier)
@@ -69,4 +71,4 @@ def validate_custom_form_constraints_request(form, schema, obj, data):
         if hasattr(new_obj, key) and key not in relationship_fields:
             setattr(new_obj, key, value)
 
-    return validate_custom_form_constraints(form, new_obj)
+    return validate_custom_form_constraints(form, new_obj, relationship_fields)

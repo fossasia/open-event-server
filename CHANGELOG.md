@@ -1,5 +1,17 @@
 ## Changelog
 
+#### v1.16.0 (2020-07-06):
+
+**MAJOR BREAKING CHANGES**
+Order API has changed and old API has been deprecated and limited to avoid data integrity bugs. Please check the changes thoroughly before upgrading
+
+- Switch to new Orders API with proper testing of discount code, tax and amount calculation
+- Add constraint checks on attendee custom forms and order status
+- Change custom form model schema to allow custom fields
+- Add endpoint for upcoming events (beta)
+- Various testing and maintenance improvements  
+- Various dependency updates
+
 #### v1.15.0 (2020-04-15):
 
 **BREAKING CHANGE**

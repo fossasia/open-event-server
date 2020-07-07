@@ -8,7 +8,7 @@ from app.models import db
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.microlocation import MicrolocationFactoryBase
-from tests.factories.session import SessionFactory, SessionFactoryBase
+from tests.factories.session import SessionFactory, SessionFactoryBasic
 from tests.factories.speaker import SpeakerFactoryBase
 from tests.factories.user import UserFactory
 
@@ -70,13 +70,13 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
                 SpeakerFactoryBase.build(name='Hong Phuc Dang', user_id=1),
             ]
 
-            SessionFactoryBase(
+            SessionFactoryBasic(
                 title='Hot Session',
                 starts_at=datetime(2019, 10, 15, 11, 30, 00),
                 ends_at=datetime(2019, 10, 15, 12, 00, 54),
             )
 
-            future_session = SessionFactoryBase(
+            future_session = SessionFactoryBasic(
                 title='Future Session',
                 starts_at=datetime(2019, 10, 16, 9, 15, 30),
                 ends_at=datetime(2019, 10, 16, 10, 30, 45),
@@ -87,7 +87,7 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             ]
 
             MicrolocationFactoryBase(name='Assembly Hall')
-            end_session = SessionFactoryBase(
+            end_session = SessionFactoryBasic(
                 title='Bye Bye Session',
                 starts_at=datetime(2019, 10, 16, 11, 30, 20),
                 ends_at=datetime(2019, 10, 16, 13, 00, 30),

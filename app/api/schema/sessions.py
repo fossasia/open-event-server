@@ -50,7 +50,7 @@ class SessionSchema(SoftDeletionSchema):
             if 'event' not in data:
                 data['event'] = session.event_id
 
-        if data['starts_at'] and data['ends_at']:
+        if data.get('starts_at') and data.get('ends_at'):
             if data['starts_at'] >= data['ends_at']:
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/ends-at'},
@@ -64,20 +64,19 @@ class SessionSchema(SoftDeletionSchema):
                     "starts-at should be after current date-time",
                 )
 
-        if 'state' in data:
-            if data['state'] not in ('draft', 'pending'):
-                if not has_access('is_coorganizer', event_id=data['event']):
-                    raise ForbiddenError(
-                        {'source': ''}, 'Co-organizer access is required.'
-                    )
-
-        if 'track' in data:
+        if data.get('state') and data['state'] not in ('draft', 'pending'):
             if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
+                raise ForbiddenError(
+                    {'pointer': '/data/attributes/state'},
+                    'Co-organizer access is required.',
+                )
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
+                raise ForbiddenError(
+                    {'pointer': '/relationships/microlocation'},
+                    'Co-organizer access is required.',
+                )
 
         validate_complex_fields_json(self, data, original_data)
 
@@ -100,7 +99,7 @@ class SessionSchema(SoftDeletionSchema):
             choices=["pending", "accepted", "confirmed", "rejected", "draft"]
         ),
         allow_none=True,
-        default='draft',
+        missing='draft',
     )
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
