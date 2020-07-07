@@ -1,7 +1,7 @@
 import factory
 
-import tests.factories.common as common
 from app.models.ticket_fee import TicketFees, db
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

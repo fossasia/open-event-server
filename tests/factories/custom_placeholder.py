@@ -1,5 +1,5 @@
-import tests.factories.common as common
 from app.models.custom_placeholder import CustomPlaceholder
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

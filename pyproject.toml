@@ -24,8 +24,9 @@ exclude = '''
 '''
 
 [tool.isort]
+profile = "black"
 line_length = 90
-skip = 'migrations/,manage.py,instance.py,hook_main.py'
+skip = '.venv/,migrations/,manage.py,instance.py,hook_main.py'
 known_first_party = 'app'
 known_third_party = 'flask'
 multi_line_output = 3

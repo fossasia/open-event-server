@@ -5,7 +5,6 @@ import threading
 from os.path import join
 
 import yaml
-
 from auto_updater import AutoUpdater
 
 POLL_SECONDS = 60

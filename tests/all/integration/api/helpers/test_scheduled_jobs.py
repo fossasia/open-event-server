@@ -1,7 +1,6 @@
 import datetime
 from datetime import timedelta, timezone
 
-import tests.factories.common as common
 from app.api.helpers.scheduled_jobs import (
     delete_ticket_holders_no_order_id,
     event_invoices_mark_due,
@@ -12,6 +11,7 @@ from app.api.helpers.scheduled_jobs import (
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
+from tests.factories import common
 from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
 from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory

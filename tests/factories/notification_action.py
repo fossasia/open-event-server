@@ -1,5 +1,5 @@
-import app.models.notification as notification
-import tests.factories.common as common
+from app.models import notification
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 
