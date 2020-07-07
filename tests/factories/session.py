@@ -36,12 +36,15 @@ class SessionSubFactory(SessionFactoryBase):
     track = factory.SubFactory(TrackSubFactory)
 
 
-class SessionFactory(SessionFactoryBase):
-    event = factory.RelatedFactory(EventFactoryBasic)
-    session_type = factory.RelatedFactory(SessionTypeFactory)
-    track = factory.RelatedFactory(TrackFactory)
-    microlocation = factory.RelatedFactory(MicrolocationFactory)
+class SessionFactoryBasic(SessionFactoryBase):
     event_id = 1
     session_type_id = 1
     track_id = 1
     microlocation_id = 1
+
+
+class SessionFactory(SessionFactoryBasic):
+    event = factory.RelatedFactory(EventFactoryBasic)
+    session_type = factory.RelatedFactory(SessionTypeFactory)
+    track = factory.RelatedFactory(TrackFactory)
+    microlocation = factory.RelatedFactory(MicrolocationFactory)

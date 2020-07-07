@@ -4,7 +4,6 @@ from app.models.custom_form import CustomForms
 from app.models.speaker import Speaker
 from tests.factories.speaker import SpeakerSubFactory
 from tests.factories.speakers_call import SpeakersCallSubFactory
-from tests.factories.track import TrackSubFactory
 
 
 def get_minimal_speaker(db, user):

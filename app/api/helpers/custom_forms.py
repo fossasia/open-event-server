@@ -64,7 +64,7 @@ def validate_custom_form_constraints(form, obj, relationship_fields):
         return data if data else None
 
 
-def validate_custom_form_constraints_request(form, schema, obj, data, field_overrides=[]):
+def validate_custom_form_constraints_request(form, schema, obj, data):
     new_obj = type(obj)(**object_as_dict(obj))
     relationship_fields = get_relationships(schema)
     for key, value in data.items():
