@@ -2,6 +2,7 @@ import json
 
 from app.models.order import Order
 from app.models.custom_form import CustomForms
+from app.models.ticket_holder import TicketHolder
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderSubFactory
@@ -212,3 +213,42 @@ def test_order_placed_incomplete_complex_custom_form(client, db, user, jwt):
         ],
         'jsonapi': {'version': '1.0'},
     }
+
+
+def test_order_pending_complete_complex_custom_form(client, db, user, jwt):
+    order_id = get_complex_custom_form_order(db, user)
+    order = Order.query.get(order_id)
+
+    attendee = TicketHolder.query.filter_by(order_id=order.id).first()
+    attendee.complex_field_values = {
+        "what_college": "Zakir Hussain College",
+        "what_university": "Aligarh Muslim University",
+    }
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            "data": {
+                "attributes": {"status": "pending", "order-notes": "do it pending"},
+                "type": "order",
+                "id": order_id,
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/orders/{order_id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(order)
+
+    json_response = json.loads(response.data)
+
+    assert response.status_code == 200
+    assert order.status == "pending"
+    assert order.order_notes == "do it pending"
+    assert json_response['data']['attributes']['status'] == "pending"
+    assert json_response['data']['attributes']['order-notes'] == "do it pending"
