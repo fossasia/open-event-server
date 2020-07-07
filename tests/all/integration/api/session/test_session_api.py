@@ -59,6 +59,14 @@ def get_simple_custom_form_session(db, user):
     CustomForms(
         event=session.event,
         form='session',
+        field_identifier='track',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
+    CustomForms(
+        event=session.event,
+        form='session',
         field_identifier='level',
         type='number',
         is_included=True,
@@ -243,6 +251,14 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
 
 def get_complex_custom_form_session(db, user):
     session = get_minimal_session(db, user)
+    CustomForms(
+        event=session.event,
+        form='session',
+        field_identifier='track',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
     CustomForms(
         event=session.event,
         form='session',
