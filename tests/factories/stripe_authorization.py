@@ -1,7 +1,7 @@
 import factory
 
-import tests.factories.common as common
 from app.models.stripe_authorization import StripeAuthorization
+from tests.factories import common as common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 

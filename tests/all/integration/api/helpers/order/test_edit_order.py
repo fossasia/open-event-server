@@ -1,7 +1,7 @@
 import json
 
-from app.models.order import Order
 from app.models.custom_form import CustomForms
+from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic

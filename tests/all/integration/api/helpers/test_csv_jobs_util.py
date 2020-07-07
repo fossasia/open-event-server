@@ -1,11 +1,11 @@
 import unittest
 from datetime import datetime
 
-import tests.factories.common as common
 from app.api.helpers.csv_jobs_util import *
 from app.models import db
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
+from tests.factories import common as common
 from tests.factories.attendee import AttendeeFactory
 from tests.factories.order import OrderFactory
 from tests.factories.session import SessionFactory
