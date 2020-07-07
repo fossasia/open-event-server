@@ -163,7 +163,7 @@ def get_complex_custom_form_order(db, user):
     return str(order.id)
 
 
-def test_order_status_to_pending_incomplete_simple_custom_form(client, db, user, jwt):
+def test_order_pending_incomplete_simple_custom_form(client, db, user, jwt):
     order_id = get_simple_custom_form_order(db, user)
     order = Order.query.get(order_id)
 
@@ -202,7 +202,7 @@ def test_order_status_to_pending_incomplete_simple_custom_form(client, db, user,
     }
 
 
-def test_order_status_to_pending_incomplete_complex_custom_form(client, db, user, jwt):
+def test_order_pending_incomplete_complex_custom_form(client, db, user, jwt):
     order_id = get_complex_custom_form_order(db, user)
     order = Order.query.get(order_id)
 
