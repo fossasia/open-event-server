@@ -1,4 +1,4 @@
-from app.models import notification as notification
+from app.models import notification
 from tests.factories import common
 from tests.factories.base import BaseFactory
 
