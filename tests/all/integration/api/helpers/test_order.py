@@ -8,7 +8,7 @@ from app.models import db
 from app.models.order import Order
 from app.settings import get_settings
 from tests.all.integration.utils import OpenEventTestCase
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.attendee import AttendeeFactoryBase, AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory

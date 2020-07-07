@@ -1,5 +1,5 @@
 from app.models.image_size import ImageSizes
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

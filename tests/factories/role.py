@@ -1,6 +1,6 @@
 from app.models.role import Role
 from app.models.user import ORGANIZER
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

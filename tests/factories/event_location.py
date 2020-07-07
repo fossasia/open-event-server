@@ -1,5 +1,5 @@
 from app.models.event_location import EventLocation
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

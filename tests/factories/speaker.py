@@ -1,7 +1,7 @@
 import factory
 
 from app.models.speaker import Speaker
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.session import SessionFactory

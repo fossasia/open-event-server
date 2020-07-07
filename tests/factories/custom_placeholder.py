@@ -1,5 +1,5 @@
 from app.models.custom_placeholder import CustomPlaceholder
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 
 

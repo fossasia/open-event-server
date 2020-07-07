@@ -1,7 +1,7 @@
 import factory
 
 from app.models.social_link import SocialLink
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 

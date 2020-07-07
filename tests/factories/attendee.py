@@ -1,7 +1,7 @@
 import factory
 
 from app.models.ticket_holder import TicketHolder
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory, OrderSubFactory

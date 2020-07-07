@@ -1,7 +1,7 @@
 import factory
 
 from app.models.discount_code import DiscountCode
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.user import UserFactory

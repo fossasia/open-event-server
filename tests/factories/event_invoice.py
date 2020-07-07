@@ -1,7 +1,7 @@
 import factory
 
 from app.models.event_invoice import EventInvoice
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.discount_code import DiscountCodeFactory
 from tests.factories.event import EventFactoryBasic

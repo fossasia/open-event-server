@@ -11,7 +11,7 @@ from app.api.helpers.scheduled_jobs import (
 from app.models.event_invoice import EventInvoice
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
-from tests.factories import common as common
+from tests.factories import common
 from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
 from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory
