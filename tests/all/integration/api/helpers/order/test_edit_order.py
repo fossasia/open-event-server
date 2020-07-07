@@ -1,6 +1,7 @@
 import json
 
 from app.models.order import Order
+from app.models.custom_form import CustomForms
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderSubFactory
@@ -91,3 +92,150 @@ def test_ignore_on_order_event_update(client, db, user, jwt):
     db.session.refresh(order)
     assert response.status_code == 200
     assert order.event == order_event
+
+
+def get_simple_custom_form_order(db, user):
+    order = OrderSubFactory(amount=234, status='initializing', user=user)
+    attendee = AttendeeSubFactory(order=order)
+
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='jobTitle',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
+
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='taxBusinessInfo',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
+
+    db.session.commit()
+
+    return str(order.id)
+
+
+def get_complex_custom_form_order(db, user):
+    order = OrderSubFactory(amount=234, status='initializing', user=user)
+    attendee = AttendeeSubFactory(order=order)
+
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='whatUniversity',
+        name='what university',
+        type='text',
+        is_complex=True,
+        is_included=True,
+        is_required=True,
+    )
+
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='whatCollege',
+        name='what college',
+        type='text',
+        is_complex=True,
+        is_included=True,
+        is_required=True,
+    )
+
+    CustomForms(
+        event=attendee.event,
+        form='attendee',
+        field_identifier='naamBatao',
+        name='naam batao',
+        type='text',
+        is_complex=True,
+        is_included=True,
+        is_required=False,
+    )
+
+    db.session.commit()
+
+    return str(order.id)
+
+
+def test_order_status_to_pending_incomplete_simple_custom_form(client, db, user, jwt):
+    order_id = get_simple_custom_form_order(db, user)
+    order = Order.query.get(order_id)
+
+    data = json.dumps(
+        {
+            "data": {
+                "attributes": {"status": "pending", "order-notes": "take me to pending"},
+                "type": "order",
+                "id": order_id,
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/orders/{order_id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(order)
+
+    assert response.status_code == 422
+    assert order.status != "pending"
+    assert order.order_notes != "take me to pending"
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'status': 422,
+                'source': {'pointer': '/data/attributes'},
+                'title': 'Unprocessable Entity',
+                'detail': "Missing required fields ['job_title', 'tax_business_info']",
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
+
+
+def test_order_status_to_pending_incomplete_complex_custom_form(client, db, user, jwt):
+    order_id = get_complex_custom_form_order(db, user)
+    order = Order.query.get(order_id)
+
+    data = json.dumps(
+        {
+            "data": {
+                "attributes": {"status": "pending", "order-notes": "do it pending"},
+                "type": "order",
+                "id": order_id,
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/orders/{order_id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(order)
+
+    assert response.status_code == 422
+    assert order.status != "pending"
+    assert order.order_notes != "do it pending"
+    assert json.loads(response.data) == {
+        'errors': [
+            {
+                'status': 422,
+                'source': {'pointer': '/data/attributes'},
+                'title': 'Unprocessable Entity',
+                'detail': "Missing required fields ['what_college', 'what_university']",
+            }
+        ],
+        'jsonapi': {'version': '1.0'},
+    }
