@@ -92,7 +92,7 @@ class SpeakerListPost(ResourceList):
                     )
 
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'speaker', SpeakerSchema, Speaker(event_id=data['event']), data
+            'speaker', self.schema, Speaker(event_id=data['event']), data
         )
 
     def after_create_object(self, speaker, data, view_kwargs):

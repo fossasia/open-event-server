@@ -53,6 +53,10 @@ class SessionListPost(ResourceList):
         ):
             raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
+        data['complex_field_values'] = validate_custom_form_constraints_request(
+            'session', self.schema, Session(event_id=data['event']), data
+        )
+
     def after_create_object(self, session, data, view_kwargs):
         """
         method to send email for creation of new session
