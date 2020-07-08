@@ -172,6 +172,9 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if not current_user.is_staff:
+            data['user'] = current_user.id
+
         if not can_edit_after_cfs_ends(speaker.event_id):
             raise ForbiddenError(
                 {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
