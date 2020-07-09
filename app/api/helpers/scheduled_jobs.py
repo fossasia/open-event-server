@@ -21,7 +21,7 @@ from app.api.helpers.notification import (
 )
 from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.storage import UPLOAD_PATHS
-from app.api.helpers.utilities import monthdelta
+from app.api.helpers.utilities import monthdelta, make_dict
 from app.instance import celery
 from app.models import db
 from app.models.event import Event
@@ -54,18 +54,23 @@ def send_after_event_mail():
             frontend_url = get_settings()['frontend_url']
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 unique_emails = set()
+                user_objects = list()
                 for speaker in speakers:
                     if not speaker.is_email_overridden:
                         unique_emails.add(speaker.user.email)
-                        send_notif_after_event(speaker.user, event.name)
+                        user_objects.append(speaker.user)
                 for organizer in organizers:
                     unique_emails.add(organizer.user.email)
-                    send_notif_after_event(organizer.user, event.name)
+                    user_objects.append(organizer.user)
                 if owner:
                     unique_emails.add(owner.user.email)
-                    send_notif_after_event(owner.user, event.name)
+                    user_objects.append(owner.user)
                 for email in unique_emails:
                     send_email_after_event(email, event.name, frontend_url)
+                # Unique user's dict based on their id.
+                unique_users_dict = make_dict(user_objects, "id")
+                for user in unique_users_dict.values():
+                    send_notif_after_event(user, event.name)
 
 
 @celery.task(base=RequestContextTask, name='change.session.state.on.event.completion')

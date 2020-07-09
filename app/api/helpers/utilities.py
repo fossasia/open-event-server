@@ -13,6 +13,19 @@ from itsdangerous import Serializer
 from app.api.helpers.errors import UnprocessableEntityError
 
 
+def make_dict(list_of_object, key):
+    """
+    To convert a list of object into dict.
+
+    This will return a dict containing unique keys
+    mapped to the object which contains that key.
+    """
+    mapped_dict = dict()
+    for obj in list_of_object:
+        mapped_dict[getattr(obj, key)] = obj
+    return mapped_dict
+
+
 def dasherize(text):
     return text.replace('_', '-')
 
