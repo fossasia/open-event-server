@@ -54,7 +54,7 @@ def send_after_event_mail():
             frontend_url = get_settings()['frontend_url']
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 unique_emails = set()
-                user_objects = list()
+                user_objects = []
                 for speaker in speakers:
                     if not speaker.is_email_overridden:
                         unique_emails.add(speaker.user.email)
