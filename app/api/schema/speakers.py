@@ -73,6 +73,7 @@ class SpeakerSchema(SoftDeletionSchema):
         related_view_kwargs={'speaker_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
     )
     sessions = Relationship(
         attribute='sessions',
