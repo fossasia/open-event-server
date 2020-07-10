@@ -3,7 +3,7 @@
 nose==1.3.7
 pylint==2.5.3
 pep8==1.7.1
-isort==5.0.6
+isort==5.0.7
 black==19.10b0
 pre-commit==2.6.0
 pytype==2020.6.26
