@@ -42,7 +42,7 @@ python-pentabarf-xml==0.20
 python-geoip-geolite2==2015.303
 pycountry==20.7.3
 pytz==2020.1
-diff-match-patch==20181111
+diff-match-patch==20200713
 blinker==1.4
 envparse==0.2
 git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.2
