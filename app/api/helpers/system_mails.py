@@ -177,7 +177,8 @@ MAILS = {
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
             u"<br/>Your order has been processed successfully."
-            + u"<br/> You can find your Tickets and Order Invoice attached to this mail."
+            u"<br/> You can find your Tickets and Order Invoice at the link below."
+            u"<br/>{order_view_url}"
             u"<br><br><em>Looking forward to seeing you at the event."
             u"<br/>Login to manage your orders at {frontend_url} </em>"
         ),
@@ -188,8 +189,7 @@ MAILS = {
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
             u"<br/>Your order has been processed successfully."
-            + u"<br/> Your tickets & invoice have been enclosed."
-            u"<br><br>You can also download your tickets in <b>My Tickets</b> section."
+            u"<br><br>You can download your tickets in <b>My Tickets</b> section."
             u"<br/>Login to manage the orders at <a href='{my_tickets_url}' target='_blank'>{my_tickets_url}</a> </em>"
             u"<br><br><em>Looking forward to seeing you at the event."
         ),

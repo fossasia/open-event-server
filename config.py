@@ -73,6 +73,7 @@ class Config:
     )
     ETAG = True
     SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.01)
+    ATTACH_ORDER_PDF = env.bool('ATTACH_ORDER_PDF', default=True)
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
