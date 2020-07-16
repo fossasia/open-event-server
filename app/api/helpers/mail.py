@@ -324,6 +324,11 @@ def send_email_change_user_email(user, email):
 
 
 def send_email_to_attendees(order, purchaser_id, attachments=None):
+    if not current_app.config['ATTACH_ORDER_PDF']:
+        attachments = None
+
+    frontend_url = get_settings()['frontend_url']
+    order_view_url = frontend_url + '/orders/' + order.identifier + '/view'
     for holder in order.ticket_holders:
         if holder.user and holder.user.id == purchaser_id:
             # Ticket holder is the purchaser
@@ -333,11 +338,12 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                 subject=MAILS[TICKET_PURCHASED]['subject'].format(
                     event_name=order.event.name,
                     invoice_id=order.invoice_number,
-                    frontend_url=get_settings()['frontend_url'],
+                    frontend_url=frontend_url,
                 ),
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     event_name=order.event.name,
-                    frontend_url=get_settings()['frontend_url'],
+                    frontend_url=frontend_url,
+                    order_view_url=order_view_url,
                 ),
                 attachments=attachments,
             )
@@ -350,7 +356,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                     event_name=order.event.name, invoice_id=order.invoice_number
                 ),
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                    my_tickets_url=get_settings()['frontend_url'] + '/my-tickets',
+                    my_tickets_url=frontend_url + '/my-tickets',
                     event_name=order.event.name,
                 ),
                 attachments=attachments,
