@@ -14,9 +14,9 @@
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
-It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
+It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
-The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
+The **Open Event Server** exposes a well-documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
 **API Documentation:**
 - Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
@@ -98,13 +98,13 @@ Required keys can be obtained from [https://www.instagram.com/developer/authenti
 
 #### Google Maps
 
-Google maps is used to get information about location (info about country, city, latitude and longitude).
+Google maps is used to get information about the location (info about country, city, latitude and longitude).
 
 Required keys can be obtained from [https://developers.google.com/maps/documentation/javascript/get-api-key](https://developers.google.com/maps/documentation/javascript/get-api-key).
 
 #### Media Storage - Local/Amazon S3/Google Cloud
 
-Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
+Media (like audio, avatars and logos) can be stored either locally or on Amazon S3 or Google Storage.
 
 1. [Amazon S3 Setup Instructions](/docs/general/amazon-s3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
@@ -190,7 +190,7 @@ The api is documented using [api blueprint](https://apiblueprint.org/). Local ch
 
 ```bash
 gem install apiaryio # dependency
-apiary preview --path docs/api/api_blueprint.apib # opens browser with generated file
+apiary preview --path docs/api/api_blueprint.apib # opens browser with the generated file
 ```
 
 ### Testing
@@ -249,9 +249,9 @@ pytest tests/
 ```
 
 #### Running robot framework tests
-* Make sure you have FireFox installed
+* Make sure you have Firefox browser installed
 * Start your local flask server instance.
-* Go to the project directory and Run the tests by using the following command.
+* Go to the project directory and run the tests by using the following command.
 
 ```
 robot -v SERVER:{server_name} -v SUPERUSER_USERNAME:{super_user_email_here} -v SUPERUSER_PASSWORD:{super_user_password} tests/robot
@@ -286,7 +286,7 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 We have the following branches :
  * **development**
-	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
+	 All development goes on in this branch. If you're contributing, please make a pull request to _development_.
 	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api-dev.herokuapp.com - Is running off of the development branch. It is hosted on Heroku.)
 
  * **master**
@@ -310,9 +310,9 @@ The tentative release policy, for now (since there is a lot of activity and a lo
 * When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
 
 **Join the development**
-* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
+* Before you join the development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
 * Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
-* If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
+* If you would like to work on an issue, drop in a comment on the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
 ## License
 
