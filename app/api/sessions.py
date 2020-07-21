@@ -138,6 +138,8 @@ class SessionList(ResourceList):
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
 
+        query_.distinct()
+
         return query_
 
     view_kwargs = True
