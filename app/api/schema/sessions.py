@@ -96,7 +96,7 @@ class SessionSchema(SoftDeletionSchema):
     signup_url = fields.Url(allow_none=True)
     state = fields.Str(
         validate=validate.OneOf(
-            choices=["pending", "accepted", "confirmed", "rejected", "draft"]
+            choices=["pending", "accepted", "confirmed", "rejected", "draft", "cancelled", "withdrawn"]
         ),
         allow_none=True,
         missing='draft',
