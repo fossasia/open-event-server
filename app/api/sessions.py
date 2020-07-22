@@ -1,5 +1,7 @@
+from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
 
 from app.api.bootstrap import api
 from app.api.events import Event
@@ -95,6 +97,28 @@ class SessionListPost(ResourceList):
     }
 
 
+def get_distinct_sort_fields(schema, model, sort=True):
+    """Due to the poor code of flask-rest-jsonapi, distinct query needed
+       in sessions API to remove duplicate sessions can't be sorted on
+       returning subquery, thus we need to add all sort fields in distinct
+       group and repeat it in sort group as well"""
+    fields = []
+    qs = QSManager(request.args, schema)
+    for sort_opt in qs.sorting:
+        field = sort_opt['field']
+        if not hasattr(model, field):
+            continue
+        field = getattr(model, field)
+        if sort:
+            field = getattr(field, sort_opt['order'])()
+        fields.append(field)
+    field = Session.id
+    if sort:
+        field = field.desc()
+    fields.append(field)
+    return fields
+
+
 class SessionList(ResourceList):
     """
     List Sessions
@@ -131,6 +155,8 @@ class SessionList(ResourceList):
                         or Session.speakers.any(Speaker.user_id == user.id)
                     )
                 )
+                .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
+                .order_by(*get_distinct_sort_fields(SessionSchema, Session))
             )
         query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
