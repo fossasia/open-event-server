@@ -63,5 +63,18 @@ def user(db):
 
 
 @pytest.fixture
+def admin_user(db):
+    user = UserFactory(is_admin=True)
+    db.session.commit()
+
+    return user
+
+
+@pytest.fixture
 def jwt(user):
     return {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
+
+
+@pytest.fixture
+def admin_jwt(admin_user):
+    return {'Authorization': "JWT " + create_access_token(admin_user.id, fresh=True)}

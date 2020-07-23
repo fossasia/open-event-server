@@ -172,6 +172,48 @@ class SessionList(ResourceList):
     data_layer = {'session': db.session, 'model': Session, 'methods': {'query': query}}
 
 
+SESSION_STATE_DICT = {
+    'organizer': {
+        'draft': {},  # No state change allowed
+        'pending': {
+            'withdrawn': True,
+            'accepted': True,
+            'rejected': True,
+            'confirmed': True,
+        },
+        'accepted': {
+            'withdrawn': True,
+            'rejected': True,
+            'confirmed': True,
+            'canceled': True,
+        },
+        'confirmed': {
+            'withdrawn': True,
+            'accepted': True,
+            'rejected': True,
+            'canceled': True,
+        },
+        'rejected': {'withdrawn': True, 'accepted': True, 'confirmed': True},
+        'canceled': {
+            'withdrawn': True,
+            'accepted': True,
+            'rejected': True,
+            'confirmed': True,
+        },
+        'withdrawn': {'accepted': True, 'rejected': True, 'confirmed': True},
+    },
+    'speaker': {
+        'draft': {'pending': True},
+        'pending': {'withdrawn': True},
+        'accepted': {'withdrawn': True},
+        'confirmed': {'withdrawn': True},
+        'rejected': {'withdrawn': True},
+        'canceled': {'withdrawn': True},
+        'withdrawn': {'pending': True},
+    },
+}
+
+
 class SessionDetail(ResourceDetail):
     """
     Session detail by id
@@ -197,11 +239,11 @@ class SessionDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        is_organizer = has_access('is_admin') or has_access(
+            'is_organizer', event_id=session.event_id
+        )
         if session.is_locked:
-            if not (
-                has_access('is_admin')
-                or has_access('is_organizer', event_id=session.event_id)
-            ):
+            if not is_organizer:
                 raise ForbiddenError(
                     {'source': '/data/attributes/is-locked'},
                     "You don't have enough permissions to change this property",
@@ -212,6 +254,21 @@ class SessionDetail(ResourceDetail):
                 {'source': '/data/attributes/is-locked'},
                 "Locked sessions cannot be edited",
             )
+
+        new_state = data.get('state')
+        if new_state and new_state != session.state:
+            # State change detected. Verify that state change is allowed
+            key = 'speaker'
+            if is_organizer:
+                key = 'organizer'
+            state_dict = SESSION_STATE_DICT[key]
+            try:
+                state_dict[session.state][new_state]
+            except KeyError:
+                raise ForbiddenError(
+                    {'pointer': '/data/attributes/state'},
+                    f'You cannot change a session state from "{session.state}" to "{new_state}"',
+                )
 
         if not can_edit_after_cfs_ends(session.event_id):
             raise ForbiddenError(

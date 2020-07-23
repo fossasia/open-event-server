@@ -64,13 +64,6 @@ class SessionSchema(SoftDeletionSchema):
                     "starts-at should be after current date-time",
                 )
 
-        if data.get('state') and data['state'] not in ('draft', 'pending'):
-            if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError(
-                    {'pointer': '/data/attributes/state'},
-                    'Co-organizer access is required.',
-                )
-
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
                 raise ForbiddenError(
@@ -96,9 +89,17 @@ class SessionSchema(SoftDeletionSchema):
     signup_url = fields.Url(allow_none=True)
     state = fields.Str(
         validate=validate.OneOf(
-            choices=["pending", "accepted", "confirmed", "rejected", "draft", "cancelled", "withdrawn"]
+            choices=[
+                "pending",
+                "accepted",
+                "confirmed",
+                "rejected",
+                "draft",
+                "canceled",
+                "withdrawn",
+            ]
         ),
-        allow_none=True,
+        allow_none=False,
         missing='draft',
     )
     created_at = fields.DateTime(dump_only=True)

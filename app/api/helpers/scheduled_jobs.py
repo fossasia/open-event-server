@@ -21,7 +21,7 @@ from app.api.helpers.notification import (
 )
 from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.storage import UPLOAD_PATHS
-from app.api.helpers.utilities import monthdelta, make_dict
+from app.api.helpers.utilities import make_dict, monthdelta
 from app.instance import celery
 from app.models import db
 from app.models.event import Event
