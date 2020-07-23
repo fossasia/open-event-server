@@ -280,14 +280,9 @@ class SessionDetail(ResourceDetail):
         )
 
     def after_update_object(self, session, data, view_kwargs):
-        """ Send email if session accepted or rejected """
+        """ Send email if session state changes """
 
-        if (
-            'state' in data
-            and data.get('send_email', None)
-            and (session.state == 'accepted' or session.state == 'rejected')
-        ):
-
+        if 'state' in data and data.get('send_email', None):
             event = session.event
             # Email for speaker
             speakers = session.speakers
