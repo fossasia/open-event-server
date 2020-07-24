@@ -51,7 +51,6 @@ from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
 from tests.factories.role import RoleFactory
-from tests.factories.module import ModuleFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.role_invite import RoleInviteFactory
 from tests.factories.custom_placeholder import CustomPlaceholderFactory
@@ -355,8 +354,6 @@ def event_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
         RoleFactory(name=OWNER)  # TODO: Change to get_or_create in event after_created
         db.session.commit()
 
@@ -395,8 +392,6 @@ def event_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
         event = EventFactoryBasic()
         db.session.add(event)
         db.session.commit()
@@ -2824,33 +2819,6 @@ def settings_patch(transaction):
     with stash['app'].app_context():
         setting = SettingFactory()
         db.session.add(setting)
-        db.session.commit()
-
-
-# ------------------------- Modules -------------------------
-@hooks.before("Modules > Modules Details > Show Modules")
-def modules_get_list(transaction):
-    """
-    GET /modules
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
-        db.session.commit()
-
-
-@hooks.before("Modules > Modules Details > Update Modules")
-def modules_patch(transaction):
-    """
-    PATCH /modules
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
         db.session.commit()
 
 

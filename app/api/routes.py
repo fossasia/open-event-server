@@ -120,7 +120,6 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
-from app.api.modules import ModuleDetail
 from app.api.notifications import (
     NotificationActionDetail,
     NotificationActionList,
@@ -424,9 +423,6 @@ api.route(
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
-
-# modules
-api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 
 # pages
 api.route(PageList, 'page_list', '/pages')
