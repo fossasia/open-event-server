@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, g
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
@@ -256,8 +256,10 @@ class SessionDetail(ResourceDetail):
             )
 
         new_state = data.get('state')
+
         if new_state and new_state != session.state:
             # State change detected. Verify that state change is allowed
+            g.send_email = new_state == 'accepted' or new_state == 'rejected'
             key = 'speaker'
             if is_organizer:
                 key = 'organizer'
@@ -282,12 +284,7 @@ class SessionDetail(ResourceDetail):
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """
 
-        if (
-            'state' in data
-            and data.get('send_email', None)
-            and (session.state == 'accepted' or session.state == 'rejected')
-        ):
-
+        if data.get('send_email', None) and g.get('send_email'):
             event = session.event
             # Email for speaker
             speakers = session.speakers
