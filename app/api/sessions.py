@@ -257,14 +257,9 @@ class SessionDetail(ResourceDetail):
 
         new_state = data.get('state')
 
-        g.send_email = (
-            new_state is not None
-            and new_state != session.state
-            and (new_state == 'accepted' or new_state == 'rejected')
-        )
-
         if new_state and new_state != session.state:
             # State change detected. Verify that state change is allowed
+            g.send_email = new_state == 'accepted' or new_state == 'rejected'
             key = 'speaker'
             if is_organizer:
                 key = 'organizer'
@@ -289,7 +284,7 @@ class SessionDetail(ResourceDetail):
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """
 
-        if g.send_email:
+        if data.get('send_email', None) and g.get('send_email'):
             event = session.event
             # Email for speaker
             speakers = session.speakers
