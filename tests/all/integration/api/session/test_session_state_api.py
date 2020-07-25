@@ -124,9 +124,7 @@ states = _create_permutations(['withdrawn'], ['pending'])
 
 @pytest.mark.parametrize('state,new_state', states)
 def test_revert_withdraw_speaker_disallow(db, client, user, jwt, new_state, state):
-    _test_state_change(
-        db, client, user, jwt, new_state, state=state, event_owner=False
-    )
+    _test_state_change(db, client, user, jwt, new_state, state=state, event_owner=False)
 
 
 def test_withdraw_speaker_error(

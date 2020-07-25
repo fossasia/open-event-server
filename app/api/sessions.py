@@ -202,7 +202,7 @@ SESSION_STATE_DICT = {
             'rejected': True,
             'confirmed': True,
         },
-        'withdrawn': {}, # Withdrawn is final
+        'withdrawn': {},  # Withdrawn is final
     },
     'speaker': {
         'draft': {'pending': True},
@@ -211,9 +211,10 @@ SESSION_STATE_DICT = {
         'confirmed': {'withdrawn': True},
         'rejected': {'withdrawn': True},
         'canceled': {'withdrawn': True},
-        'withdrawn': {}, # Withdrawn is final
+        'withdrawn': {},  # Withdrawn is final
     },
 }
+
 
 @sessions_blueprint.route('/states')
 def get_session_states():
