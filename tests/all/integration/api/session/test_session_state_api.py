@@ -28,6 +28,8 @@ def get_session(db, user, event_owner=True, **kwargs):
     return session
 
 
+# TODO(Areeb): Remove some states from tests to reduce testing time.
+# Not every state change needs to be tested
 def _test_state_change(
     db, client, user, jwt, new_state, state, event_owner=True, error=True
 ):
@@ -121,9 +123,9 @@ states = _create_permutations(['withdrawn'], ['pending'])
 
 
 @pytest.mark.parametrize('state,new_state', states)
-def test_revert_withdraw_speaker_allow(db, client, user, jwt, new_state, state):
+def test_revert_withdraw_speaker_disallow(db, client, user, jwt, new_state, state):
     _test_state_change(
-        db, client, user, jwt, new_state, state=state, event_owner=False, error=False
+        db, client, user, jwt, new_state, state=state, event_owner=False
     )
 
 
@@ -147,8 +149,8 @@ states = _create_permutations(['withdrawn'], ['accepted', 'confirmed', 'rejected
 
 
 @pytest.mark.parametrize('state,new_state', states)
-def test_revert_withdraw_organizer_allow(db, client, user, jwt, new_state, state):
-    _test_state_change(db, client, user, jwt, new_state, state=state, error=False)
+def test_revert_withdraw_organizer_disallow(db, client, user, jwt, new_state, state):
+    _test_state_change(db, client, user, jwt, new_state, state=state)
 
 
 states = _create_permutations(['pending'], ['accepted', 'confirmed', 'rejected'])

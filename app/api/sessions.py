@@ -1,4 +1,4 @@
-from flask import request, g
+from flask import Blueprint, g, jsonify, request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
@@ -28,6 +28,8 @@ from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
 from app.settings import get_settings
+
+sessions_blueprint = Blueprint('sessions_blueprint', __name__, url_prefix='/v1/sessions')
 
 
 class SessionListPost(ResourceList):
@@ -200,7 +202,7 @@ SESSION_STATE_DICT = {
             'rejected': True,
             'confirmed': True,
         },
-        'withdrawn': {'accepted': True, 'rejected': True, 'confirmed': True},
+        'withdrawn': {}, # Withdrawn is final
     },
     'speaker': {
         'draft': {'pending': True},
@@ -209,9 +211,13 @@ SESSION_STATE_DICT = {
         'confirmed': {'withdrawn': True},
         'rejected': {'withdrawn': True},
         'canceled': {'withdrawn': True},
-        'withdrawn': {'pending': True},
+        'withdrawn': {}, # Withdrawn is final
     },
 }
+
+@sessions_blueprint.route('/states')
+def get_session_states():
+    return jsonify(SESSION_STATE_DICT)
 
 
 class SessionDetail(ResourceDetail):
