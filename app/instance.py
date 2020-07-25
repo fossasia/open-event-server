@@ -150,6 +150,7 @@ def create_app():
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
+        from app.api.sessions import sessions_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
         from app.api.custom.orders import ticket_blueprint
@@ -176,6 +177,7 @@ def create_app():
         app.register_blueprint(ticket_blueprint)
         app.register_blueprint(order_blueprint)
         app.register_blueprint(event_blueprint)
+        app.register_blueprint(sessions_blueprint)
 
         add_engine_pidguard(db.engine)
 

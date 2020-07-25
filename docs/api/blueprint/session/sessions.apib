@@ -855,3 +855,68 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                 "self": "/v1/speakers/1/sessions"
             }
         }
+
+
+## Sessions States [/v1/sessions/states]
+
+### Session States [GET]
+Get possible session state transitions. **(Public)**
+
++ Response 200 (application/json)
+
+        {
+          "organizer": {
+            "accepted": {
+              "canceled": true, 
+              "confirmed": true, 
+              "rejected": true, 
+              "withdrawn": true
+            }, 
+            "canceled": {
+              "accepted": true, 
+              "confirmed": true, 
+              "rejected": true, 
+              "withdrawn": true
+            }, 
+            "confirmed": {
+              "accepted": true, 
+              "canceled": true, 
+              "rejected": true, 
+              "withdrawn": true
+            }, 
+            "draft": {}, 
+            "pending": {
+              "accepted": true, 
+              "confirmed": true, 
+              "rejected": true, 
+              "withdrawn": true
+            }, 
+            "rejected": {
+              "accepted": true, 
+              "confirmed": true, 
+              "withdrawn": true
+            }, 
+            "withdrawn": {}
+          }, 
+          "speaker": {
+            "accepted": {
+              "withdrawn": true
+            }, 
+            "canceled": {
+              "withdrawn": true
+            }, 
+            "confirmed": {
+              "withdrawn": true
+            }, 
+            "draft": {
+              "pending": true
+            }, 
+            "pending": {
+              "withdrawn": true
+            }, 
+            "rejected": {
+              "withdrawn": true
+            }, 
+            "withdrawn": {}
+          }
+        }
