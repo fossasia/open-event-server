@@ -201,34 +201,6 @@ Clone the repo and set up the server according to the steps listed. Make sure yo
 pip3 install -r requirements/tests.txt
 ```
 
-#### Enable/Disable modules
-
--   Enable/Disable a specific module
-
-```
-python manage.py module --name module_name --switch on/off
-```
-
-**_Example :_**
-
-```
-python manage.py module --name ticket_include --switch on
-python manage.py module -n ticket_include -s off
-```
-
--   Enable/Disable all modules
-
-```
-python manage.py module --name module_name --switch on/off
-```
-
-**_Example :_**
-
-```
-python manage.py module --name all --switch on
-python manage.py module -n all -s off
-```
-
 #### Running unit tests
 
 * If you have docker installed and want to run tests faster, run

@@ -33,7 +33,6 @@ from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
 from app.models.microlocation import Microlocation
-from app.models.module import Module
 from app.models.order import Order
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
@@ -64,24 +63,9 @@ from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
 
 
-def validate_event(user, modules, data):
+def validate_event(user, data):
     if not user.can_create_event():
         raise ForbiddenError({'source': ''}, "Please verify your Email")
-    elif not modules.ticket_include:
-        raise ForbiddenError({'source': ''}, "Ticketing is not enabled in the system")
-    if (
-        data.get('can_pay_by_paypal', False)
-        or data.get('can_pay_by_cheque', False)
-        or data.get('can_pay_by_bank', False)
-        or data.get('can_pay_by_stripe', False)
-    ):
-        if not modules.payment_include:
-            raise ForbiddenError({'source': ''}, "Payment is not enabled in the system")
-    if data.get('is_donation_enabled', False) and not modules.donation_include:
-        raise ForbiddenError(
-            {'source': '/data/attributes/is-donation-enabled'},
-            "Donation is not enabled in the system",
-        )
 
     if data.get('state', None) == 'published' and not user.can_publish_event():
         raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
@@ -338,8 +322,7 @@ class EventList(ResourceList):
         :return:
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
-        modules = Module.query.first()
-        validate_event(user, modules, data)
+        validate_event(user, data)
         if data['state'] != 'draft':
             validate_date(None, data)
 
@@ -690,8 +673,7 @@ class EventDetail(ResourceDetail):
         :return:
         """
         user = User.query.filter_by(id=current_user.id).one()
-        modules = Module.query.first()
-        validate_event(user, modules, data)
+        validate_event(user, data)
 
     def before_update_object(self, event, data, view_kwargs):
         """

@@ -11,7 +11,6 @@ from app.instance import current_app as app
 from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
 from app.models import db
 from app.models.event import Event, get_new_event_identifier
-from app.models.module import Module
 from app.models.speaker import Speaker
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
@@ -82,26 +81,6 @@ def fix_digit_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         db.session.add(event)
-    db.session.commit()
-
-
-@manager.option('-n', '--name', dest='name', default='all')
-@manager.option('-s', '--switch', dest='switch', default='off')
-def module(name, switch):
-    keys = [i.name for i in Module.__table__.columns][1:]
-    convey = {"on": True, "off": False}
-    if switch not in ['on', 'off']:
-        print("Choose either state On/Off")
-
-    elif name == 'all':
-        for key in keys:
-            setattr(Module.query.first(), key, convey[switch])
-            print("Module %s turned %s" % (key, switch))
-    elif name in keys:
-        setattr(Module.query.first(), name, convey[switch])
-        print("Module %s turned %s" % (name, switch))
-    else:
-        print("Invalid module selected")
     db.session.commit()
 
 
