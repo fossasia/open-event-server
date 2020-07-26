@@ -141,6 +141,7 @@ class Setting(db.Model):
     twitter_url = db.Column(db.String)
     support_url = db.Column(db.String)
     facebook_url = db.Column(db.String)
+    instagram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
 
     #
