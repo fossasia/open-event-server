@@ -506,9 +506,7 @@ def test_edit_session_only_state(db, client, user, jwt):
             'data': {
                 'type': 'session',
                 'id': str(session.id),
-                "attributes": {
-                    "state": "withdrawn",
-                },
+                "attributes": {"state": "withdrawn",},
             }
         }
     )
@@ -539,9 +537,7 @@ def test_edit_session_custom_allow(db, client, user, jwt):
             'data': {
                 'type': 'session',
                 'id': str(session.id),
-                "attributes": {
-                    "state": "withdrawn"
-                },
+                "attributes": {"state": "withdrawn"},
             }
         }
     )
@@ -575,7 +571,7 @@ def test_edit_session_custom_same_allow(db, client, user, jwt):
                 'id': str(session.id),
                 "attributes": {
                     "state": "withdrawn",
-                    "complex-field-values": {'test': 'hello'}
+                    "complex-field-values": {'test': 'hello'},
                 },
             }
         }
@@ -608,10 +604,7 @@ def test_edit_session_custom_none_disallow(db, client, user, jwt):
             'data': {
                 'type': 'session',
                 'id': str(session.id),
-                "attributes": {
-                    "state": "withdrawn",
-                    "complex_field_values": None
-                },
+                "attributes": {"state": "withdrawn", "complex_field_values": None},
             }
         }
     )

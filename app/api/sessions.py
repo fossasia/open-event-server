@@ -285,9 +285,15 @@ class SessionDetail(ResourceDetail):
             )
 
         # We allow organizers and admins to edit session without validations
-        complex_field_values = data.get('complex_field_values', 'absent') # Set default to 'absent' to differentiate between None and not sent
-        is_absent = complex_field_values == 'absent' # True if values are not sent in data JSON
-        is_same = data.get('complex_field_values') == session.complex_field_values # Using original value to ensure None instead of absent
+        complex_field_values = data.get(
+            'complex_field_values', 'absent'
+        )  # Set default to 'absent' to differentiate between None and not sent
+        is_absent = (
+            complex_field_values == 'absent'
+        )  # True if values are not sent in data JSON
+        is_same = (
+            data.get('complex_field_values') == session.complex_field_values
+        )  # Using original value to ensure None instead of absent
         # We stop checking validations for organizers only if they may result in data change or absent. See test_session_forms_api.py for more info
         if not (is_organizer and (is_absent or is_same)):
             data['complex_field_values'] = validate_custom_form_constraints_request(
