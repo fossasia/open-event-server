@@ -47,8 +47,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 * Debian based Linux Distros (like Ubuntu)
 * MacOS
 
-1. [Generic Installation Instructions](/docs/installation/basic.md)
-1. [Local Installation](/docs/installation/local.md)
+1. [Installation Instructions](/docs/installation/basic.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
 1. [Deployment on Google Compute Engine](/docs/installation/google.md)
 1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
