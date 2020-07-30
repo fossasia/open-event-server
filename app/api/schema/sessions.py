@@ -99,7 +99,7 @@ class SessionSchema(SoftDeletionSchema):
                 "withdrawn",
             ]
         ),
-        allow_none=False,
+        allow_none=True,
         missing='draft',
     )
     created_at = fields.DateTime(dump_only=True)
