@@ -4,9 +4,17 @@
 
 * Python 3.7
 * Postgres
+* OpenSSL
+
+### For mac users
+```sh
+brew install postgresql
+```
+
+### For debian-based linux users
 ```sh
 sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install postgresql postgresql-contrib libssl-dev
 ```
 
 ## Steps
@@ -15,28 +23,83 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
+* **Step 0** - Clone the Open Event Server repository (from the development branch) and ```cd ``` into the directory.
+```sh
+git clone -b development https://github.com/fossasia/open-event-server.git
+cd open-event-server
+```
+**Note :** If you want to contribute, first fork the original repository and clone the forked repository into your local machine followed by ```cd``` into the directory
+```sh
+git clone https://github.com/USERNAME/open-event-server.git
+cd open-event-server
+```
 
-* **Step 1** - Install Python 3 requirements.
+* **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
+
+# Installation in Virtual Environment   (This is recommended over systemwide installation)
+
+You can use **pip** to install Open Event Server in a virtual environment.
+
+Firstly, open a terminal and enter
+
+```sh
+# For linux users
+sudo apt-get install python3-dev
+sudo apt-get install libpq-dev
+sudo apt-get install libffi6 libffi-dev
+
+# For macOS users
+brew install python@3
+brew install libmagic
+```
+
+## Using pip and virtualenv
+
+Open a terminal and enter the following commands to setup a virtual environment
+
+```sh
+. venv/bin/activate
+```
+
+Now to install the dependencies using pip, type
 
 ```sh
 pip3 install -r requirements.txt
 ```
 
 
-* **Step 2** - Create the database. For that we first open the psql shell.
+# System Wide Installation
 
 ```sh
+sudo -H pip3 install -r requirements.txt
+```
+hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+
+**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
+
+
+* **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
+
+```sh
+# For linux users
 sudo -u postgres psql
+
+# For macOS users
+psql -d postgres
 ```
 
-* When inside psql, create a user for open-event and then using the user create the database.
+* When inside psql, create a user for open-event and then using the user create the database. Also, create a test database named opev_test for the test suites by dumping the oevent database into it. without this, the tests will not run locally.
+
+For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
 
 ```sql
 CREATE USER open_event_user WITH PASSWORD 'opev_pass';
 CREATE DATABASE oevent WITH OWNER open_event_user;
 ```
 
-* Once database is created, exit the psql shell with `\q` followed by ENTER.
+**Note:**  Once the databases are created, exit the psql shell with `\q` followed by ENTER.
+
+
 
 
 * **Step 3** - Create application environment variables.
@@ -54,7 +117,11 @@ To get a good secret value, run `python -c 'import secrets;print(secrets.token_h
 ```sh
 sudo service postgresql restart
 ```
+for mac users:
 
+```sh
+brew services restart postgresql
+```
 
 * **Step 5** - Create the tables. For that we will use `create_db.py`.
 
@@ -63,21 +130,24 @@ python3 create_db.py
 # enter email and password
 python3 manage.py db stamp head
 ```
+**Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
+**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
 The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
-# download and run redis
-wget http://download.redis.io/releases/redis-3.2.1.tar.gz
-tar xzf redis-3.2.1.tar.gz
-rm redis-3.2.1.tar.gz
-cd redis-3.2.1
-make
+# Install and run redis
+# For Ubuntu, Debian and alike
+sudo apt-get install redis-server
+# For Fedora, RedHat, CentOS
+sudo dnf install redis
 
-# To run redis
-redis-3.2.1/src/redis-server &
+
+# For macOS
+brew install redis
+brew services start redis
 
 # run worker
 export INTEGRATE_SOCKETIO=false
@@ -91,3 +161,70 @@ python3 manage.py runserver
 ```
 
 * **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
+
+
+## Flask-SocketIO development
+
+[Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) has been used in the project for displaying real-time notifications to the user. Although it's switched off by default. To integrate SocketIO you must set the `INTEGRATE_SOCKETIO` variable to `true` at bash.
+
+```bash
+export INTEGRATE_SOCKETIO="true"
+```
+
+The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `.  To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
+
+If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python3 manage.py runserver`:
+
+```bash
+gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
+```
+
+### Nginx
+
+Gunicorn shouldn't be serving static files, it's supposed to run just the Flask application. You can use [Nginx](https://www.nginx.com/) to serve static files and bypass other requests to the Gunicorn server, using it as a reverse proxy server. Proper configuration to enable proxying of WebSocket requests can be found in the Flask-SocketIO documentation: https://flask-socketio.readthedocs.io/en/latest/ (search for Nginx).
+
+#### For Vagrant Machine
+
+Doing the same for Vagrant machine requires some more configuration. If you're using the `Vagrantfile` provided in the repo, then you can check that the port forwarding is done as: 8001 -> 5000. So accessing the 8001 port in host machine will access the port 5000 in the guest (vagrant) machine. So in the guest machine, you need to run Nginx at port 5000 and gunicorn at some other port (let's assume port 5001).
+
+```nginx
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    listen       5000;
+
+    sendfile off;
+
+    location /static {
+        alias /vagrant/app/static;
+    autoindex on;
+    }
+
+    location / {
+    proxy_pass http://127.0.0.1:5001;
+
+    proxy_redirect http://127.0.0.1:5001/ http://127.0.0.1:8001/;
+
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
+    break;
+    }
+}
+```
+
+You can directly use this configuration and put it inside sites-available (`/etc/nginx/sites-available/nginx.conf`) and create a symlink for it in sites-enabled (`/etc/nginx/sites-enabled/nginx.conf`).
+
+Test the Nginx configuration and restart the Nginx server. Then run the Gunicorn server.
+
+```bash
+sudo service nginx testconfig # Should respond with "test is successful"
+sudo service nginx restart
+gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
+```
+
+---
