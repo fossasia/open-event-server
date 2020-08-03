@@ -142,3 +142,12 @@ def get_new_slug(model, name):
         return slug
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
+
+
+def get_new_identifier(model):
+    identifier = str(uuid.uuid4())
+    count = get_count(model.query.filter_by(identifier=identifier))
+    if count == 0:
+        return identifier
+    else:
+        return get_new_identifier(model)
