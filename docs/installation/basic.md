@@ -97,7 +97,6 @@ For ease of development, you should create Postgres user with the same username 
 ```sql
 CREATE USER open_event_user WITH PASSWORD 'opev_pass';
 CREATE DATABASE oevent WITH OWNER open_event_user;
-CREATE DATABASE opev_test WITH OWNER open_event_user;
 ```
 
 * Once the databases are created, exit the psql shell with `\q` followed by ENTER.*
