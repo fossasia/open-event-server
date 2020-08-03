@@ -36,18 +36,11 @@ cd open-event-server
 
 * **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
 
-# System Wide Installation
-
-```sh
-sudo -H pip3 install -r requirements.txt
-```
-hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
-
-**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
-
 # Installation in Virtual Environment
 
-You can use either **pip** or **pipenv** to install Open Event Server in a virtual environment.
+*Note:* This is recommended over the system wide installation.
+
+You can use **pip** to install Open Event Server in a virtual environment.
 
 Firstly, open a terminal and enter
 
@@ -67,8 +60,6 @@ brew install libmagic
 Open a terminal and enter the following commands to setup a virtual environment
 
 ```sh
-sudo apt-get install python3.7
-virtualenv -p python3.7 venv
 . venv/bin/activate
 ```
 
@@ -78,21 +69,16 @@ Now to install the dependencies using pip, type
 pip3 install -r requirements.txt
 ```
 
-## Using pipenv
-
-Using pipenv, you will not need to set up virtualenv. It will do it automatically for you
-
-To setup a virtual environment and install the dependices, enter in a terminal
+# System Wide Installation
 
 ```sh
-pipenv --python 3.7.3 install
+sudo -H pip3 install -r requirements.txt
 ```
+hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
 
-Now to activate the virtual environment, type
+**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
 
-```sh
-pipenv shell
-```
+
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
 
@@ -114,7 +100,8 @@ CREATE DATABASE oevent WITH OWNER open_event_user;
 CREATE DATABASE opev_test WITH OWNER open_event_user;
 ```
 
-* Once the databases are created, exit the psql shell with `\q` followed by ENTER.
+* Once the databases are created, exit the psql shell with `\q` followed by ENTER.*
+
 
 
 * **Step 3** - Create application environment variables.
@@ -158,13 +145,9 @@ The `&` at the end of the commands below make them run in background so that the
 sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis
-
 # For macOS
 brew install redis
 brew services start redis
-
-# To run redis
-redis-3.2.1/src/redis-server &
 
 # run worker
 export INTEGRATE_SOCKETIO=false
@@ -195,10 +178,7 @@ If you've installed development requirements, you should have both `gunicorn` an
 ```bash
 gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
 ```
-
-`-w` specifies the number of worker classes to be used. `--reload` is used for development environments, so the server is restarted if any of the application python files change.
-
-Now you should be able to access the website at `localhost:5000`.
+* **Deployment**
 
 ### Nginx
 
@@ -248,4 +228,3 @@ sudo service nginx restart
 gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
 
----
