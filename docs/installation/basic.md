@@ -36,7 +36,9 @@ cd open-event-server
 
 * **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
 
-# Installation in Virtual Environment   (This is recommended over systemwide installation)
+# Installation in Virtual Environment
+
+*Note:* This is recommended over the system wide installation.
 
 You can use **pip** to install Open Event Server in a virtual environment.
 
@@ -67,7 +69,6 @@ Now to install the dependencies using pip, type
 pip3 install -r requirements.txt
 ```
 
-
 # System Wide Installation
 
 ```sh
@@ -76,6 +77,7 @@ sudo -H pip3 install -r requirements.txt
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
 
 **Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
+
 
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
@@ -97,8 +99,7 @@ CREATE USER open_event_user WITH PASSWORD 'opev_pass';
 CREATE DATABASE oevent WITH OWNER open_event_user;
 ```
 
-**Note:**  Once the databases are created, exit the psql shell with `\q` followed by ENTER.
-
+* Once the databases are created, exit the psql shell with `\q` followed by ENTER.*
 
 
 
@@ -143,8 +144,6 @@ The `&` at the end of the commands below make them run in background so that the
 sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis
-
-
 # For macOS
 brew install redis
 brew services start redis
@@ -178,6 +177,7 @@ If you've installed development requirements, you should have both `gunicorn` an
 ```bash
 gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
 ```
+* **Deployment**
 
 ### Nginx
 
@@ -226,5 +226,3 @@ sudo service nginx testconfig # Should respond with "test is successful"
 sudo service nginx restart
 gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
-
----
