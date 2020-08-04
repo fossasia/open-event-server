@@ -249,16 +249,9 @@ class SessionDetail(ResourceDetail):
         is_organizer = has_access('is_admin') or has_access(
             'is_organizer', event_id=session.event_id
         )
-        if session.is_locked:
-            if not is_organizer:
-                raise ForbiddenError(
-                    {'source': '/data/attributes/is-locked'},
-                    "You don't have enough permissions to change this property",
-                )
-
-        if session.is_locked and data.get('is_locked') != session.is_locked:
+        if session.is_locked and not is_organizer:
             raise ForbiddenError(
-                {'source': '/data/attributes/is-locked'},
+                {'pointer': '/data/attributes/is-locked'},
                 "Locked sessions cannot be edited",
             )
 
