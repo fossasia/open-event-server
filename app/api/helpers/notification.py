@@ -11,7 +11,7 @@ from app.api.helpers.system_notifications import (
     get_monthly_payment_follow_up_notification_actions,
     get_monthly_payment_notification_actions,
     get_new_session_notification_actions,
-    get_session_accept_reject_notification_actions,
+    get_session_state_change_notification_actions,
     get_ticket_purchased_attendee_notification_actions,
     get_ticket_purchased_notification_actions,
     get_ticket_purchased_organizer_notification_actions,
@@ -27,7 +27,7 @@ from app.models.notification import (
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
     MONTHLY_PAYMENT_NOTIF,
     NEW_SESSION,
-    SESSION_ACCEPT_REJECT,
+    SESSION_STATE_CHANGE,
     TICKET_CANCELLED,
     TICKET_CANCELLED_ORGANIZER,
     TICKET_PURCHASED,
@@ -73,9 +73,9 @@ def send_notif_new_session_organizer(user, event_name, link, session_id):
         send_notification(user, title, message, actions)
 
 
-def send_notif_session_accept_reject(user, session_name, acceptance, link, session_id):
+def send_notif_session_state_change(user, session_name, acceptance, link, session_id):
     """
-    Send notification to the session creator about a session being accepted or rejected.
+    Send notification to the session creator about a session status being changed.
     :param user:
     :param session_name:
     :param acceptance:
@@ -84,11 +84,11 @@ def send_notif_session_accept_reject(user, session_name, acceptance, link, sessi
     :return:
     """
     message_settings = MessageSettings.query.filter_by(
-        action=SESSION_ACCEPT_REJECT
+        action=SESSION_STATE_CHANGE
     ).first()
     if not message_settings or message_settings.notification_status == 1:
-        actions = get_session_accept_reject_notification_actions(session_id, link)
-        notification = NOTIFS[SESSION_ACCEPT_REJECT]
+        actions = get_session_state_change_notification_actions(session_id, link)
+        notification = NOTIFS[SESSION_STATE_CHANGE]
         title = notification['title'].format(
             session_name=session_name, acceptance=acceptance
         )
@@ -156,7 +156,7 @@ def send_notif_monthly_fee_payment(
     :return:
     """
     message_settings = MessageSettings.query.filter_by(
-        action=SESSION_ACCEPT_REJECT
+        action=SESSION_STATE_CHANGE
     ).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_notification_actions(event_id, link)
@@ -184,7 +184,7 @@ def send_followup_notif_monthly_fee_payment(
     :return:
     """
     message_settings = MessageSettings.query.filter_by(
-        action=SESSION_ACCEPT_REJECT
+        action=SESSION_STATE_CHANGE
     ).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_follow_up_notification_actions(event_id, link)

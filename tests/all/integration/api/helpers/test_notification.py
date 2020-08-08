@@ -8,7 +8,7 @@ from app.api.helpers.notification import (
     send_notif_event_role,
     send_notif_monthly_fee_payment,
     send_notif_new_session_organizer,
-    send_notif_session_accept_reject,
+    send_notif_session_state_change,
     send_notif_ticket_purchase_organizer,
 )
 from app.models.notification import Notification
@@ -39,9 +39,9 @@ def test_send_notif_new_session_organizer(user):
     )
 
 
-def test_send_notif_session_accept_reject(user):
+def test_send_notif_session_state_change(user):
     """Method to test session accept reject notification"""
-    send_notif_session_accept_reject(
+    send_notif_session_state_change(
         user, 'Homeless Therapy', 'accepted', link, 1,
     )
     notification = Notification.query.first()

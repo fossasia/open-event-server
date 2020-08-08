@@ -16,7 +16,7 @@ from app.models.notification import (
     NEW_SESSION,
     NEXT_EVENT,
     PASSWORD_CHANGE,
-    SESSION_ACCEPT_REJECT,
+    SESSION_STATE_CHANGE,
     SESSION_SCHEDULE,
     TICKET_CANCELLED,
     TICKET_CANCELLED_ORGANIZER,
@@ -201,9 +201,9 @@ def get_next_event_notification_actions(event_id, link):
     return [view_event_action]
 
 
-def get_session_accept_reject_notification_actions(session_id, link):
+def get_session_state_change_notification_actions(session_id, link):
     """
-    Get the actions associated with a notification of a session getting accepted/rejected.
+    Get the actions associated with a notification of a session status being changed.
     :param session_id: id of the session.
     :param link: link to view the session.
     :return: actions
@@ -363,7 +363,7 @@ NOTIFS = {
         'message': u"Here are upcoming events: {up_coming_events}.",
         'recipient': 'Owner, Organizer, Speaker',
     },
-    SESSION_ACCEPT_REJECT: {
+    SESSION_STATE_CHANGE: {
         'title': u'Session {session_name} has been {acceptance}',
         'message': u"The session <strong>{session_name}</strong> has been"
         + u" <strong>{acceptance}</strong> by the Organizer.",

@@ -351,7 +351,7 @@ def create_admin_message_settings():
         "Invitation For Papers",
         "After Event",
         "Ticket(s) Purchased",
-        "Session Accept or Reject",
+        "Session State Change",
         "Event Published",
         "Event Export Failed",
         "Event Exported",

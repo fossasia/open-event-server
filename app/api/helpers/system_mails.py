@@ -19,7 +19,7 @@ from app.models.mail import (
     PASSWORD_CHANGE,
     PASSWORD_RESET,
     PASSWORD_RESET_AND_VERIFY,
-    SESSION_ACCEPT_REJECT,
+    SESSION_STATE_CHANGE,
     SESSION_SCHEDULE,
     TEST_MAIL,
     TICKET_CANCELLED,
@@ -52,14 +52,74 @@ MAILS = {
             + u"<br/> Visit this link to fill up details: {link}"
         ),
     },
-    SESSION_ACCEPT_REJECT: {
+    SESSION_STATE_CHANGE: {
         'recipient': 'Speaker',
-        'subject': u'Session {session_name} has been {acceptance}',
-        'message': (
-            u"Hi {email},<br/>"
-            + u"The session <strong>{session_name}</strong> has been <strong>{acceptance}</strong> by the organizer. "
-            + u"<br/> Visit this link to view the session: {link}"
-        ),
+        'pending': {
+            'subject': 'Your speaker submission for {event_name} titled {session_name}',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "We have received your submission {session_name} for {event_name}<br/><br/>"
+            "Your proposal will be reviewed by the event organizers and review team. The current status of your session is now \"Pending\".<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
+        'accepted': {
+            'subject': 'Accepted! Congratulations Your submission for {event_name} titled {session_name} has been Accepted',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "Your session status for the submission {session_name} for {event_name} was changed to \"Accepted\". Congratulations!<br/><br/>"
+            "Your proposal will be scheduled by the event organizers and review team. Please (re)confirm your participation with the organizers of the event, if required.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
+        'confirmed': {
+            'subject': 'Confirmed! Congratulations Your submission for {event_name} titled {session_name} has been Confirmed',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "Your session status for the submission {session_name} for {event_name} was changed to \"Confirmed\". Congratulations!<br/><br/>"
+            "Your proposal will be scheduled by the event organizers and review team. Please inform the event organizers in case there are any changes to your participation.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
+        'rejected': {
+            'subject': 'Not Accepted. Your submission for {event_name} titled {session_name} was not accepted',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "Unfortunately your submission {session_name} for {event_name} was not accepted. Your session status was changed to \"Rejected\".<br/><br/>"
+            "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
+        'canceled': {
+            'subject': 'Canceled! Your submission for {event_name} titled {session_name} has been Canceled',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "Your session status for the submission {session_name} for {event_name} was changed to \"Canceled\".<br/><br/>"
+            "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
+        'withdrawn': {
+            'subject': 'Withdrawn! Your submission for {event_name} titled {session_name} has been Withdrawn',
+            'message': "Hello,<br/><br/>"
+            "This is an automatic message from {app_name}.<br/><br/>"
+            "Your session status for the submission {session_name} for {event_name} was changed to \"Withdrawn\".<br/><br/>"
+            "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "More details about the event are on the event page at {event_link}.<br/><br/>"
+            "Thank you.<br/>"
+            "<a href='{frontend_link}'>{app_name}</a>",
+        },
     },
     SESSION_SCHEDULE: {
         'recipient': 'Owner, Organizer, Speaker',

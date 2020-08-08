@@ -14,7 +14,7 @@ NEW_SESSION = 'New Session Proposal'
 PASSWORD_RESET = 'Reset Password'
 PASSWORD_CHANGE = 'Change Password'
 EVENT_ROLE = 'Event Role Invitation'
-SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
+SESSION_STATE_CHANGE = 'Session State Change'
 SESSION_SCHEDULE = 'Session Schedule Change'
 EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
@@ -60,7 +60,7 @@ class MessageSettingSchema(Schema):
                 USER_REGISTER,
                 PASSWORD_RESET,
                 EVENT_ROLE,
-                SESSION_ACCEPT_REJECT,
+                SESSION_STATE_CHANGE,
                 SESSION_SCHEDULE,
                 NEXT_EVENT,
                 EVENT_PUBLISH,
