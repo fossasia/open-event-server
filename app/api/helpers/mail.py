@@ -32,7 +32,6 @@ from app.models.mail import (
 from app.models.user import User
 from app.settings import get_settings
 
-
 logger = logging.getLogger(__name__)
 
 

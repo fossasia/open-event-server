@@ -259,7 +259,14 @@ class SessionDetail(ResourceDetail):
 
         if new_state and new_state != session.state:
             # State change detected. Verify that state change is allowed
-            g.send_email = new_state in ['accepted', 'rejected', 'confirmed', 'rejected', 'canceled', 'withdrawn']
+            g.send_email = new_state in [
+                'accepted',
+                'rejected',
+                'confirmed',
+                'rejected',
+                'canceled',
+                'withdrawn',
+            ]
             key = 'speaker'
             if is_organizer:
                 key = 'organizer'
@@ -334,9 +341,7 @@ class SessionDetail(ResourceDetail):
 def notify_for_session(session):
     event = session.event
     frontend_url = get_settings()['frontend_url']
-    link = "{}/events/{}/sessions/{}".format(
-        frontend_url, event.identifier, session.id
-    )
+    link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:
