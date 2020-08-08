@@ -205,7 +205,7 @@ def send_email_session_state_change(email, session):
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
     )
-# pytype: enable=attribute-error
+    # pytype: enable=attribute-error
 
 
 def send_email_role_invite(email, role_name, event_name, link):
