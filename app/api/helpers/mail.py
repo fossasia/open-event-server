@@ -33,6 +33,7 @@ from app.models.user import User
 from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
+# pytype: disable=attribute-error
 
 
 def check_smtp_config(smtp_encryption):
@@ -198,14 +199,12 @@ def send_email_session_state_change(email, session):
         logger.error('No mail found for session state change: ' + session.state)
         return
 
-    # pytype: disable=attribute-error
     send_email(
         to=email,
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
     )
-    # pytype: enable=attribute-error
 
 
 def send_email_role_invite(email, role_name, event_name, link):
