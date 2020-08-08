@@ -198,6 +198,7 @@ def send_email_session_state_change(email, session):
         logger.error('No mail found for session state change: ' + session.state)
         return
 
+    # pytype: disable=attribute-error
     send_email(
         to=email,
         action=SESSION_STATE_CHANGE,
