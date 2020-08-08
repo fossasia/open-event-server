@@ -74,6 +74,34 @@ class SettingSchemaPublic(Schema):
     is_omise_activated = fields.Bool(dump_only=True)
     is_alipay_activated = fields.Bool(dump_only=True)
 
+    #
+    # Payment Gateways
+    #
+
+    # Stripe Credantials
+    stripe_client_id = fields.Str(dump_only=True)
+    stripe_publishable_key = fields.Str(dump_only=True)
+    stripe_test_client_id = fields.Str(dump_only=True)
+    stripe_test_publishable_key = fields.Str(dump_only=True)
+
+    # PayPal Credentials
+    paypal_mode = fields.Str(dump_only=True)
+    paypal_client = fields.Str(dump_only=True)
+    paypal_sandbox_client = fields.Str(dump_only=True)
+
+    # Omise Credentials
+    omise_mode = fields.Str(dump_only=True)
+    omise_test_public = fields.Str(dump_only=True)
+    omise_live_public = fields.Str(dump_only=True)
+
+    # Alipay Credentials
+    alipay_publishable_key = fields.Str(dump_only=True)
+
+    # payTM credentials
+    paytm_mode = fields.Str(dump_only=True)
+    paytm_live_merchant = fields.Str(dump_only=True)
+    paytm_sandbox_merchant = fields.Str(dump_only=True)
+
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
