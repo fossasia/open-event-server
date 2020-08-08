@@ -100,8 +100,8 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
             message.add_attachment(attachment)
     sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
     logging.info(
-        'Sending an email regarding {} on behalf of {}'.format(
-            payload["subject"], payload["from"]
+        'Sending an email to {} regarding "{}" on behalf of {}'.format(
+            payload['to'], payload["subject"], payload["from"]
         )
     )
     try:

@@ -19,7 +19,7 @@ from app.models.mail import (
     MONTHLY_PAYMENT_EMAIL,
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
     NEW_SESSION,
-    SESSION_ACCEPT_REJECT,
+    SESSION_STATE_CHANGE,
     TEST_MAIL,
     TICKET_CANCELLED,
     TICKET_PURCHASED,
@@ -31,6 +31,9 @@ from app.models.mail import (
 )
 from app.models.user import User
 from app.settings import get_settings
+
+logger = logging.getLogger(__name__)
+# pytype: disable=attribute-error
 
 
 def check_smtp_config(smtp_encryption):
@@ -168,22 +171,39 @@ def send_email_new_session(email, event_name, link):
     )
 
 
-def send_email_session_accept_reject(email, session, link):
+def send_email_session_state_change(email, session):
     """email for new session"""
-    session_name = session.title
-    session_acceptance = session.state
+    event = session.event
+
+    settings = get_settings()
+    app_name = settings['app_name']
+    frontend_url = settings['frontend_url']
+    session_link = "{}/events/{}/sessions/{}".format(
+        frontend_url, event.identifier, session.id
+    )
+    event_link = f"{frontend_url}/e/{event.identifier}"
+
+    context = {
+        'session_name': session.title,
+        'session_link': session_link,
+        'session_state': session.state,
+        'event_name': event.name,
+        'event_link': event_link,
+        'app_name': app_name,
+        'frontend_link': frontend_url,
+    }
+
+    try:
+        mail = MAILS[SESSION_STATE_CHANGE][session.state]
+    except KeyError:
+        logger.error('No mail found for session state change: ' + session.state)
+        return
+
     send_email(
         to=email,
-        action=SESSION_ACCEPT_REJECT,
-        subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(
-            session_name=session_name, acceptance=session_acceptance
-        ),
-        html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
-            email=email,
-            session_name=session_name,
-            acceptance=session_acceptance,
-            link=link,
-        ),
+        action=SESSION_STATE_CHANGE,
+        subject=mail['subject'].format(**context),
+        html=mail['message'].format(**context),
     )
 
 

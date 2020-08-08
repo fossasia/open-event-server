@@ -9,10 +9,10 @@ from app.api.helpers.custom_forms import validate_custom_form_constraints_reques
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
+from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
 from app.api.helpers.notification import (
     send_notif_new_session_organizer,
-    send_notif_session_accept_reject,
+    send_notif_session_state_change,
 )
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -259,7 +259,14 @@ class SessionDetail(ResourceDetail):
 
         if new_state and new_state != session.state:
             # State change detected. Verify that state change is allowed
-            g.send_email = new_state == 'accepted' or new_state == 'rejected'
+            g.send_email = new_state in [
+                'accepted',
+                'rejected',
+                'confirmed',
+                'rejected',
+                'canceled',
+                'withdrawn',
+            ]
             key = 'speaker'
             if is_organizer:
                 key = 'organizer'
@@ -294,32 +301,8 @@ class SessionDetail(ResourceDetail):
         """ Send email if session accepted or rejected """
 
         if data.get('send_email', None) and g.get('send_email'):
-            event = session.event
-            # Email for speaker
-            speakers = session.speakers
-            for speaker in speakers:
-                frontend_url = get_settings()['frontend_url']
-                link = "{}/events/{}/sessions/{}".format(
-                    frontend_url, event.identifier, session.id
-                )
-                if not speaker.is_email_overridden:
-                    send_email_session_accept_reject(speaker.email, session, link)
-                    send_notif_session_accept_reject(
-                        speaker, session.title, session.state, link, session.id
-                    )
+            notify_for_session(session)
 
-            # Email for owner
-            if session.event.get_owner():
-                owner = session.event.get_owner()
-                owner_email = owner.email
-                frontend_url = get_settings()['frontend_url']
-                link = "{}/events/{}/sessions/{}".format(
-                    frontend_url, event.identifier, session.id
-                )
-                send_email_session_accept_reject(owner_email, session, link)
-                send_notif_session_accept_reject(
-                    owner, session.title, session.state, link, session.id
-                )
         if 'state' in data:
             entry_count = SessionsSpeakersLink.query.filter_by(session_id=session.id)
             if entry_count.count() == 0:
@@ -353,6 +336,28 @@ class SessionDetail(ResourceDetail):
             'after_update_object': after_update_object,
         },
     }
+
+
+def notify_for_session(session):
+    event = session.event
+    frontend_url = get_settings()['frontend_url']
+    link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)
+    # Email for speaker
+    speakers = session.speakers
+    for speaker in speakers:
+        if not speaker.is_email_overridden:
+            send_email_session_state_change(speaker.email, session)
+            send_notif_session_state_change(
+                speaker.user, session.title, session.state, link, session.id
+            )
+
+    # Email for owner
+    if session.event.get_owner():
+        owner = session.event.get_owner()
+        send_email_session_state_change(owner.email, session)
+        send_notif_session_state_change(
+            owner, session.title, session.state, link, session.id
+        )
 
 
 class SessionRelationshipRequired(ResourceRelationship):
