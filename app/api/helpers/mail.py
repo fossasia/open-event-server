@@ -1,6 +1,7 @@
 import base64
 import logging
 from datetime import datetime
+from typing import Dict
 
 from flask import current_app
 
@@ -171,7 +172,7 @@ def send_email_new_session(email, event_name, link):
     )
 
 
-def send_email_session_state_change(email, session):
+def send_email_session_state_change(email, session, mail_override: Dict[str, str]):
     """email for new session"""
     event = session.event
 
@@ -195,6 +196,10 @@ def send_email_session_state_change(email, session):
 
     try:
         mail = MAILS[SESSION_STATE_CHANGE][session.state]
+        if mail_override:
+            mail = mail.copy()
+            mail['subject'] = mail_override.get('subject') or mail['subject']
+            mail['message'] = mail_override.get('message') or mail['message']
     except KeyError:
         logger.error('No mail found for session state change: ' + session.state)
         return

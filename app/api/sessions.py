@@ -1,3 +1,5 @@
+from typing import Dict
+
 from flask import Blueprint, g, jsonify, request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -7,7 +9,7 @@ from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
 from app.api.helpers.notification import (
@@ -17,8 +19,9 @@ from app.api.helpers.notification import (
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
+from app.api.helpers.system_mails import MAILS, SESSION_STATE_CHANGE
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.sessions import SessionSchema
+from app.api.schema.sessions import SessionNotifySchema, SessionSchema
 from app.models import db
 from app.models.microlocation import Microlocation
 from app.models.session import Session
@@ -221,6 +224,11 @@ def get_session_states():
     return jsonify(SESSION_STATE_DICT)
 
 
+@sessions_blueprint.route('/mails')
+def get_session_state_change_mails():
+    return jsonify(MAILS[SESSION_STATE_CHANGE])
+
+
 class SessionDetail(ResourceDetail):
     """
     Session detail by id
@@ -338,7 +346,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session):
+def notify_for_session(session, mail_override: Dict[str, str]):
     event = session.event
     frontend_url = get_settings()['frontend_url']
     link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)
@@ -346,7 +354,7 @@ def notify_for_session(session):
     speakers = session.speakers
     for speaker in speakers:
         if not speaker.is_email_overridden:
-            send_email_session_state_change(speaker.email, session)
+            send_email_session_state_change(speaker.email, session, mail_override)
             send_notif_session_state_change(
                 speaker.user, session.title, session.state, link, session.id
             )
@@ -354,10 +362,26 @@ def notify_for_session(session):
     # Email for owner
     if session.event.get_owner():
         owner = session.event.get_owner()
-        send_email_session_state_change(owner.email, session)
+        send_email_session_state_change(owner.email, session, mail_override)
         send_notif_session_state_change(
             owner, session.title, session.state, link, session.id
         )
+
+
+@sessions_blueprint.route('/<int:id>/notify', methods=['POST'])
+@api.has_permission('is_speaker_for_session', methods="POST")
+def notify_session(id):
+    session = Session.query.filter_by(deleted_at=None, id=id).first_or_404()
+
+    data, errors = SessionNotifySchema().load(request.json)
+    if errors:
+        raise UnprocessableEntityError(
+            {'pointer': '/data', 'errors': errors}, 'Data in incorrect format'
+        )
+
+    notify_for_session(session, data)
+
+    return jsonify({'success': True})
 
 
 class SessionRelationshipRequired(ResourceRelationship):

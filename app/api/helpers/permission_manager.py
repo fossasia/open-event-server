@@ -163,17 +163,19 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
+    not_found = NotFoundError({'parameter': 'id'}, 'Session not found.')
+    try:
+        session = Session.query.filter(Session.id == view_kwargs['id']).one()
+    except NoResultFound:
+        raise not_found
+
     user = current_user
-    if user.is_admin or user.is_super_admin:
-        return view(*view_args, **view_kwargs)
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    try:
-        session = Session.query.filter(Session.id == view_kwargs['id']).one()
-    except NoResultFound:
-        raise NotFoundError({'parameter': 'id'}, 'Session not found.')
+    if session.deleted_at is not None:
+        raise not_found
 
     if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)

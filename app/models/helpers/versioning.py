@@ -21,7 +21,7 @@ def clean_up_string(target_string):
     return target_string
 
 
-def clean_html(html):
+def clean_html(html, allow_link=False):
     if html is None:
         return None
     tags = [
@@ -39,8 +39,12 @@ def clean_html(html):
         'ol',
         'li',
         'strike',
+        'br',
     ]
     attrs = {'*': ['style']}
+    if allow_link:
+        tags.append('a')
+        attrs['a'] = ['href']
     styles = ['text-align', 'font-weight', 'text-decoration']
     cleaned = bleach.clean(html, tags=tags, attributes=attrs, styles=styles, strip=True)
     return bleach.linkify(

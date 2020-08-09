@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from marshmallow import validate, validates_schema
+from marshmallow import Schema, validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
@@ -12,6 +12,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
+from app.models.helpers.versioning import clean_html
 from app.models.session import Session
 from utils.common import use_defaults
 
@@ -176,3 +177,13 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_='user',
     )
+
+
+# Used for customization of email notification subject and message body
+class SessionNotifySchema(Schema):
+    subject = fields.Str(required=False, validate=validate.Length(max=250))
+    message = fields.Str(required=False, validate=validate.Length(max=5000))
+
+    @validates_schema
+    def validate(self, data):
+        data['message'] = clean_html(data.get('message'), allow_link=True)
