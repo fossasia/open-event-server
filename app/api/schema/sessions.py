@@ -185,7 +185,7 @@ class SessionNotifySchema(Schema):
     message = fields.Str(required=False, validate=validate.Length(max=5000))
 
     @validates_schema
-    def validate(self, data):
+    def validate_fields(self, data):
         if not data:
             return
         data['message'] = clean_html(data.get('message'), allow_link=True)
