@@ -346,7 +346,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session, mail_override: Dict[str, str]):
+def notify_for_session(session, mail_override: Dict[str, str] = None):
     event = session.event
     frontend_url = get_settings()['frontend_url']
     link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)

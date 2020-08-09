@@ -172,7 +172,7 @@ def send_email_new_session(email, event_name, link):
     )
 
 
-def send_email_session_state_change(email, session, mail_override: Dict[str, str]):
+def send_email_session_state_change(email, session, mail_override: Dict[str, str] = None):
     """email for new session"""
     event = session.event
 

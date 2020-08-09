@@ -186,4 +186,6 @@ class SessionNotifySchema(Schema):
 
     @validates_schema
     def validate(self, data):
+        if not data:
+            return
         data['message'] = clean_html(data.get('message'), allow_link=True)
