@@ -11,4 +11,4 @@ class AuthorSchema(SQLAlchemyAutoSchema):
         model = EventType
         include_relationships = True
         include_fk = True
-        load_instance = True  """ Optional: deserialize to model instances"""
+        load_instance = True  
