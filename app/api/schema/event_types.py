@@ -2,7 +2,6 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from app.models.event_type import EventType
 
 
-
 class AuthorSchema(SQLAlchemyAutoSchema):
 
     """
