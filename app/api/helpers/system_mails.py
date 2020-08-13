@@ -247,11 +247,24 @@ MAILS = {
         'recipient': 'Attendee',
         'subject': u'Your tickets for {event_name} ({invoice_id}) ',
         'message': (
-            u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
-            u"<br/>Your order has been processed successfully."
-            u"<br><br>You can download your tickets in <b>My Tickets</b> section."
-            u"<br/>Login to manage the orders at <a href='{my_tickets_url}' target='_blank'>{my_tickets_url}</a> </em>"
-            u"<br><br><em>Looking forward to seeing you at the event."
+            u"Hello, "
+            u"<br/>this is your order confirmation for {event_name} ({event_url}) organized by {company_name}."
+            u"<br/>YOUR TICKETS"
+            u"<br/>Please download your tickets here: {my_tickets_url}"
+            u"<br/>You need to be logged in to access your ticket."
+            u"<br/>ORDER SUMMARY"
+            u"<br/>Date: {order_time}"
+            u"<br/>Order #: {identifier}"
+            u"<br/>Ordered by: {ordered_by}"
+            u"<br/>ABOUT EVENT"
+            u"<br/>Date: {event_start_at}"
+            u"<br/>TimeZone: {timezone}"
+            u"<br/>Location: {event_location}"
+            u"<br/>OpenStreetMap: {event_map_link}"
+            u"<br/>Add to my Google calendar: {google_calendar}"
+            u"<br/>YOUR ACCOUNT"
+            u"<br/>Login to your account and manage your orders: https://eventyay.com/login"
+            u"<br/><br><em>Looking forward to seeing you at the event."
         ),
     },
     TICKET_PURCHASED_ORGANIZER: {
