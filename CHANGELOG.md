@@ -24,12 +24,12 @@ Other additions:
 - Send after event emails and notifs to unique receivers
 - Fail order status transition to pending if incomplete attendee info
 
-*More details in Releases Section*
-
-##### Maintainance
+##### Maintenance
 
 - Remove modules from project (were confusing, obsolete and broken)
 - Dependency Updates
+
+*More details in Releases Section*
 
 #### v1.16.0 (2020-07-06):
 
