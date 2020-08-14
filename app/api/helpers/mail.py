@@ -374,8 +374,15 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
             )
         else:
             # The Ticket holder is not the purchaser
-            start_date = (order.event.starts_at.date()).strftime('%Y%m%d')
-            end_date = (order.event.ends_at.date()).strftime('%Y%m%d')
+            start_date=(order.event.starts_at.date()).strftime('%Y%m%d')
+            end_date=(order.event.ends_at.date()).strftime('%Y%m%d')
+            free_tickets=[]
+            paid_tickets=[]
+            for ticket in order.tickets:
+                if(ticket.type == 'free'):
+                    free_tickets.append(ticket.name)
+                elif(ticket.type == 'paid'):
+                    paid_tickets.append(ticket.name)
             send_email(
                 to=holder.email,
                 action=TICKET_PURCHASED_ATTENDEE,
@@ -396,7 +403,9 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                     company_name = order.company,
                     tickets = order.tickets,
                     google_calendar = "https://calendar.google.com/calendar/r/eventedit?text=" + order.event.name + "&dates=" + start_date + "/" + end_date,
-                    event_map_link = "https://www.google.com/maps/search/" + order.event.location_name
+                    event_map_link = "https://www.google.com/maps/search/" + order.event.location_name,
+                    free_tickets=tuple(free_tickets),
+                    paid_tickets=tuple(paid_tickets),
                 ),
                 attachments=attachments,
             )
