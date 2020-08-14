@@ -374,8 +374,8 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
             )
         else:
             # The Ticket holder is not the purchaser
-            start_date = "".join(str(order.event.starts_at.date()).split("-"))
-            end_date = "".join(str(order.event.ends_at.date()).split("-"))
+            start_date = (order.event.starts_at.date()).strftime('%Y%m%d')
+            end_date = (order.event.ends_at.date()).strftime('%Y%m%d')
             send_email(
                 to=holder.email,
                 action=TICKET_PURCHASED_ATTENDEE,
@@ -386,7 +386,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                     my_tickets_url=frontend_url + '/my-tickets',
                     event_name=order.event.name,
                     event_location = order.event.location_name,
-                    event_url = "https://eventyay.com/e/" + order.event.identifier,
+                    event_url = frontend_url + '/e/' + order.event.identifier,,
                     event_type = order.event.event_type.name,
                     event_start_at = order.event.starts_at,
                     timezone = order.event.timezone,
