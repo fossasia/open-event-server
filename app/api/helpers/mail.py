@@ -2,6 +2,7 @@ import base64
 import logging
 from datetime import datetime
 from typing import Dict
+from pytz import timezone
 
 from flask import current_app
 
@@ -374,8 +375,8 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
             )
         else:
             # The Ticket holder is not the purchaser
-            start_date=(order.event.starts_at.date()).strftime('%Y%m%d')
-            end_date=(order.event.ends_at.date()).strftime('%Y%m%d')
+            start_date=(order.event.starts_at.astimezone(timezone(order.event.timezone))).strftime("%Y%m%dT%H%M00")
+            end_date=(order.event.ends_at.astimezone(timezone(order.event.timezone))).strftime("%Y%m%dT%H%M00")
             free_tickets=[]
             paid_tickets=[]
             for ticket in order.tickets:
