@@ -1,5 +1,36 @@
 ## Changelog
 
+#### v1.17.0 (2020-08-13):
+
+##### Features
+**Major Changes in Sessions API and session state changes**
+*Note: There are no breaking changes in API but more integrity checks have been put in place*
+- Add session mails and notify endpoint
+- Add session state change emails
+- Add session states and mails API
+- Add session state transition validation
+- Add cancelled and withdrawn state to session
+- Add session custom form validations
+
+Other additions:
+- Add option to disable order attachment PDF
+- Add instagram_url in settings model
+
+##### Bug Fixes
+
+- Add public payment gateway key in settings
+- Allow orgnizers to unlock sessions and override session form validations
+- Add hack to remove duplicate sessions in user sessions API
+- Send after event emails and notifs to unique receivers
+- Fail order status transition to pending if incomplete attendee info
+
+##### Maintenance
+
+- Remove modules from project (were confusing, obsolete and broken)
+- Dependency Updates
+
+*More details in Releases Section*
+
 #### v1.16.0 (2020-07-06):
 
 **MAJOR BREAKING CHANGES**

@@ -494,3 +494,129 @@ def test_ignore_complex_custom_form_fields(db, client, user, jwt):
     assert session.complex_field_values['best_friend'] == 'Bester'
     assert session.complex_field_values['trans_fat_content'] == 20.08
     assert session.complex_field_values.get('shalimar') is None
+
+
+def test_edit_session_only_state(db, client, user, jwt):
+    # Should be allowed for organizers
+    user.is_admin = True
+    session = get_simple_custom_form_session(db, user)
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'session',
+                'id': str(session.id),
+                "attributes": {"state": "withdrawn",},
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/sessions/{session.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(session)
+
+    assert response.status_code == 200
+    assert session.state == 'withdrawn'
+
+
+def test_edit_session_custom_allow(db, client, user, jwt):
+    """If there already is some complex field value of session,
+    and we don't send any new value, then it shouldn't be validated"""
+    user.is_admin = True
+    session = get_simple_custom_form_session(db, user)
+    session.complex_field_values = {'test': 'hello'}
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'session',
+                'id': str(session.id),
+                "attributes": {"state": "withdrawn"},
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/sessions/{session.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(session)
+
+    assert response.status_code == 200
+    assert session.state == 'withdrawn'
+    assert session.complex_field_values == {'test': 'hello'}
+
+
+def test_edit_session_custom_same_allow(db, client, user, jwt):
+    """If there already is some complex field value of session,
+    and we don't send any new value, then it shouldn't be validated"""
+    user.is_admin = True
+    session = get_simple_custom_form_session(db, user)
+    session.complex_field_values = {'test': 'hello'}
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'session',
+                'id': str(session.id),
+                "attributes": {
+                    "state": "withdrawn",
+                    "complex-field-values": {'test': 'hello'},
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/sessions/{session.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(session)
+
+    assert response.status_code == 200
+    assert session.state == 'withdrawn'
+    assert session.complex_field_values == {'test': 'hello'}
+
+
+def test_edit_session_custom_none_disallow(db, client, user, jwt):
+    """If there already is some complex field value of session,
+    and we send any null value, then it shouldn't be allowed"""
+    user.is_admin = True
+    session = get_simple_custom_form_session(db, user)
+    session.complex_field_values = {'test': 'hello'}
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'session',
+                'id': str(session.id),
+                "attributes": {"state": "withdrawn", "complex_field_values": None},
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/sessions/{session.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(session)
+
+    assert response.status_code == 422
+    assert session.complex_field_values == {'test': 'hello'}

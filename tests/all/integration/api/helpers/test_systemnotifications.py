@@ -10,8 +10,8 @@ from app.api.helpers.system_notifications import (
     get_monthly_payment_notification_actions,
     get_new_session_notification_actions,
     get_next_event_notification_actions,
-    get_session_accept_reject_notification_actions,
     get_session_schedule_notification_actions,
+    get_session_state_change_notification_actions,
     get_ticket_purchased_attendee_notification_actions,
     get_ticket_purchased_notification_actions,
     get_ticket_purchased_organizer_notification_actions,
@@ -277,7 +277,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
         with self.app.test_request_context():
             request_url = 'https://localhost/e/session/345525'
             request_session_id = 1
-            response = get_session_accept_reject_notification_actions(
+            response = get_session_state_change_notification_actions(
                 request_session_id, request_url
             )
             expected_action = NotificationAction(
