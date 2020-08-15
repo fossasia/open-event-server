@@ -2,8 +2,7 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from app.models.event_type import EventType
 
 
-class AuthorSchema(SQLAlchemyAutoSchema):
-
+class EventTypeSchema(SQLAlchemyAutoSchema):
     """
     Using SQLAlchemyAutoSchema of marshmallow_sqlalchemy
     """
@@ -11,4 +10,4 @@ class AuthorSchema(SQLAlchemyAutoSchema):
         model = EventType
         include_relationships = True
         include_fk = True
-        load_instance = True  
+        load_instance = True
