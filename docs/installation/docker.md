@@ -20,6 +20,15 @@ git clone https://github.com/fossasia/open-event-server.git && cd open-event-ser
 export SERVER_NAME=localhost;
 ```
 
+* craete env file using the following command
+
+```sh
+  cp .env.example .env
+```
+   Add  SECRET_KEY in the env file to run properly in production mode . To generate a good secret value run python -c 'import secrets;print(secrets.token_hex())'
+
+
+
 * In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up` to start the server.
@@ -40,17 +49,10 @@ create database opev;
 
 * Then exit the shell by typing `\q` and ENTER.
 
-* Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web sh`. Then write the following commands.
+* Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web sh`. 
 
-```bash
-python3 create_db.py
-# ^^ write super_admin email and password when asked
-python3 manage.py db stamp head
-```
 
-* Close the application's shell by `exit` command.
-
-* That's it. Go to `localhost` on the web browser and Open Event Orga Server will be live.
+* That's it. Go to `localhost:8080` on the web browser and Open Event Orga Server will be live.
 
 
 ### Updating the Docker image
@@ -65,7 +67,7 @@ python3 manage.py db stamp head
 docker-compose run web python3 manage.py db upgrade
 ```
 
-* That should be all. Open `localhost` in web browser to view the updated open-event-server.
+* That should be all. Open `localhost:8080` in web browser to view the updated open-event-server.
 
 
 
