@@ -13,13 +13,6 @@
 git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
 ```
 
-* Then set the required `SERVER_NAME` environment variable. `SERVER_NAME` should the same as the domain on which the server is running and it should not include 'http', 'https',
-'www' or the trailing slash (/) in the url. Examples - `domain.com`, `sub.domain.com`, `sub.domain.com:5000` etc
-
-```bash
-export SERVER_NAME=localhost;
-```
-
 * craete env file using the following command
 
 ```sh
@@ -28,29 +21,9 @@ export SERVER_NAME=localhost;
    Add  SECRET_KEY in the env file to run properly in production mode . To generate a good secret value run python -c 'import secrets;print(secrets.token_hex())'
 
 
-
 * In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up` to start the server.
-
-* If you are doing it for the first time, you will have to create the database (and then tables).
-So keeping `docker-compose up` active in one terminal window, open another terminal window **in the same directory**. In there type the following command.
-
-```bash
-docker-compose run postgres psql -h postgres -p 5432 -U open_event_user --password open_event
-```
-
-* Write 'opev_pass' as password and ENTER. When inside psql shell, write the following command -
-
-```sql
-create database opev;
-# CREATE DATABASE
-```
-
-* Then exit the shell by typing `\q` and ENTER.
-
-* Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web sh`. 
-
 
 * That's it. Go to `localhost:8080` on the web browser and Open Event Orga Server will be live.
 
