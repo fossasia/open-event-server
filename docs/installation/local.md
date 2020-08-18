@@ -92,6 +92,12 @@ Now to activate the virtual environment, type
 pipenv shell
 ```
 
+After installing dependencies in your virtual environment, you need to configure pre-commit hooks by running the command
+
+```sh
+pre-commit install
+```
+
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
 
