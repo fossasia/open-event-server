@@ -18,6 +18,7 @@ git clone https://github.com/fossasia/open-event-server.git && cd open-event-ser
 ```sh
   cp .env.example .env
 ```
+Add  SECRET_KEY in the env file to run properly in production mode . To generate a good secret value run python -c 'import secrets;print(secrets.token_hex())'
   
 * In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
 
