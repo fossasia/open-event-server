@@ -6,7 +6,6 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
 def generate_hash():
@@ -14,11 +13,11 @@ def generate_hash():
     return str(hash_)
 
 
-class RoleInvite(SoftDeletionModel):
+class RoleInvite(db.Model):
     __tablename__ = 'role_invites'
     __table_args__ = (
         UniqueConstraint(
-            'email', 'role_id', 'event_id', 'deleted_at', name='email_role_event_uc',
+            'email', 'role_id', 'event_id', name='email_role_event_uc',
         ),
     )
 
