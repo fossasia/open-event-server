@@ -5,5 +5,5 @@ pylint==2.6.0
 pep8==1.7.1
 isort==5.4.2
 black==19.10b0
-pre-commit==2.6.0
+pre-commit==2.7.1
 pytype==2020.8.17
