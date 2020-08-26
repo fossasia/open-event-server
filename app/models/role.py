@@ -1,8 +1,7 @@
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
-class Role(SoftDeletionModel):
+class Role(db.Model):
     """Event Role
     """
 
