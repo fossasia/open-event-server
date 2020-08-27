@@ -71,7 +71,7 @@ def validate_event(user, data):
         raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
 
     if (
-        not data.get('is_event_online')
+        not data.get('online')
         and data.get('state', None) == 'published'
         and not data.get('location_name', None)
     ):
@@ -80,7 +80,7 @@ def validate_event(user, data):
             "Location is required to publish the event",
         )
 
-    if data.get('location_name', None) and data.get('is_event_online'):
+    if data.get('location_name', None) and data.get('online'):
         raise ConflictError(
             {'pointer': '/data/attributes/location-name'},
             "Online Event does not have any locaton",
@@ -92,7 +92,7 @@ def validate_event(user, data):
             "Event Name is required to publish the event",
         )
 
-    if data.get('searchable_location_name') and data.get('is_event_online'):
+    if data.get('searchable_location_name') and data.get('online'):
         raise ConflictError(
             {'pointer': '/data/attributes/searchable-location-name'},
             "Online Event does not have any locaton",
@@ -702,10 +702,10 @@ class EventDetail(ResourceDetail):
                 event.deleted_at = data.get('deleted_at')
 
         if (
-            'is_event_online' not in data
-            and event.is_event_online
-            or 'is_event_online' in data
-            and not data['is_event_online']
+            'online' not in data
+            and event.online
+            or 'online' in data
+            and not data['online']
         ):
             if data.get('state', None) == 'published' and not data.get(
                 'location_name', None
