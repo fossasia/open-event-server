@@ -47,7 +47,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     starts_at = fields.DateTime(required=True, timezone=True)
     ends_at = fields.DateTime(required=True, timezone=True)
     timezone = fields.Str(required=True)
-    is_event_online = fields.Boolean(default=False)
+    online = fields.Boolean(default=False)
     latitude = fields.Float(validate=lambda n: -90 <= n <= 90, allow_none=True)
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
     logo_url = fields.Url(allow_none=True)
