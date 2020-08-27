@@ -123,6 +123,8 @@ class Event(SoftDeletionModel):
         db.String, default='All sales are final. No refunds shall be issued in any case.'
     )
     is_stripe_linked = db.Column(db.Boolean, default=False)
+    live_stream_url = db.Column(db.String)
+    webinar_url = db.Column(db.String)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )
