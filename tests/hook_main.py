@@ -40,6 +40,7 @@ from tests.factories.faq import FaqFactory
 from tests.factories.event_topic import EventTopicFactory
 from tests.factories.event_invoice import EventInvoiceFactory
 from tests.factories.event_sub_topic import EventSubTopicFactory
+from tests.factories.event_role_permission import EventRolePermissionsFactory
 from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
@@ -2587,14 +2588,10 @@ def event_role_permission_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 @hooks.before(
@@ -2606,14 +2603,10 @@ def event_role_permission_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 @hooks.before(
@@ -2625,14 +2618,10 @@ def event_role_permission_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 # ------------------------- Message Setting -------------------------
