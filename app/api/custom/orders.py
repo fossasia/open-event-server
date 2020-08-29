@@ -125,7 +125,9 @@ def calculate_amount():
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
+    print(request.get_json())
     data, errors = OrderAmountInputSchema().load(request.get_json())
+    print(data)
     if errors:
         return make_response(jsonify(errors), 422)
 
@@ -167,7 +169,7 @@ def create_order():
     db.session.commit()
     order.populate_and_save()
 
-    return OrderSchema().dumps(order)
+    return OrderSchema().dump(order)
 
 
 @order_blueprint.route('/complete-order/<order_id>', methods=['PATCH'])

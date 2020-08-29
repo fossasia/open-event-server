@@ -1,5 +1,6 @@
 import os.path as path
 import sys
+import json
 
 import dredd_hooks as hooks
 import requests
@@ -47,6 +48,7 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
+from tests.factories.ticket import TicketSubFactory
 from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
@@ -60,13 +62,20 @@ from tests.factories.email_notification import EmailNotificationFactory
 from tests.factories.activities import ActivityFactory
 from tests.factories.stripe_authorization import StripeAuthorizationFactory
 from tests.factories.mail import MailFactory
-from tests.factories.order import OrderFactory
+from tests.factories.order import OrderFactory, OrderSubFactory
 from tests.factories.faq_type import FaqTypeFactory
 from tests.factories.user_email import UserEmailFactory
 from tests.factories.feedback import FeedbackFactory
 from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
+from tests.factories.discount_code import DiscountCodeTicketSubFactory
+
+from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
+    _create_taxed_tickets,
+    _create_ticket_dict,
+    _create_tickets,
+)
 
 
 stash = {}
@@ -83,6 +92,17 @@ def obtain_token():
     parsed_body = response.json()
     token = parsed_body["access_token"]
     return token
+
+
+def create_tickets(prices, **kwargs):
+    return [TicketSubFactory(price=price, **kwargs) for price in prices]
+
+
+def create_ticket_dict(tickets, quantities):
+    return [
+        dict(id=ticket.id, quantity=quantity)
+        for ticket, quantity in zip(tickets, quantities)
+    ]
 
 
 def create_super_admin(email, password):
@@ -4211,17 +4231,27 @@ def orders_get_collection(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
-@hooks.before("Orders > Orders Collection > Create Order")
+@hooks.before("Orders > Create Order > Create Order")
 def create_order(transaction):
     """
-    GET /orders
+    POST /orders/create-order
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketSubFactory(
+            type='percent', value=10.0, tickets=[]
+        )
+        tickets_dict = _create_taxed_tickets(
+            db, tax_included=False, discount_code=discount_code
+        )
+        db.session.commit()
 
 
 @hooks.before(
@@ -4229,7 +4259,7 @@ def create_order(transaction):
 )
 def create_order_with_on_site_attendee(transaction):
     """
-    GET /orders?onsite=true
+    POST /orders/create-order?onsite=true
     :param transaction:
     :return:
     """
@@ -4243,7 +4273,10 @@ def order_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Update Order")
@@ -4253,7 +4286,10 @@ def update_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Delete Order")
@@ -4263,7 +4299,10 @@ def delete_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Orders under an Event > List all Orders under an Event")
@@ -4273,7 +4312,12 @@ def event_order_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        order = OrderFactory(event_id=event.id)
+        db.session.add(event)
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Charge > Charge for an Order")

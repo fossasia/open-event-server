@@ -50,169 +50,6 @@ Get a list of all orders
           }
         }
 
-### Create Order [POST]
-Create a new Order
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "payment-mode": "paypal",
-                  "country": "India",
-                  "status": "pending",
-                  "amount": "10",
-                  "order-notes": "example"
-                },
-                "type": "order",
-                "relationships": {
-                  "attendees": {
-                    "data": [
-                      {
-                        "id": "1",
-                        "type": "attendee"
-                      }
-                    ]
-                  },
-                  "event": {
-                    "data": {
-                      "id": "1",
-                      "type": "event"
-                    }
-                  }
-                }
-              }
-            }
-+ Response 201 (application/vnd.api+json)
-
-        {
-          "included": [
-            {
-              "relationships": {
-                "ticket": {
-                  "links": {
-                    "self": "/v1/attendees/1/relationships/ticket",
-                    "related": "/v1/attendees/1/ticket"
-                  }
-                },
-                "event": {
-                  "links": {
-                    "self": "/v1/attendees/1/relationships/event",
-                    "related": "/v1/attendees/1/event"
-                  }
-                }
-              },
-              "attributes": {
-                "city": null,
-                "firstname": "Open Event User",
-                "lastname": null,
-                "ticket-id": "1",
-                "is-checked-in": false,
-                "checkin-times": null,
-                "is-checked-out": null,
-                "checkout-times": null,
-                "state": null,
-                "address": null,
-                "pdf-url": "http://example.com",
-                "country": null,
-                "email": null,
-                "created-at": "2018-07-08T01:05:09.904696+00:00",
-                "order-notes": "example"
-              },
-              "type": "attendee",
-              "id": "1",
-              "links": {
-                "self": "/v1/attendees/1"
-              }
-            }
-          ],
-          "data": {
-            "relationships": {
-              "tickets": {
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
-                  "related": "/v1/orders/11/tickets"
-                }
-              },
-              "attendees": {
-                "data": [
-                  {
-                    "type": "attendee",
-                    "id": "1"
-                  }
-                ],
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
-                  "related": "/v1/orders/11/attendees"
-                }
-              },
-              "marketer": {
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
-                }
-              },
-              "user": {
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
-                }
-              },
-              "discount-code": {
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
-                }
-              },
-              "event": {
-                "links": {
-                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
-                  "related": "/v1/events/1"
-                }
-              }
-            },
-            "attributes": {
-              "status": "pending",
-              "city": null,
-              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
-              "paid-via": null,
-              "exp-year": null,
-              "transaction-id": null,
-              "discount-code-id": null,
-              "brand": null,
-              "zipcode": null,
-              "company": null,
-              "tax-business-info": null,
-              "is-billing-enabled": false,
-              "payment-mode": "paypal",
-              "last4": null,
-              "state": null,
-              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
-              "address": null,
-              "exp-month": null,
-              "amount": 10.0,
-              "country": "India",
-              "completed-at": null,
-              "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "example",
-              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
-            },
-            "type": "order",
-            "id": "11",
-            "links": {
-              "self": "/v1/orders/1"
-            }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/orders/11"
-          }
-        }
 
 ## Order Detail [/v1/orders/{identifier}]
 + Parameters
@@ -281,8 +118,7 @@ Get a single Order detail.
               "company": null,
               "tax-business-info": null,
               "is-billing-enabled": false,
-              "payment-mode": "paypal",
-              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "payment-mode": "free",
               "last4": null,
               "state": null,
               "address": null,
@@ -307,8 +143,6 @@ Get a single Order detail.
             "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
           }
         }
-
-
 ### Update Order [PATCH]
 Update a single custom form with `id`.
 
@@ -325,7 +159,7 @@ Update a single custom form with `id`.
             {
               "data": {
                 "attributes": {
-                  "status": "confirmed",
+                  "payment-mode": "paypal",
                   "order-notes": "example"
                 },
                 "type": "order",
@@ -387,7 +221,6 @@ Update a single custom form with `id`.
               "tax-business-info": null,
               "is-billing-enabled": false,
               "payment-mode": "paypal",
-              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
               "last4": null,
               "state": null,
               "address": null,
@@ -450,11 +283,19 @@ Create a new Order with on site attendees
 
             {
               "data": {
+              "type": "order",
+              "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                },
                 "attributes": {
                   "payment-mode": "free",
                   "country": "India",
                   "status": "pending",
-                  "amount": null,
                   "order-notes": "example",
                   "on-site-tickets":  [
                         {
@@ -475,19 +316,11 @@ Create a new Order with on site attendees
                                 "type": "on-site-ticket"
                             }
                         }
-                    ]
-                },
-                "type": "order",
-                "relationships": {
-                  "event": {
-                    "data": {
-                      "id": "1",
-                      "type": "event"
-                    }
+                    ],
                   }
                 }
               }
-            }
+              
 + Response 201 (application/vnd.api+json)
 
         {
@@ -549,10 +382,9 @@ Create a new Order with on site attendees
               "payment-mode": "free",
               "last4": null,
               "state": null,
-              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
               "address": null,
               "exp-month": null,
-              "amount": null,
+              "amount": "0",
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
@@ -793,3 +625,114 @@ Create paypal payment
             "payment_id": "example",
             "error": null
         }
+
+## Create Order [/v1/orders/create-order]
+
+### Create Order [POST]
+Create a new Order
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+          {
+              "tickets": [
+                {"id": 1, "quantity": 2}, 
+                {"id": 2, "quantity": 4}, 
+                {"id": 3, "quantity": 3, "price": 789.7}, 
+                {"id": 4, "quantity": 3}
+              ],
+              "discount_code": "1"
+          }
+
++ Response 200 (application/json)
+
+        {
+          "data": {
+            "type": "order",
+            "attributes": {
+              "completed-at": null,
+              "paid-via": null,
+              "exp-year": null,
+              "discount-code-id": "1",
+              "status": "initializing",
+              "deleted-at": null,
+              "exp-month": null,
+              "country": null,
+              "is-billing-enabled": false,
+              "transaction-id": null,
+              "order-notes": null,
+              "tickets-pdf-url": null,
+              "payment-mode": null,
+              "city": null,
+              "tax-business-info": null,
+              "amount": 4745.81,
+              "identifier": "300d7722-7005-4776-89d7-037cc7ceec0d",
+              "brand": null,
+              "created-at": "2020-09-11T12:11:24.169351+00:00",
+              "zipcode": null,
+              "company": null,
+              "last4": null,
+              "state": null,
+              "cancel-note": null,
+              "address": null
+            },
+            "id": "1",
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/ticket",
+                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/tickets"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/user",
+                  "related": "/v1/users/1"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/discount-code",
+                  "related": "/v1/discount-codes/1"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/attendee",
+                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/attendees"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              },
+              "event-invoice": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event-invoice/",
+                  "related": "/v1/event-invoices/1"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/marketer"
+                }
+              }
+            },
+            "links": {
+              "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
+            }
+          },
+          "links": {
+            "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
+          }
+        }
+
