@@ -193,7 +193,7 @@ npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api
 
 ```
 
-Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+Local changes to the description can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
 
 ```bash
 gem install apiaryio # dependency
