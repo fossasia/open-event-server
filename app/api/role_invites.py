@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
-from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError, UnprocessableEntityError
+from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
@@ -128,7 +128,7 @@ class RoleInviteDetail(ResourceDetail):
         """
         if role_invite.status == 'accepted':
             raise ConflictError(
-                {'source': ''}, 'You cannot delete an accepted role invite.'
+                {'pointer': '/data/status'}, 'You cannot delete an accepted role invite.'
             )
 
     methods = ['GET', 'DELETE']
