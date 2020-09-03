@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
-from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
+from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
@@ -119,47 +119,19 @@ class RoleInviteDetail(ResourceDetail):
     Role invite detail by id
     """
 
-    def before_update_object(self, role_invite, data, view_kwargs):
+    def before_delete_object(self, role_invite, view_kwargs):
         """
-        Method to edit object
-        :param role_invite:
-        :param data:
+        method to check for proper permissions for deleting
+        :param order:
         :param view_kwargs:
         :return:
         """
-        user = User.query.filter_by(email=role_invite.email).first()
-        if user:
-            if not has_access(
-                'is_organizer', event_id=role_invite.event_id
-            ) and not has_access('is_user_itself', user_id=user.id):
-                raise UnprocessableEntityError(
-                    {'source': ''},
-                    "Status can be updated only by event organizer or user hiself",
-                )
-        if (
-            'role_name' in data
-            and data['role_name'] == 'owner'
-            and not has_access('is_owner', event_id=data['event'])
-        ):
-            raise ForbiddenError({'source': ''}, 'Owner access is required.')
-        if not user and not has_access('is_organizer', event_id=role_invite.event_id):
-            raise UnprocessableEntityError({'source': ''}, "User not registered")
-        if not has_access('is_organizer', event_id=role_invite.event_id) and (
-            len(list(data.keys())) > 1 or 'status' not in data
-        ):
-            raise UnprocessableEntityError(
-                {'source': ''}, "You can only change your status"
+        if role_invite.status == 'accepted':
+            raise ConflictError(
+                {'source': ''}, 'You cannot delete an accepted role invite.'
             )
-        if data.get('deleted_at'):
-            if role_invite.role_name == 'owner' and not has_access(
-                'is_owner', event_id=role_invite.event_id
-            ):
-                raise ForbiddenError({'source': ''}, 'Owner access is required.')
-            if role_invite.role_name != 'owner' and not has_access(
-                'is_organizer', event_id=role_invite.event_id
-            ):
-                raise ForbiddenError({'source': ''}, 'Organizer access is required.')
 
+    methods = ['GET', 'DELETE']
     decorators = (
         api.has_permission(
             'is_organizer',
@@ -173,7 +145,7 @@ class RoleInviteDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': RoleInvite,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {'before_delete_object': before_delete_object},
     }
 
 
