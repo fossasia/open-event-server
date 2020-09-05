@@ -9,8 +9,10 @@
 .DS_Store
 *.pyc
 *.pyo
+.pytype/
 env
 env*
+.venv/
 dist
 build
 *.egg
