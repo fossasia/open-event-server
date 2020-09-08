@@ -65,4 +65,4 @@ marshmallow==2.15.2
 # GraphQL support
 graphene-sqlalchemy==2.3.0
 flask-graphql==2.0.1
-graphene-sqlalchemy-filter==1.12.0
+graphene-sqlalchemy-filter==1.12.1
