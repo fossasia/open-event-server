@@ -10,10 +10,8 @@ from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.event import Event
-from utils.common import use_defaults
 
 
-@use_defaults()
 class EventSchemaPublic(SoftDeletionSchema):
     class Meta:
         type_ = 'event'

@@ -72,7 +72,7 @@ def validate_event(user, data):
 
     if not data.get('name', None) and data.get('state', None) == 'published':
         raise ConflictError(
-            {'pointer': '/data/attributes/location-name'},
+            {'pointer': '/data/attributes/name'},
             "Event Name is required to publish the event",
         )
 
