@@ -99,7 +99,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     live_stream_url = fields.Url(allow_none=True)
     webinar_url = fields.Url(allow_none=True)
     refund_policy = fields.String(
-        dump_only=True,
         default='All sales are final. No refunds shall be issued in any case.',
     )
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
