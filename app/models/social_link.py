@@ -26,6 +26,7 @@ class SocialLink(SoftDeletionModel):
     name = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=False)
     identifier = db.Column(db.String, default=get_new_social_link_identifier)
+    is_custom = db.Column(db.Boolean, nullable=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="social_link")
 
