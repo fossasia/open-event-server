@@ -15,7 +15,10 @@ import sqlalchemy_utils
 revision = '19168ff996c6'
 down_revision = '3548da69bdec'
 
-# Can't rollback this one
+
 def upgrade():
     op.execute("UPDATE events SET refund_policy = NULL;", execution_options=None)
 
+# Can't rollback this one
+def downgrade():
+    op.execute("UPDATE events SET refund_policy = 'All sales are final. No refunds shall be issued in any case.' where refund_policy = NULL;", execution_options=None)
