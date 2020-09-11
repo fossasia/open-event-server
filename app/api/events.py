@@ -7,7 +7,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
@@ -72,7 +72,7 @@ def validate_event(user, data):
 
     if not data.get('name', None) and data.get('state', None) == 'published':
         raise ConflictError(
-            {'pointer': '/data/attributes/location-name'},
+            {'pointer': '/data/attributes/name'},
             "Event Name is required to publish the event",
         )
 
@@ -827,9 +827,20 @@ class UpcomingEventList(EventList):
         query_ = (
             self.session.query(Event)
             .filter(
+                Event.starts_at > current_time,
                 Event.ends_at > current_time,
                 Event.state == 'published',
                 Event.privacy == 'public',
+                or_(
+                    Event.is_promoted,
+                    and_(
+                        Event.original_image_url != None,
+                        Event.logo_url != None,
+                        Event.event_type_id != None,
+                        Event.event_topic_id != None,
+                        Event.event_sub_topic_id != None,
+                    ),
+                ),
             )
             .order_by(Event.starts_at)
         )

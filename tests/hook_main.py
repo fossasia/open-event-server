@@ -1,6 +1,5 @@
 import os.path as path
 import sys
-import json
 
 import dredd_hooks as hooks
 import requests
@@ -34,7 +33,11 @@ from tests.factories.page import PageFactory
 from tests.factories.event_copyright import EventCopyrightFactory
 from tests.factories.setting import SettingFactory
 from tests.factories.event_type import EventTypeFactory
-from tests.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
+from tests.factories.discount_code import (
+    DiscountCodeFactory,
+    DiscountCodeTicketFactory,
+    DiscountCodeTicketSubFactory,
+)
 from tests.factories.access_code import AccessCodeFactory
 from tests.factories.custom_form import CustomFormFactory
 from tests.factories.faq import FaqFactory
@@ -48,7 +51,6 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
-from tests.factories.ticket import TicketSubFactory
 from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
@@ -62,19 +64,16 @@ from tests.factories.email_notification import EmailNotificationFactory
 from tests.factories.activities import ActivityFactory
 from tests.factories.stripe_authorization import StripeAuthorizationFactory
 from tests.factories.mail import MailFactory
-from tests.factories.order import OrderFactory, OrderSubFactory
+from tests.factories.order import OrderFactory
 from tests.factories.faq_type import FaqTypeFactory
 from tests.factories.user_email import UserEmailFactory
 from tests.factories.feedback import FeedbackFactory
 from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
-from tests.factories.discount_code import DiscountCodeTicketSubFactory
 
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
-    _create_ticket_dict,
-    _create_tickets,
 )
 
 
@@ -92,17 +91,6 @@ def obtain_token():
     parsed_body = response.json()
     token = parsed_body["access_token"]
     return token
-
-
-def create_tickets(prices, **kwargs):
-    return [TicketSubFactory(price=price, **kwargs) for price in prices]
-
-
-def create_ticket_dict(tickets, quantities):
-    return [
-        dict(id=ticket.id, quantity=quantity)
-        for ticket, quantity in zip(tickets, quantities)
-    ]
 
 
 def create_super_admin(email, password):
@@ -4259,7 +4247,7 @@ def create_order(transaction):
 )
 def create_order_with_on_site_attendee(transaction):
     """
-    POST /orders/create-order?onsite=true
+    POST /orders?onsite=true
     :param transaction:
     :return:
     """

@@ -125,9 +125,7 @@ def calculate_amount():
 @order_blueprint.route('/create-order', methods=['POST'])
 @jwt_required
 def create_order():
-    print(request.get_json())
     data, errors = OrderAmountInputSchema().load(request.get_json())
-    print(data)
     if errors:
         return make_response(jsonify(errors), 422)
 

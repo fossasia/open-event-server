@@ -50,6 +50,115 @@ Get a list of all orders
           }
         }
 
+## Create Order [/v1/orders/create-order]
+
+### Create Order [POST]
+Create a new Order
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+          {
+              "tickets": [
+                {"id": 1, "quantity": 2}, 
+                {"id": 2, "quantity": 4}, 
+                {"id": 3, "quantity": 3, "price": 789.7}, 
+                {"id": 4, "quantity": 3}
+              ],
+              "discount_code": "1"
+          }
+
++ Response 200 (application/json)
+
+        {
+          "data": {
+            "type": "order",
+            "attributes": {
+              "completed-at": null,
+              "paid-via": null,
+              "exp-year": null,
+              "discount-code-id": "1",
+              "status": "initializing",
+              "deleted-at": null,
+              "exp-month": null,
+              "country": null,
+              "is-billing-enabled": false,
+              "transaction-id": null,
+              "order-notes": null,
+              "tickets-pdf-url": null,
+              "payment-mode": null,
+              "city": null,
+              "tax-business-info": null,
+              "amount": 4745.81,
+              "identifier": "300d7722-7005-4776-89d7-037cc7ceec0d",
+              "brand": null,
+              "created-at": "2020-09-11T12:11:24.169351+00:00",
+              "zipcode": null,
+              "company": null,
+              "last4": null,
+              "state": null,
+              "cancel-note": null,
+              "address": null
+            },
+            "id": "1",
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/ticket",
+                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/tickets"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/user",
+                  "related": "/v1/users/1"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/discount-code",
+                  "related": "/v1/discount-codes/1"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/attendee",
+                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/attendees"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              },
+              "event-invoice": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event-invoice/",
+                  "related": "/v1/event-invoices/1"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/marketer"
+                }
+              }
+            },
+            "links": {
+              "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
+            }
+          },
+          "links": {
+            "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
+          }
+        }
 
 ## Order Detail [/v1/orders/{identifier}]
 + Parameters
@@ -283,19 +392,11 @@ Create a new Order with on site attendees
 
             {
               "data": {
-              "type": "order",
-              "relationships": {
-                  "event": {
-                    "data": {
-                      "id": "1",
-                      "type": "event"
-                    }
-                  }
-                },
                 "attributes": {
                   "payment-mode": "free",
                   "country": "India",
                   "status": "pending",
+                  "amount": null,
                   "order-notes": "example",
                   "on-site-tickets":  [
                         {
@@ -316,11 +417,19 @@ Create a new Order with on site attendees
                                 "type": "on-site-ticket"
                             }
                         }
-                    ],
+                    ]
+                },
+                "type": "order",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
                   }
                 }
               }
-              
+            }
 + Response 201 (application/vnd.api+json)
 
         {
@@ -382,9 +491,10 @@ Create a new Order with on site attendees
               "payment-mode": "free",
               "last4": null,
               "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",              
               "address": null,
               "exp-month": null,
-              "amount": "0",
+              "amount": null,
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
@@ -625,114 +735,3 @@ Create paypal payment
             "payment_id": "example",
             "error": null
         }
-
-## Create Order [/v1/orders/create-order]
-
-### Create Order [POST]
-Create a new Order
-
-+ Request (application/json)
-
-    + Headers
-
-            Accept: application/json
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-          {
-              "tickets": [
-                {"id": 1, "quantity": 2}, 
-                {"id": 2, "quantity": 4}, 
-                {"id": 3, "quantity": 3, "price": 789.7}, 
-                {"id": 4, "quantity": 3}
-              ],
-              "discount_code": "1"
-          }
-
-+ Response 200 (application/json)
-
-        {
-          "data": {
-            "type": "order",
-            "attributes": {
-              "completed-at": null,
-              "paid-via": null,
-              "exp-year": null,
-              "discount-code-id": "1",
-              "status": "initializing",
-              "deleted-at": null,
-              "exp-month": null,
-              "country": null,
-              "is-billing-enabled": false,
-              "transaction-id": null,
-              "order-notes": null,
-              "tickets-pdf-url": null,
-              "payment-mode": null,
-              "city": null,
-              "tax-business-info": null,
-              "amount": 4745.81,
-              "identifier": "300d7722-7005-4776-89d7-037cc7ceec0d",
-              "brand": null,
-              "created-at": "2020-09-11T12:11:24.169351+00:00",
-              "zipcode": null,
-              "company": null,
-              "last4": null,
-              "state": null,
-              "cancel-note": null,
-              "address": null
-            },
-            "id": "1",
-            "relationships": {
-              "tickets": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/ticket",
-                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/tickets"
-                }
-              },
-              "user": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/user",
-                  "related": "/v1/users/1"
-                }
-              },
-              "discount-code": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/discount-code",
-                  "related": "/v1/discount-codes/1"
-                }
-              },
-              "attendees": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/attendee",
-                  "related": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/attendees"
-                }
-              },
-              "event": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event",
-                  "related": "/v1/events/1"
-                }
-              },
-              "event-invoice": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/event-invoice/",
-                  "related": "/v1/event-invoices/1"
-                }
-              },
-              "marketer": {
-                "links": {
-                  "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d/relationships/marketer"
-                }
-              }
-            },
-            "links": {
-              "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
-            }
-          },
-          "links": {
-            "self": "/v1/orders/300d7722-7005-4776-89d7-037cc7ceec0d"
-          }
-        }
-

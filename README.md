@@ -186,7 +186,14 @@ When checking in code for models, please update migrations as well.
 
 ### API documentation
 
-The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+The api is documented using [api blueprint](https://apiblueprint.org/). First, generate the description/blueprint `.apib` file using:
+
+```bash
+npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib # generate the description .apib file
+
+```
+
+Local changes to the description can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
 
 ```bash
 gem install apiaryio # dependency

@@ -51,6 +51,8 @@ services:
   celery:
     <<: *defaults
     container_name: opev-celery
+    depends_on:
+      - web
     environment:
       <<: *environment-vars
       C_FORCE_ROOT: "true"
