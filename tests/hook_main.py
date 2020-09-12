@@ -323,16 +323,6 @@ def user_speaker(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Check if the email is available > Check if email is available")
-def user_check_email(transaction):
-    """
-    POST /users/checkEmail
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
-
-
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
