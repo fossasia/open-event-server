@@ -33,7 +33,11 @@ from tests.factories.page import PageFactory
 from tests.factories.event_copyright import EventCopyrightFactory
 from tests.factories.setting import SettingFactory
 from tests.factories.event_type import EventTypeFactory
-from tests.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
+from tests.factories.discount_code import (
+    DiscountCodeFactory,
+    DiscountCodeTicketFactory,
+    DiscountCodeTicketSubFactory,
+)
 from tests.factories.access_code import AccessCodeFactory
 from tests.factories.custom_form import CustomFormFactory
 from tests.factories.faq import FaqFactory
@@ -67,6 +71,10 @@ from tests.factories.feedback import FeedbackFactory
 from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
+
+from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
+    _create_taxed_tickets,
+)
 
 
 stash = {}
@@ -4201,17 +4209,27 @@ def orders_get_collection(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
-@hooks.before("Orders > Orders Collection > Create Order")
+@hooks.before("Orders > Create Order > Create Order")
 def create_order(transaction):
     """
-    GET /orders
+    POST /orders/create-order
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketSubFactory(
+            type='percent', value=10.0, tickets=[]
+        )
+        tickets_dict = _create_taxed_tickets(
+            db, tax_included=False, discount_code=discount_code
+        )
+        db.session.commit()
 
 
 @hooks.before(
@@ -4219,7 +4237,7 @@ def create_order(transaction):
 )
 def create_order_with_on_site_attendee(transaction):
     """
-    GET /orders?onsite=true
+    POST /orders?onsite=true
     :param transaction:
     :return:
     """
@@ -4233,7 +4251,10 @@ def order_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Update Order")
@@ -4243,7 +4264,10 @@ def update_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Delete Order")
@@ -4253,7 +4277,10 @@ def delete_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Orders under an Event > List all Orders under an Event")
@@ -4263,7 +4290,12 @@ def event_order_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        order = OrderFactory(event_id=event.id)
+        db.session.add(event)
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Charge > Charge for an Order")

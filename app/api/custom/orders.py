@@ -167,7 +167,7 @@ def create_order():
     db.session.commit()
     order.populate_and_save()
 
-    return OrderSchema().dumps(order)
+    return OrderSchema().dump(order)
 
 
 @order_blueprint.route('/complete-order/<order_id>', methods=['PATCH'])
