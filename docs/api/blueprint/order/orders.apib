@@ -735,3 +735,90 @@ Create paypal payment
             "payment_id": "example",
             "error": null
         }
+
+## Calculate Order Amount [/v1/orders/calculate-amount]
+
+### Calculate Order Amount [POST]
+Calculates the order amount
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+          {
+              "tickets": [
+                {"id": 1, "quantity": 2}, 
+                {"id": 2, "quantity": 4}, 
+                {"id": 3, "quantity": 3, "price": 789.7}, 
+                {"id": 4, "quantity": 3}
+              ],
+              "discount_code": "1"
+          }
+
++ Response 200 (application/json)
+
+          {             
+              "discount": 419.43,
+              "sub_total": 4021.87,
+              "tax": {
+                "amount": 723.94,
+                "included": false,
+                "name": "GST",
+                "percent": 18
+              },
+              "tickets": [
+                {
+                  "discount": null,
+                  "id": 1,
+                  "name": "example",
+                  "price": 123.5,
+                  "quantity": 2,
+                  "sub_total": 247,
+                  "ticket_fee": 0
+                },
+                {
+                  "discount": {
+                    "amount": 45.63,
+                    "code": "example",
+                    "percent": 10,
+                    "total": 182.52
+                  },
+                  "id": 2,
+                  "name": "example",
+                  "price": 456.3,
+                  "quantity": 4,
+                  "sub_total": 1642.68,
+                  "ticket_fee": 0
+                },
+                {
+                  "discount": {
+                    "amount": 78.97,
+                    "code": "example",
+                    "percent": 10,
+                    "total": 236.91
+                  },
+                  "id": 3,
+                  "name": "example",
+                  "price": 789.7,
+                  "quantity": 3,
+                  "sub_total": 2132.19,
+                  "ticket_fee": 0
+                },
+                {
+                  "discount": null,
+                  "id": 4,
+                  "name": "example",
+                  "price": 0,
+                  "quantity": 3,
+                  "sub_total": 0,
+                  "ticket_fee": 0
+                }
+              ],
+              "total": 4745.81        
+          }

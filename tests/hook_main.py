@@ -4226,9 +4226,22 @@ def create_order(transaction):
         discount_code = DiscountCodeTicketSubFactory(
             type='percent', value=10.0, tickets=[]
         )
-        tickets_dict = _create_taxed_tickets(
-            db, tax_included=False, discount_code=discount_code
+        _create_taxed_tickets(db, tax_included=False, discount_code=discount_code)
+        db.session.commit()
+
+
+@hooks.before("Orders > Calculate Order Amount > Calculate Order Amount")
+def calculate_amount(transaction):
+    """
+    POST /orders/calculate-amount
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketSubFactory(
+            type='percent', value=10.0, tickets=[]
         )
+        _create_taxed_tickets(db, tax_included=False, discount_code=discount_code)
         db.session.commit()
 
 
