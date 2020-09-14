@@ -143,6 +143,8 @@ class Setting(db.Model):
     facebook_url = db.Column(db.String)
     instagram_url = db.Column(db.String)
     patreon_url = db.Column(db.String)
+    gitter_url = db.Column(db.String)
+    telegram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
 
     #
