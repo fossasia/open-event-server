@@ -49,7 +49,7 @@ class EventInvoice(SoftDeletionModel):
 
     order = db.relationship('Order', backref='event_invoices', foreign_keys=[order_id])
 
-    user = db.relationship('User', backref='invoices')
+    user = db.relationship('User', backref='event_invoices')
 
     discount_code_id = db.Column(
         db.Integer,
