@@ -55,6 +55,8 @@ class SettingSchemaPublic(Schema):
     facebook_url = fields.Str(allow_none=True)
     instagram_url = fields.Str(allow_none=True)
     patreon_url = fields.Str(allow_none=True)
+    gitter_url = fields.Str(allow_none=True)
+    telegram_url = fields.Str(allow_none=True)
     youtube_url = fields.Str(allow_none=True)
 
     # Url of Frontend
