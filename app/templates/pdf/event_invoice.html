@@ -13,20 +13,20 @@
 					{% if user.billing_contact_name %}
 						{{ user.billing_contact_name }}
 					{% endif %}<br>
-					{{ user.company }}<br>
-					{{ user.billing_address }}<br>
-					{{ user.billing_city }} {{ user.billing_state }}<br>
-					{{ user.billing_country }}<br>
+					{{ user.company or '' }}<br>
+					{{ user.billing_address or '' }}<br>
+					{{ user.billing_city or '' }} {{ user.billing_state or '' }}<br>
+					{{ user.billing_country or '' }}<br>
 				</td>
 
 				<td><br>
 					{% if admin_info.admin_billing_contact_name %}
 						{{ admin_info.admin_billing_contact_name }}
 					{% endif %}<br>
-					{{ admin_info.admin_company }}<br>
-					{{ admin_info.admin_billing_address }}<br>
-					{{ admin_info.admin_billing_city }}  {{ admin_info.admin_billing_state }}<br>
-					{{ admin_info.admin_billing_country }}<br>
+					{{ admin_info.admin_company or '' }}<br>
+					{{ admin_info.admin_billing_address or '' }}<br>
+					{{ admin_info.admin_billing_city or '' }}  {{ admin_info.admin_billing_state or '' }}<br>
+					{{ admin_info.admin_billing_country or '' }}<br>
 				</td>
 			</tr>
 		</tbody>

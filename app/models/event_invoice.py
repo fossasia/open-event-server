@@ -21,15 +21,9 @@ class EventInvoice(SoftDeletionModel):
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True, default=get_new_id)
     amount = db.Column(db.Float)
-    address = db.Column(db.String)
-    city = db.Column(db.String)
-    state = db.Column(db.String)
-    country = db.Column(db.String)
-    zipcode = db.Column(db.String)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='SET NULL'))
 
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
@@ -46,18 +40,7 @@ class EventInvoice(SoftDeletionModel):
     invoice_pdf_url = db.Column(db.String)
 
     event = db.relationship('Event', backref='invoices')
-
-    order = db.relationship('Order', backref='event_invoices', foreign_keys=[order_id])
-
     user = db.relationship('User', backref='event_invoices')
-
-    discount_code_id = db.Column(
-        db.Integer,
-        db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
-        nullable=True,
-        default=None,
-    )
-    discount_code = db.relationship('DiscountCode', backref='event_invoices')
 
     def get_invoice_number(self):
         return (
