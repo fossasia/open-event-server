@@ -69,7 +69,7 @@ class UserList(ResourceList):
 
         if data.get('is_verified'):
             raise UnprocessableEntityError(
-                {'pointer': '/data/attributes/is_verified'},
+                {'pointer': '/data/attributes/is-verified'},
                 "You are not allowed to submit this field"
             )
 
@@ -296,7 +296,7 @@ class UserDetail(ResourceDetail):
             and data.get('is_verified') != user.is_verified
         ):
             raise ForbiddenError(
-                {'pointer': '/data/attributes/is_verified'},
+                {'pointer': '/data/attributes/is-verified'},
                 "Admin access is required to update this information."
             )
 
