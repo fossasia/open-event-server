@@ -290,7 +290,11 @@ class UserDetail(ResourceDetail):
                     {'source': ''}, "You are not authorized to update this information."
                 )
 
-        if not has_access('is_admin') and data.get('is_verified') != user.is_verified:
+        if (
+            not has_access('is_admin')
+            and data.get('is_verified') is not None
+            and data.get('is_verified') != user.is_verified
+        ):
             raise ForbiddenError(
                 {'pointer': '/data/attributes/is_verified'},
                 "Admin access is required to update this information."
