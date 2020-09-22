@@ -267,54 +267,8 @@ def send_monthly_event_invoice():
     events = Event.query.filter_by(deleted_at=None, state='published').all()
 
     for event in events:
-        # calculate net & gross revenues
-        user = event.owner
-        admin_info = get_settings()
-        currency = event.payment_currency
-        try:
-            ticket_fee_object = (
-                db.session.query(TicketFees).filter_by(currency=currency).one()
-            )
-        except NoResultFound:
-            logger.error('Ticket Fee not found for event id {id}'.format(id=event.id))
-            continue
-
-        ticket_fee_percentage = ticket_fee_object.service_fee
-        ticket_fee_maximum = ticket_fee_object.maximum_fee
-        orders = Order.query.filter_by(event=event).all()
-        gross_revenue = event.calc_monthly_revenue()
-        invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
-        if invoice_amount > ticket_fee_maximum:
-            invoice_amount = ticket_fee_maximum
-        net_revenue = gross_revenue - invoice_amount
-        payment_details = {
-            'tickets_sold': event.tickets_sold,
-            'gross_revenue': gross_revenue,
-            'net_revenue': net_revenue,
-            'amount_payable': invoice_amount,
-        }
-        # save invoice as pdf
-        pdf = create_save_pdf(
-            render_template(
-                'pdf/event_invoice.html',
-                orders=orders,
-                user=user,
-                admin_info=admin_info,
-                currency=currency,
-                event=event,
-                ticket_fee_object=ticket_fee_object,
-                payment_details=payment_details,
-                net_revenue=net_revenue,
-            ),
-            UPLOAD_PATHS['pdf']['event_invoice'],
-            dir_path='/static/uploads/pdf/event_invoices/',
-            identifier=event.identifier,
-        )
-        # save event_invoice info to DB
-
-        event_invoice = EventInvoice(
-            amount=invoice_amount, invoice_pdf_url=pdf, event_id=event.id
-        )
+        event_invoice = EventInvoice(event=event)
+        event_invoice.populate()
         save_to_db(event_invoice)
 
 

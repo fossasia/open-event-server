@@ -7,7 +7,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy import or_, and_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
