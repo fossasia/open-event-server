@@ -1,4 +1,6 @@
+import binascii
 import logging
+import os
 import uuid
 
 from flask import request
@@ -144,10 +146,13 @@ def get_new_slug(model, name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
-def get_new_identifier(model):
-    identifier = str(uuid.uuid4())
+def get_new_identifier(model, length=None):
+    if not length:
+        identifier = str(uuid.uuid4())
+    else:
+        identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
     count = get_count(model.query.filter_by(identifier=identifier))
-    if count == 0:
+    if not identifier.isdigit() and count == 0:
         return identifier
     else:
         return get_new_identifier(model)

@@ -1,32 +1,32 @@
 import logging
 import time
+from datetime import datetime, timedelta
 
 from flask.templating import render_template
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import send_email_for_monthly_fee_payment
+from app.api.helpers.notification import send_notif_monthly_fee_payment
 from app.api.helpers.storage import UPLOAD_PATHS
+from app.api.helpers.utilities import monthdelta
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order
+from app.models.setting import Setting
 from app.models.ticket_fee import TicketFees
 from app.settings import get_settings
-from app.api.helpers.utilities import monthdelta
-from app.api.helpers.mail import send_email_for_monthly_fee_payment
-from app.api.helpers.notification import send_notif_monthly_fee_payment
 
 logger = logging.getLogger(__name__)
 
 
 def get_new_id():
-    return get_new_identifier(EventInvoice)
+    return 'I' + get_new_identifier(EventInvoice, length=8)
 
 
 class EventInvoice(SoftDeletionModel):
-    """
-    Stripe authorization information for an event.
-    """
+    DUE_DATE_DAYS = 15
 
     __tablename__ = 'event_invoices'
 
@@ -51,67 +51,103 @@ class EventInvoice(SoftDeletionModel):
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String, default='due')
-    
+
     invoice_pdf_url = db.Column(db.String)
 
     event = db.relationship('Event', backref='invoices')
     user = db.relationship('User', backref='event_invoices')
 
-    def get_invoice_number(self):
-        return (
-            'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
-        )
+    def __init__(self, **kwargs):
+        super(EventInvoice, self).__init__(**kwargs)
+
+        if not self.created_at:
+            self.created_at = datetime.utcnow()
+
+        if not self.identifier:
+            self.identifier = get_new_id()
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
 
+    @property
+    def due_at(self):
+        return self.created_at + timedelta(days=EventInvoice.DUE_DATE_DAYS)
+
     def populate(self):
         assert self.event is not None
 
-        self.user = self.event.owner
-        self.generate_pdf()
+        with db.session.no_autoflush:
+            self.user = self.event.owner
+            return self.generate_pdf()
 
     def generate_pdf(self):
-        admin_info = get_settings()
-        currency = self.event.payment_currency
-        ticket_fee_object = db.session.query(TicketFees).filter_by(currency=currency).first()
-        if not ticket_fee_object:
-            logger.error('Ticket Fee not found for event id {id}'.format(id=event.id))
-            return
+        with db.session.no_autoflush:
+            latest_invoice_date = (
+                EventInvoice.query.filter_by(event=self.event)
+                .with_entities(func.max(EventInvoice.created_at))
+                .scalar()
+            )
 
-        ticket_fee_percentage = ticket_fee_object.service_fee
-        ticket_fee_maximum = ticket_fee_object.maximum_fee
-        gross_revenue = self.event.calc_monthly_revenue()
-        invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
-        if invoice_amount > ticket_fee_maximum:
-            invoice_amount = ticket_fee_maximum
-        self.amount = invoice_amount
-        net_revenue = gross_revenue - invoice_amount
-        payment_details = {
-            'tickets_sold': self.event.tickets_sold,
-            'gross_revenue': gross_revenue,
-            'net_revenue': net_revenue,
-            'amount_payable': invoice_amount,
-        }
-        # save invoice as pdf
-        self.invoice_pdf_url = create_save_pdf(
-            render_template(
-                'pdf/event_invoice.html',
-                user=self.user,
-                admin_info=admin_info,
-                currency=currency,
-                event=self.event,
-                ticket_fee_object=ticket_fee_object,
-                payment_details=payment_details,
-                net_revenue=net_revenue,
-            ),
-            UPLOAD_PATHS['pdf']['event_invoice'],
-            dir_path='/static/uploads/pdf/event_invoices/',
-            identifier=self.event.identifier,
-        )
+            admin_info = Setting.query.first()
+            currency = self.event.payment_currency
+            ticket_fee_object = (
+                TicketFees.query.filter_by(country=self.event.payment_country).first()
+                or TicketFees.query.filter_by(country='global').first()
+            )
+            if not ticket_fee_object:
+                logger.error(
+                    'Ticket Fee not found for event id {id}'.format(id=self.event.id)
+                )
+                return
+
+            ticket_fee_percentage = ticket_fee_object.service_fee
+            ticket_fee_maximum = ticket_fee_object.maximum_fee
+            gross_revenue = self.event.calc_revenue(
+                start=latest_invoice_date, end=self.created_at
+            )
+            invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
+            if invoice_amount > ticket_fee_maximum:
+                invoice_amount = ticket_fee_maximum
+            self.amount = invoice_amount
+            net_revenue = gross_revenue - invoice_amount
+            orders_query = self.event.get_orders_query(
+                start=latest_invoice_date, end=self.created_at
+            )
+            first_order_date = orders_query.with_entities(
+                func.min(Order.completed_at)
+            ).scalar()
+            last_order_date = orders_query.with_entities(
+                func.max(Order.completed_at)
+            ).scalar()
+            payment_details = {
+                'tickets_sold': self.event.tickets_sold,
+                'gross_revenue': gross_revenue,
+                'net_revenue': net_revenue,
+                'amount_payable': invoice_amount,
+                'first_date': first_order_date,
+                'last_date': last_order_date,
+            }
+            self.invoice_pdf_url = create_save_pdf(
+                render_template(
+                    'pdf/event_invoice.html',
+                    user=self.user,
+                    admin_info=admin_info,
+                    currency=currency,
+                    event=self.event,
+                    ticket_fee_object=ticket_fee_object,
+                    payment_details=payment_details,
+                    net_revenue=net_revenue,
+                    invoice=self,
+                ),
+                UPLOAD_PATHS['pdf']['event_invoice'],
+                dir_path='/static/uploads/pdf/event_invoices/',
+                identifier=self.identifier,
+                extra_identifiers={'event_identifier': self.event.identifier},
+                new_renderer=True,
+            )
 
         return self.invoice_pdf_url
-    
+
     def send_notification(self):
         prev_month = monthdelta(self.created_at, 1).strftime(
             "%b %Y"
@@ -120,16 +156,11 @@ class EventInvoice(SoftDeletionModel):
         frontend_url = get_settings()['frontend_url']
         link = '{}/invoices/{}'.format(frontend_url, self.identifier)
         send_email_for_monthly_fee_payment(
-            self.user.email,
-            event.name,
-            prev_month,
-            self.amount,
-            app_name,
-            link,
+            self.user.email, self.event.name, prev_month, self.amount, app_name, link,
         )
         send_notif_monthly_fee_payment(
             self.user,
-            event.name,
+            self.event.name,
             prev_month,
             self.amount,
             app_name,

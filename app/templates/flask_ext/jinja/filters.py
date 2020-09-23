@@ -17,7 +17,7 @@ def init_filters(app):
     @app.template_filter('currency_symbol')
     def currency_symbol_filter(currency_code):
         symbol = CurrencyCodes().get_symbol(currency_code)
-        return symbol if symbol else '$'
+        return symbol if symbol else currency_code
 
     @app.template_filter('money')
     def money_filter(string):
@@ -26,6 +26,12 @@ def init_filters(app):
     @app.template_filter('datetime')
     def simple_datetime_display(date):
         return date.strftime('%B %d, %Y %I:%M %p')
+
+    @app.template_filter('date')
+    def simple_date_display(date):
+        if not date:
+            return ''
+        return date.strftime('%B %d, %Y')
 
     @app.template_filter('humanize')
     def humanize_filter(time):

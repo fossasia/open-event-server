@@ -8,7 +8,7 @@ from flask import current_app
 from sqlalchemy import event
 from sqlalchemy.sql import func
 
-from app.api.helpers.db import get_count
+from app.api.helpers.db import get_count, get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
@@ -26,14 +26,7 @@ from app.models.user import ATTENDEE, ORGANIZER, OWNER
 
 
 def get_new_event_identifier(length=8):
-    identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    if (
-        not identifier.isdigit()
-        and get_count(Event.query.filter_by(identifier=identifier)) == 0
-    ):
-        return identifier
-    else:
-        return get_new_event_identifier(length)
+    return get_new_identifier(Event, length=length)
 
 
 class Event(SoftDeletionModel):
@@ -350,16 +343,22 @@ class Event(SoftDeletionModel):
             total_available = 0
         return total_available
 
-    def calc_revenue(self):
+    def get_orders_query(self, start=None, end=None):
+        query = Order.query.filter_by(event_id=self.id, status='completed')
+        if start:
+            query = query.filter(Order.completed_at > start)
+        if end:
+            query = query.filter(Order.completed_at < end)
+        return query
+
+    def calc_revenue(self, start=None, end=None):
         """Returns total revenues of all completed orders for the given event"""
-        revenue = (
-            db.session.query(func.sum(Order.amount))
-            .filter_by(event_id=self.id, status='completed')
+        return (
+            self.get_orders_query(start=start, end=end)
+            .with_entities(func.sum(Order.amount))
             .scalar()
+            or 0
         )
-        if revenue is None:
-            revenue = 0
-        return revenue
 
     def calc_monthly_revenue(self):
         """Returns revenue of current month. Invoice sent every 1st of the month for the previous month"""
