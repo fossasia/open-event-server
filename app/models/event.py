@@ -1,5 +1,3 @@
-import binascii
-import os
 from argparse import Namespace
 from datetime import datetime
 
@@ -8,7 +6,7 @@ from flask import current_app
 from sqlalchemy import event
 from sqlalchemy.sql import func
 
-from app.api.helpers.db import get_count, get_new_identifier
+from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
