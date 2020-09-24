@@ -228,3 +228,18 @@ class Setting(db.Model):
             return True
         else:
             return False
+
+    @property
+    def full_billing_address(self):
+        return ', '.join(
+            filter(
+                None,
+                [
+                    self.admin_billing_address,
+                    self.admin_billing_city,
+                    self.admin_billing_state,
+                    self.admin_billing_zip,
+                    self.admin_billing_country,
+                ],
+            )
+        )

@@ -76,7 +76,7 @@ UPLOAD_PATHS = {
         'ticket_attendee': 'attendees/tickets/pdf/{identifier}',
         'order': 'orders/invoices/pdf/{identifier}',
         'tickets_all': 'orders/tickets/pdf/{identifier}',
-        'event_invoice': 'events/organizer/invoices/pdf/{identifier}',
+        'event_invoice': 'events/organizer/invoices/pdf/{event_identifier}/{identifier}',
     },
 }
 

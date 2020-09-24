@@ -1,69 +1,198 @@
 <!doctype html>
-<html>
-<head>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <title>{{ event.identifier }}</title>
-</head>
+    <title>Invoice {{ invoice.identifier }} for Event {{ event.identifier }}</title>
+    <style type="text/css">
+        .clearfix:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
 
-<body>
-	<table width="100%">
-		<tbody>
-			<tr class="padded">
-				<td><br>
-					{% if user.billing_contact_name %}
-						{{ user.billing_contact_name }}
-					{% endif %}<br>
-					{{ user.company }}<br>
-					{{ user.billing_address }}<br>
-					{{ user.billing_city }} {{ user.billing_state }}<br>
-					{{ user.billing_country }}<br>
-				</td>
+        a {
+          color: #5D6975;
+          text-decoration: underline;
+        }
 
-				<td><br>
-					{% if admin_info.admin_billing_contact_name %}
-						{{ admin_info.admin_billing_contact_name }}
-					{% endif %}<br>
-					{{ admin_info.admin_company }}<br>
-					{{ admin_info.admin_billing_address }}<br>
-					{{ admin_info.admin_billing_city }}  {{ admin_info.admin_billing_state }}<br>
-					{{ admin_info.admin_billing_country }}<br>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<hr>
-	<h3>{{ ("Event Invoice") }}</h3>
-	Event Name : {{ event.name }}<br>
-	<hr>
-	Dear
-	{% if user.first_name %}
-		{{ user.first_name }}
-	{% elif user.billing_contact_name %}
-		{{ user.billing_contact_name }}
-	{% endif %},<br>
-	Thank you for using Eventyay to ticket your event. Please find below the invoice for the Eventyay services you recieved for the event 
-	" {{ event.name }}" between {{ event.starts_at | datetime }} and {{ event.ends_at | datetime }} .<br>
+        body {
+          position: relative;
+          margin: 0 auto; 
+          color: #001028;
+          background: #FFFFFF; 
+          font-family: Arial, sans-serif; 
+          font-size: 12px; 
+          font-family: Arial;
+        }
 
-	For your event, Eventyay platform charges {{ ticket_fee_object.service_fee }} % on each completed order (maximum fees can be {{ currency }} {{ ticket_fee_object.maximum_fee }}) 
+        header {
+          padding: 10px 0;
+          margin-bottom: 30px;
+        }
 
-	<table class="table" width="100%">
-		<thead class="black white-text">
-			<tr>
-				<th scope="col">Tickets Sold</th>
-				<th scope="col">Gross Revenue</th>
-				<th scope="col">Net Revenue</th>
-				<th scope="col">Amount Payable</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td style="text-align:center">{{ payment_details.tickets_sold }}</td>
-				<td style="text-align:center">{{ currency }} {{ payment_details.gross_revenue }}</td>
-				<td style="text-align:center">{{ currency }} {{ payment_details.net_revenue }}</td>
-				<td style="text-align:center">{{ currency }} {{ payment_details.amount_payable }}</td>
-			</tr>
-		</tbody>
-	</table>
+        #logo {
+          font-size: 1.5rem;
+          color: #555;
+          text-align: center;
+          margin-bottom: 10px;
+        }
 
-</body>
+        #logo img {
+          width: 90px;
+        }
+
+        h1 {
+          border-top: 1px solid  #5D6975;
+          border-bottom: 1px solid  #5D6975;
+          color: #5D6975;
+          font-size: 2.4em;
+          line-height: 1.4em;
+          font-weight: normal;
+          text-align: center;
+          margin: 0 0 20px 0;
+        }
+
+        #project {
+          float: left;
+        }
+
+        #project span {
+          color: #5D6975;
+          text-align: right;
+          width: 52px;
+          margin-right: 10px;
+          display: inline-block;
+          font-size: 0.8em;
+        }
+
+        #company {
+          float: right;
+          text-align: right;
+        }
+
+        #project div,
+        #company div {
+          white-space: nowrap;        
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          border-spacing: 0;
+          margin-bottom: 20px;
+          font-size: 0.8em;
+        }
+
+        table tr:nth-child(2n-1) td {
+          background: #F5F5F5;
+        }
+
+        table th,
+        table td {
+          text-align: center;
+        }
+
+        table th {
+          padding: 5px 20px;
+          color: #5D6975;
+          border-bottom: 1px solid #C1CED9;
+          white-space: nowrap;        
+          font-weight: normal;
+        }
+
+        table .service,
+        table .desc {
+          text-align: left;
+        }
+
+        table td {
+          padding: 20px;
+          text-align: right;
+        }
+
+        table td.service,
+        table td.desc {
+          vertical-align: top;
+        }
+
+        table td.desc,
+        table td.sales {
+          font-size: .8em;
+          background-color: hotpink;
+          border: 5px;
+        }
+
+        table td.grand {
+          border-top: 1px solid #5D6975;;
+        }
+
+        #notices .notice {
+          color: #5D6975;
+          font-size: 1.2em;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="logo">
+      {{ admin_info.app_name }}
+    </div>
+    <header class="clearfix">
+      <h1>INVOICE {{ invoice.identifier }}</h1>
+      <div id="company" class="clearfix">
+        <div>{{ admin_info.admin_company or '' }}</div>
+        <div>{{ admin_info.full_billing_address or '' }}</div>
+        <div>{{ admin_info.admin_billing_phone or '' }}</div>
+        <div>{{ 'Tax ID: ' ~ admin_info.admin_billing_tax_info or '' }}</div>
+        <div><a href="{{ admin_info.admin_billing_email }}">{{ admin_info.admin_billing_email }}</a></div>
+      </div>
+      <div id="project">
+        <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
+        <div><span>ADDRESS</span> {{ user.full_billing_address }} </div>
+        <div><span>EMAIL</span> <a href="{{ user._email }}">{{ user._email }}</a></div>
+        {% if user.billing_tax_info %}
+          <div><span>TAX ID</span> {{user.billing_tax_info or ''}}</div>
+        {% endif %}
+        <div><span>DATE</span> {{ invoice.created_at | date }}</div>
+        <div><span>DUE DATE</span> {{ invoice.due_at | date }}</div>
+      </div>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class="service">PRODUCT</th>
+            <th class="desc">DESCRIPTION</th>
+            <th>FEES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="service">{{ event.name }}</td>
+            <td class="desc">
+              Plan: Early Access <br />
+              Ticket Sales Period: {{ payment_details.first_date | date }} - {{ payment_details.last_date | date }} <br />
+              Amount Earned: {{ currency | currency_symbol }} {{ payment_details.gross_revenue }}
+            </td>
+            <td class="total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
+          </tr>
+          <tr>
+            <td colspan="2">SUBTOTAL</td>
+            <td class="total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
+          </tr>
+          <tr>
+            <td colspan="2">TAX N/A</td>
+            <td class="total">{{ currency | currency_symbol }} 0.00</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="grand total">GRAND TOTAL</td>
+            <td class="grand total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="notices">
+        <div>NOTICE:</div>
+        <div class="notice">A finance charge of 5% will be made on unpaid balances after 30 days.</div>
+      </div>
+    </main>
+  </body>
 </html>

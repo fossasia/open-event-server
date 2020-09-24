@@ -449,14 +449,29 @@ class User(SoftDeletionModel):
     def update_lat(self):
         self.last_accessed_at = datetime.now(pytz.utc)
 
+    # Deprecated
     @property
     def fullname(self):
-        firstname = self.first_name if self.first_name else ''
-        lastname = self.last_name if self.last_name else ''
-        if firstname and lastname:
-            return '{} {}'.format(firstname, lastname)
-        else:
-            return ''
+        return self.full_name
+
+    @property
+    def full_name(self):
+        return ' '.join(filter(None, [self.first_name, self.last_name]))
+
+    @property
+    def full_billing_address(self):
+        return ', '.join(
+            filter(
+                None,
+                [
+                    self.billing_address,
+                    self.billing_city,
+                    self.billing_state,
+                    self.billing_zip_code,
+                    self.billing_country,
+                ],
+            )
+        )
 
     def __repr__(self):
         return '<User %r>' % self.email
