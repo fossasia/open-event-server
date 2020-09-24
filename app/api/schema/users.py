@@ -67,7 +67,7 @@ class UserSchema(UserSchemaPublic):
     is_user_moderator = fields.Boolean(dump_only=True)
     is_user_registrar = fields.Boolean(dump_only=True)
     is_user_attendee = fields.Boolean(dump_only=True)
-    is_verified = fields.Boolean(dump_only=True)
+    is_verified = fields.Boolean()
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)

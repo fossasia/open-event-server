@@ -67,6 +67,12 @@ class UserList(ResourceList):
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 
+        if data.get('is_verified'):
+            raise UnprocessableEntityError(
+                {'pointer': '/data/attributes/is-verified'},
+                "You are not allowed to submit this field"
+            )
+
     def after_create_object(self, user, data, view_kwargs):
         """
         method to send-
@@ -283,6 +289,16 @@ class UserDetail(ResourceDetail):
                 raise ForbiddenError(
                     {'source': ''}, "You are not authorized to update this information."
                 )
+
+        if (
+            not has_access('is_admin')
+            and data.get('is_verified') is not None
+            and data.get('is_verified') != user.is_verified
+        ):
+            raise ForbiddenError(
+                {'pointer': '/data/attributes/is-verified'},
+                "Admin access is required to update this information."
+            )
 
         users_email = data.get('email', None)
         if users_email is not None:
