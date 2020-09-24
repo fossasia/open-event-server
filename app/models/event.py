@@ -360,17 +360,6 @@ class Event(SoftDeletionModel):
             or 0
         )
 
-    def calc_monthly_revenue(self):
-        """Returns revenue of current month. Invoice sent every 1st of the month for the previous month"""
-        previous_month = datetime.now().month - 1
-        orders = Order.query.filter_by(event_id=self.id, status='completed').all()
-        monthly_revenue = sum(
-            o.amount
-            for o in orders
-            if o.completed_at and o.completed_at.month == previous_month
-        )
-        return monthly_revenue
-
     @property
     def tickets_available(self):
         return self.calc_total_tickets_count()

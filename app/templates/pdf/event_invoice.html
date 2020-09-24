@@ -140,56 +140,52 @@
       <h1>INVOICE {{ invoice.identifier }}</h1>
       <div id="company" class="clearfix">
         <div>{{ admin_info.admin_company or '' }}</div>
-        <div>{{ admin_info.full_billing_address }}</div>
-        <div>{{ admin_info.admin_billing_phone }}</div>
+        <div>{{ admin_info.full_billing_address or '' }}</div>
+        <div>{{ admin_info.admin_billing_phone or '' }}</div>
+        <div>{{ 'Tax ID: ' ~ admin_info.admin_billing_tax_info or '' }}</div>
         <div><a href="{{ admin_info.admin_billing_email }}">{{ admin_info.admin_billing_email }}</a></div>
       </div>
       <div id="project">
         <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
         <div><span>ADDRESS</span> {{ user.full_billing_address }} </div>
         <div><span>EMAIL</span> <a href="{{ user._email }}">{{ user._email }}</a></div>
+        {% if user.billing_tax_info %}
+          <div><span>TAX ID</span> {{user.billing_tax_info or ''}}</div>
+        {% endif %}
         <div><span>DATE</span> {{ invoice.created_at | date }}</div>
         <div><span>DUE DATE</span> {{ invoice.due_at | date }}</div>
       </div>
     </header>
     <main>
-      <div style="margin-bottom: 2rem; font-size: 0.8em">
-        Dear {{ user.billing_contact_name or user.first_name }},<br>
-        Thank you for using {{ admin_info.app_name }} to ticket your event. Please find below the invoice for the {{ admin_info.app_name }} services you recieved for the event 
-        "<code>{{ event.name }}</code>" between {{ event.starts_at | datetime }} and {{ event.ends_at | datetime }}.<br>
-
-        For your event, {{ admin_info.app_name }} platform charges {{ ticket_fee_object.service_fee }} % on each completed order (maximum fees can be {{ currency | currency_symbol }} {{ ticket_fee_object.maximum_fee }}) 
-      </div>
       <table>
         <thead>
           <tr>
             <th class="service">PRODUCT</th>
             <th class="desc">DESCRIPTION</th>
-            <th>SALES</th>
             <th>FEES</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="service">{{ event.name }}</td>
-            <td class="desc">Plan: Early Access <br /> Ticket Sales Period: {{ payment_details.first_date | date }} - {{ payment_details.last_date | date }}</td>
-            <td class="sales">
-                Gross Revenue: {{ currency | currency_symbol }} {{ payment_details.gross_revenue }} <br />
-                Net Revenue: {{ currency | currency_symbol }} {{ payment_details.net_revenue }}
+            <td class="desc">
+              Plan: Early Access <br />
+              Ticket Sales Period: {{ payment_details.first_date | date }} - {{ payment_details.last_date | date }} <br />
+              Amount Earned: {{ currency | currency_symbol }} {{ payment_details.gross_revenue }}
             </td>
-            <td class="total">{{ currency | currency_symbol }} {{ payment_details.amount_payable }}</td>
+            <td class="total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
           </tr>
           <tr>
-            <td colspan="3">SUBTOTAL</td>
-            <td class="total">{{ currency | currency_symbol }} {{ payment_details.amount_payable }}</td>
+            <td colspan="2">SUBTOTAL</td>
+            <td class="total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
           </tr>
           <tr>
-            <td colspan="3">TAX N/A</td>
-            <td class="total">0</td>
+            <td colspan="2">TAX N/A</td>
+            <td class="total">{{ currency | currency_symbol }} 0.00</td>
           </tr>
           <tr>
-            <td colspan="3" class="grand total">GRAND TOTAL</td>
-            <td class="grand total">{{ currency | currency_symbol }} {{ payment_details.amount_payable }}</td>
+            <td colspan="2" class="grand total">GRAND TOTAL</td>
+            <td class="grand total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
           </tr>
         </tbody>
       </table>

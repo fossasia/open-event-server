@@ -1,5 +1,4 @@
 import logging
-import time
 from datetime import datetime, timedelta
 
 from flask.templating import render_template
@@ -7,8 +6,14 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
 from app.api.helpers.files import create_save_pdf
-from app.api.helpers.mail import send_email_for_monthly_fee_payment
-from app.api.helpers.notification import send_notif_monthly_fee_payment
+from app.api.helpers.mail import (
+    send_email_for_monthly_fee_payment,
+    send_followup_email_for_monthly_fee_payment,
+)
+from app.api.helpers.notification import (
+    send_followup_notif_monthly_fee_payment,
+    send_notif_monthly_fee_payment,
+)
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.utilities import monthdelta
 from app.models import db
@@ -22,11 +27,11 @@ logger = logging.getLogger(__name__)
 
 
 def get_new_id():
-    return 'I' + get_new_identifier(EventInvoice, length=8)
+    return get_new_identifier(EventInvoice, length=8)
 
 
 class EventInvoice(SoftDeletionModel):
-    DUE_DATE_DAYS = 15
+    DUE_DATE_DAYS = 30
 
     __tablename__ = 'event_invoices'
 
@@ -64,7 +69,7 @@ class EventInvoice(SoftDeletionModel):
             self.created_at = datetime.utcnow()
 
         if not self.identifier:
-            self.identifier = get_new_id()
+            self.identifier = self.created_at.strftime('%Y%mU-') + get_new_id()
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
@@ -84,6 +89,7 @@ class EventInvoice(SoftDeletionModel):
         with db.session.no_autoflush:
             latest_invoice_date = (
                 EventInvoice.query.filter_by(event=self.event)
+                .filter(EventInvoice.created_at < self.created_at)
                 .with_entities(func.max(EventInvoice.created_at))
                 .scalar()
             )
@@ -102,14 +108,14 @@ class EventInvoice(SoftDeletionModel):
 
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
-            gross_revenue = self.event.calc_revenue(
-                start=latest_invoice_date, end=self.created_at
+            gross_revenue = round(
+                self.event.calc_revenue(start=latest_invoice_date, end=self.created_at), 2
             )
             invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
-            self.amount = invoice_amount
-            net_revenue = gross_revenue - invoice_amount
+            self.amount = round(invoice_amount, 2)
+            net_revenue = round(gross_revenue - invoice_amount, 2)
             orders_query = self.event.get_orders_query(
                 start=latest_invoice_date, end=self.created_at
             )
@@ -123,7 +129,6 @@ class EventInvoice(SoftDeletionModel):
                 'tickets_sold': self.event.tickets_sold,
                 'gross_revenue': gross_revenue,
                 'net_revenue': net_revenue,
-                'amount_payable': invoice_amount,
                 'first_date': first_order_date,
                 'last_date': last_order_date,
             }
@@ -148,17 +153,22 @@ class EventInvoice(SoftDeletionModel):
 
         return self.invoice_pdf_url
 
-    def send_notification(self):
+    def send_notification(self, follow_up=False):
         prev_month = monthdelta(self.created_at, 1).strftime(
             "%b %Y"
         )  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
-        link = '{}/invoices/{}'.format(frontend_url, self.identifier)
-        send_email_for_monthly_fee_payment(
+        link = '{}/event-invoice/{}/review'.format(frontend_url, self.identifier)
+        email_function = send_email_for_monthly_fee_payment
+        notification_function = send_notif_monthly_fee_payment
+        if follow_up:
+            email_function = send_followup_email_for_monthly_fee_payment
+            notification_function = send_followup_notif_monthly_fee_payment
+        email_function(
             self.user.email, self.event.name, prev_month, self.amount, app_name, link,
         )
-        send_notif_monthly_fee_payment(
+        notification_function(
             self.user,
             self.event.name,
             prev_month,

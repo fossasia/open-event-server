@@ -305,7 +305,7 @@ MAILS = {
         'subject': u'{date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
-            + u"<br/> That payment for the same has to be made in two weeks. <a href='{payment_url}'>Click here</a> to "
+            + u"<br/> That payment for the same has to be made in 30 days. <a href='{payment_url}'>Click here</a> to "
             u"view your invoice and complete the payment."
             u"<br><br><em>Thank you for using {app_name}.</em>"
         ),

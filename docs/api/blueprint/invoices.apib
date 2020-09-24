@@ -12,11 +12,6 @@ Data related to an invoice for the event.
 | `payment-mode` | Payment Mode | string | - |
 | `stripe-token` | Stripe Token for the event organizer | string | - |
 | `last4` | - | string | - |
-| `address` | Billing Address | string | - |
-| `city` | City for Billing Address | string | - |
-| `state` | State for Billing Address | string | - |
-| `country` | Country for Billing Address| string | - |
-| `zipcode` | Zipcode for Billing Address | string | - |
 | `exp-month` | Expiring Month | integer | - |
 | `exp-year` | Expiring Year  | integer | - |
 | `amount` | Amount of the order | float | - |
@@ -65,20 +60,15 @@ Get a list of event invoices.
               },
               "attributes": {
                 "status": "pending",
-                "city": null,
                 "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
                 "paypal-token": null,
                 "exp-year": null,
                 "transaction-id": null,
-                "country": null,
                 "brand": null,
                 "created-at": "2017-06-08T11:24:57.344803+00:00",
-                "zipcode": null,
                 "payment-mode": null,
                 "stripe-token": null,
                 "last4": null,
-                "state": null,
-                "address": null,
                 "exp-month": null,
                 "amount": 100.0,
                 "completed-at": null,
@@ -120,12 +110,6 @@ Get a single event invoice.
         {
             "data": {
                 "relationships": {
-                    "discount-code": {
-                        "links": {
-                            "self": "/v1/event-invoices/5/relationships/discount-code",
-                            "related": "/v1event-invoices/5/discount-code"
-                        }
-                    },
                     "event": {
                         "links": {
                             "self": "/v1/event-invoices/5/relationships/event",
@@ -141,20 +125,15 @@ Get a single event invoice.
                 },
                 "attributes": {
                     "status": "pending",
-                    "city": "city",
                     "identifier": "b88639c9-5a41-45ea-884d-977876baa08f",
                     "paypal-token": "1234",
                     "invoice-pdf-url": null,
                     "transaction-id": "ae43awer",
-                    "country": "US",
                     "brand": "brand",
                     "created-at": "2017-06-28T08:10:14.968538+00:00",
-                    "zipcode": "40004",
                     "payment-mode": "mode",
                     "stripe-token": "fssfda432",
                     "last4": "5445",
-                    "state": "state",
-                    "address": "address",
                     "exp-month": 10,
                     "amount": 500,
                     "completed-at": null,
@@ -199,11 +178,6 @@ Update a single event invoice by `id`.
                   "payment-mode": "mode",
                   "stripe-token": "fssfda432",
                   "last4": "5445",
-                  "address": "address",
-                  "city": "city",
-                  "state": "state",
-                  "country": "US",
-                  "zipcode": "40004",
                   "exp-month": "10",
                   "amount": 500.0,
                   "paid-via": "stripe"
@@ -218,12 +192,6 @@ Update a single event invoice by `id`.
         {
             "data": {
                 "relationships": {
-                    "discount-code": {
-                        "links": {
-                            "self": "/v1/event-invoices/5/relationships/discount-code",
-                            "related": "/v1event-invoices/5/discount-code"
-                        }
-                    },
                     "event": {
                         "links": {
                             "self": "/v1/event-invoices/5/relationships/event",
@@ -239,20 +207,15 @@ Update a single event invoice by `id`.
                 },
                 "attributes": {
                     "status": "pending",
-                    "city": "city",
                     "identifier": "b88639c9-5a41-45ea-884d-977876baa08f",
                     "paypal-token": "1234",
                     "invoice-pdf-url": null,
                     "transaction-id": "ae43awer",
-                    "country": "US",
                     "brand": "brand",
                     "created-at": "2017-06-28T08:10:14.968538+00:00",
-                    "zipcode": "40004",
                     "payment-mode": "mode",
                     "stripe-token": "fssfda432",
                     "last4": "5445",
-                    "state": "state",
-                    "address": "address",
                     "exp-month": 10,
                     "amount": 500,
                     "completed-at": null,
@@ -325,12 +288,6 @@ Get a single event invoice.
             "data": [
                 {
                     "relationships": {
-                        "discount-code": {
-                            "links": {
-                                "self": "/v1/event-invoices/1/relationships/discount-code",
-                                "related": "/v1event-invoices/1/discount-code"
-                            }
-                        },
                         "event": {
                             "links": {
                                 "self": "/v1/event-invoices/1/relationships/event",
@@ -346,20 +303,15 @@ Get a single event invoice.
                     },
                     "attributes": {
                         "status": "pending",
-                        "city": "city",
                         "identifier": "1881f5f8-2936-4796-b51e-b9a97a54ba9a",
                         "paypal-token": "1234",
                         "invoice-pdf-url": null,
                         "transaction-id": "ae43awer",
-                        "country": "US",
                         "brand": "brand",
                         "created-at": "2017-08-06T23:45:30.564344+00:00",
-                        "zipcode": "40004",
                         "payment-mode": "mode",
                         "stripe-token": "fssfda432",
                         "last4": "5445",
-                        "state": "state",
-                        "address": "address",
                         "exp-month": 10,
                         "amount": 500,
                         "completed-at": null,
@@ -412,12 +364,6 @@ Get a single event invoice.
             "data": [
                 {
                     "relationships": {
-                        "discount-code": {
-                            "links": {
-                                "self": "/v1/event-invoices/1/relationships/discount-code",
-                                "related": "/v1event-invoices/1/discount-code"
-                            }
-                        },
                         "event": {
                             "links": {
                                 "self": "/v1/event-invoices/1/relationships/event",
@@ -433,20 +379,15 @@ Get a single event invoice.
                     },
                     "attributes": {
                         "status": "pending",
-                        "city": "city",
                         "identifier": "1881f5f8-2936-4796-b51e-b9a97a54ba9a",
                         "paypal-token": "1234",
                         "invoice-pdf-url": null,
                         "transaction-id": "ae43awer",
-                        "country": "US",
                         "brand": "brand",
                         "created-at": "2017-08-06T23:45:30.564344+00:00",
-                        "zipcode": "40004",
                         "payment-mode": "mode",
                         "stripe-token": "fssfda432",
                         "last4": "5445",
-                        "state": "state",
-                        "address": "address",
                         "exp-month": 10,
                         "amount": 500,
                         "completed-at": null,

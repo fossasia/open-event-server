@@ -1,21 +1,22 @@
 import datetime
 from datetime import timedelta, timezone
 
+from app.api.helpers.db import get_or_create
 from app.api.helpers.scheduled_jobs import (
     delete_ticket_holders_no_order_id,
-    event_invoices_mark_due,
     expire_initializing_tickets,
     expire_pending_tickets,
     send_monthly_event_invoice,
 )
-from app.models.event_invoice import EventInvoice
+from app.models.role import Role
 from app.models.ticket_holder import TicketHolder
+from app.models.users_events_role import UsersEventsRoles
 from app.settings import get_settings
 from tests.factories import common
 from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
-from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
+from tests.factories.user import UserFactory
 
 
 def test_delete_ticket_holder_created_currently(db):
@@ -56,40 +57,18 @@ def test_delete_ticket_holders_with_no_order_id(db):
     assert ticket_holder == None
 
 
-def test_event_invoices_mark_due(db):
-    """Method to test marking of event invoices as due"""
-
-    event_invoice_new = EventInvoiceSubFactory(
-        event__ends_at=datetime.datetime(2019, 7, 20)
-    )
-    event_invoice_paid = EventInvoiceSubFactory(
-        status="paid", event=event_invoice_new.event
-    )
-
-    db.session.commit()
-
-    event_invoice_new_id = event_invoice_new.id
-    event_invoice_paid_id = event_invoice_paid.id
-
-    event_invoices_mark_due()
-
-    status_new = EventInvoice.query.get(event_invoice_new_id).status
-    status_paid = EventInvoice.query.get(event_invoice_paid_id).status
-
-    assert status_new == "due"
-    assert status_paid == "paid"
-
-
 def test_send_monthly_invoice(db):
     """Method to test monthly invoices"""
 
-    TicketFeesFactory(service_fee=10.23, maximum_fee=11)
+    TicketFeesFactory(service_fee=10.23, maximum_fee=11, country='global')
     test_order = OrderSubFactory(
         status='completed',
         event__state='published',
         completed_at=datetime.datetime.now() - datetime.timedelta(days=30),
         amount=100,
     )
+    role, _ = get_or_create(Role, name='owner', title_name='Owner')
+    UsersEventsRoles(user=UserFactory(), event=test_order.event, role=role)
     AttendeeSubFactory(event=test_order.event, order=test_order)
     db.session.commit()
 
