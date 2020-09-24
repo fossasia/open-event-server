@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta
+from decimal import ROUND_UP, Decimal
 
 from flask.templating import render_template
 from sqlalchemy.sql import func
@@ -28,6 +29,10 @@ logger = logging.getLogger(__name__)
 
 def get_new_id():
     return get_new_identifier(EventInvoice, length=8)
+
+
+def round_money(money):
+    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_UP)
 
 
 class EventInvoice(SoftDeletionModel):
@@ -108,14 +113,14 @@ class EventInvoice(SoftDeletionModel):
 
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
-            gross_revenue = round(
-                self.event.calc_revenue(start=latest_invoice_date, end=self.created_at), 2
+            gross_revenue = self.event.calc_revenue(
+                start=latest_invoice_date, end=self.created_at
             )
             invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
-            self.amount = round(invoice_amount, 2)
-            net_revenue = round(gross_revenue - invoice_amount, 2)
+            self.amount = round_money(invoice_amount)
+            net_revenue = round_money(gross_revenue - invoice_amount)
             orders_query = self.event.get_orders_query(
                 start=latest_invoice_date, end=self.created_at
             )
@@ -127,8 +132,8 @@ class EventInvoice(SoftDeletionModel):
             ).scalar()
             payment_details = {
                 'tickets_sold': self.event.tickets_sold,
-                'gross_revenue': gross_revenue,
-                'net_revenue': net_revenue,
+                'gross_revenue': round_money(gross_revenue),
+                'net_revenue': round_money(net_revenue),
                 'first_date': first_order_date,
                 'last_date': last_order_date,
             }
