@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime, timedelta
-from decimal import ROUND_UP, Decimal
+from decimal import ROUND_HALF_UP, Decimal
 
 from flask.templating import render_template
 from sqlalchemy.sql import func
@@ -32,7 +32,7 @@ def get_new_id():
 
 
 def round_money(money):
-    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_UP)
+    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
 class EventInvoice(SoftDeletionModel):
