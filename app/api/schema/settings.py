@@ -76,6 +76,7 @@ class SettingSchemaPublic(Schema):
     is_stripe_activated = fields.Bool(dump_only=True)
     is_omise_activated = fields.Bool(dump_only=True)
     is_alipay_activated = fields.Bool(dump_only=True)
+    is_billing_paypal_activated = fields.Bool(dump_only=True)
 
     #
     # Payment Gateways
@@ -267,3 +268,4 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     admin_billing_city = fields.Str(allow_none=True)
     admin_billing_zip = fields.Str(allow_none=True)
     admin_billing_additional_info = fields.Str(allow_none=True)
+    admin_billing_paypal_email = fields.Email(allow_none=True)
