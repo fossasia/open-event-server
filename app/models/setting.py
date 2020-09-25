@@ -166,6 +166,7 @@ class Setting(db.Model):
     admin_billing_city = db.Column(db.String)
     admin_billing_zip = db.Column(db.String)
     admin_billing_additional_info = db.Column(db.String)
+    admin_billing_paypal_email = db.Column(db.String)
     #
     # Generators
     #
@@ -228,6 +229,10 @@ class Setting(db.Model):
             return True
         else:
             return False
+
+    @property
+    def is_billing_paypal_activated(self):
+        return self.admin_billing_paypal_email is not None
 
     @property
     def full_billing_address(self):
