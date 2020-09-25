@@ -17,6 +17,7 @@ from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.user import User
+from app.settings import get_settings
 
 
 class EventInvoiceList(ResourceList):
@@ -167,8 +168,9 @@ def create_paypal_payment_invoice(invoice_identifier):
     event_invoice = safe_query(
         EventInvoice, 'identifier', invoice_identifier, 'identifier'
     )
+    billing_email = get_settings()['admin_billing_paypal_email']
     status, response = PayPalPaymentsManager.create_payment(
-        event_invoice, return_url, cancel_url
+        event_invoice, return_url, cancel_url, payee_email=billing_email
     )
 
     if status:
@@ -206,6 +208,7 @@ def charge_paypal_payment_invoice(invoice_identifier):
     if status:
         # successful transaction hence update the order details.
         event_invoice.paid_via = 'paypal'
+        event_invoice.payment_mode = 'paypal'
         event_invoice.status = 'paid'
         event_invoice.transaction_id = paypal_payment_id
         event_invoice.completed_at = datetime.datetime.now()
