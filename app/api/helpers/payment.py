@@ -189,18 +189,20 @@ class PayPalPaymentsManager:
         )
 
     @staticmethod
-    def create_payment(order, return_url, cancel_url):
+    def create_payment(order, return_url, cancel_url, payee_email=None):
         """
         Create payment for an order
         :param order: Order to create payment for.
         :param return_url: return url for the payment.
         :param cancel_url: cancel_url for the payment.
+        :param payee_email: email of the payee. Default to event paypal email if not set
         :return: request_id or the error message along with an indicator.
         """
-        if (not order.event.paypal_email) or order.event.paypal_email == '':
+        payee_email = payee_email or order.event.paypal_email
+        if not payee_email:
             raise ConflictError(
                 {'pointer': ''},
-                "Payments through Paypal hasn't been configured for the event",
+                "Payments through Paypal hasn't been configured for the billing",
             )
 
         PayPalPaymentsManager.configure_paypal()
@@ -216,7 +218,7 @@ class PayPalPaymentsManager:
                             "total": int(order.amount),
                             "currency": order.event.payment_currency,
                         },
-                        "payee": {"email": order.event.paypal_email},
+                        "payee": {"email": payee_email},
                     }
                 ],
             }
