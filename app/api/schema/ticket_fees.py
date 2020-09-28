@@ -23,7 +23,7 @@ class TicketFeesSchema(Schema):
 
     id = fields.Integer(dump_only=True)
     currency = fields.Str(
-        validate=validate.OneOf(choices=PAYMENT_CURRENCY_CHOICES), allow_none=False
+        validate=validate.OneOf(choices=PAYMENT_CURRENCY_CHOICES), allow_none=True
     )
     country = fields.String(allow_none=False)
     service_fee = fields.Float(validate=lambda n: n >= 0, allow_none=True)
