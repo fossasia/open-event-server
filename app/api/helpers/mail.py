@@ -19,6 +19,8 @@ from app.models.mail import (
     EVENT_ROLE,
     MONTHLY_PAYMENT_EMAIL,
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+    MONTHLY_PAYMENT_POST_DUE_EMAIL,
+    MONTHLY_PAYMENT_PRE_DUE_EMAIL,
     NEW_SESSION,
     SESSION_STATE_CHANGE,
     TEST_MAIL,
@@ -251,37 +253,25 @@ def send_email_after_event(email, event_name, frontend_url):
 
 
 def send_email_for_monthly_fee_payment(
-    email, event_name, previous_month, amount, app_name, link
+    user, event_name, previous_month, amount, app_name, link, follow_up=False
 ):
     """email for monthly fee payment"""
+    options = {
+        False: MONTHLY_PAYMENT_EMAIL,
+        True: MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+        'pre_due': MONTHLY_PAYMENT_PRE_DUE_EMAIL,
+        'post_due': MONTHLY_PAYMENT_POST_DUE_EMAIL,
+    }
+    key = options[follow_up]
+    email = user.email
     send_email(
         to=email,
-        action=MONTHLY_PAYMENT_EMAIL,
-        subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(
-            date=previous_month, event_name=event_name
+        action=key,
+        subject=MAILS[key]['subject'].format(
+            date=previous_month, event_name=event_name, app_name=app_name
         ),
-        html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(
-            email=email,
-            event_name=event_name,
-            date=previous_month,
-            amount=amount,
-            app_name=app_name,
-            payment_url=link,
-        ),
-    )
-
-
-def send_followup_email_for_monthly_fee_payment(
-    email, event_name, previous_month, amount, app_name, link
-):
-    """followup email for monthly fee payment"""
-    send_email(
-        to=email,
-        action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
-        subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(
-            date=previous_month, event_name=event_name
-        ),
-        html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(
+        html=MAILS[key]['message'].format(
+            name=user.full_name,
             email=email,
             event_name=event_name,
             date=previous_month,
