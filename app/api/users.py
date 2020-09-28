@@ -70,7 +70,7 @@ class UserList(ResourceList):
         if data.get('is_verified'):
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/is-verified'},
-                "You are not allowed to submit this field"
+                "You are not allowed to submit this field",
             )
 
     def after_create_object(self, user, data, view_kwargs):
@@ -297,7 +297,7 @@ class UserDetail(ResourceDetail):
         ):
             raise ForbiddenError(
                 {'pointer': '/data/attributes/is-verified'},
-                "Admin access is required to update this information."
+                "Admin access is required to update this information.",
             )
 
         users_email = data.get('email', None)

@@ -10,7 +10,7 @@ from app.api.helpers import checksum
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError
-from app.api.helpers.utilities import represents_int
+from app.api.helpers.utilities import represents_int, round_money
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import Environment, get_settings
@@ -215,7 +215,7 @@ class PayPalPaymentsManager:
                 "transactions": [
                     {
                         "amount": {
-                            "total": int(order.amount),
+                            "total": round_money(order.amount),
                             "currency": order.event.payment_currency,
                         },
                         "payee": {"email": payee_email},
