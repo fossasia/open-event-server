@@ -1,7 +1,6 @@
 import pytest
 
 from app.api.helpers.notification import (
-    send_followup_notif_monthly_fee_payment,
     send_notif_after_event,
     send_notif_after_export,
     send_notif_after_import,
@@ -92,8 +91,8 @@ def test_send_notif_monthly_fee_payment(user):
 
 
 def test_send_followup_notif_monthly_fee_payment(user):
-    send_followup_notif_monthly_fee_payment(
-        user, 'Champagne Showers', 'November', 4532.99, 'RedFoo', link, 1,
+    send_notif_monthly_fee_payment(
+        user, 'Champagne Showers', 'November', 4532.99, 'RedFoo', link, 1, follow_up=True
     )
     notification = Notification.query.first()
     assert (

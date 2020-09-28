@@ -6,7 +6,6 @@ from app.api.helpers.system_notifications import (
     get_event_published_notification_actions,
     get_event_role_notification_actions,
     get_invite_papers_notification_actions,
-    get_monthly_payment_follow_up_notification_actions,
     get_monthly_payment_notification_actions,
     get_new_session_notification_actions,
     get_next_event_notification_actions,
@@ -65,28 +64,6 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
             request_url = 'https://localhost/e/345525/payment'
             request_event_id = 1
             response = get_monthly_payment_notification_actions(
-                request_event_id, request_url
-            )
-            expected_action = NotificationAction(
-                subject='event',
-                link=request_url,
-                subject_id=request_event_id,
-                action_type='view',
-            )
-            expected_action = [expected_action]
-            expected_length = len(expected_action)
-            response_length = len(response)
-            self.assertIsInstance(response, list)
-            self.assertEqual(expected_action[0].subject, response[0].subject)
-            self.assertEqual(expected_length, response_length)
-
-    def test_monthly_pay_followup_notification(self):
-        """Method to test the actions associated with a follow up notification of monthly payments."""
-
-        with self.app.test_request_context():
-            request_url = 'https://localhost/e/345525/payment'
-            request_event_id = 1
-            response = get_monthly_payment_follow_up_notification_actions(
                 request_event_id, request_url
             )
             expected_action = NotificationAction(

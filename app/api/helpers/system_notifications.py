@@ -67,20 +67,6 @@ def get_monthly_payment_notification_actions(event_id, payment_url):
     :return: actions
     """
     view_invoice_action = NotificationAction(
-        subject='event', link=payment_url, subject_id=event_id, action_type='view'
-    )
-    save_to_db(view_invoice_action)
-    return [view_invoice_action]
-
-
-def get_monthly_payment_follow_up_notification_actions(event_id, payment_url):
-    """
-    Get the actions associated with a follow up notification of monthly payments.
-    :param event_id: id of the event.
-    :param payment_url: url to view invoice.
-    :return: actions
-    """
-    view_invoice_action = NotificationAction(
         subject='invoice', link=payment_url, subject_id=event_id, action_type='view'
     )
     save_to_db(view_invoice_action)

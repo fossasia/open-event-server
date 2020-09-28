@@ -8,7 +8,6 @@ from app.api.helpers.system_notifications import (
     get_event_exported_actions,
     get_event_imported_actions,
     get_event_role_notification_actions,
-    get_monthly_payment_follow_up_notification_actions,
     get_monthly_payment_notification_actions,
     get_new_session_notification_actions,
     get_session_state_change_notification_actions,
@@ -142,7 +141,7 @@ def send_notif_after_export(user, event_name, download_url=None, error_text=None
 
 
 def send_notif_monthly_fee_payment(
-    user, event_name, previous_month, amount, app_name, link, event_id
+    user, event_name, previous_month, amount, app_name, link, event_id, follow_up=False
 ):
     """
     Send notification about monthly fee payments.
@@ -155,43 +154,14 @@ def send_notif_monthly_fee_payment(
     :param event_id:
     :return:
     """
-    message_settings = MessageSettings.query.filter_by(
-        action=SESSION_STATE_CHANGE
-    ).first()
+    key = MONTHLY_PAYMENT_FOLLOWUP_NOTIF if follow_up else MONTHLY_PAYMENT_NOTIF
+    message_settings = MessageSettings.query.filter_by(action=key).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_notification_actions(event_id, link)
-        notification = NOTIFS[MONTHLY_PAYMENT_NOTIF]
+        notification = NOTIFS[key]
         title = notification['subject'].format(date=previous_month, event_name=event_name)
         message = notification['message'].format(
             event_name=event_name, date=previous_month, amount=amount, app_name=app_name,
-        )
-
-        send_notification(user, title, message, actions)
-
-
-def send_followup_notif_monthly_fee_payment(
-    user, event_name, previous_month, amount, app_name, link, event_id
-):
-    """
-    Send follow up notifications for monthly fee payment.
-    :param user:
-    :param event_name:
-    :param previous_month:
-    :param amount:
-    :param app_name:
-    :param link:
-    :param event_id:
-    :return:
-    """
-    message_settings = MessageSettings.query.filter_by(
-        action=SESSION_STATE_CHANGE
-    ).first()
-    if not message_settings or message_settings.notification_status == 1:
-        actions = get_monthly_payment_follow_up_notification_actions(event_id, link)
-        notification = NOTIFS[MONTHLY_PAYMENT_FOLLOWUP_NOTIF]
-        title = notification['subject'].format(date=previous_month, event_name=event_name)
-        message = notification['message'].format(
-            event_name=event_name, date=previous_month, amount=amount, app_name=app_name
         )
 
         send_notification(user, title, message, actions)

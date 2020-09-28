@@ -14,6 +14,8 @@ from app.models.mail import (
     MAIL_TO_EXPIRED_ORDERS,
     MONTHLY_PAYMENT_EMAIL,
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+    MONTHLY_PAYMENT_POST_DUE_EMAIL,
+    MONTHLY_PAYMENT_PRE_DUE_EMAIL,
     NEW_SESSION,
     NEXT_EVENT,
     PASSWORD_CHANGE,
@@ -301,26 +303,66 @@ MAILS = {
         ),
     },
     MONTHLY_PAYMENT_EMAIL: {
-        'recipient': 'Owner, Organizer',
-        'subject': u'{date} - Monthly service fee invoice for {event_name}',
+        'recipient': 'Owner',
+        'subject': u'Your invoice for {event_name} for {date} is available on {app_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
-            + u"<br/> That payment for the same has to be made in 30 days. <a href='{payment_url}'>Click here</a> to "
-            u"view your invoice and complete the payment."
-            u"<br><br><em>Thank you for using {app_name}.</em>"
+            u"Hello {name},<br><br>"
+            u"The invoice for your event {event_name} on eventyay.com for {date} is now available. Your invoice payment is due within 30 days.<br><br>"
+            u"Amount Due: {amount}<br><br>"
+            u"Please pay within 30 days.<br><br>"
+            u"Pay Now at: <a href='{payment_url}'>{payment_url}</a><br><br>"
+            u"A detailed invoice is available in <a href='https://eventyay.com/account/billing/invoices/'>the billing area</a> of your account. If you have any questions about invoices, please find more information on our FAQ at https://support.eventyay.com.<br><br>"
+            u"<em>Thank you for using {app_name}!</em><br><br>"
+            u"{app_name} Team"
         ),
         'sent_at': '1st day of the month',
     },
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL: {
-        'recipient': 'Owner, Organizer',
-        'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
+        'recipient': 'Owner',
+        'subject': u'Reminder: Your invoice for {event_name} for {date} is available on {app_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
-            + u"<br/> That payment for the same is past the due date. <a href='{payment_url}'>Click here</a> to "
-            u"view your invoice and complete the payment to prevent loss of functionality."
-            u"<br><br><em>Thank you for using {app_name}.</em>"
+            u"Hello {name},<br><br>"
+            u"Just a friendly reminder that we haven't received your payment for your invoice for {event_name} for {date}. Payment is fast and simple using your credit card or PayPal account.<br><br>"
+            u"Amount Due: {amount}<br><br>"
+            u"Please pay within 15 days.<br><br>"
+            u"Pay Now at: <a href='{payment_url}'>{payment_url}</a><br><br>"
+            u"A detailed invoice is available in <a href='https://eventyay.com/account/billing/invoices/'>the billing area</a> of your account. If you have any questions about invoices, please find more information on our FAQ at https://support.eventyay.com.<br><br>"
+            u"<em>Thank you for using {app_name}!</em><br><br>"
+            u"{app_name} Team"
         ),
         'sent_at': '15th day of the month',
+    },
+    MONTHLY_PAYMENT_PRE_DUE_EMAIL: {
+        'recipient': 'Owner',
+        'subject': u'Reminder: Your invoice for {event_name} for {date} is available on {app_name}',
+        'message': (
+            u"Hello {name},<br><br>"
+            u"This is a reminder that we haven't received your payment for your invoice for {event_name} for {date}. Payment is fast and simple using your credit card or PayPal account.<br><br>"
+            u"Amount Due: {amount}<br><br>"
+            u"Please pay within 2 days.<br><br>"
+            u"Pay Now: <a href='{payment_url}'>{payment_url}</a><br><br>"
+            u"Late payments can be subject to a 5% finance fee.<br><br>"
+            u"A detailed invoice is available in <a href='https://eventyay.com/account/billing/invoices/'>the billing area</a> of your account. If you have any questions about invoices, please find more information on our FAQ at https://support.eventyay.com.<br><br>"
+            u"<em>Thank you for using {app_name}!</em><br><br>"
+            u"{app_name} Team"
+        ),
+        'sent_at': '27th day of the month',
+    },
+    MONTHLY_PAYMENT_POST_DUE_EMAIL: {
+        'recipient': 'Owner',
+        'subject': u'Please pay your overdue invoice for {event_name} for {date} on {app_name}',
+        'message': (
+            u"Hello {name},<br><br>"
+            u"Your payment is now past due.<br>Please pay this invoice immediately to avoid your account being suspended.<br><br>"
+            u"Amount Due: {amount}<br><br>"
+            u"Please pay immediately at: <a href='{payment_url}'>{payment_url}</a><br><br>"
+            u"Late payments can be subject to a 5% finance fee.<br><br>"
+            u"A detailed invoice is available in <a href='https://eventyay.com/account/billing/invoices/'>the billing area</a> of your account. If you have any questions about invoices, please find more information on our FAQ at https://support.eventyay.com.<br><br>"
+            u"If you feel this invoice is incorrect or have any questions, you can contact our support team for assistance.<br><br>"
+            u"<em>Thank you for using {app_name}!</em><br><br>"
+            u"{app_name} Team"
+        ),
+        'sent_at': '30th day of the month',
     },
     EVENT_IMPORTED: {
         'recipient': 'User',
