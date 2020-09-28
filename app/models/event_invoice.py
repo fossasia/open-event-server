@@ -16,7 +16,7 @@ from app.api.helpers.notification import (
     send_notif_monthly_fee_payment,
 )
 from app.api.helpers.storage import UPLOAD_PATHS
-from app.api.helpers.utilities import monthdelta
+from app.api.helpers.utilities import monthdelta, round_money
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order
@@ -29,10 +29,6 @@ logger = logging.getLogger(__name__)
 
 def get_new_id():
     return get_new_identifier(EventInvoice, length=8)
-
-
-def round_money(money):
-    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
 class EventInvoice(SoftDeletionModel):

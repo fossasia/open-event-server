@@ -3,6 +3,7 @@
 import random
 import re
 import string
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Dict
 
 import bleach
@@ -149,6 +150,10 @@ def update_state(task_handle, state, result=None):
         result = {}
     if not current_app.config.get('CELERY_ALWAYS_EAGER'):
         task_handle.update_state(state=state, meta=result)
+
+
+def round_money(money):
+    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
 static_page = 'https://eventyay.com/'
