@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime, timedelta
-from decimal import ROUND_HALF_UP, Decimal
 
 from flask.templating import render_template
 from sqlalchemy.sql import func
