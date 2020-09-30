@@ -191,23 +191,25 @@ def send_event_invoice(
         # For keeping invoice numbers gapless and non-repeating, we need to generate invoices
         # one at a time. Hence, we try acquiring an expiring lock for 20 seconds, and then retry.
         # To avoid the condition of a deadlock, lock automatically expires after 5 seconds
+        saved = False
+        pdf_url = None
         with redis_store.lock('event_invoice_generate', timeout=5, blocking_timeout=20):
             event_invoice = EventInvoice(event=event, issued_at=this_month)
             pdf_url = event_invoice.populate()
             if pdf_url:
                 try:
                     save_to_db(event_invoice)
+                    saved = True
                 except Exception as e:
                     # For some reason, like duplicate identifier, the record might not be saved, so we
                     # retry generating the invoice and hope the error doesn't happen again
                     logger.exception('Error while saving invoice. Retrying')
                     raise self.retry(exc=e)
-                else:
-                    if send_notification:
-                        event_invoice.send_notification()
-                return pdf_url
             else:
                 logger.error('Error in generating event invoice for event %s', event)
+        if saved and send_notification:
+            event_invoice.send_notification()
+        return pdf_url
     except LockError as e:
         logger.exception('Error while acquiring lock. Retrying')
         self.retry(exc=e)

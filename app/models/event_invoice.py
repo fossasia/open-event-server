@@ -65,7 +65,7 @@ class EventInvoice(SoftDeletionModel):
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
 
-    def get_new_id(self) -> int:
+    def get_new_id(self) -> str:
         with db.session.no_autoflush:
             identifier = self.issued_at.strftime('%Y%mU-') + str(
                 EventInvoice.query.count() + 1
