@@ -24,6 +24,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     identifier = fields.Str(allow_none=True)
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=True)
     created_at = fields.DateTime(allow_none=True)
+    issued_at = fields.DateTime(allow_none=True)
     completed_at = fields.DateTime(default=None)
     transaction_id = fields.Str(allow_none=True)
     paid_via = fields.Str(

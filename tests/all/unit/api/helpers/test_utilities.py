@@ -95,6 +95,14 @@ def test_monthdelta():
     test_future_date = monthdelta(test_date, 3)
     assert test_future_date == datetime.datetime(2000, 9, 18)
 
+    test_date = datetime.datetime(2000, 1, 1)
+    test_past_date = monthdelta(test_date, -1)
+    assert test_past_date == datetime.datetime(1999, 12, 1)
+
+    test_date = datetime.datetime(2000, 3, 1)
+    test_past_date = monthdelta(test_date, -1)
+    assert test_past_date == datetime.datetime(2000, 2, 1)
+
 
 def test_dict_to_snake_case():
     assert dict_to_snake_case(None) is None

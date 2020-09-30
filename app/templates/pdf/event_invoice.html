@@ -105,6 +105,10 @@
           text-align: left;
         }
 
+        table .fees {
+          text-align: right;
+        }
+
         table td {
           padding: 20px;
           text-align: right;
@@ -142,8 +146,12 @@
         <div>{{ admin_info.admin_company or '' }}</div>
         <div>{{ admin_info.full_billing_address or '' }}</div>
         <div>{{ admin_info.admin_billing_phone or '' }}</div>
-        <div>{{ 'Tax ID: ' ~ admin_info.admin_billing_tax_info or '' }}</div>
-        <div><a href="{{ admin_info.admin_billing_email }}">{{ admin_info.admin_billing_email }}</a></div>
+        {% if admin_info.admin_billing_tax_info %}
+          <div>{{ 'Tax ID: ' ~ admin_info.admin_billing_tax_info or '' }}</div>
+        {% endif %}
+        {% if admin_info.admin_billing_tax_info %}
+          <div><a href="{{ admin_info.admin_billing_email }}">{{ admin_info.admin_billing_email }}</a></div>
+        {% endif %}
       </div>
       <div id="project">
         <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
@@ -152,7 +160,7 @@
         {% if user.billing_tax_info %}
           <div><span>TAX ID</span> {{user.billing_tax_info or ''}}</div>
         {% endif %}
-        <div><span>DATE</span> {{ invoice.created_at | date }}</div>
+        <div><span>DATE</span> {{ invoice.issued_at | date }}</div>
         <div><span>DUE DATE</span> {{ invoice.due_at | date }}</div>
       </div>
     </header>
@@ -162,7 +170,7 @@
           <tr>
             <th class="service">PRODUCT</th>
             <th class="desc">DESCRIPTION</th>
-            <th>FEES</th>
+            <th class="fees">FEES ({{ ticket_fee.service_fee }}%)</th>
           </tr>
         </thead>
         <tbody>
@@ -180,7 +188,7 @@
             <td class="total">{{ currency | currency_symbol }} {{ invoice.amount }}</td>
           </tr>
           <tr>
-            <td colspan="2">TAX N/A</td>
+            <td colspan="2">TAX (N/A)</td>
             <td class="total">{{ currency | currency_symbol }} 0.00</td>
           </tr>
           <tr>
