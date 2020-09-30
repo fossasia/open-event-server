@@ -3,12 +3,14 @@ import logging
 
 import pytz
 from flask_celeryext import RequestContextTask
+from redis.exceptions import LockError
+from sqlalchemy import distinct, or_
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.mail import send_email_after_event
 from app.api.helpers.notification import send_notif_after_event
 from app.api.helpers.query import get_user_event_roles_by_role_name
-from app.api.helpers.utilities import make_dict
+from app.api.helpers.utilities import make_dict, monthdelta
 from app.instance import celery
 from app.models import db
 from app.models.event import Event
@@ -18,6 +20,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
+from app.views.redis_store import redis_store
 
 logger = logging.getLogger(__name__)
 
@@ -133,18 +136,83 @@ def delete_ticket_holders_no_order_id():
     db.session.commit()
 
 
+def this_month_date() -> datetime.datetime:
+    return datetime.datetime.combine(
+        datetime.date.today().replace(day=1), datetime.time()
+    )
+
+
 @celery.task(base=RequestContextTask, name='send.monthly.event.invoice')
-def send_monthly_event_invoice():
-    events = Event.query.filter_by(deleted_at=None).filter(Event.owner != None).all()
+def send_monthly_event_invoice(send_notification: bool = True):
+    this_month = this_month_date()
+    last_month = monthdelta(this_month, -1)
+    # Find all event IDs which had a completed order last month
+    last_order_event_ids = Order.query.filter(
+        Order.completed_at.between(last_month, this_month)
+    ).with_entities(distinct(Order.event_id))
+    # SQLAlchemy returns touples instead of list of IDs
+    last_order_event_ids = [r[0] for r in last_order_event_ids]
+    events = (
+        Event.query.filter(Event.owner != None)
+        .filter(
+            or_(
+                Event.starts_at.between(last_month, this_month),
+                Event.ends_at.between(last_month, this_month),
+                Event.id.in_(last_order_event_ids),
+            )
+        )
+        .all()
+    )
 
     for event in events:
-        event_invoice = EventInvoice(event=event)
-        pdf_url = event_invoice.populate()
-        if pdf_url:
-            save_to_db(event_invoice)
+        send_event_invoice.delay(event.id, send_notification=send_notification)
+
+
+@celery.task(base=RequestContextTask, bind=True, max_retries=5)
+def send_event_invoice(
+    self, event_id: int, send_notification: bool = True, force: bool = False
+):
+    this_month = this_month_date()
+    # Check if this month's invoice has been generated
+    event_invoice = (
+        EventInvoice.query.filter_by(event_id=event_id)
+        .filter(EventInvoice.issued_at >= this_month)
+        .first()
+    )
+    if not force and event_invoice:
+        logger.warn(
+            'Event Invoice of this month for this event has already been created: %s',
+            event_id,
+        )
+        return
+
+    event = Event.query.get(event_id)
+    try:
+        # For keeping invoice numbers gapless and non-repeating, we need to generate invoices
+        # one at a time. Hence, we try acquiring an expiring lock for 20 seconds, and then retry.
+        # To avoid the condition of a deadlock, lock automatically expires after 5 seconds
+        saved = False
+        pdf_url = None
+        with redis_store.lock('event_invoice_generate', timeout=5, blocking_timeout=20):
+            event_invoice = EventInvoice(event=event, issued_at=this_month)
+            pdf_url = event_invoice.populate()
+            if pdf_url:
+                try:
+                    save_to_db(event_invoice)
+                    saved = True
+                except Exception as e:
+                    # For some reason, like duplicate identifier, the record might not be saved, so we
+                    # retry generating the invoice and hope the error doesn't happen again
+                    logger.exception('Error while saving invoice. Retrying')
+                    raise self.retry(exc=e)
+            else:
+                logger.error('Error in generating event invoice for event %s', event)
+        if saved and send_notification:
             event_invoice.send_notification()
-        else:
-            logger.error('Error in generating event invoice for event %s', event)
+        return pdf_url
+    except LockError as e:
+        logger.exception('Error while acquiring lock. Retrying')
+        self.retry(exc=e)
 
 
 @celery.on_after_configure.connect

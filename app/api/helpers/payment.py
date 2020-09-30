@@ -215,7 +215,7 @@ class PayPalPaymentsManager:
                 "transactions": [
                     {
                         "amount": {
-                            "total": round_money(order.amount),
+                            "total": float(round_money(order.amount)),
                             "currency": order.event.payment_currency,
                         },
                         "payee": {"email": payee_email},

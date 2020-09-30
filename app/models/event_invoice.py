@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from flask.templating import render_template
 from sqlalchemy.sql import func
 
-from app.api.helpers.db import get_new_identifier
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_for_monthly_fee_payment
 from app.api.helpers.notification import send_notif_monthly_fee_payment
@@ -20,23 +19,20 @@ from app.settings import get_settings
 logger = logging.getLogger(__name__)
 
 
-def get_new_id():
-    return get_new_identifier(EventInvoice, length=8)
-
-
 class EventInvoice(SoftDeletionModel):
     DUE_DATE_DAYS = 30
 
     __tablename__ = 'event_invoices'
 
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, unique=True, default=get_new_id)
+    identifier = db.Column(db.String, unique=True, nullable=False)
     amount = db.Column(db.Float)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
 
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    issued_at = db.Column(db.DateTime(timezone=True), nullable=False)
 
     # Payment Fields
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
@@ -59,18 +55,32 @@ class EventInvoice(SoftDeletionModel):
     def __init__(self, **kwargs):
         super(EventInvoice, self).__init__(**kwargs)
 
-        if not self.created_at:
-            self.created_at = datetime.utcnow()
+        if not self.issued_at:
+            self.issued_at = datetime.now()
 
         if not self.identifier:
-            self.identifier = self.created_at.strftime('%Y%mU-') + get_new_id()
+            self.identifier = self.get_new_id()
 
     def __repr__(self):
         return '<EventInvoice %r>' % self.invoice_pdf_url
 
+    def get_new_id(self) -> str:
+        with db.session.no_autoflush:
+            identifier = self.issued_at.strftime('%Y%mU-') + str(
+                EventInvoice.query.count() + 1
+            )
+            count = EventInvoice.query.filter_by(identifier=identifier).count()
+            if count == 0:
+                return identifier
+            return self.get_new_id()
+
+    @property
+    def previous_month_date(self):
+        return monthdelta(self.issued_at, -1)
+
     @property
     def due_at(self):
-        return self.created_at + timedelta(days=EventInvoice.DUE_DATE_DAYS)
+        return self.issued_at + timedelta(days=EventInvoice.DUE_DATE_DAYS)
 
     def populate(self):
         assert self.event is not None
@@ -83,8 +93,8 @@ class EventInvoice(SoftDeletionModel):
         with db.session.no_autoflush:
             latest_invoice_date = (
                 EventInvoice.query.filter_by(event=self.event)
-                .filter(EventInvoice.created_at < self.created_at)
-                .with_entities(func.max(EventInvoice.created_at))
+                .filter(EventInvoice.issued_at < self.issued_at)
+                .with_entities(func.max(EventInvoice.issued_at))
                 .scalar()
             )
 
@@ -103,7 +113,7 @@ class EventInvoice(SoftDeletionModel):
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             gross_revenue = self.event.calc_revenue(
-                start=latest_invoice_date, end=self.created_at
+                start=latest_invoice_date, end=self.issued_at
             )
             invoice_amount = gross_revenue * (ticket_fee_percentage / 100)
             if invoice_amount > ticket_fee_maximum:
@@ -111,7 +121,7 @@ class EventInvoice(SoftDeletionModel):
             self.amount = round_money(invoice_amount)
             net_revenue = round_money(gross_revenue - invoice_amount)
             orders_query = self.event.get_orders_query(
-                start=latest_invoice_date, end=self.created_at
+                start=latest_invoice_date, end=self.issued_at
             )
             first_order_date = orders_query.with_entities(
                 func.min(Order.completed_at)
@@ -123,8 +133,8 @@ class EventInvoice(SoftDeletionModel):
                 'tickets_sold': self.event.tickets_sold,
                 'gross_revenue': round_money(gross_revenue),
                 'net_revenue': round_money(net_revenue),
-                'first_date': first_order_date,
-                'last_date': last_order_date,
+                'first_date': first_order_date or self.previous_month_date,
+                'last_date': last_order_date or self.issued_at,
             }
             self.invoice_pdf_url = create_save_pdf(
                 render_template(
@@ -133,7 +143,7 @@ class EventInvoice(SoftDeletionModel):
                     admin_info=admin_info,
                     currency=currency,
                     event=self.event,
-                    ticket_fee_object=ticket_fee_object,
+                    ticket_fee=ticket_fee_object,
                     payment_details=payment_details,
                     net_revenue=net_revenue,
                     invoice=self,
@@ -148,9 +158,7 @@ class EventInvoice(SoftDeletionModel):
         return self.invoice_pdf_url
 
     def send_notification(self, follow_up=False):
-        prev_month = monthdelta(self.created_at, 1).strftime(
-            "%b %Y"
-        )  # Displayed as Aug 2016
+        prev_month = self.previous_month_date.strftime("%b %Y")  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
         link = '{}/event-invoice/{}/review'.format(frontend_url, self.identifier)
