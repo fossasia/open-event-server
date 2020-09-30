@@ -179,8 +179,7 @@ class PayPalPaymentsManager:
                 {'pointer': ''},
                 "Payments through Paypal have not been configured on the platform",
             )
-
-        paypalrestsdk.configure(
+        return paypalrestsdk.configure(
             {
                 "mode": paypal_mode,
                 "client_id": paypal_client,
@@ -284,7 +283,7 @@ class PayPalPaymentsManager:
         :param paypal_payer_id: payer_id
         :return: Result of the transaction.
         """
-
+        PayPalPaymentsManager.configure_paypal()
         payment = paypalrestsdk.Payment.find(paypal_payment_id)
 
         if payment.execute({"payer_id": paypal_payer_id}):
