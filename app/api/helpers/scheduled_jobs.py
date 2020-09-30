@@ -139,7 +139,7 @@ def delete_ticket_holders_no_order_id():
 def this_month_date() -> datetime.datetime:
     return datetime.datetime.combine(
         datetime.date.today().replace(day=1), datetime.time()
-    )
+    ).replace(tzinfo=pytz.UTC)
 
 
 @celery.task(base=RequestContextTask, name='send.monthly.event.invoice')
