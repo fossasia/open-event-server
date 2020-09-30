@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from flask.templating import render_template
 from sqlalchemy.sql import func
 
-from app.api.helpers.db import get_new_identifier
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_for_monthly_fee_payment
 from app.api.helpers.notification import send_notif_monthly_fee_payment
