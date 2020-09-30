@@ -4,6 +4,7 @@ dist: bionic
 
 services:
   - docker
+  - redis-server
 
 addons:
   apt:
