@@ -56,7 +56,7 @@ def check_smtp_config(smtp_encryption):
     return True
 
 
-def send_email(to, action, subject, html, attachments=None):
+def send_email(to, action, subject, html, attachments=None, bcc=None):
     """
     Sends email and records it in DB
     """
@@ -75,6 +75,7 @@ def send_email(to, action, subject, html, attachments=None):
             'subject': subject,
             'html': html,
             'attachments': attachments,
+            'bcc': bcc
         }
 
         if not current_app.config['TESTING']:
@@ -279,6 +280,7 @@ def send_email_for_monthly_fee_payment(
             app_name=app_name,
             payment_url=link,
         ),
+        bcc=get_settings()['admin_billing_email']
     )
 
 
