@@ -25,7 +25,7 @@ COPY --from=builder /install /usr/local
 RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
 # PDF Generation: weasyprint
 RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
-RUN fc-cache -f && rm -rf /var/cache/*
+RUN fc-cache -f
 
 WORKDIR /data/app
 ADD . .
