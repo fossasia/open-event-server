@@ -200,7 +200,12 @@ def send_event_invoice(
                 try:
                     save_to_db(event_invoice)
                     saved = True
-                    logger.info('Generated Event invoice %s for %s. Amount: %f', event_invoice, event, event_invoice.amount)
+                    logger.info(
+                        'Generated Event invoice %s for %s. Amount: %f',
+                        event_invoice,
+                        event,
+                        event_invoice.amount,
+                    )
                 except Exception as e:
                     # For some reason, like duplicate identifier, the record might not be saved, so we
                     # retry generating the invoice and hope the error doesn't happen again
