@@ -200,14 +200,16 @@ def send_event_invoice(
                 try:
                     save_to_db(event_invoice)
                     saved = True
+                    logger.info('Generated Event invoice %s for %s. Amount: %f', event_invoice, event, event_invoice.amount)
                 except Exception as e:
                     # For some reason, like duplicate identifier, the record might not be saved, so we
                     # retry generating the invoice and hope the error doesn't happen again
                     logger.exception('Error while saving invoice. Retrying')
                     raise self.retry(exc=e)
             else:
-                logger.error('Error in generating event invoice for event %s', event)
+                logger.warning('Failed to generate event invoice PDF %s', event)
         if saved and send_notification:
+            logger.info('Sending Invoice Notification %s', event_invoice)
             event_invoice.send_notification()
         return pdf_url
     except LockError as e:

@@ -62,13 +62,11 @@ class EventInvoice(SoftDeletionModel):
             self.identifier = self.get_new_id()
 
     def __repr__(self):
-        return '<EventInvoice %r>' % self.invoice_pdf_url
+        return '<EventInvoice %r %r %r>' % (self.id, self.identifier, self.invoice_pdf_url)
 
     def get_new_id(self) -> str:
         with db.session.no_autoflush:
-            identifier = self.issued_at.strftime('%Y%mU-') + str(
-                EventInvoice.query.count() + 1
-            )
+            identifier = self.issued_at.strftime('%Y%mU-') + '%06d' % (EventInvoice.query.count() + 1)
             count = EventInvoice.query.filter_by(identifier=identifier).count()
             if count == 0:
                 return identifier
@@ -106,7 +104,7 @@ class EventInvoice(SoftDeletionModel):
             )
             if not ticket_fee_object:
                 logger.error(
-                    'Ticket Fee not found for event id {id}'.format(id=self.event.id)
+                    'Ticket Fee not found for event %s', self.event
                 )
                 return
 
@@ -119,6 +117,9 @@ class EventInvoice(SoftDeletionModel):
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
             self.amount = round_money(invoice_amount)
+            if self.amount == 0:
+                logger.warning('Invoice amount of Event %s is 0, hence skipping generation', self.event)
+                return
             net_revenue = round_money(gross_revenue - invoice_amount)
             orders_query = self.event.get_orders_query(
                 start=latest_invoice_date, end=self.issued_at
