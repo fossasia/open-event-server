@@ -209,7 +209,7 @@ def test_invoice_post_admin_error(client, admin_jwt):
     data = json.dumps({'data': {'type': 'event-invoice', 'attributes': {'amount': 100},}})
 
     response = client.post(
-        f'/v1/event-invoices',
+        '/v1/event-invoices',
         content_type='application/vnd.api+json',
         headers=admin_jwt,
         data=data,
@@ -223,7 +223,7 @@ def test_invoice_post_user_error(client, jwt):
     data = json.dumps({'data': {'type': 'event-invoice', 'attributes': {'amount': 100},}})
 
     response = client.post(
-        f'/v1/event-invoices',
+        '/v1/event-invoices',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
