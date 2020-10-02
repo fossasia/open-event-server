@@ -93,7 +93,7 @@ class EventInvoice(SoftDeletionModel):
             self.user = self.event.owner
             return self.generate_pdf()
 
-    def generate_pdf(self):
+    def generate_pdf(self, force=False):
         with db.session.no_autoflush:
             latest_invoice_date = (
                 EventInvoice.query.filter_by(event=self.event)
@@ -121,7 +121,7 @@ class EventInvoice(SoftDeletionModel):
             if invoice_amount > ticket_fee_maximum:
                 invoice_amount = ticket_fee_maximum
             self.amount = round_money(invoice_amount)
-            if self.amount == 0:
+            if not force and self.amount == 0:
                 logger.warning(
                     'Invoice amount of Event %s is 0, hence skipping generation',
                     self.event,

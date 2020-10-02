@@ -458,9 +458,8 @@ class User(SoftDeletionModel):
     def full_name(self):
         return ' '.join(filter(None, [self.first_name, self.last_name]))
 
-    @property
-    def full_billing_address(self):
-        return ', '.join(
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
             filter(
                 None,
                 [
@@ -472,6 +471,8 @@ class User(SoftDeletionModel):
                 ],
             )
         )
+
+    full_billing_address = property(get_full_billing_address)
 
     def __repr__(self):
         return '<User %r>' % self.email
