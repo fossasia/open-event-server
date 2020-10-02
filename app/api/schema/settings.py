@@ -106,6 +106,19 @@ class SettingSchemaPublic(Schema):
     paytm_live_merchant = fields.Str(dump_only=True)
     paytm_sandbox_merchant = fields.Str(dump_only=True)
 
+    # Admin Invoice Details
+    admin_billing_contact_name = fields.Str(allow_none=True)
+    admin_billing_phone = fields.Str(allow_none=True)
+    admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_state = fields.Str(allow_none=True)
+    admin_billing_country = fields.Str(allow_none=True)
+    admin_billing_tax_info = fields.Str(allow_none=True)
+    admin_company = fields.Str(allow_none=True)
+    admin_billing_address = fields.Str(allow_none=True)
+    admin_billing_city = fields.Str(allow_none=True)
+    admin_billing_zip = fields.Str(allow_none=True)
+    admin_billing_additional_info = fields.Str(allow_none=True)
+
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
@@ -257,15 +270,4 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     invoice_sending_timezone = fields.Str(allow_none=False, default="UTC")
 
     # Admin Invoice Details
-    admin_billing_contact_name = fields.Str(allow_none=True)
-    admin_billing_phone = fields.Str(allow_none=True)
-    admin_billing_email = fields.Email(allow_none=True)
-    admin_billing_state = fields.Str(allow_none=True)
-    admin_billing_country = fields.Str(allow_none=True)
-    admin_billing_tax_info = fields.Str(allow_none=True)
-    admin_company = fields.Str(allow_none=True)
-    admin_billing_address = fields.Str(allow_none=True)
-    admin_billing_city = fields.Str(allow_none=True)
-    admin_billing_zip = fields.Str(allow_none=True)
-    admin_billing_additional_info = fields.Str(allow_none=True)
     admin_billing_paypal_email = fields.Email(allow_none=True)
