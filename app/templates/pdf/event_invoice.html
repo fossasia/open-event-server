@@ -149,8 +149,8 @@
     <header class="clearfix">
       <h1>INVOICE {{ invoice.identifier }}</h1>
       <div id="company" class="clearfix">
-        <div>{{ admin_info.admin_billing_contact_name or '' }}</div>
         <div>{{ admin_info.admin_company or '' }}</div>
+        <div>{{ admin_info.admin_billing_contact_name or '' }}</div>
         <div class="preserve-newline">{{ admin_info.full_billing_address }}</div>
         <div>{{ admin_info.admin_billing_phone or '' }}</div>
         {% if admin_info.admin_billing_tax_info %}
