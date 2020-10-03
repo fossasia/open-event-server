@@ -234,9 +234,8 @@ class Setting(db.Model):
     def is_billing_paypal_activated(self):
         return self.admin_billing_paypal_email is not None
 
-    @property
-    def full_billing_address(self):
-        return ', '.join(
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
             filter(
                 None,
                 [
@@ -248,3 +247,5 @@ class Setting(db.Model):
                 ],
             )
         )
+
+    full_billing_address = property(get_full_billing_address)

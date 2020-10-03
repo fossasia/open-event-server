@@ -63,6 +63,8 @@
           margin-right: 10px;
           display: inline-block;
           font-size: 0.8em;
+          vertical-align: top;
+          padding-top: 2px;
         }
 
         #company {
@@ -134,6 +136,10 @@
           color: #5D6975;
           font-size: 1.2em;
         }
+
+        .preserve-newline {
+          white-space: pre !important;
+        }
     </style>
   </head>
   <body>
@@ -143,8 +149,9 @@
     <header class="clearfix">
       <h1>INVOICE {{ invoice.identifier }}</h1>
       <div id="company" class="clearfix">
+        <div>{{ admin_info.admin_billing_contact_name or '' }}</div>
         <div>{{ admin_info.admin_company or '' }}</div>
-        <div>{{ admin_info.full_billing_address or '' }}</div>
+        <div class="preserve-newline">{{ admin_info.full_billing_address }}</div>
         <div>{{ admin_info.admin_billing_phone or '' }}</div>
         {% if admin_info.admin_billing_tax_info %}
           <div>{{ 'Tax ID: ' ~ admin_info.admin_billing_tax_info or '' }}</div>
@@ -155,7 +162,7 @@
       </div>
       <div id="project">
         <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
-        <div><span>ADDRESS</span> {{ user.full_billing_address }} </div>
+        <div><span>ADDRESS</span> <div class="preserve-newline" style="display: inline-block">{{ user.full_billing_address }}</div> </div>
         <div><span>EMAIL</span> <a href="{{ user._email }}">{{ user._email }}</a></div>
         {% if user.billing_tax_info %}
           <div><span>TAX ID</span> {{user.billing_tax_info or ''}}</div>
