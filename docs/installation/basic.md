@@ -3,10 +3,12 @@
 ## Dependencies required to run Orga Server
 
 * Python 3.7
-* Postgres
+* PostgreSQL
+* Redis
+
+
 ```sh
-sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+xargs -a deb-packages.txt sudo apt install
 ```
 
 ## Steps
@@ -66,19 +68,8 @@ python3 manage.py db stamp head
 
 
 * **Step 6** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
-# download and run redis
-wget http://download.redis.io/releases/redis-3.2.1.tar.gz
-tar xzf redis-3.2.1.tar.gz
-rm redis-3.2.1.tar.gz
-cd redis-3.2.1
-make
-
-# To run redis
-redis-3.2.1/src/redis-server &
-
 # run worker
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks

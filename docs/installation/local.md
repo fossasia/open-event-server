@@ -2,95 +2,105 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 3.7
-* Postgres
-* OpenSSL
+-   Python 3.7
+-   Postgres
+-   OpenSSL
 
-### For mac users
+## Get a copy of source code
+
+- Clone the Open Event Server repository (from the development branch) and `cd ` into the directory.
+
+```sh
+git clone https://github.com/fossasia/open-event-server.git
+cd open-event-server
+```
+
+- If you want to contribute, first fork the original repository to your GitHub profile and clone that fork into your local machine, followed by `cd` into the directory
+
+```sh
+git clone git@github.com:USERNAME/open-event-server.git
+cd open-event-server
+```
+
+- Tip:
+
+  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatly.
+
+  + To let your personal fork up-to-date with the original FOSSASIA repo, add original repo to "remote" list and regularly fetch its new content.
+
+  ```sh
+  git remote add upstream https://github.com/fossasia/open-event-server.git
+  git fetch upstream
+  git merge upstream/development
+  ```
+
+## Install system dependencies
+
+These are softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
+
+### For Mac OS
+
 ```sh
 brew install postgresql
-````
-
-### For debian-based linux users
-```sh
-sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib libssl-dev
+brew install python@3
+brew install libmagic
+brew install redis
 ```
-
-## Steps
-
-Make sure you have the dependencies mentioned above installed before proceeding further.
-
-* **Step 0** - Clone the Open Event Server repository (from the development branch) and ```cd ``` into the directory.
-```sh
-git clone -b development https://github.com/fossasia/open-event-server.git
-cd open-event-server
-```
-**Note :** If you want to contribute, first fork the original repository and clone the forked repository into your local machine followed by ```cd``` into the directory
-```sh
-git clone https://github.com/USERNAME/open-event-server.git
-cd open-event-server
-```
-
-* **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
-
-# System Wide Installation
-
-```sh
-sudo -H pip3 install -r requirements.txt
-```
-hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
 
 **Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
 
-# Installation in Virtual Environment
+### For Debian/Ubuntu
 
-You can use either **pip** or **pipenv** to install Open Event Server in a virtual environment.
-
-Firstly, open a terminal and enter
+Enter the project source folder and run:
 
 ```sh
-# For linux users
-sudo apt-get install python3-dev
-sudo apt-get install libpq-dev
-sudo apt-get install libffi6 libffi-dev
-
-# For macOS users
-brew install python@3
-brew install libmagic
+xargs -a deb-packages.txt sudo apt install
 ```
 
-## Using pip and virtualenv
+In case you use Ubuntu 20.04+, where Python 3.7 is not provided in official repo, you can use [pyenv](https://github.com/pyenv/pyenv) to install Python 3.7 (Open Event Server is not compatible with Python 3.8+ yet).
 
-Open a terminal and enter the following commands to setup a virtual environment
+## Create a Python virtual environment
+
+Python virtual environment is a way to keep this project's collection of libraries not interfere with other projects or the system. There are many ways to create Python virtual environment (all have the same core), like:
+
+- Use Python built-in tool:
+
+  ```sh
+  python3 -m venv my-project-name
+  ```
+
+- Use third-party tools:
+
+  ```sh
+  mkvirtualenv my-project-name -p /usr/bin/python3
+  ```
+
+I (Quân) recommend [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) because:
+
+- It gathers all virtual environments to one place. That let you know which virtual environments you created.
+- It provides auto-complete command to enter a virtual env (`workon my-env`), list and delete them.
+- It let you enter a virtual env no matter where you are standing.
+
+Some tools, like Pipenv, puts virtual environment into your project code folder. That approach has some disadvantage:
+
+- When you do somethings that involve scanning source code (like running test cases, search for file content), you accidentally scan the Python packages in the virtual environment.
+- You don't know how many virtual environments you created.
+- You have to know the path of an virtual environment in order to enter (if you are not standing in project folder).
+
+After creating virtual environment, you should upgrade `pip`, `wheel` libraries inside it.
 
 ```sh
-sudo apt-get install python3.7
-virtualenv -p python3.7 venv
-. venv/bin/activate
+pip install -U pip wheel setuptools
 ```
 
-Now to install the dependencies using pip, type
+## Install Python packages
 
-```sh
-pip3 install -r requirements.txt
-```
+- Activate the Python virtual environment you created for this project.
+- Enter the project folder and run:
 
-## Using pipenv
-
-Using pipenv, you will not need to set up virtualenv. It will do it automatically for you
-
-To setup a virtual environment and install the dependices, enter in a terminal
-
-```sh
-pipenv --python 3.7.3 install
-```
-
-Now to activate the virtual environment, type
-
-```sh
-pipenv shell
-```
+  ```sh
+  pip3 install -r requirements.txt
+  ```
 
 After installing dependencies in your virtual environment, you need to configure pre-commit hooks by running the command
 
@@ -98,20 +108,30 @@ After installing dependencies in your virtual environment, you need to configure
 pre-commit install
 ```
 
+## Create database
 
-* **Step 2** - Create the database. For that we first open the psql shell. Go to the directory where your postgres file is stored.
+### For Linux users
+
+The default database name used by Open Event server is `oevent` and `opev_test` for test cases.
+To ease development, we should connect to PostgreSQL with the same username as Linux user, without creating password.
 
 ```sh
-# For linux users
-sudo -u postgres psql
+# Make yourself superuser in PostgeSQL
+sudo -u postgres createuser -s $USER
+# You are already a superuser, you can freely create new database
+createdb oevent -O $USER
+createdb opev_test -O $USER
+```
 
-# For macOS users
+### For MAC users
+
+(Not sure how to make it behave like Linux above - Quân)
+
+```sh
 psql -d postgres
 ```
 
-* When inside psql, create a user for open-event and then using the user create the database. Also, create a test database named opev_test for the test suites by dumping the oevent database into it. without this, the tests will not run locally.
-
-For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
+Inside `psql`'s shell:
 
 ```sql
 CREATE USER open_event_user WITH PASSWORD 'opev_pass';
@@ -119,52 +139,35 @@ CREATE DATABASE oevent WITH OWNER open_event_user;
 CREATE DATABASE opev_test WITH OWNER open_event_user;
 ```
 
-* Once the databases are created, exit the psql shell with `\q` followed by ENTER.
+Once the databases are created, exit the psql shell with `\q` followed by ENTER.
 
-
-* **Step 3** - Create application environment variables.
+## Generate configuration
 
 ```sh
 cp .env.example .env
 ```
 
 Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that server will not run in production mode if you don't supply a secret.
-To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above and paste it in `.env` file
+To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above and paste it in `.env` file.
 
+If you created a dedicated PostgreSQL user and password, you should update the *.env* file content.
 
-* **Step 4** - Start the postgres service.
+## Create database tables
 
-```sh
-sudo service postgresql restart
-```
-for mac users:
-
-```sh
-brew services restart postgresql
-```
-
-* **Step 5** - Create the tables. For that we will use `create_db.py`.
+Please run these inside Python virtual environment
 
 ```sh
 python3 create_db.py
 # enter email and password
 python3 manage.py db stamp head
 ```
-**Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
-**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+**Note:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
-* **Step 6** - Start the application along with the needed services.
+## Start application
 
 ```sh
-# Install and run redis
-# For Ubuntu, Debian and alike
-sudo apt-get install redis-server
-# For Fedora, RedHat, CentOS
-sudo dnf install redis
-
 # For macOS
-brew install redis
 brew services start redis
 
 # Run Celery
@@ -176,8 +179,7 @@ INTEGRATE_SOCKETIO=false celery worker -A app.instance.celery
 python3 manage.py runserver
 ```
 
-* **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
-
+- Rejoice. Go to `localhost:5000` in your web browser to see the application live.
 
 ## Flask-SocketIO development
 
@@ -187,7 +189,7 @@ python3 manage.py runserver
 export INTEGRATE_SOCKETIO="true"
 ```
 
-The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `.  To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
+The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `. To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
 
 If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python3 manage.py runserver`:
 
