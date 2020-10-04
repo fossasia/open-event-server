@@ -51,7 +51,7 @@ brew install redis
 
 ### For Debian/Ubuntu
 
-Enter the project source folder and run:
+The dependencies are listed in *deb-packages.txt* file. You can install them all with one command:
 
 ```sh
 xargs -a deb-packages.txt sudo apt install
