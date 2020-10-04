@@ -123,6 +123,11 @@ createdb oevent -O $USER
 createdb opev_test -O $USER
 ```
 
+This method is called "ident" method, where the connection is established via "Unix domain socket", which is a file, instead of a pair of IP:port. This method is safe because:
+
+- No password to protect.
+- Only available to same-machine clients, meaning no worries about attack from outside.
+
 ### For MAC users
 
 (Not sure how to make it behave like Linux above - Quân)
