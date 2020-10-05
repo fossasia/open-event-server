@@ -33,7 +33,7 @@ class AdminSalesByMarketerSchema(Schema):
         Returns sales (dictionary with total sales and ticket count) for
         placed, completed and pending orders
         """
-        return summary(obj.orders)
+        return summary(obj)
 
 
 class AdminSalesByMarketerList(ResourceList):

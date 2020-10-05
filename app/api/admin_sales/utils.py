@@ -2,22 +2,29 @@
 This module contains common sales calculations that are used throughout the
 admin section
 """
+from sqlalchemy import func
+
+from app.models.order import Order
+from app.models.ticket_holder import TicketHolder
+from app.api.helpers.db import get_count
 
 
-def status_summary(orders, status):
+def status_summary(event, status):
     """
     Groups orders by status and returns the total sales and ticket count as a
     dictionary
     """
+    sales = Order.query.filter_by(event_id=event.id, status=status).with_entities(func.sum(Order.amount)).scalar() or 0
+    tickets = get_count(TicketHolder.query.join(Order).filter(Order.event_id == event.id, Order.status == status))
     return {
-        'sales_total': sum(o.amount for o in orders if o.status == status),
-        'ticket_count': sum(o.tickets_count for o in orders if o.status == status),
+        'sales_total': sales,
+        'ticket_count': tickets,
     }
 
 
-def summary(orders):
+def summary(event):
     """
     Returns sales as dictionary for all status codes
     """
     status_codes = ['placed', 'completed', 'pending']
-    return {s: status_summary(orders, s) for s in status_codes}
+    return {s: status_summary(event, s) for s in status_codes}

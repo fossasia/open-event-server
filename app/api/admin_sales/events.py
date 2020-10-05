@@ -26,10 +26,13 @@ class AdminSalesByEventsSchema(Schema):
         inflect = dasherize
 
     id = fields.String()
+    identifier = fields.String()
     name = fields.String()
+    created_at = fields.DateTime()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     payment_currency = fields.String()
+    payment_country = fields.String()
     sales = fields.Method('calc_sales')
 
     @staticmethod
@@ -38,7 +41,7 @@ class AdminSalesByEventsSchema(Schema):
         Returns sales (dictionary with total sales and ticket count) for
         placed, completed and pending orders
         """
-        return summary(obj.orders)
+        return summary(obj)
 
 
 class AdminSalesByEventsList(ResourceList):
@@ -48,7 +51,7 @@ class AdminSalesByEventsList(ResourceList):
     """
 
     def query(self, _):
-        return self.session.query(Event).outerjoin(Order).outerjoin(OrderTicket)
+        return Event.query
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)
