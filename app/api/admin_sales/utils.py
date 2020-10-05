@@ -4,27 +4,26 @@ admin section
 """
 from sqlalchemy import func
 
-from app.api.helpers.db import get_count
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
 
 
-def status_summary(event, status):
+def status_summary(sales_summary, tickets_summary, status):
     """
     Groups orders by status and returns the total sales and ticket count as a
     dictionary
     """
-    sales = (
-        Order.query.filter_by(event_id=event.id, status=status)
-        .with_entities(func.sum(Order.amount))
-        .scalar()
-        or 0
-    )
-    tickets = get_count(
-        TicketHolder.query.join(Order).filter(
-            Order.event_id == event.id, Order.status == status
-        )
-    )
+    sales = 0
+    tickets = 0
+
+    for sale_status, sale in sales_summary:
+        if sale_status == status:
+            sales = sale
+
+    for ticket_status, ticket in tickets_summary:
+        if ticket_status == status:
+            tickets = ticket
+
     return {
         'sales_total': sales,
         'ticket_count': tickets,
@@ -35,5 +34,18 @@ def summary(event):
     """
     Returns sales as dictionary for all status codes
     """
+    sales_summary = (
+        Order.query.filter_by(event_id=event.id)
+        .with_entities(Order.status, func.sum(Order.amount))
+        .group_by(Order.status)
+        .all()
+    )
+    tickets_summary = (
+        TicketHolder.query.join(Order)
+        .filter(Order.event_id == event.id)
+        .with_entities(Order.status, func.count())
+        .group_by(Order.status)
+        .all()
+    )
     status_codes = ['placed', 'completed', 'pending']
-    return {s: status_summary(event, s) for s in status_codes}
+    return {s: status_summary(sales_summary, tickets_summary, s) for s in status_codes}
