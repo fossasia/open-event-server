@@ -117,7 +117,7 @@ def __decode__(to_decode, iv, key):
     # Decrypt
     c = AES.new(key.encode('UTF-8'), AES.MODE_CBC, iv.encode('UTF-8'))
     to_decode = c.decrypt(to_decode)
-    if type(to_decode) == bytes:
+    if type(to_decode) is bytes:
         # convert bytes array to str.
         to_decode = to_decode.decode()
     # remove pad

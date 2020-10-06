@@ -273,7 +273,7 @@ def _fix_related_fields(srv, data, service_ids):
             continue
         # else continue normal
         old_value = data[field[0]]
-        if type(old_value) == list:
+        if type(old_value) is list:
             ls = []
             for i in old_value:
                 old_id = i['id']
@@ -282,7 +282,7 @@ def _fix_related_fields(srv, data, service_ids):
             del data[field[0]]
             data[field[1]] = ls
         else:
-            if type(old_value) == dict:
+            if type(old_value) is dict:
                 old_id = old_value['id']
             else:
                 old_id = old_value
