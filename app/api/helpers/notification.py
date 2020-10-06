@@ -1,5 +1,3 @@
-from flask import current_app
-
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity

@@ -315,7 +315,7 @@ def resend_verification_email():
             ),
             'utf-8',
         )
-        link = make_frontend_url(f'/verify', {'token': hash_})
+        link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
 
         return make_response(jsonify(message="Verification email resent"), 200)
