@@ -86,7 +86,7 @@ def is_payment_valid(order, mode):
             and order.last4
             and order.exp_month
         )
-    elif mode == 'paypal':
+    if mode == 'paypal':
         return (order.paid_via == 'paypal') and order.transaction_id
 
 
@@ -694,8 +694,7 @@ def create_paypal_payment(order_identifier):
 
     if status:
         return jsonify(status=True, payment_id=response)
-    else:
-        return jsonify(status=False, error=response)
+    return jsonify(status=False, error=response)
 
 
 @order_misc_routes.route(
@@ -760,8 +759,7 @@ def alipay_return_uri(order_identifier):
             order.status = 'completed'
             save_to_db(order)
             return redirect(make_frontend_url(f'/orders/{order_identifier}/view'))
-        else:
-            return jsonify(status=False, error='Charge object failure')
+        return jsonify(status=False, error='Charge object failure')
     except TypeError:
         return jsonify(status=False, error='Source object status error')
 
@@ -801,10 +799,9 @@ def omise_checkout(order_identifier):
                 charge.failure_message, charge.failure_code
             ),
         )
-    else:
-        logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
+    logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
-        return redirect(make_frontend_url(f'orders/{order_identifier}/view'))
+    return redirect(make_frontend_url(f'orders/{order_identifier}/view'))
 
 
 @order_misc_routes.route(

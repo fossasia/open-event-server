@@ -230,9 +230,8 @@ class Event(SoftDeletionModel):
     def set_default_event_image(cls, event_topic_id):
         if event_topic_id is None:
             return None
-        else:
-            event_topic = EventTopic.query.filter_by(id=event_topic_id).first()
-            return event_topic.system_image_url
+        event_topic = EventTopic.query.filter_by(id=event_topic_id).first()
+        return event_topic.system_image_url
 
     @property
     def fee(self):

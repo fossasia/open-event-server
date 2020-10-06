@@ -49,13 +49,12 @@ class StripePaymentsManager:
                     'SECRET_KEY': settings['stripe_test_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"],
                 }
-            elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
+            if settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"],
                 }
-            else:
-                return None
+            return None
         else:
             if represents_int(event):
                 authorization = StripeAuthorization.query.filter_by(
@@ -68,8 +67,7 @@ class StripePaymentsManager:
                     'SECRET_KEY': authorization.stripe_secret_key,
                     'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
                 }
-            else:
-                return None
+            return None
 
     @staticmethod
     def get_event_organizer_credentials_from_stripe(stripe_auth_code):
@@ -225,8 +223,7 @@ class PayPalPaymentsManager:
 
         if payment.create():
             return True, payment.id
-        else:
-            return False, payment.error
+        return False, payment.error
 
     @staticmethod
     def verify_payment(payment_id, order):
@@ -252,14 +249,13 @@ class PayPalPaymentsManager:
 
             if float(amount_server) != order.amount:
                 return False, 'Payment amount does not match order'
-            elif currency_server != order.event.payment_currency:
+            if currency_server != order.event.payment_currency:
                 return False, 'Payment currency does not match order'
-            elif sale_state != 'completed':
+            if sale_state != 'completed':
                 return False, 'Sale not completed'
-            elif PayPalPaymentsManager.used_payment(payment_id, order):
+            if PayPalPaymentsManager.used_payment(payment_id, order):
                 return False, 'Payment already been verified'
-            else:
-                return True, None
+            return True, None
         except paypalrestsdk.ResourceNotFound:
             return False, 'Payment Not Found'
 
@@ -272,8 +268,7 @@ class PayPalPaymentsManager:
             order.paypal_token = payment_id
             save_to_db(order)
             return False
-        else:
-            return True
+        return True
 
     @staticmethod
     def execute_payment(paypal_payer_id, paypal_payment_id):
@@ -288,8 +283,7 @@ class PayPalPaymentsManager:
 
         if payment.execute({"payer_id": paypal_payer_id}):
             return True, 'Successfully Executed'
-        else:
-            return False, payment.error
+        return False, payment.error
 
 
 class AliPayPaymentsManager:

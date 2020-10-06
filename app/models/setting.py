@@ -198,10 +198,9 @@ class Setting(db.Model):
             and self.paypal_sandbox_secret
         ):
             return True
-        elif self.paypal_client and self.paypal_secret:
+        if self.paypal_client and self.paypal_secret:
             return True
-        else:
-            return False
+        return False
 
     @hybrid_property
     def is_stripe_activated(self):
@@ -222,10 +221,9 @@ class Setting(db.Model):
             and self.omise_test_secret
         ):
             return True
-        elif self.omise_live_public and self.omise_live_secret:
+        if self.omise_live_public and self.omise_live_secret:
             return True
-        else:
-            return False
+        return False
 
     @property
     def is_billing_paypal_activated(self):

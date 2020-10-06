@@ -106,12 +106,11 @@ def get_or_create(model, **kwargs):
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
         return instance, was_created
-    else:
-        instance = model(**kwargs)
-        db.session.add(instance)
-        db.session.commit()
-        was_created = True
-        return instance, was_created
+    instance = model(**kwargs)
+    db.session.add(instance)
+    db.session.commit()
+    was_created = True
+    return instance, was_created
 
 
 def get_count(query):
@@ -141,8 +140,7 @@ def get_new_slug(model, name):
     count = get_count(model.query.filter_by(slug=slug))
     if count == 0:
         return slug
-    else:
-        return f'{slug}-{uuid.uuid4().hex}'
+    return f'{slug}-{uuid.uuid4().hex}'
 
 
 def get_new_identifier(model, length=None):
@@ -153,5 +151,4 @@ def get_new_identifier(model, length=None):
     count = get_count(model.query.filter_by(identifier=identifier))
     if not identifier.isdigit() and count == 0:
         return identifier
-    else:
-        return get_new_identifier(model)
+    return get_new_identifier(model)

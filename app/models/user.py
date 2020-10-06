@@ -196,8 +196,7 @@ class User(SoftDeletionModel):
         ).first()
         if uer is None:
             return False
-        else:
-            return True
+        return True
 
     def _is_role(self, role_name, event_id=None):
         """
@@ -210,8 +209,7 @@ class User(SoftDeletionModel):
             uer = UER.query.filter_by(user=self, role=role).first()
         if not uer:
             return False
-        else:
-            return True
+        return True
 
     def is_owner(self, event_id):
         return self._is_role(OWNER, event_id)
