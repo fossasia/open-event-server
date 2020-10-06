@@ -170,9 +170,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
-        logging.info(
-            f'Resized images saved successfully for event with id: {event_id}'
-        )
+        logging.info(f'Resized images saved successfully for event with id: {event_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for event with id: {}'.format(
@@ -195,9 +193,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
-        logging.info(
-            f'Resized images saved successfully for user with id: {user_id}'
-        )
+        logging.info(f'Resized images saved successfully for user with id: {user_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for user with id: {}'.format(
@@ -211,9 +207,7 @@ def sponsor_logos_url_task(self, event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id, deleted_at=None).all()
     for sponsor in sponsors:
         try:
-            logging.info(
-                f'Sponsor logo url generation task started {sponsor.logo_url}'
-            )
+            logging.info(f'Sponsor logo url generation task started {sponsor.logo_url}')
             new_logo_url = create_save_resized_image(
                 image_file=sponsor.logo_url, resize=False
             )

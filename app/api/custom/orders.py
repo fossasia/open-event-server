@@ -341,9 +341,7 @@ def complete_order(order_id):
         )
 
         send_notif_to_attendees(order, current_user.id)
-        order_url = make_frontend_url(
-            path=f'/orders/{order.identifier}'
-        )
+        order_url = make_frontend_url(path=f'/orders/{order.identifier}')
         for organizer in order.event.organizers:
             send_notif_ticket_purchase_organizer(
                 organizer,

@@ -71,8 +71,7 @@ def safe_query_without_soft_deleted_entries(
         record = record.one()
     except NoResultFound:
         raise ObjectNotFound(
-            {'parameter': f'{parameter_name}'},
-            f"{model.__name__}: {value} not found",
+            {'parameter': f'{parameter_name}'}, f"{model.__name__}: {value} not found",
         )
     else:
         return record

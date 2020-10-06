@@ -63,8 +63,7 @@ def check_event_user_ticket_holders(order, data, element):
         getattr(order, element, None).id
     ):
         raise ForbiddenError(
-            {'pointer': f'data/{element}'},
-            f"You cannot update {element} of an order",
+            {'pointer': f'data/{element}'}, f"You cannot update {element} of an order",
         )
     elif element == 'ticket_holders':
         ticket_holders = []
@@ -147,9 +146,7 @@ def on_order_completed(order):
     if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
         order.completed_at = datetime.utcnow()
 
-    order_url = make_frontend_url(
-        path=f'/orders/{order.identifier}'
-    )
+    order_url = make_frontend_url(path=f'/orders/{order.identifier}')
     for organizer in set(
         order.event.organizers + order.event.coorganizers + [order.event.owner]
     ):
@@ -559,9 +556,7 @@ class OrderDetail(ResourceDetail):
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
 
-            order_url = make_frontend_url(
-                path=f'/orders/{order.identifier}'
-            )
+            order_url = make_frontend_url(path=f'/orders/{order.identifier}')
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(
                     organizer,

@@ -136,10 +136,7 @@ def redirect_uri(provider):
     client_id = provider_class.get_client_id()
     if not client_id:
         return make_response(
-            jsonify(
-                message=f"{provider} client id is not configured on the server"
-            ),
-            404,
+            jsonify(message=f"{provider} client id is not configured on the server"), 404,
         )
 
     url = (

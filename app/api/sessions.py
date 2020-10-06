@@ -78,9 +78,7 @@ class SessionListPost(ResourceList):
             owner = session.event.get_owner()
             owner_email = owner.email
             event = session.event
-            link = make_frontend_url(
-                f"/events/{event.identifier}/sessions/{session.id}"
-            )
+            link = make_frontend_url(f"/events/{event.identifier}/sessions/{session.id}")
             send_email_new_session(owner_email, event_name, link)
             send_notif_new_session_organizer(owner, event_name, link, session.id)
 
