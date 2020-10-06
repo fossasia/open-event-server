@@ -24,4 +24,4 @@ class Permission(db.Model):
     can_delete = db.Column(db.Boolean, nullable=False, default=True)
 
     def __repr__(self):
-        return '<Perm %r for %r>' % (self.role, self.service,)
+        return '<Perm {!r} for {!r}>'.format(self.role, self.service)

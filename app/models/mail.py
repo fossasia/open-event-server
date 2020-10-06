@@ -44,4 +44,4 @@ class Mail(db.Model):
     message = db.Column(db.String)
 
     def __repr__(self):
-        return '<Mail %r to %r>' % (self.id, self.recipient)
+        return '<Mail {!r} to {!r}>'.format(self.id, self.recipient)

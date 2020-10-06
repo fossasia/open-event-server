@@ -155,10 +155,7 @@ class SessionList(ResourceList):
                 query_.join(User)
                 .join(Speaker)
                 .filter(
-                    (
-                        User.id == user.id
-                        or Session.speakers.any(Speaker.user_id == user.id)
-                    )
+                    User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)
                 )
                 .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
                 .order_by(*get_distinct_sort_fields(SessionSchema, Session))

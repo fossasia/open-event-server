@@ -102,7 +102,7 @@ def create_save_resized_image(
     if resize:
         if maintain_aspect:
             width_percent = basewidth / float(img.size[0])
-            height_size = int((float(img.size[1]) * float(width_percent)))
+            height_size = int(float(img.size[1]) * float(width_percent))
 
         img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
 

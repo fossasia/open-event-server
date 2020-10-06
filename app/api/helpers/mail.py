@@ -75,7 +75,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
             'subject': subject,
             'html': html,
             'attachments': attachments,
-            'bcc': bcc
+            'bcc': bcc,
         }
 
         if not current_app.config['TESTING']:
@@ -280,7 +280,7 @@ def send_email_for_monthly_fee_payment(
             app_name=app_name,
             payment_url=link,
         ),
-        bcc=get_settings()['admin_billing_email']
+        bcc=get_settings()['admin_billing_email'],
     )
 
 

@@ -16,4 +16,4 @@ class UsersEventsRoles(SoftDeletionModel):
     role = db.relationship("Role")
 
     def __repr__(self):
-        return '<UER %r:%r:%r>' % (self.user, self.event_id, self.role,)
+        return '<UER {!r}:{!r}:{!r}>'.format(self.user, self.event_id, self.role)

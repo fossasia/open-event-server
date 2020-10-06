@@ -119,9 +119,9 @@ def make_error(uploaded_file, er=None, id_=None):
         er = ServerError(source='{}', detail="Internal Server Error")
     istr = 'File %s' % uploaded_file
     if id_ is not None:
-        istr = '%s, ID %s' % (istr, id_)
+        istr = '{}, ID {}'.format(istr, id_)
     if hasattr(er, 'title'):
-        er.title = '%s, %s' % (istr, er.title)
+        er.title = '{}, {}'.format(istr, er.title)
     if not hasattr(er, 'status') or not er.status:
         er.status = 500
     return er

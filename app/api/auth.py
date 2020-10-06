@@ -438,9 +438,8 @@ def change_password():
 
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (
-        file_name_prefix,
-        identifier,
+    response.headers['Content-Disposition'] = 'attachment; filename={}-{}.pdf'.format(
+        file_name_prefix, identifier,
     )
     return response
 
