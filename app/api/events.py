@@ -681,8 +681,7 @@ class EventDetail(ResourceDetail):
                 raise ForbiddenError(
                     {'source': ''}, "Event associated with orders cannot be deleted"
                 )
-            else:
-                event.deleted_at = data.get('deleted_at')
+            event.deleted_at = data.get('deleted_at')
 
         if (
             data.get('original_image_url')

@@ -75,7 +75,7 @@ class SpeakerListPost(ResourceList):
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )
-        elif (
+        if (
             data.get('is_email_overridden')
             and has_access('is_organizer', event_id=data['event'])
             and not data.get('email')
@@ -186,7 +186,7 @@ class SpeakerDetail(ResourceDetail):
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )
-        elif (
+        if (
             data.get('is_email_overridden')
             and has_access('is_organizer', event_id=speaker.event_id)
             and not data.get('email')

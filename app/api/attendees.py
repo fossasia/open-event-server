@@ -90,12 +90,12 @@ class AttendeeListPost(ResourceList):
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Attendee needs to be checked in first",
                 )
-            elif 'checkin_times' not in data or data['checkin_times'] is None:
+            if 'checkin_times' not in data or data['checkin_times'] is None:
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Check in Times missing",
                 )
-            elif len(data['checkin_times'].split(",")) != len(
+            if len(data['checkin_times'].split(",")) != len(
                 data['device_name_checkin'].split(",")
             ):
                 raise UnprocessableEntityError(
@@ -232,44 +232,43 @@ class AttendeeDetail(ResourceDetail):
                     {'pointer': '/data/attributes/checkin_times'},
                     "Check in time missing while trying to check in attendee",
                 )
-            else:
-                if obj.checkin_times and data[
-                    'checkin_times'
-                ] not in obj.checkin_times.split(","):
-                    data['checkin_times'] = '{},{}'.format(
-                        obj.checkin_times, data['checkin_times']
-                    )
-                elif obj.checkin_times and data[
-                    'checkin_times'
-                ] in obj.checkin_times.split(","):
-                    raise UnprocessableEntityError(
-                        {'pointer': '/data/attributes/checkin_times'},
-                        "Check in time already present",
+            if obj.checkin_times and data[
+                'checkin_times'
+            ] not in obj.checkin_times.split(","):
+                data['checkin_times'] = '{},{}'.format(
+                    obj.checkin_times, data['checkin_times']
+                )
+            elif obj.checkin_times and data[
+                'checkin_times'
+            ] in obj.checkin_times.split(","):
+                raise UnprocessableEntityError(
+                    {'pointer': '/data/attributes/checkin_times'},
+                    "Check in time already present",
+                )
+
+            if (
+                'device_name_checkin' in data
+                and data['device_name_checkin'] is not None
+            ):
+                if obj.device_name_checkin is not None:
+                    data['device_name_checkin'] = '{},{}'.format(
+                        obj.device_name_checkin, data['device_name_checkin']
                     )
 
-                if (
-                    'device_name_checkin' in data
-                    and data['device_name_checkin'] is not None
+                if len(data['checkin_times'].split(",")) != len(
+                    data['device_name_checkin'].split(",")
                 ):
-                    if obj.device_name_checkin is not None:
-                        data['device_name_checkin'] = '{},{}'.format(
-                            obj.device_name_checkin, data['device_name_checkin']
-                        )
-
-                    if len(data['checkin_times'].split(",")) != len(
-                        data['device_name_checkin'].split(",")
-                    ):
-                        raise UnprocessableEntityError(
-                            {'pointer': '/data/attributes/device_name_checkin'},
-                            "Check in Time missing for the corresponding device name",
-                        )
+                    raise UnprocessableEntityError(
+                        {'pointer': '/data/attributes/device_name_checkin'},
+                        "Check in Time missing for the corresponding device name",
+                    )
+            else:
+                if obj.device_name_checkin is not None:
+                    data['device_name_checkin'] = '{},{}'.format(
+                        obj.device_name_checkin, '-'
+                    )
                 else:
-                    if obj.device_name_checkin is not None:
-                        data['device_name_checkin'] = '{},{}'.format(
-                            obj.device_name_checkin, '-'
-                        )
-                    else:
-                        data['device_name_checkin'] = '-'
+                    data['device_name_checkin'] = '-'
 
         if 'is_checked_out' in data and data['is_checked_out']:
             attendee = safe_query(TicketHolder, 'id', kwargs['id'], 'attendee_id')
