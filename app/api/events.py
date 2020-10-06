@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytz
 from flask import request
-from flask_jwt_extended import current_user, verify_jwt_in_request
+from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -129,8 +129,13 @@ class EventList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Event).filter_by(state='published')
+        query_ = self.session.query(Event)
+        if get_jwt_identity() is None or not current_user.is_staff:
+            # If user is not admin, we only show published events
+            query_ = query_.filter_by(state='published')
         if 'Authorization' in request.headers:
+            # For a specific user accessing the API, we show all
+            # events managed by them, even if they're not published
             verify_jwt_in_request()
             query2 = self.session.query(Event)
             query2 = (
