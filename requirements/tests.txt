@@ -2,6 +2,6 @@
 
 coverage==5.3
 dredd_hooks==0.2
-pytest==6.1.0
+pytest==6.1.1
 pytest-cov==2.10.1
 objproxies==0.9.4
