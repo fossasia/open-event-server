@@ -33,7 +33,7 @@ def send_receipt():
                 {'source': ''},
                 'You need to be the event organizer or order buyer to send receipts.',
             )
-        elif order.status != 'completed':
+        if order.status != 'completed':
             abort(
                 make_response(
                     jsonify(error="Cannot send receipt for an incomplete order"), 409

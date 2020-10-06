@@ -65,7 +65,7 @@ def check_event_user_ticket_holders(order, data, element):
         raise ForbiddenError(
             {'pointer': f'data/{element}'}, f"You cannot update {element} of an order",
         )
-    elif element == 'ticket_holders':
+    if element == 'ticket_holders':
         ticket_holders = []
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
@@ -409,8 +409,7 @@ class OrderDetail(ResourceDetail):
                                 {'pointer': f'data/{element}'},
                                 f"You cannot update {element} of an order",
                             )
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+                        check_event_user_ticket_holders(order, data, element)
 
             else:
                 # Order created from the public pages.
@@ -424,7 +423,7 @@ class OrderDetail(ResourceDetail):
                                     {'pointer': f'data/{element}'},
                                     f"You cannot update {element} of an order",
                                 )
-                            elif (
+                            if (
                                 element == 'status'
                                 and order.amount
                                 and order.status == 'completed'
@@ -434,7 +433,7 @@ class OrderDetail(ResourceDetail):
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a completed paid order",
                                 )
-                            elif element == 'status' and order.status == 'cancelled':
+                            if element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
                                 raise ForbiddenError(
                                     {'pointer': 'data/status'},
@@ -449,9 +448,8 @@ class OrderDetail(ResourceDetail):
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
-            else:
-                for element in data:
-                    if data[element]:
+            for element in data:
+                if data[element]:
                         if (
                             element == 'is_billing_enabled'
                             and order.status == 'completed'
@@ -463,7 +461,7 @@ class OrderDetail(ResourceDetail):
                                     element
                                 ),
                             )
-                        elif (
+                        if (
                             element not in relationships
                             and data[element] != getattr(order, element, None)
                             and element not in get_updatable_fields()
@@ -472,8 +470,7 @@ class OrderDetail(ResourceDetail):
                                 {'pointer': f'data/{element}'},
                                 f"You cannot update {element} of an order",
                             )
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+                        check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(
@@ -488,7 +485,7 @@ class OrderDetail(ResourceDetail):
                 {'pointer': '/data/attributes/payment-mode'},
                 "payment-mode cannot be free for order with amount > 0",
             )
-        elif (
+        if (
             data.get('status') == 'completed'
             and data.get('payment_mode') == 'stripe'
             and not is_payment_valid(order, 'stripe')
@@ -497,7 +494,7 @@ class OrderDetail(ResourceDetail):
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify stripe payment",
             )
-        elif (
+        if (
             data.get('status') == 'completed'
             and data.get('payment_mode') == 'paypal'
             and not is_payment_valid(order, 'paypal')
@@ -583,7 +580,7 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
-        elif (
+        if (
             order.amount
             and order.amount > 0
             and (order.status == 'completed' or order.status == 'placed')

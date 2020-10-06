@@ -274,7 +274,7 @@ class DiscountCodeDetail(ResourceDetail):
                     raise MethodNotAllowed(
                         {'parameter': '{code}'}, "Discount Code is not active"
                     )
-                elif (
+                if (
                     current_time < discount.valid_from
                     or current_time > discount.valid_till
                 ):

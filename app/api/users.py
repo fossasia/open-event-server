@@ -274,13 +274,12 @@ class UserDetail(ResourceDetail):
                             {'source': ''},
                             "Users associated with events cannot be deleted",
                         )
-                    elif len(user.orders) != 0:
+                    if len(user.orders) != 0:
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with orders cannot be deleted",
                         )
-                    else:
-                        modify_email_for_user_to_be_deleted(user)
+                    modify_email_for_user_to_be_deleted(user)
                 else:
                     modify_email_for_user_to_be_restored(user)
                     data['email'] = user.email
