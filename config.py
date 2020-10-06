@@ -1,3 +1,4 @@
+import sys
 import os
 
 from envparse import env
@@ -76,7 +77,7 @@ class Config:
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
-        exit()
+        sys.exit()
 
     BASE_DIR = basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
