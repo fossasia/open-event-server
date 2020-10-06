@@ -51,6 +51,6 @@ class Speaker(SoftDeletionModel):
             or name == 'speaking_experience'
             or name == 'sponsorship_required'
         ):
-            super(Speaker, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)))
         else:
-            super(Speaker, self).__setattr__(name, value)
+            super().__setattr__(name, value)

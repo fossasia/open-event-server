@@ -197,7 +197,7 @@ class Event(SoftDeletionModel):
     )
 
     def __init__(self, **kwargs):
-        super(Event, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         original_image_url = kwargs.get('original_image_url')
         self.original_image_url = (
@@ -220,11 +220,11 @@ class Event(SoftDeletionModel):
             or name == 'description'
             or name == 'code_of_conduct'
         ):
-            super(Event, self).__setattr__(
+            super().__setattr__(
                 name, clean_html(clean_up_string(value), allow_link=allow_link)
             )
         else:
-            super(Event, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
     @classmethod
     def set_default_event_image(cls, event_topic_id):

@@ -479,9 +479,9 @@ class User(SoftDeletionModel):
 
     def __setattr__(self, name, value):
         if name == 'details':
-            super(User, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)))
         else:
-            super(User, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
 
 @event.listens_for(User, 'init')

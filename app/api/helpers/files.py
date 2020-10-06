@@ -90,8 +90,8 @@ def create_save_resized_image(
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':
@@ -292,8 +292,8 @@ def create_system_image(
         image_file = current_app.config['BASE_DIR'] + '/' + file_relative_path
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':

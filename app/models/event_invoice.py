@@ -53,7 +53,7 @@ class EventInvoice(SoftDeletionModel):
     user = db.relationship('User', backref='event_invoices')
 
     def __init__(self, **kwargs):
-        super(EventInvoice, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         if not self.issued_at:
             self.issued_at = datetime.now()

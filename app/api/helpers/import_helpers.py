@@ -351,7 +351,7 @@ def import_event_json(task_handle, zip_path, creator_id):
     # create event
     try:
         update_state(task_handle, 'Importing event core')
-        data = json.loads(open(path + '/event', 'r').read())
+        data = json.loads(open(path + '/event').read())
         _, data = _trim_id(data)
         srv = ('event', Event)
         data = _delete_fields(srv, data)
@@ -374,7 +374,7 @@ def import_event_json(task_handle, zip_path, creator_id):
         service_ids = {}
         for item in IMPORT_SERIES:
             item[1].is_importing = True
-            data = open(path + '/%s' % item[0], 'r').read()
+            data = open(path + '/%s' % item[0]).read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
                 task_handle, dic, item, new_event.id, service_ids
@@ -382,7 +382,7 @@ def import_event_json(task_handle, zip_path, creator_id):
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
             item[1].is_importing = False
-    except IOError:
+    except OSError:
         db.session.delete(new_event)
         db.session.commit()
         raise NotFoundError('file', 'File %s missing in event zip' % item[0])

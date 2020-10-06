@@ -383,7 +383,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
 def send_order_cancel_email(order):
     cancel_msg = ''
     if order.cancel_note:
-        cancel_msg = u"<br/>Message from the organizer: {cancel_note}".format(
+        cancel_msg = "<br/>Message from the organizer: {cancel_note}".format(
             cancel_note=order.cancel_note
         )
 
