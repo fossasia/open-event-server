@@ -269,10 +269,10 @@ def send_notif_ticket_cancel(order):
             cancel_note=order.cancel_note,
             event_name=order.event.name,
             event_url=make_frontend_url(
-                '/e/{identifier}'.format(identifier=order.event.identifier)
+                f'/e/{order.event.identifier}'
             ),
             order_url=make_frontend_url(
-                '/orders/{identifier}/view'.format(identifier=order.identifier)
+                f'/orders/{order.identifier}/view'
             ),
             invoice_id=order.invoice_number,
         ),

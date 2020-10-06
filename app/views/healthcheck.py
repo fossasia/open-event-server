@@ -73,7 +73,7 @@ def check_migrations():
             db.session.query(model).first()
         except:
             capture_exception()
-            return 'failure,{} model out of date with migrations'.format(model)
+            return f'failure,{model} model out of date with migrations'
     return 'success,database up to date with migrations'
 
 

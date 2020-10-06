@@ -171,8 +171,8 @@ class PayPalPaymentsManager:
                 {'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'"
             )
 
-        paypal_client = settings.get('{}_client'.format(paypal_key), None)
-        paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
+        paypal_client = settings.get(f'{paypal_key}_client', None)
+        paypal_secret = settings.get(f'{paypal_key}_secret', None)
 
         if not paypal_client or not paypal_secret:
             raise ConflictError(

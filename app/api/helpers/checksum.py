@@ -14,7 +14,7 @@ BLOCK_SIZE = 16
 def generate_checksum(param_dict, merchant_key, salt=None):
     params_string = __get_param_string__(param_dict)
     salt = salt if salt else __id_generator__(4)
-    final_string = '{}|{}'.format(params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()
@@ -31,7 +31,7 @@ def generate_refund_checksum(param_dict, merchant_key, salt=None):
             exit()
     params_string = __get_param_string__(param_dict)
     salt = salt if salt else __id_generator__(4)
-    final_string = '{}|{}'.format(params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()
@@ -44,7 +44,7 @@ def generate_refund_checksum(param_dict, merchant_key, salt=None):
 def generate_checksum_by_str(param_str, merchant_key, salt=None):
     params_string = param_str
     salt = salt if salt else __id_generator__(4)
-    final_string = '{}|{}'.format(params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()

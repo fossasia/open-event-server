@@ -85,7 +85,7 @@ def create_save_resized_image(
     """
     if not image_file:
         return None
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     data = requests.get(image_file).content
     image_file = io.BytesIO(data)
     try:
@@ -283,7 +283,7 @@ def create_system_image(
     :return:
     """
     # Get an unique identifier from uuid if not provided
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     if image_file:
         with urllib.request.urlopen(image_file) as img_data:
             image_file = io.BytesIO(img_data.read())

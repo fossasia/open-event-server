@@ -79,7 +79,7 @@ class SessionListPost(ResourceList):
             owner_email = owner.email
             event = session.event
             link = make_frontend_url(
-                "/events/{}/sessions/{}".format(event.identifier, session.id)
+                f"/events/{event.identifier}/sessions/{session.id}"
             )
             send_email_new_session(owner_email, event_name, link)
             send_notif_new_session_organizer(owner, event_name, link, session.id)
@@ -346,7 +346,7 @@ class SessionDetail(ResourceDetail):
 def notify_for_session(session, mail_override: Dict[str, str] = None):
     event = session.event
     frontend_url = get_settings()['frontend_url']
-    link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)
+    link = f"{frontend_url}/events/{event.identifier}/sessions/{session.id}"
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:

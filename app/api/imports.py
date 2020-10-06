@@ -43,7 +43,7 @@ def import_event_task_base(task_handle, file_path, source_type='json', creator_i
         new_event = import_event_json(task_handle, file_path, creator_id)
     if new_event:
         url = make_frontend_url(
-            path='/events/{identifier}'.format(identifier=new_event.identifier)
+            path=f'/events/{new_event.identifier}'
         )
         return {'url': url, 'id': new_event.id, 'event_name': new_event.name}
 

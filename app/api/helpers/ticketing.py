@@ -299,7 +299,7 @@ class TicketingManager:
             send_notif_to_attendees(order, current_user.id)
 
             order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
+                path=f'/orders/{order.identifier}'
             )
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(
@@ -361,7 +361,7 @@ class TicketingManager:
             send_notif_to_attendees(order, order.user_id)
 
             order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
+                path=f'/orders/{order.identifier}'
             )
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(

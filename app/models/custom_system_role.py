@@ -41,4 +41,4 @@ class UserSystemRole(db.Model):
     role = db.relationship('CustomSysRole')
 
     def __repr__(self):
-        return '{!r} as {!r}'.format(self.user, self.role, self.event)
+        return f'{self.user!r} as {self.role!r}'

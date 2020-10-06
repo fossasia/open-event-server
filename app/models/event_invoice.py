@@ -167,7 +167,7 @@ class EventInvoice(SoftDeletionModel):
         prev_month = self.previous_month_date.strftime("%b %Y")  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
-        link = '{}/event-invoice/{}/review'.format(frontend_url, self.identifier)
+        link = f'{frontend_url}/event-invoice/{self.identifier}/review'
         currency = self.event.payment_currency
         amount = f"{currency} {self.amount}"
         send_email_for_monthly_fee_payment(

@@ -51,8 +51,8 @@ def require_relationship(resource_list, data):
     for resource in resource_list:
         if resource not in data:
             raise UnprocessableEntityError(
-                {'pointer': '/data/relationships/{}'.format(resource)},
-                "A valid relationship with {} resource is required".format(resource),
+                {'pointer': f'/data/relationships/{resource}'},
+                f"A valid relationship with {resource} resource is required",
             )
 
 

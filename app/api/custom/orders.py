@@ -241,7 +241,7 @@ def complete_order(order_id):
                 return make_response(
                     jsonify(
                         status='Unprocessable Entity',
-                        error='{} is a required field.'.format(field.field_identifier),
+                        error=f'{field.field_identifier} is a required field.',
                     ),
                     422,
                 )
@@ -342,7 +342,7 @@ def complete_order(order_id):
 
         send_notif_to_attendees(order, current_user.id)
         order_url = make_frontend_url(
-            path='/orders/{identifier}'.format(identifier=order.identifier)
+            path=f'/orders/{order.identifier}'
         )
         for organizer in order.event.organizers:
             send_notif_ticket_purchase_organizer(

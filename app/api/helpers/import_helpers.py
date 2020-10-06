@@ -119,9 +119,9 @@ def make_error(uploaded_file, er=None, id_=None):
         er = ServerError(source='{}', detail="Internal Server Error")
     istr = 'File %s' % uploaded_file
     if id_ is not None:
-        istr = '{}, ID {}'.format(istr, id_)
+        istr = f'{istr}, ID {id_}'
     if hasattr(er, 'title'):
-        er.title = '{}, {}'.format(istr, er.title)
+        er.title = f'{istr}, {er.title}'
     if not hasattr(er, 'status') or not er.status:
         er.status = 500
     return er
@@ -173,9 +173,9 @@ def _upload_media_queue(srv, obj):
         return
     for i in UPLOAD_PATHS[srv[0]]:
         if i in ['original', 'large', 'thumbnail', 'small', 'icon']:
-            upload_path = '{}_image_url'.format(i)
+            upload_path = f'{i}_image_url'
         else:
-            upload_path = '{}_url'.format(i)
+            upload_path = f'{i}_url'
         path = getattr(obj, upload_path)
         if not path:
             continue

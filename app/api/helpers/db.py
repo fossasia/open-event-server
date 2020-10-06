@@ -71,8 +71,8 @@ def safe_query_without_soft_deleted_entries(
         record = record.one()
     except NoResultFound:
         raise ObjectNotFound(
-            {'parameter': '{}'.format(parameter_name)},
-            "{}: {} not found".format(model.__name__, value),
+            {'parameter': f'{parameter_name}'},
+            f"{model.__name__}: {value} not found",
         )
     else:
         return record
@@ -143,7 +143,7 @@ def get_new_slug(model, name):
     if count == 0:
         return slug
     else:
-        return '{}-{}'.format(slug, uuid.uuid4().hex)
+        return f'{slug}-{uuid.uuid4().hex}'
 
 
 def get_new_identifier(model, length=None):

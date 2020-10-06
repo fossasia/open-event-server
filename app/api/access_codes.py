@@ -53,7 +53,7 @@ class AccessCodeListPost(ResourceList):
                     if not ticket_object.is_hidden:
                         raise ConflictError(
                             {'pointer': '/data/relationships/tickets'},
-                            "Ticket with id {} is public.".format(ticket)
+                            f"Ticket with id {ticket} is public."
                             + " Access code cannot be applied to public tickets",
                         )
                 except NoResultFound:
