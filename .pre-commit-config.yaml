@@ -3,4 +3,10 @@ repos:
     rev: stable
     hooks:
     - id: black
+      exclude:
+      - .venv/
+      - migrations/
+      - manage.py
+      - instance.py
+      - hook_main.py
       language_version: python3.7
