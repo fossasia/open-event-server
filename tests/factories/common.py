@@ -7,7 +7,7 @@ from app.api.helpers.utilities import image_link, static_page
 # use camelCase for naming variables
 
 string_ = 'example'
-email_ = factory.Sequence(lambda n: 'user{0}@example.com'.format(n))
+email_ = factory.Sequence(lambda n: f'user{n}@example.com')
 integer_ = 25
 url_ = static_page
 imageUrl_ = image_link
@@ -23,8 +23,8 @@ timezone_ = 'UTC'
 environment_ = 'testing'
 secret_ = 'ABCDefghIJKLmnop'
 fee_ = 1.23
-slug_ = factory.Sequence(lambda n: 'example_slug{0}'.format(n))
+slug_ = factory.Sequence(lambda n: f'example_slug{n}')
 
 
 def socialUrl_(name):
-    return 'https://{}.com/{}'.format(name, name)
+    return f'https://{name}.com/{name}'
