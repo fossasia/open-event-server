@@ -319,10 +319,7 @@ class User(SoftDeletionModel):
                 .filter(Session.id == session_id)
                 .one()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:
@@ -335,10 +332,7 @@ class User(SoftDeletionModel):
                 .filter(Session.event_id == event_id)
                 .first()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:

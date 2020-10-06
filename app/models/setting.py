@@ -212,10 +212,7 @@ class Setting(db.Model):
 
     @hybrid_property
     def is_alipay_activated(self):
-        if self.alipay_publishable_key and self.alipay_secret_key:
-            return True
-        else:
-            return False
+        return bool(self.alipay_publishable_key and self.alipay_secret_key)
 
     @hybrid_property
     def is_omise_activated(self):
