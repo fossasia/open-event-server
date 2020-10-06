@@ -131,15 +131,12 @@ def redirect_uri(provider):
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 404)
+        return make_response(jsonify(message=f"No support for {provider}"), 404)
 
     client_id = provider_class.get_client_id()
     if not client_id:
         return make_response(
-            jsonify(
-                message="{} client id is not configured on the server".format(provider)
-            ),
-            404,
+            jsonify(message=f"{provider} client id is not configured on the server"), 404,
         )
 
     url = (
@@ -180,7 +177,7 @@ def get_token(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -269,7 +266,7 @@ def login_user(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -318,7 +315,7 @@ def resend_verification_email():
             ),
             'utf-8',
         )
-        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash_})
+        link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
 
         return make_response(jsonify(message="Verification email resent"), 200)
@@ -438,9 +435,8 @@ def change_password():
 
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (
-        file_name_prefix,
-        identifier,
+    response.headers['Content-Disposition'] = 'attachment; filename={}-{}.pdf'.format(
+        file_name_prefix, identifier,
     )
     return response
 

@@ -69,4 +69,4 @@ class Notification(SoftDeletionModel):
     is_read = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<Notif %s:%s>' % (self.user, self.title)
+        return f'<Notif {self.user}:{self.title}>'

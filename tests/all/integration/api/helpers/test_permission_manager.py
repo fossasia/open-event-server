@@ -17,7 +17,7 @@ from tests.factories.user import UserFactory
 
 class TestPermissionManager(OpenEventLegacyTestCase):
     def setUp(self):
-        super(TestPermissionManager, self).setUp()
+        super().setUp()
         with self.app.test_request_context():
             user = UserFactory()
             save_to_db(user)

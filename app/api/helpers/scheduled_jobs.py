@@ -74,9 +74,7 @@ def change_session_state_on_event_completion():
         )
         for session in sessions_to_be_changed:
             session.state = 'rejected'
-            save_to_db(
-                session, 'Changed {} session state to rejected'.format(session.title)
-            )
+            save_to_db(session, f'Changed {session.title} session state to rejected')
 
 
 @celery.task(base=RequestContextTask, name='send.event.fee.notification.followup')

@@ -222,142 +222,142 @@ def get_invite_papers_notification_actions(cfs_link, submit_link):
 NOTIFS = {
     EVENT_EXPORTED: {
         'recipient': 'User',
-        'title': u'Event {event_name} has been exported',
+        'title': 'Event {event_name} has been exported',
         'message': (
-            u"Event <strong>{event_name}</strong> has been exported successfully."
+            "Event <strong>{event_name}</strong> has been exported successfully."
         ),
     },
     EVENT_EXPORT_FAIL: {
         'recipient': 'User',
-        'title': u'Export of event {event_name} failed',
-        'message': (u"The following error occurred:<br>" + u"<pre>{error_text}</pre>"),
+        'title': 'Export of event {event_name} failed',
+        'message': ("The following error occurred:<br>" + "<pre>{error_text}</pre>"),
     },
     EVENT_IMPORTED: {
         'recipient': 'User',
-        'title': u'Event {event_name} has been imported',
+        'title': 'Event {event_name} has been imported',
         'message': (
-            u"Event <strong>{event_name}</strong> has been imported successfully."
+            "Event <strong>{event_name}</strong> has been imported successfully."
         ),
     },
     EVENT_IMPORT_FAIL: {
         'recipient': 'User',
-        'title': u'Import of event {event_name} failed',
-        'message': (u"The following error occurred:<br>" + u"<pre>{error_text}</pre>"),
+        'title': 'Import of event {event_name} failed',
+        'message': ("The following error occurred:<br>" + "<pre>{error_text}</pre>"),
     },
     MONTHLY_PAYMENT_NOTIF: {
         'recipient': 'Owner, Organizer',
-        'subject': u'{date} - Monthly service fee invoice for {event_name}',
+        'subject': '{date} - Monthly service fee invoice for {event_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
-            + u"<br/> That payment for the same has to be made in two weeks."
-            + u"<br><br><em>Thank you for using {app_name}.</em>"
+            "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
+            + "<br/> That payment for the same has to be made in two weeks."
+            + "<br><br><em>Thank you for using {app_name}.</em>"
         ),
         'sent_at': '1st day of the month',
     },
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF: {
         'recipient': 'Owner, Organizer',
-        'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
+        'subject': 'Past Due: {date} - Monthly service fee invoice for {event_name}',
         'message': (
-            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
-            + u"<br/> That payment for the same is past the due date."
-            + u"<br><br><em>Thank you for using {app_name}.</em>"
+            "The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}."
+            + "<br/> That payment for the same is past the due date."
+            + "<br><br><em>Thank you for using {app_name}.</em>"
         ),
         'sent_at': '15th day of the month',
     },
     TICKET_PURCHASED: {
         'recipient': 'User',
-        'title': u'Your order invoice and tickets ({invoice_id})',
-        'message': (u"Your order has been processed successfully."),
+        'title': 'Your order invoice and tickets ({invoice_id})',
+        'message': ("Your order has been processed successfully."),
     },
     TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'User',
-        'title': u'Your ticket for {event_name}',
-        'message': (u"Your order has been processed successfully."),
+        'title': 'Your ticket for {event_name}',
+        'message': ("Your order has been processed successfully."),
     },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer',
-        'title': u'New ticket purchase for {event_name} : ({invoice_id})',
-        'message': (u"The order has been processed successfully."),
+        'title': 'New ticket purchase for {event_name} : ({invoice_id})',
+        'message': ("The order has been processed successfully."),
     },
     TICKET_RESEND_ORGANIZER: {
         'recipient': 'Owner, Organizer',
-        'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id})',
-        'message': (u"Email has been sent successfully."),
+        'title': 'Email resent for {event_name} by {buyer_email} ({invoice_id})',
+        'message': ("Email has been sent successfully."),
     },
     TICKET_CANCELLED: {
         'recipient': 'User',
-        'title': u'Your order for {event_name} has been cancelled ({invoice_id})',
+        'title': 'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer "
-            + u"<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> "
-            + u"<br/>Please contact the organizer for more info "
-            + u"<br/>Message from the organizer: {cancel_note}."
+            "Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer "
+            + "<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> "
+            + "<br/>Please contact the organizer for more info "
+            + "<br/>Message from the organizer: {cancel_note}."
         ),
     },
     TICKET_CANCELLED_ORGANIZER: {
         'recipient': 'User',
-        'title': u'Order ({invoice_id}) of {event_name} has been cancelled',
+        'title': 'Order ({invoice_id}) of {event_name} has been cancelled',
         'message': (
-            u"Order ({invoice_id}) has been cancelled "
-            + u"Please visit the link to check the cancelled orders for this event:"
-            + u" <a href='{cancel_order_page}'>{event_name}</a> "
-            + u"<br/>Cancel Note: {cancel_note}."
+            "Order ({invoice_id}) has been cancelled "
+            + "Please visit the link to check the cancelled orders for this event:"
+            + " <a href='{cancel_order_page}'>{event_name}</a> "
+            + "<br/>Cancel Note: {cancel_note}."
         ),
     },
     USER_CHANGE_EMAIL: {
         'recipient': 'User',
-        'title': u'Your email has been changed',
+        'title': 'Your email has been changed',
         'message': (
-            u"Your email has been changed from {email} to {new_email}.<br>Please verify your new email."
+            "Your email has been changed from {email} to {new_email}.<br>Please verify your new email."
         ),
     },
     PASSWORD_CHANGE: {
         'recipient': 'User',
-        'subject': u'{app_name}: Password Change',
-        'message': (u"Your password has been successfully changed."),
+        'subject': '{app_name}: Password Change',
+        'message': ("Your password has been successfully changed."),
     },
     AFTER_EVENT: {
-        'title': u'Event {event_name} completed',
-        'message': u"The event <strong>{event_name}</strong> has been completed.<br><br>",
+        'title': 'Event {event_name} completed',
+        'message': "The event <strong>{event_name}</strong> has been completed.<br><br>",
         'recipient': 'User',
     },
     EVENT_PUBLISH: {
-        'title': u'Event {event_name} has been published',
-        'message': u"The event <strong>{event_name}</strong> has been published.",
+        'title': 'Event {event_name} has been published',
+        'message': "The event <strong>{event_name}</strong> has been published.",
         'recipient': 'User',
     },
     EVENT_ROLE: {
-        'title': u'Invitation to be {role_name} at {event_name}',
-        'message': u"You've been invited to be one of the <strong>{role_name}s</strong>"
-        + u" at <strong>{event_name}</strong>.",
+        'title': 'Invitation to be {role_name} at {event_name}',
+        'message': "You've been invited to be one of the <strong>{role_name}s</strong>"
+        + " at <strong>{event_name}</strong>.",
         'recipient': 'User',
     },
     NEW_SESSION: {
-        'title': u'New session proposal for {event_name}',
-        'message': u"The event <strong>{event_name}</strong> has received"
-        + u" a new session proposal.",
+        'title': 'New session proposal for {event_name}',
+        'message': "The event <strong>{event_name}</strong> has received"
+        + " a new session proposal.",
         'recipient': 'Owner, Organizer',
     },
     SESSION_SCHEDULE: {
-        'title': u'Schedule for Session {session_name} has been changed',
-        'message': u"The schedule for session <strong>{session_name}</strong>"
-        + u" has been changed.",
+        'title': 'Schedule for Session {session_name} has been changed',
+        'message': "The schedule for session <strong>{session_name}</strong>"
+        + " has been changed.",
         'recipient': 'Owner, Organizer, Speaker',
     },
     NEXT_EVENT: {
-        'title': u'Event {event_name} is coming soon',
-        'message': u"Here are upcoming events: {up_coming_events}.",
+        'title': 'Event {event_name} is coming soon',
+        'message': "Here are upcoming events: {up_coming_events}.",
         'recipient': 'Owner, Organizer, Speaker',
     },
     SESSION_STATE_CHANGE: {
-        'title': u'Session {session_name} has been {acceptance}',
-        'message': u"The session <strong>{session_name}</strong> has been"
-        + u" <strong>{acceptance}</strong> by the Organizer.",
+        'title': 'Session {session_name} has been {acceptance}',
+        'message': "The session <strong>{session_name}</strong> has been"
+        + " <strong>{acceptance}</strong> by the Organizer.",
         'recipient': 'Speaker',
     },
     INVITE_PAPERS: {
-        'title': u'Invitation to Submit Papers for {event_name}',
-        'message': u"You have been invited to submit papers for <strong>{event_name}</strong>.",
+        'title': 'Invitation to Submit Papers for {event_name}',
+        'message': "You have been invited to submit papers for <strong>{event_name}</strong>.",
         'recipient': 'Speaker',
     },
 }

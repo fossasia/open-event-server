@@ -1,4 +1,4 @@
-from marshmallow import validate as validate
+from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 

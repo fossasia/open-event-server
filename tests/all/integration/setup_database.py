@@ -17,7 +17,7 @@ def create_app():
     return app
 
 
-class Setup(object):
+class Setup:
     @staticmethod
     def create_app():
         test_app = create_app()

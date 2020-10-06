@@ -119,9 +119,9 @@ def make_error(uploaded_file, er=None, id_=None):
         er = ServerError(source='{}', detail="Internal Server Error")
     istr = 'File %s' % uploaded_file
     if id_ is not None:
-        istr = '%s, ID %s' % (istr, id_)
+        istr = f'{istr}, ID {id_}'
     if hasattr(er, 'title'):
-        er.title = '%s, %s' % (istr, er.title)
+        er.title = f'{istr}, {er.title}'
     if not hasattr(er, 'status') or not er.status:
         er.status = 500
     return er
@@ -173,9 +173,9 @@ def _upload_media_queue(srv, obj):
         return
     for i in UPLOAD_PATHS[srv[0]]:
         if i in ['original', 'large', 'thumbnail', 'small', 'icon']:
-            upload_path = '{}_image_url'.format(i)
+            upload_path = f'{i}_image_url'
         else:
-            upload_path = '{}_url'.format(i)
+            upload_path = f'{i}_url'
         path = getattr(obj, upload_path)
         if not path:
             continue
@@ -351,7 +351,7 @@ def import_event_json(task_handle, zip_path, creator_id):
     # create event
     try:
         update_state(task_handle, 'Importing event core')
-        data = json.loads(open(path + '/event', 'r').read())
+        data = json.loads(open(path + '/event').read())
         _, data = _trim_id(data)
         srv = ('event', Event)
         data = _delete_fields(srv, data)
@@ -374,7 +374,7 @@ def import_event_json(task_handle, zip_path, creator_id):
         service_ids = {}
         for item in IMPORT_SERIES:
             item[1].is_importing = True
-            data = open(path + '/%s' % item[0], 'r').read()
+            data = open(path + '/%s' % item[0]).read()
             dic = json.loads(data)
             changed_ids = create_service_from_json(
                 task_handle, dic, item, new_event.id, service_ids
@@ -382,7 +382,7 @@ def import_event_json(task_handle, zip_path, creator_id):
             service_ids[item[0]] = changed_ids.copy()
             CUR_ID = None
             item[1].is_importing = False
-    except IOError:
+    except OSError:
         db.session.delete(new_event)
         db.session.commit()
         raise NotFoundError('file', 'File %s missing in event zip' % item[0])

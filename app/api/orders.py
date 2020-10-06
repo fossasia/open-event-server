@@ -63,8 +63,7 @@ def check_event_user_ticket_holders(order, data, element):
         getattr(order, element, None).id
     ):
         raise ForbiddenError(
-            {'pointer': 'data/{}'.format(element)},
-            "You cannot update {} of an order".format(element),
+            {'pointer': f'data/{element}'}, f"You cannot update {element} of an order",
         )
     elif element == 'ticket_holders':
         ticket_holders = []
@@ -72,8 +71,8 @@ def check_event_user_ticket_holders(order, data, element):
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
             raise ForbiddenError(
-                {'pointer': 'data/{}'.format(element)},
-                "You cannot update {} of an order".format(element),
+                {'pointer': f'data/{element}'},
+                f"You cannot update {element} of an order",
             )
 
 
@@ -147,9 +146,7 @@ def on_order_completed(order):
     if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
         order.completed_at = datetime.utcnow()
 
-    order_url = make_frontend_url(
-        path='/orders/{identifier}'.format(identifier=order.identifier)
-    )
+    order_url = make_frontend_url(path=f'/orders/{order.identifier}')
     for organizer in set(
         order.event.organizers + order.event.coorganizers + [order.event.owner]
     ):
@@ -409,8 +406,8 @@ class OrderDetail(ResourceDetail):
                             and element not in get_updatable_fields()
                         ):
                             raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
-                                "You cannot update {} of an order".format(element),
+                                {'pointer': f'data/{element}'},
+                                f"You cannot update {element} of an order",
                             )
                         else:
                             check_event_user_ticket_holders(order, data, element)
@@ -424,8 +421,8 @@ class OrderDetail(ResourceDetail):
                         ):
                             if element != 'status' and element != 'deleted_at':
                                 raise ForbiddenError(
-                                    {'pointer': 'data/{}'.format(element)},
-                                    "You cannot update {} of an order".format(element),
+                                    {'pointer': f'data/{element}'},
+                                    f"You cannot update {element} of an order",
                                 )
                             elif (
                                 element == 'status'
@@ -461,7 +458,7 @@ class OrderDetail(ResourceDetail):
                             and data[element] != getattr(order, element, None)
                         ):
                             raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
+                                {'pointer': f'data/{element}'},
                                 "You cannot update {} of a completed order".format(
                                     element
                                 ),
@@ -472,8 +469,8 @@ class OrderDetail(ResourceDetail):
                             and element not in get_updatable_fields()
                         ):
                             raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
-                                "You cannot update {} of an order".format(element),
+                                {'pointer': f'data/{element}'},
+                                f"You cannot update {element} of an order",
                             )
                         else:
                             check_event_user_ticket_holders(order, data, element)
@@ -559,9 +556,7 @@ class OrderDetail(ResourceDetail):
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
 
-            order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
-            )
+            order_url = make_frontend_url(path=f'/orders/{order.identifier}')
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(
                     organizer,
@@ -767,7 +762,7 @@ def alipay_return_uri(order_identifier):
             order = safe_query(Order, 'identifier', order_identifier, 'identifier')
             order.status = 'completed'
             save_to_db(order)
-            return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
+            return redirect(make_frontend_url(f'/orders/{order_identifier}/view'))
         else:
             return jsonify(status=False, error='Charge object failure')
     except TypeError:
@@ -812,7 +807,7 @@ def omise_checkout(order_identifier):
     else:
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
-        return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
+        return redirect(make_frontend_url(f'orders/{order_identifier}/view'))
 
 
 @order_misc_routes.route(

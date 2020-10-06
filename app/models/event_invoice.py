@@ -53,7 +53,7 @@ class EventInvoice(SoftDeletionModel):
     user = db.relationship('User', backref='event_invoices')
 
     def __init__(self, **kwargs):
-        super(EventInvoice, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         if not self.issued_at:
             self.issued_at = datetime.now()
@@ -62,10 +62,8 @@ class EventInvoice(SoftDeletionModel):
             self.identifier = self.get_new_id()
 
     def __repr__(self):
-        return '<EventInvoice %r %r %r>' % (
-            self.id,
-            self.identifier,
-            self.invoice_pdf_url,
+        return '<EventInvoice {!r} {!r} {!r}>'.format(
+            self.id, self.identifier, self.invoice_pdf_url,
         )
 
     def get_new_id(self) -> str:
@@ -169,7 +167,7 @@ class EventInvoice(SoftDeletionModel):
         prev_month = self.previous_month_date.strftime("%b %Y")  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
-        link = '{}/event-invoice/{}/review'.format(frontend_url, self.identifier)
+        link = f'{frontend_url}/event-invoice/{self.identifier}/review'
         currency = self.event.payment_currency
         amount = f"{currency} {self.amount}"
         send_email_for_monthly_fee_payment(

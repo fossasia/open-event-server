@@ -78,9 +78,7 @@ class SessionListPost(ResourceList):
             owner = session.event.get_owner()
             owner_email = owner.email
             event = session.event
-            link = make_frontend_url(
-                "/events/{}/sessions/{}".format(event.identifier, session.id)
-            )
+            link = make_frontend_url(f"/events/{event.identifier}/sessions/{session.id}")
             send_email_new_session(owner_email, event_name, link)
             send_notif_new_session_organizer(owner, event_name, link, session.id)
 
@@ -155,10 +153,7 @@ class SessionList(ResourceList):
                 query_.join(User)
                 .join(Speaker)
                 .filter(
-                    (
-                        User.id == user.id
-                        or Session.speakers.any(Speaker.user_id == user.id)
-                    )
+                    User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)
                 )
                 .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
                 .order_by(*get_distinct_sort_fields(SessionSchema, Session))
@@ -349,7 +344,7 @@ class SessionDetail(ResourceDetail):
 def notify_for_session(session, mail_override: Dict[str, str] = None):
     event = session.event
     frontend_url = get_settings()['frontend_url']
-    link = "{}/events/{}/sessions/{}".format(frontend_url, event.identifier, session.id)
+    link = f"{frontend_url}/events/{event.identifier}/sessions/{session.id}"
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:

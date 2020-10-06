@@ -85,13 +85,13 @@ def create_save_resized_image(
     """
     if not image_file:
         return None
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     data = requests.get(image_file).content
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':
@@ -102,7 +102,7 @@ def create_save_resized_image(
     if resize:
         if maintain_aspect:
             width_percent = basewidth / float(img.size[0])
-            height_size = int((float(img.size[1]) * float(width_percent)))
+            height_size = int(float(img.size[1]) * float(width_percent))
 
         img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
 
@@ -283,7 +283,7 @@ def create_system_image(
     :return:
     """
     # Get an unique identifier from uuid if not provided
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     if image_file:
         with urllib.request.urlopen(image_file) as img_data:
             image_file = io.BytesIO(img_data.read())
@@ -292,8 +292,8 @@ def create_system_image(
         image_file = current_app.config['BASE_DIR'] + '/' + file_relative_path
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':

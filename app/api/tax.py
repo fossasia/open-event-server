@@ -116,9 +116,7 @@ class TaxDetail(ResourceDetail):
             try:
                 tax = Tax.query.filter_by(id=kwargs['id']).one()
             except NoResultFound:
-                raise ObjectNotFound(
-                    {'parameter': 'id'}, "Tax: Not found for id {}".format(id)
-                )
+                raise ObjectNotFound({'parameter': 'id'}, f"Tax: Not found for id {id}")
             if 'Authorization' in request.headers and has_access(
                 'is_coorganizer', event_id=tax.event_id
             ):

@@ -39,4 +39,6 @@ class RoleInvite(db.Model):
         return datetime.now(pytz.utc) > self.created_at + timedelta(hours=24)
 
     def __repr__(self):
-        return '<RoleInvite %r:%r:%r>' % (self.email, self.event_id, self.role_id,)
+        return '<RoleInvite {!r}:{!r}:{!r}>'.format(
+            self.email, self.event_id, self.role_id
+        )

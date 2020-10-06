@@ -32,4 +32,6 @@ class PanelPermission(db.Model):
     can_access = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
-        return '<PanelPerm %r for %r>' % (self.custom_system_roles, self.panel_name)
+        return '<PanelPerm {!r} for {!r}>'.format(
+            self.custom_system_roles, self.panel_name
+        )

@@ -162,7 +162,7 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
 def resize_event_images_task(self, event_id, original_image_url):
     event = Event.query.get(event_id)
     try:
-        logging.info('Event image resizing tasks started {}'.format(original_image_url))
+        logging.info(f'Event image resizing tasks started {original_image_url}')
         uploaded_images = create_save_image_sizes(
             original_image_url, 'event-image', event.id
         )
@@ -170,9 +170,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
-        logging.info(
-            'Resized images saved successfully for event with id: {}'.format(event_id)
-        )
+        logging.info(f'Resized images saved successfully for event with id: {event_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for event with id: {}'.format(
@@ -185,7 +183,7 @@ def resize_event_images_task(self, event_id, original_image_url):
 def resize_user_images_task(self, user_id, original_image_url):
     user = safe_query(User, 'id', user_id, 'user_id')
     try:
-        logging.info('User image resizing tasks started {}'.format(original_image_url))
+        logging.info(f'User image resizing tasks started {original_image_url}')
         uploaded_images = create_save_image_sizes(
             original_image_url, 'speaker-image', user.id
         )
@@ -195,9 +193,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
-        logging.info(
-            'Resized images saved successfully for user with id: {}'.format(user_id)
-        )
+        logging.info(f'Resized images saved successfully for user with id: {user_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for user with id: {}'.format(
@@ -211,9 +207,7 @@ def sponsor_logos_url_task(self, event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id, deleted_at=None).all()
     for sponsor in sponsors:
         try:
-            logging.info(
-                'Sponsor logo url generation task started {}'.format(sponsor.logo_url)
-            )
+            logging.info(f'Sponsor logo url generation task started {sponsor.logo_url}')
             new_logo_url = create_save_resized_image(
                 image_file=sponsor.logo_url, resize=False
             )
@@ -239,7 +233,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
         speaker.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(speaker)
         logging.info(
-            'Resized images saved successfully for speaker with id: {}'.format(speaker_id)
+            f'Resized images saved successfully for speaker with id: {speaker_id}'
         )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
@@ -447,7 +441,7 @@ def export_order_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "order-{}.csv".format(uuid.uuid1().hex)
+        filename = f"order-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
@@ -501,7 +495,7 @@ def export_attendees_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "attendees-{}.csv".format(uuid.uuid1().hex)
+        filename = f"attendees-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
@@ -547,7 +541,7 @@ def export_sessions_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "sessions-{}.csv".format(uuid.uuid1().hex)
+        filename = f"sessions-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
@@ -577,7 +571,7 @@ def export_speakers_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "speakers-{}.csv".format(uuid.uuid1().hex)
+        filename = f"speakers-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:

@@ -21,7 +21,7 @@ class TicketFees(db.Model):
     maximum_fee = db.Column(db.Float)
 
     def __repr__(self):
-        return '<Ticket Fee {} {}>'.format(self.country, self.service_fee)
+        return f'<Ticket Fee {self.country} {self.service_fee}>'
 
 
 def get_fee(country, currency):

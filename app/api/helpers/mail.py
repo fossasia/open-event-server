@@ -75,7 +75,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
             'subject': subject,
             'html': html,
             'attachments': attachments,
-            'bcc': bcc
+            'bcc': bcc,
         }
 
         if not current_app.config['TESTING']:
@@ -280,7 +280,7 @@ def send_email_for_monthly_fee_payment(
             app_name=app_name,
             payment_url=link,
         ),
-        bcc=get_settings()['admin_billing_email']
+        bcc=get_settings()['admin_billing_email'],
     )
 
 
@@ -335,7 +335,7 @@ def send_email_change_user_email(user, email):
         base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')),
         'utf-8',
     )
-    link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash_})
+    link = make_frontend_url('/email/verify', {'token': hash_})
     send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
@@ -383,7 +383,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
 def send_order_cancel_email(order):
     cancel_msg = ''
     if order.cancel_note:
-        cancel_msg = u"<br/>Message from the organizer: {cancel_note}".format(
+        cancel_msg = "<br/>Message from the organizer: {cancel_note}".format(
             cancel_note=order.cancel_note
         )
 

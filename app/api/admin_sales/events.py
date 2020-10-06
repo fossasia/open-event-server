@@ -7,7 +7,6 @@ from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
-from app.models.order import Order, OrderTicket
 
 
 class AdminSalesByEventsSchema(Schema):

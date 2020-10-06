@@ -118,7 +118,7 @@ EXPORTS = [
 ]
 
 # strings to remove in a filename
-FILENAME_EXCLUDE = '<>:"/\|?*;'
+FILENAME_EXCLUDE = r'<>:"/\|?*;'
 
 
 # FUNCTIONS

@@ -22,7 +22,7 @@ def health_check_celery():
     except ConnectionError as e:
         capture_exception(e)
         return False, 'cannot connect to redis server'
-    except IOError as e:
+    except OSError as e:
         msg = "Error connecting to the backend: " + str(e)
         if len(e.args) > 0 and errorcode.get(e.args[0]) == 'ECONNREFUSED':
             msg += ' Check that the Redis server is running.'
@@ -73,7 +73,7 @@ def check_migrations():
             db.session.query(model).first()
         except:
             capture_exception()
-            return 'failure,{} model out of date with migrations'.format(model)
+            return f'failure,{model} model out of date with migrations'
     return 'success,database up to date with migrations'
 
 
