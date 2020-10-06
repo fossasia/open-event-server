@@ -28,7 +28,7 @@ def celery_task(task_id):
         info = result.info
     # check
     if state == 'SUCCESS':
-        if type(info) == dict:
+        if type(info) is dict:
             # check if is error
             if '__error' in info:
                 return info['result']
