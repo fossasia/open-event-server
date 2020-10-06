@@ -247,7 +247,7 @@ def login_user(provider):
             200,
         )
 
-    elif provider == 'google':
+    if provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),

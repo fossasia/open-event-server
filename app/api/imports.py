@@ -44,6 +44,4 @@ def import_event_task_base(task_handle, file_path, source_type='json', creator_i
     if new_event:
         url = make_frontend_url(path=f'/events/{new_event.identifier}')
         return {'url': url, 'id': new_event.id, 'event_name': new_event.name}
-
-    else:
-        return None
+    return None

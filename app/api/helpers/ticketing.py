@@ -313,16 +313,15 @@ class TicketingManager:
                 )
 
             return True, 'Charge successful'
-        else:
-            # payment failed hence expire the order
-            order.status = 'expired'
-            save_to_db(order)
+        # payment failed hence expire the order
+        order.status = 'expired'
+        save_to_db(order)
 
-            # delete related attendees to unlock the tickets
-            delete_related_attendees_for_order(order)
+        # delete related attendees to unlock the tickets
+        delete_related_attendees_for_order(order)
 
-            # return the failure message from stripe.
-            return False, charge.failure_message
+        # return the failure message from stripe.
+        return False, charge.failure_message
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
@@ -373,13 +372,12 @@ class TicketingManager:
                 )
 
             return True, 'Charge successful'
-        else:
-            # payment failed hence expire the order
-            order.status = 'expired'
-            save_to_db(order)
+        # payment failed hence expire the order
+        order.status = 'expired'
+        save_to_db(order)
 
-            # delete related attendees to unlock the tickets
-            delete_related_attendees_for_order(order)
+        # delete related attendees to unlock the tickets
+        delete_related_attendees_for_order(order)
 
-            # return the error message from Paypal
-            return False, error
+        # return the error message from Paypal
+        return False, error

@@ -23,7 +23,6 @@ def can_edit_after_cfs_ends(event_id):
                 or has_access('is_coorganizer', event_id=event_id)
             )
         )
-    else:
-        raise ForbiddenError(
-            {'source': '/data/event-id'}, f'Speaker Calls for event {event_id} not found',
-        )
+    raise ForbiddenError(
+        {'source': '/data/event-id'}, f'Speaker Calls for event {event_id} not found',
+    )

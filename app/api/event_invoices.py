@@ -166,8 +166,7 @@ def create_paypal_payment_invoice(invoice_identifier):
 
     if status:
         return jsonify(status=True, payment_id=response)
-    else:
-        return jsonify(status=False, error=response)
+    return jsonify(status=False, error=response)
 
 
 @order_misc_routes.route(
@@ -206,6 +205,5 @@ def charge_paypal_payment_invoice(invoice_identifier):
         save_to_db(event_invoice)
 
         return jsonify(status="Charge Successful", payment_id=paypal_payment_id)
-    else:
-        # return the error message from Paypal
-        return jsonify(status="Charge Unsuccessful", error=error)
+    # return the error message from Paypal
+    return jsonify(status="Charge Unsuccessful", error=error)

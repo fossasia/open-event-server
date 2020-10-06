@@ -159,12 +159,11 @@ def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
         return upload_to_aws(
             aws_bucket_name, aws_region, aws_key, aws_secret, uploaded_file, key, **kwargs
         )
-    elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
+    if gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
         return upload_to_gs(
             gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs
         )
-    else:
-        return upload_local(uploaded_file, key, upload_dir, **kwargs)
+    return upload_local(uploaded_file, key, upload_dir, **kwargs)
 
 
 def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):

@@ -32,9 +32,8 @@ def celery_task(task_id):
             # check if is error
             if '__error' in info:
                 return info['result']
-        # return normal
+            # return normal
         return jsonify(state='SUCCESS', result=info)
-    elif state == 'FAILURE':
+    if state == 'FAILURE':
         return jsonify(state=state)
-    else:
-        return jsonify(state=state)
+    return jsonify(state=state)

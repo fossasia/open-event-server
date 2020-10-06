@@ -105,11 +105,10 @@ def resend_emails():
                     order_identifier
                 ),
             )
-        else:
-            raise UnprocessableEntityError(
-                {'source': 'data/order'},
-                "Only placed and completed orders have confirmation",
-            )
+        raise UnprocessableEntityError(
+            {'source': 'data/order'},
+            "Only placed and completed orders have confirmation",
+        )
     else:
         raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
 
@@ -190,7 +189,7 @@ def complete_order(order_id):
                 jsonify(status='Access Forbidden', error='You can only cancel an order.'),
                 403,
             )
-        elif data['status'] == 'cancelled':
+        if data['status'] == 'cancelled':
             order.status = 'cancelled'
             db.session.add(order)
             attendees = (
@@ -221,12 +220,11 @@ def complete_order(order_id):
             ),
             422,
         )
-    else:
-        attendees = (
-            db.session.query(TicketHolder)
-            .filter_by(order_id=order_id, deleted_at=None)
-            .all()
-        )
+    attendees = (
+        db.session.query(TicketHolder)
+        .filter_by(order_id=order_id, deleted_at=None)
+        .all()
+    )
     form_fields = (
         db.session.query(CustomForms)
         .filter_by(event_id=order.event_id, form='attendee', is_included=True)

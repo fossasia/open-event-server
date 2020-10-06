@@ -270,8 +270,7 @@ def export_event_json(event_id, settings):
 def get_current_user():
     if current_user:
         return current_user
-    else:
-        return current_logged_user
+    return current_logged_user
 
 
 # HELPERS

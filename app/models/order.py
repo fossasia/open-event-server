@@ -119,8 +119,7 @@ class Order(SoftDeletionModel):
             return self.amount - min(
                 self.amount * (self.event.fee / 100.0), self.event.maximum_fee
             )
-        else:
-            return 0.0
+        return 0.0
 
     # Saves the order and generates and sends appropriate
     # documents and notifications

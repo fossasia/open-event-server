@@ -16,8 +16,7 @@ def get_new_social_link_identifier(length=8):
     count = get_count(SocialLink.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
-    else:
-        return get_new_social_link_identifier(length)
+    return get_new_social_link_identifier(length)
 
 
 class SocialLink(SoftDeletionModel):

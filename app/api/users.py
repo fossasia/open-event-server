@@ -399,8 +399,7 @@ def is_email_available():
     if email:
         if get_count(db.session.query(User).filter_by(email=email)):
             return jsonify(result="False")
-        else:
-            return jsonify(result="True")
+        return jsonify(result="True")
     else:
         abort(make_response(jsonify(error="Email field missing"), 422))
 
