@@ -400,8 +400,7 @@ def is_email_available():
         if get_count(db.session.query(User).filter_by(email=email)):
             return jsonify(result="False")
         return jsonify(result="True")
-    else:
-        abort(make_response(jsonify(error="Email field missing"), 422))
+    abort(make_response(jsonify(error="Email field missing"), 422))
 
 
 def start_image_resizing_tasks(user, original_image_url):
