@@ -1,5 +1,29 @@
 ## Changelog
 
+#### v1.18.0 (2020-10-07):
+
+##### Features
+- Add invoice generation, billing and payment logic
+- Add ability to create online events
+- Add more social media URLs in settings
+
+##### Bug Fixes
+
+- Fix Admin Sales API
+- Fix Admin's ability to view draft events
+- Fix long standing paypal charging issue
+- Fix proper float level amount usage in payments
+
+##### Maintenance
+
+- Make celery container depend on web, to avoid DB race issue
+- Remove soft deletion from some models
+- Upgrade python code syntax to latest versions and remove code smells
+- Add tests for disabled dredd sections
+- Dependency Updates
+
+*More details in Releases Section*
+
 #### v1.17.0 (2020-08-13):
 
 ##### Features
