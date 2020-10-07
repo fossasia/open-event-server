@@ -55,19 +55,18 @@ class StripePaymentsManager:
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"],
                 }
             return None
+        if represents_int(event):
+            authorization = StripeAuthorization.query.filter_by(
+                event_id=event
+            ).first()
         else:
-            if represents_int(event):
-                authorization = StripeAuthorization.query.filter_by(
-                    event_id=event
-                ).first()
-            else:
-                authorization = event.stripe_authorization
-            if authorization:
-                return {
-                    'SECRET_KEY': authorization.stripe_secret_key,
-                    'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
-                }
-            return None
+            authorization = event.stripe_authorization
+        if authorization:
+            return {
+                'SECRET_KEY': authorization.stripe_secret_key,
+                'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
+            }
+        return None
 
     @staticmethod
     def get_event_organizer_credentials_from_stripe(stripe_auth_code):

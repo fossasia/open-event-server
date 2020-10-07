@@ -88,5 +88,4 @@ def health_check_migrations():
             return True, result[1]
         # the exception will be caught in check_migrations function, so no need for sentry catching exception here
         return False, result[1]
-    else:
-        return False, 'The health_check_migration test is still running'
+    return False, 'The health_check_migration test is still running'
