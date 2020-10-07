@@ -353,13 +353,15 @@ def create_save_pdf(
     identifier=get_file_name(),
     upload_dir='static/media/',
     new_renderer=False,
-    extra_identifiers={},
+    extra_identifiers=None,
 ):
     """
     Create and Saves PDFs from html
     :param pdf_data:
     :return:
     """
+    if extra_identifiers is None:
+        extra_identifiers = {}
     filedir = current_app.config.get('BASE_DIR') + dir_path
 
     if not os.path.isdir(filedir):
