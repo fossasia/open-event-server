@@ -36,7 +36,7 @@ class OrderSchema(SoftDeletionSchema):
         if (
             'POST' in request.method
             or ('GET' in request.method and 'regenerate' in request.args)
-            and 'completed' != data["status"]
+            and data["status"] != 'completed'
         ):
             if data['payment_mode'] == 'stripe':
                 data['payment_url'] = 'stripe://payment'
