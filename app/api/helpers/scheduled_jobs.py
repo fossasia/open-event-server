@@ -77,18 +77,6 @@ def change_session_state_on_event_completion():
             save_to_db(session, f'Changed {session.title} session state to rejected')
 
 
-@celery.task(base=RequestContextTask, name='send.event.fee.notification.followup')
-def send_event_fee_notification_followup():
-    from app.instance import current_app as app
-
-    with app.app_context():
-        incomplete_invoices = EventInvoice.query.filter(
-            EventInvoice.amount > 0, EventInvoice.status != 'paid'
-        ).all()
-        for incomplete_invoice in incomplete_invoices:
-            incomplete_invoice.send_notification(follow_up=True)
-
-
 @celery.task(base=RequestContextTask, name='expire.pending.tickets')
 def expire_pending_tickets():
     Order.query.filter(
@@ -138,6 +126,34 @@ def this_month_date() -> datetime.datetime:
     return datetime.datetime.combine(
         datetime.date.today().replace(day=1), datetime.time()
     ).replace(tzinfo=pytz.UTC)
+
+
+@celery.task(base=RequestContextTask, name='send.event.fee.notification.followup')
+def send_event_fee_notification_followup(follow_up=True):
+    if not follow_up:
+        logger.warning('Not valid follow up request: %s', follow_up)
+        return
+    query = EventInvoice.query.filter(
+        EventInvoice.amount > 0, EventInvoice.status != 'paid'
+    )
+    this_month = this_month_date()
+    if follow_up != 'post_due':
+        query = query.filter(EventInvoice.issued_at >= this_month)
+    else:
+        # For post due invoices, we want invoices of previous month only
+        # Because it gets executed on 3rd day of the next month from issued date
+        last_month = monthdelta(this_month, -1)
+        query = query.filter(
+            EventInvoice.issued_at >= last_month, EventInvoice.issued_at < this_month
+        )
+    incomplete_invoices = query.all()
+    logger.info(
+        'Sending notification %s for %d event invoices',
+        follow_up,
+        len(incomplete_invoices),
+    )
+    for incomplete_invoice in incomplete_invoices:
+        send_invoice_notification.delay(incomplete_invoice.id, follow_up=follow_up)
 
 
 @celery.task(base=RequestContextTask, name='send.monthly.event.invoice')
@@ -212,12 +228,23 @@ def send_event_invoice(
             else:
                 logger.warning('Failed to generate event invoice PDF %s', event)
         if saved and send_notification:
-            logger.info('Sending Invoice Notification %s', event_invoice)
-            event_invoice.send_notification()
+            send_invoice_notification.delay(event_invoice.id)
         return pdf_url
     except LockError as e:
         logger.exception('Error while acquiring lock. Retrying')
         self.retry(exc=e)
+
+
+@celery.task(base=RequestContextTask)
+def send_invoice_notification(invoice_id: int, follow_up: bool = False):
+    event_invoice = EventInvoice.query.get(invoice_id)
+    logger.info(
+        'Sending notification %s for event invoice %s of event %s',
+        follow_up,
+        event_invoice,
+        event_invoice.event,
+    )
+    event_invoice.send_notification(follow_up=follow_up)
 
 
 @celery.on_after_configure.connect
@@ -227,13 +254,24 @@ def setup_scheduled_task(sender, **kwargs):
     # Every day at 5:30
     sender.add_periodic_task(crontab(hour=5, minute=30), send_after_event_mail)
     # Every 1st day of month at 0:00
-    # sender.add_periodic_task(
-    #     crontab(minute=0, hour=0, day_of_month=1), send_event_fee_notification_followup
-    # )
-    # Every 1st day of month at 0:00
-    # sender.add_periodic_task(
-    #     crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice
-    # )
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice
+    )
+    # Every 14th day of month at 0:00
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0, day_of_month=14),
+        send_event_fee_notification_followup.s(follow_up=True),
+    )
+    # Every 27th day of month at 0:00
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0, day_of_month=27),
+        send_event_fee_notification_followup.s(follow_up='pre_due'),
+    )
+    # Every 3rd day of next month at 0:00
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0, day_of_month=3),
+        send_event_fee_notification_followup.s(follow_up='post_due'),
+    )
     # Every day at 5:30
     sender.add_periodic_task(
         crontab(hour=5, minute=30), change_session_state_on_event_completion
