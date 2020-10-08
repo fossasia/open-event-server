@@ -59,6 +59,8 @@ class Config:
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SENTRY_DSN = env('SENTRY_DSN', default=None)
+    SENTRY_RELEASE_NAME = env('SENTRY_PROJECT_NAME', default='eventyay-server') + '@' + VERSION_NAME
+    SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.1)
     ENABLE_ELASTICSEARCH = env.bool('ENABLE_ELASTICSEARCH', default=False)
     ELASTICSEARCH_HOST = env('ELASTICSEARCH_HOST', default='localhost:9200')
     REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
@@ -72,7 +74,6 @@ class Config:
         'API_PROPOGATE_UNCAUGHT_EXCEPTIONS', default=True
     )
     ETAG = True
-    SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.01)
     ATTACH_ORDER_PDF = env.bool('ATTACH_ORDER_PDF', default=True)
 
     if not SQLALCHEMY_DATABASE_URI:
