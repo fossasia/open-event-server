@@ -21,7 +21,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
-from app.api import routes # noqa: Used for registering routes
+from app.api import routes  # noqa: Used for registering routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
