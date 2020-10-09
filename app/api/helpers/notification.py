@@ -159,7 +159,10 @@ def send_notif_monthly_fee_payment(
         notification = NOTIFS[key]
         title = notification['subject'].format(date=previous_month, event_name=event_name)
         message = notification['message'].format(
-            event_name=event_name, date=previous_month, amount=amount, app_name=app_name,
+            event_name=event_name,
+            date=previous_month,
+            amount=amount,
+            app_name=app_name,
         )
 
         send_notification(user, title, message, actions)

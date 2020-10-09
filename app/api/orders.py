@@ -63,7 +63,8 @@ def check_event_user_ticket_holders(order, data, element):
         getattr(order, element, None).id
     ):
         raise ForbiddenError(
-            {'pointer': f'data/{element}'}, f"You cannot update {element} of an order",
+            {'pointer': f'data/{element}'},
+            f"You cannot update {element} of an order",
         )
     if element == 'ticket_holders':
         ticket_holders = []
@@ -450,27 +451,25 @@ class OrderDetail(ResourceDetail):
                 )
             for element in data:
                 if data[element]:
-                        if (
-                            element == 'is_billing_enabled'
-                            and order.status == 'completed'
-                            and data[element] != getattr(order, element, None)
-                        ):
-                            raise ForbiddenError(
-                                {'pointer': f'data/{element}'},
-                                "You cannot update {} of a completed order".format(
-                                    element
-                                ),
-                            )
-                        if (
-                            element not in relationships
-                            and data[element] != getattr(order, element, None)
-                            and element not in get_updatable_fields()
-                        ):
-                            raise ForbiddenError(
-                                {'pointer': f'data/{element}'},
-                                f"You cannot update {element} of an order",
-                            )
-                        check_event_user_ticket_holders(order, data, element)
+                    if (
+                        element == 'is_billing_enabled'
+                        and order.status == 'completed'
+                        and data[element] != getattr(order, element, None)
+                    ):
+                        raise ForbiddenError(
+                            {'pointer': f'data/{element}'},
+                            "You cannot update {} of a completed order".format(element),
+                        )
+                    if (
+                        element not in relationships
+                        and data[element] != getattr(order, element, None)
+                        and element not in get_updatable_fields()
+                    ):
+                        raise ForbiddenError(
+                            {'pointer': f'data/{element}'},
+                            f"You cannot update {element} of an order",
+                        )
+                    check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(
@@ -829,8 +828,13 @@ def initiate_transaction(order_identifier):
         "websiteName": "eventyay",
         "orderId": order_identifier,
         "callbackUrl": "",
-        "txnAmount": {"value": order.amount, "currency": "INR",},
-        "userInfo": {"custId": order.user.id,},
+        "txnAmount": {
+            "value": order.amount,
+            "currency": "INR",
+        },
+        "userInfo": {
+            "custId": order.user.id,
+        },
     }
     checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
     # head parameters

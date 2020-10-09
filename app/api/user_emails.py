@@ -91,7 +91,7 @@ class UserEmailListPost(ResourceList):
 
 class UserEmailDetail(ResourceDetail):
     """
-   User Email detail by id
+    User Email detail by id
     """
 
     schema = UserEmailSchema

@@ -68,7 +68,9 @@ class NotificationDetail(ResourceDetail):
     def before_get(self, args, kwargs):
         if kwargs.get('notification_action_id'):
             notification_action = safe_query_kwargs(
-                NotificationAction, kwargs, 'notification_action_id',
+                NotificationAction,
+                kwargs,
+                'notification_action_id',
             )
             kwargs['id'] = notification_action.notification_id
 
@@ -80,7 +82,9 @@ class NotificationDetail(ResourceDetail):
         """
         if view_kwargs.get('notification_action_id'):
             notification_action = safe_query_kwargs(
-                NotificationAction, view_kwargs, 'notification_action_id',
+                NotificationAction,
+                view_kwargs,
+                'notification_action_id',
             )
             view_kwargs['id'] = notification_action.notification_id
 

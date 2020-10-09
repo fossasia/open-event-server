@@ -87,7 +87,8 @@ class SpeakerListPost(ResourceList):
             for session_id in session_ids:
                 if not has_access('is_session_self_submitted', session_id=session_id):
                     raise ObjectNotFound(
-                        {'parameter': 'session_id'}, f"Session: {session_id} not found",
+                        {'parameter': 'session_id'},
+                        f"Session: {session_id} not found",
                     )
 
         data['complex_field_values'] = validate_custom_form_constraints_request(
@@ -155,7 +156,13 @@ class SpeakerList(ResourceList):
     methods = [
         'GET',
     ]
-    data_layer = {'session': db.session, 'model': Speaker, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': Speaker,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class SpeakerDetail(ResourceDetail):

@@ -59,8 +59,10 @@ class StripeAuthorizationListPost(ResourceList):
                 event_id=data['event'], deleted_at=None
             ).one()
         except NoResultFound:
-            credentials = StripePaymentsManager.get_event_organizer_credentials_from_stripe(
-                data['stripe_auth_code']
+            credentials = (
+                StripePaymentsManager.get_event_organizer_credentials_from_stripe(
+                    data['stripe_auth_code']
+                )
             )
             if 'error' in credentials:
                 raise UnprocessableEntityError(

@@ -54,7 +54,7 @@ def get_sold_and_reserved_tickets_count(ticket_id):
 
 class AttendeeListPost(ResourceList):
     """
-       List and create Attendees through direct URL
+    List and create Attendees through direct URL
     """
 
     def before_post(self, args, kwargs, data):
@@ -128,7 +128,10 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query_kwargs(
-                Order, view_kwargs, 'order_identifier', 'identifier',
+                Order,
+                view_kwargs,
+                'order_identifier',
+                'identifier',
             )
             if not has_access('is_registrar', event_id=order.event_id) and not has_access(
                 'is_user_itself', user_id=order.user_id
@@ -232,24 +235,21 @@ class AttendeeDetail(ResourceDetail):
                     {'pointer': '/data/attributes/checkin_times'},
                     "Check in time missing while trying to check in attendee",
                 )
-            if obj.checkin_times and data[
-                'checkin_times'
-            ] not in obj.checkin_times.split(","):
+            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(
+                ","
+            ):
                 data['checkin_times'] = '{},{}'.format(
                     obj.checkin_times, data['checkin_times']
                 )
-            elif obj.checkin_times and data[
-                'checkin_times'
-            ] in obj.checkin_times.split(","):
+            elif obj.checkin_times and data['checkin_times'] in obj.checkin_times.split(
+                ","
+            ):
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/checkin_times'},
                     "Check in time already present",
                 )
 
-            if (
-                'device_name_checkin' in data
-                and data['device_name_checkin'] is not None
-            ):
+            if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
                 if obj.device_name_checkin is not None:
                     data['device_name_checkin'] = '{},{}'.format(
                         obj.device_name_checkin, data['device_name_checkin']

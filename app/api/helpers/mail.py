@@ -391,7 +391,8 @@ def send_order_cancel_email(order):
         to=order.user.email,
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(
-            event_name=order.event.name, invoice_id=order.invoice_number,
+            event_name=order.event.name,
+            invoice_id=order.invoice_number,
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,

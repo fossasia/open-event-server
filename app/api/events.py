@@ -209,7 +209,10 @@ class EventList(ResourceList):
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query(
-                User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id',
+                User,
+                'id',
+                view_kwargs['user_track_organizer_id'],
+                'user_organizer_id',
             )
             query_ = (
                 query_.join(Event.roles)
@@ -341,7 +344,11 @@ class EventList(ResourceList):
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
-    decorators = (api.has_permission('create_event',),)
+    decorators = (
+        api.has_permission(
+            'create_event',
+        ),
+    )
     schema = EventSchema
     data_layer = {
         'session': db.session,
@@ -369,7 +376,9 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('user_favourite_event_id') is not None:
         user_favourite_event = safe_query_kwargs(
-            UserFavouriteEvent, view_kwargs, 'user_favourite_event_id',
+            UserFavouriteEvent,
+            view_kwargs,
+            'user_favourite_event_id',
         )
         if user_favourite_event.event_id is not None:
             view_kwargs['id'] = user_favourite_event.event_id
@@ -450,7 +459,9 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('stripe_authorization_id') is not None:
         stripe_authorization = safe_query_kwargs(
-            StripeAuthorization, view_kwargs, 'stripe_authorization_id',
+            StripeAuthorization,
+            view_kwargs,
+            'stripe_authorization_id',
         )
         if stripe_authorization.event_id is not None:
             view_kwargs['id'] = stripe_authorization.event_id
@@ -505,7 +516,9 @@ def get_id(view_kwargs):
 
     if view_kwargs.get('users_events_role_id') is not None:
         users_events_role = safe_query_kwargs(
-            UsersEventsRoles, view_kwargs, 'users_events_role_id',
+            UsersEventsRoles,
+            view_kwargs,
+            'users_events_role_id',
         )
         if users_events_role.event_id is not None:
             view_kwargs['id'] = users_events_role.event_id

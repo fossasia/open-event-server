@@ -56,9 +56,7 @@ class StripePaymentsManager:
                 }
             return None
         if represents_int(event):
-            authorization = StripeAuthorization.query.filter_by(
-                event_id=event
-            ).first()
+            authorization = StripeAuthorization.query.filter_by(event_id=event).first()
         else:
             authorization = event.stripe_authorization
         if authorization:

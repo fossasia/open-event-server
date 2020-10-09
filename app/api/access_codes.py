@@ -108,7 +108,9 @@ class AccessCodeList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': AccessCode,
-        'methods': {'query': query,},
+        'methods': {
+            'query': query,
+        },
     }
 
 

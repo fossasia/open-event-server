@@ -89,7 +89,10 @@ class CustomFormDetail(ResourceDetail):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
-                Event, view_kwargs, 'event_identifier', 'identifier',
+                Event,
+                view_kwargs,
+                'event_identifier',
+                'identifier',
             )
 
         if event:

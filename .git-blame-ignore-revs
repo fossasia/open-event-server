@@ -1,0 +1,5 @@
+# This file can be used for git blame using --ignore-revs-file
+# or by setting blame.ignoreRevsFile in the git config.
+
+ref: Format files using black
+830d81a61c5a1c0a098091ef24fef968e5bff367

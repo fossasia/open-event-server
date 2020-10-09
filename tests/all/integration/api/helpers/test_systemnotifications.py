@@ -103,7 +103,7 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
 
     def test_ticket_purchased_attendee(self):
         """Method to test the actions associated with a notification of tickets purchased for an attendee that is
-           not the buyer."""
+        not the buyer."""
 
         with self.app.test_request_context():
             request_pdfurl = 'https://localhost/pdf/e/24324/'

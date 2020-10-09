@@ -16,7 +16,9 @@ def test_invoice_list_user_error(db, client, jwt, user):
     get_invoice(db, user)
 
     response = client.get(
-        '/v1/event-invoices', content_type='application/vnd.api+json', headers=jwt,
+        '/v1/event-invoices',
+        content_type='application/vnd.api+json',
+        headers=jwt,
     )
 
     assert response.status_code == 403
@@ -27,7 +29,9 @@ def test_invoice_list_admin(db, client, admin_jwt, user):
     get_invoice(db, UserFactory())
 
     response = client.get(
-        '/v1/event-invoices', content_type='application/vnd.api+json', headers=admin_jwt,
+        '/v1/event-invoices',
+        content_type='application/vnd.api+json',
+        headers=admin_jwt,
     )
 
     assert response.status_code == 200
@@ -206,7 +210,14 @@ def test_invoice_delete_user_error(db, client, jwt, user):
 
 
 def test_invoice_post_admin_error(client, admin_jwt):
-    data = json.dumps({'data': {'type': 'event-invoice', 'attributes': {'amount': 100},}})
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'event-invoice',
+                'attributes': {'amount': 100},
+            }
+        }
+    )
 
     response = client.post(
         '/v1/event-invoices',
@@ -220,7 +231,14 @@ def test_invoice_post_admin_error(client, admin_jwt):
 
 
 def test_invoice_post_user_error(client, jwt):
-    data = json.dumps({'data': {'type': 'event-invoice', 'attributes': {'amount': 100},}})
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'event-invoice',
+                'attributes': {'amount': 100},
+            }
+        }
+    )
 
     response = client.post(
         '/v1/event-invoices',

@@ -22,7 +22,8 @@ from tests.factories.user import UserFactory
 def test_delete_ticket_holder_created_currently(db):
     """Method to test not deleting ticket holders with no order id but created within expiry time"""
     attendee = AttendeeSubFactory(
-        created_at=datetime.datetime.utcnow(), modified_at=datetime.datetime.utcnow(),
+        created_at=datetime.datetime.utcnow(),
+        modified_at=datetime.datetime.utcnow(),
     )
     db.session.commit()
 

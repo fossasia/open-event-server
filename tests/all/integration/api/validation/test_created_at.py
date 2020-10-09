@@ -17,8 +17,7 @@ from tests.factories.user_token_blacklist import UserTokenBlacklistFactory
 
 class TestCreatedAtValidation(OpenEventLegacyTestCase):
     def test_created_at(self):
-        """ Validate time : Tests if created_at is set to current time in all models
-        """
+        """Validate time : Tests if created_at is set to current time in all models"""
         with self.app.test_request_context():
             model_factories = [
                 UserFactory,

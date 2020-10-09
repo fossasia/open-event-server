@@ -104,8 +104,7 @@ class Ticket(SoftDeletionModel):
         return bool(count > 0)
 
     def tags_csv(self):
-        """Return list of Tags in CSV.
-        """
+        """Return list of Tags in CSV."""
         tag_names = [tag.name for tag in self.tags]
         return ','.join(tag_names)
 

@@ -31,7 +31,9 @@ def get_schema(form_fields):
 
 def validate_custom_form_constraints(form, obj, relationship_fields):
     form_fields = CustomForms.query.filter_by(
-        form=form, event_id=obj.event_id, is_included=True,
+        form=form,
+        event_id=obj.event_id,
+        is_included=True,
     ).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []

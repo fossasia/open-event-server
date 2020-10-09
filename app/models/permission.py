@@ -2,8 +2,7 @@ from app.models import db
 
 
 class Permission(db.Model):
-    """Role-Service Permissions
-    """
+    """Role-Service Permissions"""
 
     __tablename__ = 'permissions'
     __table_args__ = (

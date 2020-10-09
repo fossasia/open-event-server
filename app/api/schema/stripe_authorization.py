@@ -7,7 +7,7 @@ from app.api.schema.base import SoftDeletionSchema
 
 class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
     """
-        Stripe Authorization Schema
+    Stripe Authorization Schema
     """
 
     class Meta:
@@ -36,7 +36,7 @@ class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
 
 class StripeAuthorizationSchema(StripeAuthorizationSchemaPublic):
     """
-        Stripe Authorization Schema
+    Stripe Authorization Schema
     """
 
     class Meta:

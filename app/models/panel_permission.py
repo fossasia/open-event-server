@@ -14,8 +14,7 @@ roles_panels = db.Table(
 
 
 class PanelPermission(db.Model):
-    """Super-Admin Panel Permissions
-    """
+    """Super-Admin Panel Permissions"""
 
     __tablename__ = 'panel_permissions'
 

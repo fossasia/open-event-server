@@ -136,7 +136,8 @@ def redirect_uri(provider):
     client_id = provider_class.get_client_id()
     if not client_id:
         return make_response(
-            jsonify(message=f"{provider} client id is not configured on the server"), 404,
+            jsonify(message=f"{provider} client id is not configured on the server"),
+            404,
         )
 
     url = (
@@ -436,7 +437,8 @@ def change_password():
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
     response.headers['Content-Disposition'] = 'attachment; filename={}-{}.pdf'.format(
-        file_name_prefix, identifier,
+        file_name_prefix,
+        identifier,
     )
     return response
 
