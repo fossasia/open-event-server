@@ -1,12 +1,11 @@
 from argparse import Namespace
-from datetime import datetime
 
 import flask_login as login
 from flask import current_app
-from sqlalchemy import event
+from sqlalchemy import event, or_
 from sqlalchemy.sql import func
 
-from app.api.helpers.db import get_new_identifier
+from app.api.helpers.db import get_count, get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
@@ -19,7 +18,6 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee, get_maximum_fee
-from app.models.ticket_holder import TicketHolder
 from app.models.user import ATTENDEE, ORGANIZER, OWNER
 
 
@@ -247,28 +245,6 @@ class Event(SoftDeletionModel):
         """
         return get_maximum_fee(self.payment_country, self.payment_currency)
 
-    def notification_settings(self, user_id):
-        try:
-            return (
-                EmailNotification.query.filter_by(
-                    user_id=(login.current_user.id if not user_id else int(user_id))
-                )
-                .filter_by(event_id=self.id)
-                .first()
-            )
-        except:
-            return None
-
-    def get_average_rating(self):
-        avg = (
-            db.session.query(func.avg(Feedback.rating))
-            .filter_by(event_id=self.id)
-            .scalar()
-        )
-        if avg is not None:
-            avg = round(avg, 2)
-        return avg
-
     def is_payment_enabled(self):
         return (
             self.can_pay_by_paypal
@@ -281,68 +257,6 @@ class Event(SoftDeletionModel):
             or self.can_pay_by_paytm
         )
 
-    @property
-    def average_rating(self):
-        return self.get_average_rating()
-
-    def get_organizer(self):
-        """returns organizer of an event"""
-        for role in self.roles:
-            if role.role.name == ORGANIZER:
-                return role.user
-        return None
-
-    def get_owner(self):
-        """returns owner of an event"""
-        for role in self.roles:
-            if role.role.name == OWNER:
-                return role.user
-        return None
-
-    def has_staff_access(self, user_id):
-        """does user have role other than attendee"""
-        for _ in self.roles:
-            if _.user_id == (login.current_user.id if not user_id else int(user_id)):
-                if _.role.name != ATTENDEE:
-                    return True
-        return False
-
-    def get_staff_roles(self):
-        """returns only roles which are staff i.e. not attendee"""
-        return [role for role in self.roles if role.role.name != ATTENDEE]
-
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-    @property
-    def tickets_sold_object(self):
-        obj = (
-            db.session.query(Order.event_id)
-            .filter_by(event_id=self.id, status='completed')
-            .join(TicketHolder)
-        )
-        return obj
-
-    def calc_tickets_sold_count(self):
-        """Calculate total number of tickets sold for the event"""
-        return self.tickets_sold_object.count()
-
-    def calc_tickets_sold_prev_month(self):
-        """Calculate tickets sold in the previous month"""
-        previous_month = datetime.now().month - 1
-        return self.tickets_sold_object.filter_by(completed_at=previous_month).count()
-
-    def calc_total_tickets_count(self):
-        """Calculate total available tickets for all types of tickets"""
-        total_available = (
-            db.session.query(func.sum(Ticket.quantity))
-            .filter_by(event_id=self.id)
-            .scalar()
-        )
-        if total_available is None:
-            total_available = 0
-        return total_available
-
     def get_orders_query(self, start=None, end=None):
         query = Order.query.filter_by(event_id=self.id, status='completed')
         if start:
@@ -350,6 +264,8 @@ class Event(SoftDeletionModel):
         if end:
             query = query.filter(Order.completed_at < end)
         return query
+
+    orders_query = property(get_orders_query)
 
     def calc_revenue(self, start=None, end=None):
         """Returns total revenues of all completed orders for the given event"""
@@ -360,25 +276,17 @@ class Event(SoftDeletionModel):
             or 0
         )
 
-    @property
-    def tickets_available(self):
-        return self.calc_total_tickets_count()
+    revenue = property(calc_revenue)
 
     @property
-    def tickets_sold(self):
-        return self.calc_tickets_sold_count()
+    def speakers_query(self):
+        return Speaker.query.filter_by(event_id=self.id, deleted_at=None)
 
     @property
-    def revenue(self):
-        return self.calc_revenue()
-
-    @property
-    def has_sessions(self):
-        return Session.query.filter_by(event_id=self.id).count() > 0
-
-    @property
-    def has_speakers(self):
-        return Speaker.query.filter_by(event_id=self.id).count() > 0
+    def sessions_query(self):
+        return Session.query.filter_by(event_id=self.id, deleted_at=None).filter(
+            or_(Session.state == 'confirmed', Session.state == 'accepted')
+        )
 
     @property
     def order_statistics(self):

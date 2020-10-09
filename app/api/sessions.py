@@ -73,9 +73,9 @@ class SessionListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if session.event.get_owner():
+        if session.event.owner:
             event_name = session.event.name
-            owner = session.event.get_owner()
+            owner = session.event.owner
             owner_email = owner.email
             event = session.event
             link = make_frontend_url(f"/events/{event.identifier}/sessions/{session.id}")
@@ -355,8 +355,8 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
             )
 
     # Email for owner
-    if session.event.get_owner():
-        owner = session.event.get_owner()
+    if session.event.owner:
+        owner = session.event.owner
         send_email_session_state_change(owner.email, session, mail_override)
         send_notif_session_state_change(
             owner, session.title, session.state, link, session.id
