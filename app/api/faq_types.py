@@ -50,7 +50,13 @@ class FaqTypeList(ResourceList):
         'GET',
     ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': FaqType,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class FaqTypeDetail(ResourceDetail):

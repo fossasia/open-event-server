@@ -40,7 +40,9 @@ class RoleDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query_kwargs(
-                UsersEventsRoles, view_kwargs, 'users_events_role_id',
+                UsersEventsRoles,
+                view_kwargs,
+                'users_events_role_id',
             )
             if users_events_role.role_id is not None:
                 view_kwargs['id'] = users_events_role.role_id

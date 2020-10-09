@@ -27,7 +27,7 @@ MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
 class NotificationAction(db.Model):
     """
-        Model for storing user notification actions.
+    Model for storing user notification actions.
     """
 
     __tablename__ = 'notification_actions'
@@ -53,7 +53,7 @@ class NotificationAction(db.Model):
 
 class Notification(SoftDeletionModel):
     """
-        Model for storing user notifications.
+    Model for storing user notifications.
     """
 
     __tablename__ = 'notifications'

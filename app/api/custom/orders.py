@@ -137,7 +137,8 @@ def create_order():
 
     if not tickets:
         raise UnprocessableEntityError(
-            {'source': 'tickets'}, "Tickets missing in Order request",
+            {'source': 'tickets'},
+            "Tickets missing in Order request",
         )
 
     event = tickets[0].event
@@ -220,9 +221,7 @@ def complete_order(order_id):
             422,
         )
     attendees = (
-        db.session.query(TicketHolder)
-        .filter_by(order_id=order_id, deleted_at=None)
-        .all()
+        db.session.query(TicketHolder).filter_by(order_id=order_id, deleted_at=None).all()
     )
     form_fields = (
         db.session.query(CustomForms)

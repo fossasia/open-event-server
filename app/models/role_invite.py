@@ -16,7 +16,12 @@ def generate_hash():
 class RoleInvite(db.Model):
     __tablename__ = 'role_invites'
     __table_args__ = (
-        UniqueConstraint('email', 'role_id', 'event_id', name='email_role_event_uc',),
+        UniqueConstraint(
+            'email',
+            'role_id',
+            'event_id',
+            name='email_role_event_uc',
+        ),
     )
 
     id = db.Column(db.Integer, primary_key=True)

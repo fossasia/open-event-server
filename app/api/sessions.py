@@ -102,9 +102,9 @@ class SessionListPost(ResourceList):
 
 def get_distinct_sort_fields(schema, model, sort=True):
     """Due to the poor code of flask-rest-jsonapi, distinct query needed
-       in sessions API to remove duplicate sessions can't be sorted on
-       returning subquery, thus we need to add all sort fields in distinct
-       group and repeat it in sort group as well"""
+    in sessions API to remove duplicate sessions can't be sorted on
+    returning subquery, thus we need to add all sort fields in distinct
+    group and repeat it in sort group as well"""
     fields = []
     qs = QSManager(request.args, schema)
     for sort_opt in qs.sorting:
@@ -142,7 +142,9 @@ class SessionList(ResourceList):
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
             microlocation = safe_query_kwargs(
-                Microlocation, view_kwargs, 'microlocation_id',
+                Microlocation,
+                view_kwargs,
+                'microlocation_id',
             )
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == microlocation.id

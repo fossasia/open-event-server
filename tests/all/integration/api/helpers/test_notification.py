@@ -41,7 +41,11 @@ def test_send_notif_new_session_organizer(user):
 def test_send_notif_session_state_change(user):
     """Method to test session accept reject notification"""
     send_notif_session_state_change(
-        user, 'Homeless Therapy', 'accepted', link, 1,
+        user,
+        'Homeless Therapy',
+        'accepted',
+        link,
+        1,
     )
     notification = Notification.query.first()
     assert notification.title == 'Session Homeless Therapy has been accepted'
@@ -55,7 +59,9 @@ def test_send_notif_session_state_change(user):
 def test_send_notif_after_import(user):
     """Method to test notification after import"""
     send_notif_after_import(
-        user, event_name='Tooth Fairy Convention', error_text='TOOTH_NOT_FOUND',
+        user,
+        event_name='Tooth Fairy Convention',
+        error_text='TOOTH_NOT_FOUND',
     )
     notification = Notification.query.first()
     assert notification.title == 'Import of event Tooth Fairy Convention failed'

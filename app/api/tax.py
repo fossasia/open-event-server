@@ -84,7 +84,7 @@ class TaxList(ResourceList):
 
 class TaxDetail(ResourceDetail):
     """
-     Tax details class
+    Tax details class
     """
 
     def before_get_object(self, view_kwargs):
@@ -150,7 +150,7 @@ class TaxDetail(ResourceDetail):
 
 class TaxRelationship(ResourceRelationship):
     """
-        Tax Relationship Resource
+    Tax Relationship Resource
     """
 
     decorators = (

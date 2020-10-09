@@ -2,8 +2,7 @@ from app.models import db
 
 
 class Role(db.Model):
-    """Event Role
-    """
+    """Event Role"""
 
     __tablename__ = 'roles'
 

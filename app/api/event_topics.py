@@ -86,7 +86,9 @@ class EventTopicDetail(ResourceDetail):
 
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query_kwargs(
-                EventSubTopic, view_kwargs, 'event_sub_topic_id',
+                EventSubTopic,
+                view_kwargs,
+                'event_sub_topic_id',
             )
             if event_sub_topic.event_topic_id:
                 view_kwargs['id'] = event_sub_topic.event_topic_id

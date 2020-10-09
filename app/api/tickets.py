@@ -147,7 +147,9 @@ class TicketList(ResourceList):
 
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query_kwargs(
-                DiscountCode, view_kwargs, 'discount_code_id',
+                DiscountCode,
+                view_kwargs,
+                'discount_code_id',
             )
             # discount_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
@@ -178,7 +180,13 @@ class TicketList(ResourceList):
         ),
     )
     schema = TicketSchema
-    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': Ticket,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class TicketDetail(ResourceDetail):

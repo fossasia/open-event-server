@@ -3,8 +3,7 @@ from app.models.panel_permission import PanelPermission
 
 
 class CustomSysRole(db.Model):
-    """Custom System Role
-    """
+    """Custom System Role"""
 
     __tablename__ = 'custom_sys_roles'
 
@@ -23,8 +22,7 @@ class CustomSysRole(db.Model):
 
 
 class UserSystemRole(db.Model):
-    """User Custom System Role
-    """
+    """User Custom System Role"""
 
     __tablename__ = 'user_system_role'
 

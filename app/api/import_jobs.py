@@ -19,7 +19,13 @@ class ImportJobList(ResourceList):
 
     decorators = (jwt_required,)
     schema = ImportJobSchema
-    data_layer = {'session': db.session, 'model': ImportJob, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': ImportJob,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class ImportJobDetail(ResourceDetail):

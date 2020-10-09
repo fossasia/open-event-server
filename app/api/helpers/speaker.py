@@ -24,5 +24,6 @@ def can_edit_after_cfs_ends(event_id):
             )
         )
     raise ForbiddenError(
-        {'source': '/data/event-id'}, f'Speaker Calls for event {event_id} not found',
+        {'source': '/data/event-id'},
+        f'Speaker Calls for event {event_id} not found',
     )

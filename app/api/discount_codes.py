@@ -140,7 +140,10 @@ class DiscountCodeList(ResourceList):
 
         if view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
-                Event, view_kwargs, 'event_identifier', 'identifier',
+                Event,
+                view_kwargs,
+                'event_identifier',
+                'identifier',
             )
             view_kwargs['event_id'] = event.id
 
@@ -316,7 +319,10 @@ class DiscountCodeDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
-                Event, view_kwargs, 'event_identifier', 'identifier',
+                Event,
+                view_kwargs,
+                'event_identifier',
+                'identifier',
             )
             view_kwargs['event_id'] = event.id
 
@@ -329,7 +335,9 @@ class DiscountCodeDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') and has_access('is_admin'):
             event_invoice = safe_query_kwargs(
-                EventInvoice, view_kwargs, 'event_invoice_id',
+                EventInvoice,
+                view_kwargs,
+                'event_invoice_id',
             )
             if event_invoice.discount_code_id:
                 view_kwargs['id'] = event_invoice.discount_code_id

@@ -72,7 +72,7 @@ class SpeakersCallList(ResourceList):
 
 class SpeakersCallDetail(ResourceDetail):
     """
-     speakers call detail by id
+    speakers call detail by id
     """
 
     def before_patch(self, args, kwargs, data):

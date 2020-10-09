@@ -14,5 +14,7 @@ class SessionsSpeakersLink(SoftDeletionModel):
 
     def __repr__(self):
         return '<SSLink {!r}:{!r}:{!r}>'.format(
-            self.session_id, self.speaker_id, self.session_state,
+            self.session_id,
+            self.speaker_id,
+            self.session_state,
         )

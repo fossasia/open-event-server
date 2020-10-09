@@ -1,12 +1,16 @@
+exclude: '.venv|migrations'
 repos:
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v0.0.1-alpha.3
+    hooks:
+      - id: pycln
+        args: [--config=pyproject.toml]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.5.4
+    hooks:
+      - id: isort
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 20.8b1
     hooks:
     - id: black
-      exclude:
-      - .venv/
-      - migrations/
-      - manage.py
-      - instance.py
-      - hook_main.py
       language_version: python3.7

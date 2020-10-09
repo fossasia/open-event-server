@@ -154,7 +154,9 @@ class UserDetail(ResourceDetail):
         """
         if view_kwargs.get('notification_id') is not None:
             notification = safe_query_kwargs(
-                Notification, view_kwargs, 'notification_id',
+                Notification,
+                view_kwargs,
+                'notification_id',
             )
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
@@ -181,7 +183,9 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') is not None:
             event_invoice = safe_query_kwargs(
-                EventInvoice, view_kwargs, 'event_invoice_id',
+                EventInvoice,
+                view_kwargs,
+                'event_invoice_id',
             )
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
@@ -199,7 +203,9 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query_kwargs(
-                UsersEventsRoles, view_kwargs, 'users_events_role_id',
+                UsersEventsRoles,
+                view_kwargs,
+                'users_events_role_id',
             )
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
@@ -236,7 +242,9 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('discount_code_id') is not None:
             discount_code = safe_query_kwargs(
-                DiscountCode, view_kwargs, 'discount_code_id',
+                DiscountCode,
+                view_kwargs,
+                'discount_code_id',
             )
             if discount_code.marketer_id is not None:
                 view_kwargs['id'] = discount_code.marketer_id
@@ -245,7 +253,9 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('email_notification_id') is not None:
             email_notification = safe_query_kwargs(
-                EmailNotification, view_kwargs, 'email_notification_id',
+                EmailNotification,
+                view_kwargs,
+                'email_notification_id',
             )
             if email_notification.user_id is not None:
                 view_kwargs['id'] = email_notification.user_id

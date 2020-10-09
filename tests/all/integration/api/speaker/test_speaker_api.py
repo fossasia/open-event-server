@@ -140,7 +140,10 @@ def test_create_speaker_required_fields_missing(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/speakers', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/speakers',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     assert response.status_code == 422
@@ -219,7 +222,10 @@ def test_create_speaker_required_fields_complete(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/speakers', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/speakers',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     assert response.status_code == 201
@@ -323,7 +329,10 @@ def test_custom_form_create_complex_fields_missing_required(db, client, user, jw
     )
 
     response = client.post(
-        '/v1/speakers', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/speakers',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     db.session.refresh(speaker)
@@ -402,7 +411,10 @@ def test_custom_form_create_complex_fields_complete(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/speakers', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/speakers',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     speaker = Speaker.query.get(json.loads(response.data)['data']['id'])

@@ -335,7 +335,9 @@ api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')
 api.route(UserEmailListPost, 'user_email_post', '/user-emails')
 api.route(UserEmailList, 'user_emails_list', '/users/<int:user_id>/alternate-emails')
 api.route(
-    UserEmailDetail, 'user_emails_detail', '/user-emails/<int:id>',
+    UserEmailDetail,
+    'user_emails_detail',
+    '/user-emails/<int:id>',
 )
 api.route(
     UserEmailRelationship, 'user_emails_user', '/user-emails/<int:id>/relationships/user'
@@ -607,7 +609,9 @@ api.route(
 )
 
 api.route(
-    UpcomingEventList, 'upcoming_event_list', '/events/upcoming',
+    UpcomingEventList,
+    'upcoming_event_list',
+    '/events/upcoming',
 )
 
 api.route(
