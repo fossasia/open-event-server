@@ -825,15 +825,15 @@ msgstr "टिकट धारक"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
 msgid "First"
-msgstr ""
+msgstr "प्रथम"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:111
 msgid "name"
-msgstr ""
+msgstr "नाम"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:201
 msgid "Zip Code"
-msgstr ""
+msgstr "पिन कोड"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:210
 msgid "Pay Via"
@@ -841,23 +841,23 @@ msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:252
 msgid "Telegraphic Transfer(TT) / Bank Transfer"
-msgstr ""
+msgstr "भुगतान करें"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:264
 msgid "Onsite/Cash"
-msgstr ""
+msgstr "ऑनसाइट/नकद"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:278
 msgid "By clicking"
-msgstr ""
+msgstr "क्लिक करने से"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:280
 msgid "Order Now"
-msgstr ""
+msgstr "अभी ऑर्डर करें"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:281
 msgid "I acknowledge that I have read and agree with"
-msgstr ""
+msgstr "मैं स्वीकार करता हूं कि मैंने पढ़ा है और इससे सहमत हूं"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:282
 msgid "the"
@@ -865,11 +865,11 @@ msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:283
 msgid "Open Event terms of service, and privacy policy."
-msgstr ""
+msgstr "ईवेंट की सेवा की शर्तें, और गोपनीयता नीति खोलें।"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:286
 msgid "Order now"
-msgstr ""
+msgstr "अभी ऑर्डर करें"
 
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
@@ -878,7 +878,7 @@ msgid "Processing"
 msgstr "प्रसंस्करण"
 
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:25
-msgid "Card Nam"
+msgid "Card Name"
 msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
