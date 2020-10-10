@@ -636,13 +636,13 @@ msgstr "जारी रखने के लिए अपने खाते म
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:35
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:47
 msgid "First name"
-msgstr ""
+msgstr "पहला नाम"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:44
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:56
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:122
 msgid "Last name"
-msgstr ""
+msgstr "उपनाम"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:54
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:66
@@ -658,94 +658,96 @@ msgstr ""
 #: app/templates/gentelella/users/events/tickets/attendees.html:195
 #: app/templates/gentelella/users/settings/pages/contact_info.html:18
 msgid "Email"
-msgstr ""
+msgstr "ईमेल"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:66
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:78
 msgid "Confirm Email"
-msgstr ""
+msgstr "ईमेल की पुष्टि करें"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:80
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:158
 msgid "Billing Information"
-msgstr ""
+msgstr "बिलिंग जानकारी"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:85
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:163
 #: app/templates/gentelella/users/events/wizard/basic-details.html:646
 msgid "Country"
-msgstr ""
+msgstr "देश"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:89
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:167
 msgid "Select country"
-msgstr ""
+msgstr "देश चुनिए"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:98
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:176
 msgid "Address"
-msgstr ""
+msgstr "पता"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:107
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:185
 #: app/templates/gentelella/users/events/wizard/basic-details.html:701
 msgid "City"
-msgstr ""
+msgstr "शहर"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:115
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:193
 msgid "State/Province"
-msgstr ""
+msgstr "राज्य / प्रांत"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:123
 msgid "Code"
-msgstr ""
+msgstr "कोड"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:132
 msgid "Pay"
-msgstr ""
+msgstr "वेतन"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:158
 msgid ""
 "By clicking \"Pay Now\", I acknowledge that I have read and agree with "
 "our terms of service, and privacy policy."
 msgstr ""
+"\"अब भुगतान करें"\ पर क्लिक करके, मैं स्वीकार करता हूं कि मैंने पढ़ा है और इससे सहमत हूं"
+"हमारी सेवा की शर्तें, और गोपनीयता नीति।"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:5
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:5
 msgid "Billing Details"
-msgstr ""
+msgstr "बिलिंग विवरण"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:19
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:19
 msgid "Payment Information"
-msgstr ""
+msgstr "भुगतान की जानकारी"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:22
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:22
 msgid "Paid Via"
-msgstr ""
+msgstr "अदा वाया"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:23
 msgid "Transaction"
-msgstr ""
+msgstr "लेन-देन"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:25
 msgid "Card Name"
-msgstr ""
+msgstr "कार्ड का नाम"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:26
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:26
 msgid "Card Number"
-msgstr ""
+msgstr "कार्ड नंबर"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:27
 msgid "Exp Date"
-msgstr ""
+msgstr "समाप्ति की तिथि"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:29
 msgid "Payment Date"
-msgstr ""
+msgstr "भुगतान तिथि"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:30
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:30
@@ -754,70 +756,72 @@ msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:4
 msgid "Invoice Summary"
-msgstr ""
+msgstr "चालान संख्या"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:10
 msgid "Event Name"
-msgstr ""
+msgstr "कार्यक्रम नाम"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:11
 msgid "Fee Percent"
-msgstr ""
+msgstr "फीस का प्रतिशत"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:26
 msgid "Invoice total"
-msgstr ""
+msgstr "कुल बिल"
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:32
 msgid "When & Where"
-msgstr ""
+msgstr "कब और कहाँ"
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:45
 msgid "Organizer"
-msgstr ""
+msgstr "आयोजक"
 
 #: app/templates/gentelella/guest/ticketing/order_base.html:52
 msgid "Contact the organizer"
-msgstr ""
+msgstr "आयोजक से संपर्क करें"
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:3
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:3
 msgid "Your Order"
-msgstr ""
+msgstr "आपका आदेश"
 
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:39
 msgid "Download Tickets"
-msgstr ""
+msgstr "टिकट डाउनलोड करें"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:24
 msgid "Please complete registration within 10:00 minutes"
-msgstr ""
+msgstr "कृपया 10:00 मिनट के भीतर पंजीकरण पूरा करें"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:25
 msgid ""
 "After 10:00 minutes, the reservation we're holding will be released to "
 "others."
 msgstr ""
+"10:00 मिनट के बाद, हम जो आरक्षण धारण कर रहे हैं, उसे जारी किया जाएगा"
+"अन्य।"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:33
 msgid "Ticket"
-msgstr ""
+msgstr "टिकट"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:39
 msgid "Have you used Open Event before"
-msgstr ""
+msgstr "क्या आपने पहले Open Event का उपयोग किया है"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:41
 msgid "To Your Account to continue"
-msgstr ""
+msgstr "जारी रखने के लिए आपका खाता"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:93
 msgid "Ticket Holders' Information"
-msgstr ""
+msgstr "टिकट धारक की जानकारी"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:104
 msgid "Ticket Holder"
-msgstr ""
+msgstr "टिकट धारक"
 
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
 msgid "First"
