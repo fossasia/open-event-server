@@ -281,7 +281,7 @@ msgstr "घटनाओं का प्रबंधन"
 
 #: app/templates/gentelella/guest/sitemap.html:77
 msgid "List own events"
-msgstr"स्वयं की घटनाओं की सूची बनाएं"
+msgstr "स्वयं की घटनाओं की सूची बनाएं"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:5
 #: app/templates/gentelella/guest/event/_ticketing_box.html:23
