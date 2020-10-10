@@ -140,7 +140,7 @@ msgstr "कोई नए संदेश नहीं"
 
 #: app/templates/gentelella/errors/400.html:9
 msgid "We are not able to understand what you require"
-msgstr ""
+msgstr "हम समझ नहीं पा रहे हैं कि आपको क्या चाहिए"
 
 #: app/templates/gentelella/errors/400.html:10
 msgid ""
@@ -148,6 +148,9 @@ msgid ""
 "frequently, drop in an email at our support address so that we can see "
 "what's the issue."
 msgstr ""
+"हम एक आम भाषा नहीं बोलते हैं। यदि आप इस समस्या का सामना कर रहे हैं"
+"अक्सर, हमारे समर्थन पते पर एक ईमेल में छोड़ दें ताकि हम देख सकें"
+"समस्या क्या है।"
 
 #: app/templates/gentelella/errors/403.html:10
 msgid "Access denied"
@@ -166,14 +169,17 @@ msgid ""
 "Sorry but we couldn't find this page since the page you are looking for "
 "does not exist."
 msgstr ""
+"क्षमा करें, लेकिन हम उस पृष्ठ को नहीं ढूंढ सकते हैं जिस पृष्ठ को आप खोज रहे हैं"
+"मौजूद नहीं है"
+
 
 #: app/templates/gentelella/errors/500.html:9
 msgid "We seem to be having some issues on our side."
-msgstr ""
+msgstr "हमें अपनी तरफ से कुछ समस्याएं दिख रही हैं।"
 
 #: app/templates/gentelella/errors/500.html:10
 msgid "Inconvenience is regretted. We'll fix this as soon as possible."
-msgstr ""
+msgstr "असुविधा के लिए खेद है। हम इसे जल्द से जल्द ठीक कर देंगे।"
 
 #: app/templates/gentelella/guest/home.html:186
 msgid "The simplest way to create events."
@@ -237,152 +243,152 @@ msgstr "इस घटना को साझा करें"
 
 #: app/templates/gentelella/guest/sitemap.html:40
 msgid "General Information"
-msgstr ""
+msgstr "सामान्य जानकारी"
 
 #: app/templates/gentelella/guest/sitemap.html:58
 msgid "Account Management"
-msgstr ""
+msgstr "खाता प्रबंधन"
 
 #: app/templates/gentelella/guest/sitemap.html:60
 #: app/templates/swagger/user-info.html:14
 msgid "Register"
-msgstr ""
+msgstr "रजिस्टर करें"
 
 #: app/templates/gentelella/guest/sitemap.html:62
 #: app/templates/gentelella/users/login/change_password.html:7
 msgid "Reset Password"
-msgstr ""
+msgstr "पासवर्ड रीसेट"
 
 #: app/templates/gentelella/guest/sitemap.html:63
 msgid "View own profile"
-msgstr ""
+msgstr "खुद की प्रोफ़ाइल देखें"
 
 #: app/templates/gentelella/guest/sitemap.html:67
 msgid "Attending Events"
-msgstr ""
+msgstr "कार्यक्रम में भाग ले रहे हैं"
 
 #: app/templates/gentelella/guest/sitemap.html:69
 msgid "Find Events"
-msgstr ""
+msgstr "ईवेंट खोजें"
 
 #: app/templates/gentelella/guest/sitemap.html:70
 msgid "My Event Tickets"
-msgstr ""
+msgstr "मेरा इवेंट टिकट"
 
 #: app/templates/gentelella/guest/sitemap.html:74
 msgid "Managing Events"
-msgstr ""
+msgstr "घटनाओं का प्रबंधन"
 
 #: app/templates/gentelella/guest/sitemap.html:77
 msgid "List own events"
-msgstr ""
+msgstr"स्वयं की घटनाओं की सूची बनाएं"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:5
 #: app/templates/gentelella/guest/event/_ticketing_box.html:23
 msgid "Ticket Information"
-msgstr ""
+msgstr "टिकट की जानकारी"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:8
 msgid "Click to order tickets"
-msgstr ""
+msgstr "टिकट ऑर्डर करने के लिए क्लिक करें"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "You will be taken to"
-msgstr ""
+msgstr "आपको ले जाया जाएगा"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:11
 msgid "to complete the purchase of the tickets"
-msgstr ""
+msgstr "टिकटों की खरीद को पूरा करने के लिए"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:29
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:10
 msgid "Ticket type"
-msgstr ""
+msgstr "टिकिट का प्रकार"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:30
 msgid "Sales ends"
-msgstr ""
+msgstr "बिक्री समाप्त होती है"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 #: app/templates/gentelella/users/events/tickets/add_order.html:37
 #: app/templates/gentelella/users/events/wizard/basic-details.html:257
 msgid "Price"
-msgstr ""
+msgstr "कीमत"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/invoicing/components/_invoice_summary.html:12
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:12
 #: app/templates/gentelella/super_admin/sales/fees.html:64
 msgid "Fee"
-msgstr ""
+msgstr "शुल्क"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:35
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 #: app/templates/gentelella/users/events/tickets/add_order.html:38
 #: app/templates/gentelella/users/events/wizard/basic-details.html:260
 msgid "Quantity"
-msgstr ""
+msgstr "मात्रा"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:36
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:14
 msgid "Subtotal"
-msgstr ""
+msgstr "उप-योग"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:100
 msgid "This ticket's sale has ended"
-msgstr ""
+msgstr "इस टिकट की बिक्री समाप्त हो गई है"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:103
 msgid "This ticket's sale will start"
-msgstr ""
+msgstr "इस टिकट की बिक्री शुरू होगी"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:104
 #: app/templates/gentelella/users/events/wizard/session-speakers.html:5
 #: app/templates/gentelella/users/events/wizard/sponsors.html:5
 msgid "on"
-msgstr ""
+msgstr "पर"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:107
 msgid "This ticket is sold out"
-msgstr ""
+msgstr "यह टिकट बिक गया है"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:116
 #: app/templates/gentelella/super_admin/sales/fees.html:95
 #: app/templates/gentelella/super_admin/sales/summary_base.html:156
 #: app/templates/gentelella/users/events/tickets/tickets.html:248
 msgid "Total"
-msgstr ""
+msgstr "कुल"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:133
 msgid "No tickets available right now."
-msgstr ""
+msgstr "अभी कोई टिकट उपलब्ध नहीं है।"
 
 #: app/templates/gentelella/guest/event/_ticketing_box.html:142
 msgid "Enter promotional code"
-msgstr ""
+msgstr "प्रचार कोड दर्ज करें"
 
 #: app/templates/gentelella/guest/event/cfs.html:21
 msgid "Open"
-msgstr ""
+msgstr "खुला हुआ"
 
 #: app/templates/gentelella/guest/event/cfs.html:23
 msgid "Closed"
-msgstr ""
+msgstr "बन्द है"
 
 #: app/templates/gentelella/guest/event/cfs.html:25
 msgid "Yet to Open"
-msgstr ""
+msgstr "फिर भी खोलना है"
 
 #: app/templates/gentelella/guest/event/cfs.html:35
 #: app/templates/gentelella/guest/event/cfs.html:39
 #: app/templates/gentelella/guest/event/cfs.html:62
 msgid "Submit Proposal"
-msgstr ""
+msgstr "प्रस्ताव प्रस्तुत करें"
 
 #: app/templates/gentelella/guest/event/cfs.html:47
 msgid "Please login to submit your proposal"
-msgstr ""
+msgstr "कृपया अपना प्रस्ताव जमा करने के लिए लॉगिन करें"
 
 #: app/templates/gentelella/guest/event/cfs.html:50
 #: app/templates/gentelella/super_admin/content/_system_images.html:112
@@ -397,87 +403,87 @@ msgstr "रद्द करना"
 
 #: app/templates/gentelella/guest/event/cfs.html:51
 msgid "Login/SignUp"
-msgstr ""
+msgstr "साइन अप/लॉग इन करें"
 
 #: app/templates/gentelella/guest/event/cfs.html:65
 msgid "Register as a Speaker"
-msgstr ""
+msgstr "एक अध्यक्ष के रूप में पंजीकरण करें"
 
 #: app/templates/gentelella/guest/event/cfs.html:66
 msgid "Propose Session"
-msgstr ""
+msgstr "प्रस्ताव का प्रस्ताव"
 
 #: app/templates/gentelella/guest/event/cfs.html:77
 msgid "Add Speaker Information"
-msgstr ""
+msgstr "अध्यक्ष जानकारी जोड़ें"
 
 #: app/templates/gentelella/guest/event/cfs.html:81
 msgid "Existing Sessions"
-msgstr ""
+msgstr "मौजूदा सत्र"
 
 #: app/templates/gentelella/guest/event/cfs.html:90
 msgid "Add Session Proposal"
-msgstr ""
+msgstr "सत्र प्रस्ताव जोड़ें"
 
 #: app/templates/gentelella/guest/event/cfs_new_session.html:14
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:7
 msgid "Session Details"
-msgstr ""
+msgstr "सत्र विवरण"
 
 #: app/templates/gentelella/guest/event/cfs_new_speaker.html:14
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:27
 msgid "Speaker Details"
-msgstr ""
+msgstr "स्पीकर का विवरण"
 
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 #: app/templates/gentelella/users/events/wizard/basic-details.html:568
 msgid "Code of Conduct"
-msgstr ""
+msgstr "आचार संहिता"
 
 #: app/templates/gentelella/guest/event/details.html:112
 msgid "No sessions have been published yet"
-msgstr ""
+msgstr "अभी तक कोई सत्र प्रकाशित नहीं हुआ है"
 
 #: app/templates/gentelella/guest/event/details.html:126
 msgid "Other Sponsors"
-msgstr ""
+msgstr "अन्य प्रायोजक"
 
 #: app/templates/gentelella/guest/event/details.html:138
 msgid "Organized by"
-msgstr ""
+msgstr "द्वारा आयोजित"
 
 #: app/templates/gentelella/guest/event/details.html:143
 msgid "Getting Here"
-msgstr ""
+msgstr "यहां आ रहा हूं"
 
 #: app/templates/gentelella/guest/event/schedule.html:26
 msgid " Schedule"
-msgstr ""
+msgstr " अनुसूची"
 
 #: app/templates/gentelella/guest/event/schedule.html:35
 msgid "Rooms View"
-msgstr ""
+msgstr "कमरे का दृश्य"
 
 #: app/templates/gentelella/guest/event/schedule.html:36
 msgid "Tracks View"
-msgstr ""
+msgstr "ट्रैक दृश्य"
 
 #: app/templates/gentelella/guest/event/schedule.html:37
 msgid "Sessions View"
-msgstr ""
+msgstr "सत्र देखें"
 
 #: app/templates/gentelella/guest/event/schedule.html:47
 #: app/templates/gentelella/users/events/scheduler/scheduler.html:21
 msgid "Sessions loading"
-msgstr ""
+msgstr "सत्र लोड हो रहा है"
 
 #: app/templates/gentelella/guest/event/schedule.html:60
 msgid "All the timings are in"
-msgstr ""
+msgstr "सभी टाइमिंग में हैं"
 
 #: app/templates/gentelella/guest/event/schedule.html:63
 msgid "Published on"
-msgstr ""
+msgstr "पर प्रकाशित"
 
 #: app/templates/gentelella/guest/event/sessions.html:14
 #: app/templates/gentelella/super_admin/events/events.html:187
@@ -517,16 +523,16 @@ msgstr "टिकट"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:17
 msgid "All Categories"
-msgstr ""
+msgstr "सब वर्ग"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:48
 #: app/templates/gentelella/users/events/wizard/basic-details.html:528
 msgid "Event Type"
-msgstr ""
+msgstr "घटना प्रकार"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:55
 msgid "All Event Types"
-msgstr ""
+msgstr "सभी घटना प्रकार"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:67
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
@@ -536,7 +542,7 @@ msgstr "तारीख"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:79
 msgid "Custom Dates"
-msgstr ""
+msgstr "कस्टम तिथियाँ"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:84
 #: app/templates/gentelella/super_admin/events/events.html:184
@@ -545,7 +551,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/events/events.html:250
 #: app/templates/gentelella/super_admin/events/events.html:272
 msgid "Start Date"
-msgstr ""
+msgstr "आरंभ करने की तिथि"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:92
 #: app/templates/gentelella/super_admin/events/events.html:185
@@ -554,7 +560,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/events/events.html:251
 #: app/templates/gentelella/super_admin/events/events.html:273
 msgid "End Date"
-msgstr ""
+msgstr "अंतिम तिथि"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:99
 #: app/templates/gentelella/super_admin/sales/filter_table_base.html:41
@@ -563,11 +569,11 @@ msgstr ""
 #: app/templates/gentelella/users/events/tickets/orders.html:62
 #: app/templates/gentelella/users/events/tickets/orders.html:78
 msgid "Filter"
-msgstr ""
+msgstr "फ़िल्टर"
 
 #: app/templates/gentelella/guest/explore/results.html:15
 msgid "Explore"
-msgstr ""
+msgstr "खोजना"
 
 #: app/templates/gentelella/guest/explore/results.html:32
 #: app/templates/gentelella/super_admin/events/events.html:4
@@ -578,54 +584,54 @@ msgstr "आयोजन"
 
 #: app/templates/gentelella/guest/explore/results.html:42
 msgid "Loading"
-msgstr ""
+msgstr "लोड हो रहा है"
 
 #: app/templates/gentelella/guest/explore/results.html:50
 msgid "No events found for the selected parameters."
-msgstr ""
+msgstr "चयनित मापदंडों के लिए कोई ईवेंट नहीं मिला।"
 
 #: app/templates/gentelella/guest/invoicing/invoice_base.html:30
 #: app/templates/gentelella/guest/ticketing/order_base.html:65
 msgid "Pay Via Stripe"
-msgstr ""
+msgstr "वेतन वाया Stripe"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:5
 #: app/templates/gentelella/guest/invoicing/invoice_pdf.html:37
 #: app/templates/gentelella/guest/ticketing/invoice_pdf.html:37
 #: app/templates/gentelella/super_admin/sales/fees_status.html:16
 msgid "Invoice"
-msgstr ""
+msgstr "चालान"
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:18
 #: app/templates/gentelella/guest/ticketing/order_post_payment.html:35
 msgid "Print Invoice"
-msgstr ""
+msgstr "चालान छापें"
 
 #: app/templates/gentelella/guest/invoicing/invoice_post_payment.html:22
 msgid "Download Invoice"
-msgstr ""
+msgstr "चालान को डाउनलोड करो"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:3
 msgid "Your Invoice"
-msgstr ""
+msgstr "आपका चालान"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:15
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:15
 msgid "Registration Information"
-msgstr ""
+msgstr "रजिस्ट्रशन जानकारी"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:22
 msgid "Personal Information"
-msgstr ""
+msgstr "व्यक्तिगत जानकारी"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:29
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:40
 msgid "Sign In"
-msgstr ""
+msgstr "साइन इन करें"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:29
 msgid "to your account to continue"
-msgstr ""
+msgstr "जारी रखने के लिए अपने खाते में"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:35
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:47
