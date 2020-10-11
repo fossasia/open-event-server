@@ -83,7 +83,7 @@ Python virtual environment is a way to keep this project's collection of librari
   mkvirtualenv my-project-name -p /usr/bin/python3
   ```
 
-I (Quân) recommend [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) because:
+I (@hongquan) recommend [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) because:
 
 - It gathers all virtual environments to one place. That let you know which virtual environments you created.
 - It provides auto-complete command to enter a virtual env (`workon my-env`), list and delete them.
@@ -137,8 +137,6 @@ This method is called "ident" method, where the connection is established via "U
 - Only available to same-machine clients, meaning no worries about attack from outside.
 
 ### For MAC users
-
-(Not sure how to make it behave like Linux above - Quân)
 
 ```sh
 psql -d postgres
