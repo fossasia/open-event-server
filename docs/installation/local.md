@@ -66,8 +66,12 @@ Python virtual environment is a way to keep this project's collection of librari
 - Use Python built-in tool:
 
   ```sh
-  python3 -m venv my-project-name
+  python3 -m venv .env
   ```
+
+  Running this command will create a folder named *.env* in your working copy. Please remember
+  not to commit it.
+
 
 - Use third-party tools:
 
