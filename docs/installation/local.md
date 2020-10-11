@@ -11,20 +11,24 @@
 - Clone the Open Event Server repository (from the development branch) and `cd ` into the directory.
 
 ```sh
-git clone https://github.com/fossasia/open-event-server.git
+git clone -b development https://github.com/fossasia/open-event-server.git
 cd open-event-server
 ```
 
 - If you want to contribute, first fork the original repository to your GitHub profile and clone that fork into your local machine, followed by `cd` into the directory
 
 ```sh
-git clone git@github.com:USERNAME/open-event-server.git
+git clone -b development https://github.com/USERNAME/open-event-server.git
 cd open-event-server
 ```
 
 - Tip:
 
-  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatly.
+  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatly. It case of SSH, the command above will be:
+
+  ```
+  git clone -b development git@github.com:USERNAME/open-event-server.git
+  ```
 
   + To let your personal fork up-to-date with the original FOSSASIA repo, add original repo to "remote" list and regularly fetch its new content.
 
@@ -66,10 +70,10 @@ Python virtual environment is a way to keep this project's collection of librari
 - Use Python built-in tool:
 
   ```sh
-  python3 -m venv .env
+  python3 -m venv .venv
   ```
 
-  Running this command will create a folder named *.env* in your working copy. Please remember
+  Running this command will create a folder named *.venv* in your working copy. Please remember
   not to commit it.
 
 
