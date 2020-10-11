@@ -6,7 +6,7 @@ repos:
       - id: pycln
         args: [--config=pyproject.toml]
   - repo: https://github.com/pycqa/isort
-    rev: 5.6.1
+    rev: 5.6.3
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
