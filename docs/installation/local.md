@@ -34,8 +34,7 @@ cd open-event-server
 
   ```sh
   git remote add upstream https://github.com/fossasia/open-event-server.git
-  git fetch upstream
-  git merge upstream/development
+  git pull -r upstream development
   ```
 
 ## Install system dependencies
