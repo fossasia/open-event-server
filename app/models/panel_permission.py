@@ -3,12 +3,16 @@ from app.models import db
 roles_panels = db.Table(
     'roles_panels',
     db.Column(
-        'role_id', db.Integer, db.ForeignKey('custom_sys_roles.id', ondelete='CASCADE')
+        'role_id',
+        db.Integer,
+        db.ForeignKey('custom_sys_roles.id', ondelete='CASCADE'),
+        nullable=False,
     ),
     db.Column(
         'panel_permission_id',
         db.Integer,
         db.ForeignKey('panel_permissions.id', ondelete='CASCADE'),
+        nullable=False,
     ),
 )
 

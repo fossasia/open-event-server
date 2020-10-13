@@ -94,14 +94,30 @@ class Event(SoftDeletionModel):
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
     is_billing_info_mandatory = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_paypal = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_stripe = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_cheque = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_bank = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_onsite = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_omise = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_alipay = db.Column(db.Boolean, default=False, nullable=False)
-    can_pay_by_paytm = db.Column(db.Boolean, default=False, nullable=False)
+    can_pay_by_paypal = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_stripe = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_cheque = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_bank = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_onsite = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_omise = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_alipay = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
+    can_pay_by_paytm = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
