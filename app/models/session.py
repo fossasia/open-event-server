@@ -21,7 +21,6 @@ class Session(SoftDeletionModel):
     """Session model class"""
 
     __tablename__ = 'sessions'
-    __versioned__ = {'exclude': []}
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
