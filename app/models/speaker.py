@@ -26,7 +26,9 @@ class Speaker(SoftDeletionModel):
     instagram = db.Column(db.String)
     organisation = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False)
-    is_email_overridden = db.Column(db.Boolean, default=False)
+    is_email_overridden = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     position = db.Column(db.String)
     country = db.Column(db.String)
     city = db.Column(db.String)

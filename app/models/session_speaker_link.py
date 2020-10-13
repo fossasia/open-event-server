@@ -7,9 +7,9 @@ class SessionsSpeakersLink(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    event_id = db.Column(db.Integer)
-    session_id = db.Column(db.Integer)
-    speaker_id = db.Column(db.Integer)
+    event_id = db.Column(db.Integer, nullable=False)
+    session_id = db.Column(db.Integer, nullable=False)
+    speaker_id = db.Column(db.Integer, nullable=False)
     session_state = db.Column(db.String, nullable=False)
 
     def __repr__(self):
