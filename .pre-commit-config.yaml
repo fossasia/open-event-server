@@ -1,5 +1,10 @@
 exclude: '.venv|migrations'
 repos:
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.7.2
+    hooks:
+    -   id: pyupgrade
+        args: [--py37-plus]
   - repo: https://github.com/hadialqattan/pycln
     rev: v0.0.1-alpha.3
     hooks:
