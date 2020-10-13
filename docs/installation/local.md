@@ -65,35 +65,13 @@ In case you use Ubuntu 20.04+, where Python 3.7 is not provided in official repo
 
 ## Create a Python virtual environment
 
-Python virtual environment is a way to keep this project's collection of libraries not interfere with other projects or the system. There are many ways to create Python virtual environment (all have the same core), like:
 
-- Use Python built-in tool:
+Use Python built-in tool:
 
-  ```sh
-  python3 -m venv .venv
-  ```
+```sh
+python3 -m venv .venv
+```
 
-  Running this command will create a folder named *.venv* in your working copy. Please remember
-  not to commit it.
-
-
-- Use third-party tools:
-
-  ```sh
-  mkvirtualenv my-project-name -p /usr/bin/python3
-  ```
-
-I (@hongquan) recommend [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) because:
-
-- It gathers all virtual environments to one place. That let you know which virtual environments you created.
-- It provides auto-complete command to enter a virtual env (`workon my-env`), list and delete them.
-- It let you enter a virtual env no matter where you are standing.
-
-Some tools, like Pipenv, puts virtual environment into your project code folder. That approach has some disadvantage:
-
-- When you do somethings that involve scanning source code (like running test cases, search for file content), you accidentally scan the Python packages in the virtual environment.
-- You don't know how many virtual environments you created.
-- You have to know the path of an virtual environment in order to enter (if you are not standing in project folder).
 
 After creating virtual environment, you should upgrade `pip`, `wheel` libraries inside it.
 
@@ -104,6 +82,11 @@ pip install -U pip wheel setuptools
 ## Install Python packages
 
 - Activate the Python virtual environment you created for this project.
+
+  ```sh
+  source .venv/bin/activate
+  ```
+
 - Enter the project folder and run:
 
   ```sh
