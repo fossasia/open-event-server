@@ -458,7 +458,7 @@ class OrderDetail(ResourceDetail):
                     ):
                         raise ForbiddenError(
                             {'pointer': f'data/{element}'},
-                            "You cannot update {} of a completed order".format(element),
+                            f"You cannot update {element} of a completed order",
                         )
                     if (
                         element not in relationships
