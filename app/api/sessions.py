@@ -10,7 +10,6 @@ from app.api.events import Event
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
-from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
 from app.api.helpers.notification import (
     send_notif_new_session_organizer,
@@ -30,7 +29,6 @@ from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
-from app.settings import get_settings
 
 sessions_blueprint = Blueprint('sessions_blueprint', __name__, url_prefix='/v1/sessions')
 
@@ -77,10 +75,10 @@ class SessionListPost(ResourceList):
             event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            event = session.event
-            link = make_frontend_url(f"/events/{event.identifier}/sessions/{session.id}")
-            send_email_new_session(owner_email, event_name, link)
-            send_notif_new_session_organizer(owner, event_name, link, session.id)
+            send_email_new_session(owner_email, event_name, session.site_link)
+            send_notif_new_session_organizer(
+                owner, event_name, session.site_link, session.id
+            )
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
@@ -344,16 +342,13 @@ class SessionDetail(ResourceDetail):
 
 
 def notify_for_session(session, mail_override: Dict[str, str] = None):
-    event = session.event
-    frontend_url = get_settings()['frontend_url']
-    link = f"{frontend_url}/events/{event.identifier}/sessions/{session.id}"
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:
         if not speaker.is_email_overridden:
             send_email_session_state_change(speaker.email, session, mail_override)
             send_notif_session_state_change(
-                speaker.user, session.title, session.state, link, session.id
+                speaker.user, session.title, session.state, session.site_link, session.id
             )
 
     # Email for owner
@@ -361,7 +356,7 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
         owner = session.event.get_owner()
         send_email_session_state_change(owner.email, session, mail_override)
         send_notif_session_state_change(
-            owner, session.title, session.state, link, session.id
+            owner, session.title, session.state, session.site_link, session.id
         )
 
 

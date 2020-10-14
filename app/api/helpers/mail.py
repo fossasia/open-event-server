@@ -182,17 +182,13 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     settings = get_settings()
     app_name = settings['app_name']
     frontend_url = settings['frontend_url']
-    session_link = "{}/events/{}/sessions/{}".format(
-        frontend_url, event.identifier, session.id
-    )
-    event_link = f"{frontend_url}/e/{event.identifier}"
 
     context = {
         'session_name': session.title,
-        'session_link': session_link,
+        'session_link': session.site_link,
         'session_state': session.state,
         'event_name': event.name,
-        'event_link': event_link,
+        'event_link': event.site_link,
         'app_name': app_name,
         'frontend_link': frontend_url,
     }
