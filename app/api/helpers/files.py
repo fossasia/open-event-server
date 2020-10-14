@@ -1,10 +1,10 @@
 import base64
 import io
 import os
-import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+from typing import Any, Dict, List, Optional, Union
 
 import PIL
 import requests
@@ -19,11 +19,11 @@ from app.models.image_size import ImageSizes
 from app.settings import get_settings
 
 
-def get_file_name():
+def get_file_name() -> str:
     return str(uuid.uuid4())
 
 
-def uploaded_image(extension='.png', file_content=None):
+def uploaded_image(extension='.png', file_content=None) -> UploadedFile:
     filename = get_file_name() + extension
     filedir = current_app.config.get('BASE_DIR') + '/static/uploads/'
     if not os.path.isdir(filedir):
@@ -35,7 +35,7 @@ def uploaded_image(extension='.png', file_content=None):
     return UploadedFile(file_path, filename)
 
 
-def uploaded_file(files, multiple=False):
+def uploaded_file(files, multiple=False) -> Union[UploadedFile, List[UploadedFile]]:
     if multiple:
         files_uploaded = []
         for file in files:
@@ -70,7 +70,7 @@ def create_save_resized_image(
     ext='jpg',
     remove_after_upload=False,
     resize=True,
-):
+) -> Optional[str]:
     """
     Create and Save the resized version of the background image
     :param resize:
@@ -129,7 +129,9 @@ def create_save_resized_image(
     return uploaded_url
 
 
-def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None):
+def create_save_image_sizes(
+    image_file, image_sizes_type, unique_identifier=None
+) -> Dict[str, Any]:
     """
     Save the resized version of the background image
     :param unique_identifier:
@@ -273,7 +275,7 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
 
 def create_system_image(
     image_file=None, upload_path=None, unique_identifier=None, ext='jpg'
-):
+) -> Dict[str, Any]:
     """
     Create System Images for Event Topics
     :param upload_path:
@@ -326,7 +328,7 @@ def create_system_image(
     return image
 
 
-def make_frontend_url(path, parameters=None):
+def make_frontend_url(path, parameters=None) -> str:
     """
     Create URL for frontend
     """
@@ -354,7 +356,7 @@ def create_save_pdf(
     upload_dir='static/media/',
     new_renderer=False,
     extra_identifiers=None,
-):
+) -> Any:
     """
     Create and Saves PDFs from html
     :param pdf_data:

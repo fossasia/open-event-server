@@ -34,7 +34,7 @@ from app.models.notification import (
 )
 
 
-def send_notification(user, title, message, actions=None):
+def send_notification(user, title, message, actions=None) -> None:
     """
     Helper function to send notifications.
     :param user:
@@ -51,7 +51,7 @@ def send_notification(user, title, message, actions=None):
     record_activity('notification_event', user=user, title=title, actions=actions)
 
 
-def send_notif_new_session_organizer(user, event_name, link, session_id):
+def send_notif_new_session_organizer(user, event_name, link, session_id) -> None:
     """
     Send notification to the event organizer about a new session.
     :param user:
@@ -70,7 +70,9 @@ def send_notif_new_session_organizer(user, event_name, link, session_id):
         send_notification(user, title, message, actions)
 
 
-def send_notif_session_state_change(user, session_name, acceptance, link, session_id):
+def send_notif_session_state_change(
+    user, session_name, acceptance, link, session_id
+) -> None:
     """
     Send notification to the session creator about a session status being changed.
     :param user:
@@ -98,7 +100,7 @@ def send_notif_session_state_change(user, session_name, acceptance, link, sessio
 
 def send_notif_after_import(
     user, event_id=None, event_name=None, event_url=None, error_text=None
-):
+) -> None:
     """send notification after event import"""
     if error_text:
         send_notification(
@@ -118,7 +120,7 @@ def send_notif_after_import(
         )
 
 
-def send_notif_after_export(user, event_name, download_url=None, error_text=None):
+def send_notif_after_export(user, event_name, download_url=None, error_text=None) -> None:
     """send notification after event export"""
     if error_text:
         send_notification(
@@ -140,7 +142,7 @@ def send_notif_after_export(user, event_name, download_url=None, error_text=None
 
 def send_notif_monthly_fee_payment(
     user, event_name, previous_month, amount, app_name, link, event_id, follow_up=False
-):
+) -> None:
     """
     Send notification about monthly fee payments.
     :param user:
@@ -168,7 +170,7 @@ def send_notif_monthly_fee_payment(
         send_notification(user, title, message, actions)
 
 
-def send_notif_event_role(user, role_name, event_name, link, event_id):
+def send_notif_event_role(user, role_name, event_name, link, event_id) -> None:
     """
     Send notification to a user about an event role invite.
     :param user:
@@ -190,7 +192,7 @@ def send_notif_event_role(user, role_name, event_name, link, event_id):
         send_notification(user, title, message, actions)
 
 
-def send_notif_after_event(user, event_name):
+def send_notif_after_event(user, event_name) -> None:
     """
     Send notification to a user after the conclusion of an event.
     :param user:
@@ -208,7 +210,7 @@ def send_notif_after_event(user, event_name):
 
 def send_notif_ticket_purchase_organizer(
     user, invoice_id, order_url, event_name, subject_id
-):
+) -> None:
     """Send notification with order invoice link after purchase"""
     actions = get_ticket_purchased_organizer_notification_actions(subject_id, order_url)
     send_notification(
@@ -221,7 +223,7 @@ def send_notif_ticket_purchase_organizer(
     )
 
 
-def send_notif_to_attendees(order, purchaser_id):
+def send_notif_to_attendees(order, purchaser_id) -> None:
     """
     Send notification to attendees of an order.
     :param order:
@@ -259,7 +261,7 @@ def send_notif_to_attendees(order, purchaser_id):
                 )
 
 
-def send_notif_ticket_cancel(order):
+def send_notif_ticket_cancel(order) -> None:
     """Send notification with order invoice link after cancel"""
     send_notification(
         user=order.user,
@@ -309,7 +311,7 @@ def send_notif_ticket_cancel(order):
     )
 
 
-def send_notification_with_action(user, action, **kwargs):
+def send_notification_with_action(user, action, **kwargs) -> None:
     """
     A general notif helper to use in auth APIs
     :param user: user to which notification is to be sent

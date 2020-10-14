@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta, timezone
+from typing import TypeVar
 
 from flask import render_template
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -19,8 +20,10 @@ from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 
+_T0 = TypeVar('_T0')
 
-def delete_related_attendees_for_order(order):
+
+def delete_related_attendees_for_order(order) -> None:
     """
     Delete the associated attendees of an order when it is cancelled/deleted/expired
     :param order: Order whose attendees have to be deleted.
@@ -35,7 +38,7 @@ def delete_related_attendees_for_order(order):
             db.session.rollback()
 
 
-def set_expiry_for_order(order, override=False):
+def set_expiry_for_order(order: _T0, override=False) -> _T0:
     """
     Expire the order after the time slot(10 minutes) if the order is initializing.
     Also expires the order if we want to expire an order regardless of the state and time.
@@ -62,7 +65,7 @@ def set_expiry_for_order(order, override=False):
     return order
 
 
-def create_pdf_tickets_for_holder(order):
+def create_pdf_tickets_for_holder(order) -> None:
     """
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
@@ -117,7 +120,7 @@ def create_pdf_tickets_for_holder(order):
         save_to_db(order)
 
 
-def create_onsite_attendees_for_order(data):
+def create_onsite_attendees_for_order(data) -> None:
     """
     Creates on site ticket holders for an order and adds it into the request data.
     :param data: data initially passed in the POST request for order.
@@ -182,7 +185,7 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code=None):
+def calculate_order_amount(tickets, discount_code=None) -> dict:
     from app.api.helpers.ticketing import validate_discount_code, validate_tickets
     from app.models.discount_code import DiscountCode
 

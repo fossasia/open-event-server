@@ -3,8 +3,9 @@
 import random
 import re
 import string
+from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Tuple
 
 import bleach
 import requests
@@ -14,7 +15,7 @@ from itsdangerous import Serializer
 from app.api.helpers.errors import UnprocessableEntityError
 
 
-def make_dict(list_of_object, key):
+def make_dict(list_of_object, key) -> dict:
     """
     To convert a list of object into dict.
 
@@ -27,11 +28,11 @@ def make_dict(list_of_object, key):
     return mapped_dict
 
 
-def dasherize(text):
+def dasherize(text: str) -> str:
     return text.replace('_', '-')
 
 
-def to_snake_case(text):
+def to_snake_case(text: str) -> str:
     text = text.replace('-', '_')
     return re.sub('([A-Z]+)', r'_\1', text).lower()
 
@@ -47,7 +48,7 @@ def dict_to_snake_case(input_dict: Dict[str, Any]) -> Dict[str, Any]:
     return output
 
 
-def require_relationship(resource_list, data):
+def require_relationship(resource_list: List[Any], data: Dict[Any]) -> None:
     for resource in resource_list:
         if resource not in data:
             raise UnprocessableEntityError(
@@ -56,26 +57,26 @@ def require_relationship(resource_list, data):
             )
 
 
-def string_empty(value):
+def string_empty(value) -> bool:
     return isinstance(value, str) and not value.strip()
 
 
-def strip_tags(html):
+def strip_tags(html) -> Optional[str]:
     if html is None:
         return None
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
-def get_serializer(secret_key='secret_key'):
+def get_serializer(secret_key='secret_key') -> Serializer:
     return Serializer(secret_key)
 
 
-def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
+def str_generator(size=6, chars=string.ascii_uppercase + string.digits) -> str:
     return ''.join(random.choice(chars) for _ in range(size))
 
 
 # From http://stackoverflow.com/a/3425124
-def monthdelta(date, delta):
+def monthdelta(date: datetime, delta: int) -> datetime:
     m, y = (date.month + delta) % 12, date.year + (date.month + delta - 1) // 12
     if not m:
         m = 12
@@ -99,7 +100,7 @@ def monthdelta(date, delta):
     return date.replace(day=d, month=m, year=y)
 
 
-def represents_int(value):
+def represents_int(value) -> bool:
     try:
         int(value)
         return True
@@ -107,7 +108,7 @@ def represents_int(value):
         return False
 
 
-def is_downloadable(url):
+def is_downloadable(url: str) -> bool:
     """
     Does the url contain a downloadable resource
     """
@@ -122,7 +123,7 @@ def is_downloadable(url):
     return True
 
 
-def get_filename_from_cd(cd):
+def get_filename_from_cd(cd: str) -> Tuple[Any, str]:
     """
     Get filename and ext from content-disposition
     """
@@ -135,14 +136,14 @@ def get_filename_from_cd(cd):
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
 
 
-def write_file(file, data):
+def write_file(file, data) -> None:
     """simple write to file"""
     fp = open(file, 'w')
     fp.write(str(data, 'utf-8'))
     fp.close()
 
 
-def update_state(task_handle, state, result=None):
+def update_state(task_handle, state, result=None) -> None:
     """
     Update state of celery task
     """
@@ -152,7 +153,7 @@ def update_state(task_handle, state, result=None):
         task_handle.update_state(state=state, meta=result)
 
 
-def round_money(money):
+def round_money(money) -> Decimal:
     return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 

@@ -1,7 +1,9 @@
+from typing import List
+
 from app.models.helpers.versioning import strip_tags
 
 
-def export_orders_csv(orders):
+def export_orders_csv(orders) -> List[List[str]]:
     headers = [
         'Order#',
         'Order Date',
@@ -37,7 +39,7 @@ def export_orders_csv(orders):
     return rows
 
 
-def export_attendees_csv(attendees):
+def export_attendees_csv(attendees) -> List[List[str]]:
     headers = [
         'Order#',
         'Order Date',
@@ -81,7 +83,7 @@ def export_attendees_csv(attendees):
     return rows
 
 
-def export_sessions_csv(sessions):
+def export_sessions_csv(sessions) -> List[list]:
     headers = [
         'Session Title',
         'Session Speakers',
@@ -145,7 +147,7 @@ def export_sessions_csv(sessions):
     return rows
 
 
-def export_speakers_csv(speakers):
+def export_speakers_csv(speakers) -> List[list]:
     headers = [
         'Speaker Name',
         'Speaker Email',

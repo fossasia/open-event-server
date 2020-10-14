@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
 
 
-def check_smtp_config(smtp_encryption):
+def check_smtp_config(smtp_encryption) -> bool:
     """
     Checks config of SMTP
     """
@@ -56,7 +56,7 @@ def check_smtp_config(smtp_encryption):
     return True
 
 
-def send_email(to, action, subject, html, attachments=None, bcc=None):
+def send_email(to, action, subject, html, attachments=None, bcc=None) -> bool:
     """
     Sends email and records it in DB
     """
@@ -134,7 +134,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
     return True
 
 
-def send_email_with_action(user, action, **kwargs):
+def send_email_with_action(user, action, **kwargs) -> None:
     """
     A general email helper to use in the APIs
     :param user: email or user to which email is to be sent
@@ -153,7 +153,7 @@ def send_email_with_action(user, action, **kwargs):
     )
 
 
-def send_email_confirmation(email, link):
+def send_email_confirmation(email, link) -> None:
     """account confirmation"""
     send_email(
         to=email,
@@ -163,7 +163,7 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, event_name, link):
+def send_email_new_session(email, event_name, link) -> None:
     """email for new session"""
     send_email(
         to=email,
@@ -215,7 +215,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     )
 
 
-def send_email_role_invite(email, role_name, event_name, link):
+def send_email_role_invite(email, role_name, event_name, link) -> None:
     """email for role invite"""
     send_email(
         to=email,
@@ -227,7 +227,7 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_user_email_role_invite(email, role_name, event_name, link):
+def send_user_email_role_invite(email, role_name, event_name, link) -> None:
     """email for role invite"""
     send_email(
         to=email,
@@ -241,7 +241,7 @@ def send_user_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_after_event(email, event_name, frontend_url):
+def send_email_after_event(email, event_name, frontend_url) -> None:
     """email for role invite"""
     send_email(
         to=email,
@@ -255,7 +255,7 @@ def send_email_after_event(email, event_name, frontend_url):
 
 def send_email_for_monthly_fee_payment(
     user, event_name, previous_month, amount, app_name, link, follow_up=False
-):
+) -> None:
     """email for monthly fee payment"""
     options = {
         False: MONTHLY_PAYMENT_EMAIL,
@@ -284,7 +284,7 @@ def send_email_for_monthly_fee_payment(
     )
 
 
-def send_export_mail(email, event_name, error_text=None, download_url=None):
+def send_export_mail(email, event_name, error_text=None, download_url=None) -> None:
     """followup export link in email"""
     if error_text:
         send_email(
@@ -302,7 +302,7 @@ def send_export_mail(email, event_name, error_text=None, download_url=None):
         )
 
 
-def send_import_mail(email, event_name=None, error_text=None, event_url=None):
+def send_import_mail(email, event_name=None, error_text=None, event_url=None) -> None:
     """followup export link in email"""
     if error_text:
         send_email(
@@ -320,7 +320,7 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
         )
 
 
-def send_test_email(recipient):
+def send_test_email(recipient) -> None:
     send_email(
         to=recipient,
         action=TEST_MAIL,
@@ -329,7 +329,7 @@ def send_test_email(recipient):
     )
 
 
-def send_email_change_user_email(user, email):
+def send_email_change_user_email(user, email) -> None:
     serializer = get_serializer()
     hash_ = str(
         base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')),
@@ -340,7 +340,7 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id, attachments=None):
+def send_email_to_attendees(order, purchaser_id, attachments=None) -> None:
     if not current_app.config['ATTACH_ORDER_PDF']:
         attachments = None
 
@@ -380,7 +380,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
             )
 
 
-def send_order_cancel_email(order):
+def send_order_cancel_email(order) -> None:
     cancel_msg = ''
     if order.cancel_note:
         cancel_msg = "<br/>Message from the organizer: {cancel_note}".format(

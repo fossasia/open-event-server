@@ -3,6 +3,7 @@ import os
 import shutil
 from collections import OrderedDict
 from datetime import datetime
+from typing import Any, Dict, TypeVar, Union
 
 import pytz
 import requests
@@ -24,6 +25,8 @@ from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
+
+T = TypeVar('T')
 
 # order of keys in export json
 FIELD_ORDER = {
@@ -124,7 +127,7 @@ FILENAME_EXCLUDE = r'<>:"/\|?*;'
 # FUNCTIONS
 
 
-def sorted_dict(data):
+def sorted_dict(data: T) -> Union[OrderedDict, T]:
     """
     sorts a json (dict/list->dict) and returns OrderedDict
     """
@@ -140,7 +143,7 @@ def sorted_dict(data):
     return data
 
 
-def _order_json(data, srv):
+def _order_json(data, srv) -> OrderedDict[str, Any]:
     """
     sorts the data a/c FIELD_ORDER and returns.
     If some keys are not included in FIELD_ORDER, they go at last, sorted alphabetically
@@ -169,7 +172,7 @@ def _order_json(data, srv):
     return new_data
 
 
-def _download_media(data, srv, dir_path, settings):
+def _download_media(data, srv, dir_path, settings) -> None:
     """
     Downloads the media and saves it
     """
@@ -211,7 +214,7 @@ def _download_media(data, srv, dir_path, settings):
             pass
 
 
-def _generate_meta():
+def _generate_meta() -> Dict[str, str]:
     """
     Generate Meta information for export
     """
@@ -219,7 +222,7 @@ def _generate_meta():
     return d
 
 
-def export_event_json(event_id, settings):
+def export_event_json(event_id, settings) -> Any:
     """
     Exports the event as a zip on the server and return its path
     """
@@ -267,7 +270,7 @@ def export_event_json(event_id, settings):
     return storage_url
 
 
-def get_current_user():
+def get_current_user() -> Any:
     if current_user:
         return current_user
     return current_logged_user
@@ -276,7 +279,7 @@ def get_current_user():
 # HELPERS
 
 
-def create_export_job(task_id, event_id):
+def create_export_job(task_id, event_id) -> None:
     """
     Create export job for an export that is going to start
     """
@@ -300,14 +303,14 @@ def create_export_job(task_id, event_id):
 
 
 # FIELD DATA FORMATTERS
-def make_filename(name):
+def make_filename(name: str) -> str:
     """Make speaker image filename for export"""
     for _ in FILENAME_EXCLUDE:
         name = name.replace(_, ' ')
     return ''.join(s.title() for s in name.split() if s)
 
 
-def handle_unserializable_data(obj):
+def handle_unserializable_data(obj) -> Any:
     """
     Handles objects which cannot be serialized by json.dumps()
     :param obj: Object to be serialized
