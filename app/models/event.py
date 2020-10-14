@@ -21,6 +21,7 @@ from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee, get_maximum_fee
 from app.models.ticket_holder import TicketHolder
 from app.models.user import ATTENDEE, ORGANIZER, OWNER
+from app.settings import get_settings
 
 
 def get_new_event_identifier(length=8):
@@ -403,6 +404,11 @@ class Event(SoftDeletionModel):
     @property
     def general_statistics(self):
         return Namespace(id=self.id)
+
+    @property
+    def site_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/e/{self.identifier}"
 
 
 @event.listens_for(Event, 'after_update')

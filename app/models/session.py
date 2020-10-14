@@ -84,6 +84,10 @@ class Session(SoftDeletionModel):
     def average_rating(self):
         return self.get_average_rating()
 
+    @property
+    def site_link(self):
+        return self.event.site_link + f"/session/{self.id}"
+
     def __repr__(self):
         return '<Session %r>' % self.title
 
