@@ -52,6 +52,8 @@ class MicrolocationList(ResourceList):
         if view_kwargs.get('session_id'):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             query_ = query_.join(Session).filter(Session.id == session.id)
+        elif view_kwargs.get('video_stream_id'):
+            query_ = query_.filter_by(video_stream_id=view_kwargs['video_stream_id'])
         return query_
 
     view_kwargs = True

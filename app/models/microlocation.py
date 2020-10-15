@@ -14,6 +14,9 @@ class Microlocation(SoftDeletionModel):
     room = db.Column(db.String)
     session = db.relationship('Session', backref="microlocation")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    video_stream_id = db.Column(
+        db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE')
+    )
 
     @staticmethod
     def get_service_name():

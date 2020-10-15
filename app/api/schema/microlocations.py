@@ -46,3 +46,12 @@ class MicrolocationSchema(SoftDeletionSchema):
         schema='EventSchemaPublic',
         type_='event',
     )
+    video_stream = Relationship(
+        attribute='video_stream',
+        self_view='v1.microlocation_video_stream',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_stream_detail',
+        related_view_kwargs={'room_id': '<id>'},
+        schema='VideoStreamSchema',
+        type_='video-stream',
+    )
