@@ -13,9 +13,9 @@ class VideoStreamSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    url = fields.Str(required=True)
-    password = fields.Str()
-    additional_information = fields.Str()
+    url = fields.Url(required=True)
+    password = fields.Str(required=False)
+    additional_information = fields.Str(required=False)
     rooms = Relationship(
         attribute='rooms',
         many=True,

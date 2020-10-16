@@ -885,7 +885,7 @@ api.route(
 api.route(
     MicrolocationRelationshipOptional,
     'microlocation_video_stream',
-    '/microlocations/<int:id>/relationships/video_stream',
+    '/microlocations/<int:id>/relationships/video-stream',
 )
 
 # user favourite events
