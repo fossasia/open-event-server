@@ -3,6 +3,7 @@ from typing import Dict
 from flask import Blueprint, g, jsonify, request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
 
 from app.api.bootstrap import api
@@ -15,7 +16,7 @@ from app.api.helpers.notification import (
     send_notif_new_session_organizer,
     send_notif_session_state_change,
 )
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.system_mails import MAILS, SESSION_STATE_CHANGE
@@ -132,13 +133,13 @@ class SessionList(ResourceList):
         :return:
         """
         query_ = self.session.query(Session)
-        if view_kwargs.get('track_id') is not None:
+        if view_kwargs.get('track_id'):
             track = safe_query_kwargs(Track, view_kwargs, 'track_id')
             query_ = query_.join(Track).filter(Track.id == track.id)
-        if view_kwargs.get('session_type_id') is not None:
+        elif view_kwargs.get('session_type_id'):
             session_type = safe_query_kwargs(SessionType, view_kwargs, 'session_type_id')
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
-        if view_kwargs.get('microlocation_id') is not None:
+        elif view_kwargs.get('microlocation_id'):
             microlocation = safe_query_kwargs(
                 Microlocation,
                 view_kwargs,
@@ -147,7 +148,7 @@ class SessionList(ResourceList):
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == microlocation.id
             )
-        if view_kwargs.get('user_id') is not None:
+        elif view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
                 query_.join(User)
@@ -158,11 +159,12 @@ class SessionList(ResourceList):
                 .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
                 .order_by(*get_distinct_sort_fields(SessionSchema, Session))
             )
-        query_ = event_query(query_, view_kwargs)
-        if view_kwargs.get('speaker_id'):
+        elif view_kwargs.get('speaker_id'):
             speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
+        elif view_kwargs.get('event_id') or view_kwargs.get('event_identifier'):
+            query_ = event_query(query_, view_kwargs)
 
         return query_
 
@@ -240,6 +242,13 @@ class SessionDetail(ResourceDetail):
                 Event, 'identifier', view_kwargs['event_identifier'], 'identifier'
             )
             view_kwargs['event_id'] = event.id
+
+    def after_get_object(self, session, view_kwargs):
+        is_speaker_or_admin = is_logged_in() and has_access(
+            'is_speaker_for_session', id=session.id
+        )
+        if session.state not in ['accepted', 'confirmed'] and not is_speaker_or_admin:
+            raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
 
     def before_update_object(self, session, data, view_kwargs):
         """
@@ -337,6 +346,7 @@ class SessionDetail(ResourceDetail):
             'before_update_object': before_update_object,
             'before_get_object': before_get_object,
             'after_update_object': after_update_object,
+            'after_get_object': after_get_object,
         },
     }
 
