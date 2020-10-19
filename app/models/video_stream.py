@@ -1,4 +1,10 @@
+from flask_jwt_extended import current_user
+from sqlalchemy import or_
+
+from app.api.helpers.permission_manager import has_access
 from app.models import db
+from app.models.order import Order
+from app.models.ticket_holder import TicketHolder
 
 
 class VideoStream(db.Model):
@@ -21,3 +27,20 @@ class VideoStream(db.Model):
 
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
+
+    @property
+    def event(self):
+        return self.rooms[0].event
+
+    @property
+    def user_can_access(self):
+        event_id = self.rooms[0].event_id
+        user = current_user
+        if user.is_staff or has_access('is_coorganizer', event_id=event_id):
+            return True
+        return db.session.query(
+            TicketHolder.query.filter_by(event_id=event_id, user=user)
+            .join(Order)
+            .filter(or_(Order.status == 'completed', Order.status == 'placed'))
+            .exists()
+        ).scalar()

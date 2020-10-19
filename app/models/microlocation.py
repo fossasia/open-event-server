@@ -24,3 +24,11 @@ class Microlocation(SoftDeletionModel):
 
     def __repr__(self):
         return '<Microlocation %r>' % self.name
+
+    @property
+    def safe_video_stream(self):
+        """Conditionally return video stream after applying access control"""
+        stream = self.video_stream
+        if stream and stream.user_can_access:
+            return stream
+        return None
