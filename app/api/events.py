@@ -659,12 +659,12 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
-        event = safe_query_kwargs(Event, view_kwargs, 'id')
+    def after_get_object(self, event, view_kwargs):
         if event.state == 'Draft':
             if 'Authorization' not in request.headers and not has_access(
                 'is_registrar', event_id=event.id
             ):
-                view_kwargs['id'] = None
+                raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
     def before_patch(self, args, kwargs, data=None):
         """
@@ -731,6 +731,7 @@ class EventDetail(ResourceDetail):
         'methods': {
             'before_update_object': before_update_object,
             'before_get_object': before_get_object,
+            'after_get_object': after_get_object,
             'after_update_object': after_update_object,
             'before_patch': before_patch,
         },
