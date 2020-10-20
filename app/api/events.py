@@ -659,6 +659,13 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        event = safe_query_kwargs(Event, view_kwargs, 'id')
+        if event.state == 'Draft':
+            if 'Authorization' not in request.headers and not has_access(
+                'is_registrar', event_id=event.id
+            ):
+                view_kwargs['id'] = None
+
     def before_patch(self, args, kwargs, data=None):
         """
         before patch method to verify if the event location is provided before publishing the event and checks that
