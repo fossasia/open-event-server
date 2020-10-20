@@ -659,6 +659,13 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def after_get_object(self, event, view_kwargs):
+        if event.state == "draft":
+            if 'Authorization' not in request.headers or not has_access(
+                'is_coorganizer', event_id=event.id
+            ):
+                raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
+
     def before_patch(self, args, kwargs, data=None):
         """
         before patch method to verify if the event location is provided before publishing the event and checks that
@@ -724,6 +731,7 @@ class EventDetail(ResourceDetail):
         'methods': {
             'before_update_object': before_update_object,
             'before_get_object': before_get_object,
+            'after_get_object': after_get_object,
             'after_update_object': after_update_object,
             'before_patch': before_patch,
         },
