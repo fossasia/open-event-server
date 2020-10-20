@@ -73,7 +73,7 @@ class Event(SoftDeletionModel):
     feedbacks = db.relationship('Feedback', backref="event")
     attendees = db.relationship('TicketHolder', backref="event")
     privacy = db.Column(db.String, default="public")
-    state = db.Column(db.String, default="Draft")
+    state = db.Column(db.String, default="draft")
     event_type_id = db.Column(
         db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE')
     )
