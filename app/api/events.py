@@ -662,7 +662,7 @@ class EventDetail(ResourceDetail):
     def after_get_object(self, event, view_kwargs):
         if event.state == 'Draft':
             if 'Authorization' not in request.headers and not has_access(
-                'is_registrar', event_id=event.id
+                'is_coorganizer', event_id=event.id
             ):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
