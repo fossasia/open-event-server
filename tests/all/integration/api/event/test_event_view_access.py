@@ -5,7 +5,7 @@ from app.models.users_events_role import UsersEventsRoles
 
 
 def get_event(db, user=None):
-    event = EventFactoryBasic()
+    event = EventFactoryBasic(state='draft')
     if user:
         role, _ = get_or_create(Role, name='owner', title_name='Owner')
         UsersEventsRoles(user=user, event=event, role=role)
@@ -14,7 +14,7 @@ def get_event(db, user=None):
     return event
 
 
-def test_eventdetails_draft_get_unauthenticateduser_error(db, client):
+def test_event_draft_get_unauthenticated_error(db, client):
     event = get_event(db)
 
     response = client.get(
@@ -25,7 +25,7 @@ def test_eventdetails_draft_get_unauthenticateduser_error(db, client):
     assert response.status_code == 404
 
 
-def test_eventdetails_draft_get_normaluser_error(db, client, jwt):
+def test_event_draft_get_normal_error(db, client, jwt):
     event = get_event(db)
 
     response = client.get(
@@ -37,7 +37,7 @@ def test_eventdetails_draft_get_normaluser_error(db, client, jwt):
     assert response.status_code == 404
 
 
-def test_eventdetails_draft_get_owner(db, client, user, jwt):
+def test_event_draft_get_owner(db, client, user, jwt):
     event = get_event(db, user)
 
     response = client.get(
@@ -49,7 +49,7 @@ def test_eventdetails_draft_get_owner(db, client, user, jwt):
     assert response.status_code == 200
 
 
-def test_eventdetails_draft_get_admin(db, client, admin_jwt):
+def test_event_draft_get_admin(db, client, admin_jwt):
     event = get_event(db)
 
     response = client.get(
