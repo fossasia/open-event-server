@@ -65,7 +65,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
         'accepted': {
             'subject': 'Accepted! Congratulations Your submission for {event_name} titled {session_name} has been Accepted',
@@ -76,7 +76,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
         'confirmed': {
             'subject': 'Confirmed! Congratulations Your submission for {event_name} titled {session_name} has been Confirmed',
@@ -87,7 +87,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
         'rejected': {
             'subject': 'Not Accepted. Your submission for {event_name} titled {session_name} was not accepted',
@@ -98,7 +98,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
         'canceled': {
             'subject': 'Canceled! Your submission for {event_name} titled {session_name} has been Canceled',
@@ -109,7 +109,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
         'withdrawn': {
             'subject': 'Withdrawn! Your submission for {event_name} titled {session_name} has been Withdrawn',
@@ -120,7 +120,7 @@ MAILS = {
             "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
-            "<a href='{frontend_link}'>{app_name}</a>",
+            "{frontend_link}",
         },
     },
     SESSION_SCHEDULE: {
