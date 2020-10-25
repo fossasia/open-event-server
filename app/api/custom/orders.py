@@ -157,6 +157,13 @@ def create_order():
         raise e
 
     validate_attendees({attendee.id for attendee in attendees})
+
+    if data.get('amount') is not None and (
+        current_user.is_staff or has_access('is_coorganizer', event_id=event.id)
+    ):
+        # If organizer or admin has overrided the amount of order
+        order_amount['total'] = data['amount']
+
     order = Order(
         amount=order_amount['total'],
         event=event,
