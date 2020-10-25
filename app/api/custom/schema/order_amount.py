@@ -10,3 +10,4 @@ class TicketSchema(Schema):
 class OrderAmountInputSchema(Schema):
     tickets = fields.Nested(TicketSchema, many=True)
     discount_code = fields.Integer(load_from='discount-code')
+    amount = fields.Float(allow_none=True)
