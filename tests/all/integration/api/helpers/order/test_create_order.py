@@ -3,7 +3,6 @@ import json
 from app.api.helpers.db import get_or_create
 from app.models.order import Order
 from app.models.role import Role
-from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.users_events_role import UsersEventsRoles
 from tests.factories.attendee import AttendeeFactoryBase
@@ -71,33 +70,26 @@ def test_create_order_without_discount(client, db, jwt):
 
 
 def test_create_order_override_amount(client, db, admin_jwt):
-    tickets_dict = _create_taxed_tickets(db, tax_included=False)
+    tickets = _create_tickets([10, 20], event=EventFactoryBasic(), quantity=2)
     db.session.commit()
 
     response = client.post(
         '/v1/orders/create-order',
         content_type='application/json',
         headers=admin_jwt,
-        data=json.dumps({'amount': 0, 'tickets': tickets_dict}),
+        data=json.dumps({'amount': 0, 'tickets': _create_ticket_dict(tickets, [1, 2])}),
     )
-
-    assert TicketHolder.query.count() == 12
 
     assert response.status_code == 200
     order_dict = json.loads(response.data)
     order = Order.query.get(order_dict['data']['id'])
-    assert order_dict['data']['attributes']['amount'] == 0
-    assert order.amount == 0
-    ticket_holders = order.ticket_holders
-    assert len(ticket_holders) == 12
-    assert order.discount_code is None
-    for ticket_holder in ticket_holders:
-        assert ticket_holder.event_id is not None
+    assert order_dict['data']['attributes']['amount'] == 0.0
+    assert order.amount == 0.0
 
 
 def test_create_order_override_amount_organizer(client, db, user, jwt):
-    tickets_dict = _create_taxed_tickets(db, tax_included=False)
-    event = Ticket.query.first().event
+    event = EventFactoryBasic()
+    tickets = _create_tickets([10, 20], event=event, quantity=2)
     role, _ = get_or_create(Role, name='owner', title_name='Owner')
     UsersEventsRoles(user=user, event=event, role=role)
     db.session.commit()
@@ -106,47 +98,33 @@ def test_create_order_override_amount_organizer(client, db, user, jwt):
         '/v1/orders/create-order',
         content_type='application/json',
         headers=jwt,
-        data=json.dumps({'amount': 0, 'tickets': tickets_dict}),
+        data=json.dumps({'amount': 0, 'tickets': _create_ticket_dict(tickets, [1, 2])}),
     )
-
-    assert TicketHolder.query.count() == 12
 
     assert response.status_code == 200
     order_dict = json.loads(response.data)
     order = Order.query.get(order_dict['data']['id'])
     assert order_dict['data']['attributes']['amount'] == 0
     assert order.amount == 0
-    ticket_holders = order.ticket_holders
-    assert len(ticket_holders) == 12
-    assert order.discount_code is None
-    for ticket_holder in ticket_holders:
-        assert ticket_holder.event_id is not None
 
 
 def test_create_order_override_amount_ignore(client, db, jwt):
     # For normal user, amount parameter should be ignored
-    tickets_dict = _create_taxed_tickets(db, tax_included=False)
+    tickets = _create_tickets([10, 20], event=EventFactoryBasic(), quantity=2)
     db.session.commit()
 
     response = client.post(
         '/v1/orders/create-order',
         content_type='application/json',
         headers=jwt,
-        data=json.dumps({'amount': 0, 'tickets': tickets_dict}),
+        data=json.dumps({'amount': 0, 'tickets': _create_ticket_dict(tickets, [1, 2])}),
     )
-
-    assert TicketHolder.query.count() == 12
 
     assert response.status_code == 200
     order_dict = json.loads(response.data)
     order = Order.query.get(order_dict['data']['id'])
-    assert order_dict['data']['attributes']['amount'] == 5240.73
-    assert order.amount == 5240.73
-    ticket_holders = order.ticket_holders
-    assert len(ticket_holders) == 12
-    assert order.discount_code is None
-    for ticket_holder in ticket_holders:
-        assert ticket_holder.event_id is not None
+    assert order_dict['data']['attributes']['amount'] == 50.0
+    assert order.amount == 50.0
 
 
 def test_throw_ticket_sold_out(client, db, jwt):
