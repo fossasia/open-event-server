@@ -31,7 +31,7 @@ class SpeakerSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    email = fields.Str(required=True)
+    email = fields.Str(allow_none=True)
     photo_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(allow_none=True)
     small_image_url = fields.Url(allow_none=True)

@@ -76,7 +76,7 @@ class SpeakerListPost(ResourceList):
                 'Organizer access required to override email',
             )
         if (
-            data.get('is_email_overridden')
+            not data.get('is_email_overridden')
             and has_access('is_organizer', event_id=data['event'])
             and not data.get('email')
         ):
