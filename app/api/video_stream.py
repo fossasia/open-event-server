@@ -41,11 +41,6 @@ class VideoStreamList(ResourceList):
 
 class VideoStreamDetail(ResourceDetail):
     def before_get_object(self, view_kwargs):
-        """
-        before get method to get the resource id for fetching details
-        :param view_kwargs:
-        :return:
-        """
         if view_kwargs.get('room_id'):
             room = safe_query_kwargs(Microlocation, view_kwargs, 'room_id')
             view_kwargs['id'] = room.video_stream and room.video_stream.id
@@ -70,10 +65,6 @@ class VideoStreamDetail(ResourceDetail):
 
 
 class VideoStreamRelationship(ResourceRelationship):
-    """
-    User Favourite Events Relationship
-    """
-
     schema = VideoStreamSchema
     methods = ['GET']
     data_layer = {'session': db.session, 'model': VideoStream}

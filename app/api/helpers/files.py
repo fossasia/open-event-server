@@ -1,7 +1,6 @@
 import base64
 import io
 import os
-import urllib.error
 import urllib.parse
 import urllib.request
 import uuid

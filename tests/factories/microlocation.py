@@ -1,6 +1,5 @@
 import factory
 
-from app.models import video_stream
 from app.models.microlocation import Microlocation
 from tests.factories import common
 from tests.factories.base import BaseFactory
