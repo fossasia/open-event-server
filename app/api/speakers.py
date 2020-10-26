@@ -78,12 +78,12 @@ class SpeakerListPost(ResourceList):
         is_organizer = has_access('is_organizer', event_id=data['event'])
         if (
             not data.get('is_email_overridden')
-            and hasAccess
+            and is_organizer
             and not data.get('email')
         ):
             data['email'] = current_user.email
         if (
-            not hasAccess
+            not is_organizer
             and not data.get('email')
         ):
             raise ForbiddenError(
