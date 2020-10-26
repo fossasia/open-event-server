@@ -81,7 +81,13 @@ class SpeakerListPost(ResourceList):
             and not data.get('email')
         ):
             data['email'] = current_user.email
-
+        if (
+            not has_access('is_organizer', event_id=data['event'])
+            and not data.get('email')
+        ):
+            raise ForbiddenError(
+                {'pointer': ''}, 'Email is required for speaker'
+            )
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
