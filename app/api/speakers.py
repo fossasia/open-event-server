@@ -67,9 +67,9 @@ class SpeakerListPost(ResourceList):
             raise ForbiddenError(
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
-
-        if data.get('is_email_overridden') and not has_access(
-            'is_organizer', event_id=data['event']
+        is_organizer = has_access('is_organizer', event_id=data['event'])
+        if (
+            data.get('is_email_overridden') and not is_organizer
         ):
             raise ForbiddenError(
                 {'pointer': 'data/attributes/is_email_overridden'},
@@ -77,11 +77,17 @@ class SpeakerListPost(ResourceList):
             )
         if (
             not data.get('is_email_overridden')
-            and has_access('is_organizer', event_id=data['event'])
+            and is_organizer
             and not data.get('email')
         ):
             data['email'] = current_user.email
-
+        if (
+            not is_organizer
+            and not data.get('email')
+        ):
+            raise ForbiddenError(
+                {'pointer': '/data/email'}, 'Email is required for speaker'
+            )
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
