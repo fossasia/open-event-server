@@ -75,7 +75,7 @@ class SpeakerListPost(ResourceList):
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )
-        hasAccess=has_access('is_organizer', event_id=data['event'])
+        is_organizer = has_access('is_organizer', event_id=data['event'])
         if (
             not data.get('is_email_overridden')
             and hasAccess
