@@ -68,7 +68,8 @@ class SpeakerListPost(ResourceList):
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
         is_organizer = has_access('is_organizer', event_id=data['event'])
-        if data.get('is_email_overridden') and not is_organizer
+        if (
+            data.get('is_email_overridden') and not is_organizer
         ):
             raise ForbiddenError(
                 {'pointer': 'data/attributes/is_email_overridden'},
