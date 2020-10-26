@@ -86,7 +86,7 @@ class SpeakerListPost(ResourceList):
             and not data.get('email')
         ):
             raise ForbiddenError(
-                {'pointer': ''}, 'Email is required for speaker'
+                {'pointer': '/data/email'}, 'Email is required for speaker'
             )
         if 'sessions' in data:
             session_ids = data['sessions']
