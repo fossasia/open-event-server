@@ -28,7 +28,7 @@ def test_create_without_room_error(db, client, admin_jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=admin_jwt,
         data=data,
@@ -60,7 +60,7 @@ def test_create_with_room_admin(db, client, admin_jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=admin_jwt,
         data=data,
@@ -94,7 +94,7 @@ def test_create_with_room_organizer(db, client, user, jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
@@ -134,7 +134,7 @@ def test_create_with_rooms_different_events_error(db, client, user, jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
@@ -173,7 +173,7 @@ def test_create_with_rooms_same_events(db, client, user, jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
@@ -186,6 +186,17 @@ def test_create_with_rooms_same_events(db, client, user, jwt):
     assert stream.url == 'https://meet.jit.si'
     assert stream.name == 'Test'
     assert stream.password == '1234'
+
+    response = client.get(
+        f'/v1/video-streams/{stream.id}/rooms',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    response_dict = json.loads(response.data)
+    assert response_dict['data'][0]['id'] == str(room.id)
+    assert response_dict['data'][1]['id'] == str(room_other.id)
 
 
 def test_create_with_room_user_error(db, client, jwt):
@@ -207,7 +218,7 @@ def test_create_with_room_user_error(db, client, jwt):
     )
 
     response = client.post(
-        f'/v1/video-streams',
+        '/v1/video-streams',
         content_type='application/vnd.api+json',
         headers=jwt,
         data=data,
