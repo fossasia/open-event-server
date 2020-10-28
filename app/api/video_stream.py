@@ -3,6 +3,8 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.video_stream import VideoStreamSchema
@@ -17,10 +19,20 @@ class VideoStreamList(ResourceList):
 
     def before_post(self, args, kwargs, data):
         require_relationship(['rooms'], data)
-        # if not has_access('is_coorganizer', event_id=data['event']):
-        #     raise ObjectNotFound(
-        #         {'parameter': 'event_id'}, "Event: {} not found".format(data['event'])
-        #     )
+        rooms = Microlocation.query.filter(Microlocation.id.in_(data['rooms'])).all()
+        event_ids = set()
+        for room in rooms:
+            event_ids.add(room.event_id)
+            if len(event_ids) > 1:
+                raise ForbiddenError(
+                    {'pointer': '/data/relationships/rooms'},
+                    'Video Stream can only be created with rooms of a single event',
+                )
+        if not has_access('is_coorganizer', event_id=event_ids.pop()):
+            raise ForbiddenError(
+                {'pointer': '/data/relationships/rooms'},
+                "You don't have access to the event of provided rooms",
+            )
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStream)

@@ -3,21 +3,18 @@ import json
 from app.api.helpers.db import get_or_create
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
-from tests.factories.microlocation import MicrolocationSubVideoStreamFactory
-from tests.factories.session import SessionSubFactory
-from tests.factories.video_stream import VideoStreamFactoryBase
+from app.models.video_stream import VideoStream
+from tests.factories.microlocation import MicrolocationSubFactory
 
 
-def get_room_session_stream(db, user=None, **kwargs):
-    stream = VideoStreamFactoryBase(**kwargs)
-    room = MicrolocationSubVideoStreamFactory(video_stream=stream)
-    session = SessionSubFactory(microlocation=room, event=room.event)
+def get_room(db, user=None, **kwargs):
+    room = MicrolocationSubFactory(**kwargs)
     if user:
         role, _ = get_or_create(Role, name='owner', title_name='Owner')
         UsersEventsRoles(user=user, event=room.event, role=role)
     db.session.commit()
 
-    return room, stream, session
+    return room
 
 
 def test_create_without_room_error(db, client, admin_jwt):
@@ -25,10 +22,7 @@ def test_create_without_room_error(db, client, admin_jwt):
         {
             'data': {
                 'type': 'video-stream',
-                'attributes': {"firstname": "Haider"},
-                # "relationships": {
-                #     "rooms": [{"data": {"id": str(order.id), "type": "order"}}]
-                # },
+                'attributes': {"url": "https://meet.jit.si", "name": "Test"},
             }
         }
     )
@@ -41,4 +35,187 @@ def test_create_without_room_error(db, client, admin_jwt):
     )
 
     assert response.status_code == 422
-    assert json.loads(response.data) == ''
+    assert (
+        json.loads(response.data)['errors'][0]['detail']
+        == 'A valid relationship with rooms resource is required'
+    )
+
+
+def test_create_with_room_admin(db, client, admin_jwt):
+    room = get_room(db)
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'video-stream',
+                'attributes': {
+                    "url": "https://meet.jit.si",
+                    "name": "Test",
+                    "password": "1234",
+                },
+                "relationships": {
+                    "rooms": {"data": [{"id": str(room.id), "type": "microlocation"}]}
+                },
+            }
+        }
+    )
+
+    response = client.post(
+        f'/v1/video-streams',
+        content_type='application/vnd.api+json',
+        headers=admin_jwt,
+        data=data,
+    )
+
+    assert response.status_code == 201
+
+    stream = VideoStream.query.get(json.loads(response.data)['data']['id'])
+
+    assert stream.url == 'https://meet.jit.si'
+    assert stream.name == 'Test'
+    assert stream.password == '1234'
+
+
+def test_create_with_room_organizer(db, client, user, jwt):
+    room = get_room(db, user=user)
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'video-stream',
+                'attributes': {
+                    "url": "https://meet.jit.si",
+                    "name": "Test",
+                    "password": "1234",
+                },
+                "relationships": {
+                    "rooms": {"data": [{"id": str(room.id), "type": "microlocation"}]}
+                },
+            }
+        }
+    )
+
+    response = client.post(
+        f'/v1/video-streams',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 201
+
+    stream = VideoStream.query.get(json.loads(response.data)['data']['id'])
+
+    assert stream.url == 'https://meet.jit.si'
+    assert stream.name == 'Test'
+    assert stream.password == '1234'
+
+
+def test_create_with_rooms_different_events_error(db, client, user, jwt):
+    room = get_room(db, user=user)
+    room_other = get_room(db, user=user)
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'video-stream',
+                'attributes': {
+                    "url": "https://meet.jit.si",
+                    "name": "Test",
+                    "password": "1234",
+                },
+                "relationships": {
+                    "rooms": {
+                        "data": [
+                            {"id": str(room.id), "type": "microlocation"},
+                            {"id": str(room_other.id), "type": "microlocation"},
+                        ]
+                    }
+                },
+            }
+        }
+    )
+
+    response = client.post(
+        f'/v1/video-streams',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 403
+
+    assert (
+        json.loads(response.data)['errors'][0]['detail']
+        == 'Video Stream can only be created with rooms of a single event'
+    )
+
+
+def test_create_with_rooms_same_events(db, client, user, jwt):
+    room = get_room(db, user=user)
+    room_other = get_room(db, event=room.event)
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'video-stream',
+                'attributes': {
+                    "url": "https://meet.jit.si",
+                    "name": "Test",
+                    "password": "1234",
+                },
+                "relationships": {
+                    "rooms": {
+                        "data": [
+                            {"id": str(room.id), "type": "microlocation"},
+                            {"id": str(room_other.id), "type": "microlocation"},
+                        ]
+                    }
+                },
+            }
+        }
+    )
+
+    response = client.post(
+        f'/v1/video-streams',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 201
+
+    stream = VideoStream.query.get(json.loads(response.data)['data']['id'])
+
+    assert stream.url == 'https://meet.jit.si'
+    assert stream.name == 'Test'
+    assert stream.password == '1234'
+
+
+def test_create_with_room_user_error(db, client, jwt):
+    room = get_room(db)
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'video-stream',
+                'attributes': {
+                    "url": "https://meet.jit.si",
+                    "name": "Test",
+                    "password": "1234",
+                },
+                "relationships": {
+                    "rooms": {"data": [{"id": str(room.id), "type": "microlocation"}]}
+                },
+            }
+        }
+    )
+
+    response = client.post(
+        f'/v1/video-streams',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 403
+
+    assert (
+        json.loads(response.data)['errors'][0]['detail']
+        == "You don't have access to the event of provided rooms"
+    )
