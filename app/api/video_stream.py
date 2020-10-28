@@ -13,26 +13,27 @@ from app.models.microlocation import Microlocation
 from app.models.video_stream import VideoStream
 
 
-class VideoStreamList(ResourceList):
-
-    # decorators = (api.has_permission('is_admin', methods="POST"),)
-
-    def before_post(self, args, kwargs, data):
-        require_relationship(['rooms'], data)
-        rooms = Microlocation.query.filter(Microlocation.id.in_(data['rooms'])).all()
-        event_ids = set()
-        for room in rooms:
-            event_ids.add(room.event_id)
-            if len(event_ids) > 1:
-                raise ForbiddenError(
-                    {'pointer': '/data/relationships/rooms'},
-                    'Video Stream can only be created with rooms of a single event',
-                )
-        if not has_access('is_coorganizer', event_id=event_ids.pop()):
+def check_same_event(room_ids):
+    rooms = Microlocation.query.filter(Microlocation.id.in_(room_ids)).all()
+    event_ids = set()
+    for room in rooms:
+        event_ids.add(room.event_id)
+        if len(event_ids) > 1:
             raise ForbiddenError(
                 {'pointer': '/data/relationships/rooms'},
-                "You don't have access to the event of provided rooms",
+                'Video Stream can only be created/edited with rooms of a single event',
             )
+    if not has_access('is_coorganizer', event_id=event_ids.pop()):
+        raise ForbiddenError(
+            {'pointer': '/data/relationships/rooms'},
+            "You don't have access to the event of provided rooms",
+        )
+
+
+class VideoStreamList(ResourceList):
+    def before_post(self, args, kwargs, data):
+        require_relationship(['rooms'], data)
+        check_same_event(data['rooms'])
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStream)
@@ -63,15 +64,27 @@ class VideoStreamDetail(ResourceDetail):
                 {'parameter': 'id'}, f"Video Stream: {stream.id} not found"
             )
 
+    def before_update_object(self, obj, data, kwargs):
+        rooms = data.get('rooms', [])
+        room_ids = rooms + [room.id for room in obj.rooms]
+        if room_ids and len(room_ids):
+            check_same_event(room_ids)
+
+    def before_delete_object(self, obj, kwargs):
+        room_ids = [room.id for room in obj.rooms]
+        if room_ids and len(room_ids):
+            check_same_event(room_ids)
+
     schema = VideoStreamSchema
     decorators = (jwt_required,)
-    # decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     data_layer = {
         'session': db.session,
         'model': VideoStream,
         'methods': {
             'before_get_object': before_get_object,
             'after_get_object': after_get_object,
+            'before_update_object': before_update_object,
+            'before_delete_object': before_delete_object,
         },
     }
 

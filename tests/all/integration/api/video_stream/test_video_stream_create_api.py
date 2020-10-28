@@ -144,7 +144,7 @@ def test_create_with_rooms_different_events_error(db, client, user, jwt):
 
     assert (
         json.loads(response.data)['errors'][0]['detail']
-        == 'Video Stream can only be created with rooms of a single event'
+        == 'Video Stream can only be created/edited with rooms of a single event'
     )
 
 

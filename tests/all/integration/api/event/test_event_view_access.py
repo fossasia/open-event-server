@@ -1,7 +1,7 @@
-from tests.factories.event import EventFactoryBasic
 from app.api.helpers.db import get_or_create
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
+from tests.factories.event import EventFactoryBasic
 
 
 def get_event(db, user=None):
