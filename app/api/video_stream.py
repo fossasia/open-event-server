@@ -67,12 +67,12 @@ class VideoStreamDetail(ResourceDetail):
     def before_update_object(self, obj, data, kwargs):
         rooms = data.get('rooms', [])
         room_ids = rooms + [room.id for room in obj.rooms]
-        if room_ids and len(room_ids):
+        if room_ids:
             check_same_event(room_ids)
 
     def before_delete_object(self, obj, kwargs):
         room_ids = [room.id for room in obj.rooms]
-        if room_ids and len(room_ids):
+        if room_ids:
             check_same_event(room_ids)
 
     schema = VideoStreamSchema
