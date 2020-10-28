@@ -235,6 +235,11 @@ from app.api.user_favourite_events import (
 )
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
+from app.api.video_stream import (
+    VideoStreamDetail,
+    VideoStreamList,
+    VideoStreamRelationship,
+)
 
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')
@@ -859,6 +864,7 @@ api.route(
     'microlocation_list',
     '/events/<int:event_id>/microlocations',
     '/events/<event_identifier>/microlocations',
+    '/video-streams/<int:video_stream_id>/rooms',
 )
 api.route(
     MicrolocationDetail,
@@ -875,6 +881,11 @@ api.route(
     MicrolocationRelationshipRequired,
     'microlocation_event',
     '/microlocations/<int:id>/relationships/event',
+)
+api.route(
+    MicrolocationRelationshipOptional,
+    'microlocation_video_stream',
+    '/microlocations/<int:id>/relationships/video-stream',
 )
 
 # user favourite events
@@ -1541,3 +1552,17 @@ api.route(EventSearchResultList, 'event_search_results', '/search/events')
 # Import Jobs
 api.route(ImportJobList, 'import_job_list', '/import-jobs')
 api.route(ImportJobDetail, 'import_job_detail', '/import-jobs/<int:id>')
+
+# Video Streams
+api.route(VideoStreamList, 'video_stream_list', '/video-streams')
+api.route(
+    VideoStreamDetail,
+    'video_stream_detail',
+    '/video-streams/<int:id>',
+    '/microlocations/<int:room_id>/video-stream',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_rooms',
+    '/video-streams/<int:id>/relationships/rooms',
+)
