@@ -74,6 +74,7 @@ class Ticket(SoftDeletionModel):
         'DiscountCode', secondary=discount_codes_tickets, backref="tickets"
     )
 
+    @property
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
         Else False.
