@@ -403,13 +403,14 @@ class UserRelationship(ResourceRelationship):
     data_layer = {'session': db.session, 'model': User}
 
 
-@user_misc_routes.route('/users/checkEmail', methods=['POST'])
+@user_misc_routes.route('/users/check_email', methods=['POST'])
+@user_misc_routes.route('/users/checkEmail', methods=['POST'])  # deprecated
 def is_email_available():
     email = request.json.get('email', None)
     if email:
-        if get_count(db.session.query(User).filter_by(email=email)):
-            return jsonify(result="False")
-        return jsonify(result="True")
+        if get_count(db.session.query(User).filter_by(deleted_at=None, email=email)):
+            return jsonify(exists=True)
+        return jsonify(exists=False)
     abort(make_response(jsonify(error="Email field missing"), 422))
 
 
