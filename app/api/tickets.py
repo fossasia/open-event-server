@@ -241,6 +241,12 @@ class TicketDetail(ResourceDetail):
                     {'event_id': ticket.event.id},
                     "Event having paid ticket must have a payment method",
                 )
+        else:
+            if (data.get('deleted_at') and ticket.has_order_tickets):
+                raise ForbiddenError(
+                    {'source': ''},
+                    "Can't delete a ticket that has sales",
+                )
 
     decorators = (
         api.has_permission(
