@@ -11,11 +11,7 @@ from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import (
-    send_email_change_user_email,
-    send_email_confirmation,
-    send_email_with_action,
-)
+from app.api.helpers.mail import send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
 from app.api.helpers.user import (
@@ -31,7 +27,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import PASSWORD_RESET_AND_VERIFY, USER_REGISTER_WITH_PASSWORD
+from app.models.mail import USER_REGISTER
 from app.models.notification import Notification
 from app.models.order import Order
 from app.models.session import Session
@@ -90,29 +86,21 @@ class UserList(ResourceList):
         :return:
         """
 
-        if user.was_registered_with_order:
-            link = make_frontend_url('/reset-password', {'token': user.reset_password})
-            send_email_with_action(
-                user,
-                PASSWORD_RESET_AND_VERIFY,
-                app_name=get_settings()['app_name'],
-                email=user.email,
-                link=link,
-            )
-        else:
-            s = get_serializer()
-            hash = str(
-                base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
-                'utf-8',
-            )
-            link = make_frontend_url('/verify', {'token': hash})
-            send_email_with_action(
-                user,
-                USER_REGISTER_WITH_PASSWORD,
-                app_name=get_settings()['app_name'],
-                email=user.email,
-            )
-            send_email_confirmation(user.email, link)
+        s = get_serializer()
+        hash = str(
+            base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
+            'utf-8',
+        )
+        link = make_frontend_url('/verify', {'token': hash})
+        settings = get_settings()
+        send_email_with_action(
+            user,
+            USER_REGISTER,
+            app_name=settings['app_name'],
+            email=user.email,
+            link=link,
+            frontend_url=settings['frontend_url'],
+        )
         # TODO Handle in a celery task
         # if data.get('original_image_url'):
         #     try:
