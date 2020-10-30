@@ -77,6 +77,8 @@ class Config:
     )
     ETAG = True
     ATTACH_ORDER_PDF = env.bool('ATTACH_ORDER_PDF', default=True)
+    # Allow unverified users to buy free tickets. Default: False
+    ALLOW_UNVERIFIED_FREE_ORDERS = env.bool('ALLOW_UNVERIFIED_FREE_ORDERS', default=False)
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')

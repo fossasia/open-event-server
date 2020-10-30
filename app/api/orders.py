@@ -5,7 +5,7 @@ from datetime import datetime
 
 import omise
 import requests
-from flask import Blueprint, jsonify, redirect, request, url_for
+from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -195,7 +195,9 @@ def validate_attendees(ticket_holders):
         if ticket_holder.ticket.type == 'free':
             free_ticket_quantity += 1
 
-    if not current_user.is_verified and free_ticket_quantity == len(ticket_holders):
+    if not current_app.config['ALLOW_UNVERIFIED_FREE_ORDERS'] and (
+        not current_user.is_verified and free_ticket_quantity == len(ticket_holders)
+    ):
         raise ForbiddenError(
             {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
             "Unverified user cannot place free orders",
