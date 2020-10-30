@@ -1,11 +1,10 @@
-from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.payment import StripePaymentsManager
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.stripe_authorization import (
@@ -116,9 +115,7 @@ class StripeAuthorizationDetail(ResourceDetail):
         :return:
         """
         kwargs = get_id(kwargs)
-        if 'Authorization' in request.headers and has_access(
-            'is_coorganizer', event_id=kwargs['id']
-        ):
+        if is_logged_in() and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = StripeAuthorizationSchema
         else:
             self.schema = StripeAuthorizationSchemaPublic

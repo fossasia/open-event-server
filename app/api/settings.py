@@ -5,6 +5,7 @@ from flask_rest_jsonapi import ResourceDetail
 from app.api.bootstrap import api
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.mail import send_test_email
+from app.api.helpers.permission_manager import is_logged_in
 from app.api.helpers.permissions import is_admin
 from app.api.schema.settings import (
     SettingSchemaAdmin,
@@ -39,7 +40,7 @@ class SettingDetail(ResourceDetail):
             refresh_settings()
         kwargs['id'] = 1
 
-        if 'Authorization' in request.headers:
+        if is_logged_in():
             verify_jwt_in_request()
 
             if current_user.is_admin or current_user.is_super_admin:

@@ -158,7 +158,7 @@ class AttendeeList(ResourceList):
                 User.id == user.id
             )
 
-        query_ = event_query(query_, view_kwargs, permission='is_registrar')
+        query_ = event_query(query_, view_kwargs, restrict=True)
         return query_
 
     view_kwargs = True

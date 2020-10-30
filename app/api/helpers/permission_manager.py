@@ -2,7 +2,6 @@ from typing import Union
 
 from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
-from flask_jwt_extended.utils import get_jwt_identity
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import ForbiddenError, NotFoundError
@@ -13,7 +12,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.models.user import User
 
 
 @jwt_required
@@ -536,11 +534,4 @@ def has_access(access_level, **kwargs):
 
 
 def is_logged_in() -> bool:
-    return get_auth_user() is not None
-
-
-def get_auth_user() -> Union[None, User]:
-    if 'Authorization' in request.headers:
-        verify_jwt_in_request()
-        return get_jwt_identity()
-    return None
+    return 'Authorization' in request.headers
