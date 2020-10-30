@@ -43,7 +43,14 @@ def ticket_attendee_authorized(order_identifier):
             raise NotFoundError(
                 {'source': ''}, 'This ticket is not associated with any order'
             )
-        if current_user.can_download_tickets(order):
+        if (
+            has_access(
+                'is_coorganizer_or_user_itself',
+                event_id=order.event_id,
+                user_id=order.user_id,
+            )
+            or order.is_attendee(current_user)
+        ):
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             file_path = (
                 '../generated/tickets/{}/{}/'.format(key, generate_hash(key))
