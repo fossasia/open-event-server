@@ -7,6 +7,7 @@ from app.api.auth import return_file
 from app.api.custom.orders import order_blueprint
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models.event_invoice import EventInvoice
 from app.models.order import Order
@@ -52,7 +53,14 @@ def order_invoices(order_identifier):
             order = Order.query.filter_by(identifier=order_identifier).first()
         except NoResultFound:
             raise NotFoundError({'source': ''}, 'Order Invoice not found')
-        if current_user.can_download_tickets(order):
+        if (
+            has_access(
+                'is_coorganizer_or_user_itself',
+                event_id=order.event_id,
+                user_id=order.user_id,
+            )
+            or order.is_attendee(current_user)
+        ):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             file_path = (
                 '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
