@@ -32,36 +32,36 @@ order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders'
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')
 
 
-@ticket_blueprint.route('/<string:order_identifier>')
-@order_blueprint.route('/<string:order_identifier>/tickets-pdf')
+@ticket_blueprint.route('/<int:attendee_id>')
+@order_blueprint.route('/<int:attendee_id>/tickets-pdf')
 @jwt_required
-def ticket_attendee_authorized(order_identifier):
+def ticket_attendee_authorized(attendee_id):
     if current_user:
         try:
-            order = Order.query.filter_by(identifier=order_identifier).first()
+            order = Order.query.filter_by(user_id=attendee_id).first()
         except NoResultFound:
-            raise NotFoundError(
-                {'source': ''}, 'This ticket is not associated with any order'
-            )
+            raise NotFoundError({'source': ''}, 'No Ticket found for attendee')
         if (
             has_access(
                 'is_coorganizer_or_user_itself',
                 event_id=order.event_id,
-                user_id=order.user_id,
+                user_id=attendee_id,
             )
             or order.is_attendee(current_user)
         ):
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(
+                identifier=order.identifier, attendee_identifier=attendee_id
+            )
             file_path = (
                 '../generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
+                + order.identifier
                 + '.pdf'
             )
             try:
-                return return_file('ticket', file_path, order_identifier)
+                return return_file('ticket', file_path, order.identifier)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return return_file('ticket', file_path, order_identifier)
+                return return_file('ticket', file_path, order.identifier)
         else:
             raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
@@ -85,27 +85,9 @@ def resend_emails():
     order = safe_query(Order, 'identifier', order_identifier, 'identifier')
     if has_access('is_coorganizer', event_id=order.event_id):
         if order.status == 'completed' or order.status == 'placed':
-            # fetch tickets attachment
-            order_identifier = order.identifier
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = (
-                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = (
-                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
 
             # send email.
-            send_email_to_attendees(
-                order=order,
-                purchaser_id=current_user.id,
-                attachments=[ticket_path, invoice_path],
-            )
+            send_email_to_attendees(order=order, purchaser_id=current_user.id)
             return jsonify(
                 status=True,
                 message="Verification emails for order : {} has been sent successfully".format(
@@ -327,28 +309,7 @@ def complete_order(order_id):
     if (order.status == 'completed' or order.status == 'placed') and (
         order.deleted_at is None
     ):
-        order_identifier = order.identifier
-
-        key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-        ticket_path = (
-            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-            + order_identifier
-            + '.pdf'
-        )
-
-        key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-        invoice_path = (
-            'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-            + order_identifier
-            + '.pdf'
-        )
-
-        # send email and notifications.
-        send_email_to_attendees(
-            order=order,
-            purchaser_id=current_user.id,
-            attachments=[ticket_path, invoice_path],
-        )
+        send_email_to_attendees(order=order, purchaser_id=current_user.id)
 
         send_notif_to_attendees(order, current_user.id)
         order_url = make_frontend_url(path=f'/orders/{order.identifier}')

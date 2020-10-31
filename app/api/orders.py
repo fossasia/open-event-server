@@ -43,7 +43,6 @@ from app.api.helpers.payment import (
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.attendees import AttendeeSchema
@@ -118,29 +117,9 @@ def on_order_completed(order):
     # send e-mail and notifications if the order status is completed
     if not (order.status == 'completed' or order.status == 'placed'):
         return
-    # fetch tickets attachment
-    order_identifier = order.identifier
-
-    key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-    ticket_path = (
-        'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
-
-    key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-    invoice_path = (
-        'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
 
     # send email and notifications.
-    send_email_to_attendees(
-        order=order,
-        purchaser_id=current_user.id,
-        attachments=[ticket_path, invoice_path],
-    )
+    send_email_to_attendees(order=order, purchaser_id=current_user.id)
 
     send_notif_to_attendees(order, current_user.id)
 
@@ -522,29 +501,8 @@ class OrderDetail(ResourceDetail):
         elif (
             order.status == 'completed' or order.status == 'placed'
         ) and order.deleted_at is None:
-            # Send email to attendees with invoices and tickets attached
-            order_identifier = order.identifier
-
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = (
-                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = (
-                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
             # send email and notifications.
-            send_email_to_attendees(
-                order=order,
-                purchaser_id=current_user.id,
-                attachments=[ticket_path, invoice_path],
-            )
+            send_email_to_attendees(order=order, purchaser_id=current_user.id)
 
             send_notif_to_attendees(order, current_user.id)
 

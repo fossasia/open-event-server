@@ -8,6 +8,7 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
+from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
 from app.models.mail import (
@@ -336,13 +337,29 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id, attachments=None):
-    if not current_app.config['ATTACH_ORDER_PDF']:
-        attachments = None
-
+def send_email_to_attendees(order, purchaser_id):
     frontend_url = get_settings()['frontend_url']
     order_view_url = frontend_url + '/orders/' + order.identifier + '/view'
+    key = UPLOAD_PATHS['pdf']['order'].format(identifier=order.identifier)
+    invoice_path = (
+        'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+        + order.identifier
+        + '.pdf'
+    )
     for holder in order.ticket_holders:
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(
+            identifier=order.identifier, attendee_identifier=holder.id
+        )
+        ticket_path = (
+            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            + order.identifier
+            + '.pdf'
+        )
+        if not current_app.config['ATTACH_ORDER_PDF']:
+            attachments = None
+        else:
+            attachments = [ticket_path, invoice_path]
+
         if holder.user and holder.user.id == purchaser_id:
             # Ticket holder is the purchaser
             send_email(
