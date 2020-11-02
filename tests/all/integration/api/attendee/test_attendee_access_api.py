@@ -114,7 +114,7 @@ def test_get_event_attendees_anon_error(db, client):
         content_type='application/vnd.api+json',
     )
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
     attendee = get_minimal_attendee(db, event_status='draft')
 
@@ -123,7 +123,7 @@ def test_get_event_attendees_anon_error(db, client):
         content_type='application/vnd.api+json',
     )
 
-    assert response.status_code == 404
+    assert response.status_code == 401
 
 
 def test_get_event_attendees_user_error(db, client, user, jwt):
