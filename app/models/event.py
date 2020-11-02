@@ -231,7 +231,7 @@ class Event(SoftDeletionModel):
         return '<Event %r>' % self.name
 
     def __setattr__(self, name, value):
-        allow_link = name == 'description'
+        allow_link = name == 'description' or 'owner_description'
         if (
             name == 'owner_description'
             or name == 'description'
