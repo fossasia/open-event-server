@@ -30,7 +30,7 @@ stripe==2.55.0
 xhtml2pdf==0.2.5
 flask-caching==1.9.0
 forex-python==1.5
-pycryptodome==3.9.8
+pycryptodome==3.9.9
 oauth2~=1.9.0
 qrcode==6.1
 python-magic==0.4.18
