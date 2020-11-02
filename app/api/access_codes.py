@@ -85,7 +85,7 @@ class AccessCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(AccessCode)
-        query_ = event_query(query_, view_kwargs, permission='is_coorganizer')
+        query_ = event_query(query_, view_kwargs, restrict=True)
         if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):

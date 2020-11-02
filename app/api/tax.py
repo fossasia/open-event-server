@@ -1,4 +1,3 @@
-from flask import request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -6,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, MethodNotAllowed
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tax import TaxSchema, TaxSchemaPublic
 from app.models import db
@@ -67,7 +66,7 @@ class TaxList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and has_access('is_admin'):
+        if is_logged_in() and has_access('is_admin'):
             self.schema = TaxSchema
         else:
             self.schema = TaxSchemaPublic
@@ -117,14 +116,12 @@ class TaxDetail(ResourceDetail):
                 tax = Tax.query.filter_by(id=kwargs['id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'id'}, f"Tax: Not found for id {id}")
-            if 'Authorization' in request.headers and has_access(
-                'is_coorganizer', event_id=tax.event_id
-            ):
+            if is_logged_in() and has_access('is_coorganizer', event_id=tax.event_id):
                 self.schema = TaxSchema
             else:
                 self.schema = TaxSchemaPublic
         else:
-            if 'Authorization' in request.headers and has_access(
+            if is_logged_in() and has_access(
                 'is_coorganizer', event_id=kwargs['event_id']
             ):
                 self.schema = TaxSchema

@@ -292,18 +292,6 @@ class OrdersList(ResourceList):
     OrderList class for OrderSchema
     """
 
-    def before_get(self, args, kwargs):
-        """
-        before get method to get the resource id for fetching details
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        if kwargs.get('event_id') and not has_access(
-            'is_coorganizer', event_id=kwargs['event_id']
-        ):
-            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
-
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
@@ -318,7 +306,7 @@ class OrdersList(ResourceList):
             )
         else:
             # orders under an event
-            query_ = event_query(query_, view_kwargs)
+            query_ = event_query(query_, view_kwargs, restrict=True)
 
         return query_
 
