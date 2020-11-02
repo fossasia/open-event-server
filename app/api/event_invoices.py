@@ -30,6 +30,8 @@ class EventInvoiceList(ResourceList):
         """
         user = current_user
         user_id = view_kwargs.get('user_id')
+        if '/v1/event-invoices' in request.url and not user.is_staff:
+            raise ForbiddenError({'source': ''}, 'Admin access is required')
         if user_id and user_id != user.id and not user.is_staff:
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
