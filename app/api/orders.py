@@ -5,11 +5,12 @@ from datetime import datetime
 
 import omise
 import requests
-from flask import Blueprint, jsonify, redirect, request, url_for
+from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
@@ -32,7 +33,6 @@ from app.api.helpers.order import (
     create_onsite_attendees_for_order,
     create_pdf_tickets_for_holder,
     delete_related_attendees_for_order,
-    set_expiry_for_order,
 )
 from app.api.helpers.payment import (
     AliPayPaymentsManager,
@@ -195,7 +195,9 @@ def validate_attendees(ticket_holders):
         if ticket_holder.ticket.type == 'free':
             free_ticket_quantity += 1
 
-    if not current_user.is_verified and free_ticket_quantity == len(ticket_holders):
+    if not current_app.config['ALLOW_UNVERIFIED_FREE_ORDERS'] and (
+        not current_user.is_verified and free_ticket_quantity == len(ticket_holders)
+    ):
         raise ForbiddenError(
             {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
             "Unverified user cannot place free orders",
@@ -290,18 +292,6 @@ class OrdersList(ResourceList):
     OrderList class for OrderSchema
     """
 
-    def before_get(self, args, kwargs):
-        """
-        before get method to get the resource id for fetching details
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        if kwargs.get('event_id') and not has_access(
-            'is_coorganizer', event_id=kwargs['event_id']
-        ):
-            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
-
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
@@ -309,17 +299,14 @@ class OrdersList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
-            query_ = query_.join(User, User.id == Order.user_id).filter(
-                User.id == user.id
+            query_ = (
+                query_.join(TicketHolder)
+                .join(User, User.id == Order.user_id)
+                .filter(or_(User.id == user.id, TicketHolder.user == user))
             )
         else:
             # orders under an event
-            query_ = event_query(query_, view_kwargs)
-
-        # expire the initializing orders if the time limit is over.
-        orders = query_.all()
-        for order in orders:
-            set_expiry_for_order(order)
+            query_ = event_query(query_, view_kwargs, restrict=True)
 
         return query_
 
@@ -353,17 +340,17 @@ class OrderDetail(ResourceDetail):
         elif view_kwargs.get('id'):
             order = safe_query_by_id(Order, view_kwargs['id'])
 
-        if not has_access(
-            'is_coorganizer_or_user_itself',
-            event_id=order.event_id,
-            user_id=order.user_id,
+        if not (
+            has_access(
+                'is_coorganizer_or_user_itself',
+                event_id=order.event_id,
+                user_id=order.user_id,
+            )
+            or order.is_attendee(current_user)
         ):
             raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
-
-        # expire the initializing order if time limit is over.
-        set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
         """

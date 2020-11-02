@@ -34,7 +34,7 @@ class EventInvoiceList(ResourceList):
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
         query_ = self.session.query(EventInvoice)
-        query_ = event_query(query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs, restrict=True)
         if user_id:
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)

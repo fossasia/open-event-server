@@ -1455,7 +1455,7 @@ Get the details of the user.
             }
         }
 
-## Check if the email is available [/v1/users/checkEmail]
+## Check if the email is available [/v1/users/check_email]
 Check if the email passed is available or not. True is returned if the email is available, false otherwise.
 
 
@@ -1478,5 +1478,5 @@ Check if the email passed is available or not. True is returned if the email is 
 + Response 200 (application/json)
 
         {
-            "result": "True"
+            "exists": true
         }

@@ -1,4 +1,3 @@
-from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -6,8 +5,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
-from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.errors import ConflictError, UnprocessableEntityError, ForbiddenError
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
@@ -123,7 +122,7 @@ class TicketList(ResourceList):
         :return:
         """
 
-        if 'Authorization' in request.headers:
+        if is_logged_in():
             verify_jwt_in_request()
             if current_user.is_super_admin or current_user.is_admin:
                 query_ = self.session.query(Ticket)

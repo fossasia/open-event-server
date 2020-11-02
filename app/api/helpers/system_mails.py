@@ -162,10 +162,15 @@ MAILS = {
     },
     USER_REGISTER: {
         'recipient': 'User',
-        'subject': 'Account Created on {app_name}',
+        'subject': 'Welcome to {app_name}. Please verify your account',
         'message': (
-            "Your Account Has Been Created! Congratulations!"
-            + "<br/> Your login: {email}"
+            "Hello,"
+            "<br/><br/>Your account has been created on {app_name}. Congratulations!"
+            "<br/><br/>Your login is: {email}"
+            "<br/><br/>Please visit the following link to verify your email: {link}"
+            "<br/><br/>Thank You,"
+            "<br/><br/>{app_name} Team"
+            "<br/>{frontend_url}"
         ),
     },
     USER_REGISTER_WITH_PASSWORD: {

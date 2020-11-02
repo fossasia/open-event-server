@@ -1,19 +1,17 @@
 import base64
+import logging
 
 from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import (
-    send_email_change_user_email,
-    send_email_confirmation,
-    send_email_with_action,
-)
+from app.api.helpers.mail import send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
 from app.api.helpers.user import (
@@ -29,14 +27,17 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import PASSWORD_RESET_AND_VERIFY, USER_REGISTER_WITH_PASSWORD
+from app.models.mail import USER_REGISTER
 from app.models.notification import Notification
+from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
 from app.settings import get_settings
+
+logger = logging.getLogger(__name__)
 
 user_misc_routes = Blueprint('user_misc', __name__, url_prefix='/v1')
 
@@ -85,29 +86,21 @@ class UserList(ResourceList):
         :return:
         """
 
-        if user.was_registered_with_order:
-            link = make_frontend_url('/reset-password', {'token': user.reset_password})
-            send_email_with_action(
-                user,
-                PASSWORD_RESET_AND_VERIFY,
-                app_name=get_settings()['app_name'],
-                email=user.email,
-                link=link,
-            )
-        else:
-            s = get_serializer()
-            hash = str(
-                base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
-                'utf-8',
-            )
-            link = make_frontend_url('/verify', {'token': hash})
-            send_email_with_action(
-                user,
-                USER_REGISTER_WITH_PASSWORD,
-                app_name=get_settings()['app_name'],
-                email=user.email,
-            )
-            send_email_confirmation(user.email, link)
+        s = get_serializer()
+        hash = str(
+            base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
+            'utf-8',
+        )
+        link = make_frontend_url('/verify', {'token': hash})
+        settings = get_settings()
+        send_email_with_action(
+            user,
+            USER_REGISTER,
+            app_name=settings['app_name'],
+            email=user.email,
+            link=link,
+            frontend_url=settings['frontend_url'],
+        )
         # TODO Handle in a celery task
         # if data.get('original_image_url'):
         #     try:
@@ -284,7 +277,26 @@ class UserDetail(ResourceDetail):
                             {'source': ''},
                             "Users associated with events cannot be deleted",
                         )
-                    if len(user.orders) != 0:
+                    # TODO(Areeb): Deduplicate the query. Present in video stream model as well
+                    order_exists = db.session.query(
+                        TicketHolder.query.filter_by(user=user)
+                        .join(Order)
+                        .filter(
+                            or_(
+                                Order.status == 'completed',
+                                Order.status == 'placed',
+                                Order.status == 'initializing',
+                                Order.status == 'pending',
+                            )
+                        )
+                        .exists()
+                    ).scalar()
+                    # If any pending or completed order exists, we cannot delete the user
+                    if order_exists:
+                        logger.warning(
+                            'User %s has pending or completed orders, hence cannot be deleted',
+                            user,
+                        )
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with orders cannot be deleted",
@@ -403,13 +415,14 @@ class UserRelationship(ResourceRelationship):
     data_layer = {'session': db.session, 'model': User}
 
 
-@user_misc_routes.route('/users/checkEmail', methods=['POST'])
+@user_misc_routes.route('/users/check_email', methods=['POST'])
+@user_misc_routes.route('/users/checkEmail', methods=['POST'])  # deprecated
 def is_email_available():
     email = request.json.get('email', None)
     if email:
-        if get_count(db.session.query(User).filter_by(email=email)):
-            return jsonify(result="False")
-        return jsonify(result="True")
+        if get_count(db.session.query(User).filter_by(deleted_at=None, email=email)):
+            return jsonify(exists=True)
+        return jsonify(exists=False)
     abort(make_response(jsonify(error="Email field missing"), 422))
 
 

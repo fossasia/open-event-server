@@ -133,8 +133,13 @@ class AttendeeList(ResourceList):
                 'order_identifier',
                 'identifier',
             )
-            if not has_access('is_registrar', event_id=order.event_id) and not has_access(
-                'is_user_itself', user_id=order.user_id
+            if not (
+                has_access(
+                    'is_coorganizer_or_user_itself',
+                    event_id=order.event_id,
+                    user_id=order.user_id,
+                )
+                or order.is_attendee(current_user)
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
@@ -153,13 +158,14 @@ class AttendeeList(ResourceList):
                 User.id == user.id
             )
 
-        query_ = event_query(query_, view_kwargs, permission='is_registrar')
+        query_ = event_query(query_, view_kwargs, restrict=True)
         return query_
 
     view_kwargs = True
     methods = [
         'GET',
     ]
+    decorators = (jwt_required,)
     schema = AttendeeSchema
     data_layer = {
         'session': db.session,

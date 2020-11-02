@@ -16,7 +16,7 @@ from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.export_helpers import create_export_job
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchema, EventSchemaPublic
 
@@ -116,9 +116,7 @@ class EventList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and (
-            has_access('is_admin') or kwargs.get('user_id')
-        ):
+        if is_logged_in() and (has_access('is_admin') or kwargs.get('user_id')):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
@@ -133,7 +131,7 @@ class EventList(ResourceList):
         if get_jwt_identity() is None or not current_user.is_staff:
             # If user is not admin, we only show published events
             query_ = query_.filter_by(state='published')
-        if 'Authorization' in request.headers:
+        if is_logged_in():
             # For a specific user accessing the API, we show all
             # events managed by them, even if they're not published
             verify_jwt_in_request()
@@ -635,9 +633,7 @@ class EventDetail(ResourceDetail):
         :return:
         """
         kwargs = get_id(kwargs)
-        if 'Authorization' in request.headers and has_access(
-            'is_coorganizer', event_id=kwargs['id']
-        ):
+        if is_logged_in() and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
@@ -661,9 +657,7 @@ class EventDetail(ResourceDetail):
 
     def after_get_object(self, event, view_kwargs):
         if event.state == "draft":
-            if 'Authorization' not in request.headers or not has_access(
-                'is_coorganizer', event_id=event.id
-            ):
+            if not is_logged_in() or not has_access('is_coorganizer', event_id=event.id):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
     def before_patch(self, args, kwargs, data=None):

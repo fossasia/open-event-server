@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.base import SoftDeletionModel
+from app.models.ticket_holder import TicketHolder
 
 
 def get_new_id():
@@ -127,3 +128,8 @@ class Order(SoftDeletionModel):
         from app.api.orders import save_order
 
         save_order(self)
+
+    def is_attendee(self, user):
+        return db.session.query(
+            TicketHolder.query.filter_by(order_id=self.id, user=user).exists()
+        ).scalar()

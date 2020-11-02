@@ -1,4 +1,3 @@
-from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -7,7 +6,7 @@ from app.api.bootstrap import api
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.speaker import can_edit_after_cfs_ends
@@ -68,23 +67,14 @@ class SpeakerListPost(ResourceList):
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
         is_organizer = has_access('is_organizer', event_id=data['event'])
-        if (
-            data.get('is_email_overridden') and not is_organizer
-        ):
+        if data.get('is_email_overridden') and not is_organizer:
             raise ForbiddenError(
                 {'pointer': 'data/attributes/is_email_overridden'},
                 'Organizer access required to override email',
             )
-        if (
-            not data.get('is_email_overridden')
-            and is_organizer
-            and not data.get('email')
-        ):
+        if not data.get('is_email_overridden') and is_organizer and not data.get('email'):
             data['email'] = current_user.email
-        if (
-            not is_organizer
-            and not data.get('email')
-        ):
+        if not is_organizer and not data.get('email'):
             raise ForbiddenError(
                 {'pointer': '/data/email'}, 'Email is required for speaker'
             )
@@ -147,7 +137,7 @@ class SpeakerList(ResourceList):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
-            if 'Authorization' in request.headers and not has_access(
+            if is_logged_in() and not has_access(
                 'is_coorganizer', event_id=session.event_id
             ):
                 if not has_access('is_session_self_submitted', session_id=session.id):
