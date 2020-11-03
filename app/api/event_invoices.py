@@ -30,11 +30,9 @@ class EventInvoiceList(ResourceList):
         """
         user = current_user
         user_id = view_kwargs.get('user_id')
-        params = user_id or view_kwargs.get('event_id') \
-            or view_kwargs.get('event_identifier')
-        if not params and not user.is_staff:
-            raise ForbiddenError({'source': ''}, 'Admin access is required')
-        if user_id and user_id != user.id and not user.is_staff:
+        check = user_id and user_id != user.id \
+            or not view_kwargs
+        if check and not user.is_staff:
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
         query_ = self.session.query(EventInvoice)
