@@ -74,7 +74,6 @@ class Ticket(SoftDeletionModel):
         'DiscountCode', secondary=discount_codes_tickets, backref="tickets"
     )
 
-    @property
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
         Else False.
@@ -103,7 +102,15 @@ class Ticket(SoftDeletionModel):
                 count += 1
 
         return bool(count > 0)
-
+    
+    @property
+    def has_current_orders(self):
+        return Order.query.join(TicketHolder).filter(TicketHolder.ticket_id == self.id, 
+                or_(Order.status == 'completed',
+                Order.status == 'placed',
+                Order.status == 'pending',
+                Order.status == 'initializing')).exists() 
+    
     def tags_csv(self):
         """Return list of Tags in CSV."""
         tag_names = [tag.name for tag in self.tags]
