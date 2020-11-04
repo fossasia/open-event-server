@@ -134,7 +134,7 @@ def send_email_task_sendgrid(payload):
     except urllib.error.HTTPError as e:
         if e.code == 429:
             logging.warning("Sendgrid quota has exceeded")
-            send_email_task_smtp.delay(payload=payload)
+            send_email_task_smtp.delay(payload)
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
