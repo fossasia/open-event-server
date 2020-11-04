@@ -2,6 +2,7 @@ from argparse import Namespace
 from datetime import datetime
 
 import flask_login as login
+import pytz
 from flask import current_app
 from sqlalchemy import event
 from sqlalchemy.sql import func
@@ -409,6 +410,22 @@ class Event(SoftDeletionModel):
     def site_link(self):
         frontend_url = get_settings()['frontend_url']
         return f"{frontend_url}/e/{self.identifier}"
+
+    @property
+    def starts_at_tz(self):
+        return self.starts_at.astimezone(pytz.timezone(self.timezone))
+
+    @property
+    def ends_at_tz(self):
+        return self.ends_at.astimezone(pytz.timezone(self.timezone))
+
+    @property
+    def normalized_location(self):
+        if self.location_name:
+            return self.location_name
+        elif self.online:
+            return 'Online'
+        return 'Location Not Announced'
 
 
 @event.listens_for(Event, 'after_update')

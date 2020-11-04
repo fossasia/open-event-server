@@ -26,6 +26,7 @@ from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
+from app.api.helpers.mail_recorder import MailRecorder
 from app.extensions import limiter, shell
 from app.models import db
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
@@ -125,6 +126,8 @@ def create_app():
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
     app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
+
+    app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
 
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
