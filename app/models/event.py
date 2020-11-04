@@ -427,6 +427,10 @@ class Event(SoftDeletionModel):
             return 'Online'
         return 'Location Not Announced'
 
+    @property
+    def has_coordinates(self):
+        return self.latitude and self.longitude
+
 
 @event.listens_for(Event, 'after_update')
 @event.listens_for(Event, 'after_insert')

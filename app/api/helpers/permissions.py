@@ -148,7 +148,6 @@ def is_organizer(f):
     return decorated_function
 
 
-@second_order_decorator(jwt_required)
 def to_event_id(func):
     """
     Change event_identifier to event_id in kwargs
@@ -169,7 +168,7 @@ def to_event_id(func):
                 kwargs['event_id'] = event.id
             else:
                 kwargs['event_id'] = kwargs['event_identifier']
-
+            kwargs.pop('event_identifier', None)
         return func(*args, **kwargs)
 
     return decorated_function
@@ -190,8 +189,6 @@ def is_coorganizer(f):
         if user.is_staff or (
             'event_id' in kwargs and user.has_event_access(kwargs['event_id'])
         ):
-            if 'event_identifier' in kwargs:
-                kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
         raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
