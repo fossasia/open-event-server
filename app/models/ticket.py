@@ -1,6 +1,7 @@
 from app.api.helpers.errors import ConflictError
 from app.models import db
 from sqlalchemy import or_
+from app.models.ticket_holder import TicketHolder
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
 
