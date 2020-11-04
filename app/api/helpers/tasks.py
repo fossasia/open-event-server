@@ -67,6 +67,26 @@ def make_celery(app=None):
 celery = make_celery()
 
 
+def get_smtp_config():
+    smtp_encryption = get_settings()['smtp_encryption']
+    if smtp_encryption == 'tls':
+        smtp_encryption = 'required'
+    elif smtp_encryption == 'ssl':
+        smtp_encryption = 'ssl'
+    elif smtp_encryption == 'tls_optional':
+        smtp_encryption = 'optional'
+    else:
+        smtp_encryption = 'none'
+
+    return {
+        'host': get_settings()['smtp_host'],
+        'username': get_settings()['smtp_username'],
+        'password': get_settings()['smtp_password'],
+        'tls': smtp_encryption,
+        'port': get_settings()['smtp_port'],
+    }
+
+
 def empty_attachments_send(mail_client, message):
     """
     Empty attachments and send mail
@@ -79,7 +99,7 @@ def empty_attachments_send(mail_client, message):
 
 
 @celery.task(name='send.email.post.sendgrid')
-def send_email_task_sendgrid(payload, headers, smtp_config):
+def send_email_task_sendgrid(payload):
     message = Mail(
         from_email=From(payload['from'], payload['fromname']),
         to_emails=payload['to'],
@@ -114,9 +134,7 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
     except urllib.error.HTTPError as e:
         if e.code == 429:
             logging.warning("Sendgrid quota has exceeded")
-            send_email_task_smtp.delay(
-                payload=payload, headers=None, smtp_config=smtp_config
-            )
+            send_email_task_smtp.delay(payload)
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
@@ -126,17 +144,9 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
 
 
 @celery.task(name='send.email.post.smtp')
-def send_email_task_smtp(payload, smtp_config, headers=None):
-    mailer_config = {
-        'transport': {
-            'use': 'smtp',
-            'host': smtp_config['host'],
-            'username': smtp_config['username'],
-            'password': smtp_config['password'],
-            'tls': smtp_config['encryption'],
-            'port': smtp_config['port'],
-        }
-    }
+def send_email_task_smtp(payload):
+    smtp_config = get_smtp_config()
+    mailer_config = {'transport': {'use': 'smtp', **smtp_config}}
 
     mailer = Mailer(mailer_config)
     mailer.start()

@@ -241,25 +241,10 @@ MAILS = {
     TICKET_PURCHASED: {
         'recipient': 'User',
         'subject': 'Your order invoice and tickets for {event_name} ({invoice_id}) ',
-        'message': (
-            "Hi, this is a confirmation mail of your tickets for the event {event_name}"
-            "<br/>Your order has been processed successfully."
-            "<br/> You can find your Tickets and Order Invoice at the link below."
-            "<br/>{order_view_url}"
-            "<br><br><em>Looking forward to seeing you at the event."
-            "<br/>Login to manage your orders at {frontend_url} </em>"
-        ),
     },
     TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'Attendee',
         'subject': 'Your tickets for {event_name} ({invoice_id}) ',
-        'message': (
-            "Hi, this is a confirmation mail of your tickets for the event {event_name}"
-            "<br/>Your order has been processed successfully."
-            "<br><br>You can download your tickets in <b>My Tickets</b> section."
-            "<br/>Login to manage the orders at <a href='{my_tickets_url}' target='_blank'>{my_tickets_url}</a> </em>"
-            "<br><br><em>Looking forward to seeing you at the event."
-        ),
     },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer, Coorganizer',
