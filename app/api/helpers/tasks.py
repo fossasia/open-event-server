@@ -323,7 +323,7 @@ def export_ical_task(self, event_id, temp=True):
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
@@ -365,7 +365,7 @@ def export_xcal_task(self, event_id, temp=True):
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
@@ -407,7 +407,7 @@ def export_pentabarf_task(self, event_id, temp=True):
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
