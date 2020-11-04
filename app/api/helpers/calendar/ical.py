@@ -1,6 +1,7 @@
 import pytz
 from icalendar import Calendar, Event
 from sqlalchemy import or_
+from sqlalchemy.orm import joinedload
 
 from app.models.session import Session
 
@@ -27,6 +28,7 @@ def to_ical(event, include_sessions=False):
     if include_sessions:
         sessions = (
             Session.query.filter_by(event_id=event.id)
+            .options(joinedload(Session.microlocation))
             .filter_by(deleted_at=None)
             .filter(or_(Session.state == 'accepted', Session.state == 'confirmed'))
             .order_by(Session.starts_at.asc())
