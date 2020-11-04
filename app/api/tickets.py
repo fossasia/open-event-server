@@ -241,7 +241,7 @@ class TicketDetail(ResourceDetail):
                     "Event having paid ticket must have a payment method",
                 )
         else:
-            if (data.get('deleted_at') and ticket.has_order_tickets):
+            if (data.get('deleted_at') and ticket.has_current_orders):
                 raise ForbiddenError(
                     {'source': ''},
                     "Can't delete a ticket that has sales",
