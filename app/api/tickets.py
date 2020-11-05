@@ -243,7 +243,7 @@ class TicketDetail(ResourceDetail):
         
         if (data.get('deleted_at') and ticket.has_current_orders):
             raise ForbiddenError(
-                {'source': ''},
+                {'param': 'ticket_id'},
                 "Can't delete a ticket that has sales",
             )
 
