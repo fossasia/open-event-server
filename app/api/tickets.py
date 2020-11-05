@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
-from app.api.helpers.errors import ConflictError, UnprocessableEntityError
+from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -240,6 +240,12 @@ class TicketDetail(ResourceDetail):
                     {'event_id': ticket.event.id},
                     "Event having paid ticket must have a payment method",
                 )
+        
+        if (data.get('deleted_at') and ticket.has_current_orders):
+            raise ForbiddenError(
+                {'param': 'ticket_id'},
+                "Can't delete a ticket that has sales",
+            )
 
     decorators = (
         api.has_permission(
