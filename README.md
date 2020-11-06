@@ -111,7 +111,7 @@ Media (like audio, avatars and logos) can be stored either Locally, on Amazon S3
 
 #### Emails - SMTP/Sendgrid
 
-The server can send emails via SMTP or by using the sendgrid API.
+The server can send emails via SMTP or using the sendgrid API.
 
 1. SMTP can be configured directly at `admin/settings`
 2. Obtaining [Sendgrid API Token](https://sendgrid.com/docs/User_Guide/Settings/api_keys.html).
