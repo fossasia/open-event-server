@@ -12,6 +12,7 @@ from app.models.order import Order
 attendee_blueprint = Blueprint('attendee_blueprint', __name__, url_prefix='/v1')
 
 
+# TODO(Areeb): Deprecate and remove
 @attendee_blueprint.route('/attendees/send-receipt', methods=['POST'])
 @jwt_required
 def send_receipt():
@@ -40,7 +41,7 @@ def send_receipt():
                 )
             )
         else:
-            send_email_to_attendees(order, current_user.id)
+            send_email_to_attendees(order)
             return jsonify(message="receipt sent to attendees")
     else:
         raise UnprocessableEntityError({'source': ''}, 'Order identifier missing')

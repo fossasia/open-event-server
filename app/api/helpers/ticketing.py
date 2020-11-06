@@ -2,21 +2,11 @@ import logging
 from datetime import datetime
 
 import pytz
-from flask_jwt_extended import current_user
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, safe_query_by_id, save_to_db
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
-from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.notification import (
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
-)
-from app.api.helpers.order import (
-    create_pdf_tickets_for_holder,
-    delete_related_attendees_for_order,
-)
+from app.api.helpers.order import delete_related_attendees_for_order, on_order_completed
 from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
 from app.models.ticket import Ticket
@@ -291,26 +281,7 @@ class TicketingManager:
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            # create tickets.
-            create_pdf_tickets_for_holder(order)
-
-            # send email and notifications.
-            send_email_to_attendees(order, current_user.id)
-            send_notif_to_attendees(order, current_user.id)
-
-            order_url = make_frontend_url(path=f'/orders/{order.identifier}')
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer, order.invoice_number, order_url, order.event.name, order.id
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.id,
-                )
+            on_order_completed(order)
 
             return True, 'Charge successful'
         # payment failed hence expire the order
@@ -350,26 +321,7 @@ class TicketingManager:
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            # create tickets
-            create_pdf_tickets_for_holder(order)
-
-            # send email and notifications
-            send_email_to_attendees(order, order.user_id)
-            send_notif_to_attendees(order, order.user_id)
-
-            order_url = make_frontend_url(path=f'/orders/{order.identifier}')
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer, order.invoice_number, order_url, order.event.name, order.id
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.id,
-                )
+            on_order_completed(order)
 
             return True, 'Charge successful'
         # payment failed hence expire the order

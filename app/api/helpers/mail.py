@@ -29,6 +29,7 @@ from app.models.mail import (
     TICKET_CANCELLED,
     TICKET_PURCHASED,
     TICKET_PURCHASED_ATTENDEE,
+    TICKET_PURCHASED_ORGANIZER,
     USER_CHANGE_EMAIL,
     USER_CONFIRM,
     USER_EVENT_ROLE,
@@ -114,7 +115,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
     return True
 
 
-def send_email_with_action(user, action, **kwargs):
+def send_email_with_action(user, action, bcc=None, **kwargs):
     """
     A general email helper to use in the APIs
     :param user: email or user to which email is to be sent
@@ -130,6 +131,7 @@ def send_email_with_action(user, action, **kwargs):
         action=action,
         subject=MAILS[action]['subject'].format(**kwargs),
         html=MAILS[action]['message'].format(**kwargs),
+        bcc=bcc,
     )
 
 
@@ -316,12 +318,10 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id, attachments=None):
-    if not current_app.config['ATTACH_ORDER_PDF']:
-        attachments = None
-
-    frontend_url = get_settings()['frontend_url']
-    order_view_url = frontend_url + '/orders/' + order.identifier + '/view'
+def send_email_to_attendees(order):
+    attachments = None
+    if current_app.config['ATTACH_ORDER_PDF']:
+        attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
     attendees = (
         TicketHolder.query.options(
@@ -336,7 +336,7 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
     context = dict(
         order=order,
         settings=get_settings(),
-        order_view_url=order_view_url,
+        order_view_url=order.site_view_link,
     )
 
     buyer_email = order.user.email
@@ -372,6 +372,21 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                 **context,
             ),
             attachments=attachments,
+        )
+
+
+def send_order_purchase_organizer_email(order, recipients):
+    context = dict(
+        buyer_email=order.user.email,
+        event_name=order.event.name,
+        invoice_id=order.invoice_number,
+        frontend_url=get_settings()['frontend_url'],
+        order_url=order.site_view_link,
+    )
+    emails = list({organizer.email for organizer in recipients})
+    if emails:
+        send_email_with_action(
+            emails[0], TICKET_PURCHASED_ORGANIZER, bcc=emails[1:], **context
         )
 
 

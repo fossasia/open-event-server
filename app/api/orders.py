@@ -1,7 +1,6 @@
 import json
 import logging
 import time
-from datetime import datetime
 
 import omise
 import requests
@@ -23,16 +22,12 @@ from app.api.helpers.errors import (
     UnprocessableEntityError,
 )
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
-from app.api.helpers.notification import (
-    send_notif_ticket_cancel,
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
-)
+from app.api.helpers.mail import send_order_cancel_email
+from app.api.helpers.notification import send_notif_ticket_cancel
 from app.api.helpers.order import (
     create_onsite_attendees_for_order,
-    create_pdf_tickets_for_holder,
     delete_related_attendees_for_order,
+    on_order_completed,
 )
 from app.api.helpers.payment import (
     AliPayPaymentsManager,
@@ -43,7 +38,6 @@ from app.api.helpers.payment import (
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.attendees import AttendeeSchema
@@ -114,54 +108,6 @@ def check_billing_info(data):
         )
 
 
-def on_order_completed(order):
-    # send e-mail and notifications if the order status is completed
-    if not (order.status == 'completed' or order.status == 'placed'):
-        return
-    # fetch tickets attachment
-    order_identifier = order.identifier
-
-    key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-    ticket_path = (
-        'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
-
-    key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-    invoice_path = (
-        'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
-
-    # send email and notifications.
-    send_email_to_attendees(
-        order=order,
-        purchaser_id=current_user.id,
-        attachments=[ticket_path, invoice_path],
-    )
-
-    send_notif_to_attendees(order, current_user.id)
-
-    if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-        order.completed_at = datetime.utcnow()
-
-    order_url = make_frontend_url(path=f'/orders/{order.identifier}')
-    for organizer in set(
-        order.event.organizers + order.event.coorganizers + [order.event.owner]
-    ):
-        if not organizer:
-            continue
-        send_notif_ticket_purchase_organizer(
-            organizer,
-            order.invoice_number,
-            order_url,
-            order.event.name,
-            order.identifier,
-        )
-
-
 def save_order(order):
     order_tickets = {}
     for holder in order.ticket_holders:
@@ -172,9 +118,6 @@ def save_order(order):
             order_tickets[holder.ticket_id] += 1
 
     order.user = current_user
-
-    # create pdf tickets.
-    create_pdf_tickets_for_holder(order)
 
     for ticket in order_tickets:
         od = OrderTicket(
@@ -497,8 +440,6 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        # create pdf tickets.
-        create_pdf_tickets_for_holder(order)
 
         if order.status == 'cancelled' and order.deleted_at is None:
             send_order_cancel_email(order)
@@ -510,52 +451,7 @@ class OrderDetail(ResourceDetail):
         elif (
             order.status == 'completed' or order.status == 'placed'
         ) and order.deleted_at is None:
-            # Send email to attendees with invoices and tickets attached
-            order_identifier = order.identifier
-
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = (
-                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = (
-                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            # send email and notifications.
-            send_email_to_attendees(
-                order=order,
-                purchaser_id=current_user.id,
-                attachments=[ticket_path, invoice_path],
-            )
-
-            send_notif_to_attendees(order, current_user.id)
-
-            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-                order.completed_at = datetime.utcnow()
-
-            order_url = make_frontend_url(path=f'/orders/{order.identifier}')
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
+            on_order_completed(order)
 
     def before_delete_object(self, order, view_kwargs):
         """

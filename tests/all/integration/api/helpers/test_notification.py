@@ -11,6 +11,7 @@ from app.api.helpers.notification import (
     send_notif_ticket_purchase_organizer,
 )
 from app.models.notification import Notification
+from tests.factories.order import OrderSubFactory
 from tests.factories.session import SessionFactory
 from tests.factories.user import UserFactory
 
@@ -138,7 +139,10 @@ def test_send_notif_after_event(user):
 
 def test_send_notif_ticket_purchase_organizer(user):
     """Method to test order invoice notification after purchase"""
-    send_notif_ticket_purchase_organizer(user, 's53js79zgd', link, 'Poodle', 1)
+    order = OrderSubFactory(identifier='sc4r4fde4', event__name='Poodle')
+    send_notif_ticket_purchase_organizer(user, order)
     notification = Notification.query.first()
-    assert notification.title == 'New ticket purchase for Poodle : (s53js79zgd)'
+    assert (
+        f'New ticket purchase for Poodle : ({order.invoice_number})' == notification.title
+    )
     assert notification.message == 'The order has been processed successfully.'

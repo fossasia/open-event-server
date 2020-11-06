@@ -252,8 +252,8 @@ MAILS = {
         'message': (
             "Hi, {buyer_email} just bought tickets for the event {event_name}"
             "<br/>The order has been processed successfully."
-            + "<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            "<br/>Login to manage the orders at <a href='{frontend_url}' target='_blank'>{frontend_url}</a> </em>"
+            "<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
+            "<br/>Login to manage the orders at {frontend_url}"
         ),
     },
     TICKET_CANCELLED: {

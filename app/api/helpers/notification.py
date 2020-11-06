@@ -206,32 +206,31 @@ def send_notif_after_event(user, event_name):
         send_notification(user, title, message)
 
 
-def send_notif_ticket_purchase_organizer(
-    user, invoice_id, order_url, event_name, subject_id
-):
+def send_notif_ticket_purchase_organizer(user, order):
     """Send notification with order invoice link after purchase"""
-    actions = get_ticket_purchased_organizer_notification_actions(subject_id, order_url)
+    actions = get_ticket_purchased_organizer_notification_actions(
+        order.identifier, order.site_view_link
+    )
     send_notification(
         user=user,
         title=NOTIFS[TICKET_PURCHASED_ORGANIZER]['title'].format(
-            invoice_id=invoice_id, event_name=event_name
+            invoice_id=order.invoice_number, event_name=order.event.name
         ),
         message=NOTIFS[TICKET_PURCHASED_ORGANIZER]['message'],
         actions=actions,
     )
 
 
-def send_notif_to_attendees(order, purchaser_id):
+def send_notif_to_attendees(order):
     """
     Send notification to attendees of an order.
     :param order:
-    :param purchaser_id:
     :return:
     """
     for holder in order.ticket_holders:
         if holder.user:
             # send notification if the ticket holder is a registered user.
-            if holder.user.id != purchaser_id:
+            if holder.user.id != order.user_id:
                 # The ticket holder is not the purchaser
                 actions = get_ticket_purchased_attendee_notification_actions(
                     holder.pdf_url

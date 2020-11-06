@@ -3,9 +3,11 @@ import time
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
+from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.ticket_holder import TicketHolder
+from app.settings import get_settings
 
 
 def get_new_id():
@@ -124,12 +126,35 @@ class Order(SoftDeletionModel):
 
     # Saves the order and generates and sends appropriate
     # documents and notifications
-    def populate_and_save(self):
+    def populate_and_save(self) -> None:
         from app.api.orders import save_order
 
         save_order(self)
 
-    def is_attendee(self, user):
+    def is_attendee(self, user) -> bool:
         return db.session.query(
             TicketHolder.query.filter_by(order_id=self.id, user=user).exists()
         ).scalar()
+
+    @property
+    def ticket_pdf_path(self) -> str:
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=self.identifier)
+        return (
+            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            + self.identifier
+            + '.pdf'
+        )
+
+    @property
+    def invoice_pdf_path(self) -> str:
+        key = UPLOAD_PATHS['pdf']['order'].format(identifier=self.identifier)
+        return (
+            'generated/invoices/{}/{}/'.format(key, generate_hash(key))
+            + self.identifier
+            + '.pdf'
+        )
+
+    @property
+    def site_view_link(self) -> str:
+        frontend_url = get_settings()['frontend_url']
+        return frontend_url + '/orders/' + self.identifier + '/view'
