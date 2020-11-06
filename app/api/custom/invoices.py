@@ -61,12 +61,7 @@ def order_invoices(order_identifier):
             )
             or order.is_attendee(current_user)
         ):
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            file_path = (
-                '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
+            file_path = order.invoice_pdf_path
             try:
                 return return_file('invoice', file_path, order_identifier)
             except FileNotFoundError:

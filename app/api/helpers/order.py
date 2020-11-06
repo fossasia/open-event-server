@@ -11,6 +11,14 @@ from app.api.helpers.db import (
 )
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import (
+    send_email_to_attendees,
+    send_order_purchase_organizer_email,
+)
+from app.api.helpers.notification import (
+    send_notif_ticket_purchase_organizer,
+    send_notif_to_attendees,
+)
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
@@ -290,3 +298,27 @@ def calculate_order_amount(tickets, discount_code=None):
         discount=round(total_discount, 2),
         tickets=ticket_list,
     )
+
+
+def on_order_completed(order):
+    # send e-mail and notifications if the order status is completed
+    if not (order.status == 'completed' or order.status == 'placed'):
+        return
+
+    create_pdf_tickets_for_holder(order)
+
+    # send email and notifications.
+    send_email_to_attendees(order)
+    send_notif_to_attendees(order)
+
+    if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+        order.completed_at = datetime.utcnow()
+
+    organizer_set = set(
+        filter(
+            bool, order.event.organizers + order.event.coorganizers + [order.event.owner]
+        )
+    )
+    send_order_purchase_organizer_email(order, organizer_set)
+    for organizer in organizer_set:
+        send_notif_ticket_purchase_organizer(organizer, order)
