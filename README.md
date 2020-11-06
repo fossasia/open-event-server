@@ -104,7 +104,7 @@ Required keys can be obtained from [https://developers.google.com/maps/documenta
 
 #### Media Storage - Local/Amazon S3/Google Cloud
 
-Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
+Media (like audio, avatars and logos) can be stored either Locally, on Amazon S3 or on Google Storage.
 
 1. [Amazon S3 Setup Instructions](/docs/general/amazon-s3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
