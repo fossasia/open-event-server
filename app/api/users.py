@@ -103,7 +103,7 @@ class UserList(ResourceList):
             to=user,
             action=USER_REGISTER,
             subject=MAILS[USER_REGISTER]['subject'].format(app_name=settings['app_name']),
-            html=render_template('email/user_register.html', **context),
+            html=render_template('email/user_register.html', context=context),
             attachments=None,
         )
         # TODO Handle in a celery task
