@@ -1,17 +1,17 @@
-Hello,
-<br/><br/>This is a confirmation mail of your tickets for the event {{ order.event.name }}. You can download your tickets at: {{ order_view_url }}
-<br/><br/>Ticket Summary:
+{{ _('Hello') }},
+<br/><br/>{{ _('This is a confirmation mail of your tickets for the event') }} {{ order.event.name }}. {{ _('You can download your tickets at') }}: {{ order_view_url }}
+<br/><br/>{{ _('Ticket Summary') }}:
 <br/>Name: {{ attendees.0.user.full_name }}
 <br/>
 {% for _, attendee in attendees | groupby('ticket_id') %}
-    <br/>Ticket: {{ attendee.0.ticket.name }}
-    <br/>Quantity: {{ attendee | length }}
+    <br/>{{ _('Ticket') }}: {{ attendee.0.ticket.name }}
+    <br/>{ _('Quantity') }}: {{ attendee | length }}
     <br/>
 {% endfor %}
-<br/>About this event:
-<br/>Date: {{ order.event.starts_at_tz | datetime }} - {{ order.event.ends_at_tz | datetime }}
+<br/>{{ _('About this event') }}:
+<br/>{{ _('Date') }}: {{ order.event.starts_at_tz | datetime }} - {{ order.event.ends_at_tz | datetime }}
 <br/>{{ order.event.normalized_location }}
-<br/><br/>Best regards,
-<br/>{{ settings.app_name }} Team
+<br/><br/>{{ _('Best regards') }},
+<br/>{{ settings.app_name }} {{ _('Team') }}
 <br/>--
-<br/>Login to manage your orders at {{ settings.frontend_url }}
+<br/>{{ _('Login to manage your orders at') }} {{ settings.frontend_url }}
