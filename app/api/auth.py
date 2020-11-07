@@ -349,9 +349,7 @@ def reset_password_post():
                 subject=MAILS['PASSWORD_RESET_AND_VERIFY']['subject'].format(
                     app_name=get_settings()['app_name']
                 ),
-                html=render_template(
-                    html='email/password_reset_and_verify.html', link=link
-                ),
+                html=render_template('email/password_reset_and_verify.html', link=link),
             )
 
         else:
