@@ -49,6 +49,7 @@ class Config:
     FLASK_ADMIN_SWATCH = 'lumen'
 
     VERSION = VERSION_NAME
+    LANGUAGES = ['en', 'de', 'fr']
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
