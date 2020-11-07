@@ -94,17 +94,16 @@ class UserList(ResourceList):
         )
         link = make_frontend_url('/verify', {'token': hash})
         settings = get_settings()
-        context = dict(
-            email=user.email,
-            link=link,
-            settings=get_settings(),
-        )
         send_email(
             to=user,
             action=USER_REGISTER,
             subject=MAILS[USER_REGISTER]['subject'].format(app_name=settings['app_name']),
-            html=render_template('email/user_register.html', context=context),
-            attachments=None,
+            html=render_template(
+                'email/user_register.html',
+                email=user.email,
+                link=link,
+                settings=get_settings(),
+            ),
         )
         # TODO Handle in a celery task
         # if data.get('original_image_url'):

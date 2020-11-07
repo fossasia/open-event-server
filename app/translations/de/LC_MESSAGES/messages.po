@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-07 15:19+0530\n"
+"POT-Creation-Date: 2020-11-07 15:52+0530\n"
 "PO-Revision-Date: 2017-01-21 14:16+0000\n"
 "Last-Translator: nautilusx <mail.ka@mailbox.org>\n"
 "Language: de\n"
@@ -60,6 +60,15 @@ msgstr ""
 msgid "Order Summary"
 msgstr ""
 
+#: app/templates/email/ticket_purchased.html:5
+msgid "Order"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:6
+#: app/templates/email/ticket_purchased_attendee.html:4
+msgid "Name"
+msgstr ""
+
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:7
 msgid "Ticket"
@@ -86,6 +95,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:17
 #: app/templates/email/ticket_purchased_attendee.html:15
+#: app/templates/email/user_register.html:6
 msgid "Team"
 msgstr ""
 
@@ -111,11 +121,11 @@ msgid "Your account has been created on"
 msgstr ""
 
 #: app/templates/email/user_register.html:2
-msgid "Congratulations! "
+msgid "Congratulations!"
 msgstr ""
 
 #: app/templates/email/user_register.html:3
-msgid "Your login is: {{ email }} "
+msgid "Your login is"
 msgstr ""
 
 #: app/templates/email/user_register.html:4
@@ -2809,5 +2819,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Logged in as"
+#~ msgstr ""
+
+#~ msgid "Congratulations! "
+#~ msgstr ""
+
+#~ msgid "Your login is: {{ email }} "
 #~ msgstr ""
 

@@ -343,25 +343,30 @@ def reset_password_post():
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
-            context = dict(
-                link=link,
-            )
             send_email(
                 to=user,
                 action=PASSWORD_RESET_AND_VERIFY,
-                html=render_template(
-                    html='email/password_reset_and_verify.html', context=context
+                subject=MAILS['PASSWORD_RESET_AND_VERIFY']['subject'].format(
+                    app_name=get_settings()['app_name']
                 ),
-                attachments=None,
+                html=render_template(
+                    html='email/password_reset_and_verify.html', link=link
+                ),
             )
 
         else:
-            context = dict(link=link, settings=get_settings(), token=user.reset_password)
             send_email(
                 to=user,
                 action=PASSWORD_RESET,
-                html=render_template('email/password_reset.html', context=context),
-                attachments=None,
+                subject=MAILS['PASSWORD_RESET']['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template(
+                    'email/password_reset.html',
+                    link=link,
+                    settings=get_settings(),
+                    token=user.reset_password,
+                ),
             )
 
     return make_response(
@@ -427,7 +432,6 @@ def change_password():
                     app_name=get_settings()['app_name']
                 ),
                 html=render_template('email/password_change.html'),
-                attachments=None,
             )
             send_notification_with_action(
                 user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']

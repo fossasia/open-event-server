@@ -5,7 +5,7 @@
 <br/>{{ _('Order') }}: {{ order.invoice_number }}
 <br/>{{ _('Name') }}: {{ order.user.full_name }}
 <br/>
-{% for _, attendee in attendees | groupby('ticket_id') %}
+{% for i, attendee in attendees | groupby('ticket_id') %}
     <br/>{{ _('Ticket') }}: {{ attendee.0.ticket.name }}
     <br/>{{ _('Quantity') }}: {{ attendee | length }}
     <br/>
