@@ -2,8 +2,8 @@
 <br/><br/>{{ _('Thank you for your ticket order for') }} {{ order.event.name }}.
 <br/><br/>{{ _('This is your order confirmation. You can download your tickets at') }} : {{ order_view_url }}
 <br/><br/>{{ _('Order Summary') }}:
-<br/>Order: {{ order.invoice_number }}
-<br/>Name: {{ order.user.full_name }}
+<br/>{{ _('Order') }}: {{ order.invoice_number }}
+<br/>{{ _('Name') }}: {{ order.user.full_name }}
 <br/>
 {% for _, attendee in attendees | groupby('ticket_id') %}
     <br/>{{ _('Ticket') }}: {{ attendee.0.ticket.name }}
