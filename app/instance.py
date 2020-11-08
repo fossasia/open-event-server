@@ -240,7 +240,9 @@ def get_locale():
     # otherwise try to guess the language from the user accept
     # header the browser transmits.  We support de/fr/en in this
     # example.  The best match wins.
+    # pytype: disable=mro-error
     return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
+    # pytype: enable=mro-error
 
 
 # http://stackoverflow.com/questions/26724623/
