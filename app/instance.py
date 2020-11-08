@@ -10,7 +10,7 @@ import stripe
 from celery.signals import after_task_publish
 from flask_babel import Babel
 from envparse import env
-from flask import Flask, json, make_response, g, request
+from flask import Flask, json, make_response, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
@@ -233,13 +233,9 @@ babel = Babel(current_app)
 
 @babel.localeselector
 def get_locale():
-    # if a user is logged in, use the locale from the user settings
-    user = getattr(g, 'user', None)
-    if user is not None:
-        return user.locale
-    # otherwise try to guess the language from the user accept
-    # header the browser transmits.  We support de/fr/en in this
-    # example.  The best match wins.
+    # Try to guess the language from the user accept
+    # header the browser transmits. We support de/fr/en in this
+    # example. The best match wins.
     # pytype: disable=mro-error
     return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
     # pytype: enable=mro-error
