@@ -5,7 +5,7 @@
 <br/>
 {% for i, attendee in attendees | groupby('ticket_id') %}
     <br/>{{ _('Ticket') }}: {{ attendee.0.ticket.name }}
-    <br/>{ _('Quantity') }}: {{ attendee | length }}
+    <br/>{{ _('Quantity') }}: {{ attendee | length }}
     <br/>
 {% endfor %}
 <br/>{{ _('About this event') }}:
