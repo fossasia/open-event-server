@@ -346,7 +346,7 @@ def reset_password_post():
             send_email(
                 to=user,
                 action=PASSWORD_RESET_AND_VERIFY,
-                subject=MAILS['PASSWORD_RESET_AND_VERIFY']['subject'].format(
+                subject=MAILS[PASSWORD_RESET_AND_VERIFY]['subject'].format(
                     app_name=get_settings()['app_name']
                 ),
                 html=render_template('email/password_reset_and_verify.html', link=link),
@@ -356,7 +356,7 @@ def reset_password_post():
             send_email(
                 to=user,
                 action=PASSWORD_RESET,
-                subject=MAILS['PASSWORD_RESET']['subject'].format(
+                subject=MAILS[PASSWORD_RESET]['subject'].format(
                     app_name=get_settings()['app_name']
                 ),
                 html=render_template(
@@ -369,8 +369,7 @@ def reset_password_post():
 
     return make_response(
         jsonify(
-            message="If your email was registered with us, you'll get an \
-                         email with reset link shortly",
+            message="If your email was registered with us, you'll get an email with reset link shortly",
             email=email,
         ),
         200,

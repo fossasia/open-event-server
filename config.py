@@ -49,7 +49,7 @@ class Config:
     FLASK_ADMIN_SWATCH = 'lumen'
 
     VERSION = VERSION_NAME
-    LANGUAGES = [
+    ACCEPTED_LANGUAGES = [
         'en',
         'bn',
         'de',
