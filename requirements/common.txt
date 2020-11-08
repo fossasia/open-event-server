@@ -62,6 +62,7 @@ pyyaml==5.3.1
 sendgrid==6.4.7
 marshmallow==2.15.2
 WeasyPrint==52.1
+Flask-Babel==2.0.0
 
 # GraphQL support
 graphene-sqlalchemy==2.3.0

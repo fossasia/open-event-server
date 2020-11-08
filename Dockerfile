@@ -29,6 +29,7 @@ RUN fc-cache -f
 
 WORKDIR /data/app
 ADD . .
+RUN ["sh", "scripts/l10n.sh", "generate"]
 
 EXPOSE 8080
 ENTRYPOINT ["sh", "scripts/container_start.sh"]

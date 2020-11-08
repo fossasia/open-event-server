@@ -6,7 +6,7 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import Blueprint, jsonify, make_response, request, send_file
+from flask import Blueprint, jsonify, make_response, render_template, request, send_file
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -30,8 +30,9 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.mail import send_email_confirmation, send_email_with_action
+from app.api.helpers.mail import send_email, send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
+from app.api.helpers.system_mails import MAILS
 from app.api.helpers.third_party_auth import (
     FbOAuth,
     GoogleOAuth,
@@ -342,25 +343,33 @@ def reset_password_post():
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET_AND_VERIFY,
-                app_name=get_settings()['app_name'],
-                link=link,
+            send_email(
+                to=user,
+                action=PASSWORD_RESET_AND_VERIFY,
+                subject=MAILS[PASSWORD_RESET_AND_VERIFY]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template('email/password_reset_and_verify.html', link=link),
             )
+
         else:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET,
-                app_name=get_settings()['app_name'],
-                link=link,
-                token=user.reset_password,
+            send_email(
+                to=user,
+                action=PASSWORD_RESET,
+                subject=MAILS[PASSWORD_RESET]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template(
+                    'email/password_reset.html',
+                    link=link,
+                    settings=get_settings(),
+                    token=user.reset_password,
+                ),
             )
 
     return make_response(
         jsonify(
-            message="If your email was registered with us, you'll get an \
-                         email with reset link shortly",
+            message="If your email was registered with us, you'll get an email with reset link shortly",
             email=email,
         ),
         200,
@@ -413,8 +422,13 @@ def change_password():
                 )
             user.password = new_password
             save_to_db(user)
-            send_email_with_action(
-                user, PASSWORD_CHANGE, app_name=get_settings()['app_name']
+            send_email(
+                to=user,
+                action=PASSWORD_CHANGE,
+                subject=MAILS[PASSWORD_CHANGE]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template('email/password_change.html'),
             )
             send_notification_with_action(
                 user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']

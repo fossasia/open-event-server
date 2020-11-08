@@ -8,8 +8,9 @@ import sentry_sdk
 import sqlalchemy as sa
 import stripe
 from celery.signals import after_task_publish
+from flask_babel import Babel
 from envparse import env
-from flask import Flask, json, make_response
+from flask import Flask, json, make_response, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
@@ -225,6 +226,19 @@ def create_app():
 
 current_app = create_app()
 init_filters(app)
+
+# Babel
+babel = Babel(current_app)
+
+
+@babel.localeselector
+def get_locale():
+    # Try to guess the language from the user accept
+    # header the browser transmits. We support de/fr/en in this
+    # example. The best match wins.
+    # pytype: disable=mro-error
+    return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
+    # pytype: enable=mro-error
 
 
 # http://stackoverflow.com/questions/26724623/
