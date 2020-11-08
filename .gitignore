@@ -61,4 +61,4 @@ celerybeat-schedule.*
 .coverage
 .pytype
 .tool-versions
-.mo
+*.mo
