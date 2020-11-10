@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -63,10 +64,10 @@ def order_invoices(order_identifier):
         ):
             file_path = order.invoice_pdf_path
             try:
-                return return_file('invoice', file_path, order_identifier)
+                return send_from_directory('../', file_path, as_attachment=True)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return return_file('invoice', file_path, order_identifier)
+                return send_from_directory('../', file_path, as_attachment=True)
         else:
             raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
