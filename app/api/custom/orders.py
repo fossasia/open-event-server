@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, make_response, request
+from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.auth import return_file
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
@@ -42,10 +42,10 @@ def ticket_attendee_authorized(order_identifier):
         ):
             file_path = order.ticket_pdf_path
             try:
-                return return_file('ticket', file_path, order_identifier)
+                return send_from_directory('../', file_path, as_attachment=True)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return return_file('ticket', file_path, order_identifier)
+                return send_from_directory('../', file_path, as_attachment=True)
         else:
             raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
