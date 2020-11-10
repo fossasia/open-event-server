@@ -28,6 +28,7 @@ class AdminSalesByEventsSchema(Schema):
     identifier = fields.String()
     name = fields.String()
     created_at = fields.DateTime()
+    deleted_at = fields.DateTime()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     payment_currency = fields.String()
