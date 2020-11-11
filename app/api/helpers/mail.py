@@ -59,6 +59,10 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
     """
     from .tasks import get_smtp_config, send_email_task_sendgrid, send_email_task_smtp
 
+    if isinstance(to, User):
+        logger.warning('to argument should be an email string, not a User object')
+        to = to.email
+
     if string_empty(to):
         logger.warning('Recipient cannot be empty')
         return False

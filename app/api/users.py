@@ -95,7 +95,7 @@ class UserList(ResourceList):
         link = make_frontend_url('/verify', {'token': hash})
         settings = get_settings()
         send_email(
-            to=user,
+            to=user.email,
             action=USER_REGISTER,
             subject=MAILS[USER_REGISTER]['subject'].format(app_name=settings['app_name']),
             html=render_template(

@@ -344,7 +344,7 @@ def reset_password_post():
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
             send_email(
-                to=user,
+                to=user.email,
                 action=PASSWORD_RESET_AND_VERIFY,
                 subject=MAILS[PASSWORD_RESET_AND_VERIFY]['subject'].format(
                     app_name=get_settings()['app_name']
@@ -354,7 +354,7 @@ def reset_password_post():
 
         else:
             send_email(
-                to=user,
+                to=user.email,
                 action=PASSWORD_RESET,
                 subject=MAILS[PASSWORD_RESET]['subject'].format(
                     app_name=get_settings()['app_name']
@@ -423,7 +423,7 @@ def change_password():
             user.password = new_password
             save_to_db(user)
             send_email(
-                to=user,
+                to=user.email,
                 action=PASSWORD_CHANGE,
                 subject=MAILS[PASSWORD_CHANGE]['subject'].format(
                     app_name=get_settings()['app_name']
