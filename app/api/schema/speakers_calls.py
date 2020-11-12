@@ -54,7 +54,7 @@ class SpeakersCallSchema(SoftDeletionSchema):
         #                               "speakers-call ends-at should be before event starts-at")
 
     id = fields.Str(dump_only=True)
-    announcement = fields.Str(required=False)
+    announcement = fields.Str(allow_none=True)
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
     hash = fields.Str(allow_none=True)
