@@ -24,8 +24,10 @@ def init_filters(app):
         return '{:20,.2f}'.format(float(string))
 
     @app.template_filter('datetime')
-    def simple_datetime_display(date):
-        return date.strftime('%B %d, %Y %I:%M %p')
+    def simple_datetime_display(date, timezone='UTC', format='%B %d, %Y %I:%M %p'):
+        if not date:
+            return ''
+        return date.astimezone(pytz.timezone(timezone)).strftime(format)
 
     @app.template_filter('date')
     def simple_date_display(date):
