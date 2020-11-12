@@ -850,7 +850,6 @@ class UpcomingEventList(EventList):
                 Event.ends_at > current_time,
                 Event.state == 'published',
                 Event.privacy == 'public',
-                Event.tickets.any(and_(Ticket.deleted_at == None, Ticket.price > 0, Ticket.is_hidden == False)),
                 or_(
                     Event.is_promoted,
                     and_(
@@ -859,6 +858,7 @@ class UpcomingEventList(EventList):
                         Event.event_type_id != None,
                         Event.event_topic_id != None,
                         Event.event_sub_topic_id != None,
+                        Event.tickets.any(and_(Ticket.deleted_at == None, Ticket.price > 0, Ticket.is_hidden == False)),
                     ),
                 ),
             )
