@@ -21,6 +21,7 @@ def upgrade():
     op.alter_column('speakers_calls', 'announcement',
                existing_type=sa.TEXT(),
                nullable=True)
+    op.execute("update speakers_calls set announcement = null where announcement = ''")
     # ### end Alembic commands ###
 
 
