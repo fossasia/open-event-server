@@ -541,7 +541,7 @@ def export_attendees_pdf_task(self, event_id):
     try:
         attendees_pdf_url = create_save_pdf(
             render_template(
-                'pdf/attendees_pdf.html', holders=attendees, fields=custom_forms
+                'pdf/attendees_pdf.html', holders=attendees, custom_forms=custom_forms
             ),
             UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
         )

@@ -7,6 +7,7 @@ from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 from tests.factories import common
 from tests.factories.attendee import AttendeeFactory
+from tests.factories.custom_form import CustomFormFactory
 from tests.factories.order import OrderFactory
 from tests.factories.session import SessionFactory
 from tests.factories.speaker import SpeakerFactory
@@ -28,9 +29,9 @@ class TestExportCSV(OpenEventTestCase):
 
         with self.app.test_request_context():
             test_attendee = AttendeeFactory()
-            field_data = export_attendees_csv([test_attendee])
-            self.assertEqual(field_data[1][3], common.string_)
-            self.assertEqual(field_data[1][5], test_attendee.email)
+            custom_forms = CustomFormFactory()
+            field_data = export_attendees_csv([test_attendee], [custom_forms])
+            self.assertEqual(field_data[1][7], common.string_)
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():
