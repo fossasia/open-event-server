@@ -842,6 +842,7 @@ class UpcomingEventList(EventList):
         :param view_kwargs:
         :return:
         """
+        from app.api.attendees import get_sold_and_reserved_tickets_count
         current_time = datetime.now(pytz.utc)
         query_ = (
             self.session.query(Event)
@@ -858,7 +859,7 @@ class UpcomingEventList(EventList):
                         Event.event_type_id != None,
                         Event.event_topic_id != None,
                         Event.event_sub_topic_id != None,
-                        Event.tickets.any(and_(Ticket.deleted_at == None, Ticket.is_hidden == False, Ticket.sales_ends_at > current_time, Ticket.is_available == True)),
+                        Event.tickets.any(and_(Ticket.deleted_at == None, Ticket.is_hidden == False, Ticket.sales_ends_at > current_time, Ticket.quantity > get_sold_and_reserved_tickets_count(Ticket.id))),
                     ),
                 ),
             )
