@@ -3392,18 +3392,6 @@ def role_invite_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("Role Invites > Role Invite Details > Update Role Invite")
-def role_invite_patch(transaction):
-    """
-    PATCH /role-invites/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        RoleInviteFactory()
-        db.session.commit()
-
-
 @hooks.before("Role Invites > Role Invite Details > Delete Role Invite")
 def role_invite_delete(transaction):
     """
