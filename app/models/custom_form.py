@@ -137,6 +137,11 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
 class CustomForms(db.Model):
     """custom form model class"""
 
+    class TYPE:
+        ATTENDEE = 'attendee'
+        SESSION = 'session'
+        SPEAKER = 'speaker'
+
     __tablename__ = 'custom_forms'
     __table_args__ = (
         UniqueConstraint(

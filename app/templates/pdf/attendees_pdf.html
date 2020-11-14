@@ -107,34 +107,33 @@
 
                 </td>
                 <td style="text-align:center;"><br>
-                    <strong>
-                        First Name :<br>
-                        Last Name :<br>
-                        Email :<br>
-                    </strong>
+                    {% for field in custom_forms %}
+                        {{ field.name }} <br>
+                     {% endfor %}
                     Amount :<br>
                     Ticket Name :<br>
                     Status :<br>
-                </td>
-                <td><br>
-                    <strong>
-                        {{ holder.firstname }}<br>
-                        {{ holder.lastname }}<br>
-                        {{ holder.email }}<br>
-                    </strong>
+                 </td>
+                 <td><br>
+                     {% for field in custom_forms %}
+                        {% if field.is_complex and holder.complex_field_values %}
+                            {{ holder.complex_field_values[field.field_identifier] }} <br>
+                        {% else %}
+                            {{ holder | attr(field.field_identifier) }} <br>
+                        {% endif %}
+                     {% endfor %}
                     {% if holder.ticket.price %}
-                        {{ holder.event.payment_currency }}{{ holder.ticket.price | money }}
+                        {{ holder.event.payment_currency }}{{ holder.ticket.price | money }} <br>
                     {% else %}
-                        {{ "Free Ticket" }}
-                    {% endif %}<br>
+                        {{ "Free Ticket" }} <br>
+                    {% endif %}
                     {{ holder.ticket.name }}<br>
                     {% if holder.is_checked_in %}
                         {{ ("Checked In") }}<br>
                     {% else %}
                         {{ ("Not Checked In") }}<br>
                     {% endif %}
-                </td>
-            </tr>
+                 </td>
         {% endif %}
     {% endfor %}
     </tbody>

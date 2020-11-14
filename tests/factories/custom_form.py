@@ -11,6 +11,7 @@ class CustomFormFactory(BaseFactory):
 
     event = factory.RelatedFactory(EventFactoryBasic)
     form = 'attendee'
+    name = 'First Name'
     field_identifier = 'firstname'
     type = "text"
     is_required = False

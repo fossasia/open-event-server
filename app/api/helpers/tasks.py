@@ -37,6 +37,7 @@ from app.api.helpers.xcal import XCalExporter
 from app.api.imports import import_event_task_base
 from app.instance import create_app
 from app.models import db
+from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.order import Order
@@ -501,6 +502,9 @@ def export_order_pdf_task(self, event_id):
 @celery.task(base=RequestContextTask, name='export.attendees.csv', bind=True)
 def export_attendees_csv_task(self, event_id):
     attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    custom_forms = db.session.query(CustomForms).filter_by(
+        event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
+    )
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
@@ -512,7 +516,7 @@ def export_attendees_csv_task(self, event_id):
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_attendees_csv
 
-            content = export_attendees_csv(attendees)
+            content = export_attendees_csv(attendees, custom_forms)
             for row in content:
                 writer.writerow(row)
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
@@ -531,9 +535,14 @@ def export_attendees_csv_task(self, event_id):
 @celery.task(base=RequestContextTask, name='export.attendees.pdf', bind=True)
 def export_attendees_pdf_task(self, event_id):
     attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    custom_forms = db.session.query(CustomForms).filter_by(
+        event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
+    )
     try:
         attendees_pdf_url = create_save_pdf(
-            render_template('pdf/attendees_pdf.html', holders=attendees),
+            render_template(
+                'pdf/attendees_pdf.html', holders=attendees, custom_forms=custom_forms
+            ),
             UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
         )
         result = {'download_url': attendees_pdf_url}
