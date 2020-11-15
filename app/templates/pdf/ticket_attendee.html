@@ -46,8 +46,19 @@
             <span class="label">Event</span><br>
             <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
 
-            <span class="label">Location</span><br>
-            <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
+            {% if order.event.online %}
+                {% if order.event.location_name %}
+                    <span class="label">Event taking place online and at</span></br>
+                    <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
+                {% else %}
+                    <span class="label">Online Event</span><br><br>
+                {% endif %}
+            {% elif order.event.location_name %}
+                <span class="label">At</span></br>
+                <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
+            {% else %}
+                <span class="label">Location or online event details to be announced</span><br><br>
+            {% endif %}
 
             <span class="label">Date and Time</span><br>
             <span style="font-size: 15px;">From: {{ order.event.starts_at | datetime(order.event.timezone) }}</span><br>
