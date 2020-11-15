@@ -17,7 +17,7 @@ then
     export GUNICORN_LOG_LEVEL=${GUNICORN_LOG_LEVEL:-info}
     export GUNICORN_CMD_ARGS=${GUNICORN_CMD_ARGS:---preload}
     echo "[LOG] Starting gunicorn on port ${PORT}"
-    gunicorn -b 0.0.0.0:${PORT} app.instance:app -w $GUNICORN_WORKERS --enable-stdio-inheritance --log-level $GUNICORN_LOG_LEVEL --proxy-protocol
+    gunicorn -b 0.0.0.0:${PORT} app.instance:app -w $GUNICORN_WORKERS --enable-stdio-inheritance --log-level $GUNICORN_LOG_LEVEL --proxy-protocol --access-logfile -
 fi
 
 if [ "$DEPLOYMENT" == "celery" ]
