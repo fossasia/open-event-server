@@ -7,7 +7,7 @@ FROM base as builder
 WORKDIR /install
 
 RUN apk update && \
-  apk add --virtual build-deps git gcc python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
+  apk add --virtual build-deps make git gcc python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
   apk add postgresql-dev
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
