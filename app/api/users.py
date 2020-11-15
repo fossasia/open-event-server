@@ -276,7 +276,13 @@ class UserDetail(ResourceDetail):
         if data.get('deleted_at') != user.deleted_at:
             if has_access('is_user_itself', user_id=user.id) or has_access('is_admin'):
                 if data.get('deleted_at'):
-                    if len(user.events) != 0:
+                    event_exists = db.session.query(
+                        Event.query.filter_by(deleted_at=None)
+                        .join(Event.users)
+                        .filter(User.id == user.id)
+                        .exists()
+                    ).scalar()
+                    if event_exists:
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
