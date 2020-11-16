@@ -146,6 +146,7 @@ class Setting(db.Model):
     gitter_url = db.Column(db.String)
     telegram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
+    weblate_url = db.Column(db.String)
 
     #
     # Event Invoices settings
