@@ -97,10 +97,10 @@
 
                     {% if holder.order and holder.order.status == 'completed' %}
                         <span
-                            class="datetime">{{ holder.order.completed_at | datetime }} - {{ holder.order.completed_at | humanize }}</span>
+                            class="datetime">{{ holder.order.completed_at | datetime(holder.order.event.timezone) }} - {{ holder.order.completed_at | humanize }}</span>
                     {% elif holder.order %}
                         <span
-                            class="datetime">{{ holder.order.created_at | datetime }} - {{ holder.order.created_at | humanize }}</span>
+                            class="datetime">{{ holder.order.created_at | datetime(holder.order.event.timezone) }} - {{ holder.order.created_at | humanize }}</span>
                     {% else %}
                         {{ "-" }}
                     {% endif %}<br>

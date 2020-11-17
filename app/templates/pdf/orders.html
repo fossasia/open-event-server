@@ -103,9 +103,9 @@
                                 {{ ('NA') }}
                             {% endif %}<br>
                             {% if order.status == 'completed' %}
-                                <span class="datetime">{{ order.completed_at | datetime }}</span>
+                                <span class="datetime">{{ order.completed_at | datetime(event.timezone) }}</span>
                             {% else %}
-                                <span class="datetime">{{ order.created_at | datetime }}</span>
+                                <span class="datetime">{{ order.created_at | datetime(event.timezone) }}</span>
                             {% endif %}<br>
                     </td>
                     <td style="text-align:center;"><br>

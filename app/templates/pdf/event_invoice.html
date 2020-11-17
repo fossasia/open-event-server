@@ -17,11 +17,11 @@
 
         body {
           position: relative;
-          margin: 0 auto; 
+          margin: 0 auto;
           color: #001028;
-          background: #FFFFFF; 
-          font-family: Arial, sans-serif; 
-          font-size: 12px; 
+          background: #FFFFFF;
+          font-family: Arial, sans-serif;
+          font-size: 12px;
           font-family: Arial;
         }
 
@@ -74,7 +74,7 @@
 
         #project div,
         #company div {
-          white-space: nowrap;        
+          white-space: nowrap;
         }
 
         table {
@@ -98,7 +98,7 @@
           padding: 5px 20px;
           color: #5D6975;
           border-bottom: 1px solid #C1CED9;
-          white-space: nowrap;        
+          white-space: nowrap;
           font-weight: normal;
         }
 
@@ -167,8 +167,8 @@
         {% if user.billing_tax_info %}
           <div><span>TAX ID</span> {{user.billing_tax_info or ''}}</div>
         {% endif %}
-        <div><span>DATE</span> {{ invoice.issued_at | date }}</div>
-        <div><span>DUE DATE</span> {{ invoice.due_at | date }}</div>
+        <div><span>DATE</span> {{ invoice.issued_at | date(event.timezone) }}</div>
+        <div><span>DUE DATE</span> {{ invoice.due_at | date(event.timezone) }}</div>
       </div>
     </header>
     <main>

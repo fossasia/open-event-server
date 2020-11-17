@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 
+import pytz
 from flask.templating import render_template
 from sqlalchemy.sql import func
 
@@ -166,7 +167,11 @@ class EventInvoice(SoftDeletionModel):
         return self.invoice_pdf_url
 
     def send_notification(self, follow_up=False):
-        prev_month = self.previous_month_date.strftime("%b %Y")  # Displayed as Aug 2016
+        prev_month = self.previous_month_date.astimezone(
+            pytz.timezone(self.event.timezone)
+        ).strftime(
+            "%b %Y"
+        )  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
         link = f'{frontend_url}/event-invoice/{self.identifier}/review'
