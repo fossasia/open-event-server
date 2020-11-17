@@ -859,6 +859,7 @@ class UpcomingEventList(EventList):
                         Event.event_topic_id != None,
                         Event.event_sub_topic_id != None,
                         Event.tickets.any(and_(Ticket.deleted_at == None, Ticket.is_hidden == False, Ticket.sales_ends_at > current_time)),
+                        Event.social_link.any(SocialLink.name=="twitter")
                     ),
                 ),
             )
