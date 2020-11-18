@@ -30,10 +30,8 @@ def init_filters(app):
         return date.astimezone(pytz.timezone(timezone)).strftime(format)
 
     @app.template_filter('date')
-    def simple_date_display(date):
-        if not date:
-            return ''
-        return date.strftime('%B %d, %Y')
+    def simple_date_display(date, timezone='UTC'):
+        return simple_datetime_display(date, timezone, '%B %d, %Y')
 
     @app.template_filter('humanize')
     def humanize_filter(time):
