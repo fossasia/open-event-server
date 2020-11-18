@@ -28,7 +28,7 @@ from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.mail_recorder import MailRecorder
-from app.extensions import limiter, shell
+from app.extensions import limiter, shell, cache_control
 from app.models import db
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
@@ -219,6 +219,7 @@ def create_app():
     # Initialize Extensions
     shell.init_app(app)
     limiter.init_app(app)
+    cache_control.init_app(app)
 
     app_created = True
     return app
