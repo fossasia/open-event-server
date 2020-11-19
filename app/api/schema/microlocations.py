@@ -26,6 +26,7 @@ class MicrolocationSchema(SoftDeletionSchema):
     latitude = fields.Float(validate=lambda n: -90 <= n <= 90, allow_none=True)
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
     floor = fields.Integer(allow_none=True)
+    position = fields.Integer(allow_none=True, default=0)
     room = fields.Str(allow_none=True)
     sessions = Relationship(
         attribute='session',
