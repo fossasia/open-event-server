@@ -81,6 +81,7 @@ def create_pdf_tickets_for_holder(order):
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
+            extra_identifiers={'attendee_identifier': order.user.id},
             upload_dir='generated/tickets/',
         )
 
@@ -96,6 +97,7 @@ def create_pdf_tickets_for_holder(order):
                     UPLOAD_PATHS['pdf']['tickets_all'],
                     dir_path='/static/uploads/pdf/tickets/',
                     identifier=order.identifier,
+                    extra_identifiers={'attendee_identifier': holder.id},
                     upload_dir='generated/tickets/',
                 )
             else:

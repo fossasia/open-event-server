@@ -138,7 +138,9 @@ class Order(SoftDeletionModel):
 
     @property
     def ticket_pdf_path(self) -> str:
-        key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=self.identifier)
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(
+            identifier=self.identifier, attendee_identifier=self.user.id
+        )
         return (
             'generated/tickets/{}/{}/'.format(key, generate_hash(key))
             + self.identifier
