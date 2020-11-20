@@ -5,6 +5,7 @@ from io import BytesIO
 
 import qrcode
 
+from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -108,3 +109,14 @@ class TicketHolder(SoftDeletionModel):
             'company': self.company,
             'taxBusinessInfo': self.tax_business_info,
         }
+
+    @property
+    def pdf_url_path(self) -> str:
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(
+            identifier=self.order.identifier, attendee_identifier=self.id
+        )
+        return (
+            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            + self.order.identifier
+            + '.pdf'
+        )
