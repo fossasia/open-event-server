@@ -32,7 +32,6 @@ def get_sold_and_reserved_tickets_count(ticket_id):
             TicketHolder.deleted_at.is_(None),
         )
         .filter(
-            Order.deleted_at.is_(None),
             or_(
                 Order.status == 'placed',
                 Order.status == 'completed',

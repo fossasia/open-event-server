@@ -105,9 +105,7 @@ def create_pdf_tickets_for_holder(order):
             save_to_db(holder)
 
         # create order invoices pdf
-        order_tickets = OrderTicket.query.filter_by(
-            order_id=order.id, deleted_at=None
-        ).all()
+        order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
         create_save_pdf(
             render_template(

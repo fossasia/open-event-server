@@ -1,15 +1,14 @@
 from flask import request
 from marshmallow import post_dump, validate, validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 from app.models import db
 from utils.common import use_defaults
 
 
-class OnSiteTicketSchema(SoftDeletionSchema):
+class OnSiteTicketSchema(Schema):
     class Meta:
         type_ = 'on-site-ticket'
         inflect = dasherize
@@ -19,7 +18,7 @@ class OnSiteTicketSchema(SoftDeletionSchema):
 
 
 @use_defaults()
-class OrderSchema(SoftDeletionSchema):
+class OrderSchema(Schema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'

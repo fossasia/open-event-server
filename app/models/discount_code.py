@@ -46,7 +46,7 @@ class DiscountCode(SoftDeletionModel):
         return (
             TicketHolder.query.filter_by(deleted_at=None)
             .join(Order)
-            .filter_by(discount_code_id=self.id, deleted_at=None)
+            .filter_by(discount_code_id=self.id)
             .filter(Order.status.in_(['completed', 'placed']))
         )
 

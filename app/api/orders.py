@@ -349,7 +349,7 @@ class OrderDetail(ResourceDetail):
                         if element not in relationships and data[element] != getattr(
                             order, element, None
                         ):
-                            if element != 'status' and element != 'deleted_at':
+                            if element != 'status':
                                 raise ForbiddenError(
                                     {'pointer': f'data/{element}'},
                                     f"You cannot update {element} of an order",
@@ -441,40 +441,20 @@ class OrderDetail(ResourceDetail):
         :return:
         """
 
-        if order.status == 'cancelled' and order.deleted_at is None:
+        if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif (
-            order.status == 'completed' or order.status == 'placed'
-        ) and order.deleted_at is None:
+        elif order.status == 'completed' or order.status == 'placed':
             on_order_completed(order)
-
-    def before_delete_object(self, order, view_kwargs):
-        """
-        method to check for proper permissions for deleting
-        :param order:
-        :param view_kwargs:
-        :return:
-        """
-        if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenError({'source': ''}, 'Access Forbidden')
-        if (
-            order.amount
-            and order.amount > 0
-            and (order.status == 'completed' or order.status == 'placed')
-        ):
-            raise ConflictError(
-                {'source': ''}, 'You cannot delete a placed/completed paid order.'
-            )
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (
         jwt_required,
-        api.has_permission('auth_required', methods="PATCH,DELETE", model=Order),
+        api.has_permission('auth_required', methods="PATCH", model=Order),
     )
     schema = OrderSchema
     data_layer = {
@@ -482,7 +462,6 @@ class OrderDetail(ResourceDetail):
         'model': Order,
         'methods': {
             'before_update_object': before_update_object,
-            'before_delete_object': before_delete_object,
             'before_get_object': before_get_object,
             'after_update_object': after_update_object,
         },

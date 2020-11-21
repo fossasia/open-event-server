@@ -67,9 +67,9 @@ Create a new Order
 
           {
               "tickets": [
-                {"id": 1, "quantity": 2}, 
-                {"id": 2, "quantity": 4}, 
-                {"id": 3, "quantity": 3, "price": 789.7}, 
+                {"id": 1, "quantity": 2},
+                {"id": 2, "quantity": 4},
+                {"id": 3, "quantity": 3, "price": 789.7},
                 {"id": 4, "quantity": 3}
               ],
               "discount_code": "1"
@@ -86,7 +86,6 @@ Create a new Order
               "exp-year": null,
               "discount-code-id": "1",
               "status": "initializing",
-              "deleted-at": null,
               "exp-month": null,
               "country": null,
               "is-billing-enabled": false,
@@ -355,28 +354,6 @@ Update a single custom form with `id`.
           }
         }
 
-### Delete Order [DELETE]
-Delete a single Order.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "message": "Object successfully deleted"
-          },
-          "jsonapi": {
-            "version": "1.0"
-          }
-        }
-
 ## Create Order with on site Attendees [/v1/orders?onsite=true]
 
 ### Create Order with on site Attendees [POST]
@@ -491,7 +468,7 @@ Create a new Order with on site attendees
               "payment-mode": "free",
               "last4": null,
               "state": null,
-              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",              
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
               "address": null,
               "exp-month": null,
               "amount": null,
@@ -753,9 +730,9 @@ Calculates the order amount
 
           {
               "tickets": [
-                {"id": 1, "quantity": 2}, 
-                {"id": 2, "quantity": 4}, 
-                {"id": 3, "quantity": 3, "price": 789.7}, 
+                {"id": 1, "quantity": 2},
+                {"id": 2, "quantity": 4},
+                {"id": 3, "quantity": 3, "price": 789.7},
                 {"id": 4, "quantity": 3}
               ],
               "discount_code": "1"
@@ -763,7 +740,7 @@ Calculates the order amount
 
 + Response 200 (application/json)
 
-          {             
+          {
               "discount": 419.43,
               "sub_total": 4021.87,
               "tax": {
@@ -820,5 +797,5 @@ Calculates the order amount
                   "ticket_fee": 0
                 }
               ],
-              "total": 4745.81        
+              "total": 4745.81
           }
