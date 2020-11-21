@@ -43,11 +43,9 @@ def ticket_attendee_authorized(order_identifier):
             or order.is_attendee(current_user)
         ):
             file_path = order.ticket_pdf_path
-            try:
-                return send_from_directory('../', file_path, as_attachment=True)
-            except FileNotFoundError:
+            if not os.path.isfile(file_path):
                 create_pdf_tickets_for_holder(order)
-                return send_from_directory('../', file_path, as_attachment=True)
+            return send_from_directory('../', file_path, as_attachment=True)
         else:
             raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
@@ -170,6 +168,6 @@ def ticket_attendee_pdf(attendee_id):
     ):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     file_path = ticket_holder.pdf_url_path
-    if not os.path.exists(file_path):
+    if not os.path.isfile(file_path):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
