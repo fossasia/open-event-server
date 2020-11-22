@@ -76,6 +76,17 @@ def create_pdf_tickets_for_holder(order):
     :param order: The order for which to create tickets for.
     """
     if order.status == 'completed' or order.status == 'placed':
+        pdf = create_save_pdf(
+            render_template('pdf/ticket_purchaser.html', order=order),
+            UPLOAD_PATHS['pdf']['tickets_all'],
+            dir_path='/static/uploads/pdf/tickets/',
+            identifier=order.identifier,
+            extra_identifiers={'extra_identifier': order.identifier},
+            upload_dir='generated/tickets/',
+        )
+
+        order.tickets_pdf_url = pdf
+
         for holder in order.ticket_holders:
             if (not holder.user) or holder.user.id != order.user_id:
                 # holder is not the order buyer.
@@ -86,21 +97,12 @@ def create_pdf_tickets_for_holder(order):
                     UPLOAD_PATHS['pdf']['tickets_all'],
                     dir_path='/static/uploads/pdf/tickets/',
                     identifier=order.identifier,
-                    extra_identifiers={'attendee_identifier': holder.id},
+                    extra_identifiers={'extra_identifier': holder.id},
                     upload_dir='generated/tickets/',
                 )
             else:
                 # holder is the order buyer.
-                pdf = create_save_pdf(
-                    render_template('pdf/ticket_purchaser.html', order=order),
-                    UPLOAD_PATHS['pdf']['tickets_all'],
-                    dir_path='/static/uploads/pdf/tickets/',
-                    identifier=order.identifier,
-                    extra_identifiers={'attendee_identifier': holder.id},
-                    upload_dir='generated/tickets/',
-                )
-
-                order.tickets_pdf_url = pdf
+                pdf = order.tickets_pdf_url
             holder.pdf_url = pdf
             save_to_db(holder)
 

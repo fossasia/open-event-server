@@ -113,7 +113,7 @@ class TicketHolder(SoftDeletionModel):
     @property
     def pdf_url_path(self) -> str:
         key = UPLOAD_PATHS['pdf']['tickets_all'].format(
-            identifier=self.order.identifier, attendee_identifier=self.id
+            identifier=self.order.identifier, extra_identifier=self.id
         )
         return (
             'generated/tickets/{}/{}/'.format(key, generate_hash(key))
