@@ -136,7 +136,9 @@ class Order(db.Model):
 
     @property
     def ticket_pdf_path(self) -> str:
-        key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=self.identifier)
+        key = UPLOAD_PATHS['pdf']['tickets_all'].format(
+            identifier=self.identifier, extra_identifier=self.identifier
+        )
         return (
             'generated/tickets/{}/{}/'.format(key, generate_hash(key))
             + self.identifier
