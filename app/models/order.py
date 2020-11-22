@@ -5,7 +5,6 @@ from sqlalchemy.sql import func
 from app.api.helpers.db import get_new_identifier
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models import db
-from app.models.base import SoftDeletionModel
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 
@@ -29,14 +28,13 @@ def get_updatable_fields():
         'status',
         'paid_via',
         'order_notes',
-        'deleted_at',
         'payment_mode',
         'tickets_pdf_url',
         'is_billing_enabled',
     ]
 
 
-class OrderTicket(SoftDeletionModel):
+class OrderTicket(db.Model):
     __tablename__ = 'orders_tickets'
     order_id = db.Column(
         db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True
@@ -47,7 +45,7 @@ class OrderTicket(SoftDeletionModel):
     quantity = db.Column(db.Integer)
 
 
-class Order(SoftDeletionModel):
+class Order(db.Model):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
