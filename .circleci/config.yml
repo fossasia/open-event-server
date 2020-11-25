@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 orbs:
   codecov: codecov/codecov@1.1.2
 jobs:
@@ -145,8 +145,7 @@ jobs:
           name: Test
           command: . venv/bin/activate && pytest tests -v --cov=.
 
-      - codecov/upload:
-          file:
+      - codecov/upload
 
 workflows:
   version: 2
