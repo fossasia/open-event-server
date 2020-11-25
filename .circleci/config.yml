@@ -143,7 +143,16 @@ jobs:
 
       - run:
           name: Test
-          command: . venv/bin/activate && pytest tests -v --cov=.
+          command: |
+            . venv/bin/activate
+            mkdir test-results
+            pytest tests -v --junitxml=test-results/junit.xml --cov=.
+
+      - store_test_results:
+          path: test-results
+
+      - store_artifacts:
+          path: test-results  
 
       - codecov/upload
 
