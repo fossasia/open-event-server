@@ -145,7 +145,7 @@ jobs:
           name: Test
           command: . venv/bin/activate && pytest tests -v --cov=.
 
-      - codecov/upload
+      - codecov/upload: {}
 
 workflows:
   version: 2
