@@ -115,6 +115,7 @@ jobs:
           APP_CONFIG: config.TestingConfig
           DATABASE_URL: postgresql://postgres@localhost/test
           TEST_DATABASE_URL: postgresql://postgres@localhost/test
+          SECRET_KEY: super secret key
       # Services
       - image: circleci/postgres:12-postgis-ram
         environment:
@@ -160,4 +161,3 @@ workflows:
       - test:
           requires:
             - dependencies
-
