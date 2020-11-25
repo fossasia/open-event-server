@@ -16,12 +16,12 @@ calendar_routes = Blueprint('calendars', __name__, url_prefix='/v1/events')
 def export_event(event_id):
     event = Event.query.get_or_404(event_id)
     include_sessions = 'include_sessions' in request.args
-    download = 'download' in request.args
 
     response = to_ical(event, include_sessions=include_sessions)
 
-    if download:
-        response = make_response(response)
+    response = make_response(response)
+    response.headers['Content-Type'] = 'text/calendar'
+    if 'download' in request.args:
         response.headers[
             'Content-Disposition'
         ] = f'attachment; filename={event.identifier}-{event.name}-Calendar.ics;'
