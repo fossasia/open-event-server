@@ -146,7 +146,7 @@ jobs:
           command: . venv/bin/activate && pytest tests -v --cov=.
 
       - codecov/upload:
-          file: {{ coverage_report_filepath }}
+          file:
 
 workflows:
   version: 2
