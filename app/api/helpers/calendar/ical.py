@@ -9,6 +9,9 @@ from app.models.session import Session
 def to_ical(event, include_sessions=False):
     cal = Calendar()
     cal.add('version', '2.0')
+    cal.add('METHOD', 'PUBLISH')
+    cal.add('X-WR-CALNAME', event.name)
+    cal.add('X-WR-CALDESC', 'Event Calendar')
 
     event_component = Event()
     event_component.add('uid', event.identifier)
