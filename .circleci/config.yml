@@ -1,6 +1,4 @@
-version: 2.1
-orbs:
-  codecov: codecov/codecov@1.1.2
+version: 2
 jobs:
   dependencies:
     docker:
@@ -154,7 +152,10 @@ jobs:
       - store_artifacts:
           path: test-results  
 
-      - codecov/upload
+      - run:
+          name: Upload Coverage
+          command: . venv/bin/activate && bash <(curl -s https://codecov.io/bash)
+          when: on_success
 
 workflows:
   version: 2
