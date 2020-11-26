@@ -16,7 +16,7 @@ class Speaker(SoftDeletionModel):
     short_biography = db.Column(db.Text)
     long_biography = db.Column(db.Text)
     speaking_experience = db.Column(db.Text)
-    email = db.Column(db.String, nullable=False)
+    email = db.Column(db.String)
     mobile = db.Column(db.String)
     website = db.Column(db.String)
     twitter = db.Column(db.String)
