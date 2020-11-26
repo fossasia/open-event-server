@@ -1,5 +1,6 @@
 import time
 
+from flask_jwt_extended import current_user
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
@@ -153,6 +154,13 @@ class Order(db.Model):
             + self.identifier
             + '.pdf'
         )
+
+    @property
+    def filtered_ticket_holders(self):
+        query_ = TicketHolder.query.filter_by(order_id=self.id, deleted_at=None)
+        if current_user.id != self.user_id:
+            query_ = query_.filter(TicketHolder.user == current_user)
+        return query_.all()
 
     @property
     def site_view_link(self) -> str:
