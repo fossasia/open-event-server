@@ -107,7 +107,7 @@ class OrderSchema(Schema):
     )
 
     attendees = Relationship(
-        attribute='ticket_holders',
+        attribute='filtered_ticket_holders',
         self_view='v1.order_attendee',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.attendee_list',
