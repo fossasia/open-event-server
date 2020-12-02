@@ -72,6 +72,7 @@ class SpeakerListPost(ResourceList):
             raise ForbiddenError({'pointer': ''}, "Speakers are disabled for this Event")
 
         check_email_override(data, data['event'])
+
         if (
             data.get('email')
             and get_count(
@@ -94,8 +95,12 @@ class SpeakerListPost(ResourceList):
                         f"Session: {session_id} not found",
                     )
 
+        excluded = []
+        if not data.get('email'):
+            # Don't check requirement of email if overriden
+            excluded = ['email']
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'speaker', self.schema, Speaker(event_id=data['event']), data
+            'speaker', self.schema, Speaker(event_id=data['event']), data, excluded
         )
 
     def after_create_object(self, speaker, data, view_kwargs):
@@ -191,8 +196,12 @@ class SpeakerDetail(ResourceDetail):
 
         check_email_override(data, speaker.event_id)
 
+        excluded = []
+        if not data.get('email'):
+            # Don't check requirement of email if overriden
+            excluded = ['email']
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'speaker', self.resource.schema, speaker, data
+            'speaker', self.resource.schema, speaker, data, excluded
         )
 
     def after_patch(self, result):

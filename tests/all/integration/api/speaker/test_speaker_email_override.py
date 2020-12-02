@@ -1,6 +1,7 @@
 import json
 
 from app.api.helpers.db import get_or_create
+from app.models.custom_form import CustomForms
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
 from tests.factories.event import EventFactoryBasic
@@ -13,6 +14,14 @@ def get_event(db, user=None):
     if user:
         role, _ = get_or_create(Role, name='owner', title_name='Owner')
         UsersEventsRoles(user=user, event=event, role=role)
+    CustomForms(
+        event=event,
+        form='speaker',
+        field_identifier='email',
+        type='text',
+        is_included=True,
+        is_required=True,
+    )
     db.session.commit()
 
     return event
