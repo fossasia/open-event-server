@@ -157,8 +157,16 @@ class Order(db.Model):
 
     @property
     def filtered_ticket_holders(self):
+        from app.api.helpers.permission_manager import has_access
+
         query_ = TicketHolder.query.filter_by(order_id=self.id, deleted_at=None)
-        if current_user.id != self.user_id:
+        if (
+            not has_access(
+                'is_coorganizer',
+                event_id=self.event_id,
+            )
+            and current_user.id != self.user_id
+        ):
             query_ = query_.filter(TicketHolder.user == current_user)
         return query_.all()
 
