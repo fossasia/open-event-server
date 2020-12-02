@@ -132,17 +132,19 @@ class AttendeeList(ResourceList):
                 'order_identifier',
                 'identifier',
             )
+
+            is_coorganizer = has_access(
+                'is_coorganizer',
+                event_id=order.event_id,
+            )
             if not (
-                has_access(
-                    'is_coorganizer_or_user_itself',
-                    event_id=order.event_id,
-                    user_id=order.user_id,
-                )
+                is_coorganizer
+                or current_user.id == order.user_id
                 or order.is_attendee(current_user)
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
-            if current_user.id != order.user_id:
+            if not is_coorganizer and current_user.id != order.user_id:
                 query_ = query_.filter(TicketHolder.user == current_user)
 
         if view_kwargs.get('ticket_id'):
