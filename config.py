@@ -7,7 +7,7 @@ env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.18.0'
+VERSION_NAME = '1.19.0'
 
 LANGUAGES = {
     'en': 'English',

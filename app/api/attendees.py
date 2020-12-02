@@ -142,6 +142,8 @@ class AttendeeList(ResourceList):
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
+            if current_user.id != order.user_id:
+                query_ = query_.filter(TicketHolder.user == current_user)
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
