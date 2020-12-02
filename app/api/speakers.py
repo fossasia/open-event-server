@@ -5,7 +5,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.api.bootstrap import api
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -18,6 +18,23 @@ from app.models.session import Session
 from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.speaker import Speaker
 from app.models.user import User
+
+
+def check_email_override(data, event_id):
+    is_organizer = has_access('is_organizer', event_id=event_id)
+    if data.get('is_email_overridden') and not is_organizer:
+        raise ForbiddenError(
+            {'pointer': '/data/attributes/is_email_overridden'},
+            'Organizer access required to override email',
+        )
+    if not data.get('is_email_overridden') and is_organizer and not data.get('email'):
+        data['email'] = current_user.email
+    elif data.get('is_email_overridden') and is_organizer and not data.get('email'):
+        data['email'] = None
+    if not is_organizer and not data.get('email'):
+        raise UnprocessableEntityError(
+            {'pointer': '/data/attributes/email'}, 'Email is required for speaker'
+        )
 
 
 class SpeakerListPost(ResourceList):
@@ -54,8 +71,9 @@ class SpeakerListPost(ResourceList):
         ):
             raise ForbiddenError({'pointer': ''}, "Speakers are disabled for this Event")
 
+        check_email_override(data, data['event'])
         if (
-            not data.get('is_email_overridden')
+            data.get('email')
             and get_count(
                 db.session.query(Speaker).filter_by(
                     event_id=int(data['event']), email=data['email'], deleted_at=None
@@ -66,18 +84,7 @@ class SpeakerListPost(ResourceList):
             raise ForbiddenError(
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
-        is_organizer = has_access('is_organizer', event_id=data['event'])
-        if data.get('is_email_overridden') and not is_organizer:
-            raise ForbiddenError(
-                {'pointer': 'data/attributes/is_email_overridden'},
-                'Organizer access required to override email',
-            )
-        if not data.get('is_email_overridden') and is_organizer and not data.get('email'):
-            data['email'] = current_user.email
-        if not is_organizer and not data.get('email'):
-            raise ForbiddenError(
-                {'pointer': '/data/email'}, 'Email is required for speaker'
-            )
+
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
@@ -182,19 +189,7 @@ class SpeakerDetail(ResourceDetail):
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
-        if data.get('is_email_overridden') and not has_access(
-            'is_organizer', event_id=speaker.event_id
-        ):
-            raise ForbiddenError(
-                {'pointer': 'data/attributes/is_email_overridden'},
-                'Organizer access required to override email',
-            )
-        if (
-            not data.get('is_email_overridden')
-            and has_access('is_organizer', event_id=speaker.event_id)
-            and not data.get('email')
-        ):
-            data['email'] = current_user.email
+        check_email_override(data, speaker.event_id)
 
         data['complex_field_values'] = validate_custom_form_constraints_request(
             'speaker', self.resource.schema, speaker, data
