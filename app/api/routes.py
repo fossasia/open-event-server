@@ -233,6 +233,12 @@ from app.api.user_favourite_events import (
     UserFavouriteEventListPost,
     UserFavouriteEventRelationship,
 )
+from app.api.user_favourite_session import (
+    UserFavouriteSessionDetail,
+    UserFavouriteSessionList,
+    UserFavouriteSessionListPost,
+    UserFavouriteSessionRelationship,
+)
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
 from app.api.video_stream import (
@@ -912,6 +918,32 @@ api.route(
     UserFavouriteEventRelationship,
     'user_favourite_event_event',
     '/user-favourite-events/<int:id>/relationships/event',
+)
+
+# user favourite sessions
+api.route(
+    UserFavouriteSessionListPost, 'user_favourite_session_post', '/user-favourite-session'
+)
+api.route(
+    UserFavouriteSessionList,
+    'user_favourite_session_list',
+    '/user-favourite-session',
+    '/users/<int:user_id>/user-favourite-session',
+)
+api.route(
+    UserFavouriteSessionDetail,
+    'user_favourite_session_detail',
+    '/user-favourite-session/<int:id>',
+)
+api.route(
+    UserFavouriteSessionRelationship,
+    'user_favourite_session_user',
+    '/user-favourite-session/<int:id>/relationships/user',
+)
+api.route(
+    UserFavouriteSessionRelationship,
+    'user_favourite_session_session',
+    '/user-favourite-session/<int:id>/relationships/session',
 )
 
 # sessions
