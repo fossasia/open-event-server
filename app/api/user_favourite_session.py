@@ -132,5 +132,5 @@ class UserFavouriteSessionRelationship(ResourceRelationship):
 
 def find_user_favourite_session_by_id(session_id):
     return UserFavouriteSession.query.filter_by(
-        session_id=session_id, deleted_at=None, user=current_user
+        session_id=session_id, deleted_at=None
     ).first()
