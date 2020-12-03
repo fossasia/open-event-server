@@ -6,7 +6,7 @@ export INTEGRATE_SOCKETIO=false
 # also socketio is not used in a celery task so no problem to turn it off
 chmod -R 0777 ./static
 ./scripts/l10n.sh generate
-celery worker -A app.instance.celery --loglevel=info &
+celery worker -A app.instance.celery --loglevel=info -c 2 &
 if [ "$APP_CONFIG" = "config.DevelopmentConfig" ]; then
     python manage.py runserver -h 0.0.0.0 -p ${PORT:-8000} --no-reload
 else
