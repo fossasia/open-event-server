@@ -76,10 +76,10 @@ def export_attendees_csv(attendees, custom_forms):
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
                 column.append(
-                    fields_dict.get(field.field_identifier, '') if fields_dict else ''
+                    fields_dict.get(field.identifier, '') if fields_dict else ''
                 )
             else:
-                column.append(getattr(attendee, field.field_identifier, ''))
+                column.append(getattr(attendee, field.identifier, ''))
 
         rows.append(column)
 
