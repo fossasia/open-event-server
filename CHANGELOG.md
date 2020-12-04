@@ -1,5 +1,19 @@
 ## Changelog
 
+#### v1.19.1 (2020-12-04):
+
+**Hot Fix Release**
+
+##### Bug Fixes
+
+- Make speaker email nullable
+- Give access to order tickets and attendees to organizers
+- Use identifier for export instead of field identifier
+
+##### Maintenance
+
+- Upgrade to celery v5
+
 #### v1.19.0 (2020-11-30):
 
 ##### Features
