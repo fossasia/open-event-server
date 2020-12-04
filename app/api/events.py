@@ -656,7 +656,7 @@ class EventDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def after_get_object(self, event, view_kwargs):
-        if event.state == "draft":
+        if event and event.state == "draft":
             if not is_logged_in() or not has_access('is_coorganizer', event_id=event.id):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
