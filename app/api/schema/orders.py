@@ -109,6 +109,7 @@ class OrderSchema(Schema):
 
     attendees = GetterRelationship(
         getter='filtered_ticket_holders',
+        attribute='ticket_holders',
         self_view='v1.order_attendee',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.attendee_list',
