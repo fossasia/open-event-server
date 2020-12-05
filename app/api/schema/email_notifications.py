@@ -30,7 +30,6 @@ class EmailNotificationSchema(SoftDeletionSchema):
     after_ticket_purchase = fields.Boolean(default=True, allow_none=True)
     event_id = fields.Integer(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.email_notification_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -39,7 +38,6 @@ class EmailNotificationSchema(SoftDeletionSchema):
         type_='event',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.email_notification_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

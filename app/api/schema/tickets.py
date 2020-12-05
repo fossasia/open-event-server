@@ -120,7 +120,6 @@ class TicketSchemaPublic(SoftDeletionSchema):
     is_checkin_restricted = fields.Boolean(default=True)
     auto_checkin_enabled = fields.Boolean(default=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.ticket_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -141,7 +140,6 @@ class TicketSchemaPublic(SoftDeletionSchema):
     )
 
     discount_codes = Relationship(
-        attribute='discount_codes',
         self_view='v1.ticket_discount_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.discount_code_list',
@@ -160,7 +158,6 @@ class TicketSchema(TicketSchemaPublic):
         inflect = dasherize
 
     access_codes = Relationship(
-        attribute='access_codes',
         self_view='v1.ticket_access_code',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.access_code_list',
@@ -170,7 +167,6 @@ class TicketSchema(TicketSchemaPublic):
         type_='access-code',
     )
     attendees = Relationship(
-        attribute='ticket_holders',
         self_view='v1.ticket_attendees',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.attendee_list_post',
