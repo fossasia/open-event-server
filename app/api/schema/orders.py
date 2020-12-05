@@ -4,6 +4,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import GetterRelationship
 from app.models import db
 from utils.common import use_defaults
 
@@ -106,8 +107,9 @@ class OrderSchema(Schema):
         cls_or_instance=fields.Nested(OnSiteTicketSchema), load_only=True, allow_none=True
     )
 
-    attendees = Relationship(
-        attribute='filtered_ticket_holders',
+    attendees = GetterRelationship(
+        getter='filtered_ticket_holders',
+        attribute='ticket_holders',
         self_view='v1.order_attendee',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.attendee_list',
@@ -119,7 +121,6 @@ class OrderSchema(Schema):
     )
 
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.order_ticket',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.ticket_list',
@@ -131,7 +132,6 @@ class OrderSchema(Schema):
     )
 
     user = Relationship(
-        attribute='user',
         self_view='v1.order_user',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
@@ -142,7 +142,6 @@ class OrderSchema(Schema):
     )
 
     event = Relationship(
-        attribute='event',
         self_view='v1.order_event',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.event_detail',
@@ -164,7 +163,6 @@ class OrderSchema(Schema):
     )
 
     marketer = Relationship(
-        attribute='marketer',
         self_view='v1.order_marketer',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
@@ -175,7 +173,6 @@ class OrderSchema(Schema):
     )
 
     discount_code = Relationship(
-        attribute='discount_code',
         self_view='v1.order_discount',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.discount_code_detail',

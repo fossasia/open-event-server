@@ -17,7 +17,6 @@ class VideoStreamSchema(Schema):
     password = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
     rooms = Relationship(
-        attribute='rooms',
         many=True,
         self_view='v1.video_stream_rooms',
         self_view_kwargs={'id': '<id>'},

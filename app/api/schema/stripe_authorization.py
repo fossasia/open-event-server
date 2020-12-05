@@ -24,7 +24,6 @@ class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
     stripe_publishable_key = fields.Str(dump_only=True)
 
     event = Relationship(
-        attribute='event',
         self_view='v1.stripe_authorization_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

@@ -48,7 +48,6 @@ class EventInvoiceSchema(SoftDeletionSchema):
     )
     invoice_pdf_url = fields.Url(allow_none=True)
     user = Relationship(
-        attribute='user',
         self_view='v1.event_invoice_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
@@ -57,7 +56,6 @@ class EventInvoiceSchema(SoftDeletionSchema):
         type_='user',
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.event_invoice_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

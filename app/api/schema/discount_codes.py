@@ -42,7 +42,6 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
     created_at = fields.DateTime(allow_none=True)
 
     event = Relationship(
-        attribute='event',
         self_view='v1.discount_code_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -124,7 +123,6 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
             )
 
     events = Relationship(
-        attribute='events',
         self_view='v1.discount_code_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
@@ -248,7 +246,6 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             )
 
     marketer = Relationship(
-        attribute='user',
         self_view='v1.discount_code_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
@@ -258,7 +255,6 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
     )
 
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.discount_code_tickets',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.ticket_list',

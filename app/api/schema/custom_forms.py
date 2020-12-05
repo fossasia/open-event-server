@@ -41,7 +41,6 @@ class CustomFormSchema(Schema):
     is_complex = fields.Boolean(dump_only=True)
     is_fixed = fields.Boolean(default=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.custom_form_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

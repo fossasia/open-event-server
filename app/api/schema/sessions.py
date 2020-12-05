@@ -113,7 +113,6 @@ class SessionSchema(SoftDeletionSchema):
     average_rating = fields.Float(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
-        attribute='microlocation',
         self_view='v1.session_microlocation',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.microlocation_detail',
@@ -122,7 +121,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='microlocation',
     )
     track = Relationship(
-        attribute='track',
         self_view='v1.session_track',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.track_detail',
@@ -131,7 +129,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='track',
     )
     session_type = Relationship(
-        attribute='session_type',
         self_view='v1.session_session_type',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_type_detail',
@@ -140,7 +137,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='session-type',
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.session_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -149,7 +145,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='event',
     )
     feedbacks = Relationship(
-        attribute='feedbacks',
         self_view='v1.session_feedbacks',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.feedback_list',
@@ -159,7 +154,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='feedback',
     )
     speakers = Relationship(
-        attribute='speakers',
         many=True,
         self_view='v1.session_speaker',
         self_view_kwargs={'id': '<id>'},
