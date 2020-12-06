@@ -650,6 +650,7 @@ api.route(
     '/stripe-authorizations/<int:stripe_authorization_id>/event',
     '/user-favourite-events/<int:user_favourite_event_id>/event',
     '/discount-codes/<int:discount_code_id>/event',
+    '/video-streams/<int:video_stream_id>/event',
 )
 api.route(
     EventRelationship,
@@ -1560,9 +1561,16 @@ api.route(
     'video_stream_detail',
     '/video-streams/<int:id>',
     '/microlocations/<int:room_id>/video-stream',
+    '/events/<int:event_id>/video-stream',
+    '/events/<event_identifier>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
     'video_stream_rooms',
     '/video-streams/<int:id>/relationships/rooms',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_event',
+    '/video-streams/<int:id>/relationships/event',
 )

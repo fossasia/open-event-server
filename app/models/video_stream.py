@@ -1,5 +1,6 @@
 from flask_jwt_extended import current_user
 from sqlalchemy import or_
+from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
 from app.models import db
@@ -24,6 +25,11 @@ class VideoStream(db.Model):
     # a single video stream linked. But a video stream can be
     # linked to several rooms
     rooms = db.relationship('Microlocation', backref='video_stream')
+
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), unique=True
+    )
+    event = db.relationship('Event', backref=backref('video_stream', uselist=False))
 
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'

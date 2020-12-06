@@ -9,6 +9,7 @@ from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.video_stream import VideoStreamSchema
 from app.models import db
+from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_stream import VideoStream
 
@@ -57,6 +58,18 @@ class VideoStreamDetail(ResourceDetail):
         if view_kwargs.get('room_id'):
             room = safe_query_kwargs(Microlocation, view_kwargs, 'room_id')
             view_kwargs['id'] = room.video_stream and room.video_stream.id
+
+        if view_kwargs.get('event_identifier'):
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
+            )
+            view_kwargs['event_id'] = event.id
+
+        if view_kwargs.get('event_id'):
+            video_stream = safe_query_kwargs(
+                VideoStream, view_kwargs, 'event_id', 'event_id'
+            )
+            view_kwargs['id'] = video_stream.id
 
     def after_get_object(self, stream, view_kwargs):
         if not stream.user_can_access:
