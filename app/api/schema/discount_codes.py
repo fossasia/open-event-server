@@ -1,3 +1,5 @@
+from sys import maxsize
+
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
@@ -33,7 +35,10 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
     is_active = fields.Boolean()
     tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    max_quantity = fields.Integer(allow_none=True)
+    if max_quantity < 0:
+        max_quantity = sys.maxsize
+        
     valid_from = fields.DateTime(allow_none=True)
     valid_till = fields.DateTime(allow_none=True)
     used_for = fields.Str(
