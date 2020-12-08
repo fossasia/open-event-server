@@ -63,7 +63,7 @@ greenlet==0.4.17 # Required for gevent
 pyyaml==5.3.1
 sendgrid==6.4.8
 marshmallow==2.15.2
-WeasyPrint==52.1
+WeasyPrint==52.2
 Flask-Babel==2.0.0
 
 # GraphQL support
