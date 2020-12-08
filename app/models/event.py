@@ -431,6 +431,14 @@ class Event(SoftDeletionModel):
     def has_coordinates(self):
         return self.latitude and self.longitude
 
+    @property
+    def safe_video_stream(self):
+        """Conditionally return video stream after applying access control"""
+        stream = self.video_stream
+        if stream and stream.user_can_access:
+            return stream
+        return None
+
 
 @event.listens_for(Event, 'after_update')
 @event.listens_for(Event, 'after_insert')
