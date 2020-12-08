@@ -35,15 +35,11 @@ class VideoStream(db.Model):
         return f'<VideoStream {self.name!r} {self.url!r}>'
 
     @property
-    def event(self):
-        return self.rooms[0].event
-
-    @property
     def user_can_access(self):
         rooms = self.rooms
-        if not rooms:
+        if not (self.event_id or rooms):
             return False
-        event_id = rooms[0].event_id
+        event_id = self.event_id or rooms[0].event_id
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=event_id):
             return True
