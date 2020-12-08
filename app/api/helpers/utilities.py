@@ -56,6 +56,23 @@ def require_relationship(resource_list, data):
             )
 
 
+def require_exclusive_relationship(resource_list, data, optional=False):
+    """Only one of the passed relationships should be present"""
+    present = False
+    multiple = False
+    for resource in resource_list:
+        if resource in data:
+            if present:
+                multiple = True
+            present = True
+
+    if multiple or not (optional or present):
+        raise UnprocessableEntityError(
+            {'pointer': f'/data/relationships'},
+            f"A valid relationship with either of resources is required: {resource_list}",
+        )
+
+
 def string_empty(value):
     return isinstance(value, str) and not value.strip()
 

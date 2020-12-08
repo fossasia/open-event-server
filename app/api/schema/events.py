@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import GetterRelationship, SoftDeletionSchema
 from app.models.event import Event
 
 
@@ -322,6 +322,15 @@ class EventSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'id': '<id>'},
         schema='EventStatisticsGeneralSchema',
         type_='event-statistics-general',
+    )
+    video_stream = GetterRelationship(
+        getter='safe_video_stream',
+        self_view='v1.video_stream_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_stream_detail',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='VideoStreamSchema',
+        type_='video-stream',
     )
 
 

@@ -25,3 +25,11 @@ class VideoStreamSchema(Schema):
         schema='MicrolocationSchema',
         type_='microlocation',
     )
+    event = Relationship(
+        self_view='v1.video_stream_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
