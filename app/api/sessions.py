@@ -31,6 +31,8 @@ from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
 
+from datetime import datetime
+
 sessions_blueprint = Blueprint('sessions_blueprint', __name__, url_prefix='/v1/sessions')
 
 
@@ -265,6 +267,12 @@ class SessionDetail(ResourceDetail):
             raise ForbiddenError(
                 {'pointer': '/data/attributes/is-locked'},
                 "Locked sessions cannot be edited",
+            )
+
+        if(session.ends_at and session.ends_at < datetime.now()):
+            raise ForbiddenError(
+                {'pointer': '/data/attributes'},
+                "sessions cannot be edited after session held",
             )
 
         new_state = data.get('state')
