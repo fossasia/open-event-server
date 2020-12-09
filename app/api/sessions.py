@@ -59,8 +59,9 @@ class SessionListPost(ResourceList):
         ):
             raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
+        excluded = ['track']
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'session', self.schema, Session(event_id=data['event']), data
+            'session', self.schema, Session(event_id=data['event']), data, excluded
         )
 
     def after_create_object(self, session, data, view_kwargs):
