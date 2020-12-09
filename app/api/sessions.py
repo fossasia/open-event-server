@@ -7,6 +7,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
 
 from app.api.bootstrap import api
+from app.api.custom_forms import CustomForms
 from app.api.events import Event
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
@@ -60,6 +61,12 @@ class SessionListPost(ResourceList):
             raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
         excluded = ['track']
+        
+        custom_fields = db.session.query(CustomForms).filter_by(event_id = data['event']).all()
+        for i in custom_fields:
+            if(i.name == "Track" and i.is_required == True):
+                excluded = []
+
         data['complex_field_values'] = validate_custom_form_constraints_request(
             'session', self.schema, Session(event_id=data['event']), data, excluded
         )
