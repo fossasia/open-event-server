@@ -119,6 +119,7 @@ class SettingSchemaPublic(Schema):
     admin_billing_city = fields.Str(allow_none=True)
     admin_billing_zip = fields.Str(allow_none=True)
     admin_billing_additional_info = fields.Str(allow_none=True)
+    admin_billing_logo = fields.Url(allow_none=True)
 
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
