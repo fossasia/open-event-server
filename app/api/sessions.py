@@ -62,11 +62,10 @@ class SessionListPost(ResourceList):
 
         
         custom_fields = db.session.query(CustomForms).filter_by(event_id = data['event']).all()
+        excluded = ['track']
         for i in custom_fields:
             if(i.field_identifier == "track" and i.is_required == True):
-                excluded = []
-            elif(i.field_identifier == "track" and i.is_required == False):
-                excluded = ['track']
+                excluded = []   
                 
         data['complex_field_values'] = validate_custom_form_constraints_request(
             'session', self.schema, Session(event_id=data['event']), data, excluded
