@@ -48,7 +48,7 @@ class SessionListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'track'], data)
+        require_relationship(['event'], data)
         data['creator_id'] = current_user.id
         if (
             get_count(
@@ -60,12 +60,13 @@ class SessionListPost(ResourceList):
         ):
             raise ForbiddenError({'pointer': ''}, "Sessions are disabled for this Event")
 
-        excluded = ['track']
         
         custom_fields = db.session.query(CustomForms).filter_by(event_id = data['event']).all()
         for i in custom_fields:
             if(i.field_identifier == "track" and i.is_required == True):
                 excluded = []
+            elif(i.field_identifier == "track" and i.is_required == False):
+                excluded = ['track']
                 
         data['complex_field_values'] = validate_custom_form_constraints_request(
             'session', self.schema, Session(event_id=data['event']), data, excluded
