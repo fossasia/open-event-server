@@ -48,6 +48,7 @@ from app.models.user import (
 
 # User Permissions
 from app.models.user_permission import UserPermission
+from app.models.video_channel import VideoChannel
 
 SALES = 'sales'
 ADMIN = 'admin'
@@ -423,30 +424,12 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
-
-    db.session.commit()
-
-
-def populate_without_print():
-    """
-    Create defined Roles, Services and Permissions.
-    """
-    create_roles()
-    create_services()
-    create_permissions()
-    create_custom_sys_roles()
-    create_panels()
-    create_panel_permissions()
-    create_user_permissions()
-    create_settings()
-    create_event_image_sizes()
-    create_speaker_image_sizes()
-    create_event_topics()
-    create_event_sub_topics()
-    create_event_types()
-    create_event_locations()
-    create_admin_message_settings()
-    create_custom_placeholders()
+    get_or_create(
+        VideoChannel,
+        provider='jitsi',
+        name='Jitsi Meet',
+        defaults={'url': 'https://meet.jit.si', 'api_url': 'https://api.jitsi.net'},
+    )
 
     db.session.commit()
 

@@ -33,3 +33,12 @@ class VideoStreamSchema(Schema):
         schema='EventSchemaPublic',
         type_='event',
     )
+    video_channel = Relationship(
+        attribute='channel',
+        self_view='v1.video_stream_channel',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_channel_detail',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='VideoChannelSchemaPublic',
+        type_='video-channel',
+    )

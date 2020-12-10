@@ -6,6 +6,7 @@ from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
+from app.models.video_channel import VideoChannel
 
 
 class VideoStream(db.Model):
@@ -30,6 +31,11 @@ class VideoStream(db.Model):
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), unique=True
     )
     event = db.relationship('Event', backref=backref('video_stream', uselist=False))
+
+    channel_id = db.Column(
+        db.Integer, db.ForeignKey('video_channels.id', ondelete='CASCADE')
+    )
+    channel = db.relationship(VideoChannel, backref='streams')
 
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'

@@ -235,6 +235,7 @@ from app.api.user_favourite_events import (
 )
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
+from app.api.video_channel import VideoChannelDetail, VideoChannelList
 from app.api.video_stream import (
     VideoStreamDetail,
     VideoStreamList,
@@ -1573,4 +1574,18 @@ api.route(
     VideoStreamRelationship,
     'video_stream_event',
     '/video-streams/<int:id>/relationships/event',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_channel',
+    '/video-streams/<int:id>/relationships/video-channel',
+)
+
+# Video Channels
+api.route(VideoChannelList, 'video_channel_list', '/video-channels')
+api.route(
+    VideoChannelDetail,
+    'video_channel_detail',
+    '/video-channels/<int:id>',
+    '/video-streams/<int:video_stream_id>/video-channel',
 )
