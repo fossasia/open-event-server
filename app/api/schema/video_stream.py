@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.models import video_channel
 
 
 class VideoStreamSchema(Schema):
@@ -32,4 +33,13 @@ class VideoStreamSchema(Schema):
         related_view_kwargs={'video_stream_id': '<id>'},
         schema='EventSchemaPublic',
         type_='event',
+    )
+    video_channel = Relationship(
+        attribute='channel',
+        self_view='v1.video_stream_channel',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_channel_detail',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='VideoChannelSchemaPublic',
+        type_='video-channel',
     )
