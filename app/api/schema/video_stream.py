@@ -2,7 +2,6 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.models import video_channel
 
 
 class VideoStreamSchema(Schema):
