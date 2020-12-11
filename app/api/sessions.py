@@ -270,7 +270,10 @@ class SessionDetail(ResourceDetail):
 
         new_state = data.get('state')
 
-        if new_state and new_state != session.state and (is_organizer or session.ends_at):
+        if new_state and new_state != session.state and (
+            is_organizer or (
+            session.ends_at and 
+            str(session.ends_at).split(" ")[0] > str(datetime.now()).split(" ")[0])):
             # State change detected. Verify that state change is allowed
             g.send_email = new_state in [
                 'accepted',
