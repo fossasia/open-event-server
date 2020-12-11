@@ -12,7 +12,8 @@ class VideoChannel(db.Model):
     provider = db.Column(db.String, nullable=False)  # eg. jitsi, bbb, youtube
     url = db.Column(db.String, nullable=False)  # Public URL eg. https://meet.jit.si
     api_url = db.Column(db.String)  # eg. https://api.jitsi.net
-    # Extra info stored for server if needed for integration like API keys
+    api_key = db.Column(db.String)
+    # Extra info stored for server if needed for integration like settings
     extra = db.Column(db.JSON)
 
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
