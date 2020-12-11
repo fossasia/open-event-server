@@ -273,7 +273,7 @@ class SessionDetail(ResourceDetail):
         if new_state and new_state != session.state and (
             is_organizer or (
             session.ends_at and 
-            session.ends_at > datetime.utcnow())):
+            session.ends_at.date() > datetime.now().date())):
             # State change detected. Verify that state change is allowed
             g.send_email = new_state in [
                 'accepted',
