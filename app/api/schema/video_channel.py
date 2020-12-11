@@ -28,4 +28,5 @@ class VideoChannelSchema(VideoChannelSchemaPublic):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
+    api_key = fields.Str(allow_none=True)
     extra = CustomFormValueField(allow_none=True)
