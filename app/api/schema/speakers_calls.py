@@ -62,7 +62,6 @@ class SpeakersCallSchema(SoftDeletionSchema):
         validate=validate.OneOf(choices=["private", "public"]), allow_none=True
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.speakers_call_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

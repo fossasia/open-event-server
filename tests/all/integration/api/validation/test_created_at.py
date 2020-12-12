@@ -13,6 +13,7 @@ from tests.factories.role_invite import RoleInviteFactory
 from tests.factories.session import SessionFactory
 from tests.factories.user import UserFactory
 from tests.factories.user_token_blacklist import UserTokenBlacklistFactory
+from tests.factories.video_channel import VideoChannelFactory
 
 
 class TestCreatedAtValidation(OpenEventLegacyTestCase):
@@ -35,6 +36,7 @@ class TestCreatedAtValidation(OpenEventLegacyTestCase):
                 AttendeeFactory,
                 DiscountCodeFactory,
                 EventInvoiceFactory,
+                VideoChannelFactory,
             ]
             for model_factory in model_factories:
                 with self.subTest(model_factory=model_factory):

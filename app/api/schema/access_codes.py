@@ -84,7 +84,6 @@ class AccessCodeSchema(SoftDeletionSchema):
     valid_from = fields.DateTime(required=True)
     valid_till = fields.DateTime(required=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.access_code_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -102,7 +101,6 @@ class AccessCodeSchema(SoftDeletionSchema):
         type_='user',
     )
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.access_code_tickets',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.ticket_list',

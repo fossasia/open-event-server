@@ -80,7 +80,6 @@ class RoleInviteSchema(Schema):
         default="pending",
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.role_invite_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -89,7 +88,6 @@ class RoleInviteSchema(Schema):
         type_='event',
     )
     role = Relationship(
-        attribute='role',
         self_view='v1.role_invite_role',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.role_detail',

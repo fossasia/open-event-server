@@ -1,5 +1,46 @@
 ## Changelog
 
+#### v1.19.1 (2020-12-04):
+
+**Hot Fix Release**
+
+##### Bug Fixes
+
+- Make speaker email nullable
+- Give access to order tickets and attendees to organizers
+- Use identifier for export instead of field identifier
+
+##### Maintenance
+
+- Upgrade to celery v5
+
+#### v1.19.0 (2020-11-30):
+
+##### Features
+- Add video stream/conference integration support
+- Add separate tickets for each attendee
+- Improve Order Emails to include more details
+- Change PDFs to correct timezone info
+- Make emails translatable
+- Add simpler ICS export
+- Improve upcoming events criteria
+
+##### Bug Fixes
+
+- Remove ability to delete orders
+- Remove ability to edit role invites. *As an alternative, please delete an invite and resend another*
+- Fix user deletion API logic
+- Fix PDF issues related to emails and orders
+- Fix minimum amount for generating invoice
+
+##### Maintenance
+
+- Add support for gevent worker. **Note**: eventlet is deprecated and will be removed in next release
+- Remove discrepancies in prod and code migrations
+- Dependency Updates
+
+*More details in Releases Section*
+
 #### v1.18.0 (2020-10-07):
 
 ##### Features

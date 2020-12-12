@@ -66,7 +66,6 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -76,7 +75,6 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         dump_only=True,
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.attendee_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
@@ -103,7 +101,6 @@ class AttendeeSchema(AttendeeSchemaPublic):
         inflect = dasherize
 
     ticket = Relationship(
-        attribute='ticket',
         self_view='v1.attendee_ticket',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.ticket_detail',

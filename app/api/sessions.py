@@ -47,7 +47,7 @@ class SessionListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'track'], data)
+        require_relationship(['event'], data)
         data['creator_id'] = current_user.id
         if (
             get_count(

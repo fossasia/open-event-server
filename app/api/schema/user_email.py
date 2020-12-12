@@ -29,7 +29,6 @@ class UserEmailSchema(SoftDeletionSchema):
     )
     user_id = fields.Integer(allow_none=False)
     user = Relationship(
-        attribute='user',
         self_view='v1.user_emails_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

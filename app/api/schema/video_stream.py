@@ -1,6 +1,7 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.utilities import dasherize
 
 
@@ -16,8 +17,8 @@ class VideoStreamSchema(Schema):
     url = fields.Url(required=True)
     password = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
+    extra = CustomFormValueField(allow_none=True)
     rooms = Relationship(
-        attribute='rooms',
         many=True,
         self_view='v1.video_stream_rooms',
         self_view_kwargs={'id': '<id>'},
@@ -25,4 +26,21 @@ class VideoStreamSchema(Schema):
         related_view_kwargs={'video_stream_id': '<id>'},
         schema='MicrolocationSchema',
         type_='microlocation',
+    )
+    event = Relationship(
+        self_view='v1.video_stream_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_detail',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='EventSchemaPublic',
+        type_='event',
+    )
+    video_channel = Relationship(
+        attribute='channel',
+        self_view='v1.video_stream_channel',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_channel_detail',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='VideoChannelSchemaPublic',
+        type_='video-channel',
     )

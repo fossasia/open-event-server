@@ -1,10 +1,12 @@
 from flask_jwt_extended import current_user
 from sqlalchemy import or_
+from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
+from app.models.video_channel import VideoChannel
 
 
 class VideoStream(db.Model):
@@ -19,25 +21,33 @@ class VideoStream(db.Model):
     password = db.Column(db.String)
     # Any additional information for organizer or user
     additional_information = db.Column(db.String)
+    # Extra info stored for server if needed for integration like settings
+    extra = db.Column(db.JSON)
 
     # Rooms to which the stream is linked. A room can have
     # a single video stream linked. But a video stream can be
     # linked to several rooms
     rooms = db.relationship('Microlocation', backref='video_stream')
 
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), unique=True
+    )
+    event = db.relationship('Event', backref=backref('video_stream', uselist=False))
+
+    channel_id = db.Column(
+        db.Integer, db.ForeignKey('video_channels.id', ondelete='CASCADE')
+    )
+    channel = db.relationship(VideoChannel, backref='streams')
+
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
 
     @property
-    def event(self):
-        return self.rooms[0].event
-
-    @property
     def user_can_access(self):
         rooms = self.rooms
-        if not rooms:
+        if not (self.event_id or rooms):
             return False
-        event_id = rooms[0].event_id
+        event_id = self.event_id or rooms[0].event_id
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=event_id):
             return True

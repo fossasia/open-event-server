@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 class EventInvoice(SoftDeletionModel):
     DUE_DATE_DAYS = 30
+    MIN_AMOUNT = 2  # Minimum amount for which the invoice will be generated
 
     __tablename__ = 'event_invoices'
 
@@ -126,6 +127,14 @@ class EventInvoice(SoftDeletionModel):
                 logger.warning(
                     'Invoice amount of Event %s is 0, hence skipping generation',
                     self.event,
+                )
+                return
+            if not force and self.amount < EventInvoice.MIN_AMOUNT:
+                logger.warning(
+                    'Invoice amount of Event %s is %f which is less than %f, hence skipping generation',
+                    self.event,
+                    self.amount,
+                    EventInvoice.MIN_AMOUNT,
                 )
                 return
             net_revenue = round_money(gross_revenue - invoice_amount)

@@ -3,12 +3,13 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.helpers.db import safe_query_kwargs
-from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
-from app.api.helpers.utilities import require_relationship
+from app.api.helpers.utilities import require_exclusive_relationship
 from app.api.schema.video_stream import VideoStreamSchema
 from app.models import db
+from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_stream import VideoStream
 
@@ -23,17 +24,34 @@ def check_same_event(room_ids):
                 {'pointer': '/data/relationships/rooms'},
                 'Video Stream can only be created/edited with rooms of a single event',
             )
-    if not has_access('is_coorganizer', event_id=event_ids.pop()):
+    check_event_access(event_ids.pop())
+
+
+def check_event_access(event_id):
+    if not event_id:
+        return
+    if not has_access('is_coorganizer', event_id=event_id):
         raise ForbiddenError(
             {'pointer': '/data/relationships/rooms'},
-            "You don't have access to the event of provided rooms",
+            "You don't have access to the provided event",
         )
 
 
 class VideoStreamList(ResourceList):
     def before_post(self, args, kwargs, data):
-        require_relationship(['rooms'], data)
-        check_same_event(data['rooms'])
+        require_exclusive_relationship(['rooms', 'event'], data)
+        if data.get('rooms'):
+            check_same_event(data['rooms'])
+        check_event_access(data.get('event'))
+        if data.get('event'):
+            video_exists = db.session.query(
+                VideoStream.query.filter_by(event_id=data['event']).exists()
+            ).scalar()
+            if video_exists:
+                raise ConflictError(
+                    {'pointer': '/data/relationships/event'},
+                    'Video Stream for this event already exists',
+                )
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStream)
@@ -58,19 +76,35 @@ class VideoStreamDetail(ResourceDetail):
             room = safe_query_kwargs(Microlocation, view_kwargs, 'room_id')
             view_kwargs['id'] = room.video_stream and room.video_stream.id
 
+        if view_kwargs.get('event_identifier'):
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
+            )
+            view_kwargs['event_id'] = event.id
+
+        if view_kwargs.get('event_id'):
+            video_stream = safe_query_kwargs(
+                VideoStream, view_kwargs, 'event_id', 'event_id'
+            )
+            view_kwargs['id'] = video_stream.id
+
     def after_get_object(self, stream, view_kwargs):
-        if not stream.user_can_access:
+        if stream and not stream.user_can_access:
             raise ObjectNotFound(
                 {'parameter': 'id'}, f"Video Stream: {stream.id} not found"
             )
 
     def before_update_object(self, obj, data, kwargs):
+        require_exclusive_relationship(['rooms', 'event'], data, optional=True)
+        check_event_access(obj.event_id)
+        check_event_access(data.get('event'))
         rooms = data.get('rooms', [])
         room_ids = rooms + [room.id for room in obj.rooms]
         if room_ids:
             check_same_event(room_ids)
 
     def before_delete_object(self, obj, kwargs):
+        check_event_access(obj.event_id)
         room_ids = [room.id for room in obj.rooms]
         if room_ids:
             check_same_event(room_ids)

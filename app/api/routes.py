@@ -235,6 +235,7 @@ from app.api.user_favourite_events import (
 )
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
+from app.api.video_channel import VideoChannelDetail, VideoChannelList
 from app.api.video_stream import (
     VideoStreamDetail,
     VideoStreamList,
@@ -650,6 +651,7 @@ api.route(
     '/stripe-authorizations/<int:stripe_authorization_id>/event',
     '/user-favourite-events/<int:user_favourite_event_id>/event',
     '/discount-codes/<int:discount_code_id>/event',
+    '/video-streams/<int:video_stream_id>/event',
 )
 api.route(
     EventRelationship,
@@ -1560,9 +1562,30 @@ api.route(
     'video_stream_detail',
     '/video-streams/<int:id>',
     '/microlocations/<int:room_id>/video-stream',
+    '/events/<int:event_id>/video-stream',
+    '/events/<event_identifier>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
     'video_stream_rooms',
     '/video-streams/<int:id>/relationships/rooms',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_event',
+    '/video-streams/<int:id>/relationships/event',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_channel',
+    '/video-streams/<int:id>/relationships/video-channel',
+)
+
+# Video Channels
+api.route(VideoChannelList, 'video_channel_list', '/video-channels')
+api.route(
+    VideoChannelDetail,
+    'video_channel_detail',
+    '/video-channels/<int:id>',
+    '/video-streams/<int:video_stream_id>/video-channel',
 )

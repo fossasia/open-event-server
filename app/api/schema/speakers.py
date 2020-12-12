@@ -57,7 +57,6 @@ class SpeakerSchema(SoftDeletionSchema):
     sponsorship_required = fields.Str(allow_none=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.speaker_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -66,7 +65,6 @@ class SpeakerSchema(SoftDeletionSchema):
         type_='event',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.speaker_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
@@ -76,7 +74,6 @@ class SpeakerSchema(SoftDeletionSchema):
         dump_only=True,
     )
     sessions = Relationship(
-        attribute='sessions',
         self_view='v1.speaker_session',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_list',

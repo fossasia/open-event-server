@@ -33,3 +33,7 @@ class Microlocation(SoftDeletionModel):
         if stream and stream.user_can_access:
             return stream
         return None
+
+    @safe_video_stream.setter
+    def safe_video_stream(self, value):
+        self.video_stream = value

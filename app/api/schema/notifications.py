@@ -27,7 +27,6 @@ class NotificationActionSchema(SoftDeletionSchema):
     notification_id = fields.Str(allow_none=True, dump_only=True)
     link = fields.Str(dump_only=True)
     notification = Relationship(
-        attribute='notification',
         self_view='v1.notification_actions_notification',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.notification_detail',
@@ -69,7 +68,6 @@ class NotificationSchema(SoftDeletionSchema):
         type_='notification-action',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.notification_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

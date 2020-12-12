@@ -38,7 +38,6 @@ class TrackSchema(SoftDeletionSchema):
     color = fields.Str(required=True)
     font_color = fields.Str(allow_none=True, dump_only=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.track_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -47,7 +46,6 @@ class TrackSchema(SoftDeletionSchema):
         type_='event',
     )
     sessions = Relationship(
-        attribute='sessions',
         self_view='v1.track_sessions',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_list',
