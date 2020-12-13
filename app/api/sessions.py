@@ -1,5 +1,7 @@
+from datetime import datetime
 from typing import Dict
 
+import pytz
 from flask import Blueprint, g, jsonify, request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -30,7 +32,6 @@ from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
-from datetime import datetime
 
 sessions_blueprint = Blueprint('sessions_blueprint', __name__, url_prefix='/v1/sessions')
 
@@ -270,10 +271,14 @@ class SessionDetail(ResourceDetail):
 
         new_state = data.get('state')
 
-        if new_state and new_state != session.state and (
-            is_organizer or (
-            session.ends_at and 
-            session.ends_at.date() > datetime.now().date())):
+        if (
+            new_state
+            and new_state != session.state
+            and (
+                is_organizer
+                or (session.ends_at and session.ends_at > datetime.now(pytz.utc))
+            )
+        ):
             # State change detected. Verify that state change is allowed
             g.send_email = new_state in [
                 'accepted',
