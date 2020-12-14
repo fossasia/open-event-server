@@ -96,17 +96,6 @@ def validate_date(event, data):
             {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at"
         )
 
-    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
-        if event and event.deleted_at and not data.get('deleted_at'):
-            data['state'] = 'draft'
-        elif event and not event.deleted_at and data.get('deleted_at'):
-            pass
-        else:
-            raise UnprocessableEntityError(
-                {'pointer': '/data/attributes/starts-at'},
-                "starts-at should be after current date-time",
-            )
-
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
