@@ -20,3 +20,6 @@ class VideoChannel(db.Model):
     modified_at = db.Column(
         db.DateTime(timezone=True), default=func.now(), onupdate=func.now()
     )
+
+    def __repr__(self) -> str:
+        return f'<VideoChannel {self.id} {self.name} {self.provider} {self.url}>'

@@ -19,7 +19,7 @@ class Result:
 
         data = None
         if success:
-            data = xmltodict.parse(response.content)
+            data = xmltodict.parse(response.content, dict_constructor=dict)
             success = data.get('response', {}).get('returncode') == 'SUCCESS'
         return Result(success=success, response=response, data=data)
 
