@@ -102,6 +102,19 @@ def join_stream(stream_id: int):
     return jsonify(url=join_url)
 
 
+def create_bbb_meeting(channel, data):
+    # Create BBB meeting
+    bbb = BigBlueButton(channel.api_url, channel.api_key)
+    meeting_id = str(uuid4())
+    res = bbb.request('create', dict(name=data['name'], meetingID=meeting_id))
+
+    if not (res.success and res.data):
+        logger.error('Error creating BBB Meeting: %s', res)
+        raise UnprocessableEntityError('', 'Cannot create Meeting on BigBlueButton')
+
+    data['extra'] = res.data
+
+
 class VideoStreamList(ResourceList):
     def validate(self, data):
         require_exclusive_relationship(['rooms', 'event'], data)
@@ -123,18 +136,7 @@ class VideoStreamList(ResourceList):
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
-            # Create BBB meeting
-            bbb = BigBlueButton(channel.api_url, channel.api_key)
-            meeting_id = str(uuid4())
-            res = bbb.request('create', dict(name=data['name'], meetingID=meeting_id))
-
-            if not (res.success and res.data):
-                logger.error('Error creating BBB Meeting: %s', res)
-                raise UnprocessableEntityError(
-                    '', 'Cannot create Meeting on BigBlueButton'
-                )
-
-            data['extra'] = res.data
+            create_bbb_meeting(channel, data)
 
     def before_post(self, args, kwargs, data):
         self.validate(data)
@@ -181,6 +183,14 @@ class VideoStreamDetail(ResourceDetail):
                 {'parameter': 'id'}, f"Video Stream: {stream.id} not found"
             )
 
+    @staticmethod
+    def setup_channel(obj, data):
+        if not data.get('channel') or obj.channel_id == int(data['channel']):
+            return
+        channel = VideoChannel.query.get(data['channel'])
+        if channel.provider == 'bbb':
+            create_bbb_meeting(channel, data)
+
     def before_update_object(self, obj, data, kwargs):
         require_exclusive_relationship(['rooms', 'event'], data, optional=True)
         check_event_access(obj.event_id)
@@ -189,6 +199,7 @@ class VideoStreamDetail(ResourceDetail):
         room_ids = rooms + [room.id for room in obj.rooms]
         if room_ids:
             check_same_event(room_ids)
+        VideoStreamDetail.setup_channel(obj, data)
 
     def before_delete_object(self, obj, kwargs):
         check_event_access(obj.event_id)
