@@ -62,7 +62,7 @@ def check_event_access(event_id):
 def join_stream(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
     if not stream.user_can_access:
-        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
     if not stream.channel or stream.channel.provider != 'bbb':
         raise BadRequestError(
             {'param': 'stream_id'},
