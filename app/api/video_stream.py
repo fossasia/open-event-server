@@ -95,7 +95,9 @@ def join_stream(stream_id: int):
             'fullName': current_user.full_name,
             'join_via_html5': 'true',
             'meetingID': params['meetingID'],
-            'password': params['moderatorPW' if current_user.is_staff else 'attendeePW'],
+            'password': params[
+                'moderatorPW' if stream.user_is_moderator else 'attendeePW'
+            ],
         },
     )
 
