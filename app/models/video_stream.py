@@ -5,6 +5,8 @@ from sqlalchemy.orm import backref
 from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.order import Order
+from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.video_channel import VideoChannel
 
@@ -43,17 +45,46 @@ class VideoStream(db.Model):
         return f'<VideoStream {self.name!r} {self.url!r}>'
 
     @property
-    def user_can_access(self):
-        rooms = self.rooms
-        if not (self.event_id or rooms):
+    def user_is_confirmed_speaker(self):
+        if not (self.event_id or self.rooms):
             return False
-        event_id = self.event_id or rooms[0].event_id
+        query = (
+            Speaker.query.filter(Speaker.email == current_user.email)
+            .join(Speaker.sessions)
+            .filter(Session.state == 'confirmed')
+        )
+        if self.event_id:
+            query = query.filter(Session.event_id == self.event_id)
+        elif self.rooms:
+            room_ids = {room.id for room in self.rooms}
+            query = query.filter(Session.microlocation_id.in_(room_ids))
+        else:
+            raise ValueError("Video Stream must have rooms or event")
+        return db.session.query(query.exists()).scalar()
+
+    @property
+    def _event_id(self):
+        return self.event_id or self.rooms[0].event_id
+
+    @property
+    def user_is_moderator(self):
+        if not (self.event_id or self.rooms):
+            return False
         user = current_user
-        if user.is_staff or has_access('is_coorganizer', event_id=event_id):
+        if user.is_staff or has_access('is_coorganizer', event_id=self._event_id):
             return True
-        return db.session.query(
-            TicketHolder.query.filter_by(event_id=event_id, user=user)
-            .join(Order)
-            .filter(or_(Order.status == 'completed', Order.status == 'placed'))
-            .exists()
-        ).scalar()
+        return self.user_is_confirmed_speaker
+
+    @property
+    def user_can_access(self):
+        if not (self.event_id or self.rooms):
+            return False
+        return (
+            self.user_is_moderator
+            or db.session.query(
+                TicketHolder.query.filter_by(event_id=self._event_id, user=current_user)
+                .join(Order)
+                .filter(or_(Order.status == 'completed', Order.status == 'placed'))
+                .exists()
+            ).scalar()
+        )
