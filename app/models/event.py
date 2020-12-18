@@ -155,6 +155,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='owner_events',
+        sync_backref=False,
         uselist=False,
     )
     organizers = db.relationship(
@@ -165,6 +166,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='organizer_events',
+        sync_backref=False,
     )
     coorganizers = db.relationship(
         'User',
@@ -174,6 +176,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='coorganizer_events',
+        sync_backref=False,
     )
     track_organizers = db.relationship(
         'User',
@@ -184,6 +187,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='track_organizer_events',
+        sync_backref=False,
     )
     registrars = db.relationship(
         'User',
@@ -193,6 +197,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='registrar_events',
+        sync_backref=False,
     )
     moderators = db.relationship(
         'User',
@@ -202,6 +207,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='moderator_events',
+        sync_backref=False,
     )
     # staff
     users = db.relationship(
@@ -212,6 +218,7 @@ class Event(SoftDeletionModel):
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='events',
+        sync_backref=False,
     )
 
     def __init__(self, **kwargs):

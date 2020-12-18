@@ -64,6 +64,7 @@ class TicketHolder(SoftDeletionModel):
         primaryjoin='User.email == TicketHolder.email',
         viewonly=True,
         backref='attendees',
+        sync_backref=False,
     )
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
