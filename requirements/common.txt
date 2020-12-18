@@ -45,7 +45,7 @@ pytz==2020.4
 diff-match-patch==20200713
 blinker==1.4
 envparse==0.2
-git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.2
+git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.3
 wtforms[email]==2.3.3
 flask-admin==1.5.7
 google-compute-engine==2.8.13
