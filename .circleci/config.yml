@@ -36,7 +36,7 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+          key: v1.4-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
 
   dredd:
     docker:
