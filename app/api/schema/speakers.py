@@ -2,6 +2,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
@@ -30,7 +31,7 @@ class SpeakerSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    email = fields.Str(required=True)
+    email = fields.Str(allow_none=True)
     photo_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(allow_none=True)
     small_image_url = fields.Url(allow_none=True)
@@ -54,9 +55,8 @@ class SpeakerSchema(SoftDeletionSchema):
     gender = fields.Str(allow_none=True)
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.speaker_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -65,16 +65,15 @@ class SpeakerSchema(SoftDeletionSchema):
         type_='event',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.speaker_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
         related_view_kwargs={'speaker_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
     )
     sessions = Relationship(
-        attribute='sessions',
         self_view='v1.speaker_session',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_list',

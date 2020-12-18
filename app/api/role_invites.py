@@ -4,8 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
-from app.api.helpers.errors import NotFoundError
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
@@ -39,7 +38,7 @@ class RoleInviteListPost(ResourceList):
         """
         require_relationship(['event', 'role'], data)
         if not has_access('is_organizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -51,7 +50,7 @@ class RoleInviteListPost(ResourceList):
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
-            raise ForbiddenException({'source': ''}, 'Owner access is required.')
+            raise ForbiddenError({'source': ''}, 'Owner access is required.')
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
@@ -103,7 +102,7 @@ class RoleInviteList(ResourceList):
         :return:
         """
         query_ = self.session.query(RoleInvite)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -120,45 +119,19 @@ class RoleInviteDetail(ResourceDetail):
     Role invite detail by id
     """
 
-    def before_update_object(self, role_invite, data, view_kwargs):
+    def before_delete_object(self, role_invite, view_kwargs):
         """
-        Method to edit object
-        :param role_invite:
-        :param data:
+        method to check for proper permissions for deleting
+        :param order:
         :param view_kwargs:
         :return:
         """
-        user = User.query.filter_by(email=role_invite.email).first()
-        if user:
-            if not has_access(
-                'is_organizer', event_id=role_invite.event_id
-            ) and not has_access('is_user_itself', user_id=user.id):
-                raise UnprocessableEntity(
-                    {'source': ''},
-                    "Status can be updated only by event organizer or user hiself",
-                )
-        if (
-            'role_name' in data
-            and data['role_name'] == 'owner'
-            and not has_access('is_owner', event_id=data['event'])
-        ):
-            raise ForbiddenException({'source': ''}, 'Owner access is required.')
-        if not user and not has_access('is_organizer', event_id=role_invite.event_id):
-            raise UnprocessableEntity({'source': ''}, "User not registered")
-        if not has_access('is_organizer', event_id=role_invite.event_id) and (
-            len(list(data.keys())) > 1 or 'status' not in data
-        ):
-            raise UnprocessableEntity({'source': ''}, "You can only change your status")
-        if data.get('deleted_at'):
-            if role_invite.role_name == 'owner' and not has_access(
-                'is_owner', event_id=role_invite.event_id
-            ):
-                raise ForbiddenException({'source': ''}, 'Owner access is required.')
-            if role_invite.role_name != 'owner' and not has_access(
-                'is_organizer', event_id=role_invite.event_id
-            ):
-                raise ForbiddenException({'source': ''}, 'Organizer access is required.')
+        if role_invite.status == 'accepted':
+            raise ConflictError(
+                {'pointer': '/data/status'}, 'You cannot delete an accepted role invite.'
+            )
 
+    methods = ['GET', 'DELETE']
     decorators = (
         api.has_permission(
             'is_organizer',
@@ -172,7 +145,7 @@ class RoleInviteDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': RoleInvite,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {'before_delete_object': before_delete_object},
     }
 
 
@@ -192,20 +165,20 @@ def accept_invite():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'Role Invite Not Found').respond()
+        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
     else:
         try:
             user = User.query.filter_by(email=role_invite.email).first()
         except NoResultFound:
-            return NotFoundError(
+            raise NotFoundError(
                 {'source': ''}, 'User corresponding to role invite not Found'
-            ).respond()
+            )
         try:
             role = Role.query.filter_by(name=role_invite.role_name).first()
         except NoResultFound:
-            return NotFoundError(
+            raise NotFoundError(
                 {'source': ''}, 'Role corresponding to role invite not Found'
-            ).respond()
+            )
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = (
             UsersEventsRoles.query.filter_by(user=user)
@@ -223,7 +196,7 @@ def accept_invite():
                     delete_previous_uer(past_owner)
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
-            uer = UsersEventsRoles(user, event, role)
+            uer = UsersEventsRoles(user=user, event=event, role=role)
             save_to_db(uer, 'User Event Role Created')
             if not user.is_verified:
                 user.is_verified = True
@@ -245,6 +218,6 @@ def fetch_user():
     try:
         role_invite = RoleInvite.query.filter_by(hash=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'Role Invite Not Found').respond()
+        raise NotFoundError({'source': ''}, 'Role Invite Not Found')
     else:
         return jsonify({"email": role_invite.email})

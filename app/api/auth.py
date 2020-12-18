@@ -6,7 +6,7 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import Blueprint, jsonify, make_response, request, send_file
+from flask import Blueprint, jsonify, make_response, render_template, request, send_file
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -30,8 +30,9 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.mail import send_email_confirmation, send_email_with_action
+from app.api.helpers.mail import send_email, send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
+from app.api.helpers.system_mails import MAILS
 from app.api.helpers.third_party_auth import (
     FbOAuth,
     GoogleOAuth,
@@ -131,14 +132,12 @@ def redirect_uri(provider):
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 404)
+        return make_response(jsonify(message=f"No support for {provider}"), 404)
 
     client_id = provider_class.get_client_id()
     if not client_id:
         return make_response(
-            jsonify(
-                message="{} client id is not configured on the server".format(provider)
-            ),
+            jsonify(message=f"{provider} client id is not configured on the server"),
             404,
         )
 
@@ -180,7 +179,7 @@ def get_token(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -250,7 +249,7 @@ def login_user(provider):
             200,
         )
 
-    elif provider == 'google':
+    if provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
@@ -269,7 +268,7 @@ def login_user(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -279,18 +278,18 @@ def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
     except base64.binascii.Error:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
     except Exception:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
     except Exception:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
@@ -302,14 +301,14 @@ def resend_verification_email():
     try:
         email = request.json['data']['email']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return UnprocessableEntityError(
+        raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
-        ).respond()
+        )
     else:
         serializer = get_serializer()
         hash_ = str(
@@ -318,7 +317,7 @@ def resend_verification_email():
             ),
             'utf-8',
         )
-        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash_})
+        link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
 
         return make_response(jsonify(message="Verification email resent"), 200)
@@ -335,7 +334,7 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
@@ -344,25 +343,33 @@ def reset_password_post():
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET_AND_VERIFY,
-                app_name=get_settings()['app_name'],
-                link=link,
+            send_email(
+                to=user.email,
+                action=PASSWORD_RESET_AND_VERIFY,
+                subject=MAILS[PASSWORD_RESET_AND_VERIFY]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template('email/password_reset_and_verify.html', link=link),
             )
+
         else:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET,
-                app_name=get_settings()['app_name'],
-                link=link,
-                token=user.reset_password,
+            send_email(
+                to=user.email,
+                action=PASSWORD_RESET,
+                subject=MAILS[PASSWORD_RESET]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template(
+                    'email/password_reset.html',
+                    link=link,
+                    settings=get_settings(),
+                    token=user.reset_password,
+                ),
             )
 
     return make_response(
         jsonify(
-            message="If your email was registered with us, you'll get an \
-                         email with reset link shortly",
+            message="If your email was registered with us, you'll get an email with reset link shortly",
             email=email,
         ),
         200,
@@ -377,7 +384,7 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User Not Found').respond()
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         user.password = password
         if not user.is_verified:
@@ -402,29 +409,34 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User Not Found').respond()
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
-                return BadRequestError(
+                raise BadRequestError(
                     {'source': ''}, 'Old and New passwords must be different'
-                ).respond()
+                )
             if len(new_password) < 8:
-                return BadRequestError(
+                raise BadRequestError(
                     {'source': ''}, 'Password should have minimum 8 characters'
-                ).respond()
+                )
             user.password = new_password
             save_to_db(user)
-            send_email_with_action(
-                user, PASSWORD_CHANGE, app_name=get_settings()['app_name']
+            send_email(
+                to=user.email,
+                action=PASSWORD_CHANGE,
+                subject=MAILS[PASSWORD_CHANGE]['subject'].format(
+                    app_name=get_settings()['app_name']
+                ),
+                html=render_template('email/password_change.html'),
             )
             send_notification_with_action(
                 user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']
             )
         else:
-            return BadRequestError(
+            raise BadRequestError(
                 {'source': ''}, 'Wrong Password. Please enter correct current password.'
-            ).respond()
+            )
 
     return jsonify(
         {
@@ -438,7 +450,7 @@ def change_password():
 
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (
+    response.headers['Content-Disposition'] = 'attachment; filename={}-{}.pdf'.format(
         file_name_prefix,
         identifier,
     )

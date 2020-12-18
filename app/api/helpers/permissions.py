@@ -63,9 +63,7 @@ def is_super_admin(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_super_admin:
-            return ForbiddenError(
-                {'source': ''}, 'Super admin access is required'
-            ).respond()
+            raise ForbiddenError({'source': ''}, 'Super admin access is required')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -83,7 +81,7 @@ def is_admin(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_admin and not user.is_super_admin:
-            return ForbiddenError({'source': ''}, 'Admin access is required').respond()
+            raise ForbiddenError({'source': ''}, 'Admin access is required')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -102,7 +100,7 @@ def is_user_itself(f):
     def decorated_function(*args, **kwargs):
         user = current_user
         if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
-            return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
         return f(*args, **kwargs)
 
     return decorated_function
@@ -124,7 +122,7 @@ def is_owner(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_owner(kwargs['event_id']):
             return f(*args, **kwargs)
-        return ForbiddenError({'source': ''}, 'Owner access is required').respond()
+        raise ForbiddenError({'source': ''}, 'Owner access is required')
 
     return decorated_function
 
@@ -145,12 +143,11 @@ def is_organizer(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and user.is_organizer(kwargs['event_id']):
             return f(*args, **kwargs)
-        return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
+        raise ForbiddenError({'source': ''}, 'Organizer access is required')
 
     return decorated_function
 
 
-@second_order_decorator(jwt_required)
 def to_event_id(func):
     """
     Change event_identifier to event_id in kwargs
@@ -171,7 +168,7 @@ def to_event_id(func):
                 kwargs['event_id'] = event.id
             else:
                 kwargs['event_id'] = kwargs['event_identifier']
-
+            kwargs.pop('event_identifier', None)
         return func(*args, **kwargs)
 
     return decorated_function
@@ -192,12 +189,8 @@ def is_coorganizer(f):
         if user.is_staff or (
             'event_id' in kwargs and user.has_event_access(kwargs['event_id'])
         ):
-            if 'event_identifier' in kwargs:
-                kwargs.pop('event_identifier', None)
             return f(*args, **kwargs)
-        return ForbiddenError(
-            {'source': ''}, 'Co-organizer access is required.'
-        ).respond()
+        raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     return decorated_function
 
@@ -221,7 +214,7 @@ def is_registrar(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
+        raise ForbiddenError({'source': ''}, 'Registrar Access is Required.')
 
     return decorated_function
 
@@ -245,9 +238,7 @@ def is_track_organizer(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        return ForbiddenError(
-            {'source': ''}, 'Track Organizer access is Required.'
-        ).respond()
+        raise ForbiddenError({'source': ''}, 'Track Organizer access is Required.')
 
     return decorated_function
 
@@ -271,7 +262,7 @@ def is_moderator(f):
             or user.has_event_access(kwargs['event_id'])
         ):
             return f(*args, **kwargs)
-        return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
+        raise ForbiddenError({'source': ''}, 'Moderator Access is Required.')
 
     return decorated_function
 

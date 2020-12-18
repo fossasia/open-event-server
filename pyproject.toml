@@ -18,17 +18,21 @@ exclude = '''
     | dist
     | migrations
   )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
 )
 '''
 
 [tool.isort]
+profile = "black"
 line_length = 90
-skip = 'migrations/,manage.py,instance.py,hook_main.py'
+skip = '.venv/,migrations/,manage.py,instance.py,hook_main.py'
 known_first_party = 'app'
 known_third_party = 'flask'
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
+
+[tool.pycln]
+path = "app/"
+exclude = "(migrations/|.venv/)"
+all = true

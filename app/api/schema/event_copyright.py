@@ -24,7 +24,6 @@ class EventCopyrightSchema(SoftDeletionSchema):
     )
     logo_url = fields.Url(attribute='logo', allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.copyright_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

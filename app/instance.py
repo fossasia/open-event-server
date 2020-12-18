@@ -8,14 +8,13 @@ import sentry_sdk
 import sqlalchemy as sa
 import stripe
 from celery.signals import after_task_publish
+from flask_babel import Babel
 from envparse import env
-from flask import Flask, json, make_response
+from flask import Flask, json, make_response, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
 from flask_migrate import Migrate
-from flask_rest_jsonapi.errors import jsonapi_errors
-from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -23,10 +22,12 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
-from app.api import routes
+from app.api import routes  # noqa: Used for registering routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
+from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
+from app.api.helpers.mail_recorder import MailRecorder
 from app.extensions import limiter, shell
 from app.models import db
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
@@ -127,6 +128,8 @@ def create_app():
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
     app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
 
+    app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
+
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
@@ -151,11 +154,14 @@ def create_app():
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
+        from app.api.sessions import sessions_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
         from app.api.custom.orders import ticket_blueprint
         from app.api.custom.orders import order_blueprint
         from app.api.custom.invoices import event_blueprint
+        from app.api.custom.calendars import calendar_routes
+        from app.api.video_stream import streams_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -177,6 +183,9 @@ def create_app():
         app.register_blueprint(ticket_blueprint)
         app.register_blueprint(order_blueprint)
         app.register_blueprint(event_blueprint)
+        app.register_blueprint(sessions_blueprint)
+        app.register_blueprint(calendar_routes)
+        app.register_blueprint(streams_routes)
 
         add_engine_pidguard(db.engine)
 
@@ -202,6 +211,7 @@ def create_app():
                 CeleryIntegration(),
                 SqlalchemyIntegration(),
             ],
+            release=app.config['SENTRY_RELEASE_NAME'],
             traces_sample_rate=app.config['SENTRY_TRACES_SAMPLE_RATE'],
         )
 
@@ -218,6 +228,19 @@ def create_app():
 
 current_app = create_app()
 init_filters(app)
+
+# Babel
+babel = Babel(current_app)
+
+
+@babel.localeselector
+def get_locale():
+    # Try to guess the language from the user accept
+    # header the browser transmits. We support de/fr/en in this
+    # example. The best match wins.
+    # pytype: disable=mro-error
+    return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
+    # pytype: enable=mro-error
 
 
 # http://stackoverflow.com/questions/26724623/
@@ -262,14 +285,10 @@ def update_sent_state(sender=None, headers=None, **kwargs):
 @app.errorhandler(500)
 def internal_server_error(error):
     if current_app.config['PROPOGATE_ERROR'] is True:
-        exc = JsonApiException({'pointer': ''}, str(error))
+        exc = ErrorResponse(str(error))
     else:
-        exc = JsonApiException({'pointer': ''}, 'Unknown error')
-    return make_response(
-        json.dumps(jsonapi_errors([exc.to_dict()])),
-        exc.status,
-        {'Content-Type': 'application/vnd.api+json'},
-    )
+        exc = ErrorResponse('Unknown error')
+    return exc.respond()
 
 
 @app.errorhandler(429)
@@ -279,6 +298,11 @@ def ratelimit_handler(error):
         429,
         {'Content-Type': 'application/vnd.api+json'},
     )
+
+
+@app.errorhandler(ErrorResponse)
+def handle_exception(error: ErrorResponse):
+    return error.respond()
 
 
 if __name__ == '__main__':

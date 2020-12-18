@@ -67,7 +67,7 @@ class UserSchema(UserSchemaPublic):
     is_user_moderator = fields.Boolean(dump_only=True)
     is_user_registrar = fields.Boolean(dump_only=True)
     is_user_attendee = fields.Boolean(dump_only=True)
-    is_verified = fields.Boolean(dump_only=True)
+    is_verified = fields.Boolean()
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
@@ -84,7 +84,6 @@ class UserSchema(UserSchemaPublic):
     billing_zip_code = fields.Str(allow_none=True)
     billing_additional_info = fields.Str(allow_none=True)
     notifications = Relationship(
-        attribute='notifications',
         self_view='v1.user_notification',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.notification_list',
@@ -103,8 +102,7 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='feedback',
     )
-    event_invoice = Relationship(
-        attribute='event_invoice',
+    event_invoices = Relationship(
         self_view='v1.user_event_invoices',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_invoice_list',
@@ -124,7 +122,6 @@ class UserSchema(UserSchemaPublic):
         type_='speaker',
     )
     access_codes = Relationship(
-        attribute='access_codes',
         self_view='v1.user_access_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.access_code_list',
@@ -133,7 +130,6 @@ class UserSchema(UserSchemaPublic):
         type_='access-codes',
     )
     discount_codes = Relationship(
-        attribute='discount_codes',
         self_view='v1.user_discount_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.discount_code_list',
@@ -142,7 +138,6 @@ class UserSchema(UserSchemaPublic):
         type_='discount-codes',
     )
     email_notifications = Relationship(
-        attribute='email_notifications',
         self_view='v1.user_email_notifications',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.email_notification_list',
@@ -152,7 +147,6 @@ class UserSchema(UserSchemaPublic):
         type_='email-notification',
     )
     alternate_emails = Relationship(
-        attribute='alternate_emails',
         self_view='v1.user_emails',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_emails_list',
@@ -263,7 +257,6 @@ class UserSchema(UserSchemaPublic):
         type_='order',
     )
     marketer_events = Relationship(
-        attribute='marketer_events',
         self_view='v1.user_marketer_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
@@ -272,7 +265,6 @@ class UserSchema(UserSchemaPublic):
         many=True,
     )
     sales_admin_events = Relationship(
-        attribute='sales_admin_events',
         self_view='v1.user_sales_admin_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',

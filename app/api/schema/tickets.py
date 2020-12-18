@@ -3,7 +3,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.discount_code import DiscountCode
@@ -34,45 +34,45 @@ class TicketSchemaPublic(SoftDeletionSchema):
             #     data['event_ends_at'] = ticket.event.ends_at
 
         if data['sales_starts_at'] >= data['sales_ends_at']:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/sales-ends-at'},
                 "sales-ends-at should be after sales-starts-at",
             )
 
         # if 'event_ends_at' in data and data['sales_starts_at'] > data['event_ends_at']:
-        #     raise UnprocessableEntity({'pointer': '/data/attributes/sales-starts-at'},
+        #     raise UnprocessableEntityError({'pointer': '/data/attributes/sales-starts-at'},
         #                               "ticket sales-starts-at should be before event ends-at")
 
         # if 'event_ends_at' in data and data['sales_ends_at'] > data['event_ends_at']:
-        #     raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
+        #     raise UnprocessableEntityError({'pointer': '/data/attributes/sales-ends-at'},
         #                               "ticket sales-ends-at should be before event ends-at")
 
     @validates_schema
     def validate_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/max-order'},
                     "max-order should be greater than or equal to min-order",
                 )
 
         if 'quantity' in data and 'min_order' in data:
             if data['quantity'] < data['min_order']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/quantity'},
                     "quantity should be greater than or equal to min-order",
                 )
 
         if 'min_price' in data and 'max_price' in data and data['type'] == 'donation':
             if data['min_price'] > data['max_price']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/min-price'},
                     "minimum price should be lesser than or equal to maximum price",
                 )
 
         if 'quantity' in data and 'max_order' in data:
             if data['quantity'] < data['max_order']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/quantity'},
                     "quantity should be greater than or equal to max-order",
                 )
@@ -80,7 +80,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
     @validates_schema
     def validate_price(self, data):
         if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/price'},
                 "paid ticket price should be greater than 0",
             )
@@ -96,7 +96,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
                 try:
                     DiscountCode.query.filter_by(id=code['id']).one()
                 except NoResultFound:
-                    raise UnprocessableEntity(
+                    raise UnprocessableEntityError(
                         {'pointer': '/data/relationships/discount-codes'},
                         "Discount code does not exist",
                     )
@@ -120,7 +120,6 @@ class TicketSchemaPublic(SoftDeletionSchema):
     is_checkin_restricted = fields.Boolean(default=True)
     auto_checkin_enabled = fields.Boolean(default=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.ticket_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -141,7 +140,6 @@ class TicketSchemaPublic(SoftDeletionSchema):
     )
 
     discount_codes = Relationship(
-        attribute='discount_codes',
         self_view='v1.ticket_discount_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.discount_code_list',
@@ -160,7 +158,6 @@ class TicketSchema(TicketSchemaPublic):
         inflect = dasherize
 
     access_codes = Relationship(
-        attribute='access_codes',
         self_view='v1.ticket_access_code',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.access_code_list',
@@ -170,7 +167,6 @@ class TicketSchema(TicketSchemaPublic):
         type_='access-code',
     )
     attendees = Relationship(
-        attribute='ticket_holders',
         self_view='v1.ticket_attendees',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.attendee_list_post',

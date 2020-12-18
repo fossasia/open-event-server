@@ -53,7 +53,12 @@ class SettingSchemaPublic(Schema):
     twitter_url = fields.Str(allow_none=True)
     support_url = fields.Str(allow_none=True)
     facebook_url = fields.Str(allow_none=True)
+    instagram_url = fields.Str(allow_none=True)
+    patreon_url = fields.Str(allow_none=True)
+    gitter_url = fields.Str(allow_none=True)
+    telegram_url = fields.Str(allow_none=True)
     youtube_url = fields.Str(allow_none=True)
+    weblate_url = fields.Str(allow_none=True)
 
     # Url of Frontend
     frontend_url = fields.Url(allow_none=True)
@@ -72,6 +77,49 @@ class SettingSchemaPublic(Schema):
     is_stripe_activated = fields.Bool(dump_only=True)
     is_omise_activated = fields.Bool(dump_only=True)
     is_alipay_activated = fields.Bool(dump_only=True)
+    is_billing_paypal_activated = fields.Bool(dump_only=True)
+
+    #
+    # Payment Gateways
+    #
+
+    # Stripe Credantials
+    stripe_client_id = fields.Str(dump_only=True)
+    stripe_publishable_key = fields.Str(dump_only=True)
+    stripe_test_client_id = fields.Str(dump_only=True)
+    stripe_test_publishable_key = fields.Str(dump_only=True)
+
+    # PayPal Credentials
+    paypal_mode = fields.Str(dump_only=True)
+    paypal_client = fields.Str(dump_only=True)
+    paypal_sandbox_client = fields.Str(dump_only=True)
+
+    # Omise Credentials
+    omise_mode = fields.Str(dump_only=True)
+    omise_test_public = fields.Str(dump_only=True)
+    omise_live_public = fields.Str(dump_only=True)
+
+    # Alipay Credentials
+    alipay_publishable_key = fields.Str(dump_only=True)
+
+    # payTM credentials
+    paytm_mode = fields.Str(dump_only=True)
+    paytm_live_merchant = fields.Str(dump_only=True)
+    paytm_sandbox_merchant = fields.Str(dump_only=True)
+
+    # Admin Invoice Details
+    admin_billing_contact_name = fields.Str(allow_none=True)
+    admin_billing_phone = fields.Str(allow_none=True)
+    admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_state = fields.Str(allow_none=True)
+    admin_billing_country = fields.Str(allow_none=True)
+    admin_billing_tax_info = fields.Str(allow_none=True)
+    admin_company = fields.Str(allow_none=True)
+    admin_billing_address = fields.Str(allow_none=True)
+    admin_billing_city = fields.Str(allow_none=True)
+    admin_billing_zip = fields.Str(allow_none=True)
+    admin_billing_additional_info = fields.Str(allow_none=True)
+    admin_billing_logo = fields.Url(allow_none=True)
 
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
@@ -224,14 +272,4 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     invoice_sending_timezone = fields.Str(allow_none=False, default="UTC")
 
     # Admin Invoice Details
-    admin_billing_contact_name = fields.Str(allow_none=True)
-    admin_billing_phone = fields.Str(allow_none=True)
-    admin_billing_email = fields.Email(allow_none=True)
-    admin_billing_state = fields.Str(allow_none=True)
-    admin_billing_country = fields.Str(allow_none=True)
-    admin_billing_tax_info = fields.Str(allow_none=True)
-    admin_company = fields.Str(allow_none=True)
-    admin_billing_address = fields.Str(allow_none=True)
-    admin_billing_city = fields.Str(allow_none=True)
-    admin_billing_zip = fields.Str(allow_none=True)
-    admin_billing_additional_info = fields.Str(allow_none=True)
+    admin_billing_paypal_email = fields.Email(allow_none=True)

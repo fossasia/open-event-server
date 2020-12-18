@@ -2,15 +2,23 @@ import logging
 from datetime import datetime, timedelta, timezone
 
 from flask import render_template
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import (
     get_count,
     safe_query_without_soft_deleted_entries,
     save_to_db,
 )
-from app.api.helpers.errors import UnprocessableEntityError
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
+from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import (
+    send_email_to_attendees,
+    send_order_purchase_organizer_email,
+)
+from app.api.helpers.notification import (
+    send_notif_ticket_purchase_organizer,
+    send_notif_to_attendees,
+)
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
@@ -73,33 +81,27 @@ def create_pdf_tickets_for_holder(order):
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
+            extra_identifiers={'extra_identifier': order.identifier},
             upload_dir='generated/tickets/',
         )
 
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
-            if (not holder.user) or holder.user.id != order.user_id:
-                # holder is not the order buyer.
-                pdf = create_save_pdf(
-                    render_template(
-                        'pdf/ticket_attendee.html', order=order, holder=holder
-                    ),
-                    UPLOAD_PATHS['pdf']['tickets_all'],
-                    dir_path='/static/uploads/pdf/tickets/',
-                    identifier=order.identifier,
-                    upload_dir='generated/tickets/',
-                )
-            else:
-                # holder is the order buyer.
-                pdf = order.tickets_pdf_url
+            # create attendee pdf for every ticket holder
+            pdf = create_save_pdf(
+                render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                UPLOAD_PATHS['pdf']['tickets_all'],
+                dir_path='/static/uploads/pdf/tickets/',
+                identifier=order.identifier,
+                extra_identifiers={'extra_identifier': holder.id},
+                upload_dir='generated/tickets/',
+            )
             holder.pdf_url = pdf
             save_to_db(holder)
 
         # create order invoices pdf
-        order_tickets = OrderTicket.query.filter_by(
-            order_id=order.id, deleted_at=None
-        ).all()
+        order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
         create_save_pdf(
             render_template(
@@ -126,7 +128,7 @@ def create_onsite_attendees_for_order(data):
     on_site_tickets = data.get('on_site_tickets')
 
     if not on_site_tickets:
-        raise UnprocessableEntity(
+        raise UnprocessableEntityError(
             {'pointer': 'data/attributes/on_site_tickets'}, 'on_site_tickets info missing'
         )
 
@@ -137,7 +139,7 @@ def create_onsite_attendees_for_order(data):
         quantity = int(on_site_ticket['quantity'])
 
         ticket = safe_query_without_soft_deleted_entries(
-            db, Ticket, 'id', ticket_id, 'ticket_id'
+            Ticket, 'id', ticket_id, 'ticket_id'
         )
 
         ticket_sold_count = get_count(
@@ -160,7 +162,7 @@ def create_onsite_attendees_for_order(data):
                     logging.exception('DB Exception!')
                     db.session.rollback()
 
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/on_site_tickets'},
                 "Ticket with id: {} already sold out. You can buy at most {} tickets".format(
                     ticket_id, ticket.quantity - ticket_sold_count
@@ -182,35 +184,36 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code):
-    from app.api.helpers.ticketing import TicketingManager
+def calculate_order_amount(tickets, discount_code=None):
+    from app.api.helpers.ticketing import validate_discount_code, validate_tickets
+    from app.models.discount_code import DiscountCode
 
-    if discount_code:
-        if not TicketingManager.match_discount_quantity(discount_code, tickets, None):
-            return UnprocessableEntityError(
-                {'source': 'discount-code'}, 'Discount Usage Exceeded'
-            ).respond()
+    ticket_ids = {ticket['id'] for ticket in tickets}
+    ticket_map = {int(ticket['id']): ticket for ticket in tickets}
+    fetched_tickets = validate_tickets(ticket_ids)
+
+    if tickets and discount_code:
+        discount_code = validate_discount_code(discount_code, tickets=tickets)
 
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
-    for ticket_info in tickets:
-        tax_amount = tax_percent = 0.0
-        tax_data = {}
-        discount_amount = discount_percent = 0.0
-        discount_data = {}
-        sub_total = ticket_fee = 0.0
+    for ticket in fetched_tickets:
+        ticket_info = ticket_map[ticket.id]
+        discount_amount = 0.0
+        discount_data = None
+        ticket_fee = 0.0
 
-        ticket_identifier = ticket_info['id']
-        quantity = ticket_info['quantity']
-        ticket = safe_query_without_soft_deleted_entries(
-            db, Ticket, 'id', ticket_identifier, 'id'
-        )
+        quantity = ticket_info.get('quantity', 1)  # Default to single ticket
         if not event:
             event = ticket.event
+
+            if event.deleted_at:
+                raise ObjectNotFound(
+                    {'pointer': 'tickets/event'}, f'Event: {event.id} not found'
+                )
+
             fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
-        elif ticket.event.id != event.id:
-            raise UnprocessableEntity({'source': 'data/tickets'}, "Invalid Ticket")
 
         if not tax and event.tax:
             tax = event.tax
@@ -219,17 +222,24 @@ def calculate_order_amount(tickets, discount_code):
         if ticket.type == 'donation':
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
-                raise UnprocessableEntity(
-                    {'source': 'data/tickets'}, "Price for donation ticket invalid"
+                raise UnprocessableEntityError(
+                    {'pointer': 'tickets/price'},
+                    f"Price for donation ticket should be present and within range "
+                    f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price
+            price = ticket.price if ticket.type != 'free' else 0.0
 
-        if discount_code:
-            for code in ticket.discount_codes:
+        if discount_code and ticket.type != 'free':
+            code = (
+                DiscountCode.query.with_parent(ticket)
+                .filter_by(id=discount_code.id)
+                .first()
+            )
+            if code:
                 if discount_code.id == code.id:
                     if code.type == 'amount':
-                        discount_amount = code.value
+                        discount_amount = min(code.value, price)
                         discount_percent = (discount_amount / price) * 100
                     else:
                         discount_amount = (price * code.value) / 100
@@ -238,30 +248,15 @@ def calculate_order_amount(tickets, discount_code):
                         'code': discount_code.code,
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
+                        'total': round(discount_amount * quantity, 2),
                     }
 
-        if tax:
-            if not tax_included:
-                tax_amount = ((price - discount_amount) * tax.rate) / 100
-                tax_percent = tax.rate
-            else:
-                tax_amount = ((price - discount_amount) * tax.rate) / (100 + tax.rate)
-                tax_percent = tax.rate
-            tax_data = {
-                'percent': round(tax_percent, 2),
-                'amount': round(tax_amount, 2),
-            }
-
-        total_tax = total_tax + tax_amount * quantity
-        total_discount = total_discount + discount_amount * quantity
+        total_discount += round(discount_amount * quantity, 2)
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
             if ticket_fee > fees.maximum_fee:
                 ticket_fee = fees.maximum_fee
-        if tax_included:
-            sub_total = ticket_fee + (price - discount_amount) * quantity
-        else:
-            sub_total = ticket_fee + (price + tax_amount - discount_amount) * quantity
+        sub_total = ticket_fee + (price - discount_amount) * quantity
         total_amount = total_amount + sub_total
         ticket_list.append(
             {
@@ -270,15 +265,54 @@ def calculate_order_amount(tickets, discount_code):
                 'price': price,
                 'quantity': quantity,
                 'discount': discount_data,
-                'tax': tax_data,
                 'ticket_fee': round(ticket_fee, 2),
                 'sub_total': round(sub_total, 2),
             }
         )
+
+    sub_total = total_amount
+    tax_dict = None
+    if tax:
+        if tax_included:
+            total_tax = total_amount - total_amount / (1 + tax.rate / 100)
+        else:
+            total_tax = total_amount * tax.rate / 100
+            total_amount += total_tax
+        tax_dict = dict(
+            included=tax_included,
+            amount=round(total_tax, 2),
+            percent=tax.rate if tax else 0.0,
+            name=tax.name,
+        )
+
     return dict(
-        tax_included=tax_included,
-        total_amount=round(total_amount, 2),
-        total_tax=round(total_tax, 2),
-        total_discount=round(total_discount, 2),
+        tax=tax_dict,
+        sub_total=round(sub_total, 2),
+        total=round(total_amount, 2),
+        discount=round(total_discount, 2),
         tickets=ticket_list,
     )
+
+
+def on_order_completed(order):
+    # send e-mail and notifications if the order status is completed
+    if not (order.status == 'completed' or order.status == 'placed'):
+        return
+
+    create_pdf_tickets_for_holder(order)
+
+    # send email and notifications.
+    send_email_to_attendees(order)
+    send_notif_to_attendees(order)
+
+    if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+        order.completed_at = datetime.utcnow()
+
+    organizer_set = set(
+        filter(
+            bool, order.event.organizers + order.event.coorganizers + [order.event.owner]
+        )
+    )
+    send_order_purchase_organizer_email(order, organizer_set)
+    for organizer in organizer_set:
+        send_notif_ticket_purchase_organizer(organizer, order)

@@ -260,7 +260,7 @@ Get a list of events.
                         "can-pay-by-paypal": true,
                         "location-name": "example",
                         "is-sponsors-enabled": false,
-                        "is-event-online": false,
+                        "online": false,
                         "has-owner-info": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
@@ -338,7 +338,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
                     "payment-country": "US",
@@ -553,7 +553,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "timezone": "UTC",
                     "can-pay-onsite": true,
                     "deleted-at": null,
-                    "is-event-online": false,
+                    "online": false,
                     "ticket-url": "http://example.com",
                     "can-pay-by-paypal": false,
                     "location-name": "example",
@@ -813,7 +813,7 @@ Get a single event.
                     "has-owner-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "is-event-online": false,
+                    "online": false,
                     "code-of-conduct": "example",
                     "state": "draft",
                     "latitude": 1.23456789,
@@ -1116,7 +1116,7 @@ All other fields are optional. Add attributes you want to modify.
                     "privacy": "private",
                     "code-of-conduct": "example1",
                     "state": "published",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -1174,6 +1174,257 @@ Delete a single event.
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+
+## Upcoming Events Collection [/v1/events/upcoming]
+    
+### List All Upcoming Events [GET]
+Get a list of upcoming events.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "tickets": {
+                          "links": {
+                            "self": "/v1/events/1/relationships/tickets",
+                            "related": "/v1/events/1/tickets"
+                          }
+                        },
+                        "orders": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/orders",
+                                "related": "/v1/orders"
+                            }
+                        },
+                        "owner": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/owner",
+                                "related": "/v1/events/1/owner"
+                            }
+                        },
+                        "organizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/organizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "coorganizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/coorganizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "track-organizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/track-coorganizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "registrars": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/registrars",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "moderators": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/moderators",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "custom-forms": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/custom-forms",
+                                "related": "/v1/events/1/custom-forms"
+                            }
+                        },
+                        "faqs": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faqs",
+                                "related": "/v1/events/1/faqs"
+                            }
+                        },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
+                            }
+                        },
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/attendees",
+                                "related": "/v1/events/1/attendees"
+                            }
+                        },
+                        "role-invites": {
+                          "links": {
+                            "self": "/v1/events/1/relationships/role-invites",
+                            "related": "/v1/events/1/role-invites"
+                          }
+                        },
+                        "event-sub-topic": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-sub-topic",
+                                "related": "/v1/events/1/event-sub-topic"
+                            }
+                        },
+                        "speakers-call": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/speakers-call",
+                                "related": "/v1/events/1/speakers-call"
+                            }
+                        },
+                        "event-copyright": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-copyright",
+                                "related": "/v1/events/1/event-copyright"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/sessions",
+                                "related": "/v1/events/1/sessions"
+                            }
+                        },
+                        "tax": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/tax",
+                                "related": "/v1/events/1/tax"
+                            }
+                        },
+                        "event-topic": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-topic",
+                                "related": "/v1/events/1/event-topic"
+                            }
+                        },
+                        "social-links": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/social-links",
+                                "related": "/v1/events/1/social-links"
+                            }
+                        },
+                        "sponsors": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/sponsors",
+                                "related": "/v1/events/1/sponsors"
+                            }
+                        },
+                        "tracks": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/tracks",
+                                "related": "/v1/events/1/tracks"
+                            }
+                        },
+                        "event-invoices": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-invoices",
+                                "related": "/v1/events/1/event-invoices"
+                            }
+                        },
+                        "session-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/session-types",
+                                "related": "/v1/events/1/session-types"
+                            }
+                        },
+                        "microlocations": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/microlocations",
+                                "related": "/v1/events/1/microlocations"
+                            }
+                        },
+                        "event-type": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-type",
+                                "related": "/v1/events/1/event-type"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/discount-codes",
+                                "related": "/v1/events/1/discount-codes"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "payment-country": "US",
+                        "paypal-email": "example@example.com",
+                        "thumbnail-image-url": null,
+                        "schedule-published-on": null,
+                        "payment-currency": "USD",
+                        "owner-description": "example",
+                        "is-map-shown": true,
+                        "original-image-url": "http://example.com/example.png",
+                        "onsite-details": "example",
+                        "owner-name": "example",
+                        "can-pay-by-stripe": true,
+                        "large-image-url": null,
+                        "timezone": "UTC",
+                        "can-pay-onsite": true,
+                        "deleted-at": null,
+                        "ticket-url": "http://example.com",
+                        "can-pay-by-paypal": true,
+                        "location-name": "example",
+                        "is-sponsors-enabled": false,
+                        "online": false,
+                        "has-owner-info": false,
+                        "is-sessions-speakers-enabled": true,
+                        "privacy": "public",
+                        "code-of-conduct": "example",
+                        "state": "published",
+                        "latitude": 1.23456789,
+                        "starts-at": "2099-12-13T23:59:59.123456+00:00",
+                        "searchable-location-name": "example",
+                        "can-pay-by-cheque": true,
+                        "can-pay-by-omise": false,
+                        "description": "example",
+                        "pentabarf-url": null,
+                        "xcal-url": null,
+                        "logo-url": "http://example.com/example.png",
+                        "external-event-url": null,
+                        "is-tax-enabled": true,
+                        "icon-image-url": null,
+                        "ical-url": null,
+                        "name": "example",
+                        "can-pay-by-bank": true,
+                        "ends-at": "2099-12-14T23:59:59.123456+00:00",
+                        "created-at": "2020-06-07T15:22:37.205399+00:00",
+                        "longitude": 1.23456789,
+                        "bank-details": "example",
+                        "cheque-details": "example",
+                        "identifier": "b8324ae2",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
+                    },
+                    "type": "event",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/events/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/upcoming"
+            }
         }
 
 
@@ -1375,7 +1626,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-owner-info": false,
                         "state": "draft",
-                        "is-event-online": false,
+                        "online": false,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -1601,7 +1852,7 @@ Get a list of events.
                         "timezone": "UTC",
                         "can-pay-onsite": true,
                         "deleted-at": null,
-                        "is-event-online": false,
+                        "online": false,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
                         "location-name": "example",
@@ -1828,7 +2079,7 @@ Get a list of events.
                         "timezone": "UTC",
                         "can-pay-onsite": true,
                         "deleted-at": null,
-                        "is-event-online": false,
+                        "online": false,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
                         "location-name": "example",
@@ -2071,7 +2322,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-owner-info": false,
                         "state": "draft",
-                        "is-event-online": false,
+                        "online": false,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -2311,7 +2562,7 @@ Get a list of events.
                         "is-tax-enabled": true,
                         "ical-url": null,
                         "name": "example",
-                        "is-event-online": false,
+                        "online": false,
                         "icon-image-url": null,
                         "thumbnail-image-url": null,
                         "created-at": "2017-07-23T12:01:55.414735+00:00",
@@ -2524,7 +2775,7 @@ Get a list of events.
                     "has-owner-info": false,
                     "state": "draft",
                     "can-pay-by-omise": false,
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -2748,7 +2999,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-owner-info": false,
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -2966,7 +3217,7 @@ Get a list of events.
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
-                    "is-event-online": false,
+                    "online": false,
                     "can-pay-by-paypal": true,
                     "can-pay-by-omise": false,
                     "location-name": "example",
@@ -3198,7 +3449,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-owner-info": false,
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -3422,7 +3673,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "is-event-online": false,
+                    "online": false,
                     "has-owner-info": false,
                     "state": "draft",
                     "latitude": 1.23456789,
@@ -3649,7 +3900,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-owner-info": false,
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -3880,7 +4131,7 @@ Get a list of events.
                     "can-pay-by-cheque": true,
                     "description": "example",
                     "pentabarf-url": null,
-                    "is-event-online": false,
+                    "online": false,
                     "xcal-url": null,
                     "logo-url": "http://example.com/example.png",
                     "can-pay-by-bank": true,
@@ -4090,7 +4341,7 @@ Get a list of events.
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
-                    "is-event-online": false,
+                    "online": false,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
                     "can-pay-by-paypal": true,
@@ -4309,7 +4560,7 @@ Get a list of events.
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "is-event-online": false,
+                    "online": false,
                     "can-pay-by-omise": false,
                     "owner-name": "example",
                     "can-pay-by-stripe": true,
@@ -4542,7 +4793,7 @@ Get a list of events.
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
-                    "is-event-online": false,
+                    "online": false,
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
@@ -4776,7 +5027,7 @@ Get a list of events.
                     "state": "draft",
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
-                    "is-event-online": false,
+                    "online": false,
                     "searchable-location-name": "Draft",
                     "can-pay-by-cheque": true,
                     "description": "example",
@@ -4997,7 +5248,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "is-event-online": false,
+                    "online": false,
                     "has-owner-info": false,
                     "state": "draft",
                     "latitude": 1.23456789,
@@ -5235,7 +5486,7 @@ Get a list of events.
                     "can-pay-by-bank": true,
                     "is-tax-enabled": true,
                     "ical-url": null,
-                    "is-event-online": false,
+                    "online": false,
                     "name": "example",
                     "icon-image-url": null,
                     "thumbnail-image-url": null,
@@ -5456,7 +5707,7 @@ Get a list of events.
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
-                    "is-event-online": false,
+                    "online": false,
                     "logo-url": "http://example.com/example.png",
                     "can-pay-by-bank": true,
                     "is-tax-enabled": true,
@@ -5674,7 +5925,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-owner-info": false,
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5911,7 +6162,7 @@ Get a list of events.
                     "is-tax-enabled": true,
                     "ical-url": null,
                     "name": "example",
-                    "is-event-online": false,
+                    "online": false,
                     "icon-image-url": null,
                     "thumbnail-image-url": null,
                     "created-at": "2017-07-23T12:01:55.414735+00:00",
@@ -6124,7 +6375,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-owner-info": false,
                     "state": "draft",
-                    "is-event-online": false,
+                    "online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6346,7 +6597,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "is-event-online": false,
+                    "online": false,
                     "has-owner-info": false,
                     "state": "draft",
                     "can-pay-by-omise": false,
@@ -6587,7 +6838,7 @@ Get a list of events.
                     "ical-url": null,
                     "name": "example",
                     "icon-image-url": null,
-                    "is-event-online": false,
+                    "online": false,
                     "thumbnail-image-url": null,
                     "created-at": "2017-07-23T12:01:55.414735+00:00",
                     "longitude": 1.23456789,
@@ -6829,7 +7080,7 @@ Get a list of events.
               "is-sponsors-enabled": false,
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
-              "is-event-online": false,
+              "online": false,
               "has-owner-info": false,
               "state": "draft",
               "can-pay-by-omise": false,
@@ -7088,8 +7339,8 @@ Get a list of events.
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
               "has-owner-info": false,
-              "is-event-online": false,
-              "state": "Draft",
+              "online": false,
+              "state": "draft",
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,

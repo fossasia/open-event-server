@@ -1,19 +1,18 @@
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from utils.common import use_defaults
 
 
 @use_defaults()
-class RoleInviteSchema(SoftDeletionSchema):
+class RoleInviteSchema(Schema):
     """
     Api Schema for role invite model
     """
@@ -36,7 +35,7 @@ class RoleInviteSchema(SoftDeletionSchema):
             except NoResultFound:
                 raise ObjectNotFound({'source': '/data/role'}, "Role not found")
             if role.name != data['role_name']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/role'}, "Role id do not match role name"
                 )
         if 'id' in original_data['data']:
@@ -54,7 +53,7 @@ class RoleInviteSchema(SoftDeletionSchema):
                 except NoResultFound:
                     raise ObjectNotFound({'source': '/data/role'}, "Role not found")
                 if role.name != data['role_name']:
-                    raise UnprocessableEntity(
+                    raise UnprocessableEntityError(
                         {'pointer': '/data/attributes/role'},
                         "Role id do not match role name",
                     )
@@ -81,7 +80,6 @@ class RoleInviteSchema(SoftDeletionSchema):
         default="pending",
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.role_invite_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -90,7 +88,6 @@ class RoleInviteSchema(SoftDeletionSchema):
         type_='event',
     )
     role = Relationship(
-        attribute='role',
         self_view='v1.role_invite_role',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.role_detail',

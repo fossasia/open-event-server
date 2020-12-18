@@ -40,6 +40,13 @@ A demo version is automatically deployed from our repositories:
 
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
+
+**NOTE:** If you are heading towards `Local Installation`, be sure to use one of the following operating systems:
+
+
+* Debian based Linux Distros (like Ubuntu)
+* MacOS
+
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
@@ -97,7 +104,7 @@ Required keys can be obtained from [https://developers.google.com/maps/documenta
 
 #### Media Storage - Local/Amazon S3/Google Cloud
 
-Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
+Media (like audio, avatars and logos) can be stored either Locally, on Amazon S3 or on Google Storage.
 
 1. [Amazon S3 Setup Instructions](/docs/general/amazon-s3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
@@ -179,7 +186,14 @@ When checking in code for models, please update migrations as well.
 
 ### API documentation
 
-The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+The api is documented using [api blueprint](https://apiblueprint.org/). First, generate the description/blueprint `.apib` file using:
+
+```bash
+npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib # generate the description .apib file
+
+```
+
+Local changes to the description can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
 
 ```bash
 gem install apiaryio # dependency
@@ -194,53 +208,23 @@ Clone the repo and set up the server according to the steps listed. Make sure yo
 pip3 install -r requirements/tests.txt
 ```
 
-#### Enable/Disable modules
-
--   Enable/Disable a specific module
-
-```
-python manage.py module --name module_name --switch on/off
-```
-
-**_Example :_**
-
-```
-python manage.py module --name ticket_include --switch on
-python manage.py module -n ticket_include -s off
-```
-
--   Enable/Disable all modules
-
-```
-python manage.py module --name module_name --switch on/off
-```
-
-**_Example :_**
-
-```
-python manage.py module --name all --switch on
-python manage.py module -n all -s off
-```
-
 #### Running unit tests
 
-* Open Event uses Postgres database for testing. So set `DATABASE_URL` as a postgres database. Here is an example.
+* If you have docker installed and want to run tests faster, run
 
-```sh
-export DATABASE_URL=postgresql://test_user:test@127.0.0.1:5432/opev_test
-# format is postgresql://USERNAME:PASSWORD@ADDRESS/DATABASE_NAME
-export APP_CONFIG=config.TestingConfig
+```shell script
+./scripts/test_db.sh
+```
+
+And set appropriate value of `TEST_DATABASE` in `.env`
+
+```shell script
+TEST_DATABASE_URL=postgresql://test@localhost:5433/test
 ```
 
 * Then go to the project directory and run the following command:
 ```
-python3 -m unittest discover tests/
-```
-* It will run each test one by one.
-
-* You can also use the following command to run tests using nosetests:
-```
-nosetests tests/
+pytest tests/
 ```
 
 #### Running robot framework tests
@@ -283,7 +267,7 @@ We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
 	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api-dev.herokuapp.com - Is running off of the development branch. It is hosted on Heroku.)
-	 
+
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://api.eventyay.com - Is running off of the `master` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**

@@ -35,7 +35,6 @@ class EventTopicSchema(SoftDeletionSchema):
         type_='event',
     )
     event_sub_topics = Relationship(
-        attribute='event_sub_topics',
         self_view='v1.event_topic_event_sub_topic',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_sub_topic_list',

@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -21,7 +21,7 @@ class FaqTypeListPost(ResourceList):
         require_relationship(['event'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     methods = [
         'POST',
@@ -42,7 +42,7 @@ class FaqTypeList(ResourceList):
         :return:
         """
         query_ = self.session.query(FaqType)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -50,7 +50,13 @@ class FaqTypeList(ResourceList):
         'GET',
     ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': FaqType,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class FaqTypeDetail(ResourceDetail):
@@ -66,7 +72,7 @@ class FaqTypeDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('faq_id'):
-            faq = safe_query(self, Faq, 'id', view_kwargs['faq_id'], 'faq_id')
+            faq = safe_query_kwargs(Faq, view_kwargs, 'faq_id')
             if faq.faq_type_id:
                 view_kwargs['id'] = faq.faq_type_id
             else:

@@ -37,6 +37,7 @@ from app.api.helpers.xcal import XCalExporter
 from app.api.imports import import_event_task_base
 from app.instance import create_app
 from app.models import db
+from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.order import Order
@@ -67,6 +68,26 @@ def make_celery(app=None):
 celery = make_celery()
 
 
+def get_smtp_config():
+    smtp_encryption = get_settings()['smtp_encryption']
+    if smtp_encryption == 'tls':
+        smtp_encryption = 'required'
+    elif smtp_encryption == 'ssl':
+        smtp_encryption = 'ssl'
+    elif smtp_encryption == 'tls_optional':
+        smtp_encryption = 'optional'
+    else:
+        smtp_encryption = 'none'
+
+    return {
+        'host': get_settings()['smtp_host'],
+        'username': get_settings()['smtp_username'],
+        'password': get_settings()['smtp_password'],
+        'tls': smtp_encryption,
+        'port': get_settings()['smtp_port'],
+    }
+
+
 def empty_attachments_send(mail_client, message):
     """
     Empty attachments and send mail
@@ -79,13 +100,17 @@ def empty_attachments_send(mail_client, message):
 
 
 @celery.task(name='send.email.post.sendgrid')
-def send_email_task_sendgrid(payload, headers, smtp_config):
+def send_email_task_sendgrid(payload):
     message = Mail(
         from_email=From(payload['from'], payload['fromname']),
         to_emails=payload['to'],
         subject=payload['subject'],
         html_content=payload["html"],
     )
+
+    if payload['bcc'] is not None:
+        message.bcc = payload['bcc']
+
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
             with open(attachment, 'rb') as f:
@@ -100,8 +125,8 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
             message.add_attachment(attachment)
     sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
     logging.info(
-        'Sending an email regarding {} on behalf of {}'.format(
-            payload["subject"], payload["from"]
+        'Sending an email to {} regarding "{}" on behalf of {}'.format(
+            payload['to'], payload["subject"], payload["from"]
         )
     )
     try:
@@ -110,9 +135,7 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
     except urllib.error.HTTPError as e:
         if e.code == 429:
             logging.warning("Sendgrid quota has exceeded")
-            send_email_task_smtp.delay(
-                payload=payload, headers=None, smtp_config=smtp_config
-            )
+            send_email_task_smtp.delay(payload)
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
@@ -122,17 +145,9 @@ def send_email_task_sendgrid(payload, headers, smtp_config):
 
 
 @celery.task(name='send.email.post.smtp')
-def send_email_task_smtp(payload, smtp_config, headers=None):
-    mailer_config = {
-        'transport': {
-            'use': 'smtp',
-            'host': smtp_config['host'],
-            'username': smtp_config['username'],
-            'password': smtp_config['password'],
-            'tls': smtp_config['encryption'],
-            'port': smtp_config['port'],
-        }
-    }
+def send_email_task_smtp(payload):
+    smtp_config = get_smtp_config()
+    mailer_config = {'transport': {'use': 'smtp', **smtp_config}}
 
     mailer = Mailer(mailer_config)
     mailer.start()
@@ -140,6 +155,8 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
     message.subject = payload['subject']
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
+    if payload['bcc'] is not None:
+        message.bcc = payload['bcc']
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
             message.attach(name=attachment)
@@ -156,7 +173,7 @@ def send_email_task_smtp(payload, smtp_config, headers=None):
 def resize_event_images_task(self, event_id, original_image_url):
     event = Event.query.get(event_id)
     try:
-        logging.info('Event image resizing tasks started {}'.format(original_image_url))
+        logging.info(f'Event image resizing tasks started {original_image_url}')
         uploaded_images = create_save_image_sizes(
             original_image_url, 'event-image', event.id
         )
@@ -164,9 +181,7 @@ def resize_event_images_task(self, event_id, original_image_url):
         event.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         event.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(event)
-        logging.info(
-            'Resized images saved successfully for event with id: {}'.format(event_id)
-        )
+        logging.info(f'Resized images saved successfully for event with id: {event_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for event with id: {}'.format(
@@ -177,9 +192,9 @@ def resize_event_images_task(self, event_id, original_image_url):
 
 @celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
 def resize_user_images_task(self, user_id, original_image_url):
-    user = safe_query(db, User, 'id', user_id, 'user_id')
+    user = safe_query(User, 'id', user_id, 'user_id')
     try:
-        logging.info('User image resizing tasks started {}'.format(original_image_url))
+        logging.info(f'User image resizing tasks started {original_image_url}')
         uploaded_images = create_save_image_sizes(
             original_image_url, 'speaker-image', user.id
         )
@@ -189,9 +204,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         user.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(user)
-        logging.info(
-            'Resized images saved successfully for user with id: {}'.format(user_id)
-        )
+        logging.info(f'Resized images saved successfully for user with id: {user_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
             'Error encountered while generating resized images for user with id: {}'.format(
@@ -205,9 +218,7 @@ def sponsor_logos_url_task(self, event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id, deleted_at=None).all()
     for sponsor in sponsors:
         try:
-            logging.info(
-                'Sponsor logo url generation task started {}'.format(sponsor.logo_url)
-            )
+            logging.info(f'Sponsor logo url generation task started {sponsor.logo_url}')
             new_logo_url = create_save_resized_image(
                 image_file=sponsor.logo_url, resize=False
             )
@@ -233,7 +244,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
         speaker.icon_image_url = uploaded_images['icon_image_url']
         save_to_db(speaker)
         logging.info(
-            'Resized images saved successfully for speaker with id: {}'.format(speaker_id)
+            f'Resized images saved successfully for speaker with id: {speaker_id}'
         )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
@@ -245,7 +256,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, email, event_id, settings):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
     user = db.session.query(User).filter_by(email=email).first()
     smtp_encryption = get_settings()['smtp_encryption']
     try:
@@ -307,13 +318,13 @@ def import_event_task(self, email, file, source_type, creator_id):
 
 @celery.task(base=RequestContextTask, name='export.ical', bind=True)
 def export_ical_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
@@ -349,13 +360,13 @@ def export_ical_task(self, event_id, temp=True):
 
 @celery.task(base=RequestContextTask, name='export.xcal', bind=True)
 def export_xcal_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
@@ -391,13 +402,13 @@ def export_xcal_task(self, event_id, temp=True):
 
 @celery.task(base=RequestContextTask, name='export.pentabarf', bind=True)
 def export_pentabarf_task(self, event_id, temp=True):
-    event = safe_query(db, Event, 'id', event_id, 'event_id')
+    event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
         if temp:
             filedir = os.path.join(
                 current_app.config.get('BASE_DIR'),
-                'static/uploads/temp/' + event_id + '/',
+                f'static/uploads/temp/{event_id}/',
             )
         else:
             filedir = os.path.join(
@@ -441,7 +452,7 @@ def export_order_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "order-{}.csv".format(uuid.uuid1().hex)
+        filename = f"order-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
@@ -491,18 +502,21 @@ def export_order_pdf_task(self, event_id):
 @celery.task(base=RequestContextTask, name='export.attendees.csv', bind=True)
 def export_attendees_csv_task(self, event_id):
     attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    custom_forms = db.session.query(CustomForms).filter_by(
+        event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
+    )
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "attendees-{}.csv".format(uuid.uuid1().hex)
+        filename = f"attendees-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
             from app.api.helpers.csv_jobs_util import export_attendees_csv
 
-            content = export_attendees_csv(attendees)
+            content = export_attendees_csv(attendees, custom_forms)
             for row in content:
                 writer.writerow(row)
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
@@ -521,9 +535,14 @@ def export_attendees_csv_task(self, event_id):
 @celery.task(base=RequestContextTask, name='export.attendees.pdf', bind=True)
 def export_attendees_pdf_task(self, event_id):
     attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    custom_forms = db.session.query(CustomForms).filter_by(
+        event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
+    )
     try:
         attendees_pdf_url = create_save_pdf(
-            render_template('pdf/attendees_pdf.html', holders=attendees),
+            render_template(
+                'pdf/attendees_pdf.html', holders=attendees, custom_forms=custom_forms
+            ),
             UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''),
         )
         result = {'download_url': attendees_pdf_url}
@@ -541,7 +560,7 @@ def export_sessions_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "sessions-{}.csv".format(uuid.uuid1().hex)
+        filename = f"sessions-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
@@ -571,7 +590,7 @@ def export_speakers_csv_task(self, event_id):
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
-        filename = "speakers-{}.csv".format(uuid.uuid1().hex)
+        filename = f"speakers-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:

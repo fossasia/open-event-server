@@ -15,7 +15,7 @@ class AuthManager:
 
     @staticmethod
     def init_login(app):
-        from flask import request, url_for, redirect
+        from flask import redirect, request, url_for
 
         login_manager = login.LoginManager()
         login_manager.init_app(app)

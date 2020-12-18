@@ -14,7 +14,7 @@ BLOCK_SIZE = 16
 def generate_checksum(param_dict, merchant_key, salt=None):
     params_string = __get_param_string__(param_dict)
     salt = salt if salt else __id_generator__(4)
-    final_string = '%s|%s' % (params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()
@@ -28,10 +28,10 @@ def generate_refund_checksum(param_dict, merchant_key, salt=None):
     for i in param_dict:
         if "|" in param_dict[i]:
             param_dict = {}
-            exit()
+            return
     params_string = __get_param_string__(param_dict)
     salt = salt if salt else __id_generator__(4)
-    final_string = '%s|%s' % (params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()
@@ -44,7 +44,7 @@ def generate_refund_checksum(param_dict, merchant_key, salt=None):
 def generate_checksum_by_str(param_str, merchant_key, salt=None):
     params_string = param_str
     salt = salt if salt else __id_generator__(4)
-    final_string = '%s|%s' % (params_string, salt)
+    final_string = f'{params_string}|{salt}'
 
     hasher = hashlib.sha256(final_string.encode())
     hash_string = hasher.hexdigest()
@@ -84,7 +84,7 @@ def __get_param_string__(params):
     params_string = []
     for key in sorted(params.keys()):
         if "REFUND" in params[key] or "|" in params[key]:
-            exit()
+            return
         value = params[key]
         params_string.append('' if value == 'null' else str(value))
     return '|'.join(params_string)
@@ -117,7 +117,7 @@ def __decode__(to_decode, iv, key):
     # Decrypt
     c = AES.new(key.encode('UTF-8'), AES.MODE_CBC, iv.encode('UTF-8'))
     to_decode = c.decrypt(to_decode)
-    if type(to_decode) == bytes:
+    if type(to_decode) is bytes:
         # convert bytes array to str.
         to_decode = to_decode.decode()
     # remove pad

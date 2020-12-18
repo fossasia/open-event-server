@@ -1,6 +1,4 @@
-from datetime import datetime
-
-import pytz
+from sqlalchemy.sql import func
 
 from app.models import db
 
@@ -15,7 +13,7 @@ PASSWORD_RESET_AND_VERIFY = 'Reset Password and Account Verification'
 PASSWORD_CHANGE = 'Change Password'
 EVENT_ROLE = 'Event Role Invitation'
 USER_EVENT_ROLE = 'User Event Role Invitation'
-SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
+SESSION_STATE_CHANGE = 'Session State Change'
 SESSION_SCHEDULE = 'Session Schedule Change'
 EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
@@ -29,6 +27,8 @@ EVENT_EXPORT_FAIL = 'Event Export Failed'
 MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
 MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
+MONTHLY_PAYMENT_PRE_DUE_EMAIL = 'Monthly Payment Pre Due Email'
+MONTHLY_PAYMENT_POST_DUE_EMAIL = 'Monthly Payment Post Due Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
 TEST_MAIL = 'Test Mail'
@@ -38,24 +38,10 @@ class Mail(db.Model):
     __tablename__ = 'mails'
     id = db.Column(db.Integer, primary_key=True)
     recipient = db.Column(db.String)
-    time = db.Column(db.DateTime(timezone=True))
+    time = db.Column(db.DateTime(timezone=True), default=func.now())
     action = db.Column(db.String)
     subject = db.Column(db.String)
     message = db.Column(db.String)
 
-    def __init__(
-        self, recipient=None, time=None, action=None, subject=None, message=None
-    ):
-        self.recipient = recipient
-        self.time = time
-        if self.time is None:
-            self.time = datetime.now(pytz.utc)
-        self.action = action
-        self.subject = subject
-        self.message = message
-
     def __repr__(self):
-        return '<Mail %r to %r>' % (self.id, self.recipient)
-
-    def __str__(self):
-        return self.__repr__()
+        return f'<Mail {self.id!r} to {self.recipient!r}>'

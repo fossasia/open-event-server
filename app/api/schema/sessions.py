@@ -1,16 +1,18 @@
 from datetime import datetime
 
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from marshmallow import validate, validates_schema
+from marshmallow import Schema, validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
+from app.models.helpers.versioning import clean_html
 from app.models.session import Session
 from utils.common import use_defaults
 
@@ -49,37 +51,25 @@ class SessionSchema(SoftDeletionSchema):
             if 'event' not in data:
                 data['event'] = session.event_id
 
-        if data['starts_at'] and data['ends_at']:
+        if data.get('starts_at') and data.get('ends_at'):
             if data['starts_at'] >= data['ends_at']:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/ends-at'},
                     "ends-at should be after starts-at",
                 )
             if not is_patch_request and datetime.timestamp(
                 data['starts_at']
             ) <= datetime.timestamp(datetime.now()):
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/starts-at'},
                     "starts-at should be after current date-time",
                 )
 
-        if 'state' in data:
-            if data['state'] not in ('draft', 'pending'):
-                if not has_access('is_coorganizer', event_id=data['event']):
-                    return ForbiddenException(
-                        {'source': ''}, 'Co-organizer access is required.'
-                    )
-
-        if 'track' in data:
-            if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
-                    {'source': ''}, 'Co-organizer access is required.'
-                )
-
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                return ForbiddenException(
-                    {'source': ''}, 'Co-organizer access is required.'
+                raise ForbiddenError(
+                    {'pointer': '/relationships/microlocation'},
+                    'Co-organizer access is required.',
                 )
 
         validate_complex_fields_json(self, data, original_data)
@@ -100,10 +90,18 @@ class SessionSchema(SoftDeletionSchema):
     signup_url = fields.Url(allow_none=True)
     state = fields.Str(
         validate=validate.OneOf(
-            choices=["pending", "accepted", "confirmed", "rejected", "draft"]
+            choices=[
+                "pending",
+                "accepted",
+                "confirmed",
+                "rejected",
+                "draft",
+                "canceled",
+                "withdrawn",
+            ]
         ),
         allow_none=True,
-        default='draft',
+        missing='draft',
     )
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
@@ -113,9 +111,8 @@ class SessionSchema(SoftDeletionSchema):
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
-    complex_field_values = fields.Dict(allow_none=True)
+    complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
-        attribute='microlocation',
         self_view='v1.session_microlocation',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.microlocation_detail',
@@ -124,7 +121,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='microlocation',
     )
     track = Relationship(
-        attribute='track',
         self_view='v1.session_track',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.track_detail',
@@ -133,7 +129,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='track',
     )
     session_type = Relationship(
-        attribute='session_type',
         self_view='v1.session_session_type',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_type_detail',
@@ -142,7 +137,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='session-type',
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.session_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -151,7 +145,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='event',
     )
     feedbacks = Relationship(
-        attribute='feedbacks',
         self_view='v1.session_feedbacks',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.feedback_list',
@@ -161,7 +154,6 @@ class SessionSchema(SoftDeletionSchema):
         type_='feedback',
     )
     speakers = Relationship(
-        attribute='speakers',
         many=True,
         self_view='v1.session_speaker',
         self_view_kwargs={'id': '<id>'},
@@ -179,3 +171,15 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_='user',
     )
+
+
+# Used for customization of email notification subject and message body
+class SessionNotifySchema(Schema):
+    subject = fields.Str(required=False, validate=validate.Length(max=250))
+    message = fields.Str(required=False, validate=validate.Length(max=5000))
+
+    @validates_schema
+    def validate_fields(self, data):
+        if not data:
+            return
+        data['message'] = clean_html(data.get('message'), allow_link=True)

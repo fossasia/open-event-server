@@ -21,7 +21,6 @@ class CustomPlaceholderSchema(Schema):
     copyright = fields.String(allow_none=True)
     origin = fields.String(allow_none=True)
     event_sub_topic = Relationship(
-        attribute='event_sub_topic',
         self_view='v1.custom_placeholder_event_sub_topic',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_sub_topic_detail',

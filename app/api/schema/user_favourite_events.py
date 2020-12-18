@@ -24,7 +24,6 @@ class UserFavouriteEventSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.user_favourite_event_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -33,7 +32,6 @@ class UserFavouriteEventSchema(SoftDeletionSchema):
         type_='event',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.user_favourite_event_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

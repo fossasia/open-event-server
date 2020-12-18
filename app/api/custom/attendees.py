@@ -12,6 +12,7 @@ from app.models.order import Order
 attendee_blueprint = Blueprint('attendee_blueprint', __name__, url_prefix='/v1')
 
 
+# TODO(Areeb): Deprecate and remove
 @attendee_blueprint.route('/attendees/send-receipt', methods=['POST'])
 @jwt_required
 def send_receipt():
@@ -24,27 +25,23 @@ def send_receipt():
         try:
             order = db.session.query(Order).filter_by(identifier=order_identifier).one()
         except NoResultFound:
-            return NotFoundError(
-                {'parameter': '{order_identifier}'}, "Order not found"
-            ).respond()
+            raise NotFoundError({'parameter': '{order_identifier}'}, "Order not found")
 
         if (order.user_id != current_user.id) and (
             not has_access('is_registrar', event_id=order.event_id)
         ):
-            return ForbiddenError(
+            raise ForbiddenError(
                 {'source': ''},
                 'You need to be the event organizer or order buyer to send receipts.',
-            ).respond()
-        elif order.status != 'completed':
+            )
+        if order.status != 'completed':
             abort(
                 make_response(
                     jsonify(error="Cannot send receipt for an incomplete order"), 409
                 )
             )
         else:
-            send_email_to_attendees(order, current_user.id)
+            send_email_to_attendees(order)
             return jsonify(message="receipt sent to attendees")
     else:
-        return UnprocessableEntityError(
-            {'source': ''}, 'Order identifier missing'
-        ).respond()
+        raise UnprocessableEntityError({'source': ''}, 'Order identifier missing')

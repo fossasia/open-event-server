@@ -194,8 +194,7 @@ class User(SoftDeletionModel):
         ).first()
         if uer is None:
             return False
-        else:
-            return True
+        return True
 
     def _is_role(self, role_name, event_id=None):
         """
@@ -208,8 +207,7 @@ class User(SoftDeletionModel):
             uer = UER.query.filter_by(user=self, role=role).first()
         if not uer:
             return False
-        else:
-            return True
+        return True
 
     def is_owner(self, event_id):
         return self._is_role(OWNER, event_id)
@@ -317,10 +315,7 @@ class User(SoftDeletionModel):
                 .filter(Session.id == session_id)
                 .one()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:
@@ -333,10 +328,7 @@ class User(SoftDeletionModel):
                 .filter(Session.event_id == event_id)
                 .first()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:
@@ -390,18 +382,6 @@ class User(SoftDeletionModel):
             return False
         return perm.panel_name
 
-    def can_download_tickets(self, order):
-        permissible_users = [holder.id for holder in order.ticket_holders] + [
-            order.user.id
-        ]
-        if (
-            self.is_staff
-            or self.has_event_access(order.event.id)
-            or self.id in permissible_users
-        ):
-            return True
-        return False
-
     def can_access_panel(self, panel_name):
         """
         Check if user can access an Admin Panel
@@ -447,26 +427,39 @@ class User(SoftDeletionModel):
     def update_lat(self):
         self.last_accessed_at = datetime.now(pytz.utc)
 
+    # Deprecated
     @property
     def fullname(self):
-        firstname = self.first_name if self.first_name else ''
-        lastname = self.last_name if self.last_name else ''
-        if firstname and lastname:
-            return '{} {}'.format(firstname, lastname)
-        else:
-            return ''
+        return self.full_name
+
+    @property
+    def full_name(self):
+        return ' '.join(filter(None, [self.first_name, self.last_name]))
+
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
+            filter(
+                None,
+                [
+                    self.billing_address,
+                    self.billing_city,
+                    self.billing_state,
+                    self.billing_zip_code,
+                    self.billing_country,
+                ],
+            )
+        )
+
+    full_billing_address = property(get_full_billing_address)
 
     def __repr__(self):
         return '<User %r>' % self.email
 
-    def __str__(self):
-        return self.__repr__()
-
     def __setattr__(self, name, value):
         if name == 'details':
-            super(User, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)))
         else:
-            super(User, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
 
 @event.listens_for(User, 'init')

@@ -12,67 +12,75 @@ from flask_migrate import Migrate
 from flask import Flask
 from app.models import db
 from app.models.user import OWNER
-from app.models.user_token_blacklist import (
+from app.models.user_token_blacklist import (  # noqa
     UserTokenBlackListTime,
-)  # noqa Workaround for registering unimported model
+)  # Workaround for registering unimported model
 from app.api import routes  # noqa Workaround for importing all required models
 
 # imports from factories
 
-from app.factories.event_location import EventLocationFactory
-from app.factories.custom_system_role import CustomSysRoleFactory
-from app.factories.panel_permission import PanelPermissionFactory
-from app.factories.user import UserFactory
-from app.factories.notification_action import NotificationActionFactory
-from app.factories.notification import NotificationFactory
-from app.factories.event import EventFactoryBasic
-from app.factories.social_link import SocialLinkFactory
-from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
-from app.factories.page import PageFactory
-from app.factories.event_copyright import EventCopyrightFactory
-from app.factories.setting import SettingFactory
-from app.factories.event_type import EventTypeFactory
-from app.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
-from app.factories.access_code import AccessCodeFactory
-from app.factories.custom_form import CustomFormFactory
-from app.factories.faq import FaqFactory
-from app.factories.event_topic import EventTopicFactory
-from app.factories.event_invoice import EventInvoiceFactory
-from app.factories.event_sub_topic import EventSubTopicFactory
-from app.factories.sponsor import SponsorFactory
-from app.factories.speakers_call import SpeakersCallFactory
-from app.factories.tax import TaxFactory
-from app.factories.session import SessionFactory
-from app.factories.speaker import SpeakerFactory
-from app.factories.ticket import TicketFactory
-from app.factories.attendee import AttendeeFactory
-from app.factories.session_type import SessionTypeFactory
-from app.factories.track import TrackFactory
-from app.factories.ticket_tag import TicketTagFactory
-from app.factories.role import RoleFactory
-from app.factories.module import ModuleFactory
-from app.factories.ticket_fee import TicketFeesFactory
-from app.factories.role_invite import RoleInviteFactory
-from app.factories.custom_placeholder import CustomPlaceholderFactory
-from app.factories.user_permission import UserPermissionFactory
-from app.factories.email_notification import EmailNotificationFactory
-from app.factories.activities import ActivityFactory
-from app.factories.stripe_authorization import StripeAuthorizationFactory
-from app.factories.mail import MailFactory
-from app.factories.order import OrderFactory
-from app.factories.faq_type import FaqTypeFactory
-from app.factories.user_email import UserEmailFactory
-from app.factories.feedback import FeedbackFactory
-from app.factories.service import ServiceFactory
-from app.factories.message_setting import MessageSettingsFactory
-from app.factories.user_favourite_events import UserFavouriteEventFactory
+from tests.factories.event_location import EventLocationFactory
+from tests.factories.custom_system_role import CustomSysRoleFactory
+from tests.factories.panel_permission import PanelPermissionFactory
+from tests.factories.user import UserFactory
+from tests.factories.notification_action import NotificationActionFactory
+from tests.factories.notification import NotificationFactory
+from tests.factories.event import EventFactoryBasic
+from tests.factories.social_link import SocialLinkFactory
+from tests.factories.microlocation import MicrolocationFactory
+from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
+from tests.factories.page import PageFactory
+from tests.factories.event_copyright import EventCopyrightFactory
+from tests.factories.setting import SettingFactory
+from tests.factories.event_type import EventTypeFactory
+from tests.factories.discount_code import (
+    DiscountCodeFactory,
+    DiscountCodeTicketFactory,
+    DiscountCodeTicketSubFactory,
+)
+from tests.factories.access_code import AccessCodeFactory
+from tests.factories.custom_form import CustomFormFactory
+from tests.factories.faq import FaqFactory
+from tests.factories.event_topic import EventTopicFactory
+from tests.factories.event_invoice import EventInvoiceFactory
+from tests.factories.event_sub_topic import EventSubTopicFactory
+from tests.factories.event_role_permission import EventRolePermissionsFactory
+from tests.factories.sponsor import SponsorFactory
+from tests.factories.speakers_call import SpeakersCallFactory
+from tests.factories.tax import TaxFactory
+from tests.factories.session import SessionFactory
+from tests.factories.speaker import SpeakerFactory
+from tests.factories.ticket import TicketFactory
+from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
+from tests.factories.session_type import SessionTypeFactory
+from tests.factories.track import TrackFactory
+from tests.factories.ticket_tag import TicketTagFactory
+from tests.factories.role import RoleFactory
+from tests.factories.ticket_fee import TicketFeesFactory
+from tests.factories.role_invite import RoleInviteFactory
+from tests.factories.custom_placeholder import CustomPlaceholderFactory
+from tests.factories.user_permission import UserPermissionFactory
+from tests.factories.email_notification import EmailNotificationFactory
+from tests.factories.activities import ActivityFactory
+from tests.factories.stripe_authorization import StripeAuthorizationFactory
+from tests.factories.mail import MailFactory
+from tests.factories.order import OrderFactory
+from tests.factories.faq_type import FaqTypeFactory
+from tests.factories.user_email import UserEmailFactory
+from tests.factories.feedback import FeedbackFactory
+from tests.factories.service import ServiceFactory
+from tests.factories.message_setting import MessageSettingsFactory
+from tests.factories.user_favourite_events import UserFavouriteEventFactory
+
+from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
+    _create_taxed_tickets,
+)
 
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
 api_password = "fossasia"
-api_uri = "http://localhost:5000/v1/auth/login"
+api_uri = "http://localhost:5555/v1/auth/login"
 
 
 def obtain_token():
@@ -323,16 +331,6 @@ def user_speaker(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Check if the email is available > Check if email is available")
-def user_check_email(transaction):
-    """
-    POST /users/checkEmail
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
-
-
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
@@ -355,9 +353,20 @@ def event_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
         RoleFactory(name=OWNER)  # TODO: Change to get_or_create in event after_created
+        db.session.commit()
+
+
+@hooks.before("Events > Upcoming Events Collection > List All Upcoming Events")
+def upcoming_event_get_list(transaction):
+    """
+    GET /events/upcoming
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic(state="published")
+        db.session.add(event)
         db.session.commit()
 
 
@@ -382,8 +391,6 @@ def event_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
         event = EventFactoryBasic()
         db.session.add(event)
         db.session.commit()
@@ -1956,7 +1963,7 @@ def attendee_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 
@@ -1969,7 +1976,7 @@ def attendee_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        attendee = AttendeeFactory()
+        attendee = AttendeeOrderSubFactory()
         db.session.add(attendee)
         db.session.commit()
 
@@ -2579,14 +2586,10 @@ def event_role_permission_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 @hooks.before(
@@ -2598,14 +2601,10 @@ def event_role_permission_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 @hooks.before(
@@ -2617,14 +2616,10 @@ def event_role_permission_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():
-#       event_role_permission = EventRolePermissionsFactory()
-#       db.session.add(event_role_permission)
-#       db.session.commit()
+    with stash['app'].app_context():
+        event_role_permission = EventRolePermissionsFactory()
+        db.session.add(event_role_permission)
+        db.session.commit()
 
 
 # ------------------------- Message Setting -------------------------
@@ -2814,33 +2809,6 @@ def settings_patch(transaction):
         db.session.commit()
 
 
-# ------------------------- Modules -------------------------
-@hooks.before("Modules > Modules Details > Show Modules")
-def modules_get_list(transaction):
-    """
-    GET /modules
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
-        db.session.commit()
-
-
-@hooks.before("Modules > Modules Details > Update Modules")
-def modules_patch(transaction):
-    """
-    PATCH /modules
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        module = ModuleFactory()
-        db.session.add(module)
-        db.session.commit()
-
-
 # ------------------------- Discount Codes -------------------------
 @hooks.before(
     "Discount Codes > Event Discount Code Collection > List All Event Discount Codes"
@@ -2872,14 +2840,9 @@ def event_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-#   TODO: This is breaking the build, we need to repair it eventually.
-#   with stash['app'].app_context():	+    transaction['skip'] = True
-#        event = EventFactoryBasic()
-#        db.session.add(event)
-#        db.session.commit()
+    with stash['app'].app_context():
+        EventFactoryBasic()
+        db.session.commit()
 
 
 @hooks.before(
@@ -2891,11 +2854,9 @@ def ticket_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-    # with stash['app'].app_context():
-    #     event = EventFactoryBasic()
-    #     db.session.add(event)
-    #     db.session.commit()
+    with stash['app'].app_context():
+        TicketFactory()
+        db.session.commit()
 
 
 @hooks.before(
@@ -3428,18 +3389,6 @@ def role_invite_get_detail(transaction):
     with stash['app'].app_context():
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
-        db.session.commit()
-
-
-@hooks.before("Role Invites > Role Invite Details > Update Role Invite")
-def role_invite_patch(transaction):
-    """
-    PATCH /role-invites/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        RoleInviteFactory()
         db.session.commit()
 
 
@@ -4248,17 +4197,40 @@ def orders_get_collection(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
-@hooks.before("Orders > Orders Collection > Create Order")
+@hooks.before("Orders > Create Order > Create Order")
 def create_order(transaction):
     """
-    GET /orders
+    POST /orders/create-order
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketSubFactory(
+            type='percent', value=10.0, tickets=[]
+        )
+        _create_taxed_tickets(db, tax_included=False, discount_code=discount_code)
+        db.session.commit()
+
+
+@hooks.before("Orders > Calculate Order Amount > Calculate Order Amount")
+def calculate_amount(transaction):
+    """
+    POST /orders/calculate-amount
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketSubFactory(
+            type='percent', value=10.0, tickets=[]
+        )
+        _create_taxed_tickets(db, tax_included=False, discount_code=discount_code)
+        db.session.commit()
 
 
 @hooks.before(
@@ -4266,7 +4238,7 @@ def create_order(transaction):
 )
 def create_order_with_on_site_attendee(transaction):
     """
-    GET /orders?onsite=true
+    POST /orders?onsite=true
     :param transaction:
     :return:
     """
@@ -4280,7 +4252,10 @@ def order_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Update Order")
@@ -4290,7 +4265,10 @@ def update_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Delete Order")
@@ -4300,7 +4278,10 @@ def delete_order(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Orders under an Event > List all Orders under an Event")
@@ -4310,7 +4291,12 @@ def event_order_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        order = OrderFactory(event_id=event.id)
+        db.session.add(event)
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Charge > Charge for an Order")

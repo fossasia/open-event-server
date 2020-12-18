@@ -1,13 +1,12 @@
-from flask import request
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.db import get_count, safe_query_kwargs
+from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
@@ -47,7 +46,7 @@ class TicketListPost(ResourceList):
             )
             > 0
         ):
-            raise ConflictException(
+            raise ConflictError(
                 {'pointer': '/data/attributes/name'}, "Ticket already exists"
             )
 
@@ -66,19 +65,19 @@ class TicketListPost(ResourceList):
                     .one()
                 )
             except NoResultFound:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': data['event']}, "Event does not exist"
                 )
 
             if data.get('type') == 'paid' or data.get('type') == 'donation':
                 if not event.is_payment_enabled():
-                    raise UnprocessableEntity(
+                    raise UnprocessableEntityError(
                         {'event_id': data['event']},
                         "Event having paid ticket must have a payment method",
                     )
 
             if data.get('sales_ends_at') > event.ends_at:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'sales_ends_at': '/data/attributes/sales-ends-at'},
                     "Ticket end date cannot be greater than event end date",
                 )
@@ -123,7 +122,7 @@ class TicketList(ResourceList):
         :return:
         """
 
-        if 'Authorization' in request.headers:
+        if is_logged_in():
             verify_jwt_in_request()
             if current_user.is_super_admin or current_user.is_admin:
                 query_ = self.session.query(Ticket)
@@ -137,36 +136,26 @@ class TicketList(ResourceList):
             query_ = self.session.query(Ticket).filter_by(is_hidden=False)
 
         if view_kwargs.get('ticket_tag_id'):
-            ticket_tag = safe_query(
-                self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id'
-            )
+            ticket_tag = safe_query_kwargs(TicketTag, view_kwargs, 'ticket_tag_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('access_code_id'):
-            access_code = safe_query(
-                self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id'
-            )
+            access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
         if view_kwargs.get('discount_code_id'):
-            discount_code = safe_query(
-                self,
+            discount_code = safe_query_kwargs(
                 DiscountCode,
-                'id',
-                view_kwargs['discount_code_id'],
+                view_kwargs,
                 'discount_code_id',
             )
             # discount_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(
-                self,
-                Order,
-                'identifier',
-                view_kwargs['order_identifier'],
-                'order_identifier',
+            order = safe_query_kwargs(
+                Order, view_kwargs, 'order_identifier', 'identifier'
             )
             ticket_ids = []
             for ticket in order.tickets:
@@ -190,7 +179,13 @@ class TicketList(ResourceList):
         ),
     )
     schema = TicketSchema
-    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': Ticket,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class TicketDetail(ResourceDetail):
@@ -215,9 +210,7 @@ class TicketDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query(
-                self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id'
-            )
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
             if attendee.ticket_id is not None:
                 view_kwargs['id'] = attendee.ticket_id
             else:
@@ -239,14 +232,20 @@ class TicketDetail(ResourceDetail):
                     .one()
                 )
             except NoResultFound:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': ticket.event.id}, "Event does not exist"
                 )
             if not event.is_payment_enabled():
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'event_id': ticket.event.id},
                     "Event having paid ticket must have a payment method",
                 )
+        
+        if (data.get('deleted_at') and ticket.has_current_orders):
+            raise ForbiddenError(
+                {'param': 'ticket_id'},
+                "Can't delete a ticket that has sales",
+            )
 
     decorators = (
         api.has_permission(

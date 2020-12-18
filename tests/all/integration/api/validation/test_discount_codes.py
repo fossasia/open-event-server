@@ -1,13 +1,13 @@
 import unittest
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
-from app.factories.discount_code import DiscountCodeFactory
-from app.factories.ticket import TicketFactory
-from tests.all.integration.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventLegacyTestCase
+from tests.factories.discount_code import DiscountCodeFactory
+from tests.factories.ticket import TicketFactory
 
 
-class TestDiscountCodeValidation(OpenEventTestCase):
+class TestDiscountCodeValidation(OpenEventLegacyTestCase):
     def test_amount_lte_ticket_price(self):
         """
         Discount Code Validate Amount Value - Tests if function runs without an exception
@@ -32,7 +32,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntity):
+            with self.assertRaises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_free_ticket(self):
@@ -46,7 +46,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntity):
+            with self.assertRaises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_quantity_db_populate(self):

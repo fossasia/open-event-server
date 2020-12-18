@@ -3,26 +3,74 @@
 import random
 import re
 import string
+from decimal import ROUND_HALF_UP, Decimal
+from typing import Any, Dict
 
 import bleach
 import requests
 from flask import current_app
 from itsdangerous import Serializer
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
+
+
+def make_dict(list_of_object, key):
+    """
+    To convert a list of object into dict.
+
+    This will return a dict containing unique keys
+    mapped to the object which contains that key.
+    """
+    mapped_dict = {}
+    for obj in list_of_object:
+        mapped_dict[getattr(obj, key)] = obj
+    return mapped_dict
 
 
 def dasherize(text):
     return text.replace('_', '-')
 
 
+def to_snake_case(text):
+    text = text.replace('-', '_')
+    return re.sub('([A-Z]+)', r'_\1', text).lower()
+
+
+def dict_to_snake_case(input_dict: Dict[str, Any]) -> Dict[str, Any]:
+    if not input_dict:
+        return input_dict
+
+    output = {}
+    for key, val in input_dict.items():
+        output[to_snake_case(key)] = val
+
+    return output
+
+
 def require_relationship(resource_list, data):
     for resource in resource_list:
         if resource not in data:
-            raise UnprocessableEntity(
-                {'pointer': '/data/relationships/{}'.format(resource)},
-                "A valid relationship with {} resource is required".format(resource),
+            raise UnprocessableEntityError(
+                {'pointer': f'/data/relationships/{resource}'},
+                f"A valid relationship with {resource} resource is required",
             )
+
+
+def require_exclusive_relationship(resource_list, data, optional=False):
+    """Only one of the passed relationships should be present"""
+    present = False
+    multiple = False
+    for resource in resource_list:
+        if resource in data:
+            if present:
+                multiple = True
+            present = True
+
+    if multiple or not (optional or present):
+        raise UnprocessableEntityError(
+            {'pointer': f'/data/relationships'},
+            f"A valid relationship with either of resources is required: {resource_list}",
+        )
 
 
 def string_empty(value):
@@ -119,6 +167,10 @@ def update_state(task_handle, state, result=None):
         result = {}
     if not current_app.config.get('CELERY_ALWAYS_EAGER'):
         task_handle.update_state(state=state, meta=result)
+
+
+def round_money(money):
+    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
 static_page = 'https://eventyay.com/'

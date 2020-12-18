@@ -1,15 +1,15 @@
 from flask import request
 from marshmallow import post_dump, validate, validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import GetterRelationship
 from app.models import db
 from utils.common import use_defaults
 
 
-class OnSiteTicketSchema(SoftDeletionSchema):
+class OnSiteTicketSchema(Schema):
     class Meta:
         type_ = 'on-site-ticket'
         inflect = dasherize
@@ -19,7 +19,7 @@ class OnSiteTicketSchema(SoftDeletionSchema):
 
 
 @use_defaults()
-class OrderSchema(SoftDeletionSchema):
+class OrderSchema(Schema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'
@@ -36,7 +36,7 @@ class OrderSchema(SoftDeletionSchema):
         if (
             'POST' in request.method
             or ('GET' in request.method and 'regenerate' in request.args)
-            and 'completed' != data["status"]
+            and data["status"] != 'completed'
         ):
             if data['payment_mode'] == 'stripe':
                 data['payment_url'] = 'stripe://payment'
@@ -107,7 +107,8 @@ class OrderSchema(SoftDeletionSchema):
         cls_or_instance=fields.Nested(OnSiteTicketSchema), load_only=True, allow_none=True
     )
 
-    attendees = Relationship(
+    attendees = GetterRelationship(
+        getter='filtered_ticket_holders',
         attribute='ticket_holders',
         self_view='v1.order_attendee',
         self_view_kwargs={'order_identifier': '<identifier>'},
@@ -116,10 +117,10 @@ class OrderSchema(SoftDeletionSchema):
         schema='AttendeeSchemaPublic',
         many=True,
         type_='attendee',
+        dump_only=True,
     )
 
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.order_ticket',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.ticket_list',
@@ -127,26 +128,27 @@ class OrderSchema(SoftDeletionSchema):
         schema='TicketSchemaPublic',
         many=True,
         type_="ticket",
+        dump_only=True,
     )
 
     user = Relationship(
-        attribute='user',
         self_view='v1.order_user',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
         related_view_kwargs={'id': '<user_id>'},
         schema='UserSchemaPublic',
         type_="user",
+        dump_only=True,
     )
 
     event = Relationship(
-        attribute='event',
         self_view='v1.order_event',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.event_detail',
         related_view_kwargs={'id': '<event_id>'},
         schema='EventSchemaPublic',
         type_="event",
+        dump_only=True,
     )
 
     event_invoice = Relationship(
@@ -157,24 +159,25 @@ class OrderSchema(SoftDeletionSchema):
         related_view_kwargs={'id': '<id>'},
         schema='EventInvoiceSchema',
         type_="event_invoice",
+        dump_only=True,
     )
 
     marketer = Relationship(
-        attribute='marketer',
         self_view='v1.order_marketer',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
         related_view_kwargs={'id': '<marketer_id>'},
         schema='UserSchemaPublic',
         type_="user",
+        dump_only=True,
     )
 
     discount_code = Relationship(
-        attribute='discount_code',
         self_view='v1.order_discount',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.discount_code_detail',
         related_view_kwargs={'id': '<discount_code_id>'},
         schema='DiscountCodeSchemaPublic',
         type_="discount-code",
+        dump_only=True,
     )

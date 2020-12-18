@@ -141,7 +141,12 @@ class Setting(db.Model):
     twitter_url = db.Column(db.String)
     support_url = db.Column(db.String)
     facebook_url = db.Column(db.String)
+    instagram_url = db.Column(db.String)
+    patreon_url = db.Column(db.String)
+    gitter_url = db.Column(db.String)
+    telegram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
+    weblate_url = db.Column(db.String)
 
     #
     # Event Invoices settings
@@ -162,6 +167,8 @@ class Setting(db.Model):
     admin_billing_city = db.Column(db.String)
     admin_billing_zip = db.Column(db.String)
     admin_billing_additional_info = db.Column(db.String)
+    admin_billing_paypal_email = db.Column(db.String)
+    admin_billing_logo = db.Column(db.String)
     #
     # Generators
     #
@@ -185,193 +192,6 @@ class Setting(db.Model):
         db.String, default="https://next.eventyay.com/cookie-policy"
     )
 
-    def __init__(
-        self,
-        app_environment=Environment.PRODUCTION,
-        aws_key=None,
-        aws_secret=None,
-        aws_bucket_name=None,
-        aws_region=None,
-        gs_key=None,
-        gs_secret=None,
-        gs_bucket_name=None,
-        is_google_recaptcha_enabled=False,
-        google_recaptcha_secret=None,
-        google_recaptcha_site=None,
-        google_client_id=None,
-        google_client_secret=None,
-        fb_client_id=None,
-        fb_client_secret=None,
-        tw_consumer_key=None,
-        stripe_client_id=None,
-        stripe_test_client_id=None,
-        stripe_secret_key=None,
-        stripe_publishable_key=None,
-        stripe_test_secret_key=None,
-        stripe_test_publishable_key=None,
-        in_client_id=None,
-        in_client_secret=None,
-        tw_consumer_secret=None,
-        sendgrid_key=None,
-        storage_place=None,
-        app_name=None,
-        static_domain=None,
-        tagline=None,
-        google_url=None,
-        github_url=None,
-        twitter_url=None,
-        support_url=None,
-        analytics_key=None,
-        paypal_mode=None,
-        paypal_client=None,
-        paypal_secret=None,
-        paypal_sandbox_client=None,
-        paypal_sandbox_secret=None,
-        email_service=None,
-        email_from=None,
-        email_from_name=None,
-        smtp_host=None,
-        smtp_username=None,
-        smtp_password=None,
-        smtp_port=None,
-        smtp_encryption=None,
-        frontend_url=None,
-        facebook_url=None,
-        youtube_url=None,
-        android_app_url=None,
-        web_app_url=None,
-        cookie_policy=None,
-        cookie_policy_link=None,
-        omise_mode=None,
-        omise_test_public=None,
-        omise_test_secret=None,
-        omise_live_public=None,
-        omise_live_secret=None,
-        alipay_publishable_key=None,
-        alipay_secret_key=None,
-        is_paytm_activated=False,
-        paytm_mode=None,
-        paytm_live_merchant=None,
-        paytm_live_secret=None,
-        paytm_sandbox_merchant=None,
-        paytm_sandbox_secret=None,
-        invoice_sending_day=None,
-        invoice_sending_timezone=None,
-        admin_billing_contact_name=None,
-        admin_billing_phone=None,
-        admin_billing_email=None,
-        admin_billing_country=None,
-        admin_billing_tax_info=None,
-        admin_company=None,
-        admin_billing_address=None,
-        admin_billing_city=None,
-        admin_billing_state=None,
-        admin_billing_zip=None,
-        admin_billing_additional_info=None,
-        order_expiry_time=None,
-        max_complex_custom_fields=30,
-    ):
-        self.app_environment = app_environment
-        self.aws_key = aws_key
-        self.aws_secret = aws_secret
-        self.aws_bucket_name = aws_bucket_name
-        self.aws_region = aws_region
-
-        self.gs_key = gs_key
-        self.gs_secret = gs_secret
-        self.gs_bucket_name = gs_bucket_name
-
-        self.is_google_recaptcha_enabled = is_google_recaptcha_enabled
-        self.google_recaptcha_site = google_recaptcha_site
-        self.google_recaptcha_secret = google_recaptcha_secret
-
-        self.google_client_id = google_client_id
-        self.google_client_secret = google_client_secret
-        self.fb_client_id = fb_client_id
-        self.fb_client_secret = fb_client_secret
-        self.tw_consumer_key = tw_consumer_key
-        self.tw_consumer_secret = tw_consumer_secret
-        self.in_client_id = in_client_id
-        self.in_client_secret = in_client_secret
-        self.sendgrid_key = sendgrid_key
-        self.analytics_key = analytics_key
-        self.app_name = app_name
-        self.static_domain = static_domain
-        self.tagline = tagline
-        self.storage_place = storage_place
-        self.google_url = google_url
-        self.github_url = github_url
-        self.twitter_url = twitter_url
-        self.support_url = support_url
-        self.facebook_url = facebook_url
-        self.youtube_url = youtube_url
-        self.stripe_client_id = stripe_client_id
-        self.stripe_publishable_key = stripe_publishable_key
-        self.stripe_secret_key = stripe_secret_key
-        self.stripe_test_client_id = stripe_test_client_id
-        self.stripe_test_publishable_key = stripe_test_publishable_key
-        self.stripe_test_secret_key = stripe_test_secret_key
-        self.web_app_url = web_app_url
-        self.android_app_url = android_app_url
-        self.email_service = email_service
-        self.smtp_host = smtp_host
-        self.smtp_username = smtp_username
-        self.smtp_password = smtp_password
-        self.smtp_port = smtp_port
-        self.smtp_encryption = smtp_encryption
-        self.email_from = email_from
-        self.email_from_name = email_from_name
-        self.frontend_url = frontend_url
-        self.cookie_policy = cookie_policy
-        self.cookie_policy_link = cookie_policy_link
-
-        # Paypal credentials
-        self.paypal_mode = paypal_mode
-        self.paypal_client = paypal_client
-        self.paypal_secret = paypal_secret
-        self.paypal_sandbox_client = paypal_sandbox_client
-        self.paypal_sandbox_secret = paypal_sandbox_secret
-
-        # Omise Credentials
-        self.omise_mode = omise_mode
-        self.omise_test_public = omise_test_public
-        self.omise_test_secret = omise_test_secret
-        self.omise_live_public = omise_live_public
-        self.omise_live_secret = omise_live_secret
-
-        # AliPay Credentails
-        self.alipay_publishable_key = alipay_publishable_key
-        self.alipay_secret_key = alipay_secret_key
-
-        # payTM Credentials
-        self.is_paytm_activated = is_paytm_activated
-        self.paytm_mode = paytm_mode
-        self.paytm_live_merchant = paytm_live_merchant
-        self.paytm_live_secret = paytm_live_secret
-        self.paytm_sandbox_merchant = paytm_sandbox_merchant
-        self.paytm_sandbox_secret = paytm_sandbox_secret
-
-        # Event Invoice settings
-        self.invoice_sending_timezone = invoice_sending_timezone
-        self.invoice_sending_day = invoice_sending_day
-
-        # Admin Invoice Details
-        self.admin_billing_contact_name = admin_billing_contact_name
-        self.admin_billing_phone = admin_billing_phone
-        self.admin_billing_state = admin_billing_state
-        self.admin_billing_country = admin_billing_country
-        self.admin_billing_tax_info = admin_billing_tax_info
-        self.admin_company = admin_company
-        self.admin_billing_address = admin_billing_address
-        self.admin_billing_city = admin_billing_city
-        self.admin_billing_zip = admin_billing_zip
-        self.admin_billing_additional_info = admin_billing_additional_info
-
-        # Order Expiry Time in Minutes
-        self.order_expiry_time = order_expiry_time
-
-        self.max_complex_custom_fields = max_complex_custom_fields
-
     @hybrid_property
     def is_paypal_activated(self):
         if (
@@ -380,10 +200,9 @@ class Setting(db.Model):
             and self.paypal_sandbox_secret
         ):
             return True
-        elif self.paypal_client and self.paypal_secret:
+        if self.paypal_client and self.paypal_secret:
             return True
-        else:
-            return False
+        return False
 
     @hybrid_property
     def is_stripe_activated(self):
@@ -392,15 +211,9 @@ class Setting(db.Model):
     def __repr__(self):
         return 'Settings'
 
-    def __str__(self):
-        return self.__repr__()
-
     @hybrid_property
     def is_alipay_activated(self):
-        if self.alipay_publishable_key and self.alipay_secret_key:
-            return True
-        else:
-            return False
+        return bool(self.alipay_publishable_key and self.alipay_secret_key)
 
     @hybrid_property
     def is_omise_activated(self):
@@ -410,7 +223,26 @@ class Setting(db.Model):
             and self.omise_test_secret
         ):
             return True
-        elif self.omise_live_public and self.omise_live_secret:
+        if self.omise_live_public and self.omise_live_secret:
             return True
-        else:
-            return False
+        return False
+
+    @property
+    def is_billing_paypal_activated(self):
+        return self.admin_billing_paypal_email is not None
+
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
+            filter(
+                None,
+                [
+                    self.admin_billing_address,
+                    self.admin_billing_city,
+                    self.admin_billing_state,
+                    self.admin_billing_zip,
+                    self.admin_billing_country,
+                ],
+            )
+        )
+
+    full_billing_address = property(get_full_billing_address)

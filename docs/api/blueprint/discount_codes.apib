@@ -167,16 +167,10 @@ Create a new Discount Code for event. (Only Admin)
         {
             "data": {
                 "relationships": {
-                    "events": {
+                    "event": {
                         "links": {
-                            "self": "/v1/discount-codes/4/relationships/events",
-                            "related": "/v1/discount-codes/4/events"
-                        }
-                    },
-                    "tickets": {
-                        "links": {
-                            "self": "/v1/discount-codes/1/relationships/tickets",
-                            "related": "/v1/discount-codes/1/tickets"
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
                         }
                     }
                 },
@@ -217,7 +211,7 @@ Create a new Discount Code for event. (Only Admin)
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Create Ticket Discount Code [POST /v1/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+### Create Ticket Discount Code [POST /v1/discount-codes]
 Create a new Discount Code for event. (Only by Co-organizers)
 
 + Request (application/vnd.api+json)
@@ -234,7 +228,7 @@ Create a new Discount Code for event. (Only by Co-organizers)
                   "code": "DC101",
                   "discount-url": "https://my-discount-url.com",
                   "value": "100",
-                  "type": "amount",
+                  "type": "percent",
                   "is-active": "false",
                   "tickets-number": "404",
                   "min-quantity": "0",
@@ -276,7 +270,7 @@ Create a new Discount Code for event. (Only by Co-organizers)
                     "max-quantity": 100,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "is-active": false,
-                    "type": "amount",
+                    "type": "percent",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "tickets-number": 404,
@@ -761,69 +755,6 @@ Get a list of Discount Codes applied on a given ticket.
 
 ### Get Discount Code Detail of an Event [GET]
 Get a single discount code.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "event": {
-                        "links": {
-                            "self": "/v1/discount-codes/1/relationships/event",
-                            "related": "/v1/discount-codes/1/event"
-                        }
-                    },
-                    "events": {
-                        "links": {
-                            "self": "/v1/discount-codes/1/relationships/events",
-                            "related": "/v1/discount-codes/1/events"
-                        }
-                    }
-                },
-                "attributes": {
-                    "code": "DC101",
-                    "valid-from": "2099-06-18T18:30:00+00:00",
-                    "min-quantity": 0,
-                    "created-at": "2099-08-05T23:38:04.449623+00:00",
-                    "tickets-number": 404,
-                    "value": 100,
-                    "max-quantity": 100,
-                    "is-active": false,
-                    "used-for": "event",
-                    "deleted-at": null,
-                    "valid-till": "2099-06-24T18:30:00+00:00",
-                    "type": "amount",
-                    "discount-url": "https://my-discount-url.com"
-                },
-                "type": "discount-code",
-                "id": 1,
-                "links": {
-                    "self": "/v1/discount-codes/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/discount-codes/1"
-            }
-        }
-
-
-## Get Discount Code Detail of an Event Invoice [/v1/event-invoices/{event_invoice_id}/discount-code]
-+ Parameters
-    + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
-
-### Get Discount Code Detail of an Event Invoice [GET]
-Get a single discount code. (Requires admin access)
 
 + Request
 

@@ -1,6 +1,9 @@
+from app.api.helpers.errors import ConflictError
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
+from app.models.ticket_holder import TicketHolder
+from sqlalchemy import or_
 
 access_codes_tickets = db.Table(
     'access_codes_tickets',
@@ -45,20 +48,20 @@ class Ticket(SoftDeletionModel):
     description = db.Column(db.String)
     is_description_visible = db.Column(db.Boolean)
     type = db.Column(db.String, nullable=False)
-    quantity = db.Column(db.Integer)
-    position = db.Column(db.Integer)
-    price = db.Column(db.Float)
+    quantity = db.Column(db.Integer, default=100)
+    position = db.Column(db.Integer, default=1)
+    price = db.Column(db.Float, default=0)
     min_price = db.Column(db.Float, default=0, nullable=False)
-    max_price = db.Column(db.Float)
-    is_fee_absorbed = db.Column(db.Boolean)
+    max_price = db.Column(db.Float, default=0)
+    is_fee_absorbed = db.Column(db.Boolean, default=False)
     sales_starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     sales_ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
-    is_hidden = db.Column(db.Boolean)
+    is_hidden = db.Column(db.Boolean, default=False)
 
-    min_order = db.Column(db.Integer)
-    max_order = db.Column(db.Integer)
+    min_order = db.Column(db.Integer, default=1)
+    max_order = db.Column(db.Integer, default=10)
     is_checkin_restricted = db.Column(db.Boolean)
-    auto_checkin_enabled = db.Column(db.Boolean)
+    auto_checkin_enabled = db.Column(db.Boolean, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='tickets_')
 
@@ -72,59 +75,6 @@ class Ticket(SoftDeletionModel):
     discount_codes = db.relationship(
         'DiscountCode', secondary=discount_codes_tickets, backref="tickets"
     )
-
-    def __init__(
-        self,
-        name=None,
-        event_id=None,
-        type=None,
-        sales_starts_at=None,
-        sales_ends_at=None,
-        is_hidden=False,
-        description=None,
-        is_description_visible=True,
-        is_checkin_restricted=True,
-        auto_checkin_enabled=False,
-        quantity=100,
-        position=1,
-        price=0,
-        min_order=1,
-        max_order=10,
-        min_price=0,
-        max_price=0,
-        is_fee_absorbed=False,
-        tags=None,
-        access_codes=None,
-        discount_codes=None,
-    ):
-        if tags is None:
-            tags = []
-        if access_codes is None:
-            access_codes = []
-        if discount_codes is None:
-            discount_codes = []
-
-        self.name = name
-        self.quantity = quantity
-        self.position = position
-        self.type = type
-        self.event_id = event_id
-        self.description = description
-        self.is_description_visible = is_description_visible
-        self.is_checkin_restricted = is_checkin_restricted
-        self.auto_checkin_enabled = auto_checkin_enabled
-        self.price = price
-        self.min_price = min_price
-        self.max_price = max_price
-        self.sales_starts_at = sales_starts_at
-        self.sales_ends_at = sales_ends_at
-        self.is_hidden = is_hidden
-        self.min_order = min_order
-        self.max_order = max_order
-        self.tags = tags
-        self.is_fee_absorbed = is_fee_absorbed
-        self.access_codes = access_codes
-        self.discount_codes = discount_codes
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -156,56 +106,34 @@ class Ticket(SoftDeletionModel):
         return bool(count > 0)
 
     def tags_csv(self):
-        """Return list of Tags in CSV.
-        """
+        """Return list of Tags in CSV."""
         tag_names = [tag.name for tag in self.tags]
         return ','.join(tag_names)
 
-    def __repr__(self):
-        return '<Ticket %r>' % self.name
+    @property
+    def has_current_orders(self):
+        return db.session.query(Order.query.join(TicketHolder).filter(TicketHolder.ticket_id == self.id, 
+                or_(Order.status == 'completed',
+                Order.status == 'placed',
+                Order.status == 'pending',
+                Order.status == 'initializing')).exists()).scalar() 
+    
+    @property
+    def reserved_count(self):
+        from app.api.attendees import get_sold_and_reserved_tickets_count
 
-    def __str__(self):
-        return self.__repr__()
+        return get_sold_and_reserved_tickets_count(self.id)
 
     @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        data = {
-            'id': self.id,
-            'name': self.name,
-            'quantity': self.quantity,
-            'position': self.position,
-            'type': self.type,
-            'description_visibility': self.is_description_visible,
-            'description': self.description,
-            'price': self.price,
-            'sales_start_date': self.sales_starts_at.strftime('%m/%d/%Y')
-            if self.sales_starts_at
-            else '',
-            'sales_starts_at': self.sales_starts_at.strftime('%H:%M')
-            if self.sales_starts_at
-            else '',
-            'sales_end_date': self.sales_ends_at.strftime('%m/%d/%Y')
-            if self.sales_ends_at
-            else '',
-            'sales_ends_at': self.sales_ends_at.strftime('%H:%M')
-            if self.sales_ends_at
-            else '',
-            'ticket_visibility': self.hide,
-            'min_order': self.min_order,
-            'max_order': self.max_order,
-            'tags_string': '',
-            'has_orders': self.has_order_tickets(),
-            'has_completed_orders': self.has_completed_order_tickets(),
-            'is_fee_absorbed': self.is_fee_absorbed,
-        }
+    def is_available(self):
+        return self.reserved_count < self.quantity
 
-        tags = []
-        for tag in self.tags:
-            tags.append(tag.name)
+    def raise_if_unavailable(self):
+        if not self.is_available:
+            raise ConflictError({'id': self.id}, f"Ticket {self.id} already sold out")
 
-        data['tags'] = ",".join(tags)
-        return data
+    def __repr__(self):
+        return '<Ticket %r>' % self.name
 
 
 class TicketTag(SoftDeletionModel):
@@ -222,13 +150,5 @@ class TicketTag(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
-    def __init__(self, name=None, event_id=None, deleted_at=None):
-        self.name = name
-        self.event_id = event_id
-        self.deleted_at = deleted_at
-
     def __repr__(self):
         return '<TicketTag %r>' % self.name
-
-    def __str__(self):
-        return self.__repr__()

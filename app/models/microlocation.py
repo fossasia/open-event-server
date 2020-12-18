@@ -11,27 +11,13 @@ class Microlocation(SoftDeletionModel):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
+    position = db.Column(db.Integer, default=0, nullable=False)
     room = db.Column(db.String)
     session = db.relationship('Session', backref="microlocation")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-
-    def __init__(
-        self,
-        name=None,
-        latitude=None,
-        longitude=None,
-        floor=None,
-        event_id=None,
-        room=None,
-        deleted_at=None,
-    ):
-        self.name = name
-        self.latitude = latitude
-        self.longitude = longitude
-        self.floor = floor
-        self.event_id = event_id
-        self.room = room
-        self.deleted_at = deleted_at
+    video_stream_id = db.Column(
+        db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE')
+    )
 
     @staticmethod
     def get_service_name():
@@ -40,10 +26,14 @@ class Microlocation(SoftDeletionModel):
     def __repr__(self):
         return '<Microlocation %r>' % self.name
 
-    def __str__(self):
-        return self.__repr__()
-
     @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {'id': self.id, 'name': self.name, 'floor': self.floor}
+    def safe_video_stream(self):
+        """Conditionally return video stream after applying access control"""
+        stream = self.video_stream
+        if stream and stream.user_can_access:
+            return stream
+        return None
+
+    @safe_video_stream.setter
+    def safe_video_stream(self, value):
+        self.video_stream = value

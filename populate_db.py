@@ -1,4 +1,3 @@
-
 from app.api.helpers.db import get_or_create
 
 # Admin message settings
@@ -24,7 +23,6 @@ from app.models.event_type import EventType
 from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
-from app.models.module import Module
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -50,6 +48,7 @@ from app.models.user import (
 
 # User Permissions
 from app.models.user_permission import UserPermission
+from app.models.video_channel import VideoChannel
 
 SALES = 'sales'
 ADMIN = 'admin'
@@ -123,10 +122,6 @@ def create_speaker_image_sizes():
         thumbnail_size_width_height=500,
         thumbnail_quality=80,
     )
-
-
-def create_modules():
-    get_or_create(Module, donation_include=False)
 
 
 def create_event_topics():
@@ -357,7 +352,7 @@ def create_admin_message_settings():
         "Invitation For Papers",
         "After Event",
         "Ticket(s) Purchased",
-        "Session Accept or Reject",
+        "Session State Change",
         "Event Published",
         "Event Export Failed",
         "Event Exported",
@@ -413,8 +408,6 @@ def populate():
     create_user_permissions()
     print('Creating settings...')
     create_settings()
-    print('Creating modules...')
-    create_modules()
     print('Creating event image size...')
     create_event_image_sizes()
     print('Creating speaker image size...')
@@ -431,31 +424,12 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
-
-    db.session.commit()
-
-
-def populate_without_print():
-    """
-    Create defined Roles, Services and Permissions.
-    """
-    create_roles()
-    create_services()
-    create_permissions()
-    create_custom_sys_roles()
-    create_panels()
-    create_panel_permissions()
-    create_user_permissions()
-    create_settings()
-    create_modules()
-    create_event_image_sizes()
-    create_speaker_image_sizes()
-    create_event_topics()
-    create_event_sub_topics()
-    create_event_types()
-    create_event_locations()
-    create_admin_message_settings()
-    create_custom_placeholders()
+    get_or_create(
+        VideoChannel,
+        provider='jitsi',
+        name='Jitsi Meet',
+        defaults={'url': 'https://meet.jit.si', 'api_url': 'https://api.jitsi.net'},
+    )
 
     db.session.commit()
 

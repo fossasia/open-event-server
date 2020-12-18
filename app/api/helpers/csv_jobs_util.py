@@ -37,22 +37,23 @@ def export_orders_csv(orders):
     return rows
 
 
-def export_attendees_csv(attendees):
+def export_attendees_csv(attendees, custom_forms):
+
     headers = [
         'Order#',
         'Order Date',
         'Status',
-        'First Name',
-        'Last Name',
-        'Email',
-        'Country',
         'Payment Type',
         'Ticket Name',
         'Ticket Price',
         'Ticket Type',
     ]
 
+    for fields in custom_forms:
+        headers.append(fields.name)
+
     rows = [headers]
+
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
@@ -62,10 +63,6 @@ def export_attendees_csv(attendees):
             str(attendee.order.status)
             if attendee.order and attendee.order.status
             else '-',
-            str(attendee.firstname) if attendee.firstname else '',
-            str(attendee.lastname) if attendee.lastname else '',
-            str(attendee.email) if attendee.email else '',
-            str(attendee.country) if attendee.country else '',
             str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
@@ -75,6 +72,14 @@ def export_attendees_csv(attendees):
             else '0',
             str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '',
         ]
+        for field in custom_forms:
+            if field.is_complex:
+                fields_dict = attendee.complex_field_values
+                column.append(
+                    fields_dict.get(field.identifier, '') if fields_dict else ''
+                )
+            else:
+                column.append(getattr(attendee, field.identifier, ''))
 
         rows.append(column)
 

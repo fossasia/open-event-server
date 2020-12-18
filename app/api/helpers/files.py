@@ -1,7 +1,6 @@
 import base64
 import io
 import os
-import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
@@ -11,6 +10,7 @@ import requests
 from flask import current_app
 from PIL import Image
 from sqlalchemy.orm.exc import NoResultFound
+from weasyprint import HTML
 from xhtml2pdf import pisa
 
 from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, generate_hash, upload
@@ -84,13 +84,13 @@ def create_save_resized_image(
     """
     if not image_file:
         return None
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     data = requests.get(image_file).content
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':
@@ -101,7 +101,7 @@ def create_save_resized_image(
     if resize:
         if maintain_aspect:
             width_percent = basewidth / float(img.size[0])
-            height_size = int((float(img.size[1]) * float(width_percent)))
+            height_size = int(float(img.size[1]) * float(width_percent))
 
         img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
 
@@ -140,7 +140,7 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
         image_sizes = ImageSizes(
-            image_sizes_type,
+            type=image_sizes_type,
             full_width=1300,
             full_height=500,
             full_aspect=True,
@@ -282,7 +282,7 @@ def create_system_image(
     :return:
     """
     # Get an unique identifier from uuid if not provided
-    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    filename = f'{get_file_name()}.{ext}'
     if image_file:
         with urllib.request.urlopen(image_file) as img_data:
             image_file = io.BytesIO(img_data.read())
@@ -291,8 +291,8 @@ def create_system_image(
         image_file = current_app.config['BASE_DIR'] + '/' + file_relative_path
     try:
         im = Image.open(image_file)
-    except IOError:
-        raise IOError("Corrupt/Invalid Image")
+    except OSError:
+        raise OSError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format != 'JPEG':
@@ -351,12 +351,16 @@ def create_save_pdf(
     dir_path='/static/uploads/pdf/temp/',
     identifier=get_file_name(),
     upload_dir='static/media/',
+    new_renderer=False,
+    extra_identifiers=None,
 ):
     """
     Create and Saves PDFs from html
     :param pdf_data:
     :return:
     """
+    if extra_identifiers is None:
+        extra_identifiers = {}
     filedir = current_app.config.get('BASE_DIR') + dir_path
 
     if not os.path.isdir(filedir):
@@ -365,12 +369,16 @@ def create_save_pdf(
     filename = identifier + '.pdf'
     dest = filedir + filename
 
-    file = open(dest, "wb")
-    pisa.CreatePDF(io.BytesIO(pdf_data.encode('utf-8')), file)
-    file.close()
+    pdf_content = pdf_data.encode('utf-8')
+    if not new_renderer:
+        file = open(dest, "wb")
+        pisa.CreatePDF(io.BytesIO(pdf_content), file)
+        file.close()
+    else:
+        HTML(string=pdf_content).write_pdf(dest)
 
     uploaded_file = UploadedFile(dest, filename)
-    upload_path = key.format(identifier=identifier)
+    upload_path = key.format(**{'identifier': identifier, **extra_identifiers})
     new_file = upload(uploaded_file, upload_path, upload_dir=upload_dir)
     # Removing old file created
     os.remove(dest)

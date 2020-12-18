@@ -83,7 +83,7 @@ from app.api.event_sub_topics import (
 )
 from app.api.event_topics import EventTopicDetail, EventTopicList, EventTopicRelationship
 from app.api.event_types import EventTypeDetail, EventTypeList, EventTypeRelationship
-from app.api.events import EventDetail, EventList, EventRelationship
+from app.api.events import EventDetail, EventList, EventRelationship, UpcomingEventList
 from app.api.events_role_permission import (
     EventsRolePermissionDetail,
     EventsRolePermissionList,
@@ -120,7 +120,6 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
-from app.api.modules import ModuleDetail
 from app.api.notifications import (
     NotificationActionDetail,
     NotificationActionList,
@@ -236,6 +235,12 @@ from app.api.user_favourite_events import (
 )
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
+from app.api.video_channel import VideoChannelDetail, VideoChannelList
+from app.api.video_stream import (
+    VideoStreamDetail,
+    VideoStreamList,
+    VideoStreamRelationship,
+)
 
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')
@@ -336,7 +341,9 @@ api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')
 api.route(UserEmailListPost, 'user_email_post', '/user-emails')
 api.route(UserEmailList, 'user_emails_list', '/users/<int:user_id>/alternate-emails')
 api.route(
-    UserEmailDetail, 'user_emails_detail', '/user-emails/<int:id>',
+    UserEmailDetail,
+    'user_emails_detail',
+    '/user-emails/<int:id>',
 )
 api.route(
     UserEmailRelationship, 'user_emails_user', '/user-emails/<int:id>/relationships/user'
@@ -424,9 +431,6 @@ api.route(
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
-
-# modules
-api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 
 # pages
 api.route(PageList, 'page_list', '/pages')
@@ -611,6 +615,12 @@ api.route(
 )
 
 api.route(
+    UpcomingEventList,
+    'upcoming_event_list',
+    '/events/upcoming',
+)
+
+api.route(
     EventDetail,
     'event_detail',
     '/events/<int:id>',
@@ -641,6 +651,7 @@ api.route(
     '/stripe-authorizations/<int:stripe_authorization_id>/event',
     '/user-favourite-events/<int:user_favourite_event_id>/event',
     '/discount-codes/<int:discount_code_id>/event',
+    '/video-streams/<int:video_stream_id>/event',
 )
 api.route(
     EventRelationship,
@@ -855,6 +866,7 @@ api.route(
     'microlocation_list',
     '/events/<int:event_id>/microlocations',
     '/events/<event_identifier>/microlocations',
+    '/video-streams/<int:video_stream_id>/rooms',
 )
 api.route(
     MicrolocationDetail,
@@ -871,6 +883,11 @@ api.route(
     MicrolocationRelationshipRequired,
     'microlocation_event',
     '/microlocations/<int:id>/relationships/event',
+)
+api.route(
+    MicrolocationRelationshipOptional,
+    'microlocation_video_stream',
+    '/microlocations/<int:id>/relationships/video-stream',
 )
 
 # user favourite events
@@ -1537,3 +1554,38 @@ api.route(EventSearchResultList, 'event_search_results', '/search/events')
 # Import Jobs
 api.route(ImportJobList, 'import_job_list', '/import-jobs')
 api.route(ImportJobDetail, 'import_job_detail', '/import-jobs/<int:id>')
+
+# Video Streams
+api.route(VideoStreamList, 'video_stream_list', '/video-streams')
+api.route(
+    VideoStreamDetail,
+    'video_stream_detail',
+    '/video-streams/<int:id>',
+    '/microlocations/<int:room_id>/video-stream',
+    '/events/<int:event_id>/video-stream',
+    '/events/<event_identifier>/video-stream',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_rooms',
+    '/video-streams/<int:id>/relationships/rooms',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_event',
+    '/video-streams/<int:id>/relationships/event',
+)
+api.route(
+    VideoStreamRelationship,
+    'video_stream_channel',
+    '/video-streams/<int:id>/relationships/video-channel',
+)
+
+# Video Channels
+api.route(VideoChannelList, 'video_channel_list', '/video-channels')
+api.route(
+    VideoChannelDetail,
+    'video_channel_detail',
+    '/video-channels/<int:id>',
+    '/video-streams/<int:video_stream_id>/video-channel',
+)

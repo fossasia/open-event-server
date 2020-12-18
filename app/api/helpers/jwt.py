@@ -20,8 +20,7 @@ def jwt_authenticate(email, password):
     auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
     if auth_ok:
         return user
-    else:
-        return None
+    return None
 
 
 def jwt_user_loader(identity):
