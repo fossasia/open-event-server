@@ -15,9 +15,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.4-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.4-dependencies-
 
       - run:
           name: Install Python Dependencies
@@ -64,9 +64,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.4-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.4-dependencies-
 
       - run:
           name: Create API blueprint
@@ -91,9 +91,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.4-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.4-dependencies-
 
       - restore_cache:
           keys:
@@ -135,9 +135,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.4-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.4-dependencies-
 
       - run:
           name: Test
