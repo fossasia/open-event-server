@@ -9,6 +9,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.user import User
 from app.settings import get_settings
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 
@@ -48,12 +49,7 @@ class RoleInvite(db.Model):
         # Check if invitation link has expired (it expires after 24 hours)
         return datetime.now(pytz.utc) > self.created_at + timedelta(hours=24)
 
-    def __repr__(self):
-        return '<RoleInvite {!r}:{!r}:{!r}>'.format(
-            self.email, self.event_id, self.role_id
-        )
-
-    def send_invite_mail(self):
+    def send_invite(self):
         """
         Send mail to invitee
         """
@@ -63,12 +59,18 @@ class RoleInvite(db.Model):
         link = "{}/e/{}/role-invites?token={}".format(
             frontend_url, event.identifier, self.hash
         )
-        if user:
-            send_user_email_role_invite(
-                self.email, self.role_name, event.name, link
-            )
-            send_notif_event_role(user, self.role_name, event.name, link, event.id)
-        else:
-            send_email_role_invite(
-                self.email, self.role_name, event.name, link
-            )
+        if has_access('is_coorganizer', event_id=event.id):
+            if user:
+                send_user_email_role_invite(
+                    self.email, self.role_name, event.name, link
+                )
+                send_notif_event_role(user, self.role_name, event.name, link, event.id)
+            else:
+                send_email_role_invite(
+                    self.email, self.role_name, event.name, link
+                )
+
+    def __repr__(self):
+        return '<RoleInvite {!r}:{!r}:{!r}>'.format(
+            self.email, self.event_id, self.role_id
+        )

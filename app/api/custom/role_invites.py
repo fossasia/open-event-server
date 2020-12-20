@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify
 
-from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permissions import jwt_required
-from app.api.helpers.permission_manager import has_access
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 
@@ -17,11 +15,8 @@ def resend_invite(role_invite_id):
     :return: JSON response if the email was successfully sent
     """
     role_invite = RoleInvite.query.get_or_404(role_invite_id)
-    event = Event.query.filter_by(id=role_invite.event_id).first()
-    if has_access('is_organizer', event_id=event.id):
-        RoleInvite.send_invite_mail(role_invite)
-        return jsonify(
-            status=True,
-            message="Resend invite successfully",
-        )
-    raise ForbiddenError({'source': ''}, "Organizer Access Required")
+    role_invite.send_invite()
+    return jsonify(
+        success=True,
+        message="Invite resent successfully",
+    )

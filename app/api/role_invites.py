@@ -60,7 +60,7 @@ class RoleInviteListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        RoleInvite.send_invite_mail(role_invite)
+        role_invite.send_invite()
 
     view_kwargs = True
     methods = ['POST']
