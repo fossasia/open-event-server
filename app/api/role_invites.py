@@ -60,22 +60,7 @@ class RoleInviteListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        user = User.query.filter_by(email=role_invite.email).first()
-        event = Event.query.filter_by(id=role_invite.event_id).first()
-        frontend_url = get_settings()['frontend_url']
-        link = "{}/e/{}/role-invites?token={}".format(
-            frontend_url, event.identifier, role_invite.hash
-        )
-
-        if user:
-            send_user_email_role_invite(
-                role_invite.email, role_invite.role_name, event.name, link
-            )
-            send_notif_event_role(user, role_invite.role_name, event.name, link, event.id)
-        else:
-            send_email_role_invite(
-                role_invite.email, role_invite.role_name, event.name, link
-            )
+        role_invite.send_invite()
 
     view_kwargs = True
     methods = ['POST']
