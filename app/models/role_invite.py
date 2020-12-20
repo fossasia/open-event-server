@@ -53,8 +53,10 @@ class RoleInvite(db.Model):
             self.email, self.event_id, self.role_id
         )
 
-
     def send_invite_mail(self):
+        """
+        Send mail to invitee
+        """
         user = User.query.filter_by(email=self.email).first()
         event = Event.query.filter_by(id=self.event_id).first()
         frontend_url = get_settings()['frontend_url']
