@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify
 
 from app.api.helpers.permissions import jwt_required
-from app.models.event import Event
 from app.models.role_invite import RoleInvite
 
 role_invites_routes = Blueprint('role_invites_routes', __name__, url_prefix='/v1/role-invites')
