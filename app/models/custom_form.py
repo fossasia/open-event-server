@@ -156,7 +156,7 @@ class CustomForms(db.Model):
     description = db.Column(db.String, nullable=True)
     is_required = db.Column(db.Boolean, default=False)
     is_included = db.Column(db.Boolean, default=False)
-    is_public = db.Column(db.Boolean, default=False)
+    is_public = db.Column(db.Boolean, nullable=False)
     is_fixed = db.Column(db.Boolean, default=False)
     is_complex = db.Column(db.Boolean, nullable=False, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
