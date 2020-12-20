@@ -1,8 +1,6 @@
-import os
 from flask import Blueprint, jsonify
-from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.permission_manager import has_access
 from app.models.event import Event
