@@ -6,6 +6,11 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.models import db
+from app.models.event import Event
+from app.models.user import User
+from app.settings import get_settings
+from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
+from app.api.helpers.notification import send_notif_event_role
 
 
 def generate_hash():
@@ -47,3 +52,21 @@ class RoleInvite(db.Model):
         return '<RoleInvite {!r}:{!r}:{!r}>'.format(
             self.email, self.event_id, self.role_id
         )
+
+
+    def send_invite_mail(self):
+        user = User.query.filter_by(email=self.email).first()
+        event = Event.query.filter_by(id=self.event_id).first()
+        frontend_url = get_settings()['frontend_url']
+        link = "{}/e/{}/role-invites?token={}".format(
+            frontend_url, event.identifier, self.hash
+        )
+        if user:
+            send_user_email_role_invite(
+                self.email, self.role_name, event.name, link
+            )
+            send_notif_event_role(user, self.role_name, event.name, link, event.id)
+        else:
+            send_email_role_invite(
+                self.email, self.role_name, event.name, link
+            )

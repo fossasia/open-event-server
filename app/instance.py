@@ -161,7 +161,7 @@ def create_app():
         from app.api.custom.orders import order_blueprint
         from app.api.custom.invoices import event_blueprint
         from app.api.custom.calendars import calendar_routes
-        from app.api.custom.role_invites import role_invites_routes_blueprint
+        from app.api.custom.role_invites import role_invites_routes
         from app.api.video_stream import streams_routes
 
         app.register_blueprint(api_v1)
@@ -187,7 +187,7 @@ def create_app():
         app.register_blueprint(sessions_blueprint)
         app.register_blueprint(calendar_routes)
         app.register_blueprint(streams_routes)
-        app.register_blueprint(role_invites_routes_blueprint)
+        app.register_blueprint(role_invites_routes)
 
         add_engine_pidguard(db.engine)
 
