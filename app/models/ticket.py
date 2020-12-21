@@ -1,9 +1,10 @@
+from sqlalchemy import or_
+
 from app.api.helpers.errors import ConflictError
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
 from app.models.ticket_holder import TicketHolder
-from sqlalchemy import or_
 
 access_codes_tickets = db.Table(
     'access_codes_tickets',
@@ -112,12 +113,20 @@ class Ticket(SoftDeletionModel):
 
     @property
     def has_current_orders(self):
-        return db.session.query(Order.query.join(TicketHolder).filter(TicketHolder.ticket_id == self.id, 
-                or_(Order.status == 'completed',
-                Order.status == 'placed',
-                Order.status == 'pending',
-                Order.status == 'initializing')).exists()).scalar() 
-    
+        return db.session.query(
+            Order.query.join(TicketHolder)
+            .filter(
+                TicketHolder.ticket_id == self.id,
+                or_(
+                    Order.status == 'completed',
+                    Order.status == 'placed',
+                    Order.status == 'pending',
+                    Order.status == 'initializing',
+                ),
+            )
+            .exists()
+        ).scalar()
+
     @property
     def reserved_count(self):
         from app.api.attendees import get_sold_and_reserved_tickets_count

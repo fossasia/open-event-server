@@ -5,8 +5,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
-from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
-from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.role_invite import delete_previous_uer
@@ -18,7 +16,6 @@ from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
-from app.settings import get_settings
 
 role_invites_misc_routes = Blueprint('role_invites_misc', __name__, url_prefix='/v1')
 

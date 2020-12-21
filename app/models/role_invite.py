@@ -5,14 +5,14 @@ import pytz
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
-from app.models import db
 from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
+from app.api.helpers.notification import send_notif_event_role
+from app.api.helpers.permission_manager import has_access
+from app.models import db
 from app.models.event import Event
 from app.models.user import User
 from app.settings import get_settings
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
-from app.api.helpers.notification import send_notif_event_role
 
 
 def generate_hash():
@@ -63,14 +63,10 @@ class RoleInvite(db.Model):
         if not has_access('is_coorganizer', event_id=event.id):
             raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
         if user:
-            send_user_email_role_invite(
-                self.email, self.role_name, event.name, link
-            )
+            send_user_email_role_invite(self.email, self.role_name, event.name, link)
             send_notif_event_role(user, self.role_name, event.name, link, event.id)
         else:
-            send_email_role_invite(
-                self.email, self.role_name, event.name, link
-            )
+            send_email_role_invite(self.email, self.role_name, event.name, link)
 
     def __repr__(self):
         return '<RoleInvite {!r}:{!r}:{!r}>'.format(
