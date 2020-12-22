@@ -360,7 +360,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session, mail_override: Dict[str, str] = None):
+def notify_for_session(session, mail_override: Dict[str, str] = None, bcc=None):
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:
@@ -373,10 +373,12 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
     # Email for owner
     if session.event.get_owner():
         owner = session.event.get_owner()
-        send_email_session_state_change(owner.email, session, mail_override)
+        send_email_session_state_change(owner.email, session, mail_override, bcc)
         send_notif_session_state_change(
             owner, session.title, session.state, session.site_link, session.id
         )
+    # if bcc:
+    #     send_email_session_state_change(bcc, session, mail_override)
 
 
 @sessions_blueprint.route('/<int:id>/notify', methods=['POST'])
@@ -384,13 +386,14 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
 def notify_session(id):
     session = Session.query.filter_by(deleted_at=None, id=id).first_or_404()
 
-    data, errors = SessionNotifySchema().load(request.json)
+    data, errors= SessionNotifySchema().load(request.json)
+    bcc= request.json.get('bcc')
     if errors:
         raise UnprocessableEntityError(
             {'pointer': '/data', 'errors': errors}, 'Data in incorrect format'
         )
 
-    notify_for_session(session, data)
+    notify_for_session(session, data, bcc)
 
     return jsonify({'success': True})
 
