@@ -161,7 +161,7 @@ def send_email_new_session(email, event_name, link):
     )
 
 
-def send_email_session_state_change(email, session, mail_override: Dict[str, str]=None, bcc = None):
+def send_email_session_state_change(email, session, mail_override: Dict[str, str]=None):
     """email for new session"""
     event = session.event
 
@@ -185,6 +185,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
             mail = mail.copy()
             mail['subject'] = mail_override.get('subject') or mail['subject']
             mail['message'] = mail_override.get('message') or mail['message']
+            mail['bcc'] = mail_override.get('bcc') or mail['bcc']
     except KeyError:
         logger.error('No mail found for session state change: ' + session.state)
         return
@@ -194,7 +195,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=bcc
+        bcc=mail['bcc']
     )
 
 

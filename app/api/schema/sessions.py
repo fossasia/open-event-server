@@ -177,7 +177,7 @@ class SessionSchema(SoftDeletionSchema):
 class SessionNotifySchema(Schema):
     subject = fields.Str(required=False, validate=validate.Length(max=250))
     message = fields.Str(required=False, validate=validate.Length(max=5000))
-
+    bcc = fields.List(fields.String(), default=[])
     @validates_schema
     def validate_fields(self, data):
         if not data:
