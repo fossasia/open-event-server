@@ -41,7 +41,7 @@ flask-cors==3.0.9
 python-pentabarf-xml==0.20
 python-geoip-geolite2==2015.303
 pycountry==20.7.3
-pytz==2020.4
+pytz==2020.5
 diff-match-patch==20200713
 blinker==1.4
 envparse==0.2
