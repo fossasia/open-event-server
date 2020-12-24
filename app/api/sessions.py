@@ -384,7 +384,7 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
 def notify_session(id):
     session = Session.query.filter_by(deleted_at=None, id=id).first_or_404()
 
-    data, errors= SessionNotifySchema().load(request.json)
+    data, errors = SessionNotifySchema().load(request.json)
     if errors:
         raise UnprocessableEntityError(
             {'pointer': '/data', 'errors': errors}, 'Data in incorrect format'

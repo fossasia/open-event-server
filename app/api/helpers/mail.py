@@ -185,7 +185,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
             mail = mail.copy()
             mail['subject'] = mail_override.get('subject') or mail['subject']
             mail['message'] = mail_override.get('message') or mail['message']
-            mail['bcc'] = mail_override.get('bcc') or mail['bcc']
+            mail['bcc'] = mail_override.get('bcc') or []
     except KeyError:
         logger.error('No mail found for session state change: ' + session.state)
         return
