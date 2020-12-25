@@ -191,11 +191,9 @@ def create_app():
 
         add_engine_pidguard(db.engine)
 
-        if app.config[
+        if app.config[  # pytype: disable=attribute-error
             'SQLALCHEMY_DATABASE_URI'
-        ].startswith(  # pytype: disable=attribute-error
-            "sqlite://"
-        ):
+        ].startswith("sqlite://"):
             sqlite_datetime_fix()
 
     sa.orm.configure_mappers()
