@@ -296,8 +296,12 @@ class AttendeeDetail(ResourceDetail):
                     obj.attendee_notes, data['attendee_notes']
                 )
 
-        data['complex_field_values'] = validate_custom_form_constraints_request(
-            'attendee', self.resource.schema, obj, data
+        data['complex_field_values'] = (
+            validate_custom_form_constraints_request(
+                'attendee', self.resource.schema, obj, data
+            )
+            if obj.event.is_ticket_form_enabled
+            else None
         )
 
     decorators = (jwt_required,)

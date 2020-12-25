@@ -110,13 +110,14 @@ def is_coorganizer_endpoint_related_to_event(
     """
     user = get_identity()
 
-    if user.is_staff:
-        verify_jwt_in_request()
-        return view(*view_args, **view_kwargs)
+    if user:
+        if user.is_staff:
+            verify_jwt_in_request()
+            return view(*view_args, **view_kwargs)
 
-    if user.has_event_access(kwargs['event_id']):
-        verify_jwt_in_request()
-        return view(*view_args, **view_kwargs)
+        if user.has_event_access(kwargs['event_id']):
+            verify_jwt_in_request()
+            return view(*view_args, **view_kwargs)
 
     raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
