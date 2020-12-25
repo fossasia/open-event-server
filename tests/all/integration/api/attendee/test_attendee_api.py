@@ -222,6 +222,43 @@ def test_custom_form_complex_fields_missing_required(db, client, jwt, user):
     assert attendee.complex_field_values is None
 
 
+def test_custom_form_complex_fields_missing_form_disabled(db, client, jwt, user):
+    attendee = get_complex_custom_form_attendee(db, user)
+    attendee.event.is_ticket_form_enabled = False
+    db.session.commit()
+
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'attendee',
+                'id': str(attendee.id),
+                "attributes": {
+                    "firstname": "Areeb",
+                    "lastname": "Jamal",
+                    "job_title": "Software Engineer",
+                    "complex-field-values": {"favourite-friend": "Tester"},
+                },
+            }
+        }
+    )
+
+    response = client.patch(
+        f'/v1/attendees/{attendee.id}',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    db.session.refresh(attendee)
+
+    assert response.status_code == 200
+
+    assert attendee.firstname == 'Areeb'
+    assert attendee.lastname == 'Jamal'
+    assert attendee.job_title == 'Software Engineer'
+    assert attendee.complex_field_values is None
+
+
 def test_custom_form_complex_fields_missing_required_one(db, client, jwt, user):
     attendee = get_complex_custom_form_attendee(db, user)
 

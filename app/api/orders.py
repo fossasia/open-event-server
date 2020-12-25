@@ -309,7 +309,10 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('status') in ['pending', 'placed', 'completed']:
+        if (
+            data.get('status') in ['pending', 'placed', 'completed']
+            and order.event.is_ticket_form_enabled
+        ):
             attendees = order.ticket_holders
             for attendee in attendees:
                 validate_custom_form_constraints_request(
