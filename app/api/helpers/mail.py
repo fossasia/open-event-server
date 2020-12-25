@@ -110,7 +110,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
         action=action,
         subject=subject,
         message=html,
-        time=datetime.now(),
+        time=datetime.now()
     )
 
     save_to_db(mail, 'Mail Recorded')
