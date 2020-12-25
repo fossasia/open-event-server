@@ -194,7 +194,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=mail['bcc']
+        bcc=mail['bcc'],
     )
 
 
