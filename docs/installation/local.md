@@ -24,7 +24,7 @@ cd open-event-server
 
 - Tip:
 
-  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatly. It case of SSH, the command above will be:
+  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatedly. In case of SSH, the command above will be:
 
   ```
   git clone -b development git@github.com:USERNAME/open-event-server.git
@@ -39,7 +39,7 @@ cd open-event-server
 
 ## Install system dependencies
 
-These are softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
+These are the softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
 
 ### For Mac OS
 
@@ -54,7 +54,7 @@ brew install redis
 
 ### For Debian/Ubuntu
 
-The dependencies are listed in *deb-packages.txt* file. You can install them all with one command:
+The dependencies are listed in *deb-packages.txt* file. You can install all of them with one command:
 
 ```sh
 xargs -a deb-packages.txt sudo apt install
