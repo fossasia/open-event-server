@@ -2,8 +2,8 @@ import json
 from typing import Union
 
 from flask import make_response
-from flask_rest_jsonapi import JsonApiException
-from flask_rest_jsonapi.errors import jsonapi_errors
+from flask_combo_jsonapi import JsonApiException
+from flask_combo_jsonapi.errors import jsonapi_errors
 
 
 class ErrorResponse(JsonApiException):

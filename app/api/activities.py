@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList
+from flask_combo_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
 from app.api.schema.activities import ActivitySchema

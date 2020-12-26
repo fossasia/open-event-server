@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
+from flask_combo_jsonapi import ResourceDetail
 from flask_jwt_extended import jwt_required
-from flask_rest_jsonapi import ResourceDetail
 from sqlalchemy.sql import text
 
 from app.api.bootstrap import api

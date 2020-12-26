@@ -1,5 +1,5 @@
 import marshmallow
-from flask_rest_jsonapi.schema import get_relationships
+from flask_combo_jsonapi.schema import get_relationships
 from sqlalchemy import inspect
 
 from app.api.helpers.errors import UnprocessableEntityError

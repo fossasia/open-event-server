@@ -1,5 +1,5 @@
 import pytest
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_or_create
 from app.api.helpers.errors import ForbiddenError

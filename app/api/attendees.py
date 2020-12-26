@@ -1,7 +1,7 @@
 import datetime
 
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api

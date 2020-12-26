@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api

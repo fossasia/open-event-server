@@ -2,9 +2,9 @@ from datetime import datetime
 
 import pytz
 from flask import request
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_

@@ -1,7 +1,7 @@
 from flask import request, url_for
-from flask_rest_jsonapi import ResourceList
-from flask_rest_jsonapi.pagination import add_pagination_links
-from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
+from flask_combo_jsonapi import ResourceList
+from flask_combo_jsonapi.pagination import add_pagination_links
+from flask_combo_jsonapi.querystring import QueryStringManager as QSManager
 from sqlalchemy import desc, func
 
 from app.api.bootstrap import api

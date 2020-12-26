@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, make_response, request
+from flask_combo_jsonapi import ResourceDetail
 from flask_jwt_extended import current_user, verify_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail
 
 from app.api.bootstrap import api
 from app.api.helpers.errors import UnprocessableEntityError

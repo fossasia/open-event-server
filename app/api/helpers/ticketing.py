@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import pytz
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, safe_query_by_id, save_to_db
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError

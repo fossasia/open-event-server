@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 import pytest
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.order import calculate_order_amount
