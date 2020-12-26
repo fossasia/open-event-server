@@ -39,7 +39,7 @@ cd open-event-server
 
 ## Install system dependencies
 
-These are the softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
+These are softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
 
 ### For Mac OS
 
@@ -54,7 +54,7 @@ brew install redis
 
 ### For Debian/Ubuntu
 
-The dependencies are listed in *deb-packages.txt* file. You can install all of them with one command:
+The dependencies are listed in *deb-packages.txt* file. You can install them all with one command:
 
 ```sh
 xargs -a deb-packages.txt sudo apt install
