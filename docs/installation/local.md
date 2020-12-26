@@ -24,7 +24,7 @@ cd open-event-server
 
 - Tip:
 
-  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatly. It case of SSH, the command above will be:
+  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatedly. In case of SSH, the command above will be:
 
   ```
   git clone -b development git@github.com:USERNAME/open-event-server.git
