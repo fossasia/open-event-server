@@ -225,6 +225,8 @@ class SpeakerDetail(ResourceDetail):
                     )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
+        return result
+
     decorators = (
         api.has_permission(
             'is_speaker_itself_or_admin',

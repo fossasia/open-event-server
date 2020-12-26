@@ -20,7 +20,7 @@ class EventTopicSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     system_image_url = fields.Url()
     slug = fields.Str(dump_only=True)

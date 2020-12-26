@@ -22,7 +22,7 @@ class EventsRolePermissionSchema(Schema):
         self_view_many = 'v1.events_role_list'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     can_create = fields.Boolean(default=False)
     can_read = fields.Boolean(default=False)
     can_update = fields.Boolean(default=False)

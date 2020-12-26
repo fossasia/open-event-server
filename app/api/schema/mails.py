@@ -20,7 +20,7 @@ class MailSchema(Schema):
         self_view_many = 'v1.mail_list'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     recipient = fields.Email(dump_only=True)
     time = fields.DateTime(dump_only=True)
     action = fields.Str(dump_only=True)

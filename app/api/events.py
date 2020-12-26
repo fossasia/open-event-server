@@ -542,7 +542,7 @@ class EventCopySchema(Schema):
         self_view = 'v1.event_copy'
         self_view_kwargs = {'identifier': '<id>'}
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(dump_only=True)
 
 

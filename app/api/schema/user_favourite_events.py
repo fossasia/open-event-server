@@ -22,7 +22,7 @@ class UserFavouriteEventSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     event = Relationship(
         self_view='v1.user_favourite_event_event',
         self_view_kwargs={'id': '<id>'},

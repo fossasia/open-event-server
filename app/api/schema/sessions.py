@@ -34,7 +34,7 @@ class SessionSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_fields(self, data, original_data):
+    def validate_fields(self, data, original_data, **kwargs):
         is_patch_request = 'id' in original_data['data']
         if is_patch_request:
             try:
@@ -74,7 +74,7 @@ class SessionSchema(SoftDeletionSchema):
 
         validate_complex_fields_json(self, data, original_data)
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     title = fields.Str(required=True)
     subtitle = fields.Str(allow_none=True)
     level = fields.Str(allow_none=True)
@@ -180,7 +180,7 @@ class SessionNotifySchema(Schema):
     bcc = fields.List(fields.String(), default=[])
 
     @validates_schema
-    def validate_fields(self, data):
+    def validate_fields(self, data, **kwargs):
         if not data:
             return
         data['message'] = clean_html(data.get('message'), allow_link=True)

@@ -19,7 +19,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(allow_none=True)
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=True)
     created_at = fields.DateTime(allow_none=True)

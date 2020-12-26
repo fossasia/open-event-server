@@ -59,6 +59,8 @@ class SettingDetail(ResourceDetail):
         # Update settings cache after PATCH
         refresh_settings()
 
+        return result
+
 
 @admin_misc_routes.route('/test-mail', methods=['POST'])
 @is_admin

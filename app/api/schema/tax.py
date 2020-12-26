@@ -14,7 +14,7 @@ class TaxSchemaPublic(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     rate = fields.Float(validate=lambda n: 0 <= n <= 100, required=True)
     is_tax_included_in_price = fields.Boolean(default=False)

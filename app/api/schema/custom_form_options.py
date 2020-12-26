@@ -22,7 +22,7 @@ class CustomFormOptionSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     value = fields.Str(required=True)
     custom_form = Relationship(
         self_view='v1.custom_form_option_form',

@@ -42,12 +42,12 @@ class OrderSchema(Schema):
         return data
 
     @validates_schema
-    def initial_values(self, data):
+    def initial_values(self, data, **kwargs):
         if data.get('payment_mode') is None and 'POST' in request.method:
             data['payment_mode'] = 'free'
         return data
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(dump_only=True)
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)

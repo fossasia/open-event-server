@@ -22,7 +22,7 @@ class TestSchema(Schema):
         type_ = 'test-schema'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     field_without_default = fields.Str(required=True)
     field_with_default = fields.Boolean(required=True, default=False)
 

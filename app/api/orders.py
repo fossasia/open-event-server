@@ -515,7 +515,7 @@ class ChargeSchema(Schema):
         self_view = 'v1.charge_list'
         self_view_kwargs = {'order_identifier': '<id>'}
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     stripe = fields.Str(load_only=True, allow_none=True)
     paypal_payer_id = fields.Str(load_only=True, allow_none=True)
     paypal_payment_id = fields.Str(load_only=True, allow_none=True)

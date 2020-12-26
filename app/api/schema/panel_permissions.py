@@ -19,7 +19,7 @@ class PanelPermissionSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     panel_name = fields.String(allow_none=False)
     can_access = fields.Boolean()
     custom_system_roles = Relationship(

@@ -16,7 +16,7 @@ class SpeakerSchema(SoftDeletionSchema):
     """
 
     @validates_schema(pass_original=True)
-    def validate_json(self, data, original_data):
+    def validate_json(self, data, original_data, **kwargs):
         validate_complex_fields_json(self, data, original_data)
 
     class Meta:
@@ -29,7 +29,7 @@ class SpeakerSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     email = fields.Str(allow_none=True)
     photo_url = fields.Url(allow_none=True)

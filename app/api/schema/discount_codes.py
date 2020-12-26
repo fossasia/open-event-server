@@ -74,7 +74,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_quantity(self, data, original_data):
+    def validate_quantity(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -101,7 +101,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
                 )
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -145,7 +145,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_quantity(self, data, original_data):
+    def validate_quantity(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -173,7 +173,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                 )
 
     @validates_schema(pass_original=True)
-    def validate_value(self, data, original_data):
+    def validate_value(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -224,7 +224,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                 )
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(

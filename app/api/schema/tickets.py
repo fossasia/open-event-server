@@ -20,7 +20,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             ticket = Ticket.query.filter_by(id=original_data['data']['id']).one()
 
@@ -48,7 +48,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
         #                               "ticket sales-ends-at should be before event ends-at")
 
     @validates_schema
-    def validate_quantity(self, data):
+    def validate_quantity(self, data, **kwargs):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
                 raise UnprocessableEntityError(
@@ -78,7 +78,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
                 )
 
     @validates_schema
-    def validate_price(self, data):
+    def validate_price(self, data, **kwargs):
         if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
             raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/price'},
@@ -86,7 +86,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
             )
 
     @validates_schema(pass_original=True)
-    def validate_discount_code(self, data, original_data):
+    def validate_discount_code(self, data, original_data, **kwargs):
         if (
             'relationships' in original_data
             and 'discount-codes' in original_data['data']['relationships']
@@ -101,7 +101,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
                         "Discount code does not exist",
                     )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     type = fields.Str(required=True)
