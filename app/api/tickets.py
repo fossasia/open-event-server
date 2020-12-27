@@ -77,9 +77,10 @@ class TicketListPost(ResourceList):
                     )
 
             if data.get('sales_ends_at') > event.ends_at:
+                print(data)
                 raise UnprocessableEntityError(
                     {'sales_ends_at': '/data/attributes/sales-ends-at'},
-                    "End of ticket sales cannot be after end of event date.",
+                    "End of ticket "+data.get('name')+" sales cannot be after end of event date.",
                 )
 
     schema = TicketSchema
