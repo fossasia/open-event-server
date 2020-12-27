@@ -77,7 +77,6 @@ class TicketListPost(ResourceList):
                     )
 
             if data.get('sales_ends_at') > event.ends_at:
-                print(data)
                 raise UnprocessableEntityError(
                     {'sales_ends_at': '/data/attributes/sales-ends-at'},
                     "End of ticket sales date of "+data.get('name')+" cannot be after end of event date.",
@@ -246,6 +245,12 @@ class TicketDetail(ResourceDetail):
             raise ForbiddenError(
                 {'param': 'ticket_id'},
                 "Can't delete a ticket that has sales",
+            )
+
+        if data.get('event') and data.get('sales_ends_at') > event.ends_at:
+            raise UnprocessableEntityError(
+                {'sales_ends_at': '/data/attributes/sales-ends-at'},
+                "End of ticket sales date of "+data.get('name')+" cannot be after end of event date.",
             )
 
     decorators = (
