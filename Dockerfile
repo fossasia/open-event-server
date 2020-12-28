@@ -12,10 +12,9 @@ RUN apk update && \
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
-ADD requirements.txt /requirements.txt
 ADD requirements /requirements/
 
-RUN pip install --prefix=/install --no-warn-script-location -r /requirements.txt
+RUN pip install --prefix=/install --no-warn-script-location -r /requirements/prod.txt
 
 ####
 

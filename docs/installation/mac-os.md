@@ -28,9 +28,9 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
-You may encounter problems installing 'libevent' while executing the requirements.txt..
+You may encounter problems installing 'libevent' while installing the Python packages,
 
-Installing the below files would prevent the 'egg_info' error.
+run the below commands would prevent the 'egg_info' error.
 
 ```sh
 brew install python3 libevent
@@ -38,10 +38,18 @@ curl https://bootstrap.pypa.io/ez_setup.py -o - | python3
 pip install gevent gunicorn
 ```
 
-* **Step 1** - Install Python 3 requirements.
+* **Step 1** - Install Poetry and Python 3 requirements.
 
 ```sh
-sudo pip3 install -r requirements.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Go to project folder and install Python dependencies
+poetry install --no-root
+
+# Activate project's virtual environment
+poetry shell
 ```
 
 

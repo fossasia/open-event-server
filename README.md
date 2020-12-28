@@ -202,10 +202,18 @@ apiary preview --path docs/api/api_blueprint.apib # opens browser with generated
 
 ### Testing
 
-Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
+Clone the repo and set up the server according to the steps listed. Make sure you have installed [Poetry](https://python-poetry.org/docs) and all the dependencies required for testing by running
 
 ```
-pip3 install -r requirements/tests.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install --no-root
+
+# Activate porject's virtual environment
+poetry shell
 ```
 
 #### Running unit tests

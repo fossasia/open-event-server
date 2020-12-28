@@ -50,7 +50,7 @@ brew install libmagic
 brew install redis
 ```
 
-**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
+**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing Python dependencies, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
 
 ### For Debian/Ubuntu
 
@@ -62,28 +62,26 @@ xargs -a deb-packages.txt sudo apt install
 
 In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo, you can use [pyenv](https://github.com/pyenv/pyenv) to install Python 3.8 (Open Event Server is not compatible with Python 3.9+ yet).
 
-## Create a Python virtual environment
+## Install Poetry and Python packages
 
+- Install [Poetry](https://python-poetry.org/docs) to handle Python dependencies:
 
-Use Python built-in tool:
+  ```sh
+  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+  source ~/.profile
+  ```
+
+- Enter the project folder and install dependencies:
+
+  ```sh
+  poetry install --no-root
+  ```
+
+- Activate project's virtual environment:
 
 ```sh
-python3 -m venv .venv
+poetry shell
 ```
-
-## Install Python packages
-
-- Activate the Python virtual environment you created for this project.
-
-  ```sh
-  source .venv/bin/activate
-  ```
-
-- Enter the project folder and run:
-
-  ```sh
-  pip3 install -r requirements.txt
-  ```
 
 After installing dependencies in your virtual environment, you need to configure pre-commit hooks by running the command
 

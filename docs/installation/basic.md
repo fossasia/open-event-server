@@ -18,10 +18,21 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
 
-* **Step 1** - Install Python 3 requirements.
+* **Step 1** - Install Poetry and Python 3 requirements.
+
+This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
 
 ```sh
-pip3 install -r requirements.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+poetry config experimental.new-installer false
+
+# Install Python dependencies
+poetry install --no-root
+
+# Activate virtual environment
+poetry shell
 ```
 
 
