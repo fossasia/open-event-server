@@ -22,4 +22,3 @@ def upgrade():
 
 def downgrade():
     op.execute("UPDATE custom_forms SET is_public=True")
-    op.execute("UPDATE custom_forms SET is_public=True")
