@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail
+from flask_combo_jsonapi import ResourceDetail
 
 from app.api.bootstrap import api
 from app.api.schema.image_sizes import SpeakerImageSizeSchema

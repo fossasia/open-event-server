@@ -25,10 +25,10 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_json(self, data, original_data):
+    def validate_json(self, data, original_data, **kwargs):
         validate_complex_fields_json(self, data, original_data)
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
     email = fields.Str(allow_none=True)

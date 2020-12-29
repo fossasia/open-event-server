@@ -23,6 +23,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from app.api import routes  # noqa: Used for registering routes
+from app.api.bootstrap import api
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
@@ -142,7 +143,6 @@ def create_app():
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
         from app.api.custom.attendees import attendee_blueprint
-        from app.api.bootstrap import api_v1
         from app.api.celery_tasks import celery_routes
         from app.api.event_copy import event_copy
         from app.api.exports import export_routes
@@ -164,7 +164,7 @@ def create_app():
         from app.api.custom.role_invites import role_invites_routes
         from app.api.video_stream import streams_routes
 
-        app.register_blueprint(api_v1)
+        api.init_app(app)
         app.register_blueprint(event_copy)
         app.register_blueprint(upload_routes)
         app.register_blueprint(export_routes)

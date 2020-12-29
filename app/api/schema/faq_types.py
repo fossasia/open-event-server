@@ -19,7 +19,7 @@ class FaqTypeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     event = Relationship(
         self_view='v1.faq_type_event',

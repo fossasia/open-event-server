@@ -17,7 +17,7 @@ class EventLocationSchema(Schema):
         type_ = 'event-location'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     slug = fields.Str(dump_only=True)
     events = Relationship(

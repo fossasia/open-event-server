@@ -3,10 +3,10 @@ from uuid import uuid4
 
 from flask import jsonify
 from flask.blueprints import Blueprint
+from flask_combo_jsonapi import ResourceDetail, ResourceList
+from flask_combo_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.resource import ResourceRelationship
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import (

@@ -19,7 +19,7 @@ class ActivitySchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     actor = fields.Str(allow_none=True)
     time = fields.DateTime(allow_none=True)
     action = fields.Str(allow_none=True)

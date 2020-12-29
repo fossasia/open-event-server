@@ -25,14 +25,14 @@ class TrackSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema
-    def valid_color(self, data):
+    def valid_color(self, data, **kwargs):
         if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', data['color']):
             raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/color'},
                 "Color should be proper HEX color code",
             )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     color = fields.Str(required=True)

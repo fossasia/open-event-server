@@ -23,7 +23,7 @@ class FeedbackSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     rating = fields.Float(required=True, validate=Range(min=1, max=5))
     comment = fields.Str(required=False)
     event = Relationship(

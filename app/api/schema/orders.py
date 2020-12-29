@@ -5,7 +5,6 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import GetterRelationship
-from app.models import db
 from utils.common import use_defaults
 
 
@@ -43,17 +42,17 @@ class OrderSchema(Schema):
         return data
 
     @validates_schema
-    def initial_values(self, data):
+    def initial_values(self, data, **kwargs):
         if data.get('payment_mode') is None and 'POST' in request.method:
             data['payment_mode'] = 'free'
         return data
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(dump_only=True)
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
-    state = fields.Str(db.String, allow_none=True)
+    state = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     zipcode = fields.Str(allow_none=True)
     company = fields.Str(allow_none=True)

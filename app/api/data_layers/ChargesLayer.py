@@ -1,5 +1,5 @@
-from flask_rest_jsonapi.data_layers.base import BaseDataLayer
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.data_layers.base import BaseDataLayer
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.ticketing import TicketingManager

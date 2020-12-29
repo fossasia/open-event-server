@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceList
+from flask_combo_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_

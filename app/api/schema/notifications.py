@@ -20,7 +20,7 @@ class NotificationActionSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     action_type = fields.Str(allow_none=True, dump_only=True)
     subject = fields.Str(allow_none=True, dump_only=True)
     subject_id = fields.Str(allow_none=True, dump_only=True)
@@ -51,7 +51,7 @@ class NotificationSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     title = fields.Str(allow_none=True, dump_only=True)
     message = fields.Str(allow_none=True, dump_only=True)
     received_at = fields.DateTime(dump_only=True)

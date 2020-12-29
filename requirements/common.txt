@@ -46,7 +46,7 @@ pytz==2020.5
 diff-match-patch==20200713
 blinker==1.4
 envparse==0.2
-git+https://github.com/fossasia/flask-rest-jsonapi@0.12.6.3
+Flask-COMBO-JSONAPI==1.0.4
 wtforms[email]==2.3.3
 flask-admin==1.5.7
 google-compute-engine==2.8.13
@@ -63,7 +63,8 @@ gevent==20.12.1
 greenlet==0.4.17 # Required for gevent
 pyyaml==5.3.1
 sendgrid==6.4.8
-marshmallow==2.15.2
+marshmallow==3.2.1
+marshmallow-jsonapi==0.23.2
 WeasyPrint==52.2
 Flask-Babel==2.0.0
 xmltodict==0.12.0

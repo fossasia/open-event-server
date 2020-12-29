@@ -1,5 +1,5 @@
 import pytz
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
@@ -21,7 +21,7 @@ class EventSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_timezone(self, data, original_data):
+    def validate_timezone(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 event = Event.query.filter_by(id=original_data['data']['id']).one()
@@ -38,7 +38,7 @@ class EventSchemaPublic(SoftDeletionSchema):
                 "Unknown timezone: '{}'".format(data['timezone']),
             )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     external_event_url = fields.Url(allow_none=True)

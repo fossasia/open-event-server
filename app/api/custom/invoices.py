@@ -2,8 +2,8 @@ import os
 
 from flask import Blueprint
 from flask.helpers import send_from_directory
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, jwt_required
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
