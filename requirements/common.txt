@@ -64,7 +64,7 @@ greenlet==0.4.17 # Required for gevent
 pyyaml==5.3.1
 sendgrid==6.4.8
 marshmallow==2.15.2
-marshmallow-jsonapi==0.23.2
+marshmallow-jsonapi==0.24.0
 WeasyPrint==52.2
 Flask-Babel==2.0.0
 xmltodict==0.12.0
