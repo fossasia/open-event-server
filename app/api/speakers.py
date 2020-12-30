@@ -218,7 +218,6 @@ class SpeakerDetail(ResourceDetail):
             for session in all_sessions:
                 if speaker in session.speakers:
                     session_speaker_link = SessionsSpeakersLink(
-                        session_state=session.state,
                         session_id=session.id,
                         event_id=session.event.id,
                         speaker_id=speaker.id,

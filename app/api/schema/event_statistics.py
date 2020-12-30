@@ -3,7 +3,6 @@ from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
 from app.models.session import Session
-from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 
@@ -76,9 +75,16 @@ class EventStatisticsGeneralSchema(Schema):
         ).count()
 
     def speakers_count_type(self, obj, state='pending'):
-        return SessionsSpeakersLink.query.filter_by(
-            event_id=obj.id, session_state=state, deleted_at=None
-        ).count()
+        return (
+            Speaker.query.join(Speaker.sessions)
+            .distinct(Speaker.id)
+            .filter(
+                Speaker.event_id == obj.id,
+                Speaker.deleted_at == None,
+                Session.state == state,
+            )
+            .count()
+        )
 
     def speakers_count(self, obj):
         accepted = self.speakers_count_type(obj=obj, state='accepted')
