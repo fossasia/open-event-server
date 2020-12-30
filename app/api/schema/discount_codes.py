@@ -33,7 +33,7 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
     is_active = fields.Boolean()
     tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    max_quantity = fields.Integer(allow_none=True)
     valid_from = fields.DateTime(allow_none=True)
     valid_till = fields.DateTime(allow_none=True)
     used_for = fields.Str(
@@ -94,7 +94,10 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
         DiscountCodeSchemaEvent.quantity_validation_helper(data)
 
         if data.get('tickets_number') and data.get('max_quantity'):
-            if data['tickets_number'] < data['max_quantity']:
+            if (
+                data['max_quantity'] >= 0
+                and data['tickets_number'] < data['max_quantity']
+            ):
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/tickets-number'},
                     "tickets-number should be greater than max-quantity",
@@ -166,7 +169,10 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
         DiscountCodeSchemaTicket.quantity_validation_helper(data)
 
         if data.get('tickets_number') and data.get('max_quantity'):
-            if data['tickets_number'] < data['max_quantity']:
+            if (
+                data['max_quantity'] >= 0
+                and data['tickets_number'] < data['max_quantity']
+            ):
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/tickets-number'},
                     "tickets-number should be greater than max-quantity",
