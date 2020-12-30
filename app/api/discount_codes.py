@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query, safe_query_kwargs
@@ -271,8 +272,11 @@ class DiscountCodeDetail(ResourceDetail):
             )
             if discount:
                 kwargs['id'] = discount.id
-                discount_tz = discount.valid_from.tzinfo
-                current_time = datetime.now().replace(tzinfo=discount_tz)
+                if discount.valid_from:
+                    discount_tz = discount.valid_from.tzinfo
+                current_time = datetime.now().replace(
+                    tzinfo=discount_tz or timezone('UTC')
+                )
                 if not discount.is_active:
                     raise MethodNotAllowed(
                         {'parameter': '{code}'}, "Discount Code is not active"
