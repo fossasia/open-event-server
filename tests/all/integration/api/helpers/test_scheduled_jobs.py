@@ -7,7 +7,9 @@ from app.api.helpers.scheduled_jobs import (
     expire_initializing_tickets,
     expire_pending_tickets,
     send_monthly_event_invoice,
+    this_month_date,
 )
+from app.api.helpers.utilities import monthdelta
 from app.models.role import Role
 from app.models.ticket_holder import TicketHolder
 from app.models.users_events_role import UsersEventsRoles
@@ -65,7 +67,7 @@ def test_send_monthly_invoice(db):
     test_order = OrderSubFactory(
         status='completed',
         event__state='published',
-        completed_at=datetime.datetime.now() - datetime.timedelta(days=30),
+        completed_at=monthdelta(this_month_date(), -1),
         amount=100,
     )
     role, _ = get_or_create(Role, name='owner', title_name='Owner')
