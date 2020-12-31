@@ -7,5 +7,5 @@ isort==5.6.4
 black==20.8b1
 pre-commit==2.9.3
 pytype==2020.12.23
-pycln==0.0.1b0
+pycln==0.0.1b1
 pyupgrade==2.7.4
