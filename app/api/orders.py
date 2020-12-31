@@ -71,6 +71,81 @@ def check_event_user_ticket_holders(order, data, element):
             )
 
 
+def check_status_transition(order, status):
+
+    # common checks
+    if status and status not in [
+        'cancelled',
+        'completed',
+        'expired',
+        'initializing',
+        'pending',
+        'placed',
+    ]:
+        raise ConflictException(
+            {'pointer': '/data/attributes/status'}, f"Status {status} provided is invalid"
+        )
+
+    if status and order.deleted_at:
+        raise ConflictException(
+            {'pointer': '/data/attributes/status'},
+            "Status of a deleted order cannot be updated",
+        )
+
+    # should be allowed to update status in any manner
+    if has_access('is_super_admin'):
+        pass
+
+    elif has_access('is_coorganizer') or has_access('is_admin'):
+        if (
+            (order.status in ['expired', 'cancelled'] and order.status != status)
+            or (
+                order.status == 'placed'
+                and status not in ['completed', 'placed', 'cancelled']
+            )
+            or (
+                order.status == 'pending'
+                and status not in ['completed', 'expired', 'pending', 'cancelled']
+            )
+            or (
+                order.status == 'initializing'
+                and status not in ['completed', 'expired', 'pending', 'placed']
+            )
+            or (
+                order.status == 'completed'
+                and (status == 'cancelled' and order.amount or status != 'cancelled')
+            )
+        ):
+            raise ConflictException(
+                {'pointer': '/data/attributes/status'},
+                f"status of {order.status} order cannot be changed to {status}",
+            )
+
+    # users orders
+    elif current_user.id == order.user_id:
+        # not allowed to transition to completed
+        if (
+            (order.status in ['expired', 'cancelled'] and order.status != status)
+            or (order.status == 'placed' and status not in ['placed', 'cancelled'])
+            or (
+                order.status == 'pending'
+                and status not in ['expired', 'pending', 'cancelled']
+            )
+            or (
+                order.status == 'initializing'
+                and status not in ['expired', 'pending', 'placed']
+            )
+            or (
+                order.status == 'completed'
+                and (status == 'cancelled' and order.amount or status != 'cancelled')
+            )
+        ):
+            raise ConflictException(
+                {'pointer': '/data/attributes/status'},
+                f"status of {order.status} order cannot be changed to {status}",
+            )
+
+
 def is_payment_valid(order, mode):
     if mode == 'stripe':
         return (
@@ -435,6 +510,8 @@ class OrderDetail(ResourceDetail):
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify paypal payment",
             )
+        status = data.get('status', None)
+        check_status_transition(order, status)
 
     def after_update_object(self, order, data, view_kwargs):
         """
