@@ -120,7 +120,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "billingAddress": "Billing Address",
         "homeAddress": "Home Address",
         "shippingAddress": "Shipping Address",
-        "company": "Company",
+        "company": "Organisation",
         "workAddress": "Work Address",
         "workPhone": "Work Phone",
         "website": "Website",
