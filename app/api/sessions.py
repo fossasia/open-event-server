@@ -85,7 +85,6 @@ class SessionListPost(ResourceList):
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
-                session_state=session.state,
                 session_id=session.id,
                 event_id=session.event.id,
                 speaker_id=speaker.id,
@@ -331,15 +330,10 @@ class SessionDetail(ResourceDetail):
             else:
                 is_patch_request = True
 
-            if is_patch_request:
-                for focus_session in entry_count:
-                    focus_session.session_state = session.state
-                db.session.commit()
-            else:
+            if not is_patch_request:
                 current_session = Session.query.filter_by(id=session.id).first()
                 for speaker in current_session.speakers:
                     session_speaker_link = SessionsSpeakersLink(
-                        session_state=session.state,
                         session_id=session.id,
                         event_id=session.event.id,
                         speaker_id=speaker.id,
