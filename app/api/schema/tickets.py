@@ -79,6 +79,8 @@ class TicketSchemaPublic(SoftDeletionSchema):
 
     @validates_schema
     def validate_price(self, data):
+        if 'type' not in data:
+            return
         if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
             raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/price'},
