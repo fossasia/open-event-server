@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from flask import jsonify
 from flask.blueprints import Blueprint
-from flask_jwt_extended import current_user
+from flask_jwt_extended import current_user, jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
@@ -213,7 +213,7 @@ class VideoStreamDetail(ResourceDetail):
             check_same_event(room_ids)
 
     schema = VideoStreamSchema
-    decorators = (jwt_required,)
+    decorators = (jwt_optional,)
     data_layer = {
         'session': db.session,
         'model': VideoStream,
