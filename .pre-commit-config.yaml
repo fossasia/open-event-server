@@ -6,7 +6,7 @@ repos:
     -   id: pyupgrade
         args: [--py38-plus]
   - repo: https://github.com/hadialqattan/pycln
-    rev: 0.0.1-beta.1
+    rev: 0.0.1-beta.2
     hooks:
       - id: pycln
         args: [--config=pyproject.toml]
