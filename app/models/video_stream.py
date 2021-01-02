@@ -46,7 +46,7 @@ class VideoStream(db.Model):
 
     @property
     def user_is_confirmed_speaker(self):
-        if not (self.event_id or self.rooms):
+        if not current_user or not (self.event_id or self.rooms):
             return False
         query = (
             Speaker.query.filter(Speaker.email == current_user.email)
@@ -68,7 +68,7 @@ class VideoStream(db.Model):
 
     @property
     def user_is_moderator(self):
-        if not (self.event_id or self.rooms):
+        if not current_user or not (self.event_id or self.rooms):
             return False
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=self._event_id):
@@ -77,7 +77,7 @@ class VideoStream(db.Model):
 
     @property
     def user_can_access(self):
-        if not (self.event_id or self.rooms):
+        if not current_user or not (self.event_id or self.rooms):
             return False
         return (
             self.user_is_moderator
