@@ -235,6 +235,11 @@ from app.api.user_favourite_events import (
 )
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
+from app.api.users_events_roles import (
+    UsersEventsRolesDetail,
+    UsersEventsRolesList,
+    UsersEventsRolesRelationship,
+)
 from app.api.video_channel import VideoChannelDetail, VideoChannelList
 from app.api.video_stream import (
     VideoStreamDetail,
@@ -261,6 +266,7 @@ api.route(
     '/alternate-emails/<int:user_email_id>/user',
     '/favourite-events/<int:user_favourite_event_id>/user',
     '/speakers/<int:speaker_id>/user',
+    '/users-events-roles/<int:users_events_roles_id>/user',
 )
 api.route(
     UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications'
@@ -490,6 +496,7 @@ api.route(
     'role_detail',
     '/roles/<int:id>',
     '/role-invites/<int:role_invite_id>/role',
+    '/users-events-roles/<int:users_events_roles_id>/role',
 )
 
 # custom system roles
@@ -529,6 +536,32 @@ api.route(
     RoleInviteRelationship,
     'role_invite_role',
     '/role-invites/<int:id>/relationships/role',
+)
+
+# users_events_roles
+api.route(
+    UsersEventsRolesDetail, 'users_events_roles_detail', '/users-events-roles/<int:id>'
+)
+api.route(
+    UsersEventsRolesList,
+    'users_events_roles_list',
+    '/events/<int:event_id>/users-events-roles',
+    '/events/<event_identifier>/users-events-roles',
+)
+api.route(
+    UsersEventsRolesRelationship,
+    'users_events_roles_user',
+    '/users-events-roles/<int:id>/relationships/user',
+)
+api.route(
+    UsersEventsRolesRelationship,
+    'users_events_roles_event',
+    '/users-events-roles/<int:id>/relationships/event',
+)
+api.route(
+    UsersEventsRolesRelationship,
+    'users_events_roles_role',
+    '/users-events-roles/<int:id>/relationships/role',
 )
 
 # tickets
@@ -652,6 +685,7 @@ api.route(
     '/user-favourite-events/<int:user_favourite_event_id>/event',
     '/discount-codes/<int:discount_code_id>/event',
     '/video-streams/<int:video_stream_id>/event',
+    '/users-events-roles/<int:users_events_roles_id>/event',
 )
 api.route(
     EventRelationship,
