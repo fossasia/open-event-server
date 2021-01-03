@@ -4,6 +4,7 @@ from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
 from app.models import db
+from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -88,3 +89,9 @@ class VideoStream(db.Model):
                 .exists()
             ).scalar()
         )
+
+    def __setattr__(self, name, value):
+        if name == 'additional_information':
+            super().__setattr__(name, clean_html(clean_up_string(value)))
+        else:
+            super().__setattr__(name, value)
