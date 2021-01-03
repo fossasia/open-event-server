@@ -58,7 +58,10 @@ from tests.factories.ticket_tag import TicketTagFactory
 from tests.factories.role import RoleFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.role_invite import RoleInviteFactory
-from tests.factories.users_events_roles import UsersEventsRolesFactory
+from tests.factories.users_events_roles import (
+    UsersEventsRolesFactory,
+    UsersEventsRolesSubFactory,
+)
 from tests.factories.custom_placeholder import CustomPlaceholderFactory
 from tests.factories.user_permission import UserPermissionFactory
 from tests.factories.email_notification import EmailNotificationFactory
@@ -3447,7 +3450,7 @@ def users_events_roles_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        users_events_roles = UsersEventsRolesFactory()
+        users_events_roles = UsersEventsRolesSubFactory()
         db.session.add(users_events_roles)
         db.session.commit()
 
