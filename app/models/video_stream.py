@@ -4,6 +4,7 @@ from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
 from app.models import db
+from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -41,8 +42,24 @@ class VideoStream(db.Model):
     )
     channel = db.relationship(VideoChannel, backref='streams')
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.additional_information = clean_up_string(
+            kwargs.get('additional_information')
+        )
+
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
+
+    def __setattr__(self, name, value):
+        allow_link = name == 'additional_information'
+        if name == 'additional_information':
+            super().__setattr__(
+                name, clean_html(clean_up_string(value), allow_link=allow_link)
+            )
+        else:
+            super().__setattr__(name, value)
 
     @property
     def user_is_confirmed_speaker(self):
