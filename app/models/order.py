@@ -171,6 +171,20 @@ class Order(db.Model):
         return query_.all()
 
     @property
+    def safe_user(self):
+        from app.api.helpers.permission_manager import has_access
+
+        if (
+            not has_access(
+                'is_coorganizer',
+                event_id=self.event_id,
+            )
+            and current_user.id != self.user_id
+        ):
+            return None
+        return self.user
+
+    @property
     def site_view_link(self) -> str:
         frontend_url = get_settings()['frontend_url']
         return frontend_url + '/orders/' + self.identifier + '/view'

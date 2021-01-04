@@ -1511,7 +1511,9 @@ api.route(
     OrderRelationship, 'order_ticket', '/orders/<order_identifier>/relationships/ticket'
 )
 api.route(
-    OrderRelationship, 'order_user', '/orders/<order_identifier>/relationships/user'
+    OrderRelationship,
+    'order_user',
+    '/orders/<order_identifier>/relationships/user',
 )
 api.route(
     OrderRelationship, 'order_event', '/orders/<order_identifier>/relationships/event'
