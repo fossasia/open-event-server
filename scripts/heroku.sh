@@ -1,12 +1,12 @@
 #!/bin/bash
 python3 manage.py db upgrade
-python3 populate_db.py
+python3 populate_db.py &
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
 chmod -R 0777 ./static
-./scripts/l10n.sh generate
-celery -A app.instance.celery worker --loglevel=info -c 2 &
+./scripts/l10n.sh generate &
+celery -A app.instance.celery worker --loglevel=info -c 1 &
 if [ "$APP_CONFIG" = "config.DevelopmentConfig" ]; then
     python manage.py runserver -h 0.0.0.0 -p ${PORT:-8000} --no-reload
 else
