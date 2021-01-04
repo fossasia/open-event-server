@@ -20,7 +20,7 @@ humanize==3.2.0
 celery==5.0.5
 redis==3.5.3
 apscheduler==3.6.3
-pillow==8.0.1
+pillow==8.1.0
 gunicorn==20.0.4
 boto==2.49
 geoip2==4.1.0
