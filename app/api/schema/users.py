@@ -279,20 +279,15 @@ class UserSchema(UserSchemaPublic):
 
     @pre_dump
     def handle_deleted_users(self, data):
-        user = None
-        if (
-            not (
-                is_logged_in
-                and current_user
-                and data
-                and (current_user.is_staff or current_user.id == data.id)
-            )
-            and data.deleted_at != None
+        if not data:
+            return data
+        if data.deleted_at != None and not (
+            is_logged_in
+            and current_user
+            and (current_user.is_staff or current_user.id == data.id)
         ):
-            user = User()
-            user.email = 'deleted@eventyay.com'
-            user.first_name = 'deleted'
-            user.last_name = 'user'
-            user.deleted_at = data.deleted_at
-            user.id = data.id
-        return user if user else data
+            user = User(
+                id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
+            )
+            return user
+        return data
