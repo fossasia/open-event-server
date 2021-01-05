@@ -6,6 +6,10 @@ class Role(db.Model):
 
     __tablename__ = 'roles'
 
+    OWNER = 'owner'
+    ORGANIZER = 'organizer'
+    COORGANIZER = 'coorganizer'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
     title_name = db.Column(db.String)

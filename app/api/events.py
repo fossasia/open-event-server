@@ -47,12 +47,8 @@ from app.models.ticket import Ticket, TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import (
-    ATTENDEE,
-    COORGANIZER,
     MARKETER,
     MODERATOR,
-    ORGANIZER,
-    OWNER,
     REGISTRAR,
     SALES_ADMIN,
     TRACK_ORGANIZER,
@@ -131,9 +127,9 @@ class EventList(ResourceList):
                 .join(UsersEventsRoles.role)
                 .filter(
                     or_(
-                        Role.name == COORGANIZER,
-                        Role.name == ORGANIZER,
-                        Role.name == OWNER,
+                        Role.name == Role.COORGANIZER,
+                        Role.name == Role.ORGANIZER,
+                        Role.name == Role.OWNER,
                     )
                 )
             )
@@ -143,12 +139,7 @@ class EventList(ResourceList):
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = (
-                query_.join(Event.roles)
-                .filter_by(user_id=user.id)
-                .join(UsersEventsRoles.role)
-                .filter(Role.name != ATTENDEE)
-            )
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -160,7 +151,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == OWNER)
+                .filter(Role.name == Role.OWNER)
             )
 
         if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
@@ -174,7 +165,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == ORGANIZER)
+                .filter(Role.name == Role.ORGANIZER)
             )
 
         if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
@@ -187,7 +178,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == COORGANIZER)
+                .filter(Role.name == Role.COORGANIZER)
             )
 
         if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
@@ -308,7 +299,7 @@ class EventList(ResourceList):
         :return:
         """
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
-        role = Role.query.filter_by(name=OWNER).first()
+        role = Role.query.filter_by(name=Role.OWNER).first()
         uer = UsersEventsRoles(user=user, event=event, role=role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(

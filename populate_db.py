@@ -36,15 +36,7 @@ from app.models.setting import Setting
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.user import (
-    ATTENDEE,
-    COORGANIZER,
-    MODERATOR,
-    ORGANIZER,
-    OWNER,
-    REGISTRAR,
-    TRACK_ORGANIZER,
-)
+from app.models.user import MODERATOR, REGISTRAR, TRACK_ORGANIZER
 
 # User Permissions
 from app.models.user_permission import UserPermission
@@ -63,13 +55,14 @@ CONTENT = 'content'
 
 
 def create_roles():
-    get_or_create(Role, name=ORGANIZER, title_name='Organizer')
-    get_or_create(Role, name=COORGANIZER, title_name='Co-organizer')
+    get_or_create(Role, name=Role.ORGANIZER, title_name='Organizer')
+    get_or_create(Role, name=Role.COORGANIZER, title_name='Co-Organizer')
+    get_or_create(Role, name=Role.OWNER, title_name='Owner')
+
+    # Deprecated
     get_or_create(Role, name=TRACK_ORGANIZER, title_name='Track Organizer')
     get_or_create(Role, name=MODERATOR, title_name='Moderator')
-    get_or_create(Role, name=ATTENDEE, title_name='Attendee')
     get_or_create(Role, name=REGISTRAR, title_name='Registrar')
-    get_or_create(Role, name=OWNER, title_name='Owner')
 
 
 def create_services():
@@ -239,23 +232,21 @@ def create_event_locations():
 
 
 def create_permissions():
-    orgr = Role.query.get(1)
-    coorgr = Role.query.get(2)
-    track_orgr = Role.query.get(3)
-    mod = Role.query.get(4)
-    attend = Role.query.get(5)
-    regist = Role.query.get(6)
-    ownr = Role.query.get(7)
-    track = Service.query.get(1)
-    session = Service.query.get(2)
-    speaker = Service.query.get(3)
-    sponsor = Service.query.get(4)
-    microlocation = Service.query.get(5)
+    ownr = Role.query.filter_by(name=Role.OWNER).first()
+    orgr = Role.query.filter_by(name=Role.ORGANIZER).first()
+    coorgr = Role.query.filter_by(name=Role.COORGANIZER).first()
+    track_orgr = Role.query.filter_by(name=TRACK_ORGANIZER).first()
+    mod = Role.query.filter_by(name=MODERATOR).first()
+    regist = Role.query.filter_by(name=REGISTRAR).first()
+    track = Service.query.filter_by(name=Track.get_service_name()).first()
+    session = Service.query.filter_by(name=Session.get_service_name()).first()
+    speaker = Service.query.filter_by(name=Speaker.get_service_name()).first()
+    sponsor = Service.query.filter_by(name=Sponsor.get_service_name()).first()
+    microlocation = Service.query.filter_by(name=Microlocation.get_service_name()).first()
 
     # For ORGANIZER and OWNER
     # All four permissions set to True
     services = [track, session, speaker, sponsor, microlocation]
-    roles = [attend, regist]
     for service in services:
         perm, _ = get_or_create(Permission, role=ownr, service=service)
         db.session.add(perm)
@@ -283,14 +274,12 @@ def create_permissions():
         perm.can_create, perm.can_update, perm.can_delete = False, False, False
         db.session.add(perm)
 
-    # For ATTENDEE and REGISTRAR
+    # For REGISTRAR
     services = [track, session, speaker, sponsor, microlocation]
-    roles = [attend, regist]
-    for role in roles:
-        for service in services:
-            perm, _ = get_or_create(Permission, role=role, service=service)
-            perm.can_create, perm.can_update, perm.can_delete = False, False, False
-            db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=regist, service=service)
+        perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
 
 def create_custom_sys_roles():
