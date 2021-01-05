@@ -1,12 +1,9 @@
 import json
 
-from flask_jwt_extended.utils import create_access_token
-
 from app.api.helpers.db import get_or_create
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
 from tests.factories.attendee import AttendeeOrderTicketSubFactory
-from tests.factories.user import UserFactory
 
 
 def get_minimal_attendee(db, user=None, owner=False, event_status='published'):
@@ -19,68 +16,6 @@ def get_minimal_attendee(db, user=None, owner=False, event_status='published'):
     db.session.commit()
 
     return attendee
-
-
-def test_get_attendee_user(db, client, user, jwt, admin_user, admin_jwt):
-
-    attendee = get_minimal_attendee(db, user)
-    organizer_user = UserFactory(is_admin=False)
-    role = get_or_create(Role, name='ORGANIZER', title_name='Organizer')
-    UsersEventsRoles(user=organizer_user, event_id=attendee.event_id, role=role)
-    db.session.commit()
-
-    response = client.get(
-        f'/v1/attendees/{attendee.id}?include=user',
-        content_type='application/vnd.api+json',
-        headers=admin_jwt,
-    )
-
-    assert response.status_code == 200
-    assert json.loads(response.data)['included'][0]['attributes']['email'] == user.email
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['first-name']
-        == user.first_name
-    )
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['last-name']
-        == user.last_name
-    )
-
-    response = client.get(
-        f'/v1/attendees/{attendee.id}?include=user',
-        content_type='application/vnd.api+json',
-        headers={
-            'Authorization': "JWT " + create_access_token(organizer_user.id, fresh=True)
-        },
-    )
-
-    assert response.status_code == 200
-    assert json.loads(response.data)['included'][0]['attributes']['email'] == user.email
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['first-name']
-        == user.first_name
-    )
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['last-name']
-        == user.last_name
-    )
-
-    response = client.get(
-        f'/v1/attendees/{attendee.id}?include=user',
-        content_type='application/vnd.api+json',
-        headers=jwt,
-    )
-
-    assert response.status_code == 200
-    assert json.loads(response.data)['included'][0]['attributes']['email'] == user.email
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['first-name']
-        == user.first_name
-    )
-    assert (
-        json.loads(response.data)['included'][0]['attributes']['last-name']
-        == user.last_name
-    )
 
 
 def test_get_attendees_error(db, client, user, jwt, admin_user, admin_jwt):
