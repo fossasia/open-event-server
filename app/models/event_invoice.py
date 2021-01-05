@@ -148,7 +148,6 @@ class EventInvoice(SoftDeletionModel):
                 func.max(Order.completed_at)
             ).scalar()
             payment_details = {
-                'tickets_sold': self.event.tickets_sold,
                 'gross_revenue': round_money(gross_revenue),
                 'net_revenue': round_money(net_revenue),
                 'first_date': first_order_date or self.previous_month_date,
