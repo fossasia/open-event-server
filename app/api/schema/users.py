@@ -1,8 +1,12 @@
+from flask_jwt_extended import current_user
+from marshmallow import pre_dump
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.permission_manager import is_logged_in
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from app.models.user import User
 from utils.common import use_defaults
 
 
@@ -272,3 +276,18 @@ class UserSchema(UserSchemaPublic):
         type_='event',
         many=True,
     )
+
+    @pre_dump
+    def handle_deleted_users(self, data):
+        if not data:
+            return data
+        if data.deleted_at != None and not (
+            is_logged_in
+            and current_user
+            and (current_user.is_staff or current_user.id == data.id)
+        ):
+            user = User(
+                id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
+            )
+            return user
+        return data
