@@ -43,7 +43,7 @@ def jwt_required(fn, realm=None):
     @wraps(fn)
     def decorator(*args, **kwargs):
         verify_jwt_in_request()
-        current_user.last_accessed_at = datetime.utcnow()
+        current_user.last_accessed_at = datetime.now()
         save_to_db(current_user)
         return fn(*args, **kwargs)
 

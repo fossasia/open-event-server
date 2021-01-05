@@ -427,7 +427,7 @@ class User(SoftDeletionModel):
 
     # update last access time
     def update_lat(self):
-        self.last_accessed_at = datetime.now(pytz.utc)
+        self.last_accessed_at = datetime.now()
 
     # Deprecated
     @property
