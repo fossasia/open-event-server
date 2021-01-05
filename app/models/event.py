@@ -15,13 +15,13 @@ from app.models.event_topic import EventTopic
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.order import Order
+from app.models.role import Role
 from app.models.search import sync
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee, get_maximum_fee
 from app.models.ticket_holder import TicketHolder
-from app.models.user import ATTENDEE, ORGANIZER, OWNER
 from app.settings import get_settings
 
 
@@ -214,7 +214,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
+        ' and_(Role.id == UsersEventsRoles.role_id))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='events',
@@ -310,31 +310,12 @@ class Event(SoftDeletionModel):
     def average_rating(self):
         return self.get_average_rating()
 
-    def get_organizer(self):
-        """returns organizer of an event"""
-        for role in self.roles:
-            if role.role.name == ORGANIZER:
-                return role.user
-        return None
-
     def get_owner(self):
         """returns owner of an event"""
         for role in self.roles:
-            if role.role.name == OWNER:
+            if role.role.name == Role.OWNER:
                 return role.user
         return None
-
-    def has_staff_access(self, user_id):
-        """does user have role other than attendee"""
-        for _ in self.roles:
-            if _.user_id == (login.current_user.id if not user_id else int(user_id)):
-                if _.role.name != ATTENDEE:
-                    return True
-        return False
-
-    def get_staff_roles(self):
-        """returns only roles which are staff i.e. not attendee"""
-        return [role for role in self.roles if role.role.name != ATTENDEE]
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

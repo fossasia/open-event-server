@@ -11,7 +11,7 @@ sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 from flask_migrate import Migrate
 from flask import Flask
 from app.models import db
-from app.models.user import OWNER
+from app.models.role import Role
 from app.models.user_token_blacklist import (  # noqa
     UserTokenBlackListTime,
 )  # Workaround for registering unimported model
@@ -353,7 +353,9 @@ def event_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        RoleFactory(name=OWNER)  # TODO: Change to get_or_create in event after_created
+        RoleFactory(
+            name=Role.OWNER
+        )  # TODO: Change to get_or_create in event after_created
         db.session.commit()
 
 
