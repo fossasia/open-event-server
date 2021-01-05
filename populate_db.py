@@ -55,14 +55,14 @@ CONTENT = 'content'
 
 
 def create_roles():
-    get_or_create(Role, name=Role.ORGANIZER, title_name='Organizer')
-    get_or_create(Role, name=Role.COORGANIZER, title_name='Co-Organizer')
-    get_or_create(Role, name=Role.OWNER, title_name='Owner')
+    get_or_create(Role, name=Role.ORGANIZER, defaults=dict(title_name='Organizer'))
+    get_or_create(Role, name=Role.COORGANIZER, defaults=dict(title_name='Co-Organizer'))
+    get_or_create(Role, name=Role.OWNER, defaults=dict(title_name='Owner'))
 
     # Deprecated
-    get_or_create(Role, name=TRACK_ORGANIZER, title_name='Track Organizer')
-    get_or_create(Role, name=MODERATOR, title_name='Moderator')
-    get_or_create(Role, name=REGISTRAR, title_name='Registrar')
+    get_or_create(Role, name=TRACK_ORGANIZER, defaults=dict(title_name='Track Organizer'))
+    get_or_create(Role, name=MODERATOR, defaults=dict(title_name='Moderator'))
+    get_or_create(Role, name=REGISTRAR, defaults=dict(title_name='Registrar'))
 
 
 def create_services():
