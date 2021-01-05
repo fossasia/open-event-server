@@ -3441,7 +3441,7 @@ def users_events_roles_get_detail(transaction):
 
 
 @hooks.before(
-    "Users Events Roles > Users Events Roles Detail > Update Users Events Roles"
+    "Users Events Roles > Users Events Roles Details > Update Users Events Roles"
 )
 def users_events_roles_patch(transaction):
     """
