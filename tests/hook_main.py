@@ -58,6 +58,10 @@ from tests.factories.ticket_tag import TicketTagFactory
 from tests.factories.role import RoleFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.role_invite import RoleInviteFactory
+from tests.factories.users_events_roles import (
+    UsersEventsRolesFactory,
+    UsersEventsRolesSubFactory,
+)
 from tests.factories.custom_placeholder import CustomPlaceholderFactory
 from tests.factories.user_permission import UserPermissionFactory
 from tests.factories.email_notification import EmailNotificationFactory
@@ -3402,6 +3406,67 @@ def role_invite_delete(transaction):
     with stash['app'].app_context():
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
+        db.session.commit()
+
+
+# ------------------------- Users Events Roles -------------------------
+@hooks.before(
+    "Users Events Roles > Users Events Roles Collection List > List All Users Events Roles"
+)
+def users_events_roles_list(transaction):
+    """
+    GET /events/1/users-events-roles
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        users_events_roles = UsersEventsRolesFactory()
+        db.session.add(users_events_roles)
+        db.session.commit()
+
+
+@hooks.before(
+    "Users Events Roles > Users Events Roles Details > Users Events Roles Details"
+)
+def users_events_roles_get_detail(transaction):
+    """
+    GET /users-events-roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        users_events_roles = UsersEventsRolesFactory()
+        db.session.add(users_events_roles)
+        db.session.commit()
+
+
+@hooks.before(
+    "Users Events Roles > Users Events Roles Details > Update Users Events Roles"
+)
+def users_events_roles_patch(transaction):
+    """
+    PATCH /users-events-roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        users_events_roles = UsersEventsRolesSubFactory()
+        db.session.add(users_events_roles)
+        db.session.commit()
+
+
+@hooks.before(
+    "Users Events Roles > Users Events Roles Details > Delete Users Events Roles"
+)
+def users_events_roles_delete(transaction):
+    """
+    DELETE /users-events-roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        users_events_roles = UsersEventsRolesFactory()
+        db.session.add(users_events_roles)
         db.session.commit()
 
 
