@@ -1,3 +1,5 @@
+import json
+
 from app.api.helpers.db import get_or_create
 from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
@@ -59,3 +61,27 @@ def test_event_draft_get_admin(db, client, admin_jwt):
     )
 
     assert response.status_code == 200
+
+
+def test_event_get_user_role(client, db, user, jwt):
+    event = get_event(db, user)
+
+    response = client.get(
+        f'/v1/events/{event.id}/relationships/roles',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    assert len(json.loads(response.data)['data']) == 1
+
+    response = client.get(
+        f'/v1/events/{event.id}?include=roles.user',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    assert (
+        json.loads(response.data)['included'][0]['relationships']['user']['data'] != None
+    )
