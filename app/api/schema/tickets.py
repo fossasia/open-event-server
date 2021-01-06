@@ -77,6 +77,12 @@ class TicketSchemaPublic(SoftDeletionSchema):
                     "quantity should be greater than or equal to max-order",
                 )
 
+        if 'quantity' in data and data['quantity'] <= 0:
+            raise UnprocessableEntityError(
+                {'pointer': '/data/attributes/quantity'},
+                "quantity should be greater than 0",
+            )
+
     @validates_schema
     def validate_price(self, data):
         if 'type' not in data:
