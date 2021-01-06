@@ -75,7 +75,7 @@ def fix_event_and_speaker_images():
 
 @manager.command
 def fix_digit_identifier():
-    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
+    events = Event.query.filter(Event.identifier.op('~')(r'^[0-9\.]+$')).all()
     for event in events:
         event.identifier = get_new_event_identifier()
         db.session.add(event)
@@ -147,7 +147,7 @@ def initialize_db(credentials):
 
 
 @manager.command
-def prepare_kubernetes_db(credentials='open_event_test_user@fossasia.org:fossasia'):
+def prepare_db(credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
         initialize_db(credentials)
 
