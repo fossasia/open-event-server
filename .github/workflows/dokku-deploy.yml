@@ -1,0 +1,28 @@
+name: 'Dokku Deploy'
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+    
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@v1.0.1
+        with:
+          git_remote_url: 'ssh://dokku@dokku.fossasia.org/open-event'
+          branch: development
+          git_push_flags: -f
+          ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
