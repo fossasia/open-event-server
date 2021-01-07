@@ -340,6 +340,11 @@ api.route(
 )
 api.route(
     UserRelationship,
+    'user_user_favourite_sessions',
+    '/users/<int:id>/relationships/favourite-sessions',
+)
+api.route(
+    UserRelationship,
     'user_marketer_events',
     '/users/<int:id>/relationships/marketer-events',
 )
