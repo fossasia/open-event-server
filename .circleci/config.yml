@@ -143,6 +143,7 @@ jobs:
           name: Test
           command: |
             . venv/bin/activate
+            ./scripts/test_multiple_heads.sh
             mkdir test-results
             pytest tests -v --junitxml=test-results/junit.xml --cov=.
 
