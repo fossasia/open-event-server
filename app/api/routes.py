@@ -858,6 +858,12 @@ api.route(
 # Events -> roles:
 api.route(
     EventRelationship,
+    'event_users_events_roles',
+    '/events/<int:id>/relationships/roles',
+    '/events/<identifier>/relationships/roles',
+)
+api.route(
+    EventRelationship,
     'event_owner',
     '/events/<int:id>/relationships/owner',
     '/events/<identifier>/relationships/owner',
