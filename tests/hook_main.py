@@ -75,7 +75,7 @@ from tests.factories.feedback import FeedbackFactory
 from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
-
+from tests.factories.user_favourite_sessions import UserFavouriteSessionFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
@@ -4651,6 +4651,65 @@ def favourite_event_delete(transaction):
     with stash['app'].app_context():
         user_fav_event = UserFavouriteEventFactory()
         db.session.add(user_fav_event)
+        db.session.commit()
+
+
+# ------------------------- User Favourite Sessions -------------------------
+
+
+@hooks.before(
+    "Favourite Sessions > Favourite Sessions Collection > List All Favourite Sessions"
+)
+def favourite_sessions_list_get(transaction):
+    """
+    GET /user-favourite-sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_session = UserFavouriteSessionFactory()
+        db.session.add(user_fav_session)
+        db.session.commit()
+
+
+@hooks.before(
+    "Favourite Sessions > Favourite Sessions Collection > Create a Favourite Session"
+)
+def favourite_sessions_list_post(transaction):
+    """
+    POST /user-favourite-sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactoryBasic()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Favourite Sessions > Favourite Sessions Detail > Get Details")
+def favourite_session_details_get(transaction):
+    """
+    GET /user-favourite-sessions/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_session = UserFavouriteSessionFactory()
+        db.session.add(user_fav_session)
+        db.session.commit()
+
+
+@hooks.before("Favourite Sessions > Favourite Sessions Detail > Delete Favourite Session")
+def favourite_session_delete(transaction):
+    """
+    DELETE /user-favourite-sessions/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_session = UserFavouriteSessionFactory()
+        db.session.add(user_fav_session)
         db.session.commit()
 
 
