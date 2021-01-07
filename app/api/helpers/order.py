@@ -115,6 +115,7 @@ def create_pdf_tickets_for_holder(order):
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
             upload_dir='generated/invoices/',
+            new_renderer=True,
         )
         save_to_db(order)
 
