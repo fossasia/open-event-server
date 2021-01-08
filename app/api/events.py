@@ -5,6 +5,7 @@ from flask import request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended.view_decorators import jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -63,18 +64,22 @@ from app.models.video_stream import VideoStream
 events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
 
 
+@jwt_optional
 @events_blueprint.route('/<int:id>/has-streams')
 def has_streams(id: int):
     event = get_event_query().filter_by(id=id).first_or_404()
 
+    exists = False
     if event.video_stream:
-        return jsonify(True)
-    exists = db.session.query(
-        VideoStream.query.join(VideoStream.rooms)
-        .filter(Microlocation.event_id == id)
-        .exists()
-    ).scalar()
-    return jsonify(exists)
+        exists = True
+    else:
+        exists = db.session.query(
+            VideoStream.query.join(VideoStream.rooms)
+            .filter(Microlocation.event_id == id)
+            .exists()
+        ).scalar()
+    can_access = VideoStream(event_id=id).user_can_access
+    return jsonify(dict(exists=exists, can_access=can_access))
 
 
 def validate_event(user, data):
