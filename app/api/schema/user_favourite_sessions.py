@@ -1,11 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class UserFavouriteSessionSchema(SoftDeletionSchema):
+class UserFavouriteSessionSchema(Schema):
     """
     Api schema for User Favourite Session Model
     """

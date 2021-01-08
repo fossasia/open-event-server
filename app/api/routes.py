@@ -971,13 +971,12 @@ api.route(
 # user favourite sessions
 api.route(
     UserFavouriteSessionListPost,
-    'user_favourite_session_post',
+    'user_favourite_session_list_post',
     '/user-favourite-sessions',
 )
 api.route(
     UserFavouriteSessionList,
     'user_favourite_sessions_list',
-    '/user-favourite-sessions',
     '/users/<int:user_id>/favourite-sessions',
     '/sessions/<int:session_id>/favourite-sessions',
     '/events/<int:event_id>/favourite-sessions',
@@ -1048,6 +1047,11 @@ api.route(
     SessionRelationshipOptional,
     'session_feedbacks',
     '/sessions/<int:id>/relationships/feedbacks',
+)
+api.route(
+    SessionRelationshipOptional,
+    'session_user_favourite_sessions',
+    '/sessions/<int:id>/relationships/favourite-sessions',
 )
 
 # social_links
