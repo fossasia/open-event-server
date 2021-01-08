@@ -32,6 +32,14 @@ def get_new_event_identifier(length=8):
 class Event(SoftDeletionModel):
     """Event object table"""
 
+    class State:
+        PUBLISHED = 'published'
+        DRAFT = 'draft'
+
+    class Privacy:
+        PUBLIC = 'public'
+        PRIVATE = 'private'
+
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
