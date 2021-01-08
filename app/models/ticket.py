@@ -139,7 +139,7 @@ class Ticket(SoftDeletionModel):
 
     def raise_if_unavailable(self):
         if not self.is_available:
-            raise ConflictError({'id': self.id}, f"Ticket {self.name} already sold out")
+            raise ConflictError({'id': self.id}, f'Ticket "{self.name}" already sold out')
 
     def __repr__(self):
         return '<Ticket %r>' % self.name
