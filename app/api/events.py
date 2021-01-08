@@ -65,9 +65,14 @@ events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/event
 
 
 @jwt_optional
-@events_blueprint.route('/<int:id>/has-streams')
-def has_streams(id: int):
-    event = get_event_query().filter_by(id=id).first_or_404()
+@events_blueprint.route('/<id>/has-streams')
+def has_streams(id):
+    query = get_event_query()
+    if id.isnumeric():
+        query = query.filter_by(id=id)
+    else:
+        query = query.filter_by(identifier=id)
+    event = query.first_or_404()
 
     exists = False
     if event.video_stream:
