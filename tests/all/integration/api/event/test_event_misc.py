@@ -38,7 +38,7 @@ def test_event_stream_rooms(db, client):
 def test_event_stream_access(db, client, user, jwt):
     event = EventFactoryBasic(state='published')
     VideoStreamFactoryBase(event=event)
-    AttendeeOrderSubFactory(event=event, user=user, order__status='completed')
+    AttendeeOrderSubFactory(event=event, email=user.email, order__status='completed')
     db.session.commit()
 
     response = client.get(f'/v1/events/{event.id}/has-streams', headers=jwt)
@@ -49,7 +49,7 @@ def test_event_stream_access(db, client, user, jwt):
 def test_event_stream_rooms(db, client, user, jwt):
     event = EventFactoryBasic(state='published')
     MicrolocationSubVideoStreamFactory(event=event)
-    AttendeeOrderSubFactory(event=event, user=user, order__status='completed')
+    AttendeeOrderSubFactory(event=event, email=user.email, order__status='completed')
     db.session.commit()
 
     response = client.get(f'/v1/events/{event.id}/has-streams', headers=jwt)
