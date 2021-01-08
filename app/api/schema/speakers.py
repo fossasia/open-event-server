@@ -53,7 +53,7 @@ class SpeakerSchema(SoftDeletionSchema):
     country = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     gender = fields.Str(allow_none=True)
-    rank = fields.Integer(allow_none=True, default=0)
+    order = fields.Integer(allow_none=True, default=0)
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
     complex_field_values = CustomFormValueField(allow_none=True)
