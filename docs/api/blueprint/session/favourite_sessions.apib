@@ -66,7 +66,107 @@ This Group's APIs can be used for adding a particular session to the favourite l
 
 ## Favourite Sessions Collection List [/v1/user/1/favourite-sessions]
 
-### List All Favourite Sessions [GET]
+### List All Favourite Sessions of an User [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-session",
+                    "id": "1",
+                    "relationships": {
+                        "session": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/session",
+                                "related": "/v1/user-favourite-sessions/1/session"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/user",
+                                "related": "/v1/favourite-sessions/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-sessions/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-sessions"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Collection List [/v1/session/1/favourite-sessions]
+
+### List All Favourite Sessions of a Session [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-session",
+                    "id": "1",
+                    "relationships": {
+                        "session": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/session",
+                                "related": "/v1/user-favourite-sessions/1/session"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/user",
+                                "related": "/v1/favourite-sessions/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-sessions/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-sessions"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Collection List [/v1/event/1/favourite-sessions]
+
+### List All Favourite Sessions of an Event [GET]
 
 + Request
 

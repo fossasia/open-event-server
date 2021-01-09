@@ -4658,7 +4658,7 @@ def favourite_event_delete(transaction):
 
 
 @hooks.before(
-    "Favourite Sessions > Favourite Sessions Collection > List All Favourite Sessions"
+    "Favourite Sessions > Favourite Sessions Collection List > List All Favourite Sessions"
 )
 def favourite_sessions_list_get(transaction):
     """
