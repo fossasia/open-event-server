@@ -19,7 +19,7 @@ def get_dates(event_identifier):
                 .distinct()
                 .filter(Session.event_id==event.id, Session.starts_at != None, or_(Session.state == 'accepted', Session.state == 'confirmed'))
                 .order_by(asc(func.date(Session.starts_at)))
-                .all())
-            )[0]
+                .all()
+            ))[0]
     )
     return jsonify(dates)
