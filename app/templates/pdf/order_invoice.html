@@ -148,17 +148,17 @@
       {% if order.status != "deleted" %}
           {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
-            <div>{{ order.Company or '' }}</div>
-            <div class="preserve-newline">{{ order.address or '' }}</div>
-            <div>{{ order.tax_business_info or '' }}</div>
-            <div>{{ order.city or '' }}</div>
-            <div>{{ order.state or '' }}</div>
-            <div>{{ order.zipcode or '' }}</div>
-            <div>{{ order.country or '' }}</div>
+            <div>{{ order.Company or '' }}</div><br/>
+            <div class="preserve-newline">{{ order.address or '' }}</div><br/>
+            <div>{{ order.tax_business_info or '' }}</div><br/>
+            <div>{{ order.city or '' }}</div><br/>
+            <div>{{ order.state or '' }}</div><br/>
+            <div>{{ order.zipcode or '' }}</div><br/>
+            <div>{{ order.country or '' }}</div><br/>
           </div>
           {% endif %}
           <div id="project">
-            <div><span>Order Number</span> {{ order.get_invoice_number() }}</div>
+            <div><span>Order Number</span> {{ order.get_invoice_number() }}</div><br/>
             <div><span>Order By</span>
               {% if order.user and order.user.first_name and order.user.last_name %}
                   {{ order.user.fullname }}
@@ -167,7 +167,7 @@
               {% else %}
                   {{ ('Information unavailable') }}
               {% endif %}
-            </div>
+            </div><br/>
             <div><span>Order Status</span>
               {% if order.status == 'completed' %}
                   {{ order.status | capitalize }}
@@ -180,23 +180,23 @@
               {% else %}
                   {{ order.status | capitalize }}
               {% endif %}
-            </div>
-            <div><span>Quantity</span> {{ order.tickets_count }}</div>
-            <div><span>Total Amount</span> {{ event.payment_currency }}{{ order.amount | money }}</div>
+            </div><br/>
+            <div><span>Quantity</span> {{ order.tickets_count }}</div><br/>
+            <div><span>Total Amount</span> {{ event.payment_currency }}{{ order.amount | money }}</div><br/>
             <div><span>Payment Mode</span>
               {% if order.status == 'completed' %}
                   {{ order.paid_via | capitalize }}
               {% else %}
                   {{ ('Payment pending') }}
               {% endif %}  
-            </div>
+            </div><br/>
             <div><span>Discount Code</span>
               {% if order.discount_code %}
                   {{ order.discount_code.code }}<br>
               {% else %}
                   {{ ('NA') }}
               {% endif %}
-            </div>
+            </div><br/>
           </div>
         {% endif %}
     </header>
