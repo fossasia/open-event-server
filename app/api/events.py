@@ -653,6 +653,7 @@ class UpcomingEventList(EventList):
                 or_(
                     Event.is_promoted,
                     and_(
+                        Event.is_demoted == False,
                         Event.original_image_url != None,
                         Event.logo_url != None,
                         Event.event_type_id != None,
