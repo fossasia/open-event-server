@@ -57,6 +57,7 @@ class Event(SoftDeletionModel):
     searchable_location_name = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
+    no_front = db.Column(db.Boolean, default=False, nullable=False)
     description = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)

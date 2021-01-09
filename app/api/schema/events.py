@@ -73,6 +73,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     schedule_published_on = fields.DateTime(allow_none=True)
     is_featured = fields.Bool(default=False)
     is_promoted = fields.Bool(default=False)
+    no_front = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
