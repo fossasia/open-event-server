@@ -164,6 +164,7 @@ def create_app():
         from app.api.custom.role_invites import role_invites_routes
         from app.api.custom.events import events_routes
         from app.api.video_stream import streams_routes
+        from app.api.events import events_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -190,6 +191,7 @@ def create_app():
         app.register_blueprint(streams_routes)
         app.register_blueprint(role_invites_routes)
         app.register_blueprint(events_routes)
+        app.register_blueprint(events_blueprint)
 
         add_engine_pidguard(db.engine)
 

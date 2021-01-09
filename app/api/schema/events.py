@@ -420,3 +420,12 @@ class EventSchema(EventSchemaPublic):
         many=True,
         type_='attendee',
     )
+    roles = Relationship(
+        self_view='v1.event_users_events_roles',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.users_events_roles_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='UsersEventsRolesSchema',
+        type_='users-events-roles',
+        many=True,
+    )

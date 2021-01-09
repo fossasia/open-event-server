@@ -2,7 +2,10 @@ from datetime import datetime
 
 import pytz
 from flask import request
+from flask.blueprints import Blueprint
+from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended.view_decorators import jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -58,15 +61,40 @@ from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
 from app.models.video_stream import VideoStream
 
+events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
+
+
+@jwt_optional
+@events_blueprint.route('/<id>/has-streams')
+def has_streams(id):
+    query = get_event_query()
+    if id.isnumeric():
+        query = query.filter_by(id=id)
+    else:
+        query = query.filter_by(identifier=id)
+    event = query.first_or_404()
+
+    exists = False
+    if event.video_stream:
+        exists = True
+    else:
+        exists = db.session.query(
+            VideoStream.query.join(VideoStream.rooms)
+            .filter(Microlocation.event_id == id)
+            .exists()
+        ).scalar()
+    can_access = VideoStream(event_id=id).user_can_access
+    return jsonify(dict(exists=exists, can_access=can_access))
+
 
 def validate_event(user, data):
     if not user.can_create_event():
         raise ForbiddenError({'source': ''}, "Please verify your Email")
 
-    if data.get('state', None) == 'published' and not user.can_publish_event():
+    if data.get('state', None) == Event.State.PUBLISHED and not user.can_publish_event():
         raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
 
-    if not data.get('name', None) and data.get('state', None) == 'published':
+    if not data.get('name', None) and data.get('state', None) == Event.State.PUBLISHED:
         raise ConflictError(
             {'pointer': '/data/attributes/name'},
             "Event Name is required to publish the event",
@@ -93,6 +121,33 @@ def validate_date(event, data):
         )
 
 
+def get_event_query():
+    query_ = Event.query
+    if get_jwt_identity() is None or not current_user.is_staff:
+        # If user is not admin, we only show published events
+        query_ = query_.filter_by(state=Event.State.PUBLISHED)
+    if is_logged_in():
+        # For a specific user accessing the API, we show all
+        # events managed by them, even if they're not published
+        verify_jwt_in_request()
+        query2 = Event.query
+        query2 = (
+            query2.join(Event.roles)
+            .filter_by(user_id=current_user.id)
+            .join(UsersEventsRoles.role)
+            .filter(
+                or_(
+                    Role.name == Role.COORGANIZER,
+                    Role.name == Role.ORGANIZER,
+                    Role.name == Role.OWNER,
+                )
+            )
+        )
+        query_ = query_.union(query2)
+
+    return query_
+
+
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
         """
@@ -112,28 +167,7 @@ class EventList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Event)
-        if get_jwt_identity() is None or not current_user.is_staff:
-            # If user is not admin, we only show published events
-            query_ = query_.filter_by(state='published')
-        if is_logged_in():
-            # For a specific user accessing the API, we show all
-            # events managed by them, even if they're not published
-            verify_jwt_in_request()
-            query2 = self.session.query(Event)
-            query2 = (
-                query2.join(Event.roles)
-                .filter_by(user_id=current_user.id)
-                .join(UsersEventsRoles.role)
-                .filter(
-                    or_(
-                        Role.name == Role.COORGANIZER,
-                        Role.name == Role.ORGANIZER,
-                        Role.name == Role.OWNER,
-                    )
-                )
-            )
-            query_ = query_.union(query2)
+        query_ = get_event_query()
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
@@ -287,7 +321,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         validate_event(user, data)
-        if data['state'] != 'draft':
+        if data['state'] != Event.State.DRAFT:
             validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
@@ -314,7 +348,7 @@ class EventList(ResourceList):
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)
 
-        if event.state == 'published' and event.schedule_published_on:
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
 
         if data.get('original_image_url'):
@@ -419,7 +453,7 @@ class EventDetail(ResourceDetail):
         get_id(view_kwargs)
 
     def after_get_object(self, event, view_kwargs):
-        if event and event.state == "draft":
+        if event and event.state == Event.State.DRAFT:
             if not is_logged_in() or not has_access('is_coorganizer', event_id=event.id):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
@@ -447,7 +481,10 @@ class EventDetail(ResourceDetail):
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
         )
-        is_draft_published = event.state == "draft" and data.get('state') == "published"
+        is_draft_published = (
+            event.state == Event.State.DRAFT
+            and data.get('state') == Event.State.PUBLISHED
+        )
         is_event_restored = event.deleted_at and not data.get('deleted_at')
 
         if is_date_updated or is_draft_published or is_event_restored:
@@ -467,7 +504,7 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
-        if event.state == 'published' and event.schedule_published_on:
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:
             clear_export_urls(event)
@@ -611,8 +648,8 @@ class UpcomingEventList(EventList):
             .filter(
                 Event.starts_at > current_time,
                 Event.ends_at > current_time,
-                Event.state == 'published',
-                Event.privacy == 'public',
+                Event.state == Event.State.PUBLISHED,
+                Event.privacy == Event.Privacy.PUBLIC,
                 or_(
                     Event.is_promoted,
                     and_(
