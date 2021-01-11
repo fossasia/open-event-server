@@ -25,12 +25,32 @@ def test_event_stream(db, client):
     assert json.loads(response.data) == {"can_access": False, "exists": True}
 
 
+def test_event_stream_identifier(db, client):
+    event = EventFactoryBasic(state='published')
+    VideoStreamFactoryBase(event=event)
+    db.session.commit()
+
+    response = client.get(f'/v1/events/{event.identifier}/has-streams')
+
+    assert json.loads(response.data) == {"can_access": False, "exists": True}
+
+
 def test_event_stream_rooms(db, client):
     event = EventFactoryBasic(state='published')
     MicrolocationSubVideoStreamFactory(event=event)
     db.session.commit()
 
     response = client.get(f'/v1/events/{event.id}/has-streams')
+
+    assert json.loads(response.data) == {"can_access": False, "exists": True}
+
+
+def test_event_stream_rooms_identifier(db, client):
+    event = EventFactoryBasic(state='published')
+    MicrolocationSubVideoStreamFactory(event=event)
+    db.session.commit()
+
+    response = client.get(f'/v1/events/{event.identifier}/has-streams')
 
     assert json.loads(response.data) == {"can_access": False, "exists": True}
 
