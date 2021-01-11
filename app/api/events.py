@@ -80,7 +80,7 @@ def has_streams(id):
     else:
         exists = db.session.query(
             VideoStream.query.join(VideoStream.rooms)
-            .filter(Microlocation.event_id == id)
+            .filter(Microlocation.event_id == event.id)
             .exists()
         ).scalar()
     can_access = VideoStream(event_id=id).user_can_access
