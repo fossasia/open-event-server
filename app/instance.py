@@ -34,7 +34,6 @@ from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.views.blueprints import BlueprintsManager
 from app.views.healthcheck import (
-    check_migrations,
     health_check_celery,
     health_check_db,
     health_check_migrations,
@@ -260,8 +259,6 @@ def track_user():
 health = HealthCheck(current_app, "/health-check")
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
-with current_app.app_context():
-    current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
 

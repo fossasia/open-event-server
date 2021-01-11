@@ -1,6 +1,5 @@
 from errno import errorcode
 
-from flask import current_app
 from redis.exceptions import ConnectionError
 from sentry_sdk import capture_exception, capture_message
 
@@ -78,14 +77,8 @@ def check_migrations():
 
 
 def health_check_migrations():
-    """
-    Parses config var 'MIGRATION_STATUS' obtained from check_migrations function
-    :return:
-    """
-    if 'MIGRATION_STATUS' in current_app.config:
-        result = current_app.config['MIGRATION_STATUS'].split(',')
-        if result[0] == 'success':
-            return True, result[1]
-        # the exception will be caught in check_migrations function, so no need for sentry catching exception here
-        return False, result[1]
-    return False, 'The health_check_migration test is still running'
+    result = check_migrations().split(',')
+    if result[0] == 'success':
+        return True, result[1]
+    # the exception will be caught in check_migrations function, so no need for sentry catching exception here
+    return False, result[1]
