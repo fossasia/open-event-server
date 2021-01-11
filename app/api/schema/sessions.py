@@ -171,6 +171,15 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_='user',
     )
+    favourite_sessions = Relationship(
+        self_view='v1.session_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        many=True,
+        type_='user-favourite-session',
+    )
 
 
 # Used for customization of email notification subject and message body

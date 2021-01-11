@@ -233,6 +233,12 @@ from app.api.user_favourite_events import (
     UserFavouriteEventListPost,
     UserFavouriteEventRelationship,
 )
+from app.api.user_favourite_sessions import (
+    UserFavouriteSessionDetail,
+    UserFavouriteSessionList,
+    UserFavouriteSessionListPost,
+    UserFavouriteSessionRelationship,
+)
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
 from app.api.users_events_roles import (
@@ -265,6 +271,7 @@ api.route(
     '/events/<int:event_id>/owner',
     '/alternate-emails/<int:user_email_id>/user',
     '/favourite-events/<int:user_favourite_event_id>/user',
+    '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
 )
@@ -330,6 +337,11 @@ api.route(
     UserRelationship,
     'user_user_favourite_events',
     '/users/<int:id>/relationships/favourite-events',
+)
+api.route(
+    UserRelationship,
+    'user_user_favourite_sessions',
+    '/users/<int:id>/relationships/favourite-sessions',
 )
 api.route(
     UserRelationship,
@@ -956,6 +968,35 @@ api.route(
     '/user-favourite-events/<int:id>/relationships/event',
 )
 
+# user favourite sessions
+api.route(
+    UserFavouriteSessionListPost,
+    'user_favourite_session_list_post',
+    '/user-favourite-sessions',
+)
+api.route(
+    UserFavouriteSessionList,
+    'user_favourite_sessions_list',
+    '/users/<int:user_id>/favourite-sessions',
+    '/sessions/<int:session_id>/favourite-sessions',
+    '/events/<int:event_id>/favourite-sessions',
+)
+api.route(
+    UserFavouriteSessionDetail,
+    'user_favourite_session_detail',
+    '/user-favourite-sessions/<int:id>',
+)
+api.route(
+    UserFavouriteSessionRelationship,
+    'user_favourite_session_user',
+    '/user-favourite-sessions/<int:id>/relationships/user',
+)
+api.route(
+    UserFavouriteSessionRelationship,
+    'user_favourite_session_session',
+    '/user-favourite-sessions/<int:id>/relationships/session',
+)
+
 # sessions
 api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(
@@ -974,6 +1015,7 @@ api.route(
     'session_detail',
     '/sessions/<int:id>',
     '/feedbacks/<int:feedback_id>/event',
+    '/user-favourite-sessions/<int:user_favourite_session_id>/session',
 )
 api.route(
     SessionRelationshipOptional,
@@ -1005,6 +1047,11 @@ api.route(
     SessionRelationshipOptional,
     'session_feedbacks',
     '/sessions/<int:id>/relationships/feedbacks',
+)
+api.route(
+    SessionRelationshipOptional,
+    'session_user_favourite_sessions',
+    '/sessions/<int:id>/relationships/favourite-sessions',
 )
 
 # social_links
