@@ -18,7 +18,6 @@ def get_stock(event_id):
         availability["quantity"] = i.quantity
         availability["available"] = total_count
         stock.append(availability.copy())
-        print(availability)
 
     print(stock)
     return jsonify(stock)
