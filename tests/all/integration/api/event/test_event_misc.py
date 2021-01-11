@@ -77,6 +77,17 @@ def test_event_stream_rooms(db, client, user, jwt):
     assert json.loads(response.data) == {"can_access": True, "exists": True}
 
 
+def test_event_stream_rooms_identifier(db, client, user, jwt):
+    event = EventFactoryBasic(state='published')
+    MicrolocationSubVideoStreamFactory(event=event)
+    AttendeeOrderSubFactory(event=event, email=user.email, order__status='completed')
+    db.session.commit()
+
+    response = client.get(f'/v1/events/{event.identifier}/has-streams', headers=jwt)
+
+    assert json.loads(response.data) == {"can_access": True, "exists": True}
+
+
 def test_event_stream_rooms_no_access(db, client, jwt):
     event = EventFactoryBasic(state='published')
     MicrolocationSubVideoStreamFactory(event=event)

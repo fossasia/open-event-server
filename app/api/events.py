@@ -83,7 +83,7 @@ def has_streams(id):
             .filter(Microlocation.event_id == event.id)
             .exists()
         ).scalar()
-    can_access = VideoStream(event_id=id).user_can_access
+    can_access = VideoStream(event_id=event.id).user_can_access
     return jsonify(dict(exists=exists, can_access=can_access))
 
 
