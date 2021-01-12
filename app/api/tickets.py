@@ -1,8 +1,10 @@
+from flask import Blueprint, jsonify
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.attendees import get_sold_and_reserved_tickets_count
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
@@ -17,6 +19,26 @@ from app.models.event import Event
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.ticket_holder import TicketHolder
+
+tickets_routes = Blueprint('tickets_routes', __name__, url_prefix='/v1/events')
+
+
+@tickets_routes.route('/<int:event_id>/tickets/availability')
+def get_stock(event_id):
+    tickets = Ticket.query.filter_by(
+        event_id=event_id, deleted_at=None, is_hidden=False
+    ).all()
+    stock = []
+    for ticket in tickets:
+        availability = {}
+        total_count = ticket.quantity - get_sold_and_reserved_tickets_count(ticket.id)
+        availability["id"] = ticket.id
+        availability["name"] = ticket.name
+        availability["quantity"] = ticket.quantity
+        availability["available"] = max(0, total_count)
+        stock.append(availability)
+
+    return jsonify(stock)
 
 
 class TicketListPost(ResourceList):
