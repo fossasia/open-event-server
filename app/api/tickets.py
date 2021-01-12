@@ -23,8 +23,18 @@ from app.models.ticket_holder import TicketHolder
 tickets_routes = Blueprint('tickets_routes', __name__, url_prefix='/v1/events')
 
 
-@tickets_routes.route('/<int:event_id>/tickets/availability')
-def get_stock(event_id):
+@tickets_routes.route('/<id>/tickets/availability')
+def get_stock(id):
+
+    events = None
+    event_id = None
+
+    if id.isnumeric():
+        event_id = id
+    else:
+        event = Event.query.filter_by(identifier=id).one()
+        event_id = event.id
+
     tickets = Ticket.query.filter_by(
         event_id=event_id, deleted_at=None, is_hidden=False
     ).all()
