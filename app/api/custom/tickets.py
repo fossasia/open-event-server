@@ -10,15 +10,13 @@ tickets_routes = Blueprint('tickets_routes', __name__, url_prefix='/v1/events')
 def get_stock(event_id):
     stock = []
     availability = {}
-    tickets = Ticket.query.filter_by(event_id=event_id).all()
+    tickets = Ticket.query.filter_by(event_id=event_id, deleted_at=None).all()
     for i in tickets:
         total_count = i.quantity - get_sold_and_reserved_tickets_count(i.id)
         availability["id"] = i.id
         availability["name"] = i.name
         availability["quantity"] = i.quantity
-        availability["available"] = total_count
+        availability["available"] = total_count > 0 and total_count or 0
         stock.append(availability.copy())
-        print(availability)
 
-    print(stock)
     return jsonify(stock)
