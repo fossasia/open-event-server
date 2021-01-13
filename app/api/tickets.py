@@ -25,7 +25,6 @@ tickets_routes = Blueprint('tickets_routes', __name__, url_prefix='/v1/events')
 
 @tickets_routes.route('/<id>/tickets/availability')
 def get_stock(id):
-
     event_id = id
 
     if not id.isnumeric():
