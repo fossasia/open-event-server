@@ -270,7 +270,7 @@ api.route(
     '/attendees/<int:attendee_id>/user',
     '/feedbacks/<int:feedback_id>/user',
     '/events/<int:event_id>/owner',
-    '/groups/<int:group_id>/owner',
+    '/groups/<int:group_id>/user',
     '/alternate-emails/<int:user_email_id>/user',
     '/favourite-events/<int:user_favourite_event_id>/user',
     '/favourite-sessions/<int:user_favourite_session_id>/user',
@@ -1392,8 +1392,8 @@ api.route(
 )
 api.route(
     GroupRelationship,
-    'group_owner',
-    '/groups/<int:id>/relationships/owner',
+    'group_user',
+    '/groups/<int:id>/relationships/user',
 )
 
 

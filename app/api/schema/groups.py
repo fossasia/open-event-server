@@ -34,9 +34,9 @@ class GroupSchema(SoftDeletionSchema):
         type_='event',
     )
 
-    owner = Relationship(
+    user = Relationship(
         attribute='user',
-        self_view='v1.group_owner',
+        self_view='v1.group_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
         schema='UserSchemaPublic',
