@@ -74,6 +74,4 @@ def test_event_get_user_role(client, db, user, jwt):
 
     assert response.status_code == 200
     included = json.loads(response.data)['included']
-    assert included[0]['type'] == 'users-events-roles'
-    assert included[1]['type'] == 'user'
-    assert included[2]['type'] == 'role'
+    assert {item['type'] for item in included} == {'users-events-roles', 'user', 'role'}
