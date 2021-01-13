@@ -93,6 +93,7 @@ class Event(SoftDeletionModel):
     event_sub_topic_id = db.Column(
         db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
     )
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='SET NULL'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -156,6 +157,7 @@ class Event(SoftDeletionModel):
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id]
     )
+    group = db.relationship('Group', backref='event', foreign_keys=[group_id])
     owner = db.relationship(
         'User',
         viewonly=True,
