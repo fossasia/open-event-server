@@ -67,10 +67,11 @@ def test_event_get_user_role(client, db, user, jwt):
     event = get_event(db, user)
 
     response = client.get(
-        f'/v1/events/{event.id}?include=roles.user',
+        f'/v1/events/{event.id}?include=roles.user,roles.role',
         content_type='application/vnd.api+json',
         headers=jwt,
     )
 
     assert response.status_code == 200
-    assert json.loads(response.data)['included'][1]['type'] == 'user'
+    included = json.loads(response.data)['included']
+    assert {item['type'] for item in included} == {'users-events-roles', 'user', 'role'}
