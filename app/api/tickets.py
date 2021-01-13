@@ -28,11 +28,8 @@ def get_stock(id):
 
     event_id = id
 
-    if id.isnumeric():
-        event_id = id
-    else:
-        if not id.isnumeric():
-            event_id = Event.query.filter_by(identifier=id).first_or_404().id
+    if not id.isnumeric():
+        event_id = Event.query.filter_by(identifier=id).first_or_404().id
 
     tickets = Ticket.query.filter_by(
         event_id=event_id, deleted_at=None, is_hidden=False
