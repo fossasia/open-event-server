@@ -120,6 +120,12 @@ def validate_date(event, data):
             {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at"
         )
 
+    if (data['ends_at'] - data['starts_at']).days > 20:
+        raise UnprocessableEntityError(
+            {'pointer': '/data/attributes/ends-at'},
+            "Event duration can not be more than 20 days",
+        )
+
 
 def get_event_query():
     query_ = Event.query
