@@ -58,6 +58,10 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     password = data.get('password')
     criterion = [username, password]
 
+    user = User.query.filter_by(_email=username).first()
+    if user.is_blocked:
+        return jsonify(error='Admin has marked this account as Spam'), 400
+
     if not all(criterion):
         return jsonify(error='username or password missing'), 400
 
