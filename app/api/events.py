@@ -314,6 +314,11 @@ class EventList(ResourceList):
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
             )
 
+        if view_kwargs.get('group_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'group_id') == view_kwargs['group_id']
+            )
+
         return query_
 
     def before_post(self, args, kwargs, data=None):

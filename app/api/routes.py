@@ -870,6 +870,12 @@ api.route(
     '/events/<int:id>/relationships/general-statistics',
     '/events/<identifier>/relationships/general-statistics',
 )
+api.route(
+    EventRelationship,
+    'event_group',
+    '/events/<int:id>/relationships/group',
+    '/events/<identifier>/relationships/group',
+)
 # Events -> roles:
 api.route(
     EventRelationship,
@@ -1384,6 +1390,7 @@ api.route(
     GroupDetail,
     'group_detail',
     '/groups/<int:id>',
+    '/events/<int:event_id>/group',
 )
 api.route(
     GroupRelationship,

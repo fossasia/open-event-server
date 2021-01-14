@@ -5,12 +5,12 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
-from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.groups import GroupSchema
 
 # models
 from app.models import db
+from app.models.event import Event
 from app.models.group import Group
 
 
@@ -53,14 +53,16 @@ class GroupList(ResourceList):
         query_ = self.session.query(Group)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
-            if not has_access('is_user_itself', user_id=view_kwargs['user_id']):
-                raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.filter_by(user_id=view_kwargs['user_id'])
 
         return query_
 
     view_kwargs = True
-    decorators = (jwt_required,)
+    decorators = (
+        api.has_permission(
+            'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
+        ),
+    )
     schema = GroupSchema
     data_layer = {
         'session': db.session,
@@ -74,47 +76,33 @@ class GroupDetail(ResourceDetail):
     GroupDetail class for GroupSchema
     """
 
-    def before_delete_object(self, obj, view_kwargs):
-        """
-        before delete object method for group detail
-        :param obj:
-        :param kwargs:
-        :return:
-        """
-        group = safe_query_kwargs(Group, view_kwargs, 'id')
-        if not has_access(
-            'is_user_itself',
-            user_id=group.user_id,
-        ):
-            raise ForbiddenError(
-                {'source': 'User'}, 'You are not authorized to access this.'
-            )
+    def before_get_object(self, view_kwargs):
 
-    def before_update_object(self, obj, data, view_kwargs):
-        """
-        before update object method for group detail
-        :param obj:
-        :param data:
-        :param kwargs:
-        :return:
-        """
-        group = safe_query_kwargs(Group, view_kwargs, 'id')
-        if not has_access(
-            'is_user_itself',
-            user_id=group.user_id,
-        ):
-            raise ForbiddenError(
-                {'source': 'User'}, 'You are not authorized to access this.'
+        if view_kwargs.get('event_identifier'):
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
+            view_kwargs['event_id'] = event.id
 
+        if view_kwargs.get('event_id'):
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
+            if event.group_id:
+                view_kwargs['id'] = event.group_id
+            else:
+                view_kwargs['id'] = None
+
+    decorators = (
+        api.has_permission(
+            'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
+        ),
+    )
     schema = GroupSchema
     methods = ["GET", "PATCH", "DELETE"]
     data_layer = {
         'session': db.session,
         'model': Group,
         'methods': {
-            'before_update_object': before_update_object,
-            'before_delete_object': before_delete_object,
+            'before_get_object': before_get_object,
         },
     }
 
