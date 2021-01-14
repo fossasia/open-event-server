@@ -70,7 +70,6 @@ jobs:
       - run:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd
-          command: . venv/bin/activate && npx dredd
 
   pytype:
     docker:
