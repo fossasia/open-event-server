@@ -54,7 +54,7 @@ class GroupList(ResourceList):
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=view_kwargs['user_id']):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
-            query_ = query_.filter_by(user_id=user_id)
+            query_ = query_.filter_by(user_id=view_kwargs['user_id'])
 
         return query_
 
@@ -73,7 +73,7 @@ class GroupDetail(ResourceDetail):
     GroupDetail class for GroupSchema
     """
 
-    def before_delete_object(self, obj, kwargs):
+    def before_delete_object(self, obj, view_kwargs):
         """
         before delete object method for group detail
         :param obj:
@@ -89,7 +89,7 @@ class GroupDetail(ResourceDetail):
                 {'source': 'User'}, 'You are not authorized to access this.'
             )
 
-    def before_update_object(self, obj, data, kwargs):
+    def before_update_object(self, obj, data, view_kwargs):
         """
         before update object method for group detail
         :param obj:
