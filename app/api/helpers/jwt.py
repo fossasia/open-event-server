@@ -19,7 +19,7 @@ def jwt_authenticate(email, password):
         return None
     auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
     if auth_ok and user.is_blocked:
-        return "spam"
+        return None
     if auth_ok:
         return user
     return None

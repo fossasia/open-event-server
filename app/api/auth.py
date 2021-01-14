@@ -63,9 +63,6 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
 
     identity = jwt_authenticate(username, password)
 
-    if identity == "spam":
-        return jsonify(error="Admin has marked your account as spam"), 400
-
     if not identity or (existing_identity and identity != existing_identity):
         # For fresh login, credentials should match existing user
         return jsonify(error='Invalid Credentials'), 401
