@@ -93,6 +93,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     bank_details = fields.Str(allow_none=True)
     onsite_details = fields.Str(allow_none=True)
     is_sponsors_enabled = fields.Bool(default=False)
+    is_cfs_enabled = fields.Bool(default=False)
     created_at = fields.DateTime(dump_only=True, timezone=True)
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
