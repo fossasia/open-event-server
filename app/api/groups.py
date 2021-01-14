@@ -2,6 +2,7 @@ from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
+from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
@@ -106,8 +107,8 @@ class GroupDetail(ResourceDetail):
                 {'source': 'User'}, 'You are not authorized to access this.'
             )
 
-    decorators = (jwt_required,)
     schema = GroupSchema
+    methods = ["GET", "PATCH", "DELETE"]
     data_layer = {
         'session': db.session,
         'model': Group,
@@ -123,7 +124,12 @@ class GroupRelationship(ResourceRelationship):
     Group Relationship
     """
 
-    decorators = (jwt_required,)
+    decorators = (
+        api.has_permission(
+            'is_user_itself', methods="PATCH", fetch="user_id", model=Group
+        ),
+    )
+    methods = ["GET", "PATCH"]
     schema = GroupSchema
     data_layer = {
         'session': db.session,
