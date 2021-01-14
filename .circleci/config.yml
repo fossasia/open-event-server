@@ -12,7 +12,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.5-dependencies-
 
@@ -21,7 +21,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --exists-action w -r requirements/dev.txt
+            poetry config experimental.new-installer false
+            poetry install --no-root
 
       - run:
           name: Install Node Dependencies
@@ -33,7 +34,7 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.5-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "package.json" }}
+          key: v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
 
   dredd:
     docker:
@@ -58,7 +59,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.5-dependencies-
 
@@ -68,6 +69,7 @@ jobs:
 
       - run:
           name: Test API Doc
+          command: . venv/bin/activate && npx dredd
           command: . venv/bin/activate && npx dredd
 
   pytype:
@@ -82,7 +84,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.5-dependencies-
 
@@ -123,7 +125,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "requirements/dev.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1.5-dependencies-
 
