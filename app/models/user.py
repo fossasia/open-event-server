@@ -97,6 +97,22 @@ class User(SoftDeletionModel):
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    marketer_events = db.relationship(
+        'Event',
+        viewonly=True,
+        secondary='join(UserSystemRole, CustomSysRole,'
+        ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+        primaryjoin='UserSystemRole.user_id == User.id',
+        secondaryjoin='Event.id == UserSystemRole.event_id',
+    )
+    sales_admin_events = db.relationship(
+        'Event',
+        viewonly=True,
+        secondary='join(UserSystemRole, CustomSysRole,'
+        ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+        primaryjoin='UserSystemRole.user_id == User.id',
+        secondaryjoin='Event.id == UserSystemRole.event_id',
+    )
 
     @hybrid_property
     def password(self):
