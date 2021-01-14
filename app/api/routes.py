@@ -110,6 +110,7 @@ from app.api.feedbacks import (
     FeedbackRelationship,
 )
 from app.api.full_text_search.events import EventSearchResultList
+from app.api.groups import GroupDetail, GroupList, GroupListPost, GroupRelationship
 from app.api.import_jobs import ImportJobDetail, ImportJobList
 from app.api.mails import MailDetail, MailList
 from app.api.message_settings import MessageSettingsDetail, MessageSettingsList
@@ -269,6 +270,7 @@ api.route(
     '/attendees/<int:attendee_id>/user',
     '/feedbacks/<int:feedback_id>/user',
     '/events/<int:event_id>/owner',
+    '/groups/<int:group_id>/user',
     '/alternate-emails/<int:user_email_id>/user',
     '/favourite-events/<int:user_favourite_event_id>/user',
     '/favourite-sessions/<int:user_favourite_session_id>/user',
@@ -657,6 +659,7 @@ api.route(
     '/users/<int:user_moderator_id>/moderator-events',
     '/users/<int:user_marketer_id>/marketer-events',
     '/users/<int:user_sales_admin_id>/sales-admin-events',
+    '/groups/<int:group_id>/events',
 )
 
 api.route(
@@ -1372,6 +1375,25 @@ api.route(
     EventTopicRelationship,
     'event_topic_event_sub_topic',
     '/event-topics/<int:id>/relationships/event-sub-topics',
+)
+
+# groups
+api.route(GroupListPost, 'group_list_post', '/groups')
+api.route(GroupList, 'group_list', '/groups')
+api.route(
+    GroupDetail,
+    'group_detail',
+    '/groups/<int:id>',
+)
+api.route(
+    GroupRelationship,
+    'group_events',
+    '/groups/<int:id>/relationships/events',
+)
+api.route(
+    GroupRelationship,
+    'group_user',
+    '/groups/<int:id>/relationships/user',
 )
 
 
