@@ -58,14 +58,14 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     password = data.get('password')
     criterion = [username, password]
 
-    user = User.query.filter_by(_email=username).first()
-    if user.is_blocked:
-        return jsonify(error='Admin has marked this account as Spam'), 400
-
     if not all(criterion):
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
+
+    if identity == "spam":
+        return jsonify(error="Admin has marked your account as spam"), 400
+
     if not identity or (existing_identity and identity != existing_identity):
         # For fresh login, credentials should match existing user
         return jsonify(error='Invalid Credentials'), 401

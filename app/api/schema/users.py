@@ -169,15 +169,15 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='session',
     )
-    owner_events = Relationship(
-        self_view='v1.user_owner_events',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_list',
-        related_view_kwargs={'user_owner_id': '<id>'},
-        schema='EventSchema',
-        many=True,
-        type_='event',
-    )
+    # owner_events = Relationship(
+    #     self_view='v1.user_owner_events',
+    #     self_view_kwargs={'id': '<id>'},
+    #     related_view='v1.event_list',
+    #     related_view_kwargs={'user_owner_id': '<id>'},
+    #     schema='EventSchema',
+    #     many=True,
+    #     type_='event',
+    # )
     organizer_events = Relationship(
         self_view='v1.user_organizer_events',
         self_view_kwargs={'id': '<id>'},
@@ -260,22 +260,22 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='order',
     )
-    marketer_events = Relationship(
-        self_view='v1.user_marketer_events',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_list',
-        schema='EventSchema',
-        type_='event',
-        many=True,
-    )
-    sales_admin_events = Relationship(
-        self_view='v1.user_sales_admin_events',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_list',
-        schema='EventSchema',
-        type_='event',
-        many=True,
-    )
+    # marketer_events = Relationship(
+    #     self_view='v1.user_marketer_events',
+    #     self_view_kwargs={'id': '<id>'},
+    #     related_view='v1.event_list',
+    #     schema='EventSchema',
+    #     type_='event',
+    #     many=True,
+    # )
+    # sales_admin_events = Relationship(
+    #     self_view='v1.user_sales_admin_events',
+    #     self_view_kwargs={'id': '<id>'},
+    #     related_view='v1.event_list',
+    #     schema='EventSchema',
+    #     type_='event',
+    #     many=True,
+    # )
 
     @pre_dump
     def handle_deleted_users(self, data):
