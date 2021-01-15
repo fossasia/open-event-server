@@ -3,10 +3,9 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permissions import jwt_required
-from app.api.helpers.utilities import require_relationship
 from app.api.schema.groups import GroupSchema
 
 # models
@@ -29,15 +28,8 @@ class GroupListPost(ResourceList):
         :return:
         """
         data['user'] = current_user.id
-        require_relationship(['event'], data)
         if not current_user.is_verified:
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
-
-    def after_create_object(self, group, data, view_kwargs):
-        if 'events' in data:
-            for event_id in data['events']:
-                event = safe_query(Event, 'id', event_id, 'event_id')
-                event.group_id = group.id
 
     schema = GroupSchema
     decorators = (jwt_required,)
