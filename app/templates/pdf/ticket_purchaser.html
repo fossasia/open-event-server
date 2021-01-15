@@ -37,6 +37,11 @@
             color: #858585;
         }
 
+        #notices .notice {
+          color: #5D6975;
+          font-size: 1.2em;
+        }
+
     </style>
 </head>
 <body>
@@ -69,6 +74,15 @@
             <span class="label">Type</span><br>
             <span style="font-size: 20px;">{{ holder.ticket.name }}</span>
             <br><br>
+
+            {% if order.event.after_order_message %}
+                <div id="notices">
+                    <div>{{ _('Organizer Message') }}:</div>
+                    <div class="notice">{{ order.event.after_order_message }}</div>
+                </div>
+                <br><br>
+            {% endif %}
+        </div>
         </div>
 
         <div id="qrcode">
