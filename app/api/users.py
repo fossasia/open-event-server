@@ -240,8 +240,8 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('group_id') is not None:
             group = safe_query_kwargs(Group, view_kwargs, 'group_id')
-            if group.user is not None:
-                view_kwargs['id'] = group.user.id
+            if group.user_id is not None:
+                view_kwargs['id'] = group.user_id
             else:
                 view_kwargs['id'] = None
 
