@@ -74,7 +74,7 @@ class User(SoftDeletionModel):
     is_sales_admin = db.Column(db.Boolean, default=False)
     is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
-    is_blocked = db.Column(db.Boolean, default=False)
+    is_blocked = db.Column(db.Boolean, nullable=False, default=False)
     was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
