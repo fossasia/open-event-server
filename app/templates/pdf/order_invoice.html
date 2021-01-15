@@ -245,6 +245,13 @@
         </tbody>
       </table>
       <br/>
+      {% if event.after_order_message %}
+        <div id="notices">
+          <div>After Order Message:</div>
+          <div class="notice">{{ event.after_order_message }}</div>
+        </div>
+      {% endif %}
+      <br/>
       <div id="notices">
         <div>Invoice Footer:</div>
         <div class="notice">{{ tax.invoice_footer }}</div>

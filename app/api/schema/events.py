@@ -52,6 +52,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
+    after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)

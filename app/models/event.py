@@ -59,6 +59,7 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     description = db.Column(db.Text)
+    after_order_message = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
     large_image_url = db.Column(db.String)

@@ -15,5 +15,9 @@
 <br/>{{ order.event.normalized_location }}
 <br/><br/>{{ _('Best regards') }},
 <br/>{{ settings.app_name }} {{ _('Team') }}
+{% if order.event.after_order_message %}
+    <br/><br/>Below you find a message from the organizer.
+    <br/><br/>{{ order.event.after_order_message }}
+{% endif %}
 <br/>--
 <br/>{{ _('Login to manage your orders at') }} {{ settings.frontend_url }}
