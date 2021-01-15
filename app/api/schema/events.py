@@ -269,7 +269,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     group = Relationship(
         self_view='v1.event_group',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_group_detail',
+        related_view='v1.group_detail',
         related_view_kwargs={'event_id': '<id>'},
         schema='GroupSchema',
         type_='group',

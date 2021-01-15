@@ -355,6 +355,11 @@ api.route(
     'user_sales_admin_events',
     '/users/<int:id>/relationships/sales-admin-events',
 )
+api.route(
+    UserRelationship,
+    'user_group',
+    '/users/<int:id>/relationships/groups',
+)
 
 # users_emails
 api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')
@@ -1385,7 +1390,7 @@ api.route(
 
 # groups
 api.route(GroupListPost, 'group_list_post', '/groups')
-api.route(GroupList, 'group_list', '/groups')
+api.route(GroupList, 'group_list', '/groups', '/users/<int:user_id>/groups')
 api.route(
     GroupDetail,
     'group_detail',
