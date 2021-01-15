@@ -51,7 +51,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
     gender = fields.Str(allow_none=True)
-    accept_video_recording = fields.Boolean(default=True)
+    accept_video_recording = fields.Boolean(allow_none=True)
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
