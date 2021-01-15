@@ -37,6 +37,7 @@ class TicketHolder(SoftDeletionModel):
     facebook: str = db.Column(db.String)
     github: str = db.Column(db.String)
     gender: str = db.Column(db.String)
+    accept_video_recording: bool = db.Column(db.Boolean)
     age_group: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)
