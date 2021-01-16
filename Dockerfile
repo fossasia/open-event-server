@@ -16,12 +16,12 @@ ENV POETRY_HOME=/opt/poetry \
     
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN wget -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN set -eo pipefail; wget -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
 WORKDIR /opt/pysetup
 
-ADD pyproject.toml ./
-ADD poetry.lock ./
+COPY pyproject.toml ./
+COPY poetry.lock ./
 
 RUN poetry install --no-root --no-dev
 
