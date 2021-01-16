@@ -21,7 +21,8 @@
             "generator": "secret"
         },
         "POETRY_EXPERIMENTAL_NEW_INSTALLER": "false",
-        "POETRY_NO_INTERACTION": "1"
+        "POETRY_NO_INTERACTION": "1",
+        "DISABLE_POETRY_CREATE_RUNTIME_FILE": "1"
     },
     "addons": [
         "heroku-postgresql:hobby-dev",
