@@ -43,14 +43,20 @@ class SpeakersCallList(ResourceList):
                 .one()
             )
             event = speakers_call.event
-            if (
-                speakers_call.starts_at > event.starts_at
-                or speakers_call.ends_at > event.starts_at
-            ):
-                raise ForbiddenError(
-                    {'source': ''},
-                    "Speakers call date can\'t be after the event start date",
-                )
+            if event.is_cfs_enabled:
+                if (
+                    speakers_call.starts_at > event.starts_at
+                    or speakers_call.ends_at > event.starts_at
+                ):
+                    raise ForbiddenError(
+                        {'source': ''},
+                        "Speakers call date can\'t be after the event start date",
+                    )
+                if not speakers_call.announcement:
+                    raise ForbiddenError(
+                        {'source': ''},
+                        "Announcement is required if CFS is enabled",
+                    )
         except NoResultFound:
             pass
         else:
@@ -89,14 +95,20 @@ class SpeakersCallDetail(ResourceDetail):
                     event_id=kwargs['event_id']
                 ).one()
                 event = speakers_call.event
-                if (
-                    speakers_call.starts_at > event.starts_at
-                    or speakers_call.ends_at > event.starts_at
-                ):
-                    raise ForbiddenError(
-                        {'source': ''},
-                        "Speakers call date can\'t be after the event start date",
-                    )
+                if event.is_cfs_enabled:
+                    if (
+                        speakers_call.starts_at > event.starts_at
+                        or speakers_call.ends_at > event.starts_at
+                    ):
+                        raise ForbiddenError(
+                            {'source': ''},
+                            "Speakers call date can\'t be after the event start date",
+                        )
+                    if not speakers_call.announcement:
+                        raise ForbiddenError(
+                            {'source': ''},
+                            "Announcement is required if CFS is enabled",
+                        )
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             kwargs['id'] = speakers_call.id
