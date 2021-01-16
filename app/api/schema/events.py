@@ -52,6 +52,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
+    after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)
@@ -266,6 +267,14 @@ class EventSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'event_id': '<id>'},
         schema='EventSubTopicSchema',
         type_='event-sub-topic',
+    )
+    group = Relationship(
+        self_view='v1.event_group',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.group_detail',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='GroupSchema',
+        type_='group',
     )
     custom_forms = Relationship(
         attribute='custom_form',

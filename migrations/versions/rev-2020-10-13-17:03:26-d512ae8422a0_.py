@@ -130,8 +130,6 @@ def downgrade():
     op.alter_column('events', 'can_pay_by_alipay',
                existing_type=sa.BOOLEAN(),
                nullable=True)
-    op.drop_constraint('slug_event_topic_id', 'event_sub_topics', type_='unique')
-    op.create_index('slug_event_topic_id', 'event_sub_topics', ['slug', 'event_topic_id'], unique=True)
     op.create_table('invites',
     sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('user_id', sa.INTEGER(), autoincrement=False, nullable=True),

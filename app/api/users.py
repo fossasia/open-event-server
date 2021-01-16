@@ -28,6 +28,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.mail import USER_REGISTER
 from app.models.notification import Notification
 from app.models.order import Order
@@ -234,6 +235,13 @@ class UserDetail(ResourceDetail):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             if event.owner is not None:
                 view_kwargs['id'] = event.owner.id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('group_id') is not None:
+            group = safe_query_kwargs(Group, view_kwargs, 'group_id')
+            if group.user_id is not None:
+                view_kwargs['id'] = group.user_id
             else:
                 view_kwargs['id'] = None
 
