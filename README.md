@@ -210,7 +210,7 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 source ~/.profile
 
 # Install Python dependencies
-poetry install --no-root
+poetry install
 
 # Activate porject's virtual environment
 poetry shell

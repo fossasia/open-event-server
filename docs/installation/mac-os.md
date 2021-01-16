@@ -46,7 +46,7 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 source ~/.profile
 
 # Go to project folder and install Python dependencies
-poetry install --no-root
+poetry install
 
 # Activate project's virtual environment
 poetry shell

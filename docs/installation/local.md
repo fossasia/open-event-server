@@ -74,7 +74,7 @@ In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo
 - Enter the project folder and install dependencies:
 
   ```sh
-  poetry install --no-root
+  poetry install
   ```
 
 - Activate project's virtual environment:

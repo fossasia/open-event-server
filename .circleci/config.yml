@@ -21,8 +21,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            poetry config experimental.new-installer false
-            poetry install --no-root
+            poetry install
 
       - run:
           name: Install Node Dependencies

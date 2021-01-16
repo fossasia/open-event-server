@@ -26,10 +26,9 @@ This project uses [Poetry](https://python-poetry.org/docs) to handle Python depe
 # Install Poetry
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 source ~/.profile
-poetry config experimental.new-installer false
 
 # Install Python dependencies
-poetry install --no-root
+poetry install
 
 # Activate virtual environment
 poetry shell
