@@ -19,13 +19,18 @@
         "FORCE_SSL": "true",
         "INVITATION_CODE": {
             "generator": "secret"
-        }
+        },
+        "POETRY_EXPERIMENTAL_NEW_INSTALLER": "false",
+        "POETRY_NO_INTERACTION": "1"
     },
     "addons": [
         "heroku-postgresql:hobby-dev",
         "heroku-redis:hobby-dev"
     ],
     "buildpacks": [
+        {
+            "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
+        },
         {
             "url": "heroku/python"
         }
