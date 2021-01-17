@@ -66,16 +66,16 @@ In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo
 
 - Install [Poetry](https://python-poetry.org/docs) to handle Python dependencies:
 
-  ```sh
-  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-  source ~/.profile
-  ```
+```sh
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+```
 
 - Enter the project folder and install dependencies:
 
-  ```sh
-  poetry install
-  ```
+```sh
+poetry install
+```
 
 - Activate project's virtual environment:
 
