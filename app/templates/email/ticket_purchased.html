@@ -1,6 +1,6 @@
 {{ _('Hello') }},
 <br/><br/>{{ _('Thank you for your ticket order for') }} {{ order.event.name }}.
-<br/><br/>{{ _('This is your order confirmation. You can download your tickets at') }} : {{ order_view_url }}
+<br/><br/>{{ _('This is your order confirmation. You can download your tickets at') }}: {{ order_view_url }}
 <br/><br/>{{ _('Order Summary') }}:
 <br/>{{ _('Order') }}: {{ order.invoice_number }}
 <br/>{{ _('Name') }}: {{ order.user.full_name }}
@@ -10,7 +10,7 @@
     <br/>{{ _('Quantity') }}: {{ attendee | length }}
     <br/>
 {% endfor %}
-<br/>{{ _('About this event') }} :
+<br/>{{ _('About this event') }}:
 <br/>{{ _('Date') }}: {{ order.event.starts_at_tz | datetime }} - {{ order.event.ends_at_tz | datetime }}
 <br/>{{ order.event.normalized_location }}
 <br/><br/>{{ _('Best regards') }},
