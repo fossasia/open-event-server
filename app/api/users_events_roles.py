@@ -1,4 +1,3 @@
-from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
@@ -6,6 +5,7 @@ from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.query import event_query
 from app.api.schema.users_events_roles import UsersEventsRolesSchema
 from app.models import db
+from app.models.role import Role
 from app.models.users_events_role import UsersEventsRoles
 
 
@@ -46,7 +46,8 @@ class UsersEventsRolesDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if not current_user.is_staff and users_events_roles.role_id == 7:
+        role = Role.query.get_or_404(users_events_roles.role_id)
+        if role.name == "owner":
             raise ForbiddenError(
                 {'source': 'Role'},
                 'You cannot remove the owner of the event unless you are the admin.',
