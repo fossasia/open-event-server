@@ -35,6 +35,8 @@ class TicketHolder(SoftDeletionModel):
     blog: str = db.Column(db.String)
     twitter: str = db.Column(db.String)
     facebook: str = db.Column(db.String)
+    instagram: str = db.Column(db.String)
+    linkedin: str = db.Column(db.String)
     github: str = db.Column(db.String)
     gender: str = db.Column(db.String)
     accept_video_recording: bool = db.Column(db.Boolean)
