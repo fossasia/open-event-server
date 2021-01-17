@@ -50,6 +50,8 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
+    instagram = fields.Url(allow_none=True)
+    linkedin = fields.Url(allow_none=True)
     gender = fields.Str(allow_none=True)
     accept_video_recording = fields.Boolean(allow_none=True)
     accept_share_details = fields.Boolean(allow_none=True)

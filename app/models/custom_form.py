@@ -129,6 +129,8 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "twitter": "Twitter",
         "facebook": "Facebook",
         "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
         "gender": "Gender",
         "ageGroup": "Age Group",
         "acceptVideoRecording": "Accept Video Recording",
