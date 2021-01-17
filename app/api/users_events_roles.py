@@ -1,6 +1,8 @@
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.query import event_query
 from app.api.schema.users_events_roles import UsersEventsRolesSchema
 from app.models import db
@@ -37,10 +39,27 @@ class UsersEventsRolesDetail(ResourceDetail):
     users_events_roles detail by id
     """
 
-    decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
+    def before_delete_object(self, users_events_roles, view_kwargs):
+        """
+        method to check for proper permissions for deleting
+        :param users_events_roles:
+        :param view_kwargs:
+        :return:
+        """
+        if not current_user.is_staff and users_events_roles.role_id == 7:
+            raise ForbiddenError(
+                {'source': 'Role'},
+                'You cannot remove the owner of the event unless you are the admin.',
+            )
+
     methods = ['GET', 'PATCH', 'DELETE']
+    decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
     schema = UsersEventsRolesSchema
-    data_layer = {'session': db.session, 'model': UsersEventsRoles}
+    data_layer = {
+        'session': db.session,
+        'model': UsersEventsRoles,
+        'methods': {'before_delete_object': before_delete_object},
+    }
 
 
 class UsersEventsRolesRelationship(ResourceRelationship):
