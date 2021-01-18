@@ -38,7 +38,7 @@ class UsersEventsRolesDetail(ResourceDetail):
     users_events_roles detail by id
     """
 
-    def before_delete_object(self, users_events_roles, view_kwargs):
+    def before_update_object(self, users_events_roles, data, view_kwargs):
         """
         method to check for proper permissions for deleting
         :param users_events_roles:
@@ -46,11 +46,13 @@ class UsersEventsRolesDetail(ResourceDetail):
         :return:
         """
         role = users_events_roles.role
-        if role.name == "owner":
-            raise ForbiddenError(
-                {'source': 'Role'},
-                'You cannot remove the owner of the event unless you are the admin.',
-            )
+        if role and data.get('deleted_at'):
+            if role.name == "owner":
+                raise ForbiddenError(
+                    {'source': 'Role'},
+                    'You cannot remove the owner of the event.',
+                )
+            users_events_roles.deleted_at = data['deleted_at']
 
     methods = ['GET', 'PATCH', 'DELETE']
     decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
@@ -58,7 +60,7 @@ class UsersEventsRolesDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': UsersEventsRoles,
-        'methods': {'before_delete_object': before_delete_object},
+        'methods': {'before_update_object': before_update_object},
     }
 
 
