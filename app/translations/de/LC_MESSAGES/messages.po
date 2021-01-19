@@ -6,43 +6,44 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-01-16 06:15+0530\n"
-"PO-Revision-Date: 2020-11-09 07:14+0000\n"
-"Last-Translator: Areeb Jamal <jamal.areeb@gmail.com>\n"
+"PO-Revision-Date: 2021-01-19 00:17+0000\n"
+"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
+"de/>\n"
 "Language: de\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-"
-"event/server/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5-dev\n"
 "Generated-By: Babel 2.9.0\n"
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr "Ihr Passwort wurde erfolgreich geändert."
+msgstr "Das Passwort wurde erfolgreich geändert."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr "Bitte melden Sie sich mit Ihrem neuen Passwort an."
+msgstr "Bitte mit dem neuen Passwort anmelden."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr "Bitte benutzen Sie den folgenden Link, um Ihr Passwort zurückzusetzen."
+msgstr "Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen."
 
 #: app/templates/email/password_reset.html:3
 msgid "Or paste this token in your"
-msgstr "Oder fügen Sie dieses Zeichen in Ihre"
+msgstr "Oder den Token einfügen in"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
-"Bitte benutzen Sie den folgenden Link, um Ihr Passwort zurückzusetzen und"
-" Ihr Konto zu verifizieren."
+"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das "
+"Konto zu verifizieren."
 
 #: app/templates/email/ticket_purchased.html:1
 #: app/templates/email/ticket_purchased_attendee.html:1
@@ -52,13 +53,12 @@ msgstr "Hallo"
 
 #: app/templates/email/ticket_purchased.html:2
 msgid "Thank you for your ticket order for"
-msgstr "Vielen Dank für Ihre Kartenbestellung für"
+msgstr "Vielen Dank für die Ticketbestellung für"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "This is your order confirmation. You can download your tickets at"
 msgstr ""
-"Dies ist Ihre Auftragsbestätigung. Sie können Ihre Tickets herunterladen "
-"unter"
+"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "Order Summary"
@@ -107,22 +107,20 @@ msgstr "Team"
 #: app/templates/email/ticket_purchased.html:19
 #: app/templates/email/ticket_purchased_attendee.html:17
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "Unten finden Sie eine Nachricht vom Veranstalter"
 
 #: app/templates/email/ticket_purchased.html:23
 #: app/templates/email/ticket_purchased_attendee.html:21
 msgid "Login to manage your orders at"
-msgstr "Login zur Verwaltung Ihrer Bestellungen unter"
+msgstr "Login zur Verwaltung der Bestellungen unter"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "This is a confirmation mail of your tickets for the event"
-msgstr ""
-"Dies ist eine Bestätigungsmail mit Ihren Eintrittskarten für die "
-"Veranstaltung"
+msgstr "Dies ist eine Bestätigungsmail mit den Tickets für die Veranstaltung"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "You can download your tickets at"
-msgstr "Sie können Ihre Eintrittskarten herunterladen unter"
+msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 msgid "Ticket Summary"
@@ -130,7 +128,7 @@ msgstr "Ticketübersicht"
 
 #: app/templates/email/user_register.html:2
 msgid "Your account has been created on"
-msgstr "Ihr Konto wurde erstellt am"
+msgstr "Das Konto wurde erstellt am"
 
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
@@ -138,7 +136,7 @@ msgstr "Herzlichen Glückwunsch!"
 
 #: app/templates/email/user_register.html:3
 msgid "Your login is"
-msgstr "Ihr Login lautet"
+msgstr "Der Login ist"
 
 #: app/templates/email/user_register.html:4
 msgid "Please visit the following link to verify your email:"
@@ -152,9 +150,8 @@ msgstr "Vielen Dank"
 #: app/templates/pdf/ticket_attendee.html:79
 #: app/templates/pdf/ticket_purchaser.html:80
 msgid "Organizer Message"
-msgstr ""
+msgstr "Nachricht des Veranstalters"
 
 #: app/templates/pdf/order_invoice.html:256
 msgid "Invoice Footer"
-msgstr ""
-
+msgstr "Rechnungsfußzeile"
