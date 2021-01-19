@@ -512,7 +512,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 logger.warning(
                     "If 'fetch_as' is same as 'fetch', then it is redundant: %s", fetch
                 )
-            if fetch:
+            if fetch_as:
                 kwargs[fetch_as] = fetched
             elif fetch:
                 kwargs[fetch] = fetched
