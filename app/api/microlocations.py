@@ -89,7 +89,6 @@ class MicrolocationDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Microlocation,
         ),
     )
@@ -111,7 +110,6 @@ class MicrolocationRelationshipRequired(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH",
             fetch="event_id",
-            fetch_as="event_id",
             model=Microlocation,
         ),
     )
@@ -130,7 +128,6 @@ class MicrolocationRelationshipOptional(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Microlocation,
         ),
     )

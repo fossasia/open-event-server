@@ -89,9 +89,7 @@ class RoleInviteList(ResourceList):
 
     view_kwargs = True
     methods = ['GET']
-    decorators = (
-        api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id"),
-    )
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id'),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session, 'model': RoleInvite, 'methods': {'query': query}}
 
@@ -119,7 +117,6 @@ class RoleInviteDetail(ResourceDetail):
             'is_organizer',
             methods="DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=RoleInvite,
         ),
     )
