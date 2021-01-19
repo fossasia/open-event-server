@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-01-16 06:15+0530\n"
-"PO-Revision-Date: 2021-01-19 00:17+0000\n"
+"PO-Revision-Date: 2021-01-19 23:22+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -128,7 +128,7 @@ msgstr "Ticketübersicht"
 
 #: app/templates/email/user_register.html:2
 msgid "Your account has been created on"
-msgstr "Das Konto wurde erstellt am"
+msgstr "Ihr Konto wurde erstellt auf"
 
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
