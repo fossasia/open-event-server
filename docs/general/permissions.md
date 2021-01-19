@@ -7,7 +7,7 @@ Simply checking for the permission for each method. Instead of making decorators
 
 1. Separating the ```api``` intialization  to `app\api\bootstrap.py` so that it can be used in routes files  (like events.py, users.py, etc)
 2. In this basic implementation, please see `tickets.py`.
-3. As an example use, a decorator added to tickets.py as`api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id", model=Ticket),`
+3. As an example use, a decorator added to tickets.py as`api.has_permission('is_organizer', fetch='event_id', model=Ticket),`
 4. Created a permission manager `app\api\helpers\permission_manager.py` which will do the whole work.
 
 
@@ -35,7 +35,7 @@ For example: method=”GET,POST”
 Example use case can be the situation where you can leave the permission for any specific related endpoint to some resource and would like to do a manual check in the method itself.
 - **check (lambda)**: Opposite to leave_if. It receives a lambda function that will return boolean values. Based on returned value, If it is true then only it will go further and check the request for permissions else will throw forbidden error.
 - **fetch (string)**: This is the string containing the name of the key which has to be fetched for fetch_as key (described below). Permission manager will first look for this value in view_kwargs dict object. If it is not there then it will make the query to get one(described below at model )
-- **fetch_as (string)**: This is the string containing the name of a key. The value of fetch key will be sent to the permission functions by this name.
+- **fetch_as (string)**: This is the string containing the name of a key. The value of fetch key will be sent to the permission functions by this name. If fetch_as is same as fetch, there is no need to set fetch_as
 - **model (string)**: This is one most interesting concept here. To get the value of fetch key. Permission manager first looks into view_kwargs and if there no such value then you can still get one through the model. The model attribute here receives the class of the database model which will be used to get the value of fetch key.
 It makes the query to get the single resource from this model and look for the value of fetch key and then pass it to the permission functions/methods.
 The interesting part is that by default it uses < id> from view_kwargs to get the resource from the model but in any case if there is no specific ID with name < id> on the view_kwargs. You can use these two options as:

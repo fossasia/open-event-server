@@ -197,10 +197,6 @@ class OrderStatisticsTicketDetail(ResourceDetail):
     """
 
     methods = ['GET']
-    decorators = (
-        api.has_permission(
-            'is_coorganizer', fetch="event_id", fetch_as="event_id", model=Ticket
-        ),
-    )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", model=Ticket),)
     schema = OrderStatisticsTicketSchema
     data_layer = {'session': db.session, 'model': Ticket}

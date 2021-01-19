@@ -76,7 +76,6 @@ class TrackDetail(ResourceDetail):
         api.has_permission(
             'is_track_organizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Track,
             methods="PATCH,DELETE",
         ),
@@ -98,7 +97,6 @@ class TrackRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_track_organizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Track,
             methods="PATCH",
         ),
@@ -117,7 +115,6 @@ class TrackRelationshipOptional(ResourceRelationship):
         api.has_permission(
             'is_track_organizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Track,
             methods="PATCH,DELETE",
         ),

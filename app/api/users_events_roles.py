@@ -21,7 +21,7 @@ class UsersEventsRolesList(ResourceList):
 
     view_kwargs = True
     decorators = (
-        api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id"),
+        api.has_permission('is_coorganizer', fetch='event_id', model=UsersEventsRoles),
     )
     methods = ['GET']
     schema = UsersEventsRolesSchema
@@ -37,7 +37,9 @@ class UsersEventsRolesDetail(ResourceDetail):
     users_events_roles detail by id
     """
 
-    decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
+    decorators = (
+        api.has_permission('is_coorganizer', fetch='event_id', model=UsersEventsRoles),
+    )
     methods = ['GET', 'PATCH', 'DELETE']
     schema = UsersEventsRolesSchema
     data_layer = {'session': db.session, 'model': UsersEventsRoles}

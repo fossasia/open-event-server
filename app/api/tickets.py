@@ -199,7 +199,6 @@ class TicketList(ResourceList):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="POST",
             check=lambda a: a.get('event_id') or a.get('event_identifier'),
@@ -284,7 +283,6 @@ class TicketDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH,DELETE",
         ),
@@ -309,7 +307,6 @@ class TicketRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH",
         ),
@@ -328,7 +325,6 @@ class TicketRelationshipOptional(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH,DELETE",
         ),
