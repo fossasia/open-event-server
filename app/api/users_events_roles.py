@@ -52,7 +52,7 @@ class UsersEventsRolesDetail(ResourceDetail):
                     {'source': 'Role'},
                     'You cannot remove the owner of the event.',
                 )
-            users_events_roles.deleted_at = data['deleted_at']
+            # users_events_roles.deleted_at = data['deleted_at']
 
     methods = ['GET', 'PATCH', 'DELETE']
     decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
