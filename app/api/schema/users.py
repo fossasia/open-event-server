@@ -169,12 +169,13 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='session',
     )
-    group = Relationship(
+    groups = Relationship(
         self_view='v1.user_group',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.group_list',
         related_view_kwargs={'user_id': '<id>'},
         schema='GroupSchema',
+        many=True,
         type_='group',
     )
     owner_events = Relationship(
