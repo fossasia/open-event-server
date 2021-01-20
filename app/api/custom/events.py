@@ -42,7 +42,7 @@ def contact_organizer(event_id):
         'event_name': event.name,
     }
     organizer_mail = (
-        "{attendee_name} ({attendee_email}) has a question for you about your event {event_name} <br/><br/>"
+        "{attendee_name} ({attendee_email}) has a question for you about your event {event_name}: <br/><br/>"
         + request.json.get('email')
     )
     send_email(
