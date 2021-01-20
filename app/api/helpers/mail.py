@@ -53,7 +53,7 @@ def check_smtp_config(config):
     return True
 
 
-def send_email(to, action, subject, html, attachments=None, bcc=None):
+def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=None):
     """
     Sends email and records it in DB
     """
@@ -79,6 +79,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
         'html': html,
         'attachments': attachments,
         'bcc': bcc,
+        'reply_to': reply_to,
     }
 
     if not (current_app.config['TESTING'] or email_service == 'disable'):

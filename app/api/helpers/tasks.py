@@ -111,6 +111,9 @@ def send_email_task_sendgrid(payload):
     if payload['bcc'] is not None:
         message.bcc = payload['bcc']
 
+    if payload['reply_to'] is not None:
+        message.reply_to = payload['reply_to']
+
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
             with open(attachment, 'rb') as f:
@@ -157,6 +160,8 @@ def send_email_task_smtp(payload):
     message.rich = payload['html']
     if payload['bcc'] is not None:
         message.bcc = payload['bcc']
+    if payload['reply_to'] is not None:
+        message.reply = payload['reply_to']
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
             message.attach(name=attachment)
