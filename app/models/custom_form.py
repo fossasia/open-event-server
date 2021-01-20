@@ -133,9 +133,9 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "instagram": "Instagram",
         "gender": "Gender",
         "ageGroup": "Age Group",
-        "acceptVideoRecording": "Accept Video Recording",
-        "acceptShareDetails": "Accept Share Details",
-        "acceptReceiveEmails": "Accept Receive Emails",
+        "acceptVideoRecording": "Photo & video & text consent",
+        "acceptShareDetails": "Accepted to share details with sponsors",
+        "acceptReceiveEmails": "Accepted to receive emails",
     },
 }
 
