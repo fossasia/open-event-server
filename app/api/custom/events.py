@@ -30,17 +30,18 @@ def get_dates(event_id):
 @jwt_required
 def contact_organizer(event_id):
     event = Event.query.get_or_404(event_id)
-    organizers_emails = list(map(lambda x: x.email, event.organizers)) + list(map(lambda x: x.email, event.coorganizers))
+    organizers_emails = set(list(map(lambda x: x.email, event.organizers)) + list(map(lambda x: x.email, event.coorganizers)))
     context = {
         'attendee_name': current_user.fullname,
         'attendee_email': current_user.email,
         'event_name': event.name,
+        'email_copy': request.json.get('email'),
     }
     organizer_mail = (
         "{attendee_name} ({attendee_email}) has a question for you about your event {event_name} </br>"
         + request.json.get('email')
     )
-    attendee_mail = "Hello, you have contacted the organizers of the event {event_name}. Below you find a copy of your email. Organizers have received your message and will follow up with you. This is a system message. Please do not reply to this message. Replies are not monitored. Thank you."
+    attendee_mail = "Hello, you have contacted the organizers of the event {event_name}. Below you find a copy of your email. Organizers have received your message and will follow up with you. This is a system message. Please do not reply to this message. Replies are not monitored. Thank you. <br/> {email_copy}"
     send_email(
         to=event.owner.email,
         action=CONTACT_ORGANIZERS,
@@ -56,6 +57,5 @@ def contact_organizer(event_id):
         html=attendee_mail.format(**context),
     )
     return jsonify(
-        status=True,
-        message="email is resend",
+        message="email sent to organizers",
     )
