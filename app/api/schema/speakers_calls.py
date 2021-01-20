@@ -56,6 +56,7 @@ class SpeakersCallSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     announcement = fields.Str(allow_none=True)
     starts_at = fields.DateTime(required=True)
+    soft_ends_at = fields.DateTime(allow_none=True)
     ends_at = fields.DateTime(required=True)
     hash = fields.Str(allow_none=True)
     privacy = fields.String(
