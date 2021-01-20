@@ -170,7 +170,6 @@ class UserSchema(UserSchemaPublic):
         type_='session',
     )
     groups = Relationship(
-        attribute='group',
         self_view='v1.user_group',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.group_list',
