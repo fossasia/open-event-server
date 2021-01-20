@@ -229,14 +229,12 @@ class SpeakerDetail(ResourceDetail):
             'is_speaker_itself_or_admin',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
         api.has_permission(
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )
@@ -258,7 +256,6 @@ class SpeakerRelationshipRequired(ResourceRelationship):
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )
@@ -277,7 +274,6 @@ class SpeakerRelationshipOptional(ResourceRelationship):
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )

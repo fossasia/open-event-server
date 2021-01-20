@@ -22,7 +22,7 @@ class UsersEventsRolesList(ResourceList):
 
     view_kwargs = True
     decorators = (
-        api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id"),
+        api.has_permission('is_coorganizer', fetch='event_id', model=UsersEventsRoles),
     )
     methods = ['GET']
     schema = UsersEventsRolesSchema
@@ -38,6 +38,7 @@ class UsersEventsRolesDetail(ResourceDetail):
     users_events_roles detail by id
     """
 
+
     def before_update_object(self, users_events_roles, data, view_kwargs):
         """
         method to check for proper permissions for deleting
@@ -52,10 +53,10 @@ class UsersEventsRolesDetail(ResourceDetail):
                     {'source': 'Role'},
                     'You cannot remove the owner of the event.',
                 )
-            # users_events_roles.deleted_at = data['deleted_at']
-
     methods = ['GET', 'PATCH', 'DELETE']
-    decorators = (api.has_permission('is_coorganizer', methods="GET,PATCH,DELETE"),)
+    decorators = (
+        api.has_permission('is_coorganizer', fetch='event_id', model=UsersEventsRoles),
+    )
     schema = UsersEventsRolesSchema
     data_layer = {
         'session': db.session,

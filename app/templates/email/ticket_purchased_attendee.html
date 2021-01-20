@@ -9,7 +9,7 @@
     <br/>
 {% endfor %}
 <br/>{{ _('About this event') }}:
-<br/>{{ _('Date') }}: {{ order.event.starts_at_tz | datetime }} - {{ order.event.ends_at_tz | datetime }}
+<br/>{{ _('Date') }}: {{ order.event.starts_at | datetime(order.event.timezone) }} - {{ order.event.ends_at | datetime(order.event.timezone) }}
 <br/>{{ order.event.normalized_location }}
 <br/><br/>{{ _('Best regards') }},
 <br/>{{ settings.app_name }} {{ _('Team') }}
