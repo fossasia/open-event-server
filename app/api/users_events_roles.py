@@ -5,6 +5,7 @@ from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.query import event_query
 from app.api.schema.users_events_roles import UsersEventsRolesSchema
 from app.models import db
+from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
 
 
@@ -52,6 +53,11 @@ class UsersEventsRolesDetail(ResourceDetail):
                     {'source': 'Role'},
                     'You cannot remove the owner of the event.',
                 )
+            RoleInvite.query.filter_by(
+                event_id=users_events_roles.event_id,
+                email=users_events_roles.user.email,
+                role_id=role.id,
+            ).delete(synchronize_session=False)
 
     methods = ['GET', 'PATCH', 'DELETE']
     decorators = (

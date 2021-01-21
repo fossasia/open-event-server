@@ -57,9 +57,7 @@ class RoleInvite(db.Model):
         user = User.query.filter_by(email=self.email).first()
         event = Event.query.filter_by(id=self.event_id).first()
         frontend_url = get_settings()['frontend_url']
-        link = "{}/e/{}/role-invites?token={}".format(
-            frontend_url, event.identifier, self.hash
-        )
+        link = f"{frontend_url}/role-invites?token={self.hash}"
         if not has_access('is_coorganizer', event_id=event.id):
             raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
         if user:
