@@ -5,6 +5,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.groups import GroupSchema
 
@@ -106,6 +107,19 @@ class GroupDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def before_update_object(self, group, data, view_kwargs):
+        """
+        before update object method of group details
+        :param group:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if group and data.get('event'):
+            event = Event.query.filter_by(id=data['event']).first()
+            if event and not has_access('is_coorganizer', event_id=event.id):
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+
     decorators = (
         api.has_permission(
             'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
@@ -118,6 +132,7 @@ class GroupDetail(ResourceDetail):
         'model': Group,
         'methods': {
             'before_get_object': before_get_object,
+            'before_update_object': before_update_object,
         },
     }
 
