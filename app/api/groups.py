@@ -31,6 +31,18 @@ class GroupListPost(ResourceList):
         if not current_user.is_verified:
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        before create object method for GroupListPost Class
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('event', None):
+            event = Event.query.filter_by(id=data['event']).first()
+            if event and not has_access('is_coorganizer', event_id=event.id):
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+
     schema = GroupSchema
     decorators = (jwt_required,)
     methods = [
@@ -39,7 +51,10 @@ class GroupListPost(ResourceList):
     data_layer = {
         'session': db.session,
         'model': Group,
-        'methods': {'before_post': before_post},
+        'methods': {
+            'before_post': before_post,
+            'before_create_object': before_create_object,
+        },
     }
 
 
