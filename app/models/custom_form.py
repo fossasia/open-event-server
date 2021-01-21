@@ -134,8 +134,8 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "gender": "Gender",
         "ageGroup": "Age Group",
         "acceptVideoRecording": "Photo & video & text consent",
-        "acceptShareDetails": "Accepted to share details with sponsors",
-        "acceptReceiveEmails": "Accepted to receive emails",
+        "acceptShareDetails": "Partner contact consent",
+        "acceptReceiveEmails": "Email consent",
     },
 }
 
