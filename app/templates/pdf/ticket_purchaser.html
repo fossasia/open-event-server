@@ -78,7 +78,7 @@
             {% if order.event.after_order_message %}
                 <div id="notices">
                     <div>{{ _('Organizer Message') }}:</div>
-                    <div class="notice">{{ order.event.after_order_message }}</div>
+                    <div class="notice">{% autoescape false %}{{ order.event.after_order_message | strip_tags | nl2br }}{% endautoescape %}</div>
                 </div>
                 <br><br>
             {% endif %}

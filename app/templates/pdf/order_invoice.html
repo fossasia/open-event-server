@@ -248,14 +248,16 @@
       {% if event.after_order_message %}
         <div id="notices">
           <div>{{ _('Organizer Message') }}:</div>
-          <div class="notice">{{ event.after_order_message }}</div>
+          <div class="notice" style="white-space: pre-line;">{{ event.after_order_message }}</div>
+        </div>
+        <br/>
+      {% endif %}
+      {% if tax.invoice_footer %}
+        <div id="notices">
+          <div>{{ _('Invoice Footer') }}:</div>
+          <div class="notice">{{ tax.invoice_footer }}</div>
         </div>
       {% endif %}
-      <br/>
-      <div id="notices">
-        <div>{{ _('Invoice Footer') }}:</div>
-        <div class="notice">{{ tax.invoice_footer }}</div>
-      </div>
     </main>
   </body>
 </html>
