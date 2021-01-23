@@ -19,7 +19,7 @@ def can_edit_after_cfs_ends(event_id):
         id=event_id, deleted_at=None, is_cfs_enabled=True
     ).one_or_none()
 
-    if is_cfs_enable:
+    if not is_cfs_enable:
         raise ForbiddenError(
             {'source': '/data/event-id'},
             f'Speaker Calls for event {event_id} not found',
