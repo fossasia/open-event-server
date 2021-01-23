@@ -16,7 +16,7 @@ def create_default_user(email, password):
         ask_email = True
         while ask_email:
             email = input("Enter email for super_admin    : ")
-            if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            if not re.match(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', email):
                 print('\nInvalid email address\n')
                 continue
             ask_email = False
