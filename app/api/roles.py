@@ -97,5 +97,8 @@ class RoleDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Role,
-        'methods': {'before_get_object': before_get_object},
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_delete_object': before_delete_object,
+        },
     }

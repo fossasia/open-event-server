@@ -2524,7 +2524,7 @@ def role_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        role = RoleFactory()
+        role = RoleFactory(name="example role")
         db.session.add(role)
         db.session.commit()
 
