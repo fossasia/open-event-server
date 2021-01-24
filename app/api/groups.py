@@ -20,18 +20,6 @@ class GroupListPost(ResourceList):
     Create and List Groups
     """
 
-    def before_post(self, args, kwargs, data):
-        """
-        method to check for required relationship with group
-        :param args:
-        :param kwargs:
-        :param data:
-        :return:
-        """
-        data['user'] = current_user.id
-        if not current_user.is_verified:
-            raise ForbiddenError({'source': ''}, 'Access Forbidden')
-
     def before_create_object(self, data, view_kwargs):
         """
         before create object method for GroupListPost Class
@@ -39,10 +27,13 @@ class GroupListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        data['user_id'] = current_user.id
+        if not current_user.is_verified:
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
+
         for event in data.get('events', []):
             if not has_access('is_coorganizer', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event co-organizer access required")
-        data['user_id'] = current_user.id
 
     schema = GroupSchema
     decorators = (jwt_required,)
@@ -53,7 +44,6 @@ class GroupListPost(ResourceList):
         'session': db.session,
         'model': Group,
         'methods': {
-            'before_post': before_post,
             'before_create_object': before_create_object,
         },
     }
