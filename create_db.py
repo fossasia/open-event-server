@@ -23,9 +23,21 @@ def create_default_user(email, password):
     if not password:
         ask_password = True
         while ask_password:
-            password = getpass.getpass("Enter password for super_admin : ")
-            if len(password) < 8:
-                print('\nPassword should have minimum 8 characters')
+            password = getpass.getpass("Enter password( should contain at least one digit, one uppercase letter, one lowercase letter) for super_admin : ")
+            if len(password) < 8 and len(password) > 32:
+                print('\nPassword should have minimum 8 characters and maximum 32 characters')
+                continue
+            if not any(char.isdigit() for char in password):
+                print('\nPassword should contain at least one digit')
+                continue
+            if not any(char.isupper() for char in password):
+                print('\nPassword should contain at least one uppercase letter')
+                continue
+            if not any(char.islower() for char in password):
+                print('\nPassword should contain at least one lowercase letter')
+                continue
+            if not any(char in SpecialSym for char in password):
+                print('\nPassword should contain at least one special symbol')
                 continue
             repassword = getpass.getpass("Enter your password again to confirm : ")
             if password != repassword:
