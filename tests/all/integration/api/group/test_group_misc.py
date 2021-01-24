@@ -36,7 +36,7 @@ def test_group_post_access_allow(db, client):
         headers={'Authorization': 'JWT ' + create_access_token(new_user.id, fresh=True)},
         data=data,
     )
-    assert json.loads(response.data)['data']['id'] == str(group.id)
+    assert json.loads(response.data)['data']['attributes']['name'] == "eventgp2"
 
 
 def test_group_post_access_deny(db, client):
