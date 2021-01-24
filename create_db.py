@@ -28,16 +28,17 @@ def create_default_user(email, password):
                 print('\nPassword should have minimum 8 characters and maximum 32 characters')
                 continue
             if not any(char.isdigit() for char in password):
-                print('\nPassword should contain at least one digit')
+                print("\nPassword should contain at least one digit")
                 continue
             if not any(char.isupper() for char in password):
-                print('\nPassword should contain at least one uppercase letter')
+                print("\nPassword should contain at least one uppercase letter")
                 continue
             if not any(char.islower() for char in password):
-                print('\nPassword should contain at least one lowercase letter')
+                print("\nPassword should contain at least one lowercase letter")
                 continue
-            if not any(char in SpecialSym for char in password):
-                print('\nPassword should contain at least one special symbol')
+            regex=re.compile('[@_!#$%^&*()<>?/\|{}~`:]')
+            if(regex.search(password)==None):
+                print("\nPassword should contain at least one special symbol")
                 continue
             repassword = getpass.getpass("Enter your password again to confirm : ")
             if password != repassword:
