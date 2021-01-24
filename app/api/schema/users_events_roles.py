@@ -21,6 +21,7 @@ class UsersEventsRolesSchema(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
+    deleted_at = fields.DateTime(dump_only=True)
 
     event = Relationship(
         self_view='v1.users_events_roles_event',

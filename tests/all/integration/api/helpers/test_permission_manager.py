@@ -2,17 +2,17 @@ import unittest
 
 from flask_jwt_extended import create_access_token
 
-from app.api.helpers.db import get_or_create, save_to_db
+from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import (
     accessible_role_based_events,
     has_access,
     permission_manager,
 )
-from app.models.users_events_role import UsersEventsRoles
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
+from tests.factories.users_events_roles import UsersEventsRolesSubFactory
 
 
 class TestPermissionManager(OpenEventLegacyTestCase):
@@ -52,8 +52,9 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         """Method to test whether a user is organizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
-            uer.role_id = 1
+            uer = UsersEventsRolesSubFactory(
+                user_id=1, event_id=1, role__name='organizer'
+            )
             save_to_db(uer)
             self.assertTrue(has_access('is_organizer', event_id=1))
 
@@ -61,8 +62,9 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         """Method to test whether a user is coorganizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
-            uer.role_id = 2
+            uer = UsersEventsRolesSubFactory(
+                user_id=1, event_id=1, role__name='coorganizer'
+            )
             save_to_db(uer)
             self.assertTrue(has_access('is_coorganizer', event_id=1))
 
@@ -70,8 +72,9 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         """Method to test whether a user is moderator of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
-            uer.role_id = 4
+            uer = UsersEventsRolesSubFactory(
+                user_id=1, event_id=1, role__name='moderator'
+            )
             save_to_db(uer)
             self.assertTrue(has_access('is_moderator', event_id=1))
 
@@ -79,17 +82,19 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         """Method to test whether a user is track organizer of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
-            uer.role_id = 4
+            uer = UsersEventsRolesSubFactory(
+                user_id=1, event_id=1, role__name='track_organizer'
+            )
             save_to_db(uer)
-            self.assertTrue(has_access('is_moderator', event_id=1))
+            self.assertTrue(has_access('is_track_organizer', event_id=1))
 
     def test_is_registrar(self):
         """Method to test whether a user is registrar of an event or not"""
 
         with self.app.test_request_context(headers=self.auth, method="POST"):
-            uer, _ = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
-            uer.role_id = 6
+            uer = UsersEventsRolesSubFactory(
+                user_id=1, event_id=1, role__name='registrar'
+            )
             save_to_db(uer)
             self.assertTrue(has_access('is_registrar', event_id=1))
 
