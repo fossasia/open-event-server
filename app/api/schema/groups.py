@@ -41,4 +41,5 @@ class GroupSchema(SoftDeletionSchema):
         related_view_kwargs={'group_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
     )
