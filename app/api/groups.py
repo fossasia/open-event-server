@@ -5,6 +5,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.groups import GroupSchema
 
@@ -19,17 +20,20 @@ class GroupListPost(ResourceList):
     Create and List Groups
     """
 
-    def before_post(self, args, kwargs, data):
+    def before_create_object(self, data, view_kwargs):
         """
-        method to check for required relationship with group
-        :param args:
-        :param kwargs:
+        before create object method for GroupListPost Class
         :param data:
+        :param view_kwargs:
         :return:
         """
-        data['user'] = current_user.id
+        data['user_id'] = current_user.id
         if not current_user.is_verified:
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
+
+        for event in data.get('events', []):
+            if not has_access('is_coorganizer', event_id=event):
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
 
     schema = GroupSchema
     decorators = (jwt_required,)
@@ -39,7 +43,9 @@ class GroupListPost(ResourceList):
     data_layer = {
         'session': db.session,
         'model': Group,
-        'methods': {'before_post': before_post},
+        'methods': {
+            'before_create_object': before_create_object,
+        },
     }
 
 
@@ -91,6 +97,19 @@ class GroupDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def before_update_object(self, group, data, view_kwargs):
+        """
+        before update object method of group details
+        :param group:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+
+        for event in data.get('events', []):
+            if not has_access('is_coorganizer', event_id=event):
+                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+
     decorators = (
         api.has_permission(
             'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
@@ -103,6 +122,7 @@ class GroupDetail(ResourceDetail):
         'model': Group,
         'methods': {
             'before_get_object': before_get_object,
+            'before_update_object': before_update_object,
         },
     }
 

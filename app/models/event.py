@@ -158,7 +158,7 @@ class Event(SoftDeletionModel):
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id]
     )
-    group = db.relationship('Group', backref='event', foreign_keys=[group_id])
+    group = db.relationship('Group', backref='events', foreign_keys=[group_id])
     owner = db.relationship(
         'User',
         viewonly=True,
