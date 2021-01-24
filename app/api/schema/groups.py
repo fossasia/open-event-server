@@ -24,7 +24,6 @@ class GroupSchema(SoftDeletionSchema):
     name = fields.Str(required=True)
 
     events = Relationship(
-        attribute='event',
         self_view='v1.group_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',

@@ -39,10 +39,13 @@ class GroupListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if data.get('event', None):
-            event = Event.query.filter_by(id=data['event']).first()
-            if event and not has_access('is_coorganizer', event_id=event.id):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+        if data.get('events', None):
+            for event in data['events']:
+                event = Event.query.filter_by(id=int(event)).first()
+                if event and not has_access('is_coorganizer', event_id=event.id):
+                    raise ForbiddenError(
+                        {'source': ''}, "Event co-organizer access required"
+                    )
 
     schema = GroupSchema
     decorators = (jwt_required,)
@@ -115,10 +118,14 @@ class GroupDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if group and data.get('event'):
-            event = Event.query.filter_by(id=data['event']).first()
-            if event and not has_access('is_coorganizer', event_id=event.id):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+
+        if 'events' in data:
+            for event in data['events']:
+                event = Event.query.filter_by(id=int(event)).first()
+                if event and not has_access('is_coorganizer', event_id=event.id):
+                    raise ForbiddenError(
+                        {'source': ''}, "Event co-organizer access required"
+                    )
 
     decorators = (
         api.has_permission(
