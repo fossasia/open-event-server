@@ -42,6 +42,7 @@ class GroupListPost(ResourceList):
         for event in data.get('events', []):
             if not has_access('is_coorganizer', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+        data['user_id'] = current_user.id
 
     schema = GroupSchema
     decorators = (jwt_required,)
