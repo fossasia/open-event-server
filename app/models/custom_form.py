@@ -111,7 +111,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "firstname": "First Name",
         "lastname": "Last Name",
         "email": "Email",
-        "address": "Address",
+        "address": "Address (Street, Building, Number etc.)",
         "city": "City",
         "state": "State",
         "country": "Country",
