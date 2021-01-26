@@ -49,6 +49,13 @@ class OrderTicket(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
 
+    class Status:
+        INITIALIZING = 'initializing'
+        PENDING = 'pending'
+        COMPLETED = 'completed'
+        CANCELLED = 'cancelled'
+        EXPIRED = 'expired'
+
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True, default=get_new_id)
     amount = db.Column(db.Float, nullable=False, default=0)
