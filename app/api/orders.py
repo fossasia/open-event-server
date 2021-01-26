@@ -377,11 +377,20 @@ class OrderDetail(ResourceDetail):
                             check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
-            if order.status != 'initializing' and order.status != 'pending':
+            status = data.get('status')
+            if (
+                order.status != Order.Status.INITIALIZING
+                and order.status != Order.Status.PENDING
+                and status != Order.Status.CANCELLED
+            ):
                 raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
+            if status == Order.Status.CANCELLED:
+                # If this is a cancellation request, we revert all PATCH changes except status = cancelled
+                data.clear()
+                data['status'] = Order.Status.CANCELLED
             for element in data:
                 if data[element]:
                     if (
