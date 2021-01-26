@@ -15,6 +15,7 @@ class AccessCode(SoftDeletionModel):
     code: str = db.Column(db.String)
     access_url: str = db.Column(db.String)
     is_active: bool = db.Column(db.Boolean)
+    when_sales_ends: bool = db.Column(db.Boolean)
     tickets_number: int = db.Column(
         db.Integer
     )  # For event level access this holds the max. uses

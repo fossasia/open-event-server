@@ -75,7 +75,7 @@ class AccessCodeSchema(SoftDeletionSchema):
     code = fields.Str(required=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)
-
+    when_sales_ends = fields.Boolean(default=False)
     # For event level access this holds the max. uses
     tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
 
