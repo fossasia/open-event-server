@@ -49,3 +49,68 @@ def create_custom_forms_for_attendees(event):
     save_to_db(first_name_form, 'First name form saved')
     save_to_db(last_name_form, 'Last name form saved')
     save_to_db(email_form, 'Email form saved')
+
+
+def create_custom_forms_for_speakers(event):
+    """
+    Create and save the custom forms for the required fields of speakers.
+    :param event:
+    :return:
+    """
+    # common values
+    form = 'speaker'
+    is_required = True
+    is_included = True
+    is_fixed = True
+    event_id = event.id
+    form_type = 'text'
+
+    name_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type=form_type,
+        field_identifier='name',
+    )
+
+    email_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type='email',
+        field_identifier='email',
+    )
+
+    save_to_db(name_form, 'Name form saved')
+    save_to_db(email_form, 'Email form saved')
+
+
+def create_custom_forms_for_sessions(event):
+    """
+    Create and save the custom forms for the required fields of sessions.
+    :param event:
+    :return:
+    """
+    # common values
+    form = 'session'
+    is_required = True
+    is_included = True
+    is_fixed = True
+    event_id = event.id
+    form_type = 'text'
+
+    title_form = CustomForms(
+        form=form,
+        is_required=is_required,
+        is_included=is_included,
+        is_fixed=is_fixed,
+        event_id=event_id,
+        type=form_type,
+        field_identifier='title',
+    )
+
+    save_to_db(title_form, 'Title form saved')
