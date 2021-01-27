@@ -2,11 +2,13 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 3
-* Postgres
+* Python 3.8
+* PostgreSQL
+* Redis
+
+
 ```sh
-sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+xargs -a deb-packages.txt sudo apt install
 ```
 
 ## Steps
@@ -16,10 +18,20 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
 
-* **Step 1** - Install Python 3 requirements.
+* **Step 1** - Install Poetry and Python 3 requirements.
+
+This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
 
 ```sh
-pip3 install -r requirements.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
 ```
 
 
@@ -45,6 +57,9 @@ CREATE DATABASE oevent WITH OWNER open_event_user;
 cp .env.example .env
 ```
 
+Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that server will not run in production mode if you don't supply a secret.
+To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above in `.env` file
+
 
 * **Step 4** - Start the postgres service.
 
@@ -63,24 +78,13 @@ python3 manage.py db stamp head
 
 
 * **Step 6** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
-# download and run redis
-wget http://download.redis.io/releases/redis-3.2.1.tar.gz
-tar xzf redis-3.2.1.tar.gz
-rm redis-3.2.1.tar.gz
-cd redis-3.2.1
-make
-
-# To run redis
-redis-3.2.1/src/redis-server &
-
 # run worker
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.celery &
+celery -A app.instance.celery worker -B -l INFO -c 2 &
 unset INTEGRATE_SOCKETIO
 
 # run app
