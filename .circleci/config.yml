@@ -76,7 +76,7 @@ jobs:
 
       - run:
           name: Deploy API Docs
-          run: ./scripts/push_api_docs.sh
+          commadn: ./scripts/push_api_docs.sh
 
   pytype:
     docker:
