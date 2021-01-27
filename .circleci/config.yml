@@ -70,6 +70,14 @@ jobs:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd
 
+      - add_ssh_keys:
+          fingerprints:
+            - "b9:19:a3:01:f7:a3:a2:51:fe:69:cc:58:2e:40:aa:e1"
+
+      - run:
+          name: Deploy API Docs
+          command: ./scripts/push_api_docs.sh
+
   pytype:
     docker:
       - image: circleci/python:3.8.6-node
