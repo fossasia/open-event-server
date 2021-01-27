@@ -72,7 +72,7 @@ jobs:
 
       - add_ssh_keys:
           fingerprints:
-            - "b9:19:a3:01:f7:a3:a2:51:fe:69:cc:58:2e:40:aa:e1"
+            - "66:bd:79:0b:a9:ac:1d:0a:41:f3:26:dd:36:d9:a3:40"
 
       - run:
           name: Deploy API Docs
