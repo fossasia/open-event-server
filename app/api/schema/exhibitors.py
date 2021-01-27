@@ -22,6 +22,8 @@ class ExhibitorSchema(Schema):
     video_url = fields.Url(allow_none=True)
     slides_url = fields.Url(allow_none=True)
     event = Relationship(
+        self_view='v1.exhibitor_event',
+        self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
         related_view_kwargs={'exhibitor_id': '<id>'},
         schema='EventSchemaPublic',

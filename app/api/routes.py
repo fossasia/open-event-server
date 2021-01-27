@@ -1727,7 +1727,7 @@ api.route(
 )
 
 # Exhibitors
-api.route(ExhibitorListPost, 'exhibitor_list_post', '/sponsors')
+api.route(ExhibitorListPost, 'exhibitor_list_post', '/exhibitors')
 api.route(
     ExhibitorList,
     'exhibitor_list',

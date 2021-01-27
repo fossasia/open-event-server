@@ -32,7 +32,7 @@ class ExhibitorList(ResourceList):
 
     view_kwargs = True
     methods = ['GET']
-    schema = Exhibitor
+    schema = ExhibitorSchema
     data_layer = {'session': db.session, 'model': Exhibitor, 'methods': {'query': query}}
 
 
