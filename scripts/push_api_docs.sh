@@ -22,7 +22,7 @@ cp -R docs/general/* gh-pages/_docs/
 cp -R docs/installation/* gh-pages/_installation/
 cd gh-pages
 git add .
-git commit -m '[Auto] Updated API Docs'
+git commit -m '[skip ci] Updated API Docs'
 git push origin gh-pages
 
 exit 0
