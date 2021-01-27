@@ -1422,7 +1422,7 @@ python-versions = "*"
 
 [[package]]
 name = "omise"
-version = "0.9.0"
+version = "0.10.0"
 description = "Omise Python client"
 category = "main"
 optional = false
@@ -2346,7 +2346,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "dad10e2dd5de08899c4d82b17ce97d567d92b3d682ec24eece13e711a9050139"
+content-hash = "879bd881786d958f5d5e5776e6b74f6c1c3fa1c4bdda93c0ad76fad2c273d6c2"
 
 [metadata.files]
 aiohttp = [
@@ -3050,8 +3050,8 @@ objproxies = [
     {file = "objproxies-0.9.4.tar.gz", hash = "sha256:6d68281b3b44dbda51ee11e460b50e9d0025ea68e16e3fb192fcf9250f229426"},
 ]
 omise = [
-    {file = "omise-0.9.0-py3.7.egg", hash = "sha256:361ddc7dd77829ac4eb2bca7737b31a532f566fd692b24559a50d01e9461633b"},
-    {file = "omise-0.9.0.tar.gz", hash = "sha256:86c381ef3cba6b3ea2ff35c0300c61f6e1d5d3ec104148d20114b1eb19d51cd4"},
+    {file = "omise-0.10.0-py3.9.egg", hash = "sha256:7f9385611592f73c8f54e35515ec67ba59715cc51e361c765f642a7ff3d26b65"},
+    {file = "omise-0.10.0.tar.gz", hash = "sha256:b1983ab542116eeb91bdb6ea407c1a6635f16e2ba4c7db929a00fb380cadc7ac"},
 ]
 packaging = [
     {file = "packaging-20.8-py2.py3-none-any.whl", hash = "sha256:24e0da08660a87484d1602c30bb4902d74816b6985b93de36926f5bc95741858"},
