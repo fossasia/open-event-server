@@ -76,6 +76,7 @@ from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
 from tests.factories.user_favourite_sessions import UserFavouriteSessionFactory
+from tests.factories.exhibitor import ExhibitorFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
@@ -4795,4 +4796,66 @@ def mail_statistics_get(transaction):
     with stash['app'].app_context():
         mail = MailFactory()
         db.session.add(mail)
+        db.session.commit()
+
+
+# ------------------------- Exhibitors -------------------------
+@hooks.before("Exhibitors > Exhibitors Get Collection > List All Exhibitors")
+def exhibitor_get_list(transaction):
+    """
+    GET /events/1/exhibitors
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitors Post Collection > Create Exhibitor")
+def exhibitor_post(transaction):
+    """
+    POST /exhibitors
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        EventFactoryBasic()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Exhibitor Details")
+def exhibitor_get_detail(transaction):
+    """
+    GET /exhibitors/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Update Exhibitor")
+def exhibitor_patch(transaction):
+    """
+    PATCH /exhibitors/1
+    :param transaction:
+    :return:
+    """
+
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Delete Exhibitor")
+def exhibitor_delete(transaction):
+    """
+    DELETE /exhibitors/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
         db.session.commit()
