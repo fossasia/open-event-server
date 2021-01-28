@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Blueprint, abort, jsonify, make_response, render_template, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
@@ -300,25 +300,23 @@ class UserDetail(ResourceDetail):
                     order_exists = db.session.query(
                         TicketHolder.query.filter_by(user=user)
                         .join(Order)
+                        .join(Order.event)
                         .filter(
-                            or_(
-                                Order.status == 'completed',
-                                Order.status == 'placed',
-                                Order.status == 'initializing',
-                                Order.status == 'pending',
+                            and_(
+                                or_(
+                                    Order.status == 'completed',
+                                    Order.status == 'placed',
+                                    Order.status == 'initializing',
+                                    Order.status == 'pending',
+                                ),
+                                Event.ends_at > datetime.now(),
                             )
                         )
                         .exists()
                     ).scalar()
 
-                    present_event_orders = db.session.query(
-                        TicketHolder.query.filter_by(user=user)
-                        .join(Order.event)
-                        .filter(Event.ends_at > datetime.now())
-                        .exists()
-                    ).scalar()
                     # If any pending or completed order exists, we cannot delete the user
-                    if order_exists and present_event_orders:
+                    if order_exists:
                         logger.warning(
                             'User %s has pending or completed orders, hence cannot be deleted',
                             user,
