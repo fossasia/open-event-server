@@ -1,5 +1,5 @@
 from app.api.helpers.db import save_to_db
-from app.models.custom_form import CustomForms
+from app.models.custom_form import CUSTOM_FORM_IDENTIFIER_NAME_MAP, CustomForms
 
 
 def create_custom_forms_for_attendees(event):
@@ -10,45 +10,24 @@ def create_custom_forms_for_attendees(event):
     """
     # common values
     form = 'attendee'
-    is_required = True
-    is_included = True
-    is_fixed = True
     event_id = event.id
     form_type = 'text'
 
-    first_name_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type=form_type,
-        field_identifier='firstname',
-    )
+    form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
+    for x in form_dict:
+        form_name = x + "_form"
+        if x == 'email':
+            form_type = 'email'
+        else:
+            form_type = 'text'
 
-    last_name_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type=form_type,
-        field_identifier='lastname',
-    )
-
-    email_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type='email',
-        field_identifier='email',
-    )
-
-    save_to_db(first_name_form, 'First name form saved')
-    save_to_db(last_name_form, 'Last name form saved')
-    save_to_db(email_form, 'Email form saved')
+        form_name = CustomForms(
+            form=form,
+            event_id=event_id,
+            type=form_type,
+            field_identifier=x,
+        )
+        save_to_db(form_name, x.upper() + 'Form saved')
 
 
 def create_custom_forms_for_speakers(event):
@@ -59,34 +38,24 @@ def create_custom_forms_for_speakers(event):
     """
     # common values
     form = 'speaker'
-    is_required = True
-    is_included = True
-    is_fixed = True
     event_id = event.id
     form_type = 'text'
 
-    name_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type=form_type,
-        field_identifier='name',
-    )
+    form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
+    for x in form_dict:
+        form_name = x + "_form"
+        if x == 'email':
+            form_type = 'email'
+        else:
+            form_type = 'text'
 
-    email_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type='email',
-        field_identifier='email',
-    )
-
-    save_to_db(name_form, 'Name form saved')
-    save_to_db(email_form, 'Email form saved')
+        form_name = CustomForms(
+            form=form,
+            event_id=event_id,
+            type=form_type,
+            field_identifier=x,
+        )
+        save_to_db(form_name, x.upper() + 'Form saved')
 
 
 def create_custom_forms_for_sessions(event):
@@ -97,20 +66,21 @@ def create_custom_forms_for_sessions(event):
     """
     # common values
     form = 'session'
-    is_required = True
-    is_included = True
-    is_fixed = True
     event_id = event.id
     form_type = 'text'
 
-    title_form = CustomForms(
-        form=form,
-        is_required=is_required,
-        is_included=is_included,
-        is_fixed=is_fixed,
-        event_id=event_id,
-        type=form_type,
-        field_identifier='title',
-    )
+    form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
+    for x in form_dict:
+        form_name = x + "_form"
+        if x == 'email':
+            form_type = 'email'
+        else:
+            form_type = 'text'
 
-    save_to_db(title_form, 'Title form saved')
+        form_name = CustomForms(
+            form=form,
+            event_id=event_id,
+            type=form_type,
+            field_identifier=x,
+        )
+        save_to_db(form_name, x.upper() + 'Form saved')

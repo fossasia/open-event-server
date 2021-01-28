@@ -18,7 +18,7 @@ class TestEventUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             save_to_db(event)
             create_custom_forms_for_attendees(event)
-            self.assertEqual(get_count(CustomForms.query), 3)
+            self.assertEqual(get_count(CustomForms.query), 28)
 
     def test_should_create_speaker_forms(self):
         """Method to test custom forms for attendees of an event."""
@@ -26,7 +26,7 @@ class TestEventUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             save_to_db(event)
             create_custom_forms_for_speakers(event)
-            self.assertEqual(get_count(CustomForms.query), 2)
+            self.assertEqual(get_count(CustomForms.query), 21)
 
     def test_should_create_session_forms(self):
         """Method to test custom forms for attendees of an event."""
@@ -34,7 +34,7 @@ class TestEventUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             save_to_db(event)
             create_custom_forms_for_sessions(event)
-            self.assertEqual(get_count(CustomForms.query), 1)
+            self.assertEqual(get_count(CustomForms.query), 12)
 
 
 if __name__ == '__main__':
