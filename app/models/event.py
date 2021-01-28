@@ -43,7 +43,9 @@ class Event(SoftDeletionModel):
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, default=get_new_event_identifier)
+    identifier = db.Column(
+        db.String, default=get_new_event_identifier, nullable=False, unique=True
+    )
     name = db.Column(db.String, nullable=False)
     external_event_url = db.Column(db.String)
     logo_url = db.Column(db.String)
