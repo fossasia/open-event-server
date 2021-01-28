@@ -116,16 +116,28 @@ def send_email_task_sendgrid(payload):
 
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
-            with open(attachment, 'rb') as f:
-                file_data = f.read()
-                f.close()
-            encoded = base64.b64encode(file_data).decode()
-            attachment = Attachment()
-            attachment.file_content = FileContent(encoded)
-            attachment.file_type = FileType('application/pdf')
-            attachment.file_name = FileName(payload['to'])
-            attachment.disposition = Disposition('attachment')
-            message.add_attachment(attachment)
+            if attachment.endswith('.pdf'):
+                with open(attachment, 'rb') as f:
+                    file_data = f.read()
+                    f.close()
+                encoded = base64.b64encode(file_data).decode()
+                attachment = Attachment()
+                attachment.file_content = FileContent(encoded)
+                attachment.file_type = FileType('application/pdf')
+                attachment.file_name = FileName(payload['to'])
+                attachment.disposition = Disposition('attachment')
+                message.add_attachment(attachment)
+            elif attachment.endswith('.ics'):
+                with open(attachment, 'rb') as f:
+                    file_data = f.read()
+                    f.close()
+                encoded = base64.b64encode(file_data).decode()
+                attachment = Attachment()
+                attachment.file_content = FileContent(encoded)
+                attachment.file_type = FileType('text/calendar')
+                attachment.file_name = FileName('ical.ics')
+                attachment.disposition = Disposition('attachment')
+                message.add_attachment(attachment)
     sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
     logging.info(
         'Sending an email to {} regarding "{}" on behalf of {}'.format(

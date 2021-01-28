@@ -1,6 +1,6 @@
 import base64
 import logging
-from datetime import datetime
+import os
 from itertools import groupby
 from typing import Dict
 
@@ -329,6 +329,23 @@ def send_email_to_attendees(order):
     if current_app.config['ATTACH_ORDER_PDF']:
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
+    event = order.event
+    event_id = event.id
+    filedir = os.path.join(
+        current_app.config.get('BASE_DIR'),
+        f'static/uploads/{event_id}/',
+    )
+
+    if not os.path.isdir(filedir):
+        os.makedirs(filedir)
+    filename = "ical.ics"
+    ical_file_path = os.path.join(filedir, filename)
+    if ical_file_path:
+        if attachments == None:
+            attachments = [ical_file_path]
+        else:
+            attachments.append(ical_file_path)
+
     attendees = (
         TicketHolder.query.options(
             joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
@@ -338,7 +355,6 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
-    event = order.event
     context = dict(
         order=order,
         settings=get_settings(),
