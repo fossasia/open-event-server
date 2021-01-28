@@ -12,19 +12,43 @@ def create_custom_forms_for_attendees(event):
     form = 'attendee'
     event_id = event.id
     form_type = 'text'
+    is_required = False
+    is_included = False
 
     form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
     for x in form_dict:
         form_name = x + "_form"
-        if x == 'email':
-            form_type = 'email'
-        else:
-            form_type = 'text'
+        form_type = 'email' if x == 'email' else 'text'
+
+        is_required = True if x in ['firstname', 'lastname', 'email'] else False
+        is_included = (
+            True
+            if x
+            in [
+                'firstname',
+                'lastname',
+                'email',
+                'address',
+                'city',
+                'state',
+                'country',
+                'jobTitle',
+                'phone',
+                'taxBusinessInfo',
+                'company',
+                'website',
+                'twitter',
+                'github',
+            ]
+            else False
+        )
 
         form_name = CustomForms(
             form=form,
             event_id=event_id,
             type=form_type,
+            is_required=is_required,
+            is_included=is_included,
             field_identifier=x,
         )
         save_to_db(form_name, x.upper() + 'Form saved')
@@ -44,15 +68,32 @@ def create_custom_forms_for_speakers(event):
     form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
     for x in form_dict:
         form_name = x + "_form"
-        if x == 'email':
-            form_type = 'email'
-        else:
-            form_type = 'text'
+        form_type = 'email' if x == 'email' else 'text'
+
+        is_required = True if x in ['name', 'email'] else False
+        is_included = (
+            True
+            if x
+            in [
+                'name',
+                'email',
+                'photoUrl',
+                'organisation',
+                'position',
+                'country',
+                'shortBiography',
+                'website',
+                'twitter',
+            ]
+            else False
+        )
 
         form_name = CustomForms(
             form=form,
             event_id=event_id,
             type=form_type,
+            is_required=is_required,
+            is_included=is_included,
             field_identifier=x,
         )
         save_to_db(form_name, x.upper() + 'Form saved')
@@ -72,15 +113,18 @@ def create_custom_forms_for_sessions(event):
     form_dict = CUSTOM_FORM_IDENTIFIER_NAME_MAP[form]
     for x in form_dict:
         form_name = x + "_form"
-        if x == 'email':
-            form_type = 'email'
-        else:
-            form_type = 'text'
+
+        is_required = True if x in ['title'] else False
+        is_included = (
+            True if x in ['title', 'shortAbstract', 'comments', 'slidesUrl'] else False
+        )
 
         form_name = CustomForms(
             form=form,
             event_id=event_id,
             type=form_type,
+            is_required=is_required,
+            is_included=is_included,
             field_identifier=x,
         )
         save_to_db(form_name, x.upper() + 'Form saved')
