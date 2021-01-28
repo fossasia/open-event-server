@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Blueprint, abort, jsonify, make_response, render_template, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy import and_, or_
+from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
@@ -301,15 +301,13 @@ class UserDetail(ResourceDetail):
                         TicketHolder.query.filter_by(user=user)
                         .join(Order)
                         .join(Order.event)
+                        .filter(Event.ends_at > datetime.now())
                         .filter(
-                            and_(
-                                or_(
-                                    Order.status == 'completed',
-                                    Order.status == 'placed',
-                                    Order.status == 'initializing',
-                                    Order.status == 'pending',
-                                ),
-                                Event.ends_at > datetime.now(),
+                              or_(
+                                  Order.status == 'completed',
+                                  Order.status == 'placed',
+                                  Order.status == 'initializing',
+                                  Order.status == 'pending',
                             )
                         )
                         .exists()
