@@ -303,16 +303,15 @@ class UserDetail(ResourceDetail):
                         .join(Order.event)
                         .filter(Event.ends_at > datetime.now())
                         .filter(
-                              or_(
-                                  Order.status == 'completed',
-                                  Order.status == 'placed',
-                                  Order.status == 'initializing',
-                                  Order.status == 'pending',
+                            or_(
+                                Order.status == 'completed',
+                                Order.status == 'placed',
+                                Order.status == 'initializing',
+                                Order.status == 'pending',
                             )
                         )
                         .exists()
                     ).scalar()
-
                     # If any pending or completed order exists, we cannot delete the user
                     if order_exists:
                         logger.warning(
