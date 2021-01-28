@@ -1,6 +1,5 @@
 import base64
 import logging
-from datetime import datetime
 from itertools import groupby
 from typing import Dict
 
@@ -412,6 +411,8 @@ def send_order_cancel_email(order):
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
+            order_id=order.identifier,
+            event_id=order.event.identifier,
             frontend_url=get_settings()['frontend_url'],
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],
