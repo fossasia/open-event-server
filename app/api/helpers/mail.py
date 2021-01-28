@@ -345,7 +345,7 @@ def send_email_to_attendees(order):
         temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
 
     if os.path.exists(ical_file_path):
-        if attachments == None:
+        if attachments is None:
             attachments = [ical_file_path]
         else:
             attachments.append(ical_file_path)
