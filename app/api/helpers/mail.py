@@ -8,8 +8,7 @@ from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.files import make_frontend_url
-from app.api.helpers.ICalExporter import ICalExporter
+from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
@@ -332,17 +331,7 @@ def send_email_to_attendees(order):
 
     event = order.event
     event_id = event.id
-    filedir = os.path.join(
-        current_app.config.get('BASE_DIR'),
-        f'static/uploads/temp/{event_id}/',
-    )
-
-    if not os.path.isdir(filedir):
-        os.makedirs(filedir)
-    filename = "ical.ics"
-    ical_file_path = os.path.join(filedir, filename)
-    with open(ical_file_path, "w") as temp_file:
-        temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+    ical_file_path = generate_ics_file(event_id)
 
     if os.path.exists(ical_file_path):
         if attachments is None:

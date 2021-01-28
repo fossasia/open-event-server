@@ -13,6 +13,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from weasyprint import HTML
 from xhtml2pdf import pisa
 
+from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, generate_hash, upload
 from app.models.image_size import ImageSizes
 from app.settings import get_settings
@@ -384,3 +385,28 @@ def create_save_pdf(
     os.remove(dest)
 
     return new_file
+
+
+def generate_ics_file(event_id, temp=True):
+    """
+    Generates the ICS file for the {event_id}
+    """
+
+    if temp:
+        filedir = os.path.join(
+            current_app.config.get('BASE_DIR'),
+            f'static/uploads/temp/{event_id}/',
+        )
+    else:
+        filedir = os.path.join(
+            current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
+        )
+
+    if not os.path.isdir(filedir):
+        os.makedirs(filedir)
+    filename = "ical.ics"
+    file_path = os.path.join(filedir, filename)
+    with open(file_path, "w") as temp_file:
+        temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+
+    return file_path
