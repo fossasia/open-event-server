@@ -34,7 +34,7 @@ class AccessCodeSchema(SoftDeletionSchema):
                 data['valid_from'] = access_code.valid_from
 
             if 'valid_till' not in data:
-                data['valid_till'] = access_code.valid_till
+                data['valid_till'] = access_code.valid_expire_time
 
         if data['valid_till'] and data['valid_from'] > data['valid_till']:
             raise UnprocessableEntityError(
