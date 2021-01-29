@@ -389,7 +389,7 @@ def create_save_pdf(
 
 def generate_ics_file(event_id, temp=True):
     """
-    Generates the ICS file for the {event_id}
+    Generate the ICS file for the {event_id}
     """
 
     if temp:
