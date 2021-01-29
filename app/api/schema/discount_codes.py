@@ -242,10 +242,10 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if 'valid_from' not in data:
                 data['valid_from'] = discount_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = discount_code.valid_expire_time
+            
+            data['valid_till'] = discount_code.valid_till
 
-        if data['valid_from'] >= data['valid_till']:
+        if data['valid_till'] and data['valid_from'] >= data['valid_till']:
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",

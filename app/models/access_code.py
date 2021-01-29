@@ -43,6 +43,4 @@ class AccessCode(SoftDeletionModel):
 
     @property
     def valid_expire_time(self):
-        if self.valid_till:
-            return self.valid_till
-        return self.event.ends_at
+        return self.valid_till or self.event.ends_at

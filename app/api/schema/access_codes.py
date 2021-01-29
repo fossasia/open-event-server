@@ -33,8 +33,7 @@ class AccessCodeSchema(SoftDeletionSchema):
             if 'valid_from' not in data:
                 data['valid_from'] = access_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = access_code.valid_expire_time
+            data['valid_till'] = access_code.valid_expire_time
 
         if data['valid_till'] and data['valid_from'] > data['valid_till']:
             raise UnprocessableEntityError(
@@ -81,8 +80,8 @@ class AccessCodeSchema(SoftDeletionSchema):
 
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    valid_from = fields.DateTime(required=True, allow_none=True)
-    valid_till = fields.DateTime(required=True, allow_none=True)
+    valid_from = fields.DateTime(allow_none=True)
+    valid_till = fields.DateTime(allow_none=True)
     event = Relationship(
         self_view='v1.access_code_event',
         self_view_kwargs={'id': '<id>'},
