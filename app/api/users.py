@@ -1,5 +1,6 @@
 import base64
 import logging
+from datetime import datetime
 
 from flask import Blueprint, abort, jsonify, make_response, render_template, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
@@ -299,6 +300,8 @@ class UserDetail(ResourceDetail):
                     order_exists = db.session.query(
                         TicketHolder.query.filter_by(user=user)
                         .join(Order)
+                        .join(Order.event)
+                        .filter(Event.ends_at > datetime.now())
                         .filter(
                             or_(
                                 Order.status == 'completed',
