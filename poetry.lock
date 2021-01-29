@@ -949,7 +949,7 @@ test = ["pytest (==4.3.1)", "mock (==2.0.0)", "pytest-cov (==2.6.1)", "sqlalchem
 
 [[package]]
 name = "graphene-sqlalchemy-filter"
-version = "1.12.1"
+version = "1.12.2"
 description = "Filters for Graphene SQLAlchemy integration"
 category = "main"
 optional = false
@@ -2346,7 +2346,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "ee43fa0429ba39055a11a20eca7869371046821fc6d69d6693a34d0662bd627b"
+content-hash = "80def9a5f9fdf21b910e818084cd290a40dccef5b4019124bac85b7c430547e8"
 
 [metadata.files]
 aiohttp = [
@@ -2770,8 +2770,8 @@ graphene-sqlalchemy = [
     {file = "graphene_sqlalchemy-2.3.0-py2.py3-none-any.whl", hash = "sha256:97ed52bc0d01d757df50d25b5bdd490a2327778d41223d4e084d38a239925e8e"},
 ]
 graphene-sqlalchemy-filter = [
-    {file = "graphene-sqlalchemy-filter-1.12.1.tar.gz", hash = "sha256:8902e5c20e1b04adfa7967831f4dbde1d3d0a70a74e12bad7f76230b90138363"},
-    {file = "graphene_sqlalchemy_filter-1.12.1-py3-none-any.whl", hash = "sha256:b3fc44c932e992365542ae35dfce6e68030f9f47216c131fe10819c340c32ae2"},
+    {file = "graphene-sqlalchemy-filter-1.12.2.tar.gz", hash = "sha256:92057bc7bbb06a4c7351c89c267d3696e620189877e40d66f3857637caa6423a"},
+    {file = "graphene_sqlalchemy_filter-1.12.2-py3-none-any.whl", hash = "sha256:c71ea3a4bb5941d82e5d1eaf50a525d796fd39fe106b0023157821e2d3339a7e"},
 ]
 graphql-core = [
     {file = "graphql-core-2.3.2.tar.gz", hash = "sha256:aac46a9ac524c9855910c14c48fc5d60474def7f99fd10245e76608eba7af746"},
