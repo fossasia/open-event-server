@@ -26,8 +26,8 @@ from app.api.helpers.files import (
     create_save_image_sizes,
     create_save_pdf,
     create_save_resized_image,
+    generate_ics_file,
 )
-from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.mail import check_smtp_config, send_export_mail, send_import_mail
 from app.api.helpers.notification import send_notif_after_export, send_notif_after_import
 from app.api.helpers.pentabarfxml import PentabarfExporter
@@ -115,16 +115,20 @@ def send_email_task_sendgrid(payload):
         message.reply_to = payload['reply_to']
 
     if payload['attachments'] is not None:
-        for attachment in payload['attachments']:
-            with open(attachment, 'rb') as f:
+        for filename in payload['attachments']:
+            with open(filename, 'rb') as f:
                 file_data = f.read()
                 f.close()
             encoded = base64.b64encode(file_data).decode()
             attachment = Attachment()
             attachment.file_content = FileContent(encoded)
-            attachment.file_type = FileType('application/pdf')
-            attachment.file_name = FileName(payload['to'])
             attachment.disposition = Disposition('attachment')
+            if filename.endswith('.pdf'):
+                attachment.file_type = FileType('application/pdf')
+                attachment.file_name = FileName(payload['to'])
+            elif filename.endswith('.ics'):
+                attachment.file_type = FileType('text/calendar')
+                attachment.file_name = FileName('ical.ics')
             message.add_attachment(attachment)
     sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
     logging.info(
@@ -326,22 +330,9 @@ def export_ical_task(self, event_id, temp=True):
     event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
-        if temp:
-            filedir = os.path.join(
-                current_app.config.get('BASE_DIR'),
-                f'static/uploads/temp/{event_id}/',
-            )
-        else:
-            filedir = os.path.join(
-                current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
-            )
+        file_path = generate_ics_file(event_id, temp)
 
-        if not os.path.isdir(filedir):
-            os.makedirs(filedir)
-        filename = "ical.ics"
-        file_path = os.path.join(filedir, filename)
-        with open(file_path, "w") as temp_file:
-            temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+        filename = os.path.basename(file_path)
         ical_file = UploadedFile(file_path=file_path, filename=filename)
         if temp:
             ical_url = upload(

@@ -1,9 +1,8 @@
-from sqlalchemy import func
-
 from app.models import db
+from app.models.helpers.timestamp import Timestamp
 
 
-class VideoChannel(db.Model):
+class VideoChannel(db.Model, Timestamp):
     "Video Channel like Jitsi, BBB, etc"
 
     __tablename__ = 'video_channels'
@@ -15,11 +14,6 @@ class VideoChannel(db.Model):
     api_key = db.Column(db.String)
     # Extra info stored for server if needed for integration like settings
     extra = db.Column(db.JSON)
-
-    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
-    modified_at = db.Column(
-        db.DateTime(timezone=True), default=func.now(), onupdate=func.now()
-    )
 
     def __repr__(self) -> str:
         return f'<VideoChannel {self.id} {self.name} {self.provider} {self.url}>'

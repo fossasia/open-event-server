@@ -1422,7 +1422,7 @@ python-versions = "*"
 
 [[package]]
 name = "omise"
-version = "0.9.0"
+version = "0.10.0"
 description = "Omise Python client"
 category = "main"
 optional = false
@@ -1492,7 +1492,7 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "pre-commit"
-version = "2.9.3"
+version = "2.10.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -2346,7 +2346,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "dad10e2dd5de08899c4d82b17ce97d567d92b3d682ec24eece13e711a9050139"
+content-hash = "ee43fa0429ba39055a11a20eca7869371046821fc6d69d6693a34d0662bd627b"
 
 [metadata.files]
 aiohttp = [
@@ -3050,8 +3050,8 @@ objproxies = [
     {file = "objproxies-0.9.4.tar.gz", hash = "sha256:6d68281b3b44dbda51ee11e460b50e9d0025ea68e16e3fb192fcf9250f229426"},
 ]
 omise = [
-    {file = "omise-0.9.0-py3.7.egg", hash = "sha256:361ddc7dd77829ac4eb2bca7737b31a532f566fd692b24559a50d01e9461633b"},
-    {file = "omise-0.9.0.tar.gz", hash = "sha256:86c381ef3cba6b3ea2ff35c0300c61f6e1d5d3ec104148d20114b1eb19d51cd4"},
+    {file = "omise-0.10.0-py3.9.egg", hash = "sha256:7f9385611592f73c8f54e35515ec67ba59715cc51e361c765f642a7ff3d26b65"},
+    {file = "omise-0.10.0.tar.gz", hash = "sha256:b1983ab542116eeb91bdb6ea407c1a6635f16e2ba4c7db929a00fb380cadc7ac"},
 ]
 packaging = [
     {file = "packaging-20.8-py2.py3-none-any.whl", hash = "sha256:24e0da08660a87484d1602c30bb4902d74816b6985b93de36926f5bc95741858"},
@@ -3107,8 +3107,8 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 pre-commit = [
-    {file = "pre_commit-2.9.3-py2.py3-none-any.whl", hash = "sha256:6c86d977d00ddc8a60d68eec19f51ef212d9462937acf3ea37c7adec32284ac0"},
-    {file = "pre_commit-2.9.3.tar.gz", hash = "sha256:ee784c11953e6d8badb97d19bc46b997a3a9eded849881ec587accd8608d74a4"},
+    {file = "pre_commit-2.10.0-py2.py3-none-any.whl", hash = "sha256:391ed331fdd0a21d0be48c1b9919921e9d372dfd60f6dc77b8f01dd6b13161c1"},
+    {file = "pre_commit-2.10.0.tar.gz", hash = "sha256:f413348d3a8464b77987e36ef6e02c3372dadb823edf0dfe6fb0c3dc2f378ef9"},
 ]
 promise = [
     {file = "promise-2.3.tar.gz", hash = "sha256:dfd18337c523ba4b6a58801c164c1904a9d4d1b1747c7d5dbf45b693a49d93d0"},
