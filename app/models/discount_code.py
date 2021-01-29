@@ -58,6 +58,12 @@ class DiscountCode(SoftDeletionModel):
     def confirmed_attendees_count(self) -> int:
         return get_count(self.get_confirmed_attendees_query())
 
+    @property
+    def valid_expire_time(self):
+        if self.valid_till:
+            return self.valid_till
+        return self.event.ends_at
+    
     def get_supported_tickets(self, ticket_ids=None):
         query = Ticket.query.with_parent(self).filter_by(deleted_at=None)
         if ticket_ids:
