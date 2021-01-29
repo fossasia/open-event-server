@@ -1,3 +1,4 @@
+import datetime
 import unittest
 from unittest import TestCase
 
@@ -26,6 +27,20 @@ class TestDiscountCodeValidation(TestCase):
         data = {'min_quantity': 20, 'max_quantity': 10, 'tickets_number': 30}
         with self.assertRaises(UnprocessableEntityError):
             DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
+
+    def test_date_valid_from_gt_valid_till(self):
+        """
+        Acces Code Validate Date - Tests if the exception is raised when valid_from is greater than valid_till
+        :return:
+        """
+        schema = DiscountCodeSchemaTicket()
+        original_data = {'data': {}}
+        data = {
+            'valid_from': datetime.datetime(2019, 1, 1),
+            'valid_till': datetime.datetime(2018, 1, 1),
+        }
+        with self.assertRaises(UnprocessableEntityError):
+            DiscountCodeSchemaTicket.validate_date(schema, data, original_data)
 
     def test_quantity_max_gt_tickets_number(self):
         """
