@@ -1,6 +1,6 @@
 import base64
 import logging
-from datetime import datetime
+import os
 from itertools import groupby
 from typing import Dict
 
@@ -8,7 +8,7 @@ from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.files import make_frontend_url
+from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
@@ -329,6 +329,15 @@ def send_email_to_attendees(order):
     if current_app.config['ATTACH_ORDER_PDF']:
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
+    event = order.event
+    ical_file_path = generate_ics_file(event.id)
+
+    if os.path.exists(ical_file_path):
+        if attachments is None:
+            attachments = [ical_file_path]
+        else:
+            attachments.append(ical_file_path)
+
     attendees = (
         TicketHolder.query.options(
             joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
@@ -338,7 +347,6 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
-    event = order.event
     context = dict(
         order=order,
         settings=get_settings(),
