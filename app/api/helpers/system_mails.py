@@ -241,7 +241,7 @@ MAILS = {
         'subject': 'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
             "Hello,"
-            "<br/>your order {order_id} for {event_name} has been cancelled."
+            "<br/>Your order {order_id} for {event_name} has been cancelled."
             "<br/>The information about your cancelled order is here: <a href='{frontend_url}/orders/{order_id}/view/' target='_blank'>{frontend_url}/orders/{order_id}/view</a>"
             "<br/>If you have not done this cancellation by yourself, please check with the owner of the order or the organizer of the event for more information about the cancellation."
             "<br/>To contact event organizers please use the contact form on the event page here: <a href='{frontend_url}/e/{event_id}/' target='_blank'>{frontend_url}/e/{event_id}/</a>"
