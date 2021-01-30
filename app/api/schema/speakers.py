@@ -52,6 +52,7 @@ class SpeakerSchema(SoftDeletionSchema):
     position = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
+    address = fields.Str(allow_none=True)
     gender = fields.Str(allow_none=True)
     order = fields.Integer(allow_none=True, default=0)
     heard_from = fields.Str(allow_none=True)

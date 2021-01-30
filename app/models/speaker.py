@@ -32,6 +32,7 @@ class Speaker(SoftDeletionModel):
     position = db.Column(db.String)
     country = db.Column(db.String)
     city = db.Column(db.String)
+    address = db.Column(db.String)
     gender = db.Column(db.String)
     order = db.Column(db.Integer, default=0, nullable=False)
     heard_from = db.Column(db.String)
