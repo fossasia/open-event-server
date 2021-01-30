@@ -84,7 +84,7 @@ class AccessCodeSchema(SoftDeletionSchema):
 
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    valid_from = fields.DateTime(allow_none=True)
+    valid_from = fields.DateTime(required=True)
     valid_till = fields.DateTime(allow_none=True)
     event = Relationship(
         self_view='v1.access_code_event',
