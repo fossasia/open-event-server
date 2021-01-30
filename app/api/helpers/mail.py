@@ -1,6 +1,6 @@
 import base64
 import logging
-from datetime import datetime
+import os
 from itertools import groupby
 from typing import Dict
 
@@ -8,7 +8,7 @@ from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.files import make_frontend_url
+from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
@@ -172,6 +172,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     context = {
         'session_name': session.title,
         'session_link': session.site_link,
+        'session_cfs_link': session.site_cfs_link,
         'session_state': session.state,
         'event_name': event.name,
         'event_link': event.site_link,
@@ -195,7 +196,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=mail['bcc'],
+        bcc=mail.get('bcc'),
     )
 
 
@@ -329,6 +330,15 @@ def send_email_to_attendees(order):
     if current_app.config['ATTACH_ORDER_PDF']:
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
+    event = order.event
+    ical_file_path = generate_ics_file(event.id)
+
+    if os.path.exists(ical_file_path):
+        if attachments is None:
+            attachments = [ical_file_path]
+        else:
+            attachments.append(ical_file_path)
+
     attendees = (
         TicketHolder.query.options(
             joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
@@ -338,7 +348,6 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
-    event = order.event
     context = dict(
         order=order,
         settings=get_settings(),
@@ -412,6 +421,8 @@ def send_order_cancel_email(order):
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
+            order_id=order.identifier,
+            event_id=order.event.identifier,
             frontend_url=get_settings()['frontend_url'],
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],

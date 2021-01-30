@@ -5,6 +5,8 @@ import pytz
 from flask_babel import format_datetime
 from forex_python.converter import CurrencyCodes
 
+from app.api.helpers.utilities import strip_tags
+
 
 def humanize_helper(time):
     """Returns time passed from now in a human readable duration"""
@@ -39,3 +41,15 @@ def init_filters(app):
     @app.template_filter('humanize')
     def humanize_filter(time):
         return humanize_helper(time)
+
+    @app.template_filter('nl2br')
+    def nl2br(text):
+        if not text:
+            return text
+        return text.replace('\n', '<br/>')
+
+    @app.template_filter('strip_tags')
+    def strip(text):
+        if not text:
+            return text
+        return strip_tags(text)

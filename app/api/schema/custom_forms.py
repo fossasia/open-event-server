@@ -39,6 +39,7 @@ class CustomFormSchema(Schema):
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
     is_public = fields.Boolean(default=False)
+    position = fields.Integer(allow_none=True, default=0)
     is_complex = fields.Boolean(dump_only=True)
     is_fixed = fields.Boolean(default=False)
     event = Relationship(

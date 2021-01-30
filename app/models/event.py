@@ -43,7 +43,9 @@ class Event(SoftDeletionModel):
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, default=get_new_event_identifier)
+    identifier = db.Column(
+        db.String, default=get_new_event_identifier, nullable=False, unique=True
+    )
     name = db.Column(db.String, nullable=False)
     external_event_url = db.Column(db.String)
     logo_url = db.Column(db.String)
@@ -75,6 +77,7 @@ class Event(SoftDeletionModel):
     session = db.relationship('Session', backref="event")
     speaker = db.relationship('Speaker', backref="event")
     sponsor = db.relationship('Sponsor', backref="event")
+    exhibitors = db.relationship('Exhibitor', backref="event")
     tickets = db.relationship('Ticket', backref="event_")
     tags = db.relationship('TicketTag', backref='events')
     roles = db.relationship("UsersEventsRoles", backref="event")
@@ -158,7 +161,7 @@ class Event(SoftDeletionModel):
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id]
     )
-    group = db.relationship('Group', backref='event', foreign_keys=[group_id])
+    group = db.relationship('Group', backref='events', foreign_keys=[group_id])
     owner = db.relationship(
         'User',
         viewonly=True,

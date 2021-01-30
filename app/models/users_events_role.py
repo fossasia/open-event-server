@@ -7,12 +7,18 @@ class UsersEventsRoles(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), nullable=False
+    )
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
+    )
     user = db.relationship("User")
 
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
+    role_id = db.Column(
+        db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'), nullable=False
+    )
     role = db.relationship("Role")
 
     def __repr__(self):

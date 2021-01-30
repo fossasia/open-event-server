@@ -89,6 +89,12 @@ from app.api.events_role_permission import (
     EventsRolePermissionList,
     EventsRolePermissionRelationship,
 )
+from app.api.exhibitors import (
+    ExhibitorDetail,
+    ExhibitorList,
+    ExhibitorListPost,
+    ExhibitorRelationship,
+)
 from app.api.faq_types import (
     FaqTypeDetail,
     FaqTypeList,
@@ -706,6 +712,7 @@ api.route(
     '/discount-codes/<int:discount_code_id>/event',
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
+    '/exhibitors/<int:exhibitor_id>/event',
 )
 api.route(
     EventRelationship,
@@ -923,6 +930,12 @@ api.route(
     'event_registrars',
     '/events/<int:id>/relationships/registrars',
     '/events/<identifier>/relationships/registrars',
+)
+api.route(
+    EventRelationship,
+    'event_exhibitor',
+    '/events/<int:id>/relationships/exhibitors',
+    '/events/<identifier>/relationships/exhibitors',
 )
 
 # microlocations
@@ -1711,4 +1724,17 @@ api.route(
     'video_channel_detail',
     '/video-channels/<int:id>',
     '/video-streams/<int:video_stream_id>/video-channel',
+)
+
+# Exhibitors
+api.route(ExhibitorListPost, 'exhibitor_list_post', '/exhibitors')
+api.route(
+    ExhibitorList,
+    'exhibitor_list',
+    '/events/<int:event_id>/exhibitors',
+    '/events/<event_identifier>/exhibitors',
+)
+api.route(ExhibitorDetail, 'exhibitor_detail', '/exhibitors/<int:id>')
+api.route(
+    ExhibitorRelationship, 'exhibitor_event', '/exhibitors/<int:id>/relationships/event'
 )
