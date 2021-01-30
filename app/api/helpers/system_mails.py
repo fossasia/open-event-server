@@ -62,7 +62,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "We have received your submission {session_name} for {event_name}<br/><br/>"
             "Your proposal will be reviewed by the event organizers and review team. The current status of your session is now \"Pending\".<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -73,7 +73,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Accepted\". Congratulations!<br/><br/>"
             "Your proposal will be scheduled by the event organizers and review team. Please (re)confirm your participation with the organizers of the event, if required.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -84,7 +84,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Confirmed\". Congratulations!<br/><br/>"
             "Your proposal will be scheduled by the event organizers and review team. Please inform the event organizers in case there are any changes to your participation.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -95,7 +95,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Unfortunately your submission {session_name} for {event_name} was not accepted. Your session status was changed to \"Rejected\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -106,7 +106,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Canceled\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -117,7 +117,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Withdrawn\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",

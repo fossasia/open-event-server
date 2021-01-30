@@ -7,3 +7,11 @@ def test_session_site_link(db):
 
     assert session.event.site_link == 'http://eventyay.com/e/abcde'
     assert session.site_link == 'http://eventyay.com/e/abcde/session/34567'
+
+
+def test_session_site_cfs_link(db):
+    session = SessionSubFactory(event__identifier='abcde', id=34567)
+    db.session.commit()
+
+    assert session.event.site_link == 'http://eventyay.com/e/abcde'
+    assert session.site_cfs_link == 'http://eventyay.com/e/abcde/cfs/session/34567'

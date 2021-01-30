@@ -172,6 +172,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     context = {
         'session_name': session.title,
         'session_link': session.site_link,
+        'session_cfs_link': session.site_cfs_link,
         'session_state': session.state,
         'event_name': event.name,
         'event_link': event.site_link,
