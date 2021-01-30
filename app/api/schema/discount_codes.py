@@ -105,6 +105,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
+        ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -119,10 +120,9 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
             if 'valid_till' not in data:
                 data['valid_till'] = discount_code.valid_till
 
-            if not data['valid_till']:
-                data['valid_till'] = discount_code.valid_expire_time
+            ends_at = data.get('valid_till') or discount_code.valid_till
 
-        if data['valid_till'] and data['valid_from'] > data['valid_till']:
+        if ends_at and data['valid_from'] > ends_at:
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",
@@ -234,6 +234,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
+        ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -248,10 +249,9 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if 'valid_till' not in data:
                 data['valid_till'] = discount_code.valid_till
 
-            if not data['valid_till']:
-                data['valid_till'] = discount_code.valid_expire_time
+            ends_at = data.get('valid_till') or discount_code.valid_till
 
-        if data['valid_till'] and data['valid_from'] > data['valid_till']:
+        if ends_at and data['valid_from'] > ends_at:
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",
