@@ -78,9 +78,9 @@ class SessionListPost(ResourceList):
             event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, event_name, session.site_link)
+            send_email_new_session(owner_email, event_name, session.site_cfs_link)
             send_notif_new_session_organizer(
-                owner, event_name, session.site_link, session.id
+                owner, event_name, session.site_cfs_link, session.id
             )
 
         for speaker in session.speakers:
@@ -361,7 +361,11 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
         if not speaker.is_email_overridden:
             send_email_session_state_change(speaker.email, session, mail_override)
             send_notif_session_state_change(
-                speaker.user, session.title, session.state, session.site_link, session.id
+                speaker.user,
+                session.title,
+                session.state,
+                session.site_cfs_link,
+                session.id,
             )
 
     # Email for owner
