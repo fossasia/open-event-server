@@ -40,3 +40,7 @@ class AccessCode(SoftDeletionModel):
     @staticmethod
     def get_service_name():
         return 'access_code'
+
+    @property
+    def valid_expire_time(self):
+        return self.valid_till or self.event.ends_at

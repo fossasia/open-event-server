@@ -27,16 +27,16 @@ class AccessCodeSchema(SoftDeletionSchema):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
+        ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
 
             if 'valid_from' not in data:
                 data['valid_from'] = access_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = access_code.valid_till
+            ends_at = data.get('valid_till') or access_code.valid_expire_time
 
-        if data['valid_from'] > data['valid_till']:
+        if ends_at and data['valid_from'] > ends_at:
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",
@@ -82,7 +82,7 @@ class AccessCodeSchema(SoftDeletionSchema):
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(required=True)
-    valid_till = fields.DateTime(required=True)
+    valid_till = fields.DateTime(allow_none=True)
     event = Relationship(
         self_view='v1.access_code_event',
         self_view_kwargs={'id': '<id>'},

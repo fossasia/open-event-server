@@ -283,7 +283,7 @@ class DiscountCodeDetail(ResourceDetail):
                     )
                 if (
                     current_time < discount.valid_from
-                    or current_time > discount.valid_till
+                    or current_time > discount.valid_expire_time
                 ):
                     raise MethodNotAllowed(
                         {'parameter': '{code}'},

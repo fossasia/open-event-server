@@ -122,7 +122,7 @@ def validate_discount_code(
 
     now = pytz.utc.localize(datetime.utcnow())
     valid_from = discount_code.valid_from
-    valid_till = discount_code.valid_till
+    valid_till = discount_code.valid_expire_time
     if not discount_code.is_active or not valid_from <= now <= valid_till:
         logger.warning(
             "Discount code inactive or expired",
