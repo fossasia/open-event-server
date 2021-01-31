@@ -117,10 +117,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
             if 'valid_from' not in data:
                 data['valid_from'] = discount_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = discount_code.valid_till
-
-            ends_at = data.get('valid_till') or discount_code.valid_till
+            ends_at = data.get('valid_till') or discount_code.valid_expire_time
 
         if ends_at and data['valid_from'] > ends_at:
             raise UnprocessableEntityError(
@@ -246,10 +243,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if 'valid_from' not in data:
                 data['valid_from'] = discount_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = discount_code.valid_till
-
-            ends_at = data.get('valid_till') or discount_code.valid_till
+            ends_at = data.get('valid_till') or discount_code.valid_expire_time
 
         if ends_at and data['valid_from'] > ends_at:
             raise UnprocessableEntityError(
