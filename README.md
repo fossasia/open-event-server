@@ -14,7 +14,7 @@
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
-It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
+It offers features for the events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
 The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
@@ -44,7 +44,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 **NOTE:** If you are heading towards `Local Installation`, be sure to use one of the following operating systems:
 
 
-* Debian based Linux Distros (like Ubuntu)
+* Debian based Linux Distros (like Ubuntu, MX Linux, Linux Mint, Kali etc.)
 * MacOS
 
 1. [Generic Installation Instructions](/docs/installation/basic.md)
@@ -58,7 +58,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 
-One-click Heroku deployment is also available:
+ISingle-click Heroku deployment is also available:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -124,7 +124,7 @@ The required token can be obtained from [https://devcenter.heroku.com/articles/a
 
 #### Payment Gateways
 
-For ticket sales the service integrates payment gateways:
+For ticket sales the service integrates payment gateways are:
  1. Stripe - [Obtaining Keys](https://support.stripe.com/questions/where-do-i-find-my-api-keys).
  2. Paypal - [Obtaining Credentials](https://developer.paypal.com/docs/classic/lifecycle/ug_sandbox/).
 
