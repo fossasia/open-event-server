@@ -1793,7 +1793,7 @@ typed_ast = "*"
 
 [[package]]
 name = "pytz"
-version = "2020.5"
+version = "2021.1"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -2347,7 +2347,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "2ac632e2020fec0afa8f0695b339936842b193562bbf84ad0ef1d2e1cf1623be"
+content-hash = "d797114214040ab9b0cd90ecbad9cb88d652c58790dab12cf190baf6489f5fa9"
 
 [metadata.files]
 aiohttp = [
@@ -3304,8 +3304,8 @@ pytype = [
     {file = "pytype-2021.1.28.tar.gz", hash = "sha256:69ffaf8ffdb29cfa69aec8c1bbdc6052a8ab87f24278635884f61253a21c7a90"},
 ]
 pytz = [
-    {file = "pytz-2020.5-py2.py3-none-any.whl", hash = "sha256:16962c5fb8db4a8f63a26646d8886e9d769b6c511543557bc84e9569fb9a9cb4"},
-    {file = "pytz-2020.5.tar.gz", hash = "sha256:180befebb1927b16f6b57101720075a984c019ac16b1b7575673bea42c6c3da5"},
+    {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
+    {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
     {file = "pyupgrade-2.9.0-py2.py3-none-any.whl", hash = "sha256:fde759f8a697f76d8100c3530cf49affac06fccdfb8882069c43b117588af00c"},
