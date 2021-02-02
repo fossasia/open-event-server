@@ -217,7 +217,7 @@ SESSION_STATE_DICT = {
             'accepted': True,
             'rejected': True,
             'canceled': True,
-        },  # Withdrawn is final
+        },
     },
     'speaker': {
         'draft': {'pending': True},
