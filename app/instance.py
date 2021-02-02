@@ -310,5 +310,7 @@ def handle_exception(error: ErrorResponse):
     return error.respond()
 
 
+import app.cli
+
 if __name__ == '__main__':
     current_app.run()

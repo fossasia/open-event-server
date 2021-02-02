@@ -7,9 +7,6 @@ from sqlalchemy.schema import (
     Table,
 )
 
-from app.instance import current_app
-from app.models import db
-
 
 def db_drop_everything(db):
     # From http://www.sqlalchemy.org/trac/wiki/UsageRecipes/DropEverything
@@ -47,8 +44,3 @@ def db_drop_everything(db):
         conn.execute(DropTable(table))
 
     trans.commit()
-
-
-if __name__ == "__main__":
-    with current_app.app_context():
-        db_drop_everything(db)

@@ -1,12 +1,6 @@
-import argparse
 import getpass
 import re
 
-from flask_migrate import stamp
-
-from app.instance import current_app
-from app.models import db
-from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
 
 
@@ -33,17 +27,3 @@ def create_default_user(email, password):
                 continue
             ask_password = False
     create_super_admin(email, password)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("email", nargs='?', help="The email for super_admin.", default='')
-    parser.add_argument(
-        "password", nargs='?', help="The password for super_admin.", default=''
-    )
-    parsed = parser.parse_args()
-    with current_app.app_context():
-        db.create_all()
-        stamp()
-        create_default_user(parsed.email, parsed.password)
-        populate()

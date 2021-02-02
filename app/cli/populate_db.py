@@ -2,7 +2,6 @@ from app.api.helpers.db import get_or_create
 
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
-from app.instance import current_app
 from app.models import db
 
 # Custom Placeholder
@@ -421,8 +420,3 @@ def populate():
     )
 
     db.session.commit()
-
-
-if __name__ == '__main__':
-    with current_app.app_context():
-        populate()
