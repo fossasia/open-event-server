@@ -185,25 +185,39 @@ SESSION_STATE_DICT = {
             'confirmed': True,
         },
         'accepted': {
+            'pending': True,
             'withdrawn': True,
             'rejected': True,
             'confirmed': True,
             'canceled': True,
         },
         'confirmed': {
+            'pending': True,
             'withdrawn': True,
             'accepted': True,
             'rejected': True,
             'canceled': True,
         },
-        'rejected': {'withdrawn': True, 'accepted': True, 'confirmed': True},
+        'rejected': {
+            'pending': True,
+            'withdrawn': True,
+            'accepted': True,
+            'confirmed': True,
+        },
         'canceled': {
+            'pending': True,
             'withdrawn': True,
             'accepted': True,
             'rejected': True,
             'confirmed': True,
         },
-        'withdrawn': {},  # Withdrawn is final
+        'withdrawn': {
+            'pending': True,
+            'withdrawn': True,
+            'accepted': True,
+            'rejected': True,
+            'canceled': True,
+        },  # Withdrawn is final
     },
     'speaker': {
         'draft': {'pending': True},
