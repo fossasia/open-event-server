@@ -552,7 +552,7 @@ testing = ["pytest"]
 
 [[package]]
 name = "eventlet"
-version = "0.30.0"
+version = "0.30.1"
 description = "Highly concurrent networking library"
 category = "main"
 optional = false
@@ -2347,7 +2347,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "d797114214040ab9b0cd90ecbad9cb88d652c58790dab12cf190baf6489f5fa9"
+content-hash = "1001b96de71ad55f0e1fd2d5e24c939a8c7fcc1b7802123e79747e1d8623f293"
 
 [metadata.files]
 aiohttp = [
@@ -2499,6 +2499,7 @@ cffi = [
     {file = "cffi-1.14.4-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:840793c68105fe031f34d6a086eaea153a0cd5c491cde82a74b420edd0a2b909"},
     {file = "cffi-1.14.4-cp39-cp39-manylinux1_i686.whl", hash = "sha256:b18e0a9ef57d2b41f5c68beefa32317d286c3d6ac0484efd10d6e07491bb95dd"},
     {file = "cffi-1.14.4-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:045d792900a75e8b1e1b0ab6787dd733a8190ffcf80e8c8ceb2fb10a29ff238a"},
+    {file = "cffi-1.14.4-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:7ef7d4ced6b325e92eb4d3502946c78c5367bc416398d387b39591532536734e"},
     {file = "cffi-1.14.4-cp39-cp39-win32.whl", hash = "sha256:ba4e9e0ae13fc41c6b23299545e5ef73055213e466bd107953e4a013a5ddd7e3"},
     {file = "cffi-1.14.4-cp39-cp39-win_amd64.whl", hash = "sha256:f032b34669220030f905152045dfa27741ce1a6db3324a5bc0b96b6c7420c87b"},
     {file = "cffi-1.14.4.tar.gz", hash = "sha256:1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c"},
@@ -2644,8 +2645,8 @@ envparse = [
     {file = "envparse-0.2.0.tar.gz", hash = "sha256:4f3b9a27bb55d27f124eb4adf006fec05e4588891c9a054a183a112645056eb7"},
 ]
 eventlet = [
-    {file = "eventlet-0.30.0-py2.py3-none-any.whl", hash = "sha256:b33f31ae8d87eb2838dcb8467449211852374ee6dea97113c158fc84d9acff9b"},
-    {file = "eventlet-0.30.0.tar.gz", hash = "sha256:19d6f3aa9525221ba60d0ec31b570508021af7ad5497fb77f77501fe9a7c34d3"},
+    {file = "eventlet-0.30.1-py2.py3-none-any.whl", hash = "sha256:a58caa60ea936c967d16983f3fe7831583b1dc57ed58778cb9b329d1484b918e"},
+    {file = "eventlet-0.30.1.tar.gz", hash = "sha256:d00649a7e17de0bcddff1a96311ed3baf1b295b3223d4b71aceafe7b45e6d6f8"},
 ]
 factory-boy = [
     {file = "factory_boy-3.2.0-py2.py3-none-any.whl", hash = "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4"},
