@@ -27,16 +27,17 @@ class VideoStreamModeratorSchema(SoftDeletionSchema):
         self_view='v1.video_stream_moderator_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
-        related_view_kwargs={'users_events_roles_id': '<id>'},
+        related_view_kwargs={'video_stream_moderator_id': '<id>'},
         schema='EventSchemaPublic',
         type_='event',
     )
 
-    user = Relationship(
-        self_view='v1.video_stream_moderator_user',
+    video_stream = Relationship(
+        many=True,
+        self_view='v1.video_stream_moderator_stream',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.user_detail',
-        related_view_kwargs={'users_events_roles_id': '<id>'},
-        schema='UserSchemaPublic',
-        type_="user",
+        related_view='v1.video_stream_detail',
+        related_view_kwargs={'video_stream_moderator_id': '<id>'},
+        schema='VideoStreamSchema',
+        type_="video-stream",
     )

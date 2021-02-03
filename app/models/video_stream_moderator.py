@@ -15,7 +15,7 @@ class VideoStreamModerator(SoftDeletionModel):
         db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
     )
     user = db.relationship("User")
-    event = db.relationship("Event")
+    # video_stream = db.relationship("VideoStream")
 
     def __repr__(self):
         return f'<UER {self.user!r}:{self.event_id!r}>'
