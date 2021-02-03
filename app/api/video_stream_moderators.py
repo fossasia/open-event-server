@@ -9,12 +9,11 @@ from app.models.video_stream_moderator import VideoStreamModerator
 
 class VideoStreamModeratorList(ResourceList):
     """
-    List and create users_events_roles
+    List and create video_stream_moderators
     """
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStreamModerator)
-        # users_events_roles under an event
         query_ = event_query(query_, view_kwargs)
 
         return query_
@@ -36,7 +35,7 @@ class VideoStreamModeratorList(ResourceList):
 
 class VideoStreamModeratorDetail(ResourceDetail):
     """
-    users_events_roles detail by id
+    video_stream_moderators detail by id
     """
 
     methods = ['GET', 'PATCH', 'DELETE']
@@ -54,7 +53,7 @@ class VideoStreamModeratorDetail(ResourceDetail):
 
 class VideoStreamModeratorRelationship(ResourceRelationship):
     """
-    users_events_roles Relationship
+    video_stream_moderators Relationship
     """
 
     methods = ['GET', 'PATCH']

@@ -7,12 +7,12 @@ from app.api.schema.base import SoftDeletionSchema
 
 class VideoStreamModeratorSchema(SoftDeletionSchema):
     """
-    Api schema for users_events_role Model
+    Api schema for video_stream_moderator Model
     """
 
     class Meta:
         """
-        Meta class for users_events_role Api Schema
+        Meta class for video_stream_moderator Api Schema
         """
 
         type_ = 'video-stream-moderator'
