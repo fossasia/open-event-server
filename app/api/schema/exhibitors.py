@@ -1,10 +1,17 @@
+from marshmallow import Schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship, Schema
+from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Schema as JSONAPISchema
 
 from app.api.helpers.utilities import dasherize
 
 
-class ExhibitorSchema(Schema):
+class SocialLinkSchema(Schema):
+    name = fields.String(required=True)
+    link = fields.String(required=True)
+
+
+class ExhibitorSchema(JSONAPISchema):
     class Meta:
 
         type_ = 'exhibitor'
@@ -21,6 +28,7 @@ class ExhibitorSchema(Schema):
     banner_url = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
     slides_url = fields.Url(allow_none=True)
+    social_links = fields.Nested(SocialLinkSchema, many=True)
     event = Relationship(
         self_view='v1.exhibitor_event',
         self_view_kwargs={'id': '<id>'},
