@@ -39,11 +39,6 @@ class VideoStreamModeratorDetail(ResourceDetail):
     """
 
     methods = ['GET', 'PATCH', 'DELETE']
-    decorators = (
-        api.has_permission(
-            'is_coorganizer', fetch='video_stream_id', model=VideoStreamModerator
-        ),
-    )
     schema = VideoStreamModeratorSchema
     data_layer = {
         'session': db.session,
