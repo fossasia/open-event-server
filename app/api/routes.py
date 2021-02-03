@@ -1716,7 +1716,11 @@ api.route(
     'video_stream_channel',
     '/video-streams/<int:id>/relationships/video-channel',
 )
-
+api.route(
+    VideoStreamRelationship,
+    'video_stream_moderator',
+    '/video-streams/<int:id>/relationships/video-stream-moderator',
+)
 # Video Channels
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
 api.route(
