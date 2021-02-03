@@ -1752,8 +1752,7 @@ api.route(
 api.route(
     VideoStreamModeratorList,
     'video_stream_moderator_list',
-    '/events/<int:event_id>/video-stream-moderator',
-    '/events/<event_identifier>/video-stream-moderator',
+    '/video-streams/<int:video_stream_id>/video-stream-moderator',
 )
 api.route(
     VideoStreamModeratorDetail,
