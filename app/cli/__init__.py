@@ -155,11 +155,11 @@ def initialize_db(credentials):
             print("[LOG] Tables already exist. Skipping data population & creation.")
 
 
-# Check before pushing
 @app.cli.command('prepare_db')
-def prepare_db(credentials='open_event_test_user@fossasia.org:fossasia'):
+@click.pass_context
+def prepare_db(ctx, credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
-        initialize_db(credentials)
+        ctx.invoke(initialize_db, credentials=credentials)
 
 
 @app.cli.command('drop_db')
@@ -183,4 +183,5 @@ def create_db():
         populate()
 
 
-# db migrations needs to done here
+if __name__ == '__main__':
+    prepare_db()
