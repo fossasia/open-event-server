@@ -3,6 +3,7 @@ import datetime
 import pytz
 from sqlalchemy import event, func
 from sqlalchemy.sql import func as sql_func
+from sqlalchemy_utils import aggregated
 
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -70,19 +71,11 @@ class Session(SoftDeletionModel):
     def is_accepted(self):
         return self.state == "accepted"
 
-    def get_average_rating(self):
-        avg = (
-            db.session.query(func.avg(Feedback.rating))
-            .filter_by(session_id=self.id)
-            .scalar()
-        )
-        if avg is not None:
-            avg = round(avg, 2)
-        return avg
-
-    @property
+    @aggregated(
+        'feedbacks', db.Column(db.Float, default=0, server_default='0', nullable=False)
+    )
     def average_rating(self):
-        return self.get_average_rating()
+        return func.avg(Feedback.rating)
 
     @property
     def site_link(self):
