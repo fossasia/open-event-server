@@ -43,6 +43,7 @@ class VideoStreamSchema(Schema):
         type_='video-channel',
     )
     video_stream_moderator = Relationship(
+        many=True,
         self_view='v1.video_stream_moderator',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.video_stream_moderator_detail',
