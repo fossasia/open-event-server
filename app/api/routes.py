@@ -262,6 +262,7 @@ from app.api.video_stream import (
 from app.api.video_stream_moderators import (
     VideoStreamModeratorDetail,
     VideoStreamModeratorList,
+    VideoStreamModeratorRelationship,
 )
 
 # users
@@ -1758,4 +1759,14 @@ api.route(
     VideoStreamModeratorDetail,
     'video_stream_moderator_detail',
     '/video-stream-moderator/<int:id>',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_user',
+    '/video-stream-moderator/<int:id>/relationships/user',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_event',
+    '/video-stream-moderator/<int:id>/relationships/event',
 )

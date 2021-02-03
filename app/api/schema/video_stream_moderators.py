@@ -40,13 +40,3 @@ class VideoStreamModeratorSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_="user",
     )
-
-    video_streams = Relationship(
-        many=True,
-        self_view='v1.video_stream_moderator_streams',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.video_stream_list',
-        related_view_kwargs={'video_stream_id': '<id>'},
-        schema='VideoStreamSchema',
-        type_='video-stream',
-    )
