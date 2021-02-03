@@ -24,7 +24,7 @@ exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 90
-skip = '.venv/,migrations/,manage.py,instance.py,hook_main.py'
+skip = '.venv/,migrations/,instance.py,hook_main.py'
 known_first_party = 'app'
 known_third_party = 'flask'
 multi_line_output = 3
@@ -48,7 +48,6 @@ python = "3.8.6"
 pycparser = "2.20"
 Flask = "1.1.2"
 Flask-Limiter = "1.4"
-Flask-Script = "2.0.6"
 Flask-SQLAlchemy = "2.4.4"
 Flask-Migrate = "2.6.0"
 Flask-Login = "0.5"

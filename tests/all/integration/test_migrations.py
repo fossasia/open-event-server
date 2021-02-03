@@ -1,5 +1,5 @@
 from app.views.healthcheck import check_migrations
-from populate_db import populate
+from app.cli.populate_db import populate
 from tests.all.integration.utils import OpenEventTestCase
 
 

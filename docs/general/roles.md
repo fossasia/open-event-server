@@ -128,7 +128,7 @@ Organizer can access:
 
 ## Using Permissions system
 
-After running `create_db.py` Event-specific-Roles, Services and Permissions are created.
+After running `flask create_db` Event-specific-Roles, Services and Permissions are created.
 
 ### Event Specific Roles
 

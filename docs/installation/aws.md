@@ -123,9 +123,9 @@ docker-compose run web /bin/bash
 * When bash opens, run the following commands and exit.
 
 ```bash
-python3 create_db.py
+flask create_db
 # ^^ write super_admin email and password when asked
-python3 manage.py db stamp head
+flask db stamp head
 ```
 
 * That's it. Visit the public DNS to see your site live. In my case it was http://ec2-52-41-207-116.us-west-2.compute.amazonaws.com/

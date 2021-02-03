@@ -141,9 +141,9 @@ If you created a dedicated PostgreSQL user and password, you should update the *
 Please run these inside Python virtual environment
 
 ```sh
-python3 create_db.py
+flask create_db
 # enter email and password
-python3 manage.py db stamp head
+flask db stamp head
 ```
 **Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
@@ -161,7 +161,7 @@ brew services start redis
 INTEGRATE_SOCKETIO=false celery -A app.instance.celery worker -B -l INFO -c 2
 
 # run app
-python3 manage.py runserver
+flask run
 ```
 
 - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
@@ -176,7 +176,7 @@ export INTEGRATE_SOCKETIO="true"
 
 The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `. To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
 
-If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python3 manage.py runserver`:
+If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `flask run`:
 
 ```bash
 gunicorn app.instance:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload

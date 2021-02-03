@@ -129,7 +129,7 @@ This will bring you to the root directory of the Virtual Machine.
 
 
 * To run the app, type
-```python3 create_db.py```
+```flask create_db```
 this step should exit normally without raising any errors. If Terminal does report an error type
 ```echo $DATABASE_URL```
 to double check your database configuration.
@@ -138,7 +138,7 @@ to double check your database configuration.
 
 
 * Next, type
-```python3 manage.py runserver -h 0.0.0.0 -p 5000```
+```flask run -h 0.0.0.0 -p 5000```
 
 ![screen shot 2015-12-13 at 7 22 55 pm](https://cloud.githubusercontent.com/assets/9834624/11853343/5e9cab7c-a40b-11e5-96ad-30df2a3e33a0.png)
 

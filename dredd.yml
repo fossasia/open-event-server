@@ -2,7 +2,7 @@ dry-run: null
 hookfiles: ./tests/hook_main.py
 language: python
 sandbox: false
-server: env APP_CONFIG=config.TestingConfig python manage.py runserver -p 5555
+server: env APP_CONFIG=config.TestingConfig flask run -p 5555
 server-wait: 2
 init: false
 custom:
