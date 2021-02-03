@@ -183,3 +183,10 @@ TASK_RESULTS = {}
 
 class EmptyObject:
     pass
+
+
+def group_by(items, key):
+    result = {}
+    for item in items:
+        result[item[key]] = result.get(item[key], []) + [item]
+    return result
