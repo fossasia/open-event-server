@@ -22,7 +22,7 @@ class VideoStreamModeratorList(ResourceList):
     view_kwargs = True
     decorators = (
         api.has_permission(
-            'is_coorganizer', fetch='event_id', model=VideoStreamModerator
+            'is_coorganizer', fetch='video_stream_id', model=VideoStreamModerator
         ),
     )
     methods = ['GET']
@@ -42,7 +42,7 @@ class VideoStreamModeratorDetail(ResourceDetail):
     methods = ['GET', 'PATCH', 'DELETE']
     decorators = (
         api.has_permission(
-            'is_coorganizer', fetch='event_id', model=VideoStreamModerator
+            'is_coorganizer', fetch='video_stream_id', model=VideoStreamModerator
         ),
     )
     schema = VideoStreamModeratorSchema

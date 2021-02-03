@@ -23,13 +23,13 @@ class VideoStreamModeratorSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
 
-    event = Relationship(
-        self_view='v1.video_stream_moderator_event',
+    user = Relationship(
+        self_view='v1.video_stream_moderator_user',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_detail',
+        related_view='v1.user_detail',
         related_view_kwargs={'video_stream_moderator_id': '<id>'},
-        schema='EventSchemaPublic',
-        type_='event',
+        schema='UserSchemaPublic',
+        type_='user',
     )
 
     video_stream = Relationship(
