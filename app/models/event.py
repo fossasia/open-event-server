@@ -413,6 +413,11 @@ class Event(SoftDeletionModel):
     def site_link(self):
         frontend_url = get_settings()['frontend_url']
         return f"{frontend_url}/e/{self.identifier}"
+        
+    @property
+    def organizer_site_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/events/{self.identifier}"
 
     @property
     def starts_at_tz(self):

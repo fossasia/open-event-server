@@ -78,7 +78,7 @@ class SessionListPost(ResourceList):
             event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, event_name, session.site_cfs_link)
+            send_email_new_session(owner_email, session)
             send_notif_new_session_organizer(
                 owner, event_name, session.site_cfs_link, session.id
             )
