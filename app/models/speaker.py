@@ -8,6 +8,11 @@ class Speaker(SoftDeletionModel, Timestamp):
     """Speaker model class"""
 
     __tablename__ = 'speaker'
+    __table_args__ = (
+        db.UniqueConstraint(
+            'event_id', 'email', 'deleted_at', name='uq_speaker_event_email'
+        ),
+    )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo_url = db.Column(db.String)

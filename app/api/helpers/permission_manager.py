@@ -186,7 +186,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
 
     if session.speakers:
         for speaker in session.speakers:
-            if speaker.user_id == user.id:
+            if speaker.user_id == user.id or speaker.email == user._email:
                 return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
