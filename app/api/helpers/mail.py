@@ -12,6 +12,7 @@ from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.settings import get_settings
 from app.models.mail import (
     AFTER_EVENT,
     EVENT_EXPORT_FAIL,
@@ -149,14 +150,18 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, event_name, link):
+def send_email_new_session(email, session):
     """email for new session"""
+    app_name = get_settings()['app_name']
+    front_page = get_settings()['frontend_url']
+    speaker = session.speakers[0]
+    session_overview_link = session.event.organizer_site_link + "/sessions/pending"
     send_email(
         to=email,
         action=NEW_SESSION,
-        subject=MAILS[NEW_SESSION]['subject'].format(event_name=event_name),
+        subject=MAILS[NEW_SESSION]['subject'].format(session=session),
         html=MAILS[NEW_SESSION]['message'].format(
-            email=email, event_name=event_name, link=link
+            session=session, speaker=speaker, session_overview_link=session_overview_link, app_name=app_name, front_page=front_page
         ),
     )
 
