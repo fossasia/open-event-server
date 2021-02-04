@@ -26,6 +26,7 @@ from tests.factories.user import UserFactory
 from tests.factories.notification_action import NotificationActionFactory
 from tests.factories.notification import NotificationFactory
 from tests.factories.event import EventFactoryBasic
+from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
@@ -336,6 +337,19 @@ def user_speaker(transaction):
         db.session.commit()
 
 
+@hooks.before("Users > Get User Details for a Group > Get User Details for a Group")
+def user_group(transaction):
+    """
+    GET /groups/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
@@ -495,6 +509,19 @@ def discount_code_event_get_list(transaction):
 
         discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under a Group > List All Events under a Group")
+def group_event_get_list(transaction):
+    """
+    GET /groups/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
         db.session.commit()
 
 
@@ -787,6 +814,98 @@ def event_stripe_authorization(transaction):
     with stash['app'].app_context():
         stripe_authorization = StripeAuthorizationFactory()
         db.session.add(stripe_authorization)
+        db.session.commit()
+
+
+# ------------------------- Group -------------------------
+@hooks.before("Group > Group Collection > List All Groups")
+def group_get_list(transaction):
+    """
+    GET /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Groups under an User > List All Groups under an User")
+def group_get_list(transaction):
+    """
+    GET /users/1/groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Collection > Create Group")
+def group_post(transaction):
+    """
+    POST /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Group Detail")
+def group_get_detail(transaction):
+    """
+    GET /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Get Group for an Event > Group Details for an Event")
+def group_get_detail(transaction):
+    """
+    GET /events/1/group
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Update Group")
+def group_patch(transaction):
+    """
+    PATCH /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Delete Group")
+def group_delete(transaction):
+    """
+    DELETE /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
         db.session.commit()
 
 
