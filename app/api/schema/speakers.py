@@ -1,4 +1,5 @@
 from marshmallow import validate, validates_schema
+from marshmallow.schema import Schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
@@ -85,3 +86,8 @@ class SpeakerSchema(SoftDeletionSchema):
         many=True,
         type_='session',
     )
+
+
+class SpeakerReorderSchema(Schema):
+    speaker = fields.Integer(required=True)
+    order = fields.Integer(required=True)
