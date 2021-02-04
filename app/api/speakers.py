@@ -22,17 +22,17 @@ from app.models.user import User
 
 def check_email_override(data, event_id, speaker=None):
     is_organizer = has_access('is_organizer', event_id=event_id)
-    email_overriden = data.get('is_email_overridden')
-    if email_overriden and not is_organizer:
+    email_overridden = data.get('is_email_overridden')
+    if email_overridden and not is_organizer:
         raise ForbiddenError(
             {'pointer': '/data/attributes/is_email_overridden'},
             'Organizer access required to override email',
         )
-    if not email_overriden and speaker:
-        email_overriden = speaker.is_email_overridden
-    if email_overriden:
+    if not email_overridden and speaker:
+        email_overridden = speaker.is_email_overridden
+    if email_overridden:
         data['email'] = None
-    elif not data.get('email'):
+    elif not data.get('email') or not is_organizer:
         data['email'] = current_user.email
 
 
