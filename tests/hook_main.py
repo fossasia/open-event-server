@@ -877,7 +877,7 @@ def group_get_detail(transaction):
 
 
 @hooks.before("Group > Get Group for an Event > Group Details for an Event")
-def group_get_detail(transaction):
+def group_get_detail_event(transaction):
     """
     GET /events/1/group
     :param transaction:
