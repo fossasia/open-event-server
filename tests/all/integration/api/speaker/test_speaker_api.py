@@ -6,7 +6,7 @@ from tests.factories.speaker import SpeakerSubFactory
 from tests.factories.speakers_call import SpeakersCallSubFactory
 
 
-def get_minimal_speaker(db, user):
+def get_minimal_speaker(db, user=None):
     speaker = SpeakerSubFactory(
         gender=None,
         mobile=None,
@@ -16,7 +16,7 @@ def get_minimal_speaker(db, user):
         speaking_experience=None,
         city=None,
         heard_from=None,
-        email=user._email,
+        email=user and user._email,
         user=user,
         event__state='published',
     )
@@ -34,7 +34,7 @@ def test_edit_speaker_minimum_fields(db, client, user, jwt):
             'data': {
                 'type': 'speaker',
                 'id': str(speaker.id),
-                "attributes": {"name": "Areeb Jamal", "email": "jamal.areeb@gmail.com"},
+                "attributes": {"name": "Areeb Jamal"},
             }
         }
     )
@@ -50,10 +50,9 @@ def test_edit_speaker_minimum_fields(db, client, user, jwt):
 
     assert response.status_code == 200
     assert speaker.name == 'Areeb Jamal'
-    assert speaker.email == 'jamal.areeb@gmail.com'
 
 
-def get_simple_custom_form_speaker(db, user):
+def get_simple_custom_form_speaker(db, user=None):
     speaker = get_minimal_speaker(db, user)
     CustomForms(
         event=speaker.event,
@@ -86,7 +85,6 @@ def test_edit_speaker_required_fields_missing(db, client, user, jwt):
                 'id': str(speaker.id),
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "city": "hello@world.com",
                 },
             }
@@ -116,12 +114,11 @@ def test_edit_speaker_required_fields_missing(db, client, user, jwt):
     }
 
     assert speaker.name != 'Areeb'
-    assert speaker.email != 'jamal.areeb@gmail.com'
     assert speaker.city is None
 
 
-def test_create_speaker_required_fields_missing(db, client, user, jwt):
-    speaker = get_simple_custom_form_speaker(db, user)
+def test_create_speaker_required_fields_missing(db, client, jwt):
+    speaker = get_simple_custom_form_speaker(db)
 
     data = json.dumps(
         {
@@ -129,7 +126,6 @@ def test_create_speaker_required_fields_missing(db, client, user, jwt):
                 'type': 'speaker',
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "city": "hello@world.com",
                 },
                 "relationships": {
@@ -170,7 +166,6 @@ def test_edit_speaker_required_fields_complete(db, client, user, jwt):
                 'id': str(speaker.id),
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "mobile": "456345678",
                     "speaking-experience": "Speaking since birth",
                     "complex-field-values": {
@@ -193,13 +188,12 @@ def test_edit_speaker_required_fields_complete(db, client, user, jwt):
     assert response.status_code == 200
 
     assert speaker.name == 'Areeb'
-    assert speaker.email == 'jamal.areeb@gmail.com'
     assert speaker.mobile == '456345678'
     assert speaker.complex_field_values is None
 
 
-def test_create_speaker_required_fields_complete(db, client, user, jwt):
-    speaker = get_simple_custom_form_speaker(db, user)
+def test_create_speaker_required_fields_complete(db, client, jwt):
+    speaker = get_simple_custom_form_speaker(db)
 
     data = json.dumps(
         {
@@ -207,7 +201,6 @@ def test_create_speaker_required_fields_complete(db, client, user, jwt):
                 'type': 'speaker',
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "mobile": "456345678",
                     "speaking-experience": "Speaking since birth",
                     "complex-field-values": {
@@ -233,12 +226,11 @@ def test_create_speaker_required_fields_complete(db, client, user, jwt):
     speaker = Speaker.query.get(json.loads(response.data)['data']['id'])
 
     assert speaker.name == 'Areeb'
-    assert speaker.email == 'jamal.areeb@gmail.com'
     assert speaker.mobile == '456345678'
     assert speaker.complex_field_values is None
 
 
-def get_complex_custom_form_speaker(db, user):
+def get_complex_custom_form_speaker(db, user=None):
     speaker = get_minimal_speaker(db, user)
     CustomForms(
         event=speaker.event,
@@ -281,7 +273,7 @@ def test_custom_form_complex_fields_missing_required(db, client, user, jwt):
             'data': {
                 'type': 'speaker',
                 'id': str(speaker.id),
-                "attributes": {"name": "Areeb", "email": "jamal.areeb@gmail.com"},
+                "attributes": {"name": "Areeb"},
             }
         }
     )
@@ -309,18 +301,17 @@ def test_custom_form_complex_fields_missing_required(db, client, user, jwt):
     }
 
     assert speaker.name != 'Areeb'
-    assert speaker.email != 'jamal.areeb@gmail.com'
     assert speaker.complex_field_values is None
 
 
-def test_custom_form_create_complex_fields_missing_required(db, client, user, jwt):
-    speaker = get_complex_custom_form_speaker(db, user)
+def test_custom_form_create_complex_fields_missing_required(db, client, jwt):
+    speaker = get_complex_custom_form_speaker(db)
 
     data = json.dumps(
         {
             'data': {
                 'type': 'speaker',
-                "attributes": {"name": "Areeb", "email": "jamal.areeb@gmail.com"},
+                "attributes": {"name": "Areeb"},
                 "relationships": {
                     "event": {"data": {"id": str(speaker.event_id), "type": "event"}}
                 },
@@ -351,7 +342,6 @@ def test_custom_form_create_complex_fields_missing_required(db, client, user, jw
     }
 
     assert speaker.name != 'Areeb'
-    assert speaker.email != 'jamal.areeb@gmail.com'
     assert speaker.complex_field_values is None
 
 
@@ -365,7 +355,6 @@ def test_custom_form_complex_fields_complete(db, client, user, jwt):
                 'id': str(speaker.id),
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "heard-from": "Gypsie",
                     "complex-field-values": {"best-friend": "Tester"},
                 },
@@ -385,13 +374,12 @@ def test_custom_form_complex_fields_complete(db, client, user, jwt):
     assert response.status_code == 200
 
     assert speaker.name == 'Areeb'
-    assert speaker.email == 'jamal.areeb@gmail.com'
     assert speaker.heard_from == 'Gypsie'
     assert speaker.complex_field_values['best_friend'] == 'Tester'
 
 
-def test_custom_form_create_complex_fields_complete(db, client, user, jwt):
-    speaker = get_complex_custom_form_speaker(db, user)
+def test_custom_form_create_complex_fields_complete(db, client, jwt):
+    speaker = get_complex_custom_form_speaker(db)
 
     data = json.dumps(
         {
@@ -399,7 +387,6 @@ def test_custom_form_create_complex_fields_complete(db, client, user, jwt):
                 'type': 'speaker',
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "heard-from": "Gypsie",
                     "complex-field-values": {"best-friend": "Tester"},
                 },
@@ -422,7 +409,6 @@ def test_custom_form_create_complex_fields_complete(db, client, user, jwt):
     assert response.status_code == 201
 
     assert speaker.name == 'Areeb'
-    assert speaker.email == 'jamal.areeb@gmail.com'
     assert speaker.heard_from == 'Gypsie'
     assert speaker.complex_field_values['best_friend'] == 'Tester'
 
@@ -438,7 +424,6 @@ def test_ignore_complex_custom_form_fields(db, client, user, jwt):
                 'id': str(speaker.id),
                 "attributes": {
                     "name": "Areeb",
-                    "email": "jamal.areeb@gmail.com",
                     "heard-from": "Gypsie",
                     "complex-field-values": {
                         "bestFriend": "Bester",
@@ -462,7 +447,6 @@ def test_ignore_complex_custom_form_fields(db, client, user, jwt):
     assert response.status_code == 200
 
     assert speaker.name == 'Areeb'
-    assert speaker.email == 'jamal.areeb@gmail.com'
     assert speaker.heard_from == 'Gypsie'
     assert speaker.complex_field_values['best_friend'] == 'Bester'
     assert speaker.complex_field_values['trans_fat_content'] == 20.08

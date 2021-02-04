@@ -29,10 +29,10 @@ def check_email_override(data, event_id, speaker=None):
             'Organizer access required to override email',
         )
     if not email_overriden and speaker:
-        email_overriden = speaker.email_overridden
+        email_overriden = speaker.is_email_overridden
     if email_overriden:
         data['email'] = None
-    else:
+    elif not data.get('email'):
         data['email'] = current_user.email
 
 
