@@ -33,28 +33,30 @@ Get a list of groups.
             "data": [
                         {
                             "type": "group",
-                            "id": "1",
                             "relationships": {
-                                "user":{
-                                    "data":{
-                                        "id":"1",
-                                        "type":"user"
+                                "events": {
+                                    "links": {
+                                        "self": "/v1/groups/1/relationships/events",
+                                        "related": "/v1/groups/1/events"
                                     }
                                 },
-                                "events": {
-                                    "data": [
-                                        {
-                                        "id": "1",
-                                        "type": "event"
+                                "user": {
+                                    "links": {
+                                        "self": "/v1/groups/1/relationships/user",
+                                        "related": "/v1/groups/1/user"
                                     }
-                                    ]
                                 }
-                                
                             },
                             "attributes": {
-                                "name": "eventgp_1"
+                                "name": "eventgp1",
+                                "deleted-at": null
+                            },
+                            "id": "1",
+                            "links": {
+                                "self": "/v1/groups/1"
                             }
                         }
+    
             ],
             "jsonapi": {
                 "version": "1.0"
@@ -97,7 +99,7 @@ Create a new group with event_id.
                 
             },
             "attributes": {
-                "name": "eventgp_1"
+                "name": "eventgp1"
             }
         }
     }
@@ -123,7 +125,7 @@ Create a new group with event_id.
                 }
             },
             "attributes": {
-                "name": "eventgp_1",
+                "name": "eventgp1",
                 "deleted-at": null
             },
             "id": "1",
@@ -173,7 +175,7 @@ Get a single group.
                 }
             },
             "attributes": {
-                "name": "eventgp_1",
+                "name": "eventgp1",
                 "deleted-at": null
             },
             "id": "1",
@@ -349,33 +351,35 @@ Get a list of groups.
             "data": [
                         {
                             "type": "group",
-                            "id": "1",
                             "relationships": {
-                                "user":{
-                                    "data":{
-                                        "id":"1",
-                                        "type":"user"
+                                "events": {
+                                    "links": {
+                                        "self": "/v1/groups/1/relationships/events",
+                                        "related": "/v1/groups/1/events"
                                     }
                                 },
-                                "events": {
-                                    "data": [
-                                        {
-                                        "id": "1",
-                                        "type": "event"
+                                "user": {
+                                    "links": {
+                                        "self": "/v1/groups/1/relationships/user",
+                                        "related": "/v1/groups/1/user"
                                     }
-                                    ]
                                 }
-                                
                             },
                             "attributes": {
-                                "name": "eventgp_1"
+                                "name": "eventgp1",
+                                "deleted-at": null
+                            },
+                            "id": "1",
+                            "links": {
+                                "self": "/v1/groups/1"
                             }
                         }
+    
             ],
             "jsonapi": {
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/groups"
+                "self": "/v1/users/1/groups?page%5Bsize%5D=10&page%5Bnumber%5D=1&sort=name&filter=%5B%5D"
             }
         }
