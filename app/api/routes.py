@@ -1757,7 +1757,7 @@ api.route(
 api.route(
     VideoStreamModeratorDetail,
     'video_stream_moderator_detail',
-    '/video-stream-moderators/<int:id>',
+    '/video-stream-moderators/<int:video_stream_id>',
 )
 api.route(
     VideoStreamModeratorRelationship,
