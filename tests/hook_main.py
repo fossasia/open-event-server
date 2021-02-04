@@ -345,9 +345,12 @@ def user_group(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
+        db.session.commit()
+
+        event = EventFactoryBasic(group_id=1)
+        db.session.add(event)
         db.session.commit()
 
 
@@ -884,9 +887,12 @@ def group_get_detail_event(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
+        db.session.commit()
+
+        event = EventFactoryBasic(group_id=1)
+        db.session.add(event)
         db.session.commit()
 
 
