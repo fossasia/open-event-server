@@ -1724,7 +1724,7 @@ api.route(
 api.route(
     VideoStreamRelationship,
     'video_stream_moderator',
-    '/video-streams/<int:id>/relationships/video-stream-moderator',
+    '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
 # Video Channels
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
@@ -1752,20 +1752,20 @@ api.route(
 api.route(
     VideoStreamModeratorList,
     'video_stream_moderator_list',
-    '/video-streams/<int:video_stream_id>/video-stream-moderator',
+    '/video-streams/<int:video_stream_id>/video-stream-moderators',
 )
 api.route(
     VideoStreamModeratorDetail,
     'video_stream_moderator_detail',
-    '/video-stream-moderator/<int:video_stream_id>',
+    '/video-stream-moderators/<int:id>',
 )
 api.route(
     VideoStreamModeratorRelationship,
     'video_stream_moderator_user',
-    '/video-stream-moderator/<int:id>/relationships/user',
+    '/video-stream-moderators/<int:id>/relationships/user',
 )
 api.route(
     VideoStreamModeratorRelationship,
     'video_stream_moderator_stream',
-    '/video-stream-moderator/<int:id>/relationships/video-stream',
+    '/video-stream-moderators/<int:id>/relationships/video-stream',
 )

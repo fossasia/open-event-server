@@ -17,4 +17,4 @@ class VideoStreamModerator(SoftDeletionModel):
     video_stream = db.relationship("VideoStream", backref="moderators")
 
     def __repr__(self):
-        return f'<UER {self.user!r}:{self.event_id!r}>'
+        return f'{self.user!r}'
