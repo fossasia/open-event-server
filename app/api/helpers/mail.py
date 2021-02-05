@@ -173,6 +173,12 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     settings = get_settings()
     app_name = settings['app_name']
     frontend_url = settings['frontend_url']
+    organizersEmail = list(
+        set(
+            list(map(lambda x: x.email, session.event.organizers))
+            + list(map(lambda x: x.email, session.event.coorganizers))
+        )
+    )
 
     context = {
         'session_name': session.title,
@@ -202,6 +208,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
         bcc=mail.get('bcc'),
+        reply_to=organizersEmail,
     )
 
 
