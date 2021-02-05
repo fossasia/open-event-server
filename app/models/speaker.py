@@ -51,10 +51,6 @@ class Speaker(SoftDeletionModel, Timestamp):
     def get_service_name():
         return 'speaker'
 
-    @property
-    def organizer_site_link(self):
-        return self.event.organizer_site_link + f"/speaker/{self.id}"
-
     def __repr__(self):
         return '<Speaker %r>' % self.name
 
