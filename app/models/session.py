@@ -75,7 +75,13 @@ class Session(SoftDeletionModel):
         'feedbacks', db.Column(db.Float, default=0, server_default='0', nullable=False)
     )
     def average_rating(self):
-        return func.avg(Feedback.rating)
+        return func.coalesce(func.avg(Feedback.rating), 0)
+
+    @aggregated(
+        'feedbacks', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def rating_count(self):
+        return func.count('1')
 
     @property
     def site_link(self):
