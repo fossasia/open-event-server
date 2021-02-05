@@ -153,20 +153,11 @@ MAILS = {
     },
     NEW_SESSION: {
         'recipient': 'Owner, Organizer',
-        'subject': 'New session proposal for {session.event.name} titled {session.title}',
+        'subject': 'New session proposal for {event_name}',
         'message': (
-            "Hello,<br/><br/>"
-            + "This is an automatic email from {app_name} for organizers of the <a href='{session.event.site_link}' target='_blank'>{session.event.name}</a>.<br/><br/>"
-            + "Your  <a href='{session.site_cfs_link}' target='_blank'>Call for Speakers</a> has received a new session proposal with the following details:<br/><br/>"
-            + "Speaker: {speaker.name}<br/>"
-            + "Email: {speaker.email}<br/>"
-            + "Bio: {speaker.short_biography}<br/>"
-            + "Session: {session.title}<br/>"
-            + "Abstract: {session.short_abstract}<br/><br/>"
-            + "You can view all speaker details on the <a href='{speaker.organizer_site_link}' target='_blank'>speaker profile</a> page and the session proposal on the <a href='{session.organizer_site_link}' target='_blank'>session page</a>.<br/><br/>"
-            + "To change the status of sessions please go to the  <a href='{session_overview_link}' target='_blank'>sessions overview page</a> and click on the status badge of the session.<br/><br/>"
-            + "Thank you.<br/>"
-            + "<a href='{front_page}' target='_blank'>{front_page}</a><br/>"
+            "Hi {email},<br/>"
+            + "The event <strong>{event_name}</strong> has received a new session proposal. "
+            + "<br/> Visit this link to view the session: <a href='{link}' target='_blank'>{link}</a>"
         ),
     },
     USER_REGISTER: {
