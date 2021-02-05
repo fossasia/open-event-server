@@ -111,6 +111,7 @@ class SessionSchema(SoftDeletionSchema):
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
+    rating_count = fields.Integer(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
         self_view='v1.session_microlocation',
