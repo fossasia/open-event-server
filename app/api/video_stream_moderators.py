@@ -1,7 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.query import event_query
 from app.api.schema.video_stream_moderators import VideoStreamModeratorSchema
 from app.models import db
 from app.models.video_stream_moderator import VideoStreamModerator
@@ -14,14 +13,16 @@ class VideoStreamModeratorList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStreamModerator)
-        query_ = event_query(query_, view_kwargs)
-
+        if view_kwargs.get('user_id'):
+            query_ = query_.filter_by(user_id == view_kwargs['user_id'])
+        elif view_kwargs.get('video_stream_id'):
+            query_ = query_.filter_by(video_stream_id=view_kwargs['video_stream_id'])
         return query_
 
     view_kwargs = True
     decorators = (
         api.has_permission(
-            'is_coorganizer', fetch='video_stream_id', model=VideoStreamModerator
+            'is_coorganizer', fetch='event_id', model=VideoStreamModerator
         ),
     )
     methods = ['GET']
@@ -38,6 +39,12 @@ class VideoStreamModeratorDetail(ResourceDetail):
     video_stream_moderators detail by id
     """
 
+    view_kwargs = True
+    decorators = (
+        api.has_permission(
+            'is_coorganizer', fetch='event_id', model=VideoStreamModerator
+        ),
+    )
     methods = ['GET', 'PATCH', 'DELETE']
     schema = VideoStreamModeratorSchema
     data_layer = {

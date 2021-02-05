@@ -1753,6 +1753,7 @@ api.route(
     VideoStreamModeratorList,
     'video_stream_moderator_list',
     '/video-streams/<int:video_stream_id>/video-stream-moderators',
+    '/users/<int:user_id>/video-stream-moderators',
 )
 api.route(
     VideoStreamModeratorDetail,

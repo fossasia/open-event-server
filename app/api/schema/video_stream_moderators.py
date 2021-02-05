@@ -1,11 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class VideoStreamModeratorSchema(SoftDeletionSchema):
+class VideoStreamModeratorSchema(Schema):
     """
     Api schema for video_stream_moderator Model
     """

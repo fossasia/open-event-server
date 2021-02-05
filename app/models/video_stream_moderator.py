@@ -1,9 +1,11 @@
+from sqlalchemy.schema import UniqueConstraint
+
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
-class VideoStreamModerator(SoftDeletionModel):
+class VideoStreamModerator(db.Model):
     __tablename__ = 'video_stream_moderators'
+    __table_args__ = (UniqueConstraint('user_id', 'video_stream_id'),)
 
     id = db.Column(db.Integer, primary_key=True)
 
