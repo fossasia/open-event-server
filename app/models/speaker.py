@@ -12,6 +12,7 @@ class Speaker(SoftDeletionModel, Timestamp):
         db.UniqueConstraint(
             'event_id', 'email', 'deleted_at', name='uq_speaker_event_email'
         ),
+        db.Index('speaker_event_idx', 'event_id'),
     )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
