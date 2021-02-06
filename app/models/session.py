@@ -22,6 +22,10 @@ class Session(SoftDeletionModel):
     """Session model class"""
 
     __tablename__ = 'sessions'
+    __table_args__ = (
+        db.Index('session_event_idx', 'event_id'),
+        db.Index('session_state_idx', 'state'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
