@@ -7,10 +7,19 @@ from app.models.helpers.versioning import clean_html, clean_up_string
 
 @generic_repr
 class Exhibitor(db.Model, Timestamp):
+    class Status:
+        PENDING = 'pending'
+        ACCEPTED = 'accepted'
+
+        STATUSES = [PENDING, ACCEPTED]
+
     __tablename__ = 'exhibitors'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    status = db.Column(
+        db.String, nullable=False, default=Status.PENDING, server_default=Status.PENDING
+    )
     description = db.Column(db.String)
     url = db.Column(db.String)
     position = db.Column(db.Integer, nullable=False, default=0, server_default='0')
