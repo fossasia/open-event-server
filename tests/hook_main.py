@@ -345,11 +345,15 @@ def user_group(transaction):
     :return:
     """
     with stash['app'].app_context():
-        group = GroupFactory()
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
+
+        group = GroupFactory(user_id=user.id)
         db.session.add(group)
         db.session.commit()
 
-        event = EventFactoryBasic(group_id=1)
+        event = EventFactoryBasic(group_id=group.id)
         db.session.add(event)
         db.session.commit()
 
