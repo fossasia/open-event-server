@@ -337,27 +337,6 @@ def user_speaker(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for a Group > Get User Details for a Group")
-def user_group(transaction):
-    """
-    GET /groups/1/user
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        user = UserFactory()
-        db.session.add(user)
-        db.session.commit()
-
-        group = GroupFactory(user_id=user.id)
-        db.session.add(group)
-        db.session.commit()
-
-        event = EventFactoryBasic(group_id=group.id)
-        db.session.add(event)
-        db.session.commit()
-
-
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
