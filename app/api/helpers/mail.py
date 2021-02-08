@@ -179,6 +179,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
             + list(map(lambda x: x.email, session.event.coorganizers))
         )
     )
+    organizersEmail.append(session.event.owner.email)
 
     context = {
         'session_name': session.title,
