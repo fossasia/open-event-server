@@ -83,6 +83,13 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "slidesUrl": "Slide",
         "videoUrl": "Video",
         "audioUrl": "Audio",
+        "website": "Website",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "github": "GitHub",
+        "linkedin": "Linkedin",
+        "instagram": "Instagram",
+        "gitlab": "Gitlab",
     },
     "speaker": {
         "name": "Name",
