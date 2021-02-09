@@ -30,9 +30,9 @@ class UserFavouriteSessionListPost(ResourceList):
         require_relationship(['session'], data)
 
         data['user'] = current_user.id
-        user_favourite_session = find_user_favourite_session_by_id(
-            session_id=data['session']
-        )
+        user_favourite_session = UserFavouriteSession.query.filter_by(
+            session_id=data['session'], user=current_user
+        ).first()
         if user_favourite_session:
             raise ConflictError(
                 {'pointer': '/data/relationships/session'}, "Session already favourited"
@@ -64,19 +64,25 @@ class UserFavouriteSessionList(ResourceList):
                 raise ForbiddenError({'pointer': 'user_id'})
             query_ = query_.filter_by(user_id=user.id)
 
-        if view_kwargs.get('session_id'):
+        elif view_kwargs.get('session_id'):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             if not (
-                has_access('is_admin') or has_access('is_coorganizer', session.event_id)
+                has_access('is_admin')
+                or has_access('is_coorganizer', event_id=session.event_id)
             ):
                 query_ = query_.filter_by(user_id=current_user.id)
             query_ = query_.filter_by(session_id=session.id)
 
-        if view_kwargs.get('event_id'):
+        elif view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            if not (has_access('is_admin') or has_access('is_coorganizer', event.id)):
+            if not (
+                has_access('is_admin') or has_access('is_coorganizer', event_id=event.id)
+            ):
                 query_ = query_.filter_by(user_id=current_user.id)
             query_ = query_.filter_by(event_id=event.id)
+
+        elif not has_access('is_admin'):
+            raise ForbiddenError({'pointer': 'user_id'}, 'Admin Access Required')
 
         return query_
 
@@ -110,9 +116,3 @@ class UserFavouriteSessionRelationship(ResourceRelationship):
     decorators = (jwt_required,)
     methods = ['GET']
     data_layer = {'session': db.session, 'model': UserFavouriteSession}
-
-
-def find_user_favourite_session_by_id(session_id):
-    return UserFavouriteSession.query.filter_by(
-        session_id=session_id, user=current_user
-    ).first()
