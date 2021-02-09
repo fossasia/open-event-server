@@ -93,7 +93,6 @@ class User(SoftDeletionModel):
     # relationships
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
-    favourite_sessions = db.relationship('UserFavouriteSession', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
