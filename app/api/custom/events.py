@@ -16,7 +16,8 @@ from app.models.speaker import Speaker
 events_routes = Blueprint('events_routes', __name__, url_prefix='/v1/events')
 
 
-@events_routes.route('/<int:event_id>/sessions/dates')
+@events_routes.route('/<string:event_identifier>/sessions/dates')
+@to_event_id
 def get_dates(event_id):
     dates = list(
         map(
