@@ -82,6 +82,10 @@ class Session(SoftDeletionModel):
     def is_accepted(self):
         return self.state == "accepted"
 
+    @property
+    def organizer_site_link(self):
+        return self.event.organizer_site_link + f"/session/{self.id}"
+
     @aggregated(
         'feedbacks', db.Column(db.Float, default=0, server_default='0', nullable=False)
     )
