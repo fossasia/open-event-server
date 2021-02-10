@@ -434,6 +434,7 @@ def populate():
         name='Vimeo',
         defaults={'url': 'https://vimeo.com', 'api_url': 'https://api.vimeo.com'},
     )
+
     db.session.commit()
 
 
