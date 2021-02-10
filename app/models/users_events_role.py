@@ -1,9 +1,13 @@
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
-class UsersEventsRoles(SoftDeletionModel):
+class UsersEventsRoles(db.Model):
     __tablename__ = 'users_events_roles'
+    __table_args__ = (
+        db.UniqueConstraint(
+            'user_id', 'event_id', 'role_id', name='uq_uer_user_event_role'
+        ),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
 
