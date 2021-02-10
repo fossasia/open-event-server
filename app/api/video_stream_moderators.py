@@ -14,7 +14,7 @@ class VideoStreamModeratorList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStreamModerator)
         if view_kwargs.get('user_id'):
-            query_ = query_.filter_by(user_id == view_kwargs['user_id'])
+            query_ = query_.filter_by(user_id=view_kwargs['user_id'])
         elif view_kwargs.get('video_stream_id'):
             query_ = query_.filter_by(video_stream_id=view_kwargs['video_stream_id'])
         return query_
