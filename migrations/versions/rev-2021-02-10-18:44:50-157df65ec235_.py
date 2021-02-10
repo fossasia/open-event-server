@@ -17,7 +17,7 @@ down_revision = '6b9d98ec9046'
 
 
 def upgrade():
-    op.execute("insert into video_channels (name, provider, url, api_url) values('YouTube', 'youtube', 'https://youtube.com', 'https://api.youtube.com');")
+    op.execute("insert into video_channels (name, provider, url, api_url) values('YouTube', 'youtube', 'https://youtube.com', 'https://www.googleapis.com/youtube/v3');")
     op.execute("update video_streams set channel_id=(select id from video_channels where provider = 'youtube') where url like 'https://youtube.com/%';")
     op.execute("insert into video_channels (name, provider, url, api_url) values('Vimeo', 'vimeo', 'https://vimeo.com', 'https://api.vimeo.com');")
     op.execute("update video_streams set channel_id=(select id from video_channels where provider = 'vimeo') where url like 'https://vimeo.com/%';")
