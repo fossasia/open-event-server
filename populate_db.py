@@ -419,7 +419,21 @@ def populate():
         name='Jitsi Meet',
         defaults={'url': 'https://meet.jit.si', 'api_url': 'https://api.jitsi.net'},
     )
-
+    get_or_create(
+        VideoChannel,
+        provider='youtube',
+        name='YouTube',
+        defaults={
+            'url': 'https://youtube.com',
+            'api_url': 'https://www.googleapis.com/youtube/v3',
+        },
+    )
+    get_or_create(
+        VideoChannel,
+        provider='vimeo',
+        name='Vimeo',
+        defaults={'url': 'https://vimeo.com', 'api_url': 'https://api.vimeo.com'},
+    )
     db.session.commit()
 
 
