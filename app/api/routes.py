@@ -1004,9 +1004,10 @@ api.route(
 api.route(
     UserFavouriteSessionList,
     'user_favourite_sessions_list',
-    '/users/<int:user_id>/favourite-sessions',
-    '/sessions/<int:session_id>/favourite-sessions',
-    '/events/<int:event_id>/favourite-sessions',
+    '/user-favourite-sessions',
+    '/users/<int:user_id>/user-favourite-sessions',
+    '/sessions/<int:session_id>/user-favourite-sessions',
+    '/events/<int:event_id>/user-favourite-sessions',
 )
 api.route(
     UserFavouriteSessionDetail,
