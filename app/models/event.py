@@ -249,16 +249,18 @@ class Event(SoftDeletionModel):
         self.description = clean_up_string(kwargs.get('description'))
         self.owner_description = clean_up_string(kwargs.get('owner_description'))
         self.code_of_conduct = clean_up_string(kwargs.get('code_of_conduct'))
+        self.after_order_message = clean_up_string(kwargs.get('after_order_message'))
 
     def __repr__(self):
         return '<Event %r>' % self.name
 
     def __setattr__(self, name, value):
-        allow_link = name == 'description' or 'owner_description'
+        allow_link = name == 'description' or 'owner_description' or 'after_order_message'
         if (
             name == 'owner_description'
             or name == 'description'
             or name == 'code_of_conduct'
+            or name == 'after_order_message'
         ):
             super().__setattr__(
                 name, clean_html(clean_up_string(value), allow_link=allow_link)
