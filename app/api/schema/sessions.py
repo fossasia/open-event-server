@@ -179,7 +179,16 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_='user',
     )
-    favourite_sessions = Relationship(
+    favourite = Relationship(
+        dump_only=True,
+        self_view='v1.session_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+    )
+    favourites = Relationship(
         self_view='v1.session_user_favourite_sessions',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_favourite_sessions_list',
