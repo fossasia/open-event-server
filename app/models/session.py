@@ -1,6 +1,7 @@
 import datetime
 
 import pytz
+from flask_jwt_extended import current_user
 from sqlalchemy import event, func
 from sqlalchemy.sql import func as sql_func
 from sqlalchemy_utils import aggregated
@@ -9,6 +10,7 @@ from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_html, clean_up_string
+from app.models.user_favourite_session import UserFavouriteSession
 
 speakers_sessions = db.Table(
     'speakers_sessions',
@@ -97,6 +99,14 @@ class Session(SoftDeletionModel):
     )
     def rating_count(self):
         return func.count('1')
+
+    @property
+    def favourite(self):
+        if not current_user:
+            return None
+        return UserFavouriteSession.query.filter_by(
+            user=current_user, session=self
+        ).first()
 
     @property
     def site_link(self):
