@@ -101,10 +101,34 @@ class UserFavouriteSessionDetail(ResourceDetail):
     User Favourite Session detail by id
     """
 
+    @staticmethod
+    def check_perm(fav):
+        if not has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=fav.session.event_id,
+            user_id=fav.user_id,
+        ):
+            raise ForbiddenError(
+                {'pointer': 'user_id'}, "User or Co-Organizer level access required"
+            )
+
+    def after_get_object(self, fav, view_kwargs):
+        UserFavouriteSessionDetail.check_perm(fav)
+
+    def before_delete_object(self, fav, view_kwargs):
+        UserFavouriteSessionDetail.check_perm(fav)
+
     methods = ['GET', 'DELETE']
     decorators = (jwt_required,)
     schema = UserFavouriteSessionSchema
-    data_layer = {'session': db.session, 'model': UserFavouriteSession}
+    data_layer = {
+        'session': db.session,
+        'model': UserFavouriteSession,
+        'methods': {
+            'after_get_object': after_get_object,
+            'before_delete_object': before_delete_object,
+        },
+    }
 
 
 class UserFavouriteSessionRelationship(ResourceRelationship):
