@@ -83,11 +83,12 @@ Get a single users events roles.
         {
             "data": {
                 "type": "users-events-roles",
+                "id": "1",
                 "relationships": {
-                    "user": {
+                    "event": {
                         "links": {
-                            "self": "/v1/users-events-roles/1/relationships/user",
-                            "related": "/v1/users-events-roles/1/user"
+                            "self": "/v1/users-events-roles/1/relationships/event",
+                            "related": "/v1/users-events-roles/1/event"
                         }
                     },
                     "role": {
@@ -96,20 +97,13 @@ Get a single users events roles.
                             "related": "/v1/users-events-roles/1/role"
                         }
                     },
-                    "event": {
+                    "user": {
                         "links": {
-                            "self": "/v1/users-events-roles/1/relationships/event",
-                            "related": "/v1/users-events-roles/1/event"
+                            "self": "/v1/users-events-roles/1/relationships/user",
+                            "related": "/v1/users-events-roles/1/user"
                         }
                     }
-                },
-                "id": "1",
-                "links": {
-                    "self": "/v1/users-events-roles/1"
                 }
-            },
-            "links": {
-                "self": "/v1/users-events-roles/1"
             },
             "jsonapi": {
                 "version": "1.0"
