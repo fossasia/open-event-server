@@ -166,7 +166,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='owner_events',
@@ -177,7 +177,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='organizer_events',
@@ -187,7 +187,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='coorganizer_events',
@@ -197,7 +197,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id,'
+        ' and_(Role.id == UsersEventsRoles.role_id,'
         ' Role.name == "track_organizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
@@ -208,7 +208,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='registrar_events',
@@ -218,7 +218,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='moderator_events',
@@ -229,7 +229,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id))',
+        ' and_(Role.id == UsersEventsRoles.role_id))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='events',

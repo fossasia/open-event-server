@@ -187,7 +187,7 @@ class User(SoftDeletionModel):
         Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UER.query.filter_by(user=self, role=role, deleted_at=None)
+        uer = UER.query.filter_by(user=self, role=role)
         if event_id:
             uer = uer.filter_by(event_id=event_id)
         return bool(uer.first())

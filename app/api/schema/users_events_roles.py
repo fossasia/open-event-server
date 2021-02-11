@@ -1,11 +1,10 @@
-from marshmallow_jsonapi import fields
+from marshmallow_jsonapi import Schema, fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class UsersEventsRolesSchema(SoftDeletionSchema):
+class UsersEventsRolesSchema(Schema):
     """
     Api schema for users_events_role Model
     """
@@ -21,7 +20,6 @@ class UsersEventsRolesSchema(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    deleted_at = fields.DateTime(dump_only=True)
 
     event = Relationship(
         self_view='v1.users_events_roles_event',
