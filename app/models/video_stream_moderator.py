@@ -5,7 +5,9 @@ from app.models import db
 
 class VideoStreamModerator(db.Model):
     __tablename__ = 'video_stream_moderators'
-    __table_args__ = (UniqueConstraint('user_id', 'video_stream_id'),)
+    __table_args__ = (
+        UniqueConstraint('user_id', 'video_stream_id', name='user_video_stream_id'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
 
