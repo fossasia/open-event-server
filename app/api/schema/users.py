@@ -38,6 +38,21 @@ class UserSchemaPublic(SoftDeletionSchema):
     icon_image_url = fields.Url(dump_only=True, allow_none=True)
     was_registered_with_order = fields.Boolean()
 
+    @pre_dump
+    def handle_deleted_users(self, data):
+        if not data:
+            return data
+        if data.deleted_at != None and not (
+            is_logged_in
+            and current_user
+            and (current_user.is_staff or current_user.id == data.id)
+        ):
+            user = User(
+                id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
+            )
+            return user
+        return data
+
 
 class UserSchema(UserSchemaPublic):
     """
@@ -294,18 +309,3 @@ class UserSchema(UserSchemaPublic):
         type_='event',
         many=True,
     )
-
-    @pre_dump
-    def handle_deleted_users(self, data):
-        if not data:
-            return data
-        if data.deleted_at != None and not (
-            is_logged_in
-            and current_user
-            and (current_user.is_staff or current_user.id == data.id)
-        ):
-            user = User(
-                id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
-            )
-            return user
-        return data

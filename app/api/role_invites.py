@@ -160,7 +160,7 @@ def accept_invite():
             )
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = (
-            UsersEventsRoles.query.filter_by(user=user, deleted_at=None)
+            UsersEventsRoles.query.filter_by(user=user)
             .filter_by(event=event)
             .filter_by(role=role)
             .first()

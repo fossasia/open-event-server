@@ -179,7 +179,7 @@ class EventList(ResourceList):
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = query_.join(Event.roles).filter_by(user_id=user.id, deleted_at=None)
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -189,7 +189,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_owner_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.OWNER)
             )
@@ -203,7 +203,7 @@ class EventList(ResourceList):
 
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.ORGANIZER)
             )
@@ -216,7 +216,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_coorganizer_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.COORGANIZER)
             )
@@ -234,7 +234,7 @@ class EventList(ResourceList):
             )
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == TRACK_ORGANIZER)
             )
@@ -247,7 +247,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_registrar_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == REGISTRAR)
             )
@@ -260,7 +260,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_moderator_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == MODERATOR)
             )
@@ -273,7 +273,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_marketer_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == MARKETER)
             )
@@ -286,7 +286,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_sales_admin_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == SALES_ADMIN)
             )

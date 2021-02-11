@@ -37,3 +37,8 @@ def test_event_session_distinct_dates(db, client):
 
     assert response.status_code == 200
     assert json.loads(response.data) == ["2199-10-02", "2199-10-04"]
+
+    response = client.get(f'/v1/events/{event.identifier}/sessions/dates')
+
+    assert response.status_code == 200
+    assert json.loads(response.data) == ["2199-10-02", "2199-10-04"]

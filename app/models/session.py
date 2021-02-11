@@ -1,6 +1,7 @@
 import datetime
 
 import pytz
+from flask_jwt_extended import current_user
 from sqlalchemy import event, func
 from sqlalchemy.sql import func as sql_func
 from sqlalchemy_utils import aggregated
@@ -9,6 +10,7 @@ from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_html, clean_up_string
+from app.models.user_favourite_session import UserFavouriteSession
 
 speakers_sessions = db.Table(
     'speakers_sessions',
@@ -22,9 +24,20 @@ class Session(SoftDeletionModel):
     """Session model class"""
 
     __tablename__ = 'sessions'
+    __table_args__ = (
+        db.Index('session_event_idx', 'event_id'),
+        db.Index('session_state_idx', 'state'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
+    website = db.Column(db.String)
+    twitter = db.Column(db.String)
+    facebook = db.Column(db.String)
+    github = db.Column(db.String)
+    linkedin = db.Column(db.String)
+    instagram = db.Column(db.String)
+    gitlab = db.Column(db.String)
     short_abstract = db.Column(db.Text, default='')
     long_abstract = db.Column(db.Text, default='')
     comments = db.Column(db.Text)
@@ -71,11 +84,29 @@ class Session(SoftDeletionModel):
     def is_accepted(self):
         return self.state == "accepted"
 
+    @property
+    def organizer_site_link(self):
+        return self.event.organizer_site_link + f"/session/{self.id}"
+
     @aggregated(
         'feedbacks', db.Column(db.Float, default=0, server_default='0', nullable=False)
     )
     def average_rating(self):
-        return func.avg(Feedback.rating)
+        return func.coalesce(func.avg(Feedback.rating), 0)
+
+    @aggregated(
+        'feedbacks', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def rating_count(self):
+        return func.count('1')
+
+    @property
+    def favourite(self):
+        if not current_user:
+            return None
+        return UserFavouriteSession.query.filter_by(
+            user=current_user, session=self
+        ).first()
 
     @property
     def site_link(self):

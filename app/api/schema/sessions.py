@@ -85,6 +85,13 @@ class SessionSchema(SoftDeletionSchema):
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
+    website = fields.Url(allow_none=True)
+    twitter = fields.Url(allow_none=True)
+    facebook = fields.Url(allow_none=True)
+    github = fields.Url(allow_none=True)
+    linkedin = fields.Url(allow_none=True)
+    instagram = fields.Url(allow_none=True)
+    gitlab = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
     audio_url = fields.Url(allow_none=True)
     signup_url = fields.Url(allow_none=True)
@@ -111,6 +118,7 @@ class SessionSchema(SoftDeletionSchema):
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
+    rating_count = fields.Integer(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
         self_view='v1.session_microlocation',
@@ -171,7 +179,16 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserSchemaPublic',
         type_='user',
     )
-    favourite_sessions = Relationship(
+    favourite = Relationship(
+        dump_only=True,
+        self_view='v1.session_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+    )
+    favourites = Relationship(
         self_view='v1.session_user_favourite_sessions',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_favourite_sessions_list',
