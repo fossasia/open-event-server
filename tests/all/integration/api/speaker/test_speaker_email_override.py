@@ -27,7 +27,7 @@ def get_event(db, user=None):
     return event
 
 
-def test_create_speaker_email_required(db, client, jwt):
+def test_create_speaker_without_email(db, client, user, jwt):
     event = get_event(db)
     db.session.commit()
 
@@ -50,18 +50,8 @@ def test_create_speaker_email_required(db, client, jwt):
         data=data,
     )
 
-    assert response.status_code == 422
-    assert json.loads(response.data) == {
-        'errors': [
-            {
-                'detail': "Email is required for speaker",
-                'source': {'pointer': '/data/attributes/email'},
-                'status': 422,
-                'title': 'Unprocessable Entity',
-            }
-        ],
-        'jsonapi': {'version': '1.0'},
-    }
+    assert response.status_code == 201
+    assert json.loads(response.data)['data']['attributes']['email'] == user._email
 
     data = json.dumps(
         {
@@ -94,27 +84,6 @@ def test_create_speaker_email_required(db, client, jwt):
         ],
         'jsonapi': {'version': '1.0'},
     }
-
-    data = json.dumps(
-        {
-            'data': {
-                'type': 'speaker',
-                "attributes": {"name": "Areeb Jamal", "email": "abc@def.org"},
-                "relationships": {
-                    "event": {"data": {"id": str(event.id), "type": "event"}}
-                },
-            },
-        }
-    )
-
-    response = client.post(
-        '/v1/speakers',
-        content_type='application/vnd.api+json',
-        headers=jwt,
-        data=data,
-    )
-
-    assert response.status_code == 201
 
 
 def test_create_speaker_email_override(db, client, user, jwt):
@@ -165,6 +134,28 @@ def test_create_speaker_email_override(db, client, user, jwt):
     assert response.status_code == 201
     assert json.loads(response.data)['data']['attributes']['email'] is None
 
+    data = json.dumps(
+        {
+            'data': {
+                'type': 'speaker',
+                "attributes": {"name": "Areeb Jamal", "email": "abc@def.org"},
+                "relationships": {
+                    "event": {"data": {"id": str(event.id), "type": "event"}}
+                },
+            },
+        }
+    )
+
+    response = client.post(
+        '/v1/speakers',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 201
+    assert json.loads(response.data)['data']['attributes']['email'] == "abc@def.org"
+
 
 def get_minimal_speaker(db, user, organizer=False):
     speaker = SpeakerSubFactory(
@@ -207,18 +198,8 @@ def test_edit_speaker_email_required(db, client, user, jwt):
         data=data,
     )
 
-    assert response.status_code == 422
-    assert json.loads(response.data) == {
-        'errors': [
-            {
-                'detail': "Email is required for speaker",
-                'source': {'pointer': '/data/attributes/email'},
-                'status': 422,
-                'title': 'Unprocessable Entity',
-            }
-        ],
-        'jsonapi': {'version': '1.0'},
-    }
+    assert response.status_code == 200
+    assert json.loads(response.data)['data']['attributes']['email'] == user._email
 
     data = json.dumps(
         {
@@ -268,6 +249,7 @@ def test_edit_speaker_email_required(db, client, user, jwt):
     )
 
     assert response.status_code == 200
+    assert json.loads(response.data)['data']['attributes']['email'] == user._email
 
 
 def test_edit_speaker_email_override(db, client, user, jwt):

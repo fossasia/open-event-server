@@ -72,7 +72,6 @@ class TicketTagDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )
@@ -90,7 +89,6 @@ class TicketTagRelationshipRequired(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )
@@ -110,7 +108,6 @@ class TicketTagRelationshipOptional(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )

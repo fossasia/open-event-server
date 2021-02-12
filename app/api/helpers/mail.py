@@ -1,6 +1,6 @@
 import base64
 import logging
-from datetime import datetime
+import os
 from itertools import groupby
 from typing import Dict
 
@@ -8,10 +8,11 @@ from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.files import make_frontend_url
+from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.settings import get_settings
 from app.models.mail import (
     AFTER_EVENT,
     EVENT_EXPORT_FAIL,
@@ -53,7 +54,7 @@ def check_smtp_config(config):
     return True
 
 
-def send_email(to, action, subject, html, attachments=None, bcc=None):
+def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=None):
     """
     Sends email and records it in DB
     """
@@ -79,6 +80,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
         'html': html,
         'attachments': attachments,
         'bcc': bcc,
+        'reply_to': reply_to,
     }
 
     if not (current_app.config['TESTING'] or email_service == 'disable'):
@@ -148,14 +150,17 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, event_name, link):
+def send_email_new_session(email, session):
     """email for new session"""
+    app_name = get_settings()['app_name']
+    front_page = get_settings()['frontend_url']
+    session_overview_link = session.event.organizer_site_link + "/sessions/pending"
     send_email(
         to=email,
         action=NEW_SESSION,
-        subject=MAILS[NEW_SESSION]['subject'].format(event_name=event_name),
+        subject=MAILS[NEW_SESSION]['subject'].format(session=session),
         html=MAILS[NEW_SESSION]['message'].format(
-            email=email, event_name=event_name, link=link
+            session=session, session_overview_link=session_overview_link, app_name=app_name, front_page=front_page
         ),
     )
 
@@ -167,10 +172,13 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     settings = get_settings()
     app_name = settings['app_name']
     frontend_url = settings['frontend_url']
-
+    organizers = list(map(lambda x: x.email, session.event.organizers)) + list(map(lambda x: x.email, session.event.coorganizers))
+    organizers.append(session.event.owner.email)
+    organizers_email = list(set(organizers))
     context = {
         'session_name': session.title,
         'session_link': session.site_link,
+        'session_cfs_link': session.site_cfs_link,
         'session_state': session.state,
         'event_name': event.name,
         'event_link': event.site_link,
@@ -194,7 +202,8 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=mail['bcc'],
+        bcc=mail.get('bcc'),
+        reply_to=organizers_email,
     )
 
 
@@ -328,6 +337,15 @@ def send_email_to_attendees(order):
     if current_app.config['ATTACH_ORDER_PDF']:
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
+    event = order.event
+    ical_file_path = generate_ics_file(event.id)
+
+    if os.path.exists(ical_file_path):
+        if attachments is None:
+            attachments = [ical_file_path]
+        else:
+            attachments.append(ical_file_path)
+
     attendees = (
         TicketHolder.query.options(
             joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
@@ -337,7 +355,6 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
-    event = order.event
     context = dict(
         order=order,
         settings=get_settings(),
@@ -411,6 +428,8 @@ def send_order_cancel_email(order):
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
+            order_id=order.identifier,
+            event_id=order.event.identifier,
             frontend_url=get_settings()['frontend_url'],
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],

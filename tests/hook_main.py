@@ -26,6 +26,7 @@ from tests.factories.user import UserFactory
 from tests.factories.notification_action import NotificationActionFactory
 from tests.factories.notification import NotificationFactory
 from tests.factories.event import EventFactoryBasic
+from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
@@ -76,6 +77,7 @@ from tests.factories.service import ServiceFactory
 from tests.factories.message_setting import MessageSettingsFactory
 from tests.factories.user_favourite_events import UserFavouriteEventFactory
 from tests.factories.user_favourite_sessions import UserFavouriteSessionFactory
+from tests.factories.exhibitor import ExhibitorFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
@@ -497,6 +499,20 @@ def discount_code_event_get_list(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Events under a Group > List All Events under a Group")
+def group_event_get_list(transaction):
+    """
+    GET /groups/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
 @hooks.before("Events > Get Event for a Ticket > Event Details for a Ticket")
 def event_ticket(transaction):
     """
@@ -786,6 +802,108 @@ def event_stripe_authorization(transaction):
     with stash['app'].app_context():
         stripe_authorization = StripeAuthorizationFactory()
         db.session.add(stripe_authorization)
+        db.session.commit()
+
+
+# ------------------------- Group -------------------------
+@hooks.before("Group > Group Collection > List All Groups")
+def group_get_list(transaction):
+    """
+    GET /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Groups under an User > List All Groups under an User")
+def group_get_list(transaction):
+    """
+    GET /users/1/groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Collection > Create Group")
+def group_post(transaction):
+    """
+    POST /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Group Detail")
+def group_get_detail(transaction):
+    """
+    GET /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Get Group for an Event > Group Details for an Event")
+def group_get_detail_event(transaction):
+    """
+    GET /events/1/group
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+        event = EventFactoryBasic(group_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Update Group")
+def group_patch(transaction):
+    """
+    PATCH /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Delete Group")
+def group_delete(transaction):
+    """
+    DELETE /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
         db.session.commit()
 
 
@@ -2524,7 +2642,7 @@ def role_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        role = RoleFactory()
+        role = RoleFactory(name="example role")
         db.session.add(role)
         db.session.commit()
 
@@ -4795,4 +4913,66 @@ def mail_statistics_get(transaction):
     with stash['app'].app_context():
         mail = MailFactory()
         db.session.add(mail)
+        db.session.commit()
+
+
+# ------------------------- Exhibitors -------------------------
+@hooks.before("Exhibitors > Exhibitors Get Collection > List All Exhibitors")
+def exhibitor_get_list(transaction):
+    """
+    GET /events/1/exhibitors
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitors Post Collection > Create Exhibitor")
+def exhibitor_post(transaction):
+    """
+    POST /exhibitors
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        EventFactoryBasic()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Exhibitor Details")
+def exhibitor_get_detail(transaction):
+    """
+    GET /exhibitors/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Update Exhibitor")
+def exhibitor_patch(transaction):
+    """
+    PATCH /exhibitors/1
+    :param transaction:
+    :return:
+    """
+
+    with stash['app'].app_context():
+        ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before("Exhibitors > Exhibitor Details > Delete Exhibitor")
+def exhibitor_delete(transaction):
+    """
+    DELETE /exhibitors/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ExhibitorFactory()
         db.session.commit()

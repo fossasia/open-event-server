@@ -149,7 +149,6 @@ class SpeakersCallDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=SpeakersCall,
             methods="PATCH,DELETE",
         ),
@@ -171,7 +170,6 @@ class SpeakersCallRelationship(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=SpeakersCall,
             methods="PATCH,DELETE",
         ),

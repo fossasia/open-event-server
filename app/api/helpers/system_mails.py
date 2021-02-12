@@ -62,7 +62,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "We have received your submission {session_name} for {event_name}<br/><br/>"
             "Your proposal will be reviewed by the event organizers and review team. The current status of your session is now \"Pending\".<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -73,7 +73,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Accepted\". Congratulations!<br/><br/>"
             "Your proposal will be scheduled by the event organizers and review team. Please (re)confirm your participation with the organizers of the event, if required.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -84,7 +84,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Confirmed\". Congratulations!<br/><br/>"
             "Your proposal will be scheduled by the event organizers and review team. Please inform the event organizers in case there are any changes to your participation.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -95,7 +95,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Unfortunately your submission {session_name} for {event_name} was not accepted. Your session status was changed to \"Rejected\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -106,7 +106,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Canceled\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -117,7 +117,7 @@ MAILS = {
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Withdrawn\".<br/><br/>"
             "The status change was done by event organizers. If there are questions about this change please contact the organizers.<br/><br/>"
-            "You can also check the status and details of your submission on the session page {session_link}. You need to be logged in to view it.<br/><br/>"
+            "You can also check the status and details of your submission on the session page {session_cfs_link}. You need to be logged in to view it.<br/><br/>"
             "More details about the event are on the event page at {event_link}.<br/><br/>"
             "Thank you.<br/>"
             "{frontend_link}",
@@ -153,11 +153,17 @@ MAILS = {
     },
     NEW_SESSION: {
         'recipient': 'Owner, Organizer',
-        'subject': 'New session proposal for {event_name}',
+        'subject': 'New session proposal for {session.event.name} titled {session.title}',
         'message': (
-            "Hi {email},<br/>"
-            + "The event <strong>{event_name}</strong> has received a new session proposal. "
-            + "<br/> Visit this link to view the session: <a href='{link}' target='_blank'>{link}</a>"
+            "Hello,<br/><br/>"
+            + "This is an automatic email from {app_name} for organizers of the <a href='{session.event.site_link}' target='_blank'>{session.event.name}</a>.<br/><br/>"
+            + "Your  <a href='{session.site_cfs_link}' target='_blank'>Call for Speakers</a> has received a new session proposal with the following details:<br/><br/>"
+            + "Session: {session.title}<br/>"
+            + "Abstract: {session.short_abstract}<br/><br/>"
+            + "You can view all speaker details on the speaker profile page and the session proposal on the <a href='{session.organizer_site_link}' target='_blank'>session page</a>.<br/><br/>"
+            + "To change the status of sessions please go to the  <a href='{session_overview_link}' target='_blank'>sessions overview page</a> and click on the status badge of the session.<br/><br/>"
+            + "Thank you.<br/>"
+            + "<a href='{front_page}' target='_blank'>{front_page}</a><br/>"
         ),
     },
     USER_REGISTER: {
@@ -241,10 +247,11 @@ MAILS = {
         'subject': 'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
             "Hello,"
-            "<br/>your order for {event_name} has been cancelled by the organizer."
-            "<br/>Please contact the organizer for more info." + "{cancel_msg}"
-            "<br/>To manage orders please login to <a href='{frontend_url}' target='_blank'>{frontend_url}</a>"
-            "and visit \"My Tickets\"."
+            "<br/>Your order {order_id} for {event_name} has been cancelled."
+            "<br/>The information about your cancelled order is here: <a href='{frontend_url}/orders/{order_id}/view/' target='_blank'>{frontend_url}/orders/{order_id}/view</a>"
+            "<br/>If you have not done this cancellation by yourself, please check with the owner of the order or the organizer of the event for more information about the cancellation."
+            "<br/>To contact event organizers please use the contact form on the event page here: <a href='{frontend_url}/e/{event_id}/' target='_blank'>{frontend_url}/e/{event_id}/</a>"
+            "<br/>You need to login to access the form."
             "<br/>Best regards,"
             "<br/>{app_name} Team"
         ),

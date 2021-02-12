@@ -32,6 +32,7 @@ MONTHLY_PAYMENT_POST_DUE_EMAIL = 'Monthly Payment Post Due Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
 TEST_MAIL = 'Test Mail'
+CONTACT_ORGANIZERS = 'Contact Organizers'
 
 
 class Mail(db.Model):

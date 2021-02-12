@@ -343,6 +343,15 @@ class EventSchemaPublic(SoftDeletionSchema):
         schema='VideoStreamSchema',
         type_='video-stream',
     )
+    exhibitors = Relationship(
+        self_view='v1.event_exhibitor',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.exhibitor_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='ExhibitorSchema',
+        many=True,
+        type_='exhibitor',
+    )
 
 
 class EventSchema(EventSchemaPublic):

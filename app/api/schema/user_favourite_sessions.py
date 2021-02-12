@@ -28,11 +28,12 @@ class UserFavouriteSessionSchema(Schema):
     )
 
     user = Relationship(
+        dump_only=True,
         attribute='user',
         self_view='v1.user_favourite_session_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
         related_view_kwargs={'user_favourite_session_id': '<id>'},
-        schema='UserSchema',
+        schema='UserSchemaPublic',
         type_='user',
     )

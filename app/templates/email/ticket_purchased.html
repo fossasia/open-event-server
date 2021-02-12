@@ -11,13 +11,13 @@
     <br/>
 {% endfor %}
 <br/>{{ _('About this event') }} :
-<br/>{{ _('Date') }}: {{ order.event.starts_at_tz | datetime }} - {{ order.event.ends_at_tz | datetime }}
+<br/>{{ _('Date') }}: {{ order.event.starts_at | datetime(order.event.timezone) }} - {{ order.event.ends_at | datetime(order.event.timezone) }}
 <br/>{{ order.event.normalized_location }}
 <br/><br/>{{ _('Best regards') }},
 <br/>{{ settings.app_name }} {{ _('Team') }}
 {% if order.event.after_order_message %}
     <br/><br/>{{ _('Below you find a message from the organizer') }}:
-    <br/><br/>{{ order.event.after_order_message }}
+    <br/><br/><div style="white-space: pre-line;">{{ order.event.after_order_message }}</div>
 {% endif %}
 <br/>--
 <br/>{{ _('Login to manage your orders at') }} {{ settings.frontend_url }}

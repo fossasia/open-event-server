@@ -1,12 +1,19 @@
 from app.models import db
 from app.models.base import SoftDeletionModel
+from app.models.helpers.timestamp import Timestamp
 from app.models.helpers.versioning import clean_html, clean_up_string
 
 
-class Speaker(SoftDeletionModel):
+class Speaker(SoftDeletionModel, Timestamp):
     """Speaker model class"""
 
     __tablename__ = 'speaker'
+    __table_args__ = (
+        db.UniqueConstraint(
+            'event_id', 'email', 'deleted_at', name='uq_speaker_event_email'
+        ),
+        db.Index('speaker_event_idx', 'event_id'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     photo_url = db.Column(db.String)
@@ -32,6 +39,7 @@ class Speaker(SoftDeletionModel):
     position = db.Column(db.String)
     country = db.Column(db.String)
     city = db.Column(db.String)
+    address = db.Column(db.String)
     gender = db.Column(db.String)
     order = db.Column(db.Integer, default=0, nullable=False)
     heard_from = db.Column(db.String)

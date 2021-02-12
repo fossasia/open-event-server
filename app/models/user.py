@@ -93,7 +93,6 @@ class User(SoftDeletionModel):
     # relationships
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
-    favourite_sessions = db.relationship('UserFavouriteSession', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
@@ -188,13 +187,10 @@ class User(SoftDeletionModel):
         Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
+        uer = UER.query.filter_by(user=self, role=role)
         if event_id:
-            uer = UER.query.filter_by(user=self, event_id=event_id, role=role).first()
-        else:
-            uer = UER.query.filter_by(user=self, role=role).first()
-        if not uer:
-            return False
-        return True
+            uer = uer.filter_by(event_id=event_id)
+        return bool(uer.first())
 
     def is_owner(self, event_id):
         return self._is_role(Role.OWNER, event_id)

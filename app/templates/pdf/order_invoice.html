@@ -245,17 +245,12 @@
         </tbody>
       </table>
       <br/>
-      {% if event.after_order_message %}
+      {% if tax.invoice_footer %}
         <div id="notices">
-          <div>{{ _('Organizer Message') }}:</div>
-          <div class="notice">{{ event.after_order_message }}</div>
+          <div>{{ _('Invoice Footer') }}:</div>
+          <div class="notice">{{ tax.invoice_footer }}</div>
         </div>
       {% endif %}
-      <br/>
-      <div id="notices">
-        <div>{{ _('Invoice Footer') }}:</div>
-        <div class="notice">{{ tax.invoice_footer }}</div>
-      </div>
     </main>
   </body>
 </html>

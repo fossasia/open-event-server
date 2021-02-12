@@ -73,7 +73,6 @@ class FaqDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH,DELETE",
         ),
@@ -91,7 +90,6 @@ class FaqRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH",
         ),
@@ -110,7 +108,6 @@ class FaqRelationshipOptional(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH",
         ),

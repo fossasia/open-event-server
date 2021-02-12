@@ -1,11 +1,10 @@
-from marshmallow_jsonapi import fields
+from marshmallow_jsonapi import Schema, fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class UsersEventsRolesSchema(SoftDeletionSchema):
+class UsersEventsRolesSchema(Schema):
     """
     Api schema for users_events_role Model
     """

@@ -88,7 +88,7 @@
                 </td>
                 <td>
                     {% if session.created_at %}
-                        <span class="datetime">{{ session.created_at | datetime }}</span>
+                        <span class="datetime">{{ session.created_at | datetime(session.event.timezone) }}</span>
                     {% else %}
                         {{ "-" }}
                     {% endif %}

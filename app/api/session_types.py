@@ -90,7 +90,6 @@ class SessionTypeDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SessionType,
         ),
     )
@@ -113,7 +112,6 @@ class SessionTypeRelationshipRequired(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH",
             fetch="event_id",
-            fetch_as="event_id",
             model=SessionType,
         ),
     )
@@ -131,7 +129,6 @@ class SessionTypeRelationshipOptional(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SessionType,
         ),
     )
