@@ -11,6 +11,7 @@ Data related to the various exhibitors with their name, url and images associate
 | `banner_url` | Banner URL | string | - |
 | `video_url` | Video URL | string | - |
 | `slides_url` | Slides URL | string | - |
+| `contact` | Contact Info of the Exhibitor | string | - |
 
 ## Exhibitors Post Collection [/v1/exhibitors]
 
@@ -43,6 +44,7 @@ Create a new exhibitor using an event_id.
                   "banner-url": "http://example.com/banner.png",
                   "video-url": "http://example.com/video.mp4",
                   "slides-url": "http://example.com/slides.pdf",
+                  "contact": "fossasia@fossasia.org",
                   "position": 1
                 },
                 "type": "exhibitor"
@@ -70,6 +72,7 @@ Create a new exhibitor using an event_id.
               "banner-url": "http://example.com/banner.png",
               "video-url": "http://example.com/video.mp4",
               "slides-url": "http://example.com/slides.pdf",
+              "contact": "fossasia@fossasia.org",
               "position": 1
             },
             "type": "exhibitor",
@@ -129,6 +132,7 @@ Get a list of Exhibitors.
                 "banner-url": "http://example.com/banner.png",
                 "video-url": "http://example.com/video.mp4",
                 "slides-url": "http://example.com/slides.pdf",
+                "contact": "fossasia@fossasia.org",
                 "name": "Fossasia"
               },
               "type": "exhibitor",
@@ -182,6 +186,7 @@ Get a single exhibitor.
               "banner-url": "http://example.com/banner.png",
               "video-url": "http://example.com/video.mp4",
               "slides-url": "http://example.com/slides.pdf",
+              "contact": "fossasia@fossasia.org",
               "name": "Fossasia"
             },
             "type": "exhibitor",
@@ -222,7 +227,8 @@ Update a single exhibitor by `id`.
                   "logo-url": "http://example.com/example1.png",
                   "banner-url": "http://example.com/banner1.png",
                   "video-url": "http://example.com/video1.mp4",
-                  "slides-url": "http://example.com/slides1.pdf"
+                  "slides-url": "http://example.com/slides1.pdf",
+                  "contact": "fossasia@fossasia.org"
                 },
                 "type": "exhibitor",
                 "id": "1"
@@ -250,6 +256,7 @@ Update a single exhibitor by `id`.
               "logo-url": "http://example.com/example1.png",
               "banner-url": "http://example.com/banner1.png",
               "video-url": "http://example.com/video1.mp4",
+              "contact": "fossasia@fossasia.org",
               "slides-url": "http://example.com/slides1.pdf"
             },
             "type": "exhibitor",

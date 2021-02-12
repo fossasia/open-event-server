@@ -259,6 +259,11 @@ from app.api.video_stream import (
     VideoStreamList,
     VideoStreamRelationship,
 )
+from app.api.video_stream_moderators import (
+    VideoStreamModeratorDetail,
+    VideoStreamModeratorList,
+    VideoStreamModeratorRelationship,
+)
 
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')
@@ -1717,7 +1722,11 @@ api.route(
     'video_stream_channel',
     '/video-streams/<int:id>/relationships/video-channel',
 )
-
+api.route(
+    VideoStreamRelationship,
+    'video_stream_moderators',
+    '/video-streams/<int:id>/relationships/video-stream-moderators',
+)
 # Video Channels
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
 api.route(
@@ -1738,4 +1747,27 @@ api.route(
 api.route(ExhibitorDetail, 'exhibitor_detail', '/exhibitors/<int:id>')
 api.route(
     ExhibitorRelationship, 'exhibitor_event', '/exhibitors/<int:id>/relationships/event'
+)
+
+# VideoStreamModerator
+api.route(
+    VideoStreamModeratorList,
+    'video_stream_moderator_list',
+    '/video-streams/<int:video_stream_id>/video-stream-moderators',
+    '/users/<int:user_id>/video-stream-moderators',
+)
+api.route(
+    VideoStreamModeratorDetail,
+    'video_stream_moderator_detail',
+    '/video-stream-moderators/<int:video_stream_id>',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_user',
+    '/video-stream-moderators/<int:id>/relationships/user',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_stream',
+    '/video-stream-moderators/<int:id>/relationships/video-stream',
 )

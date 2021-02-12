@@ -197,12 +197,14 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         logger.error('No mail found for session state change: ' + session.state)
         return
 
+    bcc = list(set(organizers_email + mail.get('bcc', [])))
+
     send_email(
         to=email,
         action=SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=mail.get('bcc'),
+        bcc=bcc,
         reply_to=organizers_email,
     )
 
