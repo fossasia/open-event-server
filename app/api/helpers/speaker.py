@@ -13,7 +13,6 @@ def can_edit_after_cfs_ends(event_id):
     speakers_call = SpeakersCall.query.filter_by(
         event_id=event_id, deleted_at=None
     ).one_or_none()
-
     not_allowed = not (
         has_access('is_admin')
         or has_access('is_organizer', event_id=event_id)
