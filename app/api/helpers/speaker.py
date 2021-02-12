@@ -2,7 +2,6 @@ from datetime import datetime
 
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
-from app.models.event import Event
 from app.models.speakers_call import SpeakersCall
 
 
@@ -15,15 +14,6 @@ def can_edit_after_cfs_ends(event_id):
         event_id=event_id, deleted_at=None
     ).one_or_none()
 
-    is_cfs_enable = Event.query.filter_by(
-        id=event_id, deleted_at=None, is_cfs_enabled=True
-    ).one_or_none()
-
-    if not is_cfs_enable:
-        raise ForbiddenError(
-            {'source': '/data/event-id'},
-            f'Speaker Calls for event {event_id} not found',
-        )
     not_allowed = not (
         has_access('is_admin')
         or has_access('is_organizer', event_id=event_id)
