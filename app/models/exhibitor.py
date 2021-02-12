@@ -27,6 +27,7 @@ class Exhibitor(db.Model, Timestamp):
     banner_url = db.Column(db.String)
     video_url = db.Column(db.String)
     slides_url = db.Column(db.String)
+    contact = db.Column(db.String)
     social_links = db.Column(db.JSON)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), nullable=False
