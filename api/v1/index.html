@@ -13046,6 +13046,12 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
 <td>string</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>contact</code></td>
+<td>Contact Info of the Exhibitor</td>
+<td>string</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <div id="exhibitors-exhibitors-post-collection" class="resource"><h3 class="resource-heading">Exhibitors Post Collection <a href="#exhibitors-exhibitors-post-collection" class="permalink">&nbsp;&para;</a></h3><div id="exhibitors-exhibitors-post-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Exhibitor</div><a href="#exhibitors-exhibitors-post-collection-post" class="method post">POST</a><code class="uri">/v1/exhibitors</code></h4><p>Create a new exhibitor using an event_id.</p>
@@ -13067,6 +13073,7 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
       "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner.png"</span></span>,
       "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video.mp4"</span></span>,
       "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides.pdf"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span></span>,
       "<span class="hljs-attribute">position</span>": <span class="hljs-value"><span class="hljs-number">1</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span>
@@ -13089,6 +13096,7 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
       "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner.png"</span></span>,
       "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video.mp4"</span></span>,
       "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides.pdf"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span></span>,
       "<span class="hljs-attribute">position</span>": <span class="hljs-value"><span class="hljs-number">1</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span></span>,
@@ -13127,6 +13135,7 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
         "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner.png"</span></span>,
         "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video.mp4"</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides.pdf"</span></span>,
+        "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span></span>,
         "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Fossasia"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span></span>,
@@ -13162,6 +13171,7 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
       "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner.png"</span></span>,
       "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video.mp4"</span></span>,
       "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides.pdf"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span></span>,
       "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Fossasia"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span></span>,
@@ -13191,7 +13201,8 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
       "<span class="hljs-attribute">logo-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example1.png"</span></span>,
       "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner1.png"</span></span>,
       "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video1.mp4"</span></span>,
-      "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides1.pdf"</span>
+      "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides1.pdf"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span>
@@ -13214,6 +13225,7 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
       "<span class="hljs-attribute">logo-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example1.png"</span></span>,
       "<span class="hljs-attribute">banner-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/banner1.png"</span></span>,
       "<span class="hljs-attribute">video-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/video1.mp4"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"fossasia@fossasia.org"</span></span>,
       "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/slides1.pdf"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"exhibitor"</span></span>,
@@ -23108,7 +23120,7 @@ Creates the copy. Requires Co-Organizer access</p>
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 11 Feb 2021</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 12 Feb 2021</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
