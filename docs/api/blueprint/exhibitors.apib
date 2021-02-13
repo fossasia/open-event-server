@@ -12,6 +12,7 @@ Data related to the various exhibitors with their name, url and images associate
 | `video_url` | Video URL | string | - |
 | `slides_url` | Slides URL | string | - |
 | `contact` | Contact Info of the Exhibitor | string | - |
+| `extra_links` | Extra links for the exhibitor | Object | - |
 
 ## Exhibitors Post Collection [/v1/exhibitors]
 
@@ -45,6 +46,10 @@ Create a new exhibitor using an event_id.
                   "video-url": "http://example.com/video.mp4",
                   "slides-url": "http://example.com/slides.pdf",
                   "contact": "fossasia@fossasia.org",
+                  "extra_links": {
+                    "blog": "http://example1.com",
+                    "newsletter": "http://example2.com",
+                  },
                   "position": 1
                 },
                 "type": "exhibitor"
@@ -73,6 +78,10 @@ Create a new exhibitor using an event_id.
               "video-url": "http://example.com/video.mp4",
               "slides-url": "http://example.com/slides.pdf",
               "contact": "fossasia@fossasia.org",
+              "extra_links": {
+                "blog": "http://example1.com",
+                "newsletter": "http://example2.com",
+              },
               "position": 1
             },
             "type": "exhibitor",
@@ -133,6 +142,10 @@ Get a list of Exhibitors.
                 "video-url": "http://example.com/video.mp4",
                 "slides-url": "http://example.com/slides.pdf",
                 "contact": "fossasia@fossasia.org",
+                "extra_links": {
+                  "blog": "http://example1.com",
+                  "newsletter": "http://example2.com",
+                },
                 "name": "Fossasia"
               },
               "type": "exhibitor",
@@ -187,6 +200,10 @@ Get a single exhibitor.
               "video-url": "http://example.com/video.mp4",
               "slides-url": "http://example.com/slides.pdf",
               "contact": "fossasia@fossasia.org",
+              "extra_links": {
+                "blog": "http://example1.com",
+                "newsletter": "http://example2.com",
+              },
               "name": "Fossasia"
             },
             "type": "exhibitor",
@@ -228,7 +245,11 @@ Update a single exhibitor by `id`.
                   "banner-url": "http://example.com/banner1.png",
                   "video-url": "http://example.com/video1.mp4",
                   "slides-url": "http://example.com/slides1.pdf",
-                  "contact": "fossasia@fossasia.org"
+                  "contact": "fossasia@fossasia.org",
+                  "extra_links": {
+                    "blog": "http://example1.com",
+                    "newsletter": "http://example2.com",
+                  },
                 },
                 "type": "exhibitor",
                 "id": "1"
@@ -257,6 +278,10 @@ Update a single exhibitor by `id`.
               "banner-url": "http://example.com/banner1.png",
               "video-url": "http://example.com/video1.mp4",
               "contact": "fossasia@fossasia.org",
+              "extra_links": {
+                "blog": "http://example1.com",
+                "newsletter": "http://example2.com",
+              },
               "slides-url": "http://example.com/slides1.pdf"
             },
             "type": "exhibitor",
