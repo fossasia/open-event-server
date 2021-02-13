@@ -12,7 +12,6 @@ from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
-from app.settings import get_settings
 from app.models.mail import (
     AFTER_EVENT,
     EVENT_EXPORT_FAIL,
@@ -160,7 +159,10 @@ def send_email_new_session(email, session):
         action=NEW_SESSION,
         subject=MAILS[NEW_SESSION]['subject'].format(session=session),
         html=MAILS[NEW_SESSION]['message'].format(
-            session=session, session_overview_link=session_overview_link, app_name=app_name, front_page=front_page
+            session=session,
+            session_overview_link=session_overview_link,
+            app_name=app_name,
+            front_page=front_page,
         ),
     )
 
@@ -172,9 +174,6 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     settings = get_settings()
     app_name = settings['app_name']
     frontend_url = settings['frontend_url']
-    organizers = list(map(lambda x: x.email, session.event.organizers)) + list(map(lambda x: x.email, session.event.coorganizers))
-    organizers.append(session.event.owner.email)
-    organizers_email = list(set(organizers))
     context = {
         'session_name': session.title,
         'session_link': session.site_link,
@@ -197,6 +196,12 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         logger.error('No mail found for session state change: ' + session.state)
         return
 
+    organizers_email = list(
+        map(
+            lambda x: x.email,
+            session.event.organizers + session.event.coorganizers + [session.event.owner],
+        )
+    )
     bcc = list(set(organizers_email + mail.get('bcc', [])))
 
     send_email(
@@ -205,7 +210,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
         bcc=bcc,
-        reply_to=organizers_email,
+        reply_to=session.event.owner.email,
     )
 
 
