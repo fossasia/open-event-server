@@ -203,7 +203,8 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         )
     )
     bcc = list(set(organizers_email + mail.get('bcc', [])))
-    bcc.remove(email)  # to, cc, bcc should have unique emails
+    if email in bcc:
+        bcc.remove(email)  # to, cc, bcc should have unique emails
 
     send_email(
         to=email,
