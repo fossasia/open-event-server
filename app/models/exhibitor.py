@@ -23,6 +23,7 @@ class Exhibitor(db.Model, Timestamp):
     description = db.Column(db.String)
     url = db.Column(db.String)
     position = db.Column(db.Integer, nullable=False, default=0, server_default='0')
+    order = db.Column(db.Integer, default=0, nullable=False)
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
     video_url = db.Column(db.String)

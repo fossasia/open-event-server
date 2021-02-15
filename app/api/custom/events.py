@@ -6,9 +6,11 @@ from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email
 from app.api.helpers.permissions import is_coorganizer, jwt_required, to_event_id
 from app.api.helpers.utilities import group_by, strip_tags
+from app.api.schema.exhibitors import ExhibitorReorderSchema
 from app.api.schema.speakers import SpeakerReorderSchema
 from app.models import db
 from app.models.event import Event
+from app.models.exhibitor import Exhibitor
 from app.models.mail import CONTACT_ORGANIZERS
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -122,6 +124,50 @@ def reorder_speakers(event_id):
         speaker_ids = {item['speaker'] for item in items}
         result = Speaker.query.filter(Speaker.id.in_(speaker_ids)).update(
             {Speaker.order: order}, synchronize_session=False
+        )
+        updates[order] = result
+
+    db.session.commit()
+
+    return jsonify({'success': True, 'updates': updates})
+
+
+@events_routes.route('/<string:event_identifier>/reorder-exhibitors', methods=['POST'])
+@to_event_id
+def reorder_exhibitors(event_id):
+    if 'reset' in request.args:
+        updates = Exhibitor.query.filter(Exhibitor.event_id == event_id).update(
+            {Exhibitor.order: 0}, synchronize_session=False
+        )
+        db.session.commit()
+
+        return jsonify({'success': True, 'updates': updates})
+
+    data, errors = ExhibitorReorderSchema(many=True).load(request.json)
+    if errors:
+        raise UnprocessableEntityError(
+            {'pointer': '/data', 'errors': errors}, 'Data in incorrect format'
+        )
+
+    exhibitor_ids = {item['exhibitor'] for item in data}
+    event_ids = (
+        db.session.query(distinct(Exhibitor.event_id))
+        .filter(Exhibitor.id.in_(exhibitor_ids))
+        .all()
+    )
+
+    if len(event_ids) != 1 or event_ids[0][0] != event_id:
+        raise ForbiddenError(
+            {'pointer': 'event_id'},
+            'All exhibitors should be of single event which user has co-organizer access to',
+        )
+
+    result = group_by(data, 'order')
+    updates = {}
+    for (order, items) in result.items():
+        exhibitor_ids = {item['exhibitor'] for item in items}
+        result = Exhibitor.query.filter(Exhibitor.id.in_(exhibitor_ids)).update(
+            {Exhibitor.order: order}, synchronize_session=False
         )
         updates[order] = result
 
