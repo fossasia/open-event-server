@@ -37,7 +37,6 @@ class ExhibitorSchema(JSONAPISchema):
     slides_url = fields.Url(allow_none=True)
     contact_email = fields.Str(allow_none=True)
     contact_link = fields.Str(allow_none=True)
-    order = fields.Integer(allow_none=True, default=0)
     social_links = fields.Nested(ExhibitorSocialLinkSchema, many=True, allow_none=True)
     event = Relationship(
         self_view='v1.exhibitor_event',
@@ -51,4 +50,4 @@ class ExhibitorSchema(JSONAPISchema):
 
 class ExhibitorReorderSchema(JsonSchema):
     exhibitor = fields.Integer(required=True)
-    order = fields.Integer(required=True)
+    position = fields.Integer(required=True)

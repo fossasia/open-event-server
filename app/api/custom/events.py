@@ -137,7 +137,7 @@ def reorder_speakers(event_id):
 def reorder_exhibitors(event_id):
     if 'reset' in request.args:
         updates = Exhibitor.query.filter(Exhibitor.event_id == event_id).update(
-            {Exhibitor.order: 0}, synchronize_session=False
+            {Exhibitor.position: 0}, synchronize_session=False
         )
         db.session.commit()
 
@@ -162,14 +162,14 @@ def reorder_exhibitors(event_id):
             'All exhibitors should be of single event which user has co-organizer access to',
         )
 
-    result = group_by(data, 'order')
+    result = group_by(data, 'position')
     updates = {}
-    for (order, items) in result.items():
+    for (position, items) in result.items():
         exhibitor_ids = {item['exhibitor'] for item in items}
         result = Exhibitor.query.filter(Exhibitor.id.in_(exhibitor_ids)).update(
-            {Exhibitor.order: order}, synchronize_session=False
+            {Exhibitor.position: position}, synchronize_session=False
         )
-        updates[order] = result
+        updates[position] = result
 
     db.session.commit()
 
