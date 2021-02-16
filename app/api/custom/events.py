@@ -134,6 +134,7 @@ def reorder_speakers(event_id):
 
 @events_routes.route('/<string:event_identifier>/reorder-exhibitors', methods=['POST'])
 @to_event_id
+@is_coorganizer
 def reorder_exhibitors(event_id):
     if 'reset' in request.args:
         updates = Exhibitor.query.filter(Exhibitor.event_id == event_id).update(
