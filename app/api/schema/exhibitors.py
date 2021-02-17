@@ -10,6 +10,7 @@ from app.models.exhibitor import Exhibitor
 class ExhibitorSocialLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
+    isCustom = fields.Boolean(default=False)
 
 
 class ExhibitorSchema(JSONAPISchema):
@@ -36,7 +37,6 @@ class ExhibitorSchema(JSONAPISchema):
     slides_url = fields.Url(allow_none=True)
     contact = fields.Str(allow_none=True)
     social_links = fields.Nested(ExhibitorSocialLinkSchema, many=True, allow_none=True)
-    extra_links = fields.Nested(ExhibitorSocialLinkSchema, many=True, allow_none=True)
     event = Relationship(
         self_view='v1.exhibitor_event',
         self_view_kwargs={'id': '<id>'},
