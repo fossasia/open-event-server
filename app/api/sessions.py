@@ -20,7 +20,6 @@ from app.api.helpers.notification import (
 )
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
-from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.system_mails import MAILS, SESSION_STATE_CHANGE
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionNotifySchema, SessionSchema
@@ -312,11 +311,6 @@ class SessionDetail(ResourceDetail):
                     {'pointer': '/data/attributes/state'},
                     f'You cannot change a session state from "{session.state}" to "{new_state}"',
                 )
-
-        if not can_edit_after_cfs_ends(session.event_id):
-            raise ForbiddenError(
-                {'source': ''}, "Cannot edit session after the call for speaker is ended"
-            )
 
         # We allow organizers and admins to edit session without validations
         complex_field_values = data.get('complex_field_values', 'absent')
