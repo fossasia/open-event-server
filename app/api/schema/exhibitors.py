@@ -1,4 +1,5 @@
 from marshmallow import Schema, validate
+from marshmallow.schema import Schema as JsonSchema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from marshmallow_jsonapi.flask import Schema as JSONAPISchema
@@ -10,6 +11,7 @@ from app.models.exhibitor import Exhibitor
 class ExhibitorSocialLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
+    is_custom = fields.Boolean(default=False)
 
 
 class ExhibitorSchema(JSONAPISchema):
@@ -46,3 +48,8 @@ class ExhibitorSchema(JSONAPISchema):
         schema='EventSchemaPublic',
         type_='event',
     )
+
+
+class ExhibitorReorderSchema(JsonSchema):
+    exhibitor = fields.Integer(required=True)
+    position = fields.Integer(required=True)
