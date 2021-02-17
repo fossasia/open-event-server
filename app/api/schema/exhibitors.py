@@ -11,7 +11,7 @@ from app.models.exhibitor import Exhibitor
 class ExhibitorSocialLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
-    isCustom = fields.Boolean(default=False)
+    is_custom = fields.Boolean(default=False)
 
 
 class ExhibitorSchema(JSONAPISchema):
