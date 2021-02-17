@@ -29,6 +29,9 @@ class Exhibitor(db.Model, Timestamp):
     slides_url = db.Column(db.String)
     contact_email = db.Column(db.String)
     contact_link = db.Column(db.String)
+    enable_video_room = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     social_links = db.Column(db.JSON)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), nullable=False
