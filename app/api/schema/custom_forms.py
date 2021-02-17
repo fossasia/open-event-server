@@ -31,7 +31,16 @@ class CustomFormSchema(Schema):
     type = fields.Str(
         default="text",
         validate=validate.OneOf(
-            choices=["text", "checkbox", "select", "file", "image", "email", "number"]
+            choices=[
+                "text",
+                "checkbox",
+                "select",
+                "file",
+                "image",
+                "email",
+                "number",
+                "paragraph",
+            ]
         ),
     )
     name = fields.Str(allow_none=True)

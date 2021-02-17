@@ -9,7 +9,6 @@ from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
 from app.models import db
@@ -185,11 +184,6 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if not can_edit_after_cfs_ends(speaker.event_id):
-            raise ForbiddenError(
-                {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
-            )
-
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 

@@ -14,7 +14,7 @@ def get_schema(form_fields):
     attrs = {}
 
     for field in form_fields:
-        if field.type in ['text', 'checkbox', 'select']:
+        if field.type in ['text', 'checkbox', 'select', 'paragraph']:
             field_type = marshmallow.fields.Str
         elif field.type == 'email':
             field_type = marshmallow.fields.Email
