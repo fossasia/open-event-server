@@ -46,7 +46,6 @@ def get_dates(event_id):
 @to_event_id
 @is_coorganizer
 def more_speakers(event_id):
-    event = Event.query.get_or_404(event_id)
     all_speaker_count = Speaker.query.filter(Speaker.event_id == event_id).count()
     featured_speaker_count = Speaker.query.filter(
         Speaker.event_id == event_id, Speaker.is_featured == True
