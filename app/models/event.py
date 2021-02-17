@@ -105,6 +105,7 @@ class Event(SoftDeletionModel):
     is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
     is_ticket_form_enabled = db.Column(db.Boolean, default=True, nullable=False)
+    is_video_room_enabled = db.Column(db.Boolean, default=True, nullable=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
