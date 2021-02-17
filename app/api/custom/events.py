@@ -42,6 +42,18 @@ def get_dates(event_id):
     return jsonify(dates)
 
 
+@events_routes.route('/<string:event_identifier>/more-speakers')
+@to_event_id
+@is_coorganizer
+def more_speakers(event_id):
+    event = Event.query.get_or_404(event_id)
+    all_speaker_count = Speaker.query.filter(Speaker.event_id == event_id).count()
+    featured_speaker_count = Speaker.query.filter(
+        Speaker.event_id == event_id, Speaker.is_featured == True
+    ).count()
+    return jsonify(all_speaker_count - featured_speaker_count)
+
+
 @events_routes.route('/<string:event_identifier>/contact-organizer', methods=['POST'])
 @to_event_id
 @jwt_required
