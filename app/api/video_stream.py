@@ -26,6 +26,7 @@ from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_channel import VideoChannel
 from app.models.video_stream import VideoStream
+from app.models.video_stream_moderator import VideoStreamModerator
 
 logger = logging.getLogger(__name__)
 
@@ -181,6 +182,12 @@ class VideoStreamDetail(ResourceDetail):
                 VideoStream, view_kwargs, 'event_id', 'event_id'
             )
             view_kwargs['id'] = video_stream.id
+
+        if view_kwargs.get('video_stream_moderator_id'):
+            moderator = safe_query_kwargs(
+                VideoStreamModerator, view_kwargs, 'video_stream_moderator_id'
+            )
+            view_kwargs['id'] = moderator.video_stream_id
 
     def after_get_object(self, stream, view_kwargs):
         if stream and not stream.user_can_access:

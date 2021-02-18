@@ -1,20 +1,23 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.utilities import require_relationship
 from app.api.schema.video_stream_moderators import VideoStreamModeratorSchema
 from app.models import db
+from app.models.user import User
 from app.models.video_stream_moderator import VideoStreamModerator
 
 
 class VideoStreamModeratorList(ResourceList):
-    """
-    List and create video_stream_moderators
-    """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['video_stream'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStreamModerator)
         if view_kwargs.get('user_id'):
-            query_ = query_.filter_by(user_id=view_kwargs['user_id'])
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
+            query_ = query_.filter_by(email=user.email)
         elif view_kwargs.get('video_stream_id'):
             query_ = query_.filter_by(video_stream_id=view_kwargs['video_stream_id'])
         return query_
@@ -25,7 +28,7 @@ class VideoStreamModeratorList(ResourceList):
             'is_coorganizer', fetch='event_id', model=VideoStreamModerator
         ),
     )
-    methods = ['GET']
+    methods = ['GET', 'POST']
     schema = VideoStreamModeratorSchema
     data_layer = {
         'session': db.session,
