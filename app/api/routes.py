@@ -287,6 +287,7 @@ api.route(
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
+    '/video-stream-moderator/<int:video_stream_moderator_id>/user',
 )
 api.route(
     UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications'
@@ -1706,6 +1707,7 @@ api.route(
     '/microlocations/<int:room_id>/video-stream',
     '/events/<int:event_id>/video-stream',
     '/events/<event_identifier>/video-stream',
+    '/video-stream-moderators/<int:video_stream_moderator_id>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
@@ -1753,13 +1755,14 @@ api.route(
 api.route(
     VideoStreamModeratorList,
     'video_stream_moderator_list',
+    '/video-stream-moderators',
     '/video-streams/<int:video_stream_id>/video-stream-moderators',
     '/users/<int:user_id>/video-stream-moderators',
 )
 api.route(
     VideoStreamModeratorDetail,
     'video_stream_moderator_detail',
-    '/video-stream-moderators/<int:video_stream_id>',
+    '/video-stream-moderators/<int:id>',
 )
 api.route(
     VideoStreamModeratorRelationship,

@@ -46,7 +46,7 @@ class VideoStreamSchema(Schema):
         many=True,
         self_view='v1.video_stream_moderators',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.video_stream_moderator_detail',
+        related_view='v1.video_stream_moderator_list',
         related_view_kwargs={'video_stream_id': '<id>'},
         schema='VideoStreamModeratorSchema',
         type_='video-stream-moderator',

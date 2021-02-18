@@ -9,7 +9,7 @@ from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query_by, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email, send_email_change_user_email
@@ -38,6 +38,7 @@ from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
+from app.models.video_stream_moderator import VideoStreamModerator
 from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -265,6 +266,18 @@ class UserDetail(ResourceDetail):
             )
             if email_notification.user_id is not None:
                 view_kwargs['id'] = email_notification.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('video_stream_moderator_id') is not None:
+            moderator = safe_query_kwargs(
+                VideoStreamModerator,
+                view_kwargs,
+                'video_stream_moderator_id',
+            )
+            user = safe_query_by(User, moderator.email, param='email')
+            if user is not None:
+                view_kwargs['id'] = user.id
             else:
                 view_kwargs['id'] = None
 
