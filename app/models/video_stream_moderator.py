@@ -1,8 +1,10 @@
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy_utils.models import generic_repr
 
 from app.models import db
 
 
+@generic_repr
 class VideoStreamModerator(db.Model):
     __tablename__ = 'video_stream_moderators'
     __table_args__ = (
@@ -25,6 +27,3 @@ class VideoStreamModerator(db.Model):
         sync_backref=False,
     )
     video_stream = db.relationship("VideoStream", backref="moderators")
-
-    def __repr__(self):
-        return f'{self.user!r}'
