@@ -1,4 +1,5 @@
 import pytz
+from flask_jwt_extended import current_user
 from icalendar import Calendar, Event
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
@@ -6,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from app.models.session import Session
 
 
-def to_ical(event, user_id, include_sessions=False, my_schedule=False):
+def to_ical(event, include_sessions=False, my_schedule=False, user_id=current_user.id):
     cal = Calendar()
     cal.add('version', '2.0')
     cal.add('METHOD', 'PUBLISH')
@@ -37,6 +38,10 @@ def to_ical(event, user_id, include_sessions=False, my_schedule=False):
             .order_by(Session.starts_at.asc())
         )
         if my_schedule:
+            if not (current_user or user_id):
+                return jsonify(error='Forbidden Access'), 401
+            if not user_id:
+                user_id = current_user.id
             sessions_query = sessions_query.join(Session.favourites).filter_by(
                 user_id=user_id
             )
