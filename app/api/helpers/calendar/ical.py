@@ -1,6 +1,4 @@
 import pytz
-from flask import jsonify
-from flask_jwt_extended import current_user
 from icalendar import Calendar, Event
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
@@ -8,7 +6,7 @@ from sqlalchemy.orm import joinedload
 from app.models.session import Session
 
 
-def to_ical(event, include_sessions=False, my_schedule=False):
+def to_ical(event, user_id, include_sessions=False, my_schedule=False):
     cal = Calendar()
     cal.add('version', '2.0')
     cal.add('METHOD', 'PUBLISH')
@@ -39,10 +37,8 @@ def to_ical(event, include_sessions=False, my_schedule=False):
             .order_by(Session.starts_at.asc())
         )
         if my_schedule:
-            if not current_user:
-                return jsonify(error='Login Required'), 401
             sessions_query = sessions_query.join(Session.favourites).filter_by(
-                user=current_user
+                user_id=user_id
             )
         sessions = sessions_query.all()
 
