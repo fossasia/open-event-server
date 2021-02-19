@@ -19,8 +19,11 @@ def export_event(event_id):
     event = Event.query.get_or_404(event_id)
     include_sessions = 'include_sessions' in request.args
     my_schedule = 'my_schedule' in request.args
+    user_id = request.args.get('user_id')
 
-    response = to_ical(event, include_sessions=include_sessions, my_schedule=my_schedule)
+    response = to_ical(
+        event, include_sessions=include_sessions, my_schedule=my_schedule, user_id=user_id
+    )
 
     response = make_response(response)
     response.headers['Content-Type'] = 'text/calendar'
