@@ -7,6 +7,7 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.events import Event
@@ -151,10 +152,12 @@ class SessionList(ResourceList):
         elif view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
-                query_.join(User)
-                .join(Speaker)
+                query_.join(Session.speakers)
                 .filter(
-                    User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)
+                    Session.creator_id == user.id
+                    or Session.speakers.any(
+                        or_(Speaker.user_id == user.id, Speaker.email == user.email)
+                    )
                 )
                 .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
                 .order_by(*get_distinct_sort_fields(SessionSchema, Session))
