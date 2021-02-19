@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from app.models.session import Session
 
 
-def to_ical(event, include_sessions=False, my_schedule=False, user_id=current_user.id):
+def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
     cal = Calendar()
     cal.add('version', '2.0')
     cal.add('METHOD', 'PUBLISH')
@@ -40,8 +40,8 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=current_us
         if my_schedule:
             if not (current_user or user_id):
                 return jsonify(error='Forbidden Access'), 401
-            if not user_id:
-                user_id = current_user.id
+
+            user_id = current_user.id if not user_id else user_id
             sessions_query = sessions_query.join(Session.favourites).filter_by(
                 user_id=user_id
             )
