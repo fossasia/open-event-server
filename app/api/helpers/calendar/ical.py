@@ -42,7 +42,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             if not (current_user or user_id):
                 return jsonify(error='Forbidden Access'), 401
 
-            user_id = current_user.id if not user_id else user_id
+            user_id = user_id or current_user.id
             sessions_query = sessions_query.join(Session.favourites).filter_by(
                 user_id=user_id
             )
