@@ -6,7 +6,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
@@ -67,10 +67,7 @@ class SessionSchema(SoftDeletionSchema):
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError(
-                    {'pointer': '/relationships/microlocation'},
-                    'Co-organizer access is required.',
-                )
+                del data['microlocation']
 
         validate_complex_fields_json(self, data, original_data)
 
