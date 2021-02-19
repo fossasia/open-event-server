@@ -1,4 +1,5 @@
 import pytz
+from flask import jsonify
 from flask_jwt_extended import current_user
 from icalendar import Calendar, Event
 from sqlalchemy import or_
