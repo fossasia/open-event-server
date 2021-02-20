@@ -23,6 +23,12 @@ speakers_sessions = db.Table(
 class Session(SoftDeletionModel):
     """Session model class"""
 
+    class State:
+        PENDING = 'pending'
+        ACCEPTED = 'accepted'
+        CONFIRMED = 'confirmed'
+        REJECTED = 'rejected'
+
     __tablename__ = 'sessions'
     __table_args__ = (
         db.Index('session_event_idx', 'event_id'),
