@@ -51,7 +51,12 @@ class VideoStream(db.Model):
         query = (
             Speaker.query.filter(Speaker.email == current_user.email)
             .join(Speaker.sessions)
-            .filter(Session.state == 'confirmed')
+            .filter(
+                or_(
+                    Session.state == Session.State.CONFIRMED,
+                    Session.state == Session.State.ACCEPTED,
+                )
+            )
         )
         if self.event_id:
             query = query.filter(Session.event_id == self.event_id)
@@ -73,7 +78,9 @@ class VideoStream(db.Model):
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=self._event_id):
             return True
-        return self.user_is_confirmed_speaker or user.email in list(map(lambda x: x.email, self.moderators))
+        return self.user_is_confirmed_speaker or user.email in list(
+            map(lambda x: x.email, self.moderators)
+        )
 
     @property
     def user_can_access(self):

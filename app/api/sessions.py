@@ -261,6 +261,8 @@ class SessionDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
     def after_get_object(self, session, view_kwargs):
+        if not session:
+            return
         is_speaker_or_admin = is_logged_in() and has_access(
             'is_speaker_for_session', id=session.id
         )
