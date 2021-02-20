@@ -53,6 +53,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             if not (session and session.starts_at and session.ends_at):
                 continue
 
+            session_video_url = " " + event.site_link + '/video/' + session.microlocation.video_stream.name + "/" + str(session.microlocation.video_stream.id) if session.microlocation.video_stream else ""
             session_component = Event()
             session_component.add('summary', session.title)
             session_component.add('uid', str(session.id) + "-" + event.identifier)
@@ -60,7 +61,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             session_component.add(
                 'location',
                 session.microlocation
-                and session.microlocation.name
+                and session.microlocation.name + session_video_url
                 or '' + " " + event.location_name,
             )
             session_component.add(
