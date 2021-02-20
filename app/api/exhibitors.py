@@ -30,13 +30,24 @@ class ExhibitorList(ResourceList):
         query_ = event_query(query_, view_kwargs)
         return query_
 
+    def after_create_object(self, exhibitor, data, view_kwargs):
+        if data.get('banner_url'):
+            start_image_resizing_tasks(exhibitor, data['banner_url'])
+
     view_kwargs = True
-    methods = ['GET']
+    methods = ['GET', 'POST']
     schema = ExhibitorSchema
-    data_layer = {'session': db.session, 'model': Exhibitor, 'methods': {'query': query}}
+    data_layer = {
+        'session': db.session,
+        'model': Exhibitor,
+        'methods': {'after_create_object': after_create_object, 'query': query},
+    }
 
 
 class ExhibitorDetail(ResourceDetail):
+    def before_update_object(self, exhibitor, data, view_kwargs):
+        if data.get('banner_url'):
+            start_image_resizing_tasks(exhibitor, data['banner_url'])
 
     decorators = (
         api.has_permission(
@@ -47,7 +58,13 @@ class ExhibitorDetail(ResourceDetail):
         ),
     )
     schema = ExhibitorSchema
-    data_layer = {'session': db.session, 'model': Exhibitor}
+    data_layer = {
+        'session': db.session,
+        'model': Exhibitor,
+        'methods': {
+            'before_update_object': before_update_object,
+        },
+    }
 
 
 class ExhibitorRelationship(ResourceRelationship):
@@ -63,3 +80,10 @@ class ExhibitorRelationship(ResourceRelationship):
     methods = ['GET', 'PATCH']
     schema = ExhibitorSchema
     data_layer = {'session': db.session, 'model': Exhibitor}
+
+
+def start_image_resizing_tasks(exhibitor, original_image_url):
+    exhibitor_id = str(exhibitor.id)
+    from .helpers.tasks import resize_exhibitor_images_task
+
+    resize_exhibitor_images_task.delay(exhibitor_id, original_image_url)
