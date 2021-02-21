@@ -76,6 +76,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_promoted = fields.Bool(default=False)
     is_demoted = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
+    is_video_room_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     paypal_email = fields.Str(allow_none=True)
