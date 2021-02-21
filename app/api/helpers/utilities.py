@@ -190,3 +190,7 @@ def group_by(items, key):
     for item in items:
         result[item[key]] = result.get(item[key], []) + [item]
     return result
+
+
+def changed(obj, data: Dict, attr: str) -> bool:
+    return data.get(attr) and (data[attr] != getattr(obj, attr))
