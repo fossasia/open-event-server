@@ -53,9 +53,9 @@ def fix_exhibitor_images():
     exhibitors = Exhibitor.query.filter(
         Exhibitor.banner_url.isnot(None), Exhibitor.thumbnail_image_url == None
     ).all()
-    logger.info('Resizing images of %s exhibitors...', len(exhibitors))
+    print(f'Resizing images of { len(exhibitors) } exhibitors...')
     for exhibitor in exhibitors:
-        logger.info('Resizing Exhibitor %s', exhibitor.id)
+        print(f'Resizing Exhibitor { exhibitor.id }')
         resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
 
 
