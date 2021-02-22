@@ -40,6 +40,7 @@ from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
+from app.models.exhibitor import Exhibitor
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -195,6 +196,30 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.exception(
             'Error encountered while generating resized images for event with id: {}'.format(
                 event_id
+            )
+        )
+
+
+@celery.task(base=RequestContextTask, name='resize.exhibitor.images', bind=True)
+def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
+    exhibitor = Exhibitor.query.get(exhibitor_id)
+    try:
+        logging.info(
+            'Exhibitor image resizing tasks started for exhibitor with id {}'.format(
+                exhibitor_id
+            )
+        )
+        uploaded_images = create_save_image_sizes(photo_url, 'event-image', exhibitor_id)
+        exhibitor.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        exhibitor.banner_url = uploaded_images['large_image_url']
+        save_to_db(exhibitor)
+        logging.info(
+            f'Resized images saved successfully for exhibitor with id: {exhibitor_id}'
+        )
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
+        logging.exception(
+            'Error encountered while generating resized images for exhibitor with id: {}'.format(
+                exhibitor_id
             )
         )
 

@@ -25,6 +25,7 @@ class Exhibitor(db.Model, Timestamp):
     position = db.Column(db.Integer, nullable=False, default=0, server_default='0')
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
+    thumbnail_image_url = db.Column(db.String)
     video_url = db.Column(db.String)
     slides_url = db.Column(db.String)
     contact_email = db.Column(db.String)

@@ -8,10 +8,15 @@ from sqlalchemy.engine import reflection
 
 from app.api.helpers.db import save_to_db
 from app.instance import current_app as app
-from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
+from app.api.helpers.tasks import (
+    resize_event_images_task,
+    resize_speaker_images_task,
+    resize_exhibitor_images_task,
+)
 from app.models import db
 from app.models.event import Event, get_new_event_identifier
 from app.models.speaker import Speaker
+from app.models.exhibitor import Exhibitor
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
 
@@ -41,6 +46,17 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_exhibitor_images():
+    exhibitors = Exhibitor.query.filter(
+        Exhibitor.banner_url.isnot(None), Exhibitor.thumbnail_image_url == None
+    ).all()
+    print(f'Resizing images of { len(exhibitors) } exhibitors...')
+    for exhibitor in exhibitors:
+        print(f'Resizing Exhibitor { exhibitor.id }')
+        resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
 
 
 @manager.command

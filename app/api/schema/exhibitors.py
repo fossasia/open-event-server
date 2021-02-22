@@ -34,6 +34,7 @@ class ExhibitorSchema(JSONAPISchema):
     position = fields.Integer(allow_none=True, default=0)
     logo_url = fields.Url(allow_none=True)
     banner_url = fields.Url(allow_none=True)
+    thumbnail_image_url = fields.Url(allow_none=True)
     enable_video_room = fields.Boolean(allow_none=True, default=False)
     video_url = fields.Url(allow_none=True)
     slides_url = fields.Url(allow_none=True)
