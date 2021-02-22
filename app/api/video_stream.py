@@ -96,7 +96,9 @@ def join_stream(stream_id: int):
     join_url = bbb.build_url(
         'join',
         {
-            'fullName': current_user.full_name or current_user._email,
+            'fullName': current_user.public_name
+            or current_user.full_name
+            or current_user.email,
             'join_via_html5': 'true',
             'meetingID': params['meetingID'],
             'password': params[
