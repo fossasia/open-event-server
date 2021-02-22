@@ -205,18 +205,20 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
     exhibitor = Exhibitor.query.get(exhibitor_id)
     try:
         logging.info(
-            'Exhibitor image resizing tasks started for exhibitor with id {}'.format(
-                exhibitor_id
+            'Exhibitor image resizing tasks started for exhibitor with id {}: {}'.format(
+                exhibitor_id, photo_url
             )
         )
-        uploaded_images = create_save_image_sizes(photo_url, 'event-image', exhibitor_id)
+        uploaded_images = create_save_image_sizes(
+            photo_url, 'event-image', exhibitor_id, folder='exhibitors'
+        )
         exhibitor.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         exhibitor.banner_url = uploaded_images['large_image_url']
         save_to_db(exhibitor)
         logging.info(
             f'Resized images saved successfully for exhibitor with id: {exhibitor_id}'
         )
-    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL, OSError):
         logging.exception(
             'Error encountered while generating resized images for exhibitor with id: {}'.format(
                 exhibitor_id
