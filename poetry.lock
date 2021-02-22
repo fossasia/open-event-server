@@ -2067,7 +2067,7 @@ python-versions = "*"
 
 [[package]]
 name = "stripe"
-version = "2.55.2"
+version = "2.56.0"
 description = "Python bindings for the Stripe API"
 category = "main"
 optional = false
@@ -2350,7 +2350,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "20831cf39fdbe11c579af07bdf2882f26122442d9a5618fe95dd6dc87ee9f79d"
+content-hash = "1c8d0ff272715750e0c4688d65d8c8b2b1d4e07793461d540201b92e67c04c51"
 
 [metadata.files]
 aiohttp = [
@@ -3588,8 +3588,8 @@ starkbank-ecdsa = [
     {file = "starkbank-ecdsa-1.1.0.tar.gz", hash = "sha256:423f81bb55c896a3c85ee98ac7da98826721eaee918f5c0c1dfff99e1972da0c"},
 ]
 stripe = [
-    {file = "stripe-2.55.2-py2.py3-none-any.whl", hash = "sha256:97431dbc6d25b94816816a3606f75045d79f101db4cf27e79ac4e039e4971d73"},
-    {file = "stripe-2.55.2.tar.gz", hash = "sha256:e32c68194a47522a10945eb893218e5cb5ee65e3a3c2c4df7efca117a6bf1902"},
+    {file = "stripe-2.56.0-py2.py3-none-any.whl", hash = "sha256:6c685eeadf9e3608315b6d84b4f5f2da2909179b65633ce20f296be22ed21a98"},
+    {file = "stripe-2.56.0.tar.gz", hash = "sha256:2ff904fb8dee0d25f135059468a876852d24dc8cbe0b45d7aff56a028045777c"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
