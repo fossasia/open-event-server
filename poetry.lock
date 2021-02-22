@@ -100,16 +100,15 @@ with-fonttools = ["fonttools (>=3.0)", "fonttools (>=4.0)"]
 
 [[package]]
 name = "astroid"
-version = "2.4.2"
+version = "2.5"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [package.dependencies]
-lazy-object-proxy = ">=1.4.0,<1.5.0"
-six = ">=1.12,<2.0"
-wrapt = ">=1.11,<2.0"
+lazy-object-proxy = ">=1.4.0"
+wrapt = ">=1.11,<1.13"
 
 [[package]]
 name = "async-timeout"
@@ -1604,18 +1603,21 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.6.2"
+version = "2.7.0"
 description = "python code static checker"
 category = "dev"
 optional = false
-python-versions = ">=3.5.*"
+python-versions = "~=3.6"
 
 [package.dependencies]
-astroid = ">=2.4.0,<2.5"
+astroid = "2.5.0"
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
 isort = ">=4.2.5,<6"
 mccabe = ">=0.6,<0.7"
 toml = ">=0.7.1"
+
+[package.extras]
+docs = ["sphinx (>=3.2,<4.0)", "python-docs-theme"]
 
 [[package]]
 name = "pyopenssl"
@@ -2350,7 +2352,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "5eab031b3d4985b3c8702b4494a55e237461a132ae92bd1945db1c826f2f88cc"
+content-hash = "1684ca0ca061dc7aa51c133bd8868895453a40d4336f52bcde53d87b5c645ca6"
 
 [metadata.files]
 aiohttp = [
@@ -2416,8 +2418,8 @@ arabic-reshaper = [
     {file = "arabic_reshaper-2.1.1.tar.gz", hash = "sha256:cf318fa5d51d2d224fa49bf6bdbbb4684f6bd2c068b75cfce0e607f89ac199dc"},
 ]
 astroid = [
-    {file = "astroid-2.4.2-py3-none-any.whl", hash = "sha256:bc58d83eb610252fd8de6363e39d4f1d0619c894b0ed24603b881c02e64c7386"},
-    {file = "astroid-2.4.2.tar.gz", hash = "sha256:2f4078c2a41bf377eea06d71c9d2ba4eb8f6b1af2135bec27bbbb7d8f12bb703"},
+    {file = "astroid-2.5-py3-none-any.whl", hash = "sha256:87ae7f2398b8a0ae5638ddecf9987f081b756e0e9fc071aeebdca525671fc4dc"},
+    {file = "astroid-2.5.tar.gz", hash = "sha256:b31c92f545517dcc452f284bc9c044050862fbe6d93d2b3de4a215a6b384bf0d"},
 ]
 async-timeout = [
     {file = "async-timeout-3.0.1.tar.gz", hash = "sha256:0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f"},
@@ -3230,8 +3232,8 @@ pyjwt = [
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
 ]
 pylint = [
-    {file = "pylint-2.6.2-py3-none-any.whl", hash = "sha256:e71c2e9614a4f06e36498f310027942b0f4f2fde20aebb01655b31edc63b9eaf"},
-    {file = "pylint-2.6.2.tar.gz", hash = "sha256:718b74786ea7ed07aa0c58bf572154d4679f960d26e9641cc1de204a30b87fc9"},
+    {file = "pylint-2.7.0-py3-none-any.whl", hash = "sha256:3ea3926700db399765db1faf53860f11e4e981a090646e9eacd01ca78e020579"},
+    {file = "pylint-2.7.0.tar.gz", hash = "sha256:2e0c6749d809985e4f181c336a8f89b2b797340d8049160bf95f35a3f0ecf6fc"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
