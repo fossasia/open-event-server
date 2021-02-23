@@ -1,7 +1,12 @@
+from marshmallow import Schema as JsonSchema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+
+
+class VideoStreamExtraSchema(JsonSchema):
+    autoplay = fields.Boolean(default=True)
 
 
 class VideoStreamSchema(Schema):
@@ -16,6 +21,7 @@ class VideoStreamSchema(Schema):
     url = fields.Url(required=True)
     password = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
+    extra = fields.Nested(VideoStreamExtraSchema, allow_none=True)
     rooms = Relationship(
         many=True,
         self_view='v1.video_stream_rooms',
