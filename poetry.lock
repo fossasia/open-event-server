@@ -1603,7 +1603,7 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.7.0"
+version = "2.7.1"
 description = "python code static checker"
 category = "dev"
 optional = false
@@ -2352,7 +2352,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "1684ca0ca061dc7aa51c133bd8868895453a40d4336f52bcde53d87b5c645ca6"
+content-hash = "12ee9c48a00e97320fede694e8afc093111105e82faa6df1535f5d3a1e4727bf"
 
 [metadata.files]
 aiohttp = [
@@ -3232,8 +3232,8 @@ pyjwt = [
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
 ]
 pylint = [
-    {file = "pylint-2.7.0-py3-none-any.whl", hash = "sha256:3ea3926700db399765db1faf53860f11e4e981a090646e9eacd01ca78e020579"},
-    {file = "pylint-2.7.0.tar.gz", hash = "sha256:2e0c6749d809985e4f181c336a8f89b2b797340d8049160bf95f35a3f0ecf6fc"},
+    {file = "pylint-2.7.1-py3-none-any.whl", hash = "sha256:a251b238db462b71d25948f940568bb5b3ae0e37dbaa05e10523f54f83e6cc7e"},
+    {file = "pylint-2.7.1.tar.gz", hash = "sha256:81ce108f6342421169ea039ff1f528208c99d2e5a9c4ca95cfc5291be6dfd982"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
