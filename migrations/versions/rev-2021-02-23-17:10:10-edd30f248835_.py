@@ -17,9 +17,9 @@ down_revision = '0efe87a56e46'
 
 
 def upgrade():
-    op.execute("UPDATE video_streams SET extra='{\"autoplay\": false}'");
+	op.execute("UPDATE video_streams SET extra='{\"autoplay\": false}'");
 
 
 def downgrade():
 	op.execute("UPDATE video_streams SET extra=null");
-    
+
