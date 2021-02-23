@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_favourite_sessions import UserFavouriteSessionSchema
 from app.models import db
@@ -60,17 +60,14 @@ class UserFavouriteSessionList(ResourceList):
         query_ = UserFavouriteSession.query
         if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            if user != current_user and not has_access('is_admin'):
+            if user != current_user and not (
+                (is_logged_in() and has_access('is_admin')) or user.is_profile_public
+            ):
                 raise ForbiddenError({'pointer': 'user_id'})
             query_ = query_.filter_by(user_id=user.id)
 
         elif view_kwargs.get('session_id'):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
-            if not (
-                has_access('is_admin')
-                or has_access('is_coorganizer', event_id=session.event_id)
-            ):
-                query_ = query_.filter_by(user_id=current_user.id)
             query_ = query_.filter_by(session_id=session.id)
 
         elif view_kwargs.get('event_id'):
@@ -87,7 +84,6 @@ class UserFavouriteSessionList(ResourceList):
         return query_
 
     methods = ['GET']
-    decorators = (jwt_required,)
     schema = UserFavouriteSessionSchema
     data_layer = {
         'session': db.session,

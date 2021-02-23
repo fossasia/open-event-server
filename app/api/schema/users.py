@@ -41,18 +41,23 @@ class UserSchemaPublic(SoftDeletionSchema):
     was_registered_with_order = fields.Boolean()
 
     @pre_dump
-    def handle_deleted_users(self, data):
+    def handle_deleted_or_private_users(self, data):
         if not data:
             return data
-        if data.deleted_at != None and not (
+        can_access = (
             is_logged_in
             and current_user
             and (current_user.is_staff or current_user.id == data.id)
-        ):
+        )
+        if data.deleted_at != None and not can_access:
             user = User(
                 id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
             )
             return user
+        if not data.is_profile_public and not can_access:
+            return User(
+                id=data.id, email='example@example.com', public_name=data.public_name
+            )
         return data
 
 
