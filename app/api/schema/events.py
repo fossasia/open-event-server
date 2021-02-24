@@ -351,6 +351,13 @@ class EventSchemaPublic(SoftDeletionSchema):
         many=True,
         type_='exhibitor',
     )
+    session_favourites = Relationship(
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+        many=True,
+    )
 
 
 class EventSchema(EventSchemaPublic):
