@@ -72,11 +72,9 @@ class UserFavouriteSessionList(ResourceList):
 
         elif view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            if not (
-                has_access('is_admin') or has_access('is_coorganizer', event_id=event.id)
-            ):
-                query_ = query_.filter_by(user_id=current_user.id)
-            query_ = query_.filter_by(event_id=event.id)
+            query_ = query_.join(UserFavouriteSession.session).filter_by(
+                event_id=event.id
+            )
 
         elif not has_access('is_admin'):
             raise ForbiddenError({'pointer': 'user_id'}, 'Admin Access Required')
