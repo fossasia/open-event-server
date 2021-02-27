@@ -185,7 +185,7 @@ class EventInvoice(SoftDeletionModel):
         frontend_url = get_settings()['frontend_url']
         link = f'{frontend_url}/event-invoice/{self.identifier}/review'
         currency = self.event.payment_currency
-        amount = f"{currency} {self.amount}"
+        amount = f"{currency} {self.amount:.2f}"
         send_email_for_monthly_fee_payment(
             self.user,
             self.event.name,
