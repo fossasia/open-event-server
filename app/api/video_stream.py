@@ -196,6 +196,17 @@ class VideoStreamDetail(ResourceDetail):
             )
 
     @staticmethod
+    def check_extra(obj, data):
+        if not data.get('extra'):
+            return
+        channel_id = data.get('channel') or obj.channel_id
+        if not channel_id:
+            return
+        channel = VideoChannel.query.get(channel_id)
+        if channel.provider not in ['youtube', 'vimeo']:
+            del data['extra']
+
+    @staticmethod
     def setup_channel(obj, data):
         if not data.get('channel') or obj.channel_id == int(data['channel']):
             return
@@ -211,6 +222,7 @@ class VideoStreamDetail(ResourceDetail):
         room_ids = rooms + [room.id for room in obj.rooms]
         if room_ids:
             check_same_event(room_ids)
+        VideoStreamDetail.check_extra(obj, data)
         VideoStreamDetail.setup_channel(obj, data)
 
     def before_delete_object(self, obj, kwargs):
