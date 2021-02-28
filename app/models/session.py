@@ -106,6 +106,12 @@ class Session(SoftDeletionModel):
     def rating_count(self):
         return func.count('1')
 
+    @aggregated(
+        'favourites', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def favourite_count(self):
+        return func.count('1')
+
     @property
     def favourite(self):
         if not current_user:
