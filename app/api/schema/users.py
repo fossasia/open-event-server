@@ -33,7 +33,7 @@ class UserSchemaPublic(SoftDeletionSchema):
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
     public_name = fields.Str(allow_none=True)
-    is_profile_public = fields.Bool(default=True, allow_none=False)
+    is_profile_public = fields.Bool(default=False, allow_none=False)
     original_image_url = fields.Url(dump_only=True, allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
