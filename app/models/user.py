@@ -76,7 +76,7 @@ class User(SoftDeletionModel):
     is_verified = db.Column(db.Boolean, default=False)
     is_blocked = db.Column(db.Boolean, nullable=False, default=False)
     is_profile_public = db.Column(
-        db.Boolean, nullable=False, default=True, server_default='True'
+        db.Boolean, nullable=False, default=False, server_default='False'
     )
     public_name = db.Column(db.String)
     was_registered_with_order = db.Column(db.Boolean, default=False)
