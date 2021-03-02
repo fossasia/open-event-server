@@ -53,15 +53,38 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             if not (session and session.starts_at and session.ends_at):
                 continue
 
-            session_video_url = " " + event.site_link + '/video/' + session.microlocation.video_stream.name + "/" + str(session.microlocation.video_stream.id) if session.microlocation.video_stream else ""
+            session_video_url = (
+                " "
+                + event.site_link
+                + '/video/'
+                + session.microlocation.video_stream.name
+                + "/"
+                + str(session.microlocation.video_stream.id)
+                if session.microlocation.video_stream
+                else ""
+            )
+            session_link_heading = (
+                "Join using link: " + session_video_url + "<br/>"
+                if session_video_url
+                else ""
+            )
+            session_description = (
+                " "
+                + "Room: "
+                + session.microlocation.name
+                + "<br/>"
+                + session_link_heading
+                + "<br/>"
+                + session.short_abstract
+            )
             session_component = Event()
             session_component.add('summary', session.title)
             session_component.add('uid', str(session.id) + "-" + event.identifier)
             session_component.add('geo', (event.latitude, event.longitude))
             session_component.add(
                 'location',
-                session.microlocation
-                and session.microlocation.name + session_video_url
+                session_video_url
+                or (session.microlocation and session.microlocation.name)
                 or '' + " " + event.location_name,
             )
             session_component.add(
@@ -70,7 +93,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             session_component.add(
                 'dtend', session.ends_at.astimezone(pytz.timezone(event.timezone))
             )
-            session_component.add('description', session.short_abstract)
+            session_component.add('description', session_description)
             session_component.add('url', event.site_link + '/session/' + str(session.id))
 
             cal.add_component(session_component)

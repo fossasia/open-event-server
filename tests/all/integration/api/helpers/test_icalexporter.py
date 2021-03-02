@@ -2,10 +2,10 @@ import icalendar
 
 from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.ICalExporter import ICalExporter
-from tests.factories.session import SessionFactory
-from tests.factories.microlocation import MicrolocationSubVideoStreamFactory
-from tests.factories.video_stream import VideoStreamFactoryBase
 from tests.factories.event import EventFactoryBasic
+from tests.factories.microlocation import MicrolocationSubVideoStreamFactory
+from tests.factories.session import SessionFactory
+from tests.factories.video_stream import VideoStreamFactoryBase
 
 
 def test_export_basic(db):
@@ -39,6 +39,9 @@ def test_export_basic(db):
     session = test_cal.subcomponents[1]
     assert session['summary'] == 'Gooseberry Muffin'
     assert session['url'] == f'http://eventyay.com/e/asdfgh/session/{test_session.id}'
-    assert session['location'] == f'online http://eventyay.com/e/asdfgh/video/stream/{test_video_stream.id}'
+    assert (
+        session['location']
+        == f'http://eventyay.com/e/asdfgh/video/stream/{test_video_stream.id}'
+    )
 
     assert ICalExporter.export(test_session.event_id) == test_cal_str
