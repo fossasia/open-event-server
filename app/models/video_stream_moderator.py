@@ -1,3 +1,4 @@
+from citext import CIText
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_utils.models import generic_repr
 
@@ -15,7 +16,7 @@ class VideoStreamModerator(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    email = db.Column(db.String, nullable=False)
+    email = db.Column(CIText, nullable=False)
     video_stream_id = db.Column(
         db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE'), nullable=False
     )
