@@ -3,7 +3,7 @@ import icalendar
 from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.ICalExporter import ICalExporter
 from tests.factories.event import EventFactoryBasic
-from tests.factories.microlocation import MicrolocationSubVideoStreamFactory
+from tests.factories.microlocation import MicrolocationSubFactory
 from tests.factories.session import SessionFactory
 from tests.factories.video_stream import VideoStreamFactoryBase
 
@@ -14,12 +14,8 @@ def test_export_basic(db):
         name='Hoopa Loopa',
         location_name='Narnia',
     )
-    test_video_stream = VideoStreamFactoryBase(
-        name="stream",
-    )
-    test_microlocation = MicrolocationSubVideoStreamFactory(
+    test_microlocation = MicrolocationSubFactory(
         name='online',
-        video_stream=test_video_stream,
         event=test_event,
     )
     test_session = SessionFactory(
@@ -41,7 +37,7 @@ def test_export_basic(db):
     assert session['url'] == f'http://eventyay.com/e/asdfgh/session/{test_session.id}'
     assert (
         session['location']
-        == f'http://eventyay.com/e/asdfgh/video/stream/{test_video_stream.id}'
+        == f'online'
     )
 
     assert ICalExporter.export(test_session.event_id) == test_cal_str
