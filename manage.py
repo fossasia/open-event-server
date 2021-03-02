@@ -145,6 +145,7 @@ def initialize_db(credentials):
         if table_name not in table_names:
             print("[LOG] Table not found. Attempting creation")
             try:
+                db.engine.execute('create extension if not exists citext')
                 db.create_all()
                 stamp()
             except Exception:

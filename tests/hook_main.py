@@ -127,6 +127,7 @@ def before_each(transaction):
     with stash['app'].app_context():
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
+        db.engine.execute('create extension if not exists citext')
         db.create_all()
         create_super_admin(api_username, api_password)
 
