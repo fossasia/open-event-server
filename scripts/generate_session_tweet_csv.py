@@ -32,7 +32,7 @@ template = template.strip()
 print(f'Using template: { template or default_template }')
 
 duration_string = input(
-    'How much time ago tweet should be scheduled?\n[e.g. 4 hours, 5 minutes, 2 hours 30 minutes, etc]\n'
+    'When should the session post on social media be scheduled before the actual session time?\nFor example, 4 hours, 5 minutes, 2 hours 30 minutes, etc.\n'
 )
 time = parser.parse(duration_string)
 delta = timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
