@@ -2355,7 +2355,7 @@ python-versions = "*"
 
 [[package]]
 name = "weasyprint"
-version = "52.2"
+version = "52.3"
 description = "The Awesome Document Factory"
 category = "main"
 optional = false
@@ -2493,7 +2493,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "28bf169f7d6ea096b6ee419fba28585f7e2da0cb11b266aa239ccaa474d5d4e1"
+content-hash = "531570b408ff74a7e2c6d542f2978f22b32ce20b1c5269c1abac10e5dc825f91"
 
 [metadata.files]
 aiohttp = [
@@ -3895,8 +3895,8 @@ wcwidth = [
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
 ]
 weasyprint = [
-    {file = "WeasyPrint-52.2-py3-none-any.whl", hash = "sha256:36b897d219e1944a1a0c97193a121fc175db326c660c50d937e874a995d9c716"},
-    {file = "WeasyPrint-52.2.tar.gz", hash = "sha256:21a1a9f11650ed14241817bf333a0ae0a42f6ae38cd7c2654845cb17352b7434"},
+    {file = "WeasyPrint-52.3-py3-none-any.whl", hash = "sha256:1fbbbec2eea15a4fd17c227f6980dfadca193c2ca49c3f0cf8f3adea652b767c"},
+    {file = "WeasyPrint-52.3.tar.gz", hash = "sha256:07d8103d647ff5c4bc7a3ba6aa5a3b7b6c69033aa4d72e6ab8827f0e110632b4"},
 ]
 webencodings = [
     {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
