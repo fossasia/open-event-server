@@ -1043,6 +1043,7 @@ api.route(
     '/session-types/<int:session_type_id>/sessions',
     '/microlocations/<int:microlocation_id>/sessions',
     '/speakers/<int:speaker_id>/sessions',
+    '/exhibitors/<int:id>/sessions',
 )
 api.route(
     SessionDetail,
@@ -1749,6 +1750,9 @@ api.route(
 api.route(ExhibitorDetail, 'exhibitor_detail', '/exhibitors/<int:id>')
 api.route(
     ExhibitorRelationship, 'exhibitor_event', '/exhibitors/<int:id>/relationships/event'
+)
+api.route(
+    ExhibitorRelationship, 'exhibitor_session', '/exhibitors/<int:id>/relationships/sessions'
 )
 
 # VideoStreamModerator

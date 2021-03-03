@@ -49,6 +49,15 @@ class ExhibitorSchema(JSONAPISchema):
         schema='EventSchemaPublic',
         type_='event',
     )
+    sessions = Relationship(
+        many=True,
+        self_view='v1.exhibitor_session',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_list',
+        related_view_kwargs={'exhibitor_id': '<id>'},
+        schema='SessionSchema',
+        type_='session',
+    )
 
 
 class ExhibitorReorderSchema(JsonSchema):
