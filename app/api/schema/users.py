@@ -3,7 +3,7 @@ from marshmallow import pre_dump
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.permission_manager import is_logged_in
+from app.api.helpers.permission_manager import require_current_user
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.user import User
@@ -44,10 +44,8 @@ class UserSchemaPublic(SoftDeletionSchema):
     def handle_deleted_or_private_users(self, data):
         if not data:
             return data
-        can_access = (
-            is_logged_in
-            and current_user
-            and (current_user.is_staff or current_user.id == data.id)
+        can_access = require_current_user() and (
+            current_user.is_staff or current_user.id == data.id
         )
         if data.deleted_at != None and not can_access:
             user = User(
