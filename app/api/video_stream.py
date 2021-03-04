@@ -1,4 +1,5 @@
 import logging
+import random
 from uuid import uuid4
 
 from flask import jsonify
@@ -98,7 +99,7 @@ def join_stream(stream_id: int):
         {
             'fullName': current_user.public_name
             or current_user.full_name
-            or current_user.email,
+            or 'User' + str(random.randint(0, 100)),
             'join_via_html5': 'true',
             'meetingID': params['meetingID'],
             'password': params[
