@@ -6,7 +6,7 @@ from app.models.helpers.versioning import clean_html, clean_up_string
 
 exhibitors_sessions = db.Table(
     'exhibitors_sessions',
-    db.Column('session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')),
+    db.Column('session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')),
     db.Column('exhibitor_id', db.Integer, db.ForeignKey('exhibitors.id', ondelete='CASCADE')),
     db.PrimaryKeyConstraint('session_id', 'exhibitor_id'),
 )
