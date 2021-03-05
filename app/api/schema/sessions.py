@@ -168,6 +168,16 @@ class SessionSchema(SoftDeletionSchema):
         schema='SpeakerSchema',
         type_='speaker',
     )
+    exhibitors = Relationship(
+        dump_only=True,
+        many=True,
+        self_view='v1.session_exhibitor',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.exhibitor_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='ExhibitorSchema',
+        type_='exhibitor',
+    )
     creator = Relationship(
         attribute='user',
         self_view='v1.session_user',

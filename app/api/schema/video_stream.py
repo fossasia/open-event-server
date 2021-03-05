@@ -7,6 +7,7 @@ from app.api.helpers.utilities import dasherize
 
 class VideoStreamExtraSchema(JsonSchema):
     autoplay = fields.Boolean(default=True)
+    loop = fields.Boolean(default=False)
 
 
 class VideoStreamSchema(Schema):

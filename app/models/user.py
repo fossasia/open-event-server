@@ -3,6 +3,7 @@ from datetime import datetime
 
 import humanize
 import pytz
+from citext import CIText
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy import desc, event
@@ -49,7 +50,7 @@ class User(SoftDeletionModel):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    _email = db.Column(db.String(120), unique=True, nullable=False)
+    _email = db.Column(CIText, unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
     facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
     facebook_login_hash = db.Column(db.String, nullable=True)
@@ -76,7 +77,7 @@ class User(SoftDeletionModel):
     is_verified = db.Column(db.Boolean, default=False)
     is_blocked = db.Column(db.Boolean, nullable=False, default=False)
     is_profile_public = db.Column(
-        db.Boolean, nullable=False, default=True, server_default='True'
+        db.Boolean, nullable=False, default=False, server_default='False'
     )
     public_name = db.Column(db.String)
     was_registered_with_order = db.Column(db.Boolean, default=False)

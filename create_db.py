@@ -43,6 +43,7 @@ if __name__ == "__main__":
     )
     parsed = parser.parse_args()
     with current_app.app_context():
+        db.engine.execute('create extension if not exists citext')
         db.create_all()
         stamp()
         create_default_user(parsed.email, parsed.password)

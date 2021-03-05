@@ -30,6 +30,7 @@ from app.models.session import Session
 from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
+from app.models.exhibitor import Exhibitor
 from app.models.track import Track
 from app.models.user import User
 
@@ -166,6 +167,10 @@ class SessionList(ResourceList):
             speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
+        elif view_kwargs.get('exhibitor_id'):
+            exhibitor = safe_query_kwargs(Exhibitor, view_kwargs, 'exhibitor_id')
+            # session-exhibitor :: many-to-many relationship
+            query_ = Session.query.filter(Session.exhibitors.any(id=exhibitor.id))
         elif view_kwargs.get('event_id') or view_kwargs.get('event_identifier'):
             query_ = event_query(query_, view_kwargs)
 

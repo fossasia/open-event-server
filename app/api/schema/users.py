@@ -3,7 +3,7 @@ from marshmallow import pre_dump
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.permission_manager import is_logged_in
+from app.api.helpers.permission_manager import require_current_user
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.user import User
@@ -33,7 +33,7 @@ class UserSchemaPublic(SoftDeletionSchema):
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
     public_name = fields.Str(allow_none=True)
-    is_profile_public = fields.Bool(default=True, allow_none=False)
+    is_profile_public = fields.Bool(default=False, allow_none=False)
     original_image_url = fields.Url(dump_only=True, allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
@@ -44,10 +44,8 @@ class UserSchemaPublic(SoftDeletionSchema):
     def handle_deleted_or_private_users(self, data):
         if not data:
             return data
-        can_access = (
-            is_logged_in
-            and current_user
-            and (current_user.is_staff or current_user.id == data.id)
+        can_access = require_current_user() and (
+            current_user.is_staff or current_user.id == data.id
         )
         if data.deleted_at != None and not can_access:
             user = User(
@@ -55,9 +53,7 @@ class UserSchemaPublic(SoftDeletionSchema):
             )
             return user
         if not data.is_profile_public and not can_access:
-            return User(
-                id=data.id, email='example@example.com', public_name=data.public_name
-            )
+            return User(id=data.id, email='example@example.com')
         return data
 
 

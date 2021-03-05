@@ -98,7 +98,7 @@ def join_stream(stream_id: int):
         {
             'fullName': current_user.public_name
             or current_user.full_name
-            or current_user.email,
+            or 'Anonymous User',
             'join_via_html5': 'true',
             'meetingID': params['meetingID'],
             'password': params[
