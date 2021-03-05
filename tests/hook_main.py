@@ -4801,7 +4801,7 @@ def favourite_sessions_list_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactoryBasic()
+        session = SessionFactory()
         db.session.add(session)
         db.session.commit()
 
