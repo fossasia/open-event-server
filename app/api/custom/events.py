@@ -9,6 +9,7 @@ from app.api.helpers.utilities import group_by, strip_tags
 from app.api.schema.exhibitors import ExhibitorReorderSchema
 from app.api.schema.speakers import SpeakerReorderSchema
 from app.models import db
+from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
 from app.models.mail import CONTACT_ORGANIZERS
@@ -175,3 +176,17 @@ def reorder_exhibitors(event_id):
     db.session.commit()
 
     return jsonify({'success': True, 'updates': updates})
+
+
+@events_routes.route(
+    '/<string:event_identifier>/discount-codes/delete-unused', methods=['DELETE']
+)
+@to_event_id
+@is_coorganizer
+def delete_unused_discount_codes(event_id):
+    query = DiscountCode.query.filter_by(event_id=event_id, orders=None)
+    result = query.delete(synchronize_session=False)
+
+    db.session.commit()
+
+    return jsonify({'success': True, 'deletes': result})
