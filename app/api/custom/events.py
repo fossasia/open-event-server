@@ -8,7 +8,7 @@ from app.api.helpers.permissions import is_coorganizer, jwt_required, to_event_i
 from app.api.helpers.utilities import group_by, strip_tags
 from app.api.schema.exhibitors import ExhibitorReorderSchema
 from app.api.schema.speakers import SpeakerReorderSchema
-from app.models import db, event
+from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
