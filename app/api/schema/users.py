@@ -53,7 +53,9 @@ class UserSchemaPublic(SoftDeletionSchema):
             )
             return user
         if not data.is_profile_public and not can_access:
-            return User(id=data.id, email='example@example.com')
+            return User(
+                id=data.id, email='example@example.com', public_name=data.anonymous_name
+            )
         return data
 
 
