@@ -4,6 +4,7 @@ from datetime import datetime
 import humanize
 import pytz
 from citext import CIText
+from coolname import generate
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy import desc, event
@@ -432,6 +433,10 @@ class User(SoftDeletionModel):
         )
 
     full_billing_address = property(get_full_billing_address)
+
+    @property
+    def anonymous_name(self):
+        return ' '.join(map(lambda x: x.capitalize(), generate(2)))
 
     def __repr__(self):
         return '<User %r>' % self.email
