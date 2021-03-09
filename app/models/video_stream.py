@@ -78,7 +78,7 @@ class VideoStream(db.Model):
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=self._event_id):
             return True
-        return self.user_is_confirmed_speaker or user.email in list(
+        return user.email in list(
             map(lambda x: x.email, self.moderators)
         )
 
