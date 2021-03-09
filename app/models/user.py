@@ -13,6 +13,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.utilities import get_serializer
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
@@ -95,6 +96,8 @@ class User(SoftDeletionModel):
     billing_city = db.Column(db.String)
     billing_zip_code = db.Column(db.String)
     billing_additional_info = db.Column(db.String)
+
+    rocket_chat_token = db.Column(db.String)
 
     # relationships
     speaker = db.relationship('Speaker', backref="user")
@@ -437,6 +440,15 @@ class User(SoftDeletionModel):
     @property
     def anonymous_name(self):
         return ' '.join(map(lambda x: x.capitalize(), generate(2)))
+
+    @property
+    def rocket_chat_username(self):
+        name = self.public_name or self.full_name or f'user_{self.id}'
+        return name.lower().replace(' ', '_')
+
+    @property
+    def rocket_chat_password(self):
+        return get_serializer().dumps(f'rocket_chat_user_{self.id}')
 
     def __repr__(self):
         return '<User %r>' % self.email

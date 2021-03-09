@@ -83,7 +83,9 @@ def strip_tags(html):
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
-def get_serializer(secret_key='secret_key'):
+def get_serializer(secret_key=None):
+    if not secret_key:
+        secret_key = current_app.config['SECRET_KEY']
     return Serializer(secret_key)
 
 

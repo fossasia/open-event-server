@@ -133,6 +133,10 @@ class Setting(db.Model):
     # Google Analytics
     analytics_key = db.Column(db.String)
 
+    # Rocket Chat Integration
+    rocket_chat_url = db.Column(db.String)
+    rocket_chat_registration_secret = db.Column(db.String)
+
     #
     # Social links
     #

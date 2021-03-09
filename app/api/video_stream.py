@@ -8,6 +8,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
+from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import (
     BadRequestError,
@@ -121,6 +122,31 @@ def create_bbb_meeting(channel, data):
         raise UnprocessableEntityError('', 'Cannot create Meeting on BigBlueButton')
 
     data['extra'] = res.data
+
+
+@streams_routes.route(
+    '/<int:stream_id>/chat-token',
+)
+@jwt_required
+def get_chat_token(stream_id: int):
+    stream = VideoStream.query.get_or_404(stream_id)
+    if not stream.user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    try:
+        data = get_rocket_chat_token(current_user)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        else:
+            return jsonify(
+                {
+                    'success': False,
+                    'code': rce.code,
+                    'response': rce.response and rce.response.json(),
+                }
+            )
 
 
 class VideoStreamList(ResourceList):
