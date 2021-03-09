@@ -33,7 +33,7 @@ class UserFavouriteSession(db.Model, Timestamp):
             name_hash = md5(name.encode('utf-8')).hexdigest()
             return User(
                 id=self.user.id,
-                email='example@example.com',
+                email='example@eventyay.com',
                 public_name=name,
                 avatar_url=f'https://www.gravatar.com/avatar/{name_hash}?d=retro',
             )
