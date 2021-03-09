@@ -11,6 +11,7 @@ class Microlocation(SoftDeletionModel):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
+    hidden_in_scheduler = db.Column(db.Boolean, default=False, nullable=False)
     position = db.Column(db.Integer, default=0, nullable=False)
     room = db.Column(db.String)
     session = db.relationship('Session', backref="microlocation")
