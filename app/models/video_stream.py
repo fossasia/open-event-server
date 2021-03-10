@@ -44,10 +44,7 @@ class VideoStream(db.Model):
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
 
-    @property
-    def user_is_confirmed_speaker(self):
-        if not current_user or not (self.event_id or self.rooms):
-            return False
+    def user_is_speaker(self, event_id=None):
         query = (
             Speaker.query.filter(Speaker.email == current_user.email)
             .join(Speaker.sessions)
@@ -58,14 +55,21 @@ class VideoStream(db.Model):
                 )
             )
         )
-        if self.event_id:
-            query = query.filter(Session.event_id == self.event_id)
+        event_id = event_id or self.event_id
+        if event_id:
+            query = query.filter(Session.event_id == event_id)
         elif self.rooms:
             room_ids = {room.id for room in self.rooms}
             query = query.filter(Session.microlocation_id.in_(room_ids))
         else:
             raise ValueError("Video Stream must have rooms or event")
         return db.session.query(query.exists()).scalar()
+
+    @property
+    def user_is_confirmed_speaker(self):
+        if not current_user or not (self.event_id or self.rooms):
+            return False
+        return self.user_is_speaker()
 
     @property
     def _event_id(self):
@@ -88,6 +92,7 @@ class VideoStream(db.Model):
             return False
         return (
             self.user_is_moderator
+            or self.user_is_speaker(self._event_id)
             or db.session.query(
                 TicketHolder.query.filter_by(event_id=self._event_id, user=current_user)
                 .join(Order)
