@@ -100,6 +100,7 @@ def get_rocket_chat_token(user: User, retried: bool = False):
         if res.status_code == 200:
             return login('registered')
         elif res.status_code == 400:
+            logger.info('Bad Request during register: %s', data)
             # Probably already registered. Try logging in
             return login()
         else:
