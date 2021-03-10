@@ -23,7 +23,7 @@ class RocketChatException(ValueError):
         super().__init__(message)
 
 
-def get_rocket_chat_token(user: User):
+def get_rocket_chat_token(user: User, retried: bool = False):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(
@@ -60,7 +60,23 @@ def get_rocket_chat_token(user: User):
         elif res.status_code == 401:
             # Token Expired. Login again
 
-            return login()
+            try:
+                return login()
+            except RocketChatException as rce:
+                if (
+                    not retried
+                    and rce.response is not None
+                    and rce.response.status_code == 401
+                ):
+                    # Invalid credentials stored. Reset credentials and retry
+                    # If we have already retried, give up
+                    user.rocket_chat_token = None
+                    db.session.add(user)
+                    db.session.commit()
+
+                    return get_rocket_chat_token(user, retried=True)
+                else:
+                    raise rce
         else:
             # Unhandled Case
             logger.error('Error while rocket chat resume or login: %s', data)

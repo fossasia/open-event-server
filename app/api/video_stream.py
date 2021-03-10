@@ -144,7 +144,7 @@ def get_chat_token(stream_id: int):
                 {
                     'success': False,
                     'code': rce.code,
-                    'response': rce.response and rce.response.json(),
+                    'response': rce.response is not None and rce.response.json(),
                 }
             )
 
