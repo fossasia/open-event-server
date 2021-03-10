@@ -89,6 +89,7 @@ class SessionSchema(SoftDeletionSchema):
     linkedin = fields.Url(allow_none=True)
     instagram = fields.Url(allow_none=True)
     gitlab = fields.Url(allow_none=True)
+    mastadon = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
     audio_url = fields.Url(allow_none=True)
     signup_url = fields.Url(allow_none=True)
