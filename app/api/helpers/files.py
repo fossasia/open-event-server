@@ -428,9 +428,9 @@ def generate_ics_file(event_id, temp=True):
 
     if not os.path.isdir(filedir):
         os.makedirs(filedir)
-    filename = "ical.ics"
+    filename = "event_ical.ics"
     file_path = os.path.join(filedir, filename)
     with open(file_path, "w") as temp_file:
-        temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+        temp_file.write(str(ICalExporter.export(event_id, include_sessions=False), 'utf-8'))
 
     return file_path
