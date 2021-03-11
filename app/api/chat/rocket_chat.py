@@ -2,6 +2,7 @@ import logging
 
 import requests
 
+from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.user import User
 from app.settings import get_settings
@@ -51,6 +52,37 @@ def get_rocket_chat_token(user: User, retried: bool = False):
             logger.error('Error while rocket chat login: %s', data)
             raise RocketChatException('Error while logging in', response=res)
 
+    def register(username_suffix=''):
+        register_url = api_url + '/api/v1/users.register'
+        register_data = {
+            'name': user.public_name or user.full_name,
+            'email': user.email,
+            'pass': user.rocket_chat_password,
+            'username': user.rocket_chat_username + username_suffix,
+        }
+        if registration_secret := settings['rocket_chat_registration_secret']:
+            register_data['secretURL'] = registration_secret
+
+        res = requests.post(register_url, json=register_data)
+
+        data = res.json()
+        if res.status_code == 200:
+            return login('registered')
+        elif res.status_code == 400:
+            if data.get('error') == 'Username is already in use':
+                # Username conflict. Add random suffix and retry
+                return register('.' + get_new_identifier(length=5))
+            logger.info('Bad Request during register: %s', data)
+            # Probably already registered. Try logging in
+            return login()
+        else:
+            logger.error(
+                'Error while rocket chat registration: %d %s',
+                res.status_code,
+                data,
+            )
+            raise RocketChatException('Error while registration', response=res)
+
     if user.rocket_chat_token:
         res = requests.post(login_url, json=dict(resume=user.rocket_chat_token))
 
@@ -84,29 +116,4 @@ def get_rocket_chat_token(user: User, retried: bool = False):
     else:
         # No token. Try creating profile, else login
 
-        register_url = api_url + '/api/v1/users.register'
-        register_data = {
-            'name': user.public_name or user.full_name,
-            'email': user.email,
-            'pass': user.rocket_chat_password,
-            'username': user.rocket_chat_username,
-        }
-        if registration_secret := settings['rocket_chat_registration_secret']:
-            register_data['secretURL'] = registration_secret
-
-        res = requests.post(register_url, json=register_data)
-
-        data = res.json()
-        if res.status_code == 200:
-            return login('registered')
-        elif res.status_code == 400:
-            logger.info('Bad Request during register: %s', data)
-            # Probably already registered. Try logging in
-            return login()
-        else:
-            logger.error(
-                'Error while rocket chat registration: %d %s',
-                res.status_code,
-                data,
-            )
-            raise RocketChatException('Error while registration', response=res)
+        return register()

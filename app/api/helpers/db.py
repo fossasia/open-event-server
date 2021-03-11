@@ -157,12 +157,14 @@ def get_new_slug(model, name):
     return f'{slug}-{uuid.uuid4().hex}'
 
 
-def get_new_identifier(model, length=None):
+def get_new_identifier(model=None, length=None):
     if not length:
         identifier = str(uuid.uuid4())
     else:
         identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    count = get_count(model.query.filter_by(identifier=identifier))
+    count = (
+        0 if model is None else get_count(model.query.filter_by(identifier=identifier))
+    )
     if not identifier.isdigit() and count == 0:
         return identifier
     return get_new_identifier(model)
