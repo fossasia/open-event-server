@@ -347,7 +347,7 @@ def send_email_to_attendees(order):
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
 
     event = order.event
-    ical_file_path = generate_ics_file(event.id)
+    ical_file_path = generate_ics_file(event.id, include_sessions=False)
 
     if os.path.exists(ical_file_path):
         if attachments is None:
