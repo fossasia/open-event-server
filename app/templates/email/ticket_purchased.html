@@ -20,7 +20,7 @@
     <br/><br/>
     <div style="white-space: pre-line;">
         {% autoescape false %}
-            {{ order.event.after_order_message | strip_tags | nl2br }}
+            {{ order.event.after_order_message }}
         {% endautoescape %}
     </div>
 {% endif %}
