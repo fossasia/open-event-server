@@ -451,6 +451,10 @@ class User(SoftDeletionModel):
     def rocket_chat_password(self):
         return get_serializer().dumps(f'rocket_chat_user_{self.id}')
 
+    @property
+    def is_rocket_chat_registered(self) -> bool:
+        return self.rocket_chat_token is not None
+
     def __repr__(self):
         return '<User %r>' % self.email
 
