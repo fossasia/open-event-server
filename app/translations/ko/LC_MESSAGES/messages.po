@@ -6,31 +6,32 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-01-16 06:15+0530\n"
-"PO-Revision-Date: 2017-03-18 03:03+0000\n"
-"Last-Translator: lingadingdong <lphang1@e.ntu.edu.sg>\n"
+"PO-Revision-Date: 2021-03-14 14:02+0000\n"
+"Last-Translator: Youngbin Han <sukso96100@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/open-event/server/"
+"ko/>\n"
 "Language: ko\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/open-event"
-"/organizer-server/ko/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "Generated-By: Babel 2.9.0\n"
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "암호가 성공적으로 변경되었습니다."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr ""
+msgstr "새 암호로 로그인 하세요."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "아래 링크로 암호를 초기화 하세요."
 
 #: app/templates/email/password_reset.html:3
 msgid "Or paste this token in your"
@@ -40,49 +41,49 @@ msgstr ""
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
-msgstr ""
+msgstr "아래 링크로 암호를 초기화 하고 계정을 인증하세요."
 
 #: app/templates/email/ticket_purchased.html:1
 #: app/templates/email/ticket_purchased_attendee.html:1
 #: app/templates/email/user_register.html:1
 msgid "Hello"
-msgstr ""
+msgstr "안녕하세요"
 
 #: app/templates/email/ticket_purchased.html:2
 msgid "Thank you for your ticket order for"
-msgstr ""
+msgstr "티켓을 주문해 주셔서 감사합니다"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "This is your order confirmation. You can download your tickets at"
-msgstr ""
+msgstr "주문하신 티켓을 확인하세요. 다음 링크에서 티켓을 내려받을 수 있습니다"
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "Order Summary"
-msgstr ""
+msgstr "주문 요약"
 
 #: app/templates/email/ticket_purchased.html:5
 msgid "Order"
-msgstr ""
+msgstr "주문번호"
 
 #: app/templates/email/ticket_purchased.html:6
 #: app/templates/email/ticket_purchased_attendee.html:4
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:7
 msgid "Ticket"
-msgstr ""
+msgstr "티켓"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:8
 msgid "Quantity"
-msgstr ""
+msgstr "수량"
 
 #: app/templates/email/ticket_purchased.html:13
 #: app/templates/email/ticket_purchased_attendee.html:11
 msgid "About this event"
-msgstr ""
+msgstr "이 이벤트 정보"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:12
@@ -92,35 +93,35 @@ msgstr "날짜"
 #: app/templates/email/ticket_purchased.html:16
 #: app/templates/email/ticket_purchased_attendee.html:14
 msgid "Best regards"
-msgstr ""
+msgstr "감사합니다"
 
 #: app/templates/email/ticket_purchased.html:17
 #: app/templates/email/ticket_purchased_attendee.html:15
 #: app/templates/email/user_register.html:6
 msgid "Team"
-msgstr ""
+msgstr "팀"
 
 #: app/templates/email/ticket_purchased.html:19
 #: app/templates/email/ticket_purchased_attendee.html:17
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "아래는 주최자로부터의 메시지 입니다"
 
 #: app/templates/email/ticket_purchased.html:23
 #: app/templates/email/ticket_purchased_attendee.html:21
 msgid "Login to manage your orders at"
-msgstr ""
+msgstr "로그인 하여 다음 위치에서 주문을 관리하세요"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "This is a confirmation mail of your tickets for the event"
-msgstr ""
+msgstr "본 메일은 이벤트 티켓에 대한 확인 메일입니다"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "You can download your tickets at"
-msgstr ""
+msgstr "다음 위치에서 티켓을 내려받을 수 있습니다"
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 msgid "Ticket Summary"
-msgstr ""
+msgstr "티켓 요약"
 
 #: app/templates/email/user_register.html:2
 msgid "Your account has been created on"
@@ -128,7 +129,7 @@ msgstr ""
 
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "축하합니다!"
 
 #: app/templates/email/user_register.html:3
 msgid "Your login is"
@@ -136,19 +137,18 @@ msgstr ""
 
 #: app/templates/email/user_register.html:4
 msgid "Please visit the following link to verify your email:"
-msgstr ""
+msgstr "아래 링크를 방문하여 이메일을 인증하세요:"
 
 #: app/templates/email/user_register.html:5
 msgid "Thank You"
-msgstr ""
+msgstr "감사합니다"
 
 #: app/templates/pdf/order_invoice.html:250
 #: app/templates/pdf/ticket_attendee.html:79
 #: app/templates/pdf/ticket_purchaser.html:80
 msgid "Organizer Message"
-msgstr ""
+msgstr "주최자 메시지"
 
 #: app/templates/pdf/order_invoice.html:256
 msgid "Invoice Footer"
 msgstr ""
-
