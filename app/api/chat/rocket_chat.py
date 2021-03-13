@@ -2,6 +2,7 @@ import logging
 
 import requests
 
+from app.api.helpers.db import get_new_identifier
 from app.models import db
 from app.models.user import User
 from app.settings import get_settings
@@ -23,7 +24,7 @@ class RocketChatException(ValueError):
         super().__init__(message)
 
 
-def get_rocket_chat_token(user: User):
+def get_rocket_chat_token(user: User, retried: bool = False):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(
@@ -51,29 +52,13 @@ def get_rocket_chat_token(user: User):
             logger.error('Error while rocket chat login: %s', data)
             raise RocketChatException('Error while logging in', response=res)
 
-    if user.rocket_chat_token:
-        res = requests.post(login_url, json=dict(resume=user.rocket_chat_token))
-
-        data = res.json()
-        if res.status_code == 200:
-            return dict(method='resumed', token=user.rocket_chat_token, res=data)
-        elif res.status_code == 401:
-            # Token Expired. Login again
-
-            return login()
-        else:
-            # Unhandled Case
-            logger.error('Error while rocket chat resume or login: %s', data)
-            raise RocketChatException('Error while resume or logging in', response=res)
-    else:
-        # No token. Try creating profile, else login
-
+    def register(username_suffix=''):
         register_url = api_url + '/api/v1/users.register'
         register_data = {
             'name': user.public_name or user.full_name,
             'email': user.email,
             'pass': user.rocket_chat_password,
-            'username': user.rocket_chat_username,
+            'username': user.rocket_chat_username + username_suffix,
         }
         if registration_secret := settings['rocket_chat_registration_secret']:
             register_data['secretURL'] = registration_secret
@@ -84,6 +69,10 @@ def get_rocket_chat_token(user: User):
         if res.status_code == 200:
             return login('registered')
         elif res.status_code == 400:
+            if data.get('error') == 'Username is already in use':
+                # Username conflict. Add random suffix and retry
+                return register('.' + get_new_identifier(length=5))
+            logger.info('Bad Request during register: %s', data)
             # Probably already registered. Try logging in
             return login()
         else:
@@ -93,3 +82,38 @@ def get_rocket_chat_token(user: User):
                 data,
             )
             raise RocketChatException('Error while registration', response=res)
+
+    if user.rocket_chat_token:
+        res = requests.post(login_url, json=dict(resume=user.rocket_chat_token))
+
+        data = res.json()
+        if res.status_code == 200:
+            return dict(method='resumed', token=user.rocket_chat_token, res=data)
+        elif res.status_code == 401:
+            # Token Expired. Login again
+
+            try:
+                return login()
+            except RocketChatException as rce:
+                if (
+                    not retried
+                    and rce.response is not None
+                    and rce.response.status_code == 401
+                ):
+                    # Invalid credentials stored. Reset credentials and retry
+                    # If we have already retried, give up
+                    user.rocket_chat_token = None
+                    db.session.add(user)
+                    db.session.commit()
+
+                    return get_rocket_chat_token(user, retried=True)
+                else:
+                    raise rce
+        else:
+            # Unhandled Case
+            logger.error('Error while rocket chat resume or login: %s', data)
+            raise RocketChatException('Error while resume or logging in', response=res)
+    else:
+        # No token. Try creating profile, else login
+
+        return register()

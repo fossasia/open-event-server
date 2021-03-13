@@ -103,6 +103,7 @@ class UserSchema(UserSchemaPublic):
     billing_city = fields.Str(allow_none=True)
     billing_zip_code = fields.Str(allow_none=True)
     billing_additional_info = fields.Str(allow_none=True)
+    is_rocket_chat_registered = fields.Bool(dump_only=True)
     notifications = Relationship(
         self_view='v1.user_notification',
         self_view_kwargs={'id': '<id>'},

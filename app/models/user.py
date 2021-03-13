@@ -7,6 +7,7 @@ from citext import CIText
 from coolname import generate
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
+from slugify import slugify
 from sqlalchemy import desc, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -444,11 +445,15 @@ class User(SoftDeletionModel):
     @property
     def rocket_chat_username(self):
         name = self.public_name or self.full_name or f'user_{self.id}'
-        return name.lower().replace(' ', '_')
+        return slugify(name, word_boundary=True, max_length=32, separator='.')
 
     @property
     def rocket_chat_password(self):
         return get_serializer().dumps(f'rocket_chat_user_{self.id}')
+
+    @property
+    def is_rocket_chat_registered(self) -> bool:
+        return self.rocket_chat_token is not None
 
     def __repr__(self):
         return '<User %r>' % self.email

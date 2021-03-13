@@ -44,6 +44,7 @@ class Session(SoftDeletionModel):
     linkedin = db.Column(db.String)
     instagram = db.Column(db.String)
     gitlab = db.Column(db.String)
+    mastadon = db.Column(db.String)
     short_abstract = db.Column(db.Text, default='')
     long_abstract = db.Column(db.Text, default='')
     comments = db.Column(db.Text)
@@ -133,7 +134,7 @@ class Session(SoftDeletionModel):
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super().__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value), allow_link=True))
         else:
             super().__setattr__(name, value)
 

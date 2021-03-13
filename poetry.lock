@@ -1566,7 +1566,7 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "pre-commit"
-version = "2.11.0"
+version = "2.11.1"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -1623,7 +1623,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pycln"
-version = "0.0.1b2"
+version = "0.0.1b3"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
@@ -1867,8 +1867,22 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "python-slugify"
+version = "4.0.1"
+description = "A Python Slugify application that handles Unicode"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[package.dependencies]
+text-unidecode = ">=1.3"
+
+[package.extras]
+unidecode = ["Unidecode (>=1.1.1)"]
+
+[[package]]
 name = "pytype"
-version = "2021.3.3"
+version = "2021.3.10"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -2374,7 +2388,7 @@ python-versions = "*"
 
 [[package]]
 name = "weasyprint"
-version = "52.3"
+version = "52.4"
 description = "The Awesome Document Factory"
 category = "main"
 optional = false
@@ -2512,7 +2526,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "7da0ba896a03082363991201291aef5f16836f138760aa75f608bd7d40eccf6a"
+content-hash = "a66fdd326104be28531d395e8bc9325e930d484a603650814429ef1d7b0a9d66"
 
 [metadata.files]
 aiohttp = [
@@ -3332,8 +3346,8 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 pre-commit = [
-    {file = "pre_commit-2.11.0-py2.py3-none-any.whl", hash = "sha256:c4853e29c24b27d81359357fae891e00bc83e6a0575c93d815e0e8077bd53b3b"},
-    {file = "pre_commit-2.11.0.tar.gz", hash = "sha256:06f8cb95e29e56788fb5dc98d7ca7a714969dc96633e1ba654ccd5953b64c195"},
+    {file = "pre_commit-2.11.1-py2.py3-none-any.whl", hash = "sha256:94c82f1bf5899d56edb1d926732f4e75a7df29a0c8c092559c77420c9d62428b"},
+    {file = "pre_commit-2.11.1.tar.gz", hash = "sha256:de55c5c72ce80d79106e48beb1b54104d16495ce7f95b0c7b13d4784193a00af"},
 ]
 promise = [
     {file = "promise-2.3.tar.gz", hash = "sha256:dfd18337c523ba4b6a58801c164c1904a9d4d1b1747c7d5dbf45b693a49d93d0"},
@@ -3384,8 +3398,8 @@ py = [
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
 ]
 pycln = [
-    {file = "pycln-0.0.1b2-py3-none-any.whl", hash = "sha256:ed1e23bf070842af3571294ce550c90a1ce2a6d4f66c4e136c76388581061117"},
-    {file = "pycln-0.0.1b2.tar.gz", hash = "sha256:f14baae492af300e52a6dc9ecc5bb09eced74808548f30a391827bafeb56036d"},
+    {file = "pycln-0.0.1b3-py3-none-any.whl", hash = "sha256:56f3a5730b9bd3bcb42ee295b6c9fa338046b85083c0e68dcfcbb281406775da"},
+    {file = "pycln-0.0.1b3.tar.gz", hash = "sha256:83f09bd1d058d8cac8bcd8829d3b00df1421ac10836c43b0deac49277f7fb73d"},
 ]
 pycountry = [
     {file = "pycountry-20.7.3.tar.gz", hash = "sha256:81084a53d3454344c0292deebc20fcd0a1488c136d4900312cbd465cf552cb42"},
@@ -3518,14 +3532,17 @@ python-magic = [
 python-pentabarf-xml = [
     {file = "python-pentabarf-xml-0.20.tar.gz", hash = "sha256:32f415ea60aed49c0ff541482e17d7b9e995cce8d42050b3dfe69d22cd59810d"},
 ]
+python-slugify = [
+    {file = "python-slugify-4.0.1.tar.gz", hash = "sha256:69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270"},
+]
 pytype = [
-    {file = "pytype-2021.3.3-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:c5591f3b9bf753226da29b9facae2a73534a191c7c673e78f7710cbbc59d53fa"},
-    {file = "pytype-2021.3.3-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:c04623654614222ec4ec8d1b90a73c73ec9f2fd57811e2986d8100f367c2527b"},
-    {file = "pytype-2021.3.3-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:bc0e2f1de8beb1c9f0a2d841bc9edfcfc084afbeea8371f8e7c4e7c6f8a045f0"},
-    {file = "pytype-2021.3.3-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:8d3fb815deabd06af45f3367a627e5442a03fd85d0195b168363eed536599ed5"},
-    {file = "pytype-2021.3.3-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:30ce5b34d932a23b7c50465dfee56a41356acf980afb0fc3ec0cc68bc92531f2"},
-    {file = "pytype-2021.3.3-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:e093e52b1710ffe455e7d45606767cfc65aa9c7affd52f45fd956ca17d1bf79d"},
-    {file = "pytype-2021.3.3.tar.gz", hash = "sha256:d8f7808c8bba99e5eda02d1ffb7c4dcf679467d01d0510b9884141e9edb57c30"},
+    {file = "pytype-2021.3.10-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:637a976515ffb08e15df06ea4623cb95130dd120be0cf4dedcd28b9e28bd9e92"},
+    {file = "pytype-2021.3.10-cp36-cp36m-manylinux2014_x86_64.whl", hash = "sha256:f20f20e52a26e0ea067baac76a67f751f4574f1fd1b96654994258afabb8c33f"},
+    {file = "pytype-2021.3.10-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:1ad2ff860c70bcf9a1dd5cd8a7829a02d0e64ad410e4667fd8ed4361bb5dd815"},
+    {file = "pytype-2021.3.10-cp37-cp37m-manylinux2014_x86_64.whl", hash = "sha256:ceeaa3e445a7acd542b828022a07a0872e68c2de9d5c3dac0e605ac40aadc695"},
+    {file = "pytype-2021.3.10-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:af1a9f8d80465fcbb36a5d56843215551a534f0ac71620192c662cfdec58b47d"},
+    {file = "pytype-2021.3.10-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:772778051fc43ec53bbb6365049a016b2ea7d4f065f791904cb4a1ca7ed18430"},
+    {file = "pytype-2021.3.10.tar.gz", hash = "sha256:d59e2ba25f53431c3396f019519532e7c3c2a29149494f62d67f2078574ec5e3"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
@@ -3934,8 +3951,8 @@ wcwidth = [
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
 ]
 weasyprint = [
-    {file = "WeasyPrint-52.3-py3-none-any.whl", hash = "sha256:1fbbbec2eea15a4fd17c227f6980dfadca193c2ca49c3f0cf8f3adea652b767c"},
-    {file = "WeasyPrint-52.3.tar.gz", hash = "sha256:07d8103d647ff5c4bc7a3ba6aa5a3b7b6c69033aa4d72e6ab8827f0e110632b4"},
+    {file = "WeasyPrint-52.4-py3-none-any.whl", hash = "sha256:cec6747baac7bd4638cc10e6fab6052b58c4d33b54100022a94e0559218c6cb3"},
+    {file = "WeasyPrint-52.4.tar.gz", hash = "sha256:8b648d35b1e828ce321078fe593ef9267c35280242fd8f673c91f48e417a4a5f"},
 ]
 webencodings = [
     {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
