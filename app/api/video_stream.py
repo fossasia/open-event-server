@@ -72,6 +72,7 @@ def join_stream(stream_id: int):
         )
 
     params = dict(
+        record=True,
         name=stream.name,
         meetingID=stream.extra['response']['meetingID'],
         moderatorPW=stream.extra['response']['moderatorPW'],
