@@ -46,7 +46,7 @@ class SpeakerSchema(SoftDeletionSchema):
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
-    mastadon = fields.Url(allow_none=True)
+    mastodon = fields.Url(allow_none=True)
     linkedin = fields.Url(allow_none=True)
     instagram = fields.Url(allow_none=True)
     organisation = fields.Str(allow_none=True)

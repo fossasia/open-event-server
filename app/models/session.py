@@ -44,7 +44,7 @@ class Session(SoftDeletionModel):
     linkedin = db.Column(db.String)
     instagram = db.Column(db.String)
     gitlab = db.Column(db.String)
-    mastadon = db.Column(db.String)
+    mastodon = db.Column(db.String)
     short_abstract = db.Column(db.Text, default='')
     long_abstract = db.Column(db.Text, default='')
     comments = db.Column(db.Text)

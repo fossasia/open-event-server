@@ -31,7 +31,7 @@ class Speaker(SoftDeletionModel, Timestamp):
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
     github = db.Column(db.String)
-    mastadon = db.Column(db.String)
+    mastodon = db.Column(db.String)
     linkedin = db.Column(db.String)
     instagram = db.Column(db.String)
     organisation = db.Column(db.String)
