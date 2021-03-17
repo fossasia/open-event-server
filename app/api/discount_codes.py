@@ -6,7 +6,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.db import safe_query, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query, safe_query_kwargs
 from app.api.helpers.errors import (
     ConflictError,
     ForbiddenError,
@@ -73,6 +73,15 @@ class DiscountCodeListPost(ResourceList):
         data['marketer_id'] = current_user.id
 
     def before_create_object(self, data, view_kwargs):
+        if data.get('used_for') == 'ticket' and (event_id := data.get('event')):
+            discount_codes = DiscountCode.query.filter_by(
+                event_id=event_id, code=data['code'], deleted_at=None
+            )
+            if get_count(discount_codes) > 0:
+                raise ConflictError(
+                    {'pointer': '/data/attributes/code'}, 'Discount Code already exists'
+                )
+
         if data['used_for'] == 'event':
             self.resource.schema = DiscountCodeSchemaEvent
             if 'events' in data:
