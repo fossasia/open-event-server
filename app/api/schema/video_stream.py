@@ -5,9 +5,16 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 from app.api.helpers.utilities import dasherize
 
 
+class VideoStreamExtraOptionsSchema(JsonSchema):
+    record = fields.Boolean(default=True)
+    autoStartRecording = fields.Boolean(default=True)
+    muteOnStart = fields.Boolean(default=True)
+
+
 class VideoStreamExtraSchema(JsonSchema):
     autoplay = fields.Boolean(default=True)
     loop = fields.Boolean(default=False)
+    options = fields.Nested(VideoStreamExtraOptionsSchema, allow_none=True)
 
 
 class VideoStreamSchema(Schema):
