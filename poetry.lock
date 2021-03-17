@@ -704,7 +704,7 @@ dev = ["pytest", "pytest-mock", "bumpversion", "ghp-import", "sphinx", "pallets-
 
 [[package]]
 name = "flask-caching"
-version = "1.10.0"
+version = "1.10.1"
 description = "Adds caching support to your Flask application"
 category = "main"
 optional = false
@@ -2526,7 +2526,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "7e01c5ac06d0de63e40a90b9e8535b5681d1584d947a1e2e34ffc2ab8d3c21c3"
+content-hash = "640789eca1108d134bb01c8faa1e5ab0dcc842e3128b8d5bdeb26bcbdf762c00"
 
 [metadata.files]
 aiohttp = [
@@ -2870,8 +2870,8 @@ flask-babel = [
     {file = "Flask_Babel-2.0.0-py3-none-any.whl", hash = "sha256:e6820a052a8d344e178cdd36dd4bb8aea09b4bda3d5f9fa9f008df2c7f2f5468"},
 ]
 flask-caching = [
-    {file = "Flask-Caching-1.10.0.tar.gz", hash = "sha256:f3f826790abe3b7797d42b0ad0356328d3c68651a3acb22a016728734cf43c91"},
-    {file = "Flask_Caching-1.10.0-py3-none-any.whl", hash = "sha256:27ddf54b2d160267b5fd70400359fc79dba5a87aa6e53abde89e627eb0fd4540"},
+    {file = "Flask-Caching-1.10.1.tar.gz", hash = "sha256:cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00"},
+    {file = "Flask_Caching-1.10.1-py3-none-any.whl", hash = "sha256:bcda8acbc7508e31e50f63e9b1ab83185b446f6b6318bd9dd1d45626fba2e903"},
 ]
 flask-celeryext = [
     {file = "Flask-CeleryExt-0.3.4.tar.gz", hash = "sha256:47d5d18daebad300b215faca0d1c6da24625f333020482e27591634c05792c98"},
