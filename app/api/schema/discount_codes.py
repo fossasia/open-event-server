@@ -198,6 +198,11 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if 'tickets' in data:
                 for ticket in data['tickets']:
                     ticket_object = Ticket.query.filter_by(id=ticket).one()
+                    if ticket_object.event_id != int(data.get('event')):
+                        raise UnprocessableEntityError(
+                            {'pointer': '/data/attributes/tickets'},
+                            "Tickets should be of same event as discount code",
+                        )
                     if not ticket_object.price:
                         raise UnprocessableEntityError(
                             {'pointer': '/data/attributes/tickets'},
