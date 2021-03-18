@@ -126,7 +126,7 @@ def create_bbb_meeting(channel, data):
 
 
 @streams_routes.route(
-    '/<int:stream_id>/getRecordings',
+    '/<int:stream_id>/recordings',
 )
 @jwt_required
 @to_event_id
