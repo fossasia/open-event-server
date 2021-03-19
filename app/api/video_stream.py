@@ -18,7 +18,7 @@ from app.api.helpers.errors import (
     UnprocessableEntityError,
 )
 from app.api.helpers.permission_manager import has_access
-from app.api.helpers.permissions import is_coorganizer, jwt_required, to_event_id
+from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_exclusive_relationship
 from app.api.schema.video_stream import VideoStreamSchema
 from app.api.video_channels.bbb import BigBlueButton
@@ -129,16 +129,12 @@ def create_bbb_meeting(channel, data):
     '/<int:stream_id>/recordings',
 )
 @jwt_required
-@to_event_id
-@is_coorganizer
 def get_bbb_recordings(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
-    if not stream.user_can_access:
-        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
-    if not stream.channel or stream.channel.provider != 'bbb':
-        raise BadRequestError(
-            {'param': 'stream_id'},
-            'Recording cannot be accessed',
+    if not has_access('is_organizer', event_id=stream.event_id):
+        raise ForbiddenError(
+            {'source': ''},
+            'You need to be the event organizer to access video recordings.',
         )
 
     params = dict(
@@ -154,8 +150,6 @@ def get_bbb_recordings(stream_id: int):
     '/<int:stream_id>/chat-token',
 )
 @jwt_required
-@to_event_id
-@is_coorganizer
 def get_chat_token(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
     if not stream.user_can_access:
