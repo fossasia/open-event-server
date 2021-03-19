@@ -1,8 +1,10 @@
+from flask import request
 from flask_jwt_extended import current_user
-from sqlalchemy import or_
+from sqlalchemy import event, or_
 from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
+from app.api.schema.video_stream import VideoStreamSchema
 from app.models import db
 from app.models.order import Order
 from app.models.session import Session
@@ -82,9 +84,7 @@ class VideoStream(db.Model):
         user = current_user
         if user.is_staff or has_access('is_coorganizer', event_id=self._event_id):
             return True
-        return user.email in list(
-            map(lambda x: x.email, self.moderators)
-        )
+        return user.email in list(map(lambda x: x.email, self.moderators))
 
     @property
     def user_can_access(self):
@@ -100,3 +100,9 @@ class VideoStream(db.Model):
                 .exists()
             ).scalar()
         )
+
+
+@event.listens_for(VideoStream, 'before_update')
+def merge_extra(mapper, connection, target):
+    data, errors = VideoStreamSchema().load(request.json)
+    target.extra = {**target.extra, **data.get('extra')}

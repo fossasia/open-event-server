@@ -7,7 +7,7 @@ from app.api.helpers.utilities import dasherize
 
 class VideoStreamExtraOptionsSchema(JsonSchema):
     record = fields.Boolean(default=True)
-    autoStartRecording = fields.Boolean(default=True)
+    autoStartRecording = fields.Boolean(default=False)
     muteOnStart = fields.Boolean(default=True)
 
 

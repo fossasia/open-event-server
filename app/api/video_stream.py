@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 streams_routes = Blueprint('streams', __name__, url_prefix='/v1/video-streams')
 
+default_options = {'record': True, 'autoStartRecording': False, 'muteOnStart': True}
+
 
 def check_same_event(room_ids):
     rooms = Microlocation.query.filter(Microlocation.id.in_(room_ids)).all()
@@ -71,14 +73,16 @@ def join_stream(stream_id: int):
             'Join action is not applicable on this stream provider',
         )
 
+    options = stream.extra.get('options') or default_options
+
     params = dict(
         name=stream.name,
         meetingID=stream.extra['response']['meetingID'],
         moderatorPW=stream.extra['response']['moderatorPW'],
         attendeePW=stream.extra['response']['attendeePW'],
-        record=stream.extra['options']['record'],
-        autoStartRecording=stream.extra['options']['autoStartRecording'],
-        muteOnStart=stream.extra['options']['muteOnStart'],
+        record=options['record'],
+        autoStartRecording=options['autoStartRecording'],
+        muteOnStart=options['muteOnStart'],
     )
 
     channel = stream.channel
@@ -86,7 +90,10 @@ def join_stream(stream_id: int):
     result = bbb.request('create', params)
 
     if result.success and result.data:
-        stream.extra['response'] = result.data['response']
+        if stream.extra:
+            stream.extra['response'] = result.data['response']
+        else:
+            stream.extra = {**result.data, **default_options}
         db.session.commit()
     elif (
         result.data and result.data.get('response', {}).get('messageKey') == 'idNotUnique'
@@ -118,14 +125,15 @@ def create_bbb_meeting(channel, data):
     # Create BBB meeting
     bbb = BigBlueButton(channel.api_url, channel.api_key)
     meeting_id = str(uuid4())
+    options = data['extra']['options'] or default_options
     res = bbb.request(
         'create',
         dict(
             name=data['name'],
             meetingID=meeting_id,
-            record=data['extra']['options']['record'],
-            autoStartRecording=data['extra']['options']['autoStartRecording'],
-            muteOnStart=data['extra']['options']['muteOnStart'],
+            record=options['record'],
+            autoStartRecording=options['autoStartRecording'],
+            muteOnStart=options['muteOnStart'],
         ),
     )
 
@@ -133,7 +141,10 @@ def create_bbb_meeting(channel, data):
         logger.error('Error creating BBB Meeting: %s', res)
         raise UnprocessableEntityError('', 'Cannot create Meeting on BigBlueButton')
 
-    data['extra']['response'] = res.data['response']
+    if data['extra']:
+        data['extra']['response'] = res.data['response']
+    else:
+        data['extra'] = {**res.data, **default_options}
 
 
 @streams_routes.route(
