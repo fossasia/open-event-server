@@ -1,5 +1,5 @@
 from flask_jwt_extended import current_user
-from sqlalchemy import event, or_
+from sqlalchemy import or_
 from sqlalchemy.orm import backref
 
 from app.api.helpers.permission_manager import has_access
