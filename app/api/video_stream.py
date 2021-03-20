@@ -254,8 +254,10 @@ class VideoStreamDetail(ResourceDetail):
         if not channel_id:
             return
         channel = VideoChannel.query.get(channel_id)
-        if channel.provider not in ['youtube', 'vimeo']:
+        if channel.provider not in ['youtube', 'vimeo', 'bbb']:
             del data['extra']
+        else:
+            data['extra'] = {**(obj.extra or {}), **data.get('extra')}
 
     @staticmethod
     def setup_channel(obj, data):
