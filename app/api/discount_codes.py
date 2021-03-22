@@ -166,9 +166,11 @@ class DiscountCodeList(ResourceList):
                 raise ForbiddenError({'source': ''}, 'Event organizer access required')
 
         # discount_code - ticket :: many-to-many relationship
-        if view_kwargs.get('ticket_id') and has_access('is_coorganizer'):
-            self.schema = DiscountCodeSchemaTicket
+        if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
+            if not has_access('is_coorganizer', event_id=ticket.event_id):
+                raise ForbiddenError({'source': ''}, 'Event organizer access required')
+            self.schema = DiscountCodeSchemaTicket
             query_ = query_.filter(DiscountCode.tickets.any(id=ticket.id))
 
         return query_
