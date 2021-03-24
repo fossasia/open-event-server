@@ -135,7 +135,7 @@ def get_chat_token(stream_id: int):
     if not stream.user_can_access:
         raise NotFoundError({'source': ''}, 'Video Stream Not Found')
 
-    if event.is_chat_enabled:
+    if not event.is_chat_enabled:
         raise NotFoundError({'source': ''}, 'Chat Not Found')
 
     try:
