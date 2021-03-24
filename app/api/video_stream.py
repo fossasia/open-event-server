@@ -133,7 +133,7 @@ def get_bbb_recordings(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
     if not has_access('is_organizer', event_id=stream.event_id):
         raise ForbiddenError(
-            {'source': ''},
+            {'pointer': 'event_id'},
             'You need to be the event organizer to access video recordings.',
         )
 
