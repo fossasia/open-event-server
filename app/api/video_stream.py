@@ -131,12 +131,12 @@ def create_bbb_meeting(channel, data):
 @jwt_required
 def get_chat_token(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
-    event = Event.query.get_or_404(stream.event_id)
+    event = stream.event
     if not stream.user_can_access:
         raise NotFoundError({'source': ''}, 'Video Stream Not Found')
 
     if not event.is_chat_enabled:
-        raise NotFoundError({'source': ''}, 'Chat Not Found')
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
     try:
         data = get_rocket_chat_token(current_user)
