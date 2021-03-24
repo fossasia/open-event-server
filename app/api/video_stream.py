@@ -126,6 +126,27 @@ def create_bbb_meeting(channel, data):
 
 
 @streams_routes.route(
+    '/<int:stream_id>/recordings',
+)
+@jwt_required
+def get_bbb_recordings(stream_id: int):
+    stream = VideoStream.query.get_or_404(stream_id)
+    if not has_access('is_organizer', event_id=stream.event_id):
+        raise ForbiddenError(
+            {'pointer': 'event_id'},
+            'You need to be the event organizer to access video recordings.',
+        )
+
+    params = dict(
+        meetingID=stream.extra['response']['meetingID'],
+    )
+    channel = stream.channel
+    bbb = BigBlueButton(channel.api_url, channel.api_key)
+    result = bbb.request('getRecordings', params)
+    return jsonify(result=result.data)
+
+
+@streams_routes.route(
     '/<int:stream_id>/chat-token',
 )
 @jwt_required
