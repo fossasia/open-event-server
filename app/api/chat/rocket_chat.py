@@ -4,6 +4,7 @@ import requests
 
 from app.api.helpers.db import get_new_identifier
 from app.models import db
+from app.models.event import Event
 from app.models.user import User
 from app.settings import get_settings
 
@@ -24,7 +25,7 @@ class RocketChatException(ValueError):
         super().__init__(message)
 
 
-def get_rocket_chat_token(user: User, retried: bool = False):
+def get_rocket_chat_token(user: User, event: Event, retried: bool = False):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(
@@ -38,6 +39,58 @@ def get_rocket_chat_token(user: User, retried: bool = False):
 
     login_url = api_url + '/api/v1/login'
 
+    def create_room(user_id):
+        if (
+            settings['rocket_bot_email']
+            and settings['rocket_bot_password']
+            and settings['rocket_bot_name']
+        ):
+            login_data = requests.post(
+                login_url,
+                json=dict(
+                    email=settings['rocket_bot_email'],
+                    password=settings['rocket_bot_password'],
+                ),
+            ).json()
+            bot_token = login_data['data']['authToken']
+            bot_id = login_data['data']['userId']
+            res = requests.post(
+                api_url + '/api/v1/groups.create',
+                json=dict(name=event.name + event.identifier, members=[bot_id]),
+                headers={
+                    'X-Auth-Token': bot_token,
+                    'X-User-Id': bot_id,
+                },
+            )
+            data = res.json()
+            event.chat_room_id = data['group']['_id']
+            db.session.add(event)
+            db.session.commit()
+            add_in_room(user_id)
+        else:
+            raise RocketChatException('Rocket Chat Bot Info is not present')
+
+    def add_in_room(rocket_user_id):
+        room_info = {'roomId': event.chat_room_id, 'userId': rocket_user_id}
+        login_data = requests.post(
+            login_url,
+            json=dict(
+                email=settings['rocket_bot_email'],
+                password=settings['rocket_bot_password'],
+            ),
+        ).json()
+        bot_token = login_data['data']['authToken']
+        bot_id = login_data['data']['userId']
+        res = requests.post(
+            api_url + '/api/v1/groups.invite',
+            json=room_info,
+            headers={
+                'X-Auth-Token': bot_token,
+                'X-User-Id': bot_id,
+            },
+        )
+        data = res.json()
+
     def login(method='login'):
         res = requests.post(
             login_url, json=dict(email=user.email, password=user.rocket_chat_password)
@@ -46,6 +99,10 @@ def get_rocket_chat_token(user: User, retried: bool = False):
         if res.status_code == 200:
             token = data['data']['authToken']
             save_token(token)
+            if event.chat_room_id:
+                add_in_room(data['data']['userId'])
+            else:
+                room = create_room(data['data']['userId'])
             return dict(method=method, token=token, res=data)
         else:
             # Unhandled Case
@@ -88,6 +145,8 @@ def get_rocket_chat_token(user: User, retried: bool = False):
 
         data = res.json()
         if res.status_code == 200:
+            if not event.chat_room_id:
+                create_room(data['data']['userId'])
             return dict(method='resumed', token=user.rocket_chat_token, res=data)
         elif res.status_code == 401:
             # Token Expired. Login again
@@ -106,7 +165,7 @@ def get_rocket_chat_token(user: User, retried: bool = False):
                     db.session.add(user)
                     db.session.commit()
 
-                    return get_rocket_chat_token(user, retried=True)
+                    return get_rocket_chat_token(user, event, retried=True)
                 else:
                     raise rce
         else:
