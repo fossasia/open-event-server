@@ -68,7 +68,7 @@ class Config:
     ]
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
-    CSRF_ENABLED = True
+    CSRF_ENABLED = False
     SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
