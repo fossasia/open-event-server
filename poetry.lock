@@ -1357,14 +1357,18 @@ resolved_reference = "d82029336b2be595e74eefc9d07d9786c1b05e2b"
 
 [[package]]
 name = "marshmallow"
-version = "2.15.2"
+version = "2.21.0"
 description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.extras]
+dev = ["python-dateutil", "simplejson", "pytest", "pytz", "flake8 (==3.7.4)", "tox"]
+docs = ["sphinx (==2.1.2)", "sphinx-issues (==1.2.0)", "alabaster (==0.7.12)", "sphinx-version-warning (==1.1.2)"]
+lint = ["flake8 (==3.7.4)"]
 reco = ["python-dateutil", "simplejson"]
+tests = ["pytest", "pytz"]
 
 [[package]]
 name = "marshmallow-jsonapi"
@@ -2526,7 +2530,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "0721e92cffb67bd03cf538d8b8f650f30216f141e832a843502c9edf90ada363"
+content-hash = "a7997435ec95cb67ae367ac2036b1e292c298804824ac46d3b5c3cb93f25a631"
 
 [metadata.files]
 aiohttp = [
@@ -3192,8 +3196,8 @@ markupsafe = [
 "marrow.mailer" = []
 "marrow.util" = []
 marshmallow = [
-    {file = "marshmallow-2.15.2-py2.py3-none-any.whl", hash = "sha256:0466c523c00bd6f1dcb6523cec016e20ffa9738d5abfaf618cd6b1142b9dc766"},
-    {file = "marshmallow-2.15.2.tar.gz", hash = "sha256:4c9978eddbc521674505ed38109cd8b92c8baa6f0a386a52356666c74e586d1e"},
+    {file = "marshmallow-2.21.0-py2.py3-none-any.whl", hash = "sha256:7cb1881a0fa84be4b5c1e301168236932c345f6910725f99905d636bfe93e9e9"},
+    {file = "marshmallow-2.21.0.tar.gz", hash = "sha256:e9390c0c80437d7a02d84e3d1635dc20f37a8bcb149ca443d93791bdc683f28d"},
 ]
 marshmallow-jsonapi = [
     {file = "marshmallow-jsonapi-0.23.2.tar.gz", hash = "sha256:c5bbf57741c4af21b7d90b04b4e1ffc830032bc89f7f6b8b61fe9eef2efcff93"},
