@@ -39,6 +39,32 @@ def get_rocket_chat_token(user: User, event: Event, retried: bool = False):
 
     login_url = api_url + '/api/v1/login'
 
+    def user_in_room(rocket_user_id):
+        login_data = requests.post(
+            login_url,
+            json=dict(
+                email=settings['rocket_bot_email'],
+                password=settings['rocket_bot_password'],
+            ),
+        ).json()
+        bot_token = login_data['data']['authToken']
+        bot_id = login_data['data']['userId']
+        res = requests.get(
+            api_url + '/api/v1/groups.members',
+            params={'roomId': event.chat_room_id},
+            headers={
+                'X-Auth-Token': bot_token,
+                'X-User-Id': bot_id,
+            },
+        ).json()
+        members = res['members']
+
+        for member in members:
+            if member['_id'] == rocket_user_id:
+                return True
+
+        return False
+
     def create_room(user_id):
         if (
             settings['rocket_bot_email']
@@ -71,25 +97,27 @@ def get_rocket_chat_token(user: User, event: Event, retried: bool = False):
             raise RocketChatException('Rocket Chat Bot Info is not present')
 
     def add_in_room(rocket_user_id):
-        room_info = {'roomId': event.chat_room_id, 'userId': rocket_user_id}
-        login_data = requests.post(
-            login_url,
-            json=dict(
-                email=settings['rocket_bot_email'],
-                password=settings['rocket_bot_password'],
-            ),
-        ).json()
-        bot_token = login_data['data']['authToken']
-        bot_id = login_data['data']['userId']
-        res = requests.post(
-            api_url + '/api/v1/groups.invite',
-            json=room_info,
-            headers={
-                'X-Auth-Token': bot_token,
-                'X-User-Id': bot_id,
-            },
-        )
-        data = res.json()
+        if not user_in_room(rocket_user_id):
+            room_info = {'roomId': event.chat_room_id, 'userId': rocket_user_id}
+            login_data = requests.post(
+                login_url,
+                json=dict(
+                    email=settings['rocket_bot_email'],
+                    password=settings['rocket_bot_password'],
+                ),
+            ).json()
+            bot_token = login_data['data']['authToken']
+            bot_id = login_data['data']['userId']
+            res = requests.post(
+                api_url + '/api/v1/groups.invite',
+                json=room_info,
+                headers={
+                    'X-Auth-Token': bot_token,
+                    'X-User-Id': bot_id,
+                },
+            )
+        else:
+            pass
 
     def login(method='login'):
         res = requests.post(
