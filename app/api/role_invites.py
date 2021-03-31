@@ -44,6 +44,14 @@ class RoleInviteListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if 'email' in data and 'event' in data:
+            role_already_exists = RoleInvite.query.filter_by(
+                email=data['email'], event_id=data['event']
+            ).count()
+        if role_already_exists:
+            raise NotFoundError(
+                {'source': ''}, 'Role Invite has already been sent for this email.'
+            )
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
