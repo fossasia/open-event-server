@@ -102,7 +102,7 @@ def get_rocket_chat_token(user: User, event: Event, retried: bool = False):
             if event.chat_room_id:
                 add_in_room(data['data']['userId'])
             else:
-                room = create_room(data['data']['userId'])
+                create_room(data['data']['userId'])
             return dict(method=method, token=token, res=data)
         else:
             # Unhandled Case
