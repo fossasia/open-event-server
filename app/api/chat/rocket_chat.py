@@ -147,6 +147,8 @@ def get_rocket_chat_token(user: User, event: Event, retried: bool = False):
         if res.status_code == 200:
             if not event.chat_room_id:
                 create_room(data['data']['userId'])
+            else:
+                add_in_room(data['data']['userId'])
             return dict(method='resumed', token=user.rocket_chat_token, res=data)
         elif res.status_code == 401:
             # Token Expired. Login again
