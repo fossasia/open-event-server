@@ -134,7 +134,7 @@ class Session(SoftDeletionModel):
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super().__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)), allow_link=True)
         else:
             super().__setattr__(name, value)
 
