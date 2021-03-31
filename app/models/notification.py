@@ -1,5 +1,7 @@
+from sqlalchemy_utils import generic_relationship, generic_repr
+
 from app.models import db
-from app.models.base import SoftDeletionModel
+from app.models.helpers.timestamp import Timestamp
 
 USER_CHANGE_EMAIL = "User email"
 PASSWORD_CHANGE = 'Change Password'
@@ -51,7 +53,49 @@ class NotificationAction(db.Model):
     )
 
 
-class Notification(SoftDeletionModel):
+@generic_repr
+class NotificationActor(db.Model, Timestamp):
+
+    __tablename__ = 'notification_actors'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    actor_id = db.Column(
+        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
+    )
+    actor = db.relationship(
+        'User', backref='notification_actors', foreign_keys=[actor_id]
+    )
+
+    content_id = db.Column(
+        db.Integer,
+        db.ForeignKey('notification_content.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+    content = db.relationship(
+        'NotificationContent', backref='actor', foreign_keys=[content_id]
+    )
+
+
+@generic_repr
+class NotificationContent(db.Model, Timestamp):
+
+    __tablename__ = 'notification_content'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    type = db.Column(db.String, nullable=False)
+
+    target_type = db.Column(db.Unicode(255))
+    target_id = db.Column(db.Integer)
+    target = generic_relationship(target_type, target_id)
+
+    # For storing state of the action
+    target_action = db.Column(db.String)
+
+
+@generic_repr
+class Notification(db.Model, Timestamp):
     """
     Model for storing user notifications.
     """
@@ -60,13 +104,19 @@ class Notification(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
+    )
     user = db.relationship('User', backref='notifications', foreign_keys=[user_id])
 
-    title = db.Column(db.String)
-    message = db.Column(db.Text)
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __repr__(self):
-        return f'<Notif {self.user}:{self.title}>'
+    content_id = db.Column(
+        db.Integer,
+        db.ForeignKey('notification_content.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+    content = db.relationship(
+        'NotificationContent', backref='content', foreign_keys=[content_id]
+    )
