@@ -49,8 +49,8 @@ class RoleInviteListPost(ResourceList):
                 email=data['email'], event_id=data['event']
             ).count()
         if role_already_exists:
-            raise NotFoundError(
-                {'source': ''}, 'Role Invite has already been sent for this email.'
+            raise ConflictError(
+                {'source': '/data'}, 'Role Invite has already been sent for this email.'
             )
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
