@@ -54,7 +54,12 @@ def login(
 
 
 def register(
-    user: User, event: Event, api_url='', login_url='', username_suffix='', is_bot=False
+    user: User,
+    event: Event,
+    api_url='',
+    login_url='',
+    username_suffix='',
+    is_bot: bool = False,
 ):
     settings = get_settings()
     register_url = api_url + '/api/v1/users.register'
@@ -97,8 +102,6 @@ def check_or_create_bot(event: Event, api_url='', login_url=''):
 
     bot_user = User.query.filter_by(_email=bot_email).first()
 
-    print('check or create bot')
-
     if not (bot_email):
         bot_user = get_or_create(
             User, _email=bot_email, _password=bot_pass, first_name='openeventbot'
@@ -123,11 +126,15 @@ def create_room(event: Event, user_id, api_url='', login_url=''):
             'X-User-Id': bot_id,
         },
     )
-    group_data = res.json()
-    event.chat_room_id = group_data['group']['_id']
-    db.session.add(event)
-    db.session.commit()
-    add_in_room(event, user_id, api_url, login_url)
+    if not res.status_code == 200:
+        logger.error('Error while creating room : %s', res.json())
+        raise RocketChatException('Error while creating room', response=res)
+    else:
+        group_data = res.json()
+        event.chat_room_id = group_data['group']['_id']
+        db.session.add(event)
+        db.session.commit()
+        add_in_room(event, user_id, api_url, login_url)
 
 
 def add_in_room(event: Event, rocket_user_id, api_url='', login_url=''):
@@ -146,8 +153,14 @@ def add_in_room(event: Event, rocket_user_id, api_url='', login_url=''):
         },
     )
 
+    if not res.status_code == 200:
+        logger.error('Error while adding user : %s', res.json())
+        raise RocketChatException('Error while adding user', response=res)
 
-def get_rocket_chat_token(user: User, event: Event, retried: bool = False, is_bot=False):
+
+def get_rocket_chat_token(
+    user: User, event: Event, retried: bool = False, is_bot: bool = False
+):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(
