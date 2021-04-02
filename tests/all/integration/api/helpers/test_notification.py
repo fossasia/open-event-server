@@ -1,7 +1,6 @@
 import pytest
 
 from app.api.helpers.notification import (
-    send_notif_after_event,
     send_notif_after_export,
     send_notif_after_import,
     send_notif_event_role,
@@ -123,17 +122,6 @@ def test_send_notif_event_role(user):
     assert (
         notification.message
         == "You've been invited to be one of the <strong>Dinosaurs</strong> at <strong>Mass Extinction</strong>."
-    )
-
-
-def test_send_notif_after_event(user):
-    """Method to test notification after conclusion"""
-    send_notif_after_event(user, 'Apocalypse')
-    notification = Notification.query.first()
-    assert notification.title == 'Event Apocalypse completed'
-    assert (
-        notification.message
-        == 'The event <strong>Apocalypse</strong> has been completed.<br><br>'
     )
 
 
