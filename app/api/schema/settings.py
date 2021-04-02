@@ -271,8 +271,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
 
     rocket_chat_registration_secret = fields.Str(allow_none=True)
     rocket_bot_email = fields.Str(allow_none=True)
-    rocket_bot_password = fields.Str(allow_none=True)
-    rocket_bot_name = fields.Str(allow_none=True)
+    rocket_bot_pass = fields.Str(allow_none=True)
 
     # Event Invoices settings
     invoice_sending_day = fields.Integer(allow_none=False, default=1)

@@ -137,8 +137,7 @@ class Setting(db.Model):
     rocket_chat_url = db.Column(db.String)
     rocket_chat_registration_secret = db.Column(db.String)
     rocket_bot_email = db.Column(db.String)
-    rocket_bot_password = db.Column(db.String)
-    rocket_bot_name = db.Column(db.String)
+    rocket_bot_pass = db.Column(db.String)
 
     #
     # Social links
