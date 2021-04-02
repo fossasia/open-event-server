@@ -100,7 +100,7 @@ def check_or_create_bot(event: Event, api_url='', login_url=''):
     bot_email = settings['rocket_bot_email'] or 'openeventbot@openevent.com'
     bot_pass = settings['rocket_bot_pass'] or 'openeventbot'
 
-    bot_user = User.query.filter_by(_email=bot_email).first()
+    bot_user = User.query.filter_by(_email=bot_email).first_or_404()
 
     if not (bot_email):
         bot_user = get_or_create(
