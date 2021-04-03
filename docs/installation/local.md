@@ -77,12 +77,13 @@ In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo
   poetry install
   ```
 
-- Change your python version so it can be compatible with the version of this project i.e, 3.8.6
+- Change your python version so it can be compatible with the version of this project i.e, 3.8.6.
   To do this first install, pyenv using :- `pip install pyenv`. After this, enter the following commands :-
 
   ```sh
   # This installs the python 3.8.6
   pyenv install 3.8.6
+  # This inits  pyenv in current folder.
   eval "$(pyenv init -)"
   # This enables python virtual environment 3.8.6
   pyenv shell 3.8.6
