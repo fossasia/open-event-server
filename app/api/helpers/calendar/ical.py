@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import pytz
 from flask import jsonify
 from flask_jwt_extended import current_user
@@ -57,7 +59,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
                 " "
                 + event.site_link
                 + '/video/'
-                + session.microlocation.video_stream.name
+                + quote(session.microlocation.video_stream.name)
                 + "/"
                 + str(session.microlocation.video_stream.id)
                 if session.microlocation.video_stream

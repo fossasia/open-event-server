@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 streams_routes = Blueprint('streams', __name__, url_prefix='/v1/video-streams')
 
+default_options = {'record': False, 'autoStartRecording': False, 'muteOnStart': True}
+
 
 def check_same_event(room_ids):
     rooms = Microlocation.query.filter(Microlocation.id.in_(room_ids)).all()
@@ -71,12 +73,14 @@ def join_stream(stream_id: int):
             'Join action is not applicable on this stream provider',
         )
 
+    options = stream.extra.get('bbb_options') or default_options
+
     params = dict(
-        record=True,
         name=stream.name,
         meetingID=stream.extra['response']['meetingID'],
         moderatorPW=stream.extra['response']['moderatorPW'],
         attendeePW=stream.extra['response']['attendeePW'],
+        **options,
     )
 
     channel = stream.channel
@@ -84,7 +88,7 @@ def join_stream(stream_id: int):
     result = bbb.request('create', params)
 
     if result.success and result.data:
-        stream.extra = result.data
+        stream.extra = {**result.data, 'bbb_options': options}
         db.session.commit()
     elif (
         result.data and result.data.get('response', {}).get('messageKey') == 'idNotUnique'
@@ -116,13 +120,38 @@ def create_bbb_meeting(channel, data):
     # Create BBB meeting
     bbb = BigBlueButton(channel.api_url, channel.api_key)
     meeting_id = str(uuid4())
-    res = bbb.request('create', dict(name=data['name'], meetingID=meeting_id))
+    options = data['extra'].get('bbb_options') or default_options
+    res = bbb.request(
+        'create',
+        dict(name=data['name'], meetingID=meeting_id, **options),
+    )
 
     if not (res.success and res.data):
         logger.error('Error creating BBB Meeting: %s', res)
         raise UnprocessableEntityError('', 'Cannot create Meeting on BigBlueButton')
 
-    data['extra'] = res.data
+    data['extra'] = {**res.data, 'bbb_options': options}
+
+
+@streams_routes.route(
+    '/<int:stream_id>/recordings',
+)
+@jwt_required
+def get_bbb_recordings(stream_id: int):
+    stream = VideoStream.query.get_or_404(stream_id)
+    if not has_access('is_organizer', event_id=stream.event_id):
+        raise ForbiddenError(
+            {'pointer': 'event_id'},
+            'You need to be the event organizer to access video recordings.',
+        )
+
+    params = dict(
+        meetingID=stream.extra['response']['meetingID'],
+    )
+    channel = stream.channel
+    bbb = BigBlueButton(channel.api_url, channel.api_key)
+    result = bbb.request('getRecordings', params)
+    return jsonify(result=result.data)
 
 
 @streams_routes.route(
@@ -131,8 +160,12 @@ def create_bbb_meeting(channel, data):
 @jwt_required
 def get_chat_token(stream_id: int):
     stream = VideoStream.query.get_or_404(stream_id)
+    event = stream.event
     if not stream.user_can_access:
         raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
     try:
         data = get_rocket_chat_token(current_user)
@@ -232,8 +265,10 @@ class VideoStreamDetail(ResourceDetail):
         if not channel_id:
             return
         channel = VideoChannel.query.get(channel_id)
-        if channel.provider not in ['youtube', 'vimeo']:
+        if channel.provider not in ['youtube', 'vimeo', 'bbb']:
             del data['extra']
+        else:
+            data['extra'] = {**(obj.extra or {}), **(data.get('extra') or {})}
 
     @staticmethod
     def setup_channel(obj, data):

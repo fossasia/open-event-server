@@ -102,6 +102,9 @@ def get_chat_token(event_id: int):
     if not VideoStream(event_id=event.id).user_can_access:
         raise NotFoundError({'source': ''}, 'Video Stream Not Found')
 
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
     try:
         data = get_rocket_chat_token(current_user)
         return jsonify({'success': True, 'token': data['token']})

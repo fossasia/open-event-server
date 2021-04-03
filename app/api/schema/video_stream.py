@@ -5,9 +5,25 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 from app.api.helpers.utilities import dasherize
 
 
+class VideoStreamExtraOptionsSchema(JsonSchema):
+    record = fields.Boolean(default=False)
+    autoStartRecording = fields.Boolean(default=False)
+    muteOnStart = fields.Boolean(default=True)
+    welcome = fields.String(required=False, allow_none=True)
+    maxParticipants = fields.Integer(required=False, allow_none=True)
+    duration = fields.Integer(required=False, allow_none=True)
+    moderatorOnlyMessage = fields.String(required=False, allow_none=True)
+    logo = fields.URL(required=False, allow_none=True)
+    bannerText = fields.String(required=False, allow_none=True)
+    bannerColor = fields.String(required=False, allow_none=True)
+    guestPolicy = fields.String(required=False, allow_none=True)
+    allowModsToUnmuteUsers = fields.Boolean(default=True)
+
+
 class VideoStreamExtraSchema(JsonSchema):
     autoplay = fields.Boolean(default=True)
     loop = fields.Boolean(default=False)
+    bbb_options = fields.Nested(VideoStreamExtraOptionsSchema, allow_none=True)
 
 
 class VideoStreamSchema(Schema):
