@@ -22,22 +22,23 @@ events_routes = Blueprint('events_routes', __name__, url_prefix='/v1/events')
 @events_routes.route('/<string:event_identifier>/sessions/dates')
 @to_event_id
 def get_dates(event_id):
+    date_list = list(
+        zip(
+            *db.session.query(func.date(Session.starts_at))
+            .distinct()
+            .filter(
+                Session.event_id == event_id,
+                Session.starts_at != None,
+                or_(Session.state == 'accepted', Session.state == 'confirmed'),
+            )
+            .order_by(asc(func.date(Session.starts_at)))
+            .all()
+        )
+    )
     dates = list(
         map(
             str,
-            list(
-                zip(
-                    *db.session.query(func.date(Session.starts_at))
-                    .distinct()
-                    .filter(
-                        Session.event_id == event_id,
-                        Session.starts_at != None,
-                        or_(Session.state == 'accepted', Session.state == 'confirmed'),
-                    )
-                    .order_by(asc(func.date(Session.starts_at)))
-                    .all()
-                )
-            )[0],
+            date_list[0] if date_list else [],
         )
     )
     return jsonify(dates)
