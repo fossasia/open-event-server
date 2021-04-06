@@ -32,8 +32,8 @@ class GroupListPost(ResourceList):
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
 
         for event in data.get('events', []):
-            if not has_access('is_coorganizer', event_id=event):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+            if not has_access('is_owner', event_id=event):
+                raise ForbiddenError({'source': ''}, "Event owner access required")
 
     schema = GroupSchema
     decorators = (jwt_required,)
@@ -107,8 +107,8 @@ class GroupDetail(ResourceDetail):
         """
 
         for event in data.get('events', []):
-            if not has_access('is_coorganizer', event_id=event):
-                raise ForbiddenError({'source': ''}, "Event co-organizer access required")
+            if not has_access('is_owner', event_id=event):
+                raise ForbiddenError({'source': ''}, "Event owner access required")
 
     decorators = (
         api.has_permission(
