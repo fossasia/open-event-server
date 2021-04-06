@@ -270,8 +270,6 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
 
     rocket_chat_registration_secret = fields.Str(allow_none=True)
-    rocket_bot_email = fields.Str(allow_none=True)
-    rocket_bot_pass = fields.Str(allow_none=True)
 
     # Event Invoices settings
     invoice_sending_day = fields.Integer(allow_none=False, default=1)

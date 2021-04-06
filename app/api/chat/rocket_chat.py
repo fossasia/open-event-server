@@ -1,11 +1,12 @@
 import logging
+import random
+import string
 
 import requests
 
 from app.api.helpers.db import get_new_identifier, get_or_create
 from app.models import db
 from app.models.event import Event
-from app.models.setting import Setting
 from app.models.user import User
 from app.settings import get_settings
 
@@ -95,18 +96,18 @@ def register(
         raise RocketChatException('Error while registration', response=res)
 
 
-def check_or_create_bot(event: Event, api_url='', login_url=''):
-    settings = get_settings()
-    bot_email = settings['rocket_bot_email'] or 'openeventbot@openevent.com'
-    bot_pass = settings['rocket_bot_pass'] or 'openeventbot'
+def generate_pass(size=10, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
+
+def check_or_create_bot(event: Event, api_url='', login_url=''):
+    bot_email = 'openeventbot@openevent.com'
     bot_user = User.query.filter_by(_email=bot_email).first_or_404()
 
-    if not (bot_email):
+    if not (bot_user):
         bot_user, _ = get_or_create(
-            User, _email=bot_email, _password=bot_pass, first_name='openeventbot'
+            User, _email=bot_email, _password=generate_pass(), first_name='openeventbot'
         )
-        get_or_create(Setting, rocket_bot_email=bot_email, rocket_bot_pass=bot_pass)
         register(bot_user, event, api_url, login_url, '', True)
 
     return bot_user
