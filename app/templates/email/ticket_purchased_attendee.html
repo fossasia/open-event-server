@@ -1,5 +1,5 @@
 {{ _('Hello') }},
-<br/><br/>{{ _('This is a confirmation mail of your tickets for the event') }} {{ order.event.name }}. {{ _('You can download your tickets at') }}: {{ order_view_url }}
+<br/><br/>{{ _('This is a confirmation mail of your tickets for the event') }} {{ order.event.name }}. {{ _('You can download your tickets at') }}: <a href={{ order_view_url }}>{{ order_view_url }}</a>
 <br/><br/>{{ _('Ticket Summary') }}:
 <br/>{{ _('Name') }}: {{ attendees.0.user.full_name }}
 <br/>
@@ -23,4 +23,4 @@
     </div>
 {% endif %}
 <br/>--
-<br/>{{ _('Login to manage your orders at') }} {{ settings.frontend_url }}
+<br/>{{ _('Login to manage your orders at') }} <a href={{ settings.frontend_url }}>{{ settings.frontend_url }}</a>

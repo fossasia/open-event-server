@@ -13,7 +13,6 @@ from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
 from app.models.mail import (
-    AFTER_EVENT,
     EVENT_EXPORT_FAIL,
     EVENT_EXPORTED,
     EVENT_IMPORT_FAIL,
@@ -32,7 +31,6 @@ from app.models.mail import (
     TICKET_PURCHASED_ORGANIZER,
     USER_CHANGE_EMAIL,
     USER_CONFIRM,
-    USER_EVENT_ROLE,
     Mail,
 )
 from app.models.ticket_holder import TicketHolder
@@ -119,7 +117,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=N
     return True
 
 
-def send_email_with_action(user, action, bcc=None, **kwargs):
+def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
     """
     A general email helper to use in the APIs
     :param user: email or user to which email is to be sent
@@ -130,11 +128,13 @@ def send_email_with_action(user, action, bcc=None, **kwargs):
     if isinstance(user, User):
         user = user.email
 
+    template_path = 'email/' + template_name.lower() + '.html'
+
     send_email(
         to=user,
         action=action,
         subject=MAILS[action]['subject'].format(**kwargs),
-        html=MAILS[action]['message'].format(**kwargs),
+        html=render_template(template_path, **kwargs),
         bcc=bcc,
     )
 
@@ -145,7 +145,7 @@ def send_email_confirmation(email, link):
         to=email,
         action=USER_CONFIRM,
         subject=MAILS[USER_CONFIRM]['subject'],
-        html=MAILS[USER_CONFIRM]['message'].format(email=email, link=link),
+        html=render_template('email/user_confirm.html', email=email, link=link),
     )
 
 
@@ -158,7 +158,8 @@ def send_email_new_session(email, session):
         to=email,
         action=NEW_SESSION,
         subject=MAILS[NEW_SESSION]['subject'].format(session=session),
-        html=MAILS[NEW_SESSION]['message'].format(
+        html=render_template(
+            'email/new_session.html',
             session=session,
             session_overview_link=session_overview_link,
             app_name=app_name,
@@ -222,34 +223,12 @@ def send_email_role_invite(email, role_name, event_name, link):
         to=email,
         action=EVENT_ROLE,
         subject=MAILS[EVENT_ROLE]['subject'].format(role=role_name, event=event_name),
-        html=MAILS[EVENT_ROLE]['message'].format(
-            email=email, role=role_name, event=event_name, link=link
-        ),
-    )
-
-
-def send_user_email_role_invite(email, role_name, event_name, link):
-    """email for role invite"""
-    send_email(
-        to=email,
-        action=USER_EVENT_ROLE,
-        subject=MAILS[USER_EVENT_ROLE]['subject'].format(
-            role=role_name, event=event_name
-        ),
-        html=MAILS[USER_EVENT_ROLE]['message'].format(
-            email=email, role=role_name, event=event_name, link=link
-        ),
-    )
-
-
-def send_email_after_event(email, event_name, frontend_url):
-    """email for role invite"""
-    send_email(
-        to=email,
-        action=AFTER_EVENT,
-        subject=MAILS[AFTER_EVENT]['subject'].format(event_name=event_name),
-        html=MAILS[AFTER_EVENT]['message'].format(
-            email=email, event_name=event_name, url=frontend_url
+        html=render_template(
+            'email/event_role.html',
+            email=email,
+            role=role_name,
+            event=event_name,
+            link=link,
         ),
     )
 
@@ -264,6 +243,12 @@ def send_email_for_monthly_fee_payment(
         'pre_due': MONTHLY_PAYMENT_PRE_DUE_EMAIL,
         'post_due': MONTHLY_PAYMENT_POST_DUE_EMAIL,
     }
+    template_path = {
+        'Monthly Payment Email': 'email/monthly_payment_email.html',
+        'Monthly Payment Follow Up Email': 'email/monthly_payment_followup_email.html',
+        'Monthly Payment Pre Due Email': 'email/monthly_payment_pre_due_email.html',
+        'Monthly Payment Post Due Email': 'email/monthly_payment_post_due_email.html',
+    }
     key = options[follow_up]
     email = user.email
     send_email(
@@ -272,7 +257,8 @@ def send_email_for_monthly_fee_payment(
         subject=MAILS[key]['subject'].format(
             date=previous_month, event_name=event_name, app_name=app_name
         ),
-        html=MAILS[key]['message'].format(
+        html=render_template(
+            template_path[key],
             name=user.full_name,
             email=email,
             event_name=event_name,
@@ -292,14 +278,14 @@ def send_export_mail(email, event_name, error_text=None, download_url=None):
             to=email,
             action=EVENT_EXPORT_FAIL,
             subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(error_text=error_text),
+            html=render_template('email/event_export_fail.html', error_text=error_text),
         )
     elif download_url:
         send_email(
             to=email,
             action=EVENT_EXPORTED,
             subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=download_url),
+            html=render_template('email/event_exported.html', download_url=download_url),
         )
 
 
@@ -310,14 +296,14 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
             to=email,
             action=EVENT_IMPORT_FAIL,
             subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
-            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(error_text=error_text),
+            html=render_template('email/event_import_fail.html', error_text=error_text),
         )
     elif event_url:
         send_email(
             to=email,
             action=EVENT_IMPORTED,
             subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_IMPORTED]['message'].format(event_url=event_url),
+            html=render_template('email/event_imported.html', event_url=event_url),
         )
 
 
@@ -337,8 +323,12 @@ def send_email_change_user_email(user, email):
         'utf-8',
     )
     link = make_frontend_url('/email/verify', {'token': hash_})
-    send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
-    send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
+    send_email_with_action(
+        user.email, USER_CONFIRM, 'user_confirm', email=user.email, link=link
+    )
+    send_email_with_action(
+        email, USER_CHANGE_EMAIL, 'user_change_email', email=email, new_email=user.email
+    )
 
 
 def send_email_to_attendees(order):
@@ -417,7 +407,11 @@ def send_order_purchase_organizer_email(order, recipients):
     emails = list({organizer.email for organizer in recipients})
     if emails:
         send_email_with_action(
-            emails[0], TICKET_PURCHASED_ORGANIZER, bcc=emails[1:], **context
+            emails[0],
+            TICKET_PURCHASED_ORGANIZER,
+            'ticket_purchased_organizer',
+            bcc=emails[1:],
+            **context,
         )
 
 
@@ -428,6 +422,11 @@ def send_order_cancel_email(order):
             cancel_note=order.cancel_note
         )
 
+    order_url = (
+        get_settings()['frontend_url'] + '/orders/' + str(order.identifier) + '/view/'
+    )
+    event_url = get_settings()['frontend_url'] + '/e/' + order.event.identifier
+
     send_email(
         to=order.user.email,
         action=TICKET_CANCELLED,
@@ -435,11 +434,11 @@ def send_order_cancel_email(order):
             event_name=order.event.name,
             invoice_id=order.invoice_number,
         ),
-        html=MAILS[TICKET_CANCELLED]['message'].format(
+        html=render_template(
+            'email/ticket_cancelled.html',
             event_name=order.event.name,
-            order_id=order.identifier,
-            event_id=order.event.identifier,
-            frontend_url=get_settings()['frontend_url'],
+            order_url=order_url,
+            event_url=event_url,
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],
         ),
