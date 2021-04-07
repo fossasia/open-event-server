@@ -183,6 +183,9 @@ def accept_invite():
                     delete_previous_uer(past_owner)
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
+            # reset the group of event
+            event.group_id = None
+            save_to_db(event, 'Group Id Removed')
             uer = UsersEventsRoles(user=user, event=event, role=role)
             save_to_db(uer, 'User Event Role Created')
             if not user.is_verified:
