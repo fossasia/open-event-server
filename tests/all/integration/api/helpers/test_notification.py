@@ -143,6 +143,6 @@ def test_send_notif_ticket_purchase_organizer(user):
     send_notif_ticket_purchase_organizer(user, order)
     notification = Notification.query.first()
     assert (
-        f'New ticket purchase for Poodle : ({order.invoice_number})' == notification.title
+        f'New ticket purchase for Poodle: ({order.invoice_number})' == notification.title
     )
     assert notification.message == 'The order has been processed successfully.'
