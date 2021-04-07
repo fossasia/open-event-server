@@ -335,14 +335,11 @@ def create_user_permissions():
 
 def create_admin_message_settings():
     default_mails = [
-        "Next Event",
         "Session Schedule Change",
         "User email",
         "Invitation For Papers",
-        "After Event",
         "Ticket(s) Purchased",
         "Session State Change",
-        "Event Published",
         "Event Export Failed",
         "Event Exported",
         "Event Role Invitation",
