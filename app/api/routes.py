@@ -253,6 +253,11 @@ from app.api.users_events_roles import (
     UsersEventsRolesList,
     UsersEventsRolesRelationship,
 )
+from app.api.users_groups_roles import (
+    UsersGroupsRolesDetail,
+    UsersGroupsRolesList,
+    UsersGroupsRolesRelationship,
+)
 from app.api.video_channel import VideoChannelDetail, VideoChannelList
 from app.api.video_stream import (
     VideoStreamDetail,
@@ -287,6 +292,7 @@ api.route(
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
+    '/users-groups-roles/<int:users_groups_roles_id>/user'
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
 )
 api.route(
@@ -528,6 +534,7 @@ api.route(
     '/roles/<int:id>',
     '/role-invites/<int:role_invite_id>/role',
     '/users-events-roles/<int:users_events_roles_id>/role',
+    '/users-groups-roles/<int:users_groups_roles_id>/role',
 )
 
 # custom system roles
@@ -593,6 +600,31 @@ api.route(
     UsersEventsRolesRelationship,
     'users_events_roles_role',
     '/users-events-roles/<int:id>/relationships/role',
+)
+
+# users_groups_roles
+api.route(
+    UsersGroupsRolesDetail, 'users_groups_roles_detail', '/users-groups-roles/<int:id>'
+)
+api.route(
+    UsersGroupsRolesList,
+    'users_groups_roles_list',
+    '/groups/<int:group_id>/users-groups-roles',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_user',
+    '/users-groups-roles/<int:id>/relationships/user',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_event',
+    '/users-groups-roles/<int:id>/relationships/group',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_role',
+    '/users-groups-roles/<int:id>/relationships/role',
 )
 
 # tickets
@@ -1422,6 +1454,12 @@ api.route(
     'group_detail',
     '/groups/<int:id>',
     '/events/<int:event_id>/group',
+    '/users-groups-roles/<int:users_groups_roles_id>/group',
+)
+api.route(
+    GroupRelationship,
+    'event_users_groups_roles',
+    '/groups/<int:id>/relationships/roles',
 )
 api.route(
     GroupRelationship,
@@ -1758,7 +1796,9 @@ api.route(
     ExhibitorRelationship, 'exhibitor_event', '/exhibitors/<int:id>/relationships/event'
 )
 api.route(
-    ExhibitorRelationship, 'exhibitor_session', '/exhibitors/<int:id>/relationships/sessions'
+    ExhibitorRelationship,
+    'exhibitor_session',
+    '/exhibitors/<int:id>/relationships/sessions',
 )
 
 # VideoStreamModerator

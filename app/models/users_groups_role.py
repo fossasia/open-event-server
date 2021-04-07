@@ -14,6 +14,7 @@ class UsersGroupsRoles(db.Model):
     group_id = db.Column(
         db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'), nullable=False
     )
+    group = db.relationship("Group")
 
     user_id = db.Column(
         db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
