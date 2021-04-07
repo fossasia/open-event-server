@@ -6,7 +6,7 @@ class MessageSettingsFactory(BaseFactory):
     class Meta:
         model = MessageSettings
 
-    action = "After Event"
+    action = "Event Role Invitation"
     mail_status = True
     notification_status = True
     user_control_status = True
