@@ -30,13 +30,13 @@ class RocketChatException(ValueError):
 
 @dataclass
 class RocketChat:
-    api_url: string
+    api_url: str
 
     @property
-    def login_url(self) -> string:
+    def login_url(self) -> str:
         return self.api_url + '/api/v1/login'
 
-    def login(self, user: User, event: Event = None, method: string = 'login'):
+    def login(self, user: User, event: Event = None, method: str = 'login'):
         def save_token(token):
             user.rocket_chat_token = token
             db.session.add(user)
