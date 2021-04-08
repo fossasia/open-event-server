@@ -151,7 +151,7 @@ class RocketChat:
         res = requests.post(
             self.api_url + '/api/v1/groups.create',
             json=dict(
-                name=event.name.replace(' ', '-') + '-' + event.identifier,
+                name=event.rocket_room_name,
                 members=[bot_id],
             ),
             headers={
