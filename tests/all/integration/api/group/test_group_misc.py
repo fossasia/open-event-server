@@ -10,7 +10,7 @@ from tests.factories.group import GroupFactory
 def test_group_post_access_allow(db, client, user, jwt):
     user.is_verified = True
     event = EventFactoryBasic()
-    role, _ = get_or_create(Role, name='coorganizer', title_name='Co-organizer')
+    role, _ = get_or_create(Role, name='owner', title_name='Owner')
     UsersEventsRoles(user=user, event=event, role=role)
 
     db.session.commit()
@@ -68,7 +68,7 @@ def test_group_post_access_deny(db, client, user, jwt):
 def test_group_patch_access_allow(db, client, user, jwt):
     event = EventFactoryBasic()
 
-    role, _ = get_or_create(Role, name='coorganizer', title_name='Coorganizer')
+    role, _ = get_or_create(Role, name='owner', title_name='Owner')
     UsersEventsRoles(user=user, event=event, role=role)
 
     db.session.commit()
