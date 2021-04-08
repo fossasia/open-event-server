@@ -48,7 +48,6 @@ def test_group_post_access_deny(db, client, user, jwt):
                 "type": "group",
                 "relationships": {
                     "events": {"data": [{"id": str(event.id), "type": "event"}]},
-                    "groups_roles": {"data": [{"id": "1", "type": "users-groups-roles"}]},
                 },
                 "attributes": {"name": "eventgp2"},
             }
@@ -84,7 +83,6 @@ def test_group_patch_access_allow(db, client, user, jwt):
                 "id": str(group.id),
                 "relationships": {
                     "events": {"data": [{"id": str(event.id), "type": "event"}]},
-                    "groups_roles": {"data": [{"id": "1", "type": "users-groups-roles"}]},
                 },
                 "attributes": {"name": "eventgp1"},
             }
