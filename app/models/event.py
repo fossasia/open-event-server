@@ -1,3 +1,4 @@
+import re
 from argparse import Namespace
 from datetime import datetime
 
@@ -387,7 +388,7 @@ class Event(SoftDeletionModel):
 
     @property
     def chat_room_name(self):
-        return self.name.replace(' ', '-') + '-' + self.identifier
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + self.identifier
 
     @property
     def tickets_available(self):
