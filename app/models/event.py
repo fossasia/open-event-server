@@ -1,3 +1,4 @@
+import re
 from argparse import Namespace
 from datetime import datetime
 
@@ -61,6 +62,7 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
     original_image_url = db.Column(db.String)
@@ -383,6 +385,10 @@ class Event(SoftDeletionModel):
             .scalar()
             or 0
         )
+
+    @property
+    def chat_room_name(self):
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + self.identifier
 
     @property
     def tickets_available(self):

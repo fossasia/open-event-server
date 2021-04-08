@@ -168,7 +168,7 @@ def get_chat_token(stream_id: int):
         raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
     try:
-        data = get_rocket_chat_token(current_user)
+        data = get_rocket_chat_token(current_user, event)
         return jsonify({'success': True, 'token': data['token']})
     except RocketChatException as rce:
         if rce.code == RocketChatException.CODES.DISABLED:
