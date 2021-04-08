@@ -388,8 +388,7 @@ class Event(SoftDeletionModel):
 
     @property
     def rocket_room_name(self):
-        self.chat_room_name = self.name.replace(' ', '-') + '-' + self.identifier
-        return self.chat_room_name
+        return self.name.replace(' ', '-') + '-' + self.identifier
 
     @property
     def tickets_available(self):

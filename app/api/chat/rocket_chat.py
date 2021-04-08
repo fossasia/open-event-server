@@ -165,6 +165,7 @@ class RocketChat:
         else:
             group_data = res.json()
             event.chat_room_id = group_data['group']['_id']
+            event.chat_room_name = event.rocket_chat_room
             db.session.add(event)
             db.session.commit()
 
