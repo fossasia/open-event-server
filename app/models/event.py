@@ -61,7 +61,6 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
-    chat_room_name = db.Column(db.String)
     chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
@@ -387,7 +386,7 @@ class Event(SoftDeletionModel):
         )
 
     @property
-    def rocket_room_name(self):
+    def chat_room_name(self):
         return self.name.replace(' ', '-') + '-' + self.identifier
 
     @property
