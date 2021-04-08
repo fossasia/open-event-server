@@ -61,8 +61,7 @@ def test_group_post_access_deny(db, client, user, jwt):
         data=data,
     )
     assert (
-        json.loads(response.data)['errors'][0]['detail']
-        == 'Event co-organizer access required'
+        json.loads(response.data)['errors'][0]['detail'] == 'Event owner access required'
     )
 
 
@@ -128,6 +127,5 @@ def test_group_patch_access_deny(db, client, user, jwt):
         data=data,
     )
     assert (
-        json.loads(response.data)['errors'][0]['detail']
-        == 'Event co-organizer access required'
+        json.loads(response.data)['errors'][0]['detail'] == 'Event owner access required'
     )
