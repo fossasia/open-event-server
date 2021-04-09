@@ -5,7 +5,6 @@ from itertools import groupby
 from typing import Dict
 
 from flask import current_app, render_template
-from flask_admin.actions import action
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db

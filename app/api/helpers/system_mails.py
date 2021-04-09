@@ -219,6 +219,10 @@ MAILS = {
         'subject': 'Import of event failed',
         'template': 'email/event_import_fail.html',
     },
+    MailType.CONTACT_ORGANIZERS: {
+        'recipient': 'Owner, Organizer',
+        'template': 'email/organizer_contact_attendee.html',
+    },
     MailType.TEST_MAIL: {
         'recipient': 'User',
         'subject': 'Test Mail Subject',
