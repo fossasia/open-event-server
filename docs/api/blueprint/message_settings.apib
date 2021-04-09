@@ -7,9 +7,7 @@ To get or modify data of this data layer, you will need admin access. You can ge
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
 | `action`  | Action of the message | string | - |
-| `mail-status`  | Status of Mail | boolean | - |
-| `notification-status`  | Status of Notification | boolean | - |
-| `user-control-status`  | Status of User Control | boolean | - |
+| `enabled`  | Whether this Mail is enabled | boolean | - |
 | `email-message`  | Message of the Email | string | - |
 | `notification-message`  | Message of the Notification | string | - |
 
@@ -39,10 +37,8 @@ Get a list of Message Settings.
             "data": [
                 {
                     "attributes": {
-                        "mail-status": true,
-                        "notification-status": true,
-                        "user-control-status": true,
-                        "action": "Event Role Invitation",
+                        "enabled": true,
+                        "action": "event_role",
                         "recipient": "User",
                         "email-subject": "Invitation to be {role} at {event}",
                         "email-message": "Hello {email},<br><br>You have been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>To accept the role please sign up using the following link:{ Link }",
@@ -86,10 +82,8 @@ Get a single message setting.
         {
           "data": {
             "attributes": {
-                "mail-status": true,
-                "notification-status": true,
-                "user-control-status": true,
-                "action": "Event Role Invitation",
+                "enabled": true,
+                "action": "event_role",
                 "recipient": "User",
                 "email-subject": "Invitation to be {role} at {event}",
                 "email-message": "Hello {email},<br><br>You have been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>To accept the role please sign up using the following link:{ Link }",
@@ -128,10 +122,8 @@ Update a single message setting by `id` (only admin).
             {
               "data": {
                 "attributes": {
-                  "mail-status": true,
-                  "notification-status": true,
-                  "user-control-status": true,
-                  "action": "Event Role Invitation"
+                  "enabled": true,
+                  "action": "event_role"
             },
                 "id": "1",
                 "type": "message-setting"
@@ -143,10 +135,8 @@ Update a single message setting by `id` (only admin).
             {
                 "data": {
                     "attributes": {
-                        "mail-status": true,
-                        "notification-status": true,
-                        "user-control-status": true,
-                        "action": "Event Role Invitation",
+                        "enabled": true,
+                        "action": "event_role",
                         "recipient": "User",
                         "email-subject": "Invitation to be {role} at {event}",
                         "email-message": "Hello {email},<br><br>You have been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>To accept the role please sign up using the following link:{ Link }",

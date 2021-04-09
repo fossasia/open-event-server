@@ -18,8 +18,8 @@ class MailType:
     TICKET_PURCHASED_ATTENDEE = 'ticket_purchased_attendee'
     TICKET_PURCHASED_ORGANIZER = 'ticket_purchased_organizer'
     TICKET_CANCELLED = 'ticket_cancelled'
-    TICKET_CANCELLED_ORGANIZER = 'ticket_cancelled_organizer'
-    TICKET_RESEND_ORGANIZER = 'ticket_resend_organizer'
+    # TICKET_CANCELLED_ORGANIZER = 'ticket_cancelled_organizer' # To be implemented
+    # TICKET_RESEND_ORGANIZER = 'ticket_resend_organizer' # To be implemented
     EVENT_EXPORTED = 'event_exported'
     EVENT_EXPORT_FAIL = 'event_export_fail'
     EVENT_IMPORTED = 'event_imported'

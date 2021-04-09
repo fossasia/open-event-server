@@ -235,10 +235,10 @@ def send_email_for_monthly_fee_payment(
         'post_due': MailType.MONTHLY_PAYMENT_POST_DUE,
     }
     template_path = {
-        'Monthly Payment Email': 'email/monthly_payment_email.html',
-        'Monthly Payment Follow Up Email': 'email/monthly_payment_followup_email.html',
-        'Monthly Payment Pre Due Email': 'email/monthly_payment_pre_due_email.html',
-        'Monthly Payment Post Due Email': 'email/monthly_payment_post_due_email.html',
+        MailType.MONTHLY_PAYMENT: 'email/monthly_payment_email.html',
+        MailType.MONTHLY_PAYMENT_FOLLOWUP: 'email/monthly_payment_followup_email.html',
+        MailType.MONTHLY_PAYMENT_PRE_DUE: 'email/monthly_payment_pre_due_email.html',
+        MailType.MONTHLY_PAYMENT_POST_DUE: 'email/monthly_payment_post_due_email.html',
     }
     key = options[follow_up]
     email = user.email

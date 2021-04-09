@@ -29,10 +29,13 @@ class MessageSettings(db.Model, Timestamp):
     def _email_message(cls, action, attr=None):
         message = {}
         if action in MailType.entries():
-            message = MAILS[action]
+            message = MAILS.get(action)
         else:
             message = MAILS.__dict__[action]
-        message = str(message.get(attr))
+        fallback_message = 'Dynamic Mail'
+        if not message:
+            return fallback_message
+        message = str(message.get(attr) or fallback_message)
         return message
 
     @hybrid_property
