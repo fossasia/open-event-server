@@ -96,14 +96,14 @@ class UserList(ResourceList):
         )
         link = make_frontend_url('/verify', {'token': hash})
         settings = get_settings()
+        action = MailType.USER_REGISTER
+        mail = MAILS[action]
         send_email(
             to=user.email,
-            action=MailType.USER_REGISTER,
-            subject=MAILS[MailType.USER_REGISTER]['subject'].format(
-                app_name=settings['app_name']
-            ),
+            action=action,
+            subject=mail['subject'].format(app_name=settings['app_name']),
             html=render_template(
-                'email/user_register.html',
+                mail['template'],
                 email=user.email,
                 link=link,
                 settings=get_settings(),

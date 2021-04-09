@@ -346,24 +346,24 @@ def reset_password_post():
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
+            action = MailType.PASSWORD_RESET_AND_VERIFY
+            mail = MAILS[action]
             send_email(
                 to=user.email,
-                action=MailType.PASSWORD_RESET_AND_VERIFY,
-                subject=MAILS[MailType.PASSWORD_RESET_AND_VERIFY]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
-                html=render_template('email/password_reset_and_verify.html', link=link),
+                action=action,
+                subject=mail['subject'].format(app_name=get_settings()['app_name']),
+                html=render_template(mail['template'], link=link),
             )
 
         else:
+            action = MailType.PASSWORD_RESET
+            mail = MAILS[action]
             send_email(
                 to=user.email,
-                action=MailType.PASSWORD_RESET,
-                subject=MAILS[MailType.PASSWORD_RESET]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
+                action=action,
+                subject=mail['subject'].format(app_name=get_settings()['app_name']),
                 html=render_template(
-                    'email/password_reset.html',
+                    mail['template'],
                     link=link,
                     settings=get_settings(),
                     token=user.reset_password,
@@ -425,13 +425,13 @@ def change_password():
                 )
             user.password = new_password
             save_to_db(user)
+            action = MailType.PASSWORD_CHANGE
+            mail = MAILS[action]
             send_email(
                 to=user.email,
-                action=MailType.PASSWORD_CHANGE,
-                subject=MAILS[MailType.PASSWORD_CHANGE]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
-                html=render_template('email/password_change.html'),
+                action=action,
+                subject=mail['subject'].format(app_name=get_settings()['app_name']),
+                html=render_template(mail['template']),
             )
             send_notification_with_action(
                 user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']

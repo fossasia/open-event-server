@@ -35,6 +35,8 @@ class MessageSettings(db.Model, Timestamp):
         fallback_message = 'Dynamic Mail'
         if not message:
             return fallback_message
+        if attr == 'message' and (template := message.get('template')):
+            return open('app/templates/' + template).read()
         message = str(message.get(attr) or fallback_message)
         return message
 

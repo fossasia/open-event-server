@@ -5,6 +5,7 @@ from itertools import groupby
 from typing import Dict
 
 from flask import current_app, render_template
+from flask_admin.actions import action
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
@@ -130,11 +131,13 @@ def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
 
 def send_email_confirmation(email, link):
     """account confirmation"""
+    action = MailType.USER_CONFIRM
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=MailType.USER_CONFIRM,
-        subject=MAILS[MailType.USER_CONFIRM]['subject'],
-        html=render_template('email/user_confirm.html', email=email, link=link),
+        action=action,
+        subject=mail['subject'],
+        html=render_template(mail['template'], email=email, link=link),
     )
 
 
@@ -143,12 +146,14 @@ def send_email_new_session(email, session):
     app_name = get_settings()['app_name']
     front_page = get_settings()['frontend_url']
     session_overview_link = session.event.organizer_site_link + "/sessions/pending"
+    action = MailType.NEW_SESSION
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=MailType.NEW_SESSION,
-        subject=MAILS[MailType.NEW_SESSION]['subject'].format(session=session),
+        action=action,
+        subject=mail['subject'].format(session=session),
         html=render_template(
-            'email/new_session.html',
+            mail['template'],
             session=session,
             session_overview_link=session_overview_link,
             app_name=app_name,
@@ -208,14 +213,14 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
 
 def send_email_role_invite(email, role_name, event_name, link):
     """email for role invite"""
+    action = MailType.EVENT_ROLE
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=MailType.EVENT_ROLE,
-        subject=MAILS[MailType.EVENT_ROLE]['subject'].format(
-            role=role_name, event=event_name
-        ),
+        action=action,
+        subject=mail['subject'].format(role=role_name, event=event_name),
         html=render_template(
-            'email/event_role.html',
+            mail['template'],
             email=email,
             role=role_name,
             event=event_name,
@@ -234,22 +239,17 @@ def send_email_for_monthly_fee_payment(
         'pre_due': MailType.MONTHLY_PAYMENT_PRE_DUE,
         'post_due': MailType.MONTHLY_PAYMENT_POST_DUE,
     }
-    template_path = {
-        MailType.MONTHLY_PAYMENT: 'email/monthly_payment_email.html',
-        MailType.MONTHLY_PAYMENT_FOLLOWUP: 'email/monthly_payment_followup_email.html',
-        MailType.MONTHLY_PAYMENT_PRE_DUE: 'email/monthly_payment_pre_due_email.html',
-        MailType.MONTHLY_PAYMENT_POST_DUE: 'email/monthly_payment_post_due_email.html',
-    }
     key = options[follow_up]
+    mail = MAILS[key]
     email = user.email
     send_email(
         to=email,
         action=key,
-        subject=MAILS[key]['subject'].format(
+        subject=mail['subject'].format(
             date=previous_month, event_name=event_name, app_name=app_name
         ),
         html=render_template(
-            template_path[key],
+            mail['template'],
             name=user.full_name,
             email=email,
             event_name=event_name,
@@ -265,42 +265,44 @@ def send_email_for_monthly_fee_payment(
 def send_export_mail(email, event_name, error_text=None, download_url=None):
     """followup export link in email"""
     if error_text:
+        action = MailType.EVENT_EXPORT_FAIL
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=MailType.EVENT_EXPORT_FAIL,
-            subject=MAILS[MailType.EVENT_EXPORT_FAIL]['subject'].format(
-                event_name=event_name
-            ),
-            html=render_template('email/event_export_fail.html', error_text=error_text),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], error_text=error_text),
         )
     elif download_url:
+        action = MailType.EVENT_EXPORTED
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=MailType.EVENT_EXPORTED,
-            subject=MAILS[MailType.EVENT_EXPORTED]['subject'].format(
-                event_name=event_name
-            ),
-            html=render_template('email/event_exported.html', download_url=download_url),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], download_url=download_url),
         )
 
 
 def send_import_mail(email, event_name=None, error_text=None, event_url=None):
     """followup export link in email"""
     if error_text:
+        action = MailType.EVENT_IMPORT_FAIL
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=MailType.EVENT_IMPORT_FAIL,
-            subject=MAILS[MailType.EVENT_IMPORT_FAIL]['subject'],
-            html=render_template('email/event_import_fail.html', error_text=error_text),
+            action=action,
+            subject=mail['subject'],
+            html=render_template(mail['template'], error_text=error_text),
         )
     elif event_url:
+        action = MailType.EVENT_IMPORTED
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=MailType.EVENT_IMPORTED,
-            subject=MAILS[MailType.EVENT_IMPORTED]['subject'].format(
-                event_name=event_name
-            ),
-            html=render_template('email/event_imported.html', event_url=event_url),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], event_url=event_url),
         )
 
 
@@ -362,19 +364,21 @@ def send_email_to_attendees(order):
     )
 
     buyer_email = order.user.email
+    action = MailType.TICKET_PURCHASED
+    mail = MAILS[action]
     send_email(
         to=buyer_email,
-        action=MailType.TICKET_PURCHASED,
-        subject=MAILS[MailType.TICKET_PURCHASED]['subject'].format(
+        action=action,
+        subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
         ),
-        html=render_template(
-            'email/ticket_purchased.html', attendees=attendees, **context
-        ),
+        html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
     )
 
+    action = MailType.TICKET_PURCHASED_ATTENDEE
+    mail = MAILS[action]
     for email, attendees_group in email_group:
         if email == buyer_email:
             # Ticket holder is the purchaser
@@ -383,13 +387,13 @@ def send_email_to_attendees(order):
         # The Ticket holder is not the purchaser
         send_email(
             to=email,
-            action=MailType.TICKET_PURCHASED_ATTENDEE,
-            subject=MAILS[MailType.TICKET_PURCHASED_ATTENDEE]['subject'].format(
+            action=action,
+            subject=mail['subject'].format(
                 event_name=event.name,
                 invoice_id=order.invoice_number,
             ),
             html=render_template(
-                'email/ticket_purchased_attendee.html',
+                mail['template'],
                 attendees=list(attendees_group),
                 **context,
             ),
@@ -428,15 +432,17 @@ def send_order_cancel_email(order):
     )
     event_url = get_settings()['frontend_url'] + '/e/' + order.event.identifier
 
+    action = MailType.TICKET_CANCELLED
+    mail = MAILS[action]
     send_email(
         to=order.user.email,
-        action=MailType.TICKET_CANCELLED,
-        subject=MAILS[MailType.TICKET_CANCELLED]['subject'].format(
+        action=action,
+        subject=mail['subject'].format(
             event_name=order.event.name,
             invoice_id=order.invoice_number,
         ),
         html=render_template(
-            'email/ticket_cancelled.html',
+            mail['template'],
             event_name=order.event.name,
             order_url=order_url,
             event_url=event_url,

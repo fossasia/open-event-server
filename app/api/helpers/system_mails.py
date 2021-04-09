@@ -118,86 +118,106 @@ MAILS = {
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
         'subject': 'New session proposal for {session.event.name} titled {session.title}',
+        'template': 'email/new_session.html',
     },
     MailType.USER_REGISTER: {
         'recipient': 'User',
         'subject': 'Welcome to {app_name}. Please verify your account',
+        'template': 'email/user_register.html',
     },
     MailType.USER_CONFIRM: {
         'recipient': 'User',
         'subject': 'Email Confirmation to Create Account for Open-Event',
+        'template': 'email/user_confirm.html',
     },
     MailType.USER_CHANGE_EMAIL: {
         'recipient': 'User',
         'subject': 'Your email has been already changed',
+        'template': 'email/user_change_email.html',
     },
     MailType.PASSWORD_RESET: {
         'recipient': 'User',
         'subject': '{app_name}: Password Reset',
+        'template': 'email/password_reset.html',
     },
     MailType.PASSWORD_RESET_AND_VERIFY: {
         'recipient': 'User',
         'subject': '{app_name}: Reset your password and verify your account',
+        'template': 'email/password_reset_and_verify.html',
     },
     MailType.PASSWORD_CHANGE: {
         'recipient': 'User',
         'subject': '{app_name}: Password Change',
+        'template': 'email/password_change.html',
     },
     MailType.EVENT_ROLE: {
         'recipient': 'User',
         'subject': 'Invitation to be {role} at {event}',
+        'template': 'email/event_role.html',
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
         'subject': 'Your order invoice and tickets for {event_name} ({invoice_id}) ',
+        'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'Attendee',
         'subject': 'Your tickets for {event_name} ({invoice_id}) ',
+        'template': 'email/ticket_purchased_attendee.html',
     },
     MailType.TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer, Coorganizer',
         'subject': 'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'template': 'email/ticket_purchased_organizer.html',
     },
     MailType.TICKET_CANCELLED: {
         'recipient': 'User',
         'subject': 'Your order for {event_name} has been cancelled ({invoice_id})',
+        'template': 'email/ticket_cancelled.html',
     },
     MailType.EVENT_EXPORTED: {
         'recipient': 'User',
         'subject': 'Event {event_name} has been exported',
+        'template': 'email/event_exported.html',
     },
     MailType.EVENT_EXPORT_FAIL: {
         'recipient': 'User',
         'subject': 'Export of event {event_name} failed',
+        'template': 'email/event_export_fail.html',
     },
     MailType.MONTHLY_PAYMENT: {
         'recipient': 'Owner',
         'subject': 'Your invoice for {event_name} for {date} is available on {app_name}',
         'sent_at': '1st day of the month',
+        'template': 'email/monthly_payment_email.html',
     },
     MailType.MONTHLY_PAYMENT_FOLLOWUP: {
         'recipient': 'Owner',
         'subject': 'Reminder: Your invoice for {event_name} for {date} is available on {app_name}',
         'sent_at': '15th day of the month',
+        'template': 'email/monthly_payment_followup_email.html',
     },
     MailType.MONTHLY_PAYMENT_PRE_DUE: {
         'recipient': 'Owner',
         'subject': 'Reminder: Your invoice for {event_name} for {date} is available on {app_name}',
         'sent_at': '27th day of the month',
+        'template': 'email/monthly_payment_pre_due_email.html',
     },
     MailType.MONTHLY_PAYMENT_POST_DUE: {
         'recipient': 'Owner',
         'subject': 'Please pay your overdue invoice for {event_name} for {date} on {app_name}',
         'sent_at': '30th day of the month',
+        'template': 'email/monthly_payment_post_due_email.html',
     },
     MailType.EVENT_IMPORTED: {
         'recipient': 'User',
         'subject': 'Event {event_name} has been imported',
+        'template': 'email/event_imported.html',
     },
     MailType.EVENT_IMPORT_FAIL: {
         'recipient': 'User',
         'subject': 'Import of event failed',
+        'template': 'email/event_import_fail.html',
     },
     MailType.TEST_MAIL: {
         'recipient': 'User',
