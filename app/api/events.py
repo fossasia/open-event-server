@@ -42,6 +42,7 @@ from app.models.exhibitor import Exhibitor
 from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.microlocation import Microlocation
 from app.models.order import Order
 from app.models.role import Role
@@ -349,6 +350,7 @@ class EventList(ResourceList):
             )
 
         if view_kwargs.get('group_id') and 'GET' in request.method:
+            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'group_id') == view_kwargs['group_id']
             )
