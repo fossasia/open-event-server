@@ -56,7 +56,7 @@ def upgrade():
         'notifications', 'user_id', existing_type=sa.INTEGER(), nullable=False
     )
     op.create_foreign_key(
-        None,
+        'notifications_content_id_fkey',
         'notifications',
         'notification_content',
         ['content_id'],
@@ -88,7 +88,9 @@ def downgrade():
             nullable=True,
         ),
     )
-    op.drop_constraint(None, 'notifications', type_='foreignkey')
+    op.drop_constraint(
+        'notifications_content_id_fkey', 'notifications', type_='foreignkey'
+    )
     op.alter_column('notifications', 'user_id', existing_type=sa.INTEGER(), nullable=True)
     op.drop_column('notifications', 'modified_at')
     op.drop_column('notifications', 'created_at')
