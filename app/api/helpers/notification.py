@@ -13,7 +13,6 @@ from app.api.helpers.system_notifications import (
     get_ticket_purchased_notification_actions,
     get_ticket_purchased_organizer_notification_actions,
 )
-from app.models.message_setting import MessageSettings
 from app.models.notification import (
     AFTER_EVENT,
     EVENT_EXPORT_FAIL,
@@ -60,14 +59,12 @@ def send_notif_new_session_organizer(user, event_name, link, session_id):
     :param session_id:
     :return:
     """
-    message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first()
-    if not message_settings or message_settings.notification_status == 1:
-        actions = get_new_session_notification_actions(session_id, link)
-        notification = NOTIFS[NEW_SESSION]
-        title = notification['title'].format(event_name=event_name)
-        message = notification['message'].format(event_name=event_name, link=link)
+    actions = get_new_session_notification_actions(session_id, link)
+    notification = NOTIFS[NEW_SESSION]
+    title = notification['title'].format(event_name=event_name)
+    message = notification['message'].format(event_name=event_name, link=link)
 
-        send_notification(user, title, message, actions)
+    send_notification(user, title, message, actions)
 
 
 def send_notif_session_state_change(user, session_name, acceptance, link, session_id):
@@ -80,20 +77,14 @@ def send_notif_session_state_change(user, session_name, acceptance, link, sessio
     :param session_id:
     :return:
     """
-    message_settings = MessageSettings.query.filter_by(
-        action=SESSION_STATE_CHANGE
-    ).first()
-    if not message_settings or message_settings.notification_status == 1:
-        actions = get_session_state_change_notification_actions(session_id, link)
-        notification = NOTIFS[SESSION_STATE_CHANGE]
-        title = notification['title'].format(
-            session_name=session_name, acceptance=acceptance
-        )
-        message = notification['message'].format(
-            session_name=session_name, acceptance=acceptance
-        )
+    actions = get_session_state_change_notification_actions(session_id, link)
+    notification = NOTIFS[SESSION_STATE_CHANGE]
+    title = notification['title'].format(session_name=session_name, acceptance=acceptance)
+    message = notification['message'].format(
+        session_name=session_name, acceptance=acceptance
+    )
 
-        send_notification(user, title, message, actions)
+    send_notification(user, title, message, actions)
 
 
 def send_notif_after_import(
@@ -153,19 +144,17 @@ def send_notif_monthly_fee_payment(
     :return:
     """
     key = MONTHLY_PAYMENT_FOLLOWUP_NOTIF if follow_up else MONTHLY_PAYMENT_NOTIF
-    message_settings = MessageSettings.query.filter_by(action=key).first()
-    if not message_settings or message_settings.notification_status == 1:
-        actions = get_monthly_payment_notification_actions(event_id, link)
-        notification = NOTIFS[key]
-        title = notification['subject'].format(date=previous_month, event_name=event_name)
-        message = notification['message'].format(
-            event_name=event_name,
-            date=previous_month,
-            amount=amount,
-            app_name=app_name,
-        )
+    actions = get_monthly_payment_notification_actions(event_id, link)
+    notification = NOTIFS[key]
+    title = notification['subject'].format(date=previous_month, event_name=event_name)
+    message = notification['message'].format(
+        event_name=event_name,
+        date=previous_month,
+        amount=amount,
+        app_name=app_name,
+    )
 
-        send_notification(user, title, message, actions)
+    send_notification(user, title, message, actions)
 
 
 def send_notif_event_role(user, role_name, event_name, link, event_id):
@@ -178,16 +167,14 @@ def send_notif_event_role(user, role_name, event_name, link, event_id):
     :param event_id:
     :return:
     """
-    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE).first()
-    if not message_settings or message_settings.notification_status == 1:
-        actions = get_event_role_notification_actions(event_id, link)
-        notification = NOTIFS[EVENT_ROLE]
-        title = notification['title'].format(role_name=role_name, event_name=event_name)
-        message = notification['message'].format(
-            role_name=role_name, event_name=event_name, link=link
-        )
+    actions = get_event_role_notification_actions(event_id, link)
+    notification = NOTIFS[EVENT_ROLE]
+    title = notification['title'].format(role_name=role_name, event_name=event_name)
+    message = notification['message'].format(
+        role_name=role_name, event_name=event_name, link=link
+    )
 
-        send_notification(user, title, message, actions)
+    send_notification(user, title, message, actions)
 
 
 def send_notif_after_event(user, event_name):
@@ -197,13 +184,11 @@ def send_notif_after_event(user, event_name):
     :param event_name:
     :return:
     """
-    message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
-    if not message_settings or message_settings.notification_status == 1:
-        notif = NOTIFS[AFTER_EVENT]
-        title = notif['title'].format(event_name=event_name)
-        message = notif['message'].format(event_name=event_name)
+    notif = NOTIFS[AFTER_EVENT]
+    title = notif['title'].format(event_name=event_name)
+    message = notif['message'].format(event_name=event_name)
 
-        send_notification(user, title, message)
+    send_notification(user, title, message)
 
 
 def send_notif_ticket_purchase_organizer(user, order):
