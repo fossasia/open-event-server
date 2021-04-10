@@ -5,6 +5,7 @@ from sqlalchemy import asc, distinct, func, or_
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email
 from app.api.helpers.permissions import is_coorganizer, jwt_required, to_event_id
+from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import group_by, strip_tags
 from app.api.schema.exhibitors import ExhibitorReorderSchema
 from app.api.schema.speakers import SpeakerReorderSchema
@@ -12,7 +13,6 @@ from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
-from app.models.mail import CONTACT_ORGANIZERS
 from app.models.session import Session
 from app.models.speaker import Speaker
 
@@ -66,9 +66,11 @@ def contact_organizer(event_id):
         "{attendee_name} ({attendee_email}) has a question for you about your event {event_name}: <br/><br/>"
         "<div style='white-space: pre-line;'>{email}</div>"
     )
+    action = MailType.CONTACT_ORGANIZERS
+    mail = MAILS[action]
     send_email(
         to=event.owner.email,
-        action=CONTACT_ORGANIZERS,
+        action=action,
         subject=event.name + ": Question from " + current_user.fullname,
         html=organizer_mail.format(**context),
         bcc=organizers_emails,
@@ -76,10 +78,10 @@ def contact_organizer(event_id):
     )
     send_email(
         to=current_user.email,
-        action=CONTACT_ORGANIZERS,
+        action=MailType.CONTACT_ORGANIZERS,
         subject=event.name + ": Organizers are succesfully contacted",
         html=render_template(
-            'email/organizer_contact_attendee.html',
+            mail['template'],
             event_name=event.name,
             email_copy=email,
         ),

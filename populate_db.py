@@ -1,7 +1,7 @@
 from app.api.helpers.db import get_or_create
 
 # Admin message settings
-from app.api.helpers.system_mails import MAILS
+from app.api.helpers.system_mails import MailType
 from app.instance import current_app
 from app.models import db
 
@@ -334,34 +334,8 @@ def create_user_permissions():
 
 
 def create_admin_message_settings():
-    default_mails = [
-        "Session Schedule Change",
-        "User email",
-        "Invitation For Papers",
-        "Ticket(s) Purchased",
-        "Session State Change",
-        "Event Export Failed",
-        "Event Exported",
-        "Event Role Invitation",
-        "New Session Proposal",
-    ]
-    for mail in MAILS:
-        if mail in default_mails:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=True,
-                notification_status=True,
-                user_control_status=True,
-            )
-        else:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=False,
-                notification_status=False,
-                user_control_status=False,
-            )
+    for mail in MailType.entries():
+        get_or_create(MessageSettings, action=mail, defaults=dict(enabled=True))
 
 
 def create_custom_placeholders():

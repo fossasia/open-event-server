@@ -2,30 +2,6 @@ from sqlalchemy.sql import func
 
 from app.models import db
 
-USER_REGISTER = 'User Registration'
-USER_CONFIRM = 'User Confirmation'
-USER_CHANGE_EMAIL = "User email"
-NEW_SESSION = 'New Session Proposal'
-PASSWORD_RESET = 'Reset Password'
-PASSWORD_RESET_AND_VERIFY = 'Reset Password and Account Verification'
-PASSWORD_CHANGE = 'Change Password'
-EVENT_ROLE = 'Event Role Invitation'
-SESSION_STATE_CHANGE = 'Session State Change'
-TICKET_PURCHASED = 'Ticket(s) Purchased'
-TICKET_PURCHASED_ATTENDEE = 'Ticket(s) purchased to Attendee    '
-TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
-TICKET_CANCELLED = 'Ticket(s) cancelled'
-EVENT_EXPORTED = 'Event Exported'
-EVENT_EXPORT_FAIL = 'Event Export Failed'
-MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
-MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
-MONTHLY_PAYMENT_PRE_DUE_EMAIL = 'Monthly Payment Pre Due Email'
-MONTHLY_PAYMENT_POST_DUE_EMAIL = 'Monthly Payment Post Due Email'
-EVENT_IMPORTED = 'Event Imported'
-EVENT_IMPORT_FAIL = 'Event Import Failed'
-TEST_MAIL = 'Test Mail'
-CONTACT_ORGANIZERS = 'Contact Organizers'
-
 
 class Mail(db.Model):
     __tablename__ = 'mails'
