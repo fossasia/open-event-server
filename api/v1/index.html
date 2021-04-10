@@ -18216,20 +18216,8 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
 <td>-</td>
 </tr>
 <tr>
-<td style="text-align:left"><code>mail-status</code></td>
-<td>Status of Mail</td>
-<td>boolean</td>
-<td>-</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>notification-status</code></td>
-<td>Status of Notification</td>
-<td>boolean</td>
-<td>-</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>user-control-status</code></td>
-<td>Status of User Control</td>
+<td style="text-align:left"><code>enabled</code></td>
+<td>Whether this Mail is enabled</td>
 <td>boolean</td>
 <td>-</td>
 </tr>
@@ -18255,16 +18243,11 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
     {
       "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">mail-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">notification-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">user-control-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"Event Role Invitation"</span></span>,
+        "<span class="hljs-attribute">enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"event_role"</span></span>,
         "<span class="hljs-attribute">recipient</span>": <span class="hljs-value"><span class="hljs-string">"User"</span></span>,
         "<span class="hljs-attribute">email-subject</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-        "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-        "<span class="hljs-attribute">notification-title</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-        "<span class="hljs-attribute">notification-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-        "<span class="hljs-attribute">sent-at</span>": <span class="hljs-value"><span class="hljs-string">"2018-07-15T10:59:43.063672+00:00"</span>
+        "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"message-settings"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -18284,16 +18267,11 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">mail-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">notification-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">user-control-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"Event Role Invitation"</span></span>,
+      "<span class="hljs-attribute">enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"event_role"</span></span>,
       "<span class="hljs-attribute">recipient</span>": <span class="hljs-value"><span class="hljs-string">"User"</span></span>,
       "<span class="hljs-attribute">email-subject</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-      "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-      "<span class="hljs-attribute">notification-title</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-      "<span class="hljs-attribute">notification-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-      "<span class="hljs-attribute">sent-at</span>": <span class="hljs-value"><span class="hljs-string">"2018-07-15T10:59:43.063672+00:00"</span>
+      "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"message-setting"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -18315,10 +18293,8 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">mail-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">notification-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">user-control-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"Event Role Invitation"</span>
+      "<span class="hljs-attribute">enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"event_role"</span>
     </span>}</span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"message-setting"</span>
@@ -18326,16 +18302,11 @@ For security purposes, refresh token cookie is <code>HttpOnly</code>, so that JS
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">mail-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">notification-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">user-control-status</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"Event Role Invitation"</span></span>,
+      "<span class="hljs-attribute">enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"event_role"</span></span>,
       "<span class="hljs-attribute">recipient</span>": <span class="hljs-value"><span class="hljs-string">"User"</span></span>,
       "<span class="hljs-attribute">email-subject</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-      "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-      "<span class="hljs-attribute">notification-title</span>": <span class="hljs-value"><span class="hljs-string">"Invitation to be {role} at {event}"</span></span>,
-      "<span class="hljs-attribute">notification-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span></span>,
-      "<span class="hljs-attribute">sent-at</span>": <span class="hljs-value"><span class="hljs-string">"2018-07-15T10:59:43.063672+00:00"</span>
+      "<span class="hljs-attribute">email-message</span>": <span class="hljs-value"><span class="hljs-string">"Hello {email},&lt;br&gt;&lt;br&gt;You have been invited to be a &lt;strong&gt;{role}&lt;/strong&gt; at &lt;strong&gt;{event}&lt;/strong&gt;.&lt;br&gt;To accept the role please sign up using the following link:{ Link }"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"message-setting"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -23130,7 +23101,7 @@ Creates the copy. Requires Co-Organizer access</p>
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 09 Apr 2021</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 10 Apr 2021</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
