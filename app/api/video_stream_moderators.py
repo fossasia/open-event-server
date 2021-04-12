@@ -3,6 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.mail import send_email_to_moderator
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
@@ -19,6 +20,9 @@ class VideoStreamModeratorList(ResourceList):
         stream = safe_query_kwargs(VideoStream, data, 'video_stream')
         if not has_access('is_coorganizer', event_id=stream.event_id):
             raise ForbiddenError({'pointer': 'user_id'}, 'Co-Organizer access required')
+
+    def after_create_object(self, video_stream_moderator, data, view_kwargs):
+        send_email_to_moderator(video_stream_moderator)
 
     def query(self, view_kwargs):
         query_ = self.session.query(VideoStreamModerator)
@@ -47,7 +51,7 @@ class VideoStreamModeratorList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': VideoStreamModerator,
-        'methods': {'query': query},
+        'methods': {'query': query, 'after_create_object': after_create_object},
     }
 
 

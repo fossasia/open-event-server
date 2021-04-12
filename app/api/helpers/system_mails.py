@@ -30,6 +30,7 @@ class MailType:
     MONTHLY_PAYMENT_POST_DUE = 'monthly_payment_post_due'
     TEST_MAIL = 'test_mail'
     CONTACT_ORGANIZERS = 'contact_organizers'
+    VIDEO_MODERATOR_INVITE = "video_moderator_invite"
 
     @staticmethod
     def entries():
@@ -227,5 +228,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Test Mail Subject',
         'message': ("This is a  <strong> Test </strong> E-mail."),
+    },
+    MailType.VIDEO_MODERATOR_INVITE: {
+        'recipient': 'User',
+        'subject': 'Video Moderator of {video_name} at event {event_name}',
+        'template': 'email/video_stream_moderator.html',
     },
 }

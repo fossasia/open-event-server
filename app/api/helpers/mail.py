@@ -7,11 +7,12 @@ from typing import Dict
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
-from app.api.helpers.db import save_to_db
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.models.event import Event
 from app.models.mail import Mail
 from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
@@ -447,5 +448,27 @@ def send_order_cancel_email(order):
             event_url=event_url,
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],
+        ),
+    )
+
+
+def send_email_to_moderator(video_stream_moderator, event):
+    action = MailType.VIDEO_MODERATOR_INVITE
+    mail = MAILS[action]
+    event = safe_query(
+        Event, 'id', video_stream_moderator.video_stream._event_id, 'event_id'
+    )
+    send_email(
+        to=video_stream_moderator.email,
+        action=action,
+        subject=mail['subject'].format(
+            video_name=video_stream_moderator.video_stream.name, event_name=event.name
+        ),
+        html=render_template(
+            mail['template'],
+            registration_url=make_frontend_url('/register'),
+            event_name=event.name,
+            video_stream_name=video_stream_moderator.video_stream.name,
+            user=video_stream_moderator.user,
         ),
     )

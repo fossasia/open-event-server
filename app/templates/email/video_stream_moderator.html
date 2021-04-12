@@ -1,0 +1,6 @@
+{{ _('Hi you have been added as a video moderator of ') }} {{ video_stream_name }}
+{{_(' in the event ') }} {{ event_name }}.
+{% if not user %}
+    {{ _('You need to register on the platform before being able to access') }}
+{{ _('to access the video stream.') }} <a href= {{ registration_url }} >{{ registration_url }}</a>
+{% endif %}
