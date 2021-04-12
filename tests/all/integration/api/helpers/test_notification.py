@@ -1,11 +1,8 @@
 import pytest
 
 from app.api.helpers.notification import (
-    send_notif_after_export,
-    send_notif_after_import,
     send_notif_event_role,
     send_notif_monthly_fee_payment,
-    send_notif_new_session_organizer,
     send_notif_session_state_change,
     send_notif_ticket_purchase_organizer,
 )
