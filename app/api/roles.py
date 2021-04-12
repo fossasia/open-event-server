@@ -8,6 +8,7 @@ from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
+from app.models.users_groups_role import UsersGroupsRoles
 
 
 class RoleList(ResourceList):
@@ -47,6 +48,17 @@ class RoleDetail(ResourceDetail):
 
             if users_events_role.role_id is not None:
                 view_kwargs['id'] = users_events_role.role_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('users_groups_roles_id') is not None:
+            users_groups_role = safe_query_kwargs(
+                UsersGroupsRoles,
+                view_kwargs,
+                'users_groups_roles_id',
+            )
+            if users_groups_role.role_id is not None:
+                view_kwargs['id'] = users_groups_role.role_id
             else:
                 view_kwargs['id'] = None
 
