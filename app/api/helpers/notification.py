@@ -1,3 +1,5 @@
+import logging
+
 from app.models import db
 from app.models.notification import (
     Notification,
@@ -7,6 +9,8 @@ from app.models.notification import (
 )
 from app.models.speaker import Speaker
 from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 
 def send_notification(notification_content: NotificationContent, user=None, users=None):
@@ -52,6 +56,12 @@ def notify_session_state_change(session, actor):
         target_action=session.state,
         actors=[NotificationActor(actor=actor)],
     )
+
+    if not users:
+        logger.warning(
+            'No speaker to send notification for state change of session %s', session
+        )
+        return
 
     send_notification(content, users=users)
 
@@ -104,7 +114,9 @@ def notify_ticket_purchase_attendee(order):
     send_notification(content, buyer)
 
     attendees = [
-        attendee.user for attendee in order.ticket_holders if attendee.user != buyer
+        attendee.user
+        for attendee in order.ticket_holders
+        if attendee.user and attendee.user != buyer
     ]
 
     if attendees:

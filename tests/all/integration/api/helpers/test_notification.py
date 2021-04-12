@@ -1,133 +1,124 @@
 import pytest
 
+from app.api.helpers.db import get_or_create
 from app.api.helpers.notification import (
-    send_notif_event_role,
-    send_notif_monthly_fee_payment,
-    send_notif_session_state_change,
-    send_notif_ticket_purchase_organizer,
+    notify_event_role_invitation,
+    notify_monthly_payment,
+    notify_new_session,
+    notify_session_state_change,
+    notify_ticket_purchase_attendee,
 )
-from app.models.notification import Notification
+from app.models.notification import Notification, NotificationType
+from app.models.role import Role
+from app.models.users_events_role import UsersEventsRoles
+from tests.factories.attendee import AttendeeOrderSubFactory
+from tests.factories.event_invoice import EventInvoiceSubFactory
 from tests.factories.order import OrderSubFactory
-from tests.factories.session import SessionFactory
+from tests.factories.role_invite import RoleInviteSubFactory
+from tests.factories.session import SessionSubFactory
+from tests.factories.speaker import SpeakerSubFactory
 from tests.factories.user import UserFactory
 
 link = 'https://test.link'
 
 
 @pytest.fixture
-def user(db):
-    return UserFactory()
-
-
-@pytest.fixture
 def session(db):
-    return SessionFactory()
+    session = SessionSubFactory()
+    session.creator = UserFactory()
+    create_owner(db, session.event)
+
+    return session
 
 
-def test_send_notif_new_session_organizer(user):
-    """Method to test new session notification"""
-    send_notif_new_session_organizer(user, 'Hobo Meet', link, 1)
+def create_owner(db, event):
+    role, _ = get_or_create(Role, name='owner', title_name='Owner')
+    UsersEventsRoles(user=UserFactory(), event=event, role=role)
+    db.session.commit()
+
+
+def test_notify_new_session_organizer(session):
+    notify_new_session(session)
+
     notification = Notification.query.first()
-    assert notification.title == 'New session proposal for Hobo Meet'
-    assert (
-        notification.message
-        == 'The event <strong>Hobo Meet</strong> has received a new session proposal.'
-    )
+    assert notification.user_id == session.event.owner.id
+    assert notification.content.type == NotificationType.NEW_SESSION
+    assert notification.content.target == session
+    assert notification.content.actors[0].actor == session.creator
 
 
-def test_send_notif_session_state_change(user):
-    """Method to test session accept reject notification"""
-    send_notif_session_state_change(
-        user,
-        'Homeless Therapy',
-        'accepted',
-        link,
-        1,
-    )
+def test_notify_session_state_change(db, session):
+    session.state == 'accepted'
+    session.speakers = [SpeakerSubFactory(email='test@example.org')]
+    user = UserFactory(_email='test@example.org')
+    db.session.commit()
+
+    notify_session_state_change(session, session.event.owner)
+
     notification = Notification.query.first()
-    assert notification.title == 'Session Homeless Therapy has been accepted'
-    assert (
-        notification.message
-        == 'The session <strong>Homeless Therapy</strong> has been <strong>accepted</strong> '
-        'by the Organizer.'
-    )
+    assert notification.user == user
+    assert notification.content.type == NotificationType.SESSION_STATE_CHANGE
+    assert notification.content.target == session
+    assert notification.content.target_action == 'accepted'
+    assert notification.content.actors[0].actor == session.event.owner
 
 
-def test_send_notif_after_import(user):
-    """Method to test notification after import"""
-    send_notif_after_import(
-        user,
-        event_name='Tooth Fairy Convention',
-        error_text='TOOTH_NOT_FOUND',
-    )
+def test_notify_monthly_fee_payment(db):
+    invoice = EventInvoiceSubFactory(user=UserFactory())
+    db.session.commit()
+    notify_monthly_payment(invoice)
+
     notification = Notification.query.first()
-    assert notification.title == 'Import of event Tooth Fairy Convention failed'
-    assert (
-        notification.message
-        == 'The following error occurred:<br><pre>TOOTH_NOT_FOUND</pre>'
-    )
+    assert notification.user == invoice.user
+    assert notification.content.type == NotificationType.MONTHLY_PAYMENT
+    assert notification.content.target == invoice
+    assert notification.content.actors == []
 
 
-def test_send_notif_after_export(user):
-    send_notif_after_export(user, 'Elf Gather', link, 'SLEIGH_BROKEN')
+def test_notify_monthly_fee_payment_follow_up(db):
+    invoice = EventInvoiceSubFactory(user=UserFactory())
+    db.session.commit()
+    notify_monthly_payment(invoice, follow_up=True)
+
     notification = Notification.query.first()
-    assert notification.title == 'Export of event Elf Gather failed'
-    assert (
-        notification.message
-        == 'The following error occurred:<br><pre>SLEIGH_BROKEN</pre>'
-    )
+    assert notification.user == invoice.user
+    assert notification.content.type == NotificationType.MONTHLY_PAYMENT_FOLLOWUP
+    assert notification.content.target == invoice
+    assert notification.content.actors == []
 
 
-def test_send_notif_monthly_fee_payment(user):
-    """Method to test monthly fee payment notification"""
-    send_notif_monthly_fee_payment(
-        user, 'Pizza Party', 'October', 563.65, 'Kite', link, 1
-    )
+def test_notify_event_role(db):
+    invite = RoleInviteSubFactory()
+    role, _ = get_or_create(Role, name='owner', title_name='Owner')
+    UsersEventsRoles(user=UserFactory(), event=invite.event, role=role)
+    user = UserFactory()
+    db.session.commit()
+    notify_event_role_invitation(invite, user, invite.event.owner)
+
     notification = Notification.query.first()
-    assert notification.title == 'October - Monthly service fee invoice for Pizza Party'
-    assert (
-        notification.message
-        == 'The total service fee for the ticket sales of Pizza Party in the '
-        'month of October is 563.65.<br/> That payment for the same has to '
-        'be made in two weeks.<br><br><em>Thank you for using Kite.</em>'
-    )
+    assert notification.user == user
+    assert notification.content.type == NotificationType.EVENT_ROLE
+    assert notification.content.target == invite
+    assert notification.content.actors[0].actor == invite.event.owner
 
 
-def test_send_followup_notif_monthly_fee_payment(user):
-    send_notif_monthly_fee_payment(
-        user, 'Champagne Showers', 'November', 4532.99, 'RedFoo', link, 1, follow_up=True
-    )
-    notification = Notification.query.first()
-    assert (
-        notification.title
-        == 'Past Due: November - Monthly service fee invoice for Champagne Showers'
-    )
-    assert (
-        notification.message
-        == 'The total service fee for the ticket sales of Champagne Showers '
-        'in the month of November is 4532.99.<br/> That payment for the '
-        'same is past the due date.<br><br><em>Thank you for using '
-        'RedFoo.</em>'
-    )
+def test_notify_ticket_purchase_atttendee(db):
+    order = OrderSubFactory(user=UserFactory())
+    attendee = AttendeeOrderSubFactory(order=order, email='test@example.org')
+    UserFactory(_email='test@example.org')
+    db.session.commit()
 
+    notify_ticket_purchase_attendee(order)
+    notifications = Notification.query.order_by(Notification.id).all()
 
-def test_send_notif_event_role(user):
-    """Method to test event role invite notification"""
-    send_notif_event_role(user, 'Dinosaur', 'Mass Extinction', link, 1)
-    notification = Notification.query.first()
-    assert notification.title == 'Invitation to be Dinosaur at Mass Extinction'
-    assert (
-        notification.message
-        == "You've been invited to be one of the <strong>Dinosaurs</strong> at <strong>Mass Extinction</strong>."
-    )
+    notification_buyer = notifications[0]
+    assert notification_buyer.user == order.user
+    assert notification_buyer.content.type == NotificationType.TICKET_PURCHASED
+    assert notification_buyer.content.target == order
+    assert notification_buyer.content.actors[0].actor == order.user
 
-
-def test_send_notif_ticket_purchase_organizer(user):
-    """Method to test order invoice notification after purchase"""
-    order = OrderSubFactory(identifier='sc4r4fde4', event__name='Poodle')
-    send_notif_ticket_purchase_organizer(user, order)
-    notification = Notification.query.first()
-    assert (
-        f'New ticket purchase for Poodle : ({order.invoice_number})' == notification.title
-    )
-    assert notification.message == 'The order has been processed successfully.'
+    notification = notifications[1]
+    assert notification.user == attendee.user
+    assert notification.content.type == NotificationType.TICKET_PURCHASED_ATTENDEE
+    assert notification.content.target == order
+    assert notification.content.actors[0].actor == order.user
