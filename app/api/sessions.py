@@ -15,7 +15,7 @@ from app.api.helpers.custom_forms import validate_custom_form_constraints_reques
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
-from app.api.helpers.notification import notify_session_state_change
+from app.api.helpers.notification import notify_new_session, notify_session_state_change
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.system_mails import MAILS, MailType
@@ -76,7 +76,7 @@ class SessionListPost(ResourceList):
             owner = session.event.get_owner()
             owner_email = owner.email
             send_email_new_session(owner_email, session)  # TODO: Send to all organizers
-            notify_session(session)
+            notify_new_session(session)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
