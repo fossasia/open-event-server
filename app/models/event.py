@@ -456,6 +456,11 @@ class Event(SoftDeletionModel):
             return stream
         return None
 
+    @property
+    def notify_staff(self):
+        """Who receive notifications about event"""
+        return self.organizers + [self.owner]
+
 
 @event.listens_for(Event, 'after_update')
 @event.listens_for(Event, 'after_insert')

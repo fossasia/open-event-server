@@ -449,3 +449,58 @@ def send_order_cancel_email(order):
             app_name=get_settings()['app_name'],
         ),
     )
+
+
+def send_password_change_email(user):
+    action = MailType.PASSWORD_CHANGE
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(mail['template']),
+    )
+
+
+def send_password_reset_email(user):
+    link = make_frontend_url('/reset-password', {'token': user.reset_password})
+    action = (
+        MailType.PASSWORD_RESET_AND_VERIFY
+        if user.was_registered_with_order
+        else MailType.PASSWORD_RESET
+    )
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(
+            mail['template'],
+            link=link,
+            settings=get_settings(),
+            token=user.reset_password,
+        ),
+    )
+
+
+def send_user_register_email(user):
+    s = get_serializer()
+    hash = str(
+        base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
+        'utf-8',
+    )
+    link = make_frontend_url('/verify', {'token': hash})
+    settings = get_settings()
+    action = MailType.USER_REGISTER
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=settings['app_name']),
+        html=render_template(
+            mail['template'],
+            email=user.email,
+            link=link,
+            settings=get_settings(),
+        ),
+    )

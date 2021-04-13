@@ -127,10 +127,11 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
+from app.api.notification_settings import (
+    NotificationSettingsDetail,
+    NotificationSettingsList,
+)
 from app.api.notifications import (
-    NotificationActionDetail,
-    NotificationActionList,
-    NotificationActionRelationship,
     NotificationDetail,
     NotificationList,
     NotificationListAdmin,
@@ -411,23 +412,6 @@ api.route(
     '/notifications/<int:id>/relationships/actions',
 )
 
-# notification actions
-api.route(
-    NotificationActionList,
-    'notification_actions_list',
-    '/notifications/<int:notification_id>/notification-actions',
-)
-api.route(
-    NotificationActionDetail,
-    'notification_action_detail',
-    '/notification-actions/<int:id>',
-)
-api.route(
-    NotificationActionRelationship,
-    'notification_actions_notification',
-    '/notification-actions/<int:id>/relationships/notification',
-)
-
 # email_notifications
 api.route(
     EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications'
@@ -454,6 +438,16 @@ api.route(
 # message_settings
 api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
 api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
+
+# notification settings
+api.route(
+    NotificationSettingsList, 'notification_settings_list', '/notification-settings'
+)
+api.route(
+    NotificationSettingsDetail,
+    'notification_setting_detail',
+    '/notification-settings/<int:id>',
+)
 
 # event_image_sizes
 api.route(

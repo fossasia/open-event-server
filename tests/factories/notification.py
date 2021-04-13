@@ -1,17 +1,36 @@
 import factory
 
-from app.models.notification import Notification
+from app.models.notification import Notification, NotificationActor, NotificationContent
 from tests.factories import common
 from tests.factories.base import BaseFactory
+from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
 
 
-class NotificationFactory(BaseFactory):
+class NotificationFactoryBase(BaseFactory):
     class Meta:
         model = Notification
 
-    user = factory.RelatedFactory(UserFactory)
-    title = common.string_
-    message = common.string_
     is_read = False
-    user_id = 2
+
+
+class NotificationContentSubFactory(BaseFactory):
+    class Meta:
+        model = NotificationContent
+
+    type = common.string_
+    target = factory.SubFactory(EventFactoryBasic)
+
+
+class NotificationActorSubFactory(BaseFactory):
+    class Meta:
+        model = NotificationActor
+
+    actor = factory.SubFactory(UserFactory)
+    content = factory.SubFactory(NotificationContentSubFactory)
+
+
+class NotificationSubFactory(NotificationFactoryBase):
+
+    user = factory.SubFactory(UserFactory)
+    content = factory.SubFactory(NotificationContentSubFactory)
