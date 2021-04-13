@@ -7,6 +7,7 @@ from app.models.notification import (
     NotificationContent,
     NotificationType,
 )
+from app.models.notification_setting import NotificationSettings
 from app.models.speaker import Speaker
 from app.models.user import User
 
@@ -14,6 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 def send_notification(notification_content: NotificationContent, user=None, users=None):
+    if not NotificationSettings.is_enabled(notification_content.type):
+        logger.info(
+            'Notification of type %s are disabled, hence skipping',
+            notification_content.type,
+        )
+        return
     users = users or []
     if user:
         users.append(user)

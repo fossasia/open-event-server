@@ -127,6 +127,10 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
+from app.api.notification_settings import (
+    NotificationSettingsDetail,
+    NotificationSettingsList,
+)
 from app.api.notifications import (
     NotificationDetail,
     NotificationList,
@@ -434,6 +438,16 @@ api.route(
 # message_settings
 api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
 api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
+
+# notification settings
+api.route(
+    NotificationSettingsList, 'notification_settings_list', '/notification-settings'
+)
+api.route(
+    NotificationSettingsDetail,
+    'notification_setting_detail',
+    '/notification-settings/<int:id>',
+)
 
 # event_image_sizes
 api.route(

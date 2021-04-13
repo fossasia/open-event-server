@@ -16,6 +16,19 @@ class NotificationType:
     MONTHLY_PAYMENT = 'monthly_payment'
     MONTHLY_PAYMENT_FOLLOWUP = 'monthly_payment'
 
+    @staticmethod
+    def entries():
+        # Extract all values of defined entries after filtering internal keys
+        return list(
+            map(
+                lambda entry: entry[1],
+                filter(
+                    lambda entry: not entry[0].startswith('__') and type(entry[1]) == str,
+                    NotificationType.__dict__.items(),
+                ),
+            )
+        )
+
 
 @generic_repr
 class NotificationActor(db.Model, Timestamp):
