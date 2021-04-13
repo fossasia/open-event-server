@@ -30,6 +30,8 @@ from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 
 # System-wide
+from app.models.users_groups_role import UsersGroupsRoles
+
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
 
@@ -450,6 +452,11 @@ class User(SoftDeletionModel):
     @property
     def rocket_chat_password(self):
         return get_serializer().dumps(f'rocket_chat_user_{self.id}')
+
+    @property
+    def has_group_role(self):
+        group = UsersGroupsRoles.query.filter_by(user_id=self.id)
+        return group is not None
 
     @property
     def is_rocket_chat_registered(self) -> bool:
