@@ -17,32 +17,6 @@ class NotificationType:
     MONTHLY_PAYMENT_FOLLOWUP = 'monthly_payment'
 
 
-class NotificationAction(db.Model):
-    """
-    Model for storing user notification actions.
-    """
-
-    __tablename__ = 'notification_actions'
-
-    id = db.Column(db.Integer, primary_key=True)
-
-    action_type = db.Column(db.String)
-    subject = db.Column(db.String)
-    subject_id = db.Column(
-        db.String
-    )  # Contains the ID of the related subject, eg. session_id in case of new session.
-    link = db.Column(
-        db.String
-    )  # Contains the link if required to take action. Null in other cases.
-
-    notification_id = db.Column(
-        db.Integer, db.ForeignKey('notifications.id', ondelete='CASCADE')
-    )
-    notification = db.relationship(
-        'Notification', backref='actions', foreign_keys=[notification_id]
-    )
-
-
 @generic_repr
 class NotificationActor(db.Model, Timestamp):
 

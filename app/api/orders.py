@@ -455,7 +455,7 @@ class OrderDetail(ResourceDetail):
 
         if order.status == 'cancelled':
             send_order_cancel_email(order)
-            notify_ticket_cancel(order, request.user)
+            notify_ticket_cancel(order, current_user)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)

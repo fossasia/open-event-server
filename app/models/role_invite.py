@@ -2,7 +2,7 @@ import random
 from datetime import datetime, timedelta
 
 import pytz
-from flask.globals import request
+from flask_jwt_extended import current_user
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
@@ -64,7 +64,7 @@ class RoleInvite(db.Model):
 
         send_email_role_invite(self.email, self.role_name, event.name, link)
         if user:
-            notify_event_role_invitation(self, user, request.user)
+            notify_event_role_invitation(self, user, current_user)
 
     def __repr__(self):
         return '<RoleInvite {!r}:{!r}:{!r}>'.format(

@@ -377,7 +377,7 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
     if owner := session.event.get_owner():
         send_email_session_state_change(owner.email, session, mail_override)
 
-    notify_session_state_change(session, request.user)
+    notify_session_state_change(session, current_user)
 
 
 @sessions_blueprint.route('/<int:id>/notify', methods=['POST'])

@@ -128,9 +128,6 @@ from app.api.microlocations import (
     MicrolocationRelationshipRequired,
 )
 from app.api.notifications import (
-    NotificationActionDetail,
-    NotificationActionList,
-    NotificationActionRelationship,
     NotificationDetail,
     NotificationList,
     NotificationListAdmin,
@@ -409,23 +406,6 @@ api.route(
     NotificationRelationship,
     'notification_actions',
     '/notifications/<int:id>/relationships/actions',
-)
-
-# notification actions
-api.route(
-    NotificationActionList,
-    'notification_actions_list',
-    '/notifications/<int:notification_id>/notification-actions',
-)
-api.route(
-    NotificationActionDetail,
-    'notification_action_detail',
-    '/notification-actions/<int:id>',
-)
-api.route(
-    NotificationActionRelationship,
-    'notification_actions_notification',
-    '/notification-actions/<int:id>/relationships/notification',
 )
 
 # email_notifications
