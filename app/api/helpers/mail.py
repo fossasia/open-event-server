@@ -12,6 +12,7 @@ from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.models.event import Event
 from app.models.mail import Mail
 from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
@@ -501,6 +502,27 @@ def send_user_register_email(user):
             mail['template'],
             email=user.email,
             link=link,
+            settings=get_settings(),
+        ),
+    )
+
+
+def send_email_to_moderator(video_stream_moderator):
+    action = MailType.VIDEO_MODERATOR_INVITE
+    mail = MAILS[action]
+    event = Event.query.get(video_stream_moderator.video_stream._event_id)
+    send_email(
+        to=video_stream_moderator.email,
+        action=action,
+        subject=mail['subject'].format(
+            video_name=video_stream_moderator.video_stream.name, event_name=event.name
+        ),
+        html=render_template(
+            mail['template'],
+            registration_url=make_frontend_url('/register'),
+            event_name=event.name,
+            video_stream_name=video_stream_moderator.video_stream.name,
+            user=video_stream_moderator.user,
             settings=get_settings(),
         ),
     )
