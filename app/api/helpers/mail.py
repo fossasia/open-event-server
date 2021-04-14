@@ -229,6 +229,24 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
+def send_email_group_role_invite(email, role_name, group_name, link):
+    """email for role invite"""
+    action = MailType.GROUP_ROLE
+    mail = MAILS[action]
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(role=role_name, group=group_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            role=role_name,
+            group=group_name,
+            link=link,
+        ),
+    )
+
+
 def send_email_for_monthly_fee_payment(
     user, event_name, previous_month, amount, app_name, link, follow_up=False
 ):

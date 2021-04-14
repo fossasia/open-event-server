@@ -13,6 +13,7 @@ from app.api.schema.groups import GroupSchema
 from app.models import db
 from app.models.event import Event
 from app.models.group import Group
+from app.models.users_groups_role import UsersGroupsRoles
 
 
 class GroupListPost(ResourceList):
@@ -92,10 +93,15 @@ class GroupDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            if event.group_id:
-                view_kwargs['id'] = event.group_id
-            else:
-                view_kwargs['id'] = None
+            view_kwargs['id'] = event.group_id
+
+        if view_kwargs.get('users_groups_roles_id') is not None:
+            users_groups_role = safe_query_kwargs(
+                UsersGroupsRoles,
+                view_kwargs,
+                'users_groups_roles_id',
+            )
+            view_kwargs['id'] = users_groups_role.role_id
 
     def before_update_object(self, group, data, view_kwargs):
         """

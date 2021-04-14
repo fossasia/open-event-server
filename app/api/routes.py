@@ -257,6 +257,7 @@ from app.api.users_events_roles import (
 from app.api.users_groups_roles import (
     UsersGroupsRolesDetail,
     UsersGroupsRolesList,
+    UsersGroupsRolesListPost,
     UsersGroupsRolesRelationship,
 )
 from app.api.video_channel import VideoChannelDetail, VideoChannelList
@@ -293,6 +294,7 @@ api.route(
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
+    '/users-groups-roles/<int:users_groups_roles_id>/user',
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
 )
 api.route(
@@ -596,6 +598,7 @@ api.route(
 )
 
 # users_groups_roles
+api.route(UsersGroupsRolesListPost, 'users_groups_roles_list_post', '/users-groups-roles')
 api.route(
     UsersGroupsRolesDetail, 'users_groups_roles_detail', '/users-groups-roles/<int:id>'
 )
@@ -611,7 +614,7 @@ api.route(
 )
 api.route(
     UsersGroupsRolesRelationship,
-    'users_groups_roles_event',
+    'users_groups_roles_group',
     '/users-groups-roles/<int:id>/relationships/group',
 )
 api.route(

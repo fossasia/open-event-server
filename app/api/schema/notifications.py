@@ -1,7 +1,7 @@
 from marshmallow import Schema as NormalSchema
 from marshmallow import post_dump
-from marshmallow_jsonapi import Schema, fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.event_invoices import EventInvoiceSchema

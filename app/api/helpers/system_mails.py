@@ -13,6 +13,7 @@ class MailType:
     PASSWORD_CHANGE = 'password_change'
     PASSWORD_RESET_AND_VERIFY = 'password_reset_verify'
     EVENT_ROLE = 'event_role'
+    GROUP_ROLE = 'group_role'
     SESSION_STATE_CHANGE = 'session_state_change'
     TICKET_PURCHASED = 'ticket_purchased'
     TICKET_PURCHASED_ATTENDEE = 'ticket_purchased_attendee'
@@ -153,8 +154,13 @@ MAILS = {
     },
     MailType.EVENT_ROLE: {
         'recipient': 'User',
-        'subject': 'Invitation to be {role} at {event}',
+        'subject': 'Invitation to be {role} at Event: {event}',
         'template': 'email/event_role.html',
+    },
+    MailType.GROUP_ROLE: {
+        'recipient': 'User',
+        'subject': 'Invitation to be {role} at Group: {group}',
+        'template': 'email/group_role.html',
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
