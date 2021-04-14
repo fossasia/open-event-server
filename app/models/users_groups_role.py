@@ -6,8 +6,6 @@ from flask_jwt_extended import current_user
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.mail import send_email_group_role_invite
 from app.models import db
-from app.models.group import Group
-from app.models.role import Role
 from app.settings import get_settings
 
 
@@ -20,7 +18,10 @@ class UsersGroupsRoles(db.Model):
     __tablename__ = 'users_groups_roles'
     __table_args__ = (
         db.UniqueConstraint(
-            'email', 'user_id', 'group_id', 'role_id', name='uq_uer_user_group_role'
+            'user_id', 'group_id', 'role_id', name='uq_uer_user_group_role_1'
+        ),
+        db.UniqueConstraint(
+            'email', 'group_id', 'role_id', name='uq_uer_user_group_role_2'
         ),
     )
 
@@ -53,8 +54,8 @@ class UsersGroupsRoles(db.Model):
         """
         Send mail to invitee
         """
-        group = Group.query.filter_by(id=self.group_id).first()
-        role = Role.query.filter_by(id=self.role_id).first()
+        group = self.group
+        role = self.role
         frontend_url = get_settings()['frontend_url']
         link = f"{frontend_url}/users-groups-roles?token={self.token}"
         if group.user != current_user:

@@ -1,10 +1,10 @@
 import logging
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import current_user
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.errors import NotFoundError, UnprocessableEntityError
-from app.models.group import Group
+from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.models.role import Role
 from app.models.user import User
 from app.models.users_groups_role import UsersGroupsRoles
@@ -22,29 +22,23 @@ def accept_invite():
 
     users_groups_role = UsersGroupsRoles.query.filter_by(token=token).first()
     if not users_groups_role:
-        raise NotFoundError({'source': ''}, 'Users Group Role Not Found')
+        raise NotFoundError(
+            {'pointer': 'users_groups_role'}, 'Users Group Role Not Found'
+        )
     if users_groups_role.accepted:
-        raise UnprocessableEntityError(
-            {'parameter': ''}, 'Invitation is already accepted'
+        raise ConflictError(
+            {'pointer': 'users_groups_role'}, 'Invitation is already accepted'
         )
 
     user = User.query.filter_by(email=users_groups_role.email).first()
     if not user:
         raise NotFoundError(
-            {'source': ''}, 'User corresponding to Users Group Role not Found'
+            {'pointer': 'user'}, 'User corresponding to Users Group Role not Found'
         )
+    if user != current_user:
+        raise ForbiddenError({'pointer': 'user'}, 'current user is not invitee')
 
     role = Role.query.filter_by(id=users_groups_role.role_id).first()
-    if not role:
-        raise NotFoundError(
-            {'source': ''}, 'Role corresponding to Users Group Role not Found'
-        )
-
-    group = Group.query.filter_by(id=users_groups_role.group_id).first()
-    if not group:
-        raise NotFoundError(
-            {'source': ''}, 'Group corresponding to Users Group Role not Found'
-        )
 
     if not users_groups_role.user:
         users_groups_role.user = user
@@ -59,7 +53,7 @@ def accept_invite():
         {
             "email": user.email,
             "group": users_groups_role.group_id,
-            "name": user.fullname if user.fullname else None,
+            "name": user.fullname,
             "role": role.name,
         }
     )

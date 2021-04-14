@@ -154,12 +154,12 @@ MAILS = {
     },
     MailType.EVENT_ROLE: {
         'recipient': 'User',
-        'subject': 'Invitation to be {role} at {event}',
+        'subject': 'Invitation to be {role} at Event: {event}',
         'template': 'email/event_role.html',
     },
     MailType.GROUP_ROLE: {
         'recipient': 'User',
-        'subject': 'Invitation to be {role} at {group}',
+        'subject': 'Invitation to be {role} at Group: {group}',
         'template': 'email/group_role.html',
     },
     MailType.TICKET_PURCHASED: {

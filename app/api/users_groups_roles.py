@@ -112,7 +112,7 @@ class UsersGroupsRolesDetail(ResourceDetail):
                     'You cannot remove the owner of the event.',
                 )
 
-    methods = ['GET', 'PATCH', 'DELETE']
+    methods = ['GET', 'DELETE']
     decorators = (
         api.has_permission('is_coorganizer', fetch='group_id', model=UsersGroupsRoles),
     )
