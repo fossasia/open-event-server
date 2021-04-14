@@ -18,10 +18,10 @@ class UsersGroupsRoles(db.Model):
     __tablename__ = 'users_groups_roles'
     __table_args__ = (
         db.UniqueConstraint(
-            'user_id', 'group_id', 'role_id', name='uq_uer_user_group_role_1'
+            'user_id', 'group_id', 'role_id', name='uq_ugr_user_group_role'
         ),
         db.UniqueConstraint(
-            'email', 'group_id', 'role_id', name='uq_uer_user_group_role_2'
+            'email', 'group_id', 'role_id', name='uq_ugr_email_group_role'
         ),
     )
 

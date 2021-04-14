@@ -5,7 +5,6 @@ from flask_jwt_extended import current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
-from app.models.role import Role
 from app.models.user import User
 from app.models.users_groups_role import UsersGroupsRoles
 
@@ -38,7 +37,7 @@ def accept_invite():
     if user != current_user:
         raise ForbiddenError({'pointer': 'user'}, 'current user is not invitee')
 
-    role = Role.query.filter_by(id=users_groups_role.role_id).first()
+    role = users_groups_role.role
 
     if not users_groups_role.user:
         users_groups_role.user = user
