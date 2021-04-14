@@ -7,7 +7,7 @@ from typing import Dict
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import save_to_db
 from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS, MailType
@@ -510,9 +510,7 @@ def send_user_register_email(user):
 def send_email_to_moderator(video_stream_moderator):
     action = MailType.VIDEO_MODERATOR_INVITE
     mail = MAILS[action]
-    event = safe_query(
-        Event, 'id', video_stream_moderator.video_stream._event_id, 'event_id'
-    )
+    event = Event.query.get(video_stream_moderator.video_stream._event_id)
     send_email(
         to=video_stream_moderator.email,
         action=action,
@@ -525,5 +523,6 @@ def send_email_to_moderator(video_stream_moderator):
             event_name=event.name,
             video_stream_name=video_stream_moderator.video_stream.name,
             user=video_stream_moderator.user,
+            settings=get_settings(),
         ),
     )

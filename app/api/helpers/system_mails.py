@@ -231,7 +231,7 @@ MAILS = {
     },
     MailType.VIDEO_MODERATOR_INVITE: {
         'recipient': 'User',
-        'subject': 'Video Moderator of {video_name} at event {event_name}',
+        'subject': 'Video Moderator of video {video_name} at event {event_name}',
         'template': 'email/video_stream_moderator.html',
     },
 }
