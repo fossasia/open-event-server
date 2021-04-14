@@ -6,7 +6,7 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import Blueprint, jsonify, make_response, render_template, request, send_file
+from flask import Blueprint, jsonify, make_response, request, send_file
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -30,9 +30,11 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.mail import send_email, send_email_confirmation
-from app.api.helpers.notification import send_notification_with_action
-from app.api.helpers.system_mails import MAILS, MailType
+from app.api.helpers.mail import (
+    send_email_confirmation,
+    send_password_change_email,
+    send_password_reset_email,
+)
 from app.api.helpers.third_party_auth import (
     FbOAuth,
     GoogleOAuth,
@@ -42,9 +44,7 @@ from app.api.helpers.third_party_auth import (
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
-from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
@@ -344,31 +344,7 @@ def reset_password_post():
     except NoResultFound:
         logger.info('Tried to reset password not existing email %s', email)
     else:
-        link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        if user.was_registered_with_order:
-            action = MailType.PASSWORD_RESET_AND_VERIFY
-            mail = MAILS[action]
-            send_email(
-                to=user.email,
-                action=action,
-                subject=mail['subject'].format(app_name=get_settings()['app_name']),
-                html=render_template(mail['template'], link=link),
-            )
-
-        else:
-            action = MailType.PASSWORD_RESET
-            mail = MAILS[action]
-            send_email(
-                to=user.email,
-                action=action,
-                subject=mail['subject'].format(app_name=get_settings()['app_name']),
-                html=render_template(
-                    mail['template'],
-                    link=link,
-                    settings=get_settings(),
-                    token=user.reset_password,
-                ),
-            )
+        send_password_reset_email(user)
 
     return make_response(
         jsonify(
@@ -425,17 +401,7 @@ def change_password():
                 )
             user.password = new_password
             save_to_db(user)
-            action = MailType.PASSWORD_CHANGE
-            mail = MAILS[action]
-            send_email(
-                to=user.email,
-                action=action,
-                subject=mail['subject'].format(app_name=get_settings()['app_name']),
-                html=render_template(mail['template']),
-            )
-            send_notification_with_action(
-                user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']
-            )
+            send_password_change_email(user)
         else:
             raise BadRequestError(
                 {'source': ''}, 'Wrong Password. Please enter correct current password.'

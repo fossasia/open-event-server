@@ -23,6 +23,8 @@ from app.models.event_type import EventType
 from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
+from app.models.notification import NotificationType
+from app.models.notification_setting import NotificationSettings
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -336,6 +338,10 @@ def create_user_permissions():
 def create_admin_message_settings():
     for mail in MailType.entries():
         get_or_create(MessageSettings, action=mail, defaults=dict(enabled=True))
+    for notification in NotificationType.entries():
+        get_or_create(
+            NotificationSettings, type=notification, defaults=dict(enabled=True)
+        )
 
 
 def create_custom_placeholders():
