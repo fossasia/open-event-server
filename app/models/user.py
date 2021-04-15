@@ -204,7 +204,7 @@ class User(SoftDeletionModel):
         ugr = UsersGroupsRoles.query.filter_by(user=self, role=role, accepted=True)
         if event_id:
             uer = uer.filter_by(event_id=event_id)
-            event = Event.query.filter_by(id=event_id).first()
+            event = Event.query.get(event_id)
             ugr = ugr.filter_by(group=event.group)
         return bool(uer.first() or ugr.first())
 

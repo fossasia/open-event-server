@@ -43,7 +43,9 @@ def test_group_role_access(app, db, user, jwt):
 
     group = GroupSubFactory(user=user)
     role, _ = get_or_create(Role, name='organizer', title_name='Organizer')
-    ugr = UsersGroupsRoles(email=user.email, user=user, group=group, role=role)
+    ugr = UsersGroupsRoles(
+        email=user.email, user=user, group=group, role=role, accepted=True
+    )
     event.group_id = group.id
     db.session.commit()
 
