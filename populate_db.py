@@ -414,7 +414,7 @@ def populate():
     get_or_create(
         VideoChannel,
         provider='3cx',
-        name='3cx',
+        name='3CX',
         defaults={'url': 'https://www.3cx.com/'},
     )
 
