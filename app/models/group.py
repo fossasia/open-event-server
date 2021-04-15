@@ -17,3 +17,4 @@ class Group(SoftDeletionModel):
         db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
     )
     user = db.relationship('User', backref='groups')
+    roles = db.relationship("UsersGroupsRoles", backref="group")
