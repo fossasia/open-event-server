@@ -411,6 +411,12 @@ def populate():
         name='Vimeo',
         defaults={'url': 'https://vimeo.com', 'api_url': 'https://api.vimeo.com'},
     )
+    get_or_create(
+        VideoChannel,
+        provider='3cx',
+        name='3CX',
+        defaults={'url': 'https://www.3cx.com/'},
+    )
 
     db.session.commit()
 
