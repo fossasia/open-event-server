@@ -12,6 +12,7 @@ from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
+from app.models.event import Event
 from app.models.mail import Mail
 from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
@@ -223,6 +224,24 @@ def send_email_role_invite(email, role_name, event_name, link):
             email=email,
             role=role_name,
             event=event_name,
+            link=link,
+        ),
+    )
+
+
+def send_email_group_role_invite(email, role_name, group_name, link):
+    """email for role invite"""
+    action = MailType.GROUP_ROLE
+    mail = MAILS[action]
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(role=role_name, group=group_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            role=role_name,
+            group=group_name,
             link=link,
         ),
     )
@@ -447,5 +466,81 @@ def send_order_cancel_email(order):
             event_url=event_url,
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],
+        ),
+    )
+
+
+def send_password_change_email(user):
+    action = MailType.PASSWORD_CHANGE
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(mail['template']),
+    )
+
+
+def send_password_reset_email(user):
+    link = make_frontend_url('/reset-password', {'token': user.reset_password})
+    action = (
+        MailType.PASSWORD_RESET_AND_VERIFY
+        if user.was_registered_with_order
+        else MailType.PASSWORD_RESET
+    )
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(
+            mail['template'],
+            link=link,
+            settings=get_settings(),
+            token=user.reset_password,
+        ),
+    )
+
+
+def send_user_register_email(user):
+    s = get_serializer()
+    hash = str(
+        base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
+        'utf-8',
+    )
+    link = make_frontend_url('/verify', {'token': hash})
+    settings = get_settings()
+    action = MailType.USER_REGISTER
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=settings['app_name']),
+        html=render_template(
+            mail['template'],
+            email=user.email,
+            link=link,
+            settings=get_settings(),
+        ),
+    )
+
+
+def send_email_to_moderator(video_stream_moderator):
+    action = MailType.VIDEO_MODERATOR_INVITE
+    mail = MAILS[action]
+    event = Event.query.get(video_stream_moderator.video_stream._event_id)
+    send_email(
+        to=video_stream_moderator.email,
+        action=action,
+        subject=mail['subject'].format(
+            video_name=video_stream_moderator.video_stream.name, event_name=event.name
+        ),
+        html=render_template(
+            mail['template'],
+            registration_url=make_frontend_url('/register'),
+            event_name=event.name,
+            video_stream_name=video_stream_moderator.video_stream.name,
+            user=video_stream_moderator.user,
+            settings=get_settings(),
         ),
     )

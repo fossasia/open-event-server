@@ -23,7 +23,7 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_order_cancel_email
-from app.api.helpers.notification import send_notif_ticket_cancel
+from app.api.helpers.notification import notify_ticket_cancel
 from app.api.helpers.order import (
     create_onsite_attendees_for_order,
     delete_related_attendees_for_order,
@@ -455,7 +455,7 @@ class OrderDetail(ResourceDetail):
 
         if order.status == 'cancelled':
             send_order_cancel_email(order)
-            send_notif_ticket_cancel(order)
+            notify_ticket_cancel(order, current_user)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)

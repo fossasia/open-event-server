@@ -127,10 +127,11 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
+from app.api.notification_settings import (
+    NotificationSettingsDetail,
+    NotificationSettingsList,
+)
 from app.api.notifications import (
-    NotificationActionDetail,
-    NotificationActionList,
-    NotificationActionRelationship,
     NotificationDetail,
     NotificationList,
     NotificationListAdmin,
@@ -256,6 +257,7 @@ from app.api.users_events_roles import (
 from app.api.users_groups_roles import (
     UsersGroupsRolesDetail,
     UsersGroupsRolesList,
+    UsersGroupsRolesListPost,
     UsersGroupsRolesRelationship,
 )
 from app.api.video_channel import VideoChannelDetail, VideoChannelList
@@ -292,6 +294,7 @@ api.route(
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
+    '/users-groups-roles/<int:users_groups_roles_id>/user',
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
 )
 api.route(
@@ -411,23 +414,6 @@ api.route(
     '/notifications/<int:id>/relationships/actions',
 )
 
-# notification actions
-api.route(
-    NotificationActionList,
-    'notification_actions_list',
-    '/notifications/<int:notification_id>/notification-actions',
-)
-api.route(
-    NotificationActionDetail,
-    'notification_action_detail',
-    '/notification-actions/<int:id>',
-)
-api.route(
-    NotificationActionRelationship,
-    'notification_actions_notification',
-    '/notification-actions/<int:id>/relationships/notification',
-)
-
 # email_notifications
 api.route(
     EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications'
@@ -454,6 +440,16 @@ api.route(
 # message_settings
 api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
 api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
+
+# notification settings
+api.route(
+    NotificationSettingsList, 'notification_settings_list', '/notification-settings'
+)
+api.route(
+    NotificationSettingsDetail,
+    'notification_setting_detail',
+    '/notification-settings/<int:id>',
+)
 
 # event_image_sizes
 api.route(
@@ -602,6 +598,7 @@ api.route(
 )
 
 # users_groups_roles
+api.route(UsersGroupsRolesListPost, 'users_groups_roles_list_post', '/users-groups-roles')
 api.route(
     UsersGroupsRolesDetail, 'users_groups_roles_detail', '/users-groups-roles/<int:id>'
 )
@@ -617,7 +614,7 @@ api.route(
 )
 api.route(
     UsersGroupsRolesRelationship,
-    'users_groups_roles_event',
+    'users_groups_roles_group',
     '/users-groups-roles/<int:id>/relationships/group',
 )
 api.route(

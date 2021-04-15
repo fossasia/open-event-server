@@ -18,6 +18,7 @@ from app.api.helpers.utilities import get_serializer
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
+from app.models.event import Event
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -30,8 +31,6 @@ from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 
 # System-wide
-from app.models.users_groups_role import UsersGroupsRoles
-
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
 
@@ -198,11 +197,16 @@ class User(SoftDeletionModel):
         """
         Checks if a user has a particular Role at an Event.
         """
+        from app.models.users_groups_role import UsersGroupsRoles
+
         role = Role.query.filter_by(name=role_name).first()
         uer = UER.query.filter_by(user=self, role=role)
+        ugr = UsersGroupsRoles.query.filter_by(user=self, role=role, accepted=True)
         if event_id:
             uer = uer.filter_by(event_id=event_id)
-        return bool(uer.first())
+            event = Event.query.filter_by(id=event_id).first()
+            ugr = ugr.filter_by(group=event.group)
+        return bool(uer.first() or ugr.first())
 
     def is_owner(self, event_id):
         return self._is_role(Role.OWNER, event_id)
@@ -452,11 +456,6 @@ class User(SoftDeletionModel):
     @property
     def rocket_chat_password(self):
         return get_serializer().dumps(f'rocket_chat_user_{self.id}')
-
-    @property
-    def has_group_role(self):
-        group = UsersGroupsRoles.query.filter_by(user_id=self.id)
-        return group is not None
 
     @property
     def is_rocket_chat_registered(self) -> bool:

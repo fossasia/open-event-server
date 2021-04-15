@@ -1,5 +1,5 @@
-from marshmallow_jsonapi import Schema, fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 
@@ -20,21 +20,24 @@ class UsersGroupsRolesSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
+    email = fields.Email(required=True)
+    accepted = fields.Bool(dump_only=True)
 
     group = Relationship(
         self_view='v1.users_groups_roles_group',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_detail',
+        related_view='v1.group_detail',
         related_view_kwargs={'users_groups_roles_id': '<id>'},
         schema='GroupSchema',
         type_='group',
     )
 
     user = Relationship(
+        dump_only=True,
         self_view='v1.users_groups_roles_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
-        related_view_kwargs={'users_events_roles_id': '<id>'},
+        related_view_kwargs={'users_groups_roles_id': '<id>'},
         schema='UserSchemaPublic',
         type_="user",
     )

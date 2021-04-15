@@ -13,6 +13,7 @@ class MailType:
     PASSWORD_CHANGE = 'password_change'
     PASSWORD_RESET_AND_VERIFY = 'password_reset_verify'
     EVENT_ROLE = 'event_role'
+    GROUP_ROLE = 'group_role'
     SESSION_STATE_CHANGE = 'session_state_change'
     TICKET_PURCHASED = 'ticket_purchased'
     TICKET_PURCHASED_ATTENDEE = 'ticket_purchased_attendee'
@@ -30,6 +31,7 @@ class MailType:
     MONTHLY_PAYMENT_POST_DUE = 'monthly_payment_post_due'
     TEST_MAIL = 'test_mail'
     CONTACT_ORGANIZERS = 'contact_organizers'
+    VIDEO_MODERATOR_INVITE = "video_moderator_invite"
 
     @staticmethod
     def entries():
@@ -152,8 +154,13 @@ MAILS = {
     },
     MailType.EVENT_ROLE: {
         'recipient': 'User',
-        'subject': 'Invitation to be {role} at {event}',
+        'subject': 'Invitation to be {role} at Event: {event}',
         'template': 'email/event_role.html',
+    },
+    MailType.GROUP_ROLE: {
+        'recipient': 'User',
+        'subject': 'Invitation to be {role} at Group: {group}',
+        'template': 'email/group_role.html',
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
@@ -227,5 +234,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Test Mail Subject',
         'message': ("This is a  <strong> Test </strong> E-mail."),
+    },
+    MailType.VIDEO_MODERATOR_INVITE: {
+        'recipient': 'User',
+        'subject': 'Video Moderator of video {video_name} at event {event_name}',
+        'template': 'email/video_stream_moderator.html',
     },
 }

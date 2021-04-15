@@ -67,11 +67,7 @@ def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
 
     event_id = kwargs.get('event_id')
-    if (
-        user.has_group_role
-        and event_id
-        and (user.is_owner(event_id) or user.is_organizer(event_id))
-    ):
+    if event_id and (user.is_owner(event_id) or user.is_organizer(event_id)):
         return view(*view_args, **view_kwargs)
 
     raise ForbiddenError({'source': ''}, 'Organizer access is required')

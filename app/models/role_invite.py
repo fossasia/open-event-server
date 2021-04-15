@@ -2,12 +2,13 @@ import random
 from datetime import datetime, timedelta
 
 import pytz
+from flask_jwt_extended import current_user
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.mail import send_email_role_invite
-from app.api.helpers.notification import send_notif_event_role
+from app.api.helpers.notification import notify_event_role_invitation
 from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.event import Event
@@ -60,11 +61,10 @@ class RoleInvite(db.Model):
         link = f"{frontend_url}/role-invites?token={self.hash}"
         if not has_access('is_coorganizer', event_id=event.id):
             raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
+
+        send_email_role_invite(self.email, self.role_name, event.name, link)
         if user:
-            send_email_role_invite(self.email, self.role_name, event.name, link)
-            send_notif_event_role(user, self.role_name, event.name, link, event.id)
-        else:
-            send_email_role_invite(self.email, self.role_name, event.name, link)
+            notify_event_role_invitation(self, user, current_user)
 
     def __repr__(self):
         return '<RoleInvite {!r}:{!r}:{!r}>'.format(
