@@ -18,6 +18,7 @@ from app.api.helpers.utilities import get_serializer
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
+from app.models.event import Event
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -196,11 +197,16 @@ class User(SoftDeletionModel):
         """
         Checks if a user has a particular Role at an Event.
         """
+        from app.models.users_groups_role import UsersGroupsRoles
+
         role = Role.query.filter_by(name=role_name).first()
         uer = UER.query.filter_by(user=self, role=role)
+        ugr = UsersGroupsRoles.query.filter_by(user=self, role=role, accepted=True)
         if event_id:
             uer = uer.filter_by(event_id=event_id)
-        return bool(uer.first())
+            event = Event.query.get(event_id)
+            ugr = ugr.filter_by(group=event.group)
+        return bool(uer.first() or ugr.first())
 
     def is_owner(self, event_id):
         return self._is_role(Role.OWNER, event_id)
