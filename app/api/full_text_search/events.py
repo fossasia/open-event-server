@@ -6,7 +6,7 @@ for `location_name`, `name` and description.
 
 from elasticsearch_dsl import Search
 from flask import request
-from flask_rest_jsonapi.resource import Resource
+from flask_combo_jsonapi.resource import Resource
 
 from app.models.search.event import SearchableEvent
 from app.views.elastic_search import client

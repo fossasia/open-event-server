@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import current_app as app
-from flask_rest_jsonapi import Api
+from flask_combo_jsonapi import Api
 
 from app.api.helpers.permission_manager import permission_manager
 

@@ -2,8 +2,8 @@ import os
 
 from flask import Blueprint
 from flask.helpers import send_from_directory
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, jwt_required
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.auth import return_file
@@ -34,9 +34,7 @@ def event_invoices(invoice_identifier):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
     file_path = (
-        '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + invoice_identifier
-        + '.pdf'
+        f'../generated/invoices/{key}/{generate_hash(key)}/' + invoice_identifier + '.pdf'
     )
     try:
         return return_file('event-invoice', file_path, invoice_identifier)

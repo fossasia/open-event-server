@@ -1,4 +1,4 @@
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError

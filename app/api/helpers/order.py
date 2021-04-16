@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 
 from flask import render_template
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import (
     get_count,

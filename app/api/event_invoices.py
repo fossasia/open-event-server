@@ -1,8 +1,8 @@
 import datetime
 
 from flask import jsonify, request
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.helpers.db import safe_query, safe_query_by_id, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import BadRequestError, ForbiddenError

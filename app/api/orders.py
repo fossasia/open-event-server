@@ -5,8 +5,8 @@ import time
 import omise
 import requests
 from flask import Blueprint, current_app, jsonify, redirect, request, url_for
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
@@ -657,7 +657,7 @@ def omise_checkout(order_identifier):
         logging.exception(
             f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors"""
         )
-        return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
+        return jsonify(status=False, error=f"Omise Failure Message: {str(e)}")
     except Exception:
         logging.exception('Error while charging omise')
     if charge.failure_code is not None:

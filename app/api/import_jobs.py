@@ -1,5 +1,5 @@
+from flask_combo_jsonapi import ResourceDetail, ResourceList
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.import_jobs import ImportJobSchema
