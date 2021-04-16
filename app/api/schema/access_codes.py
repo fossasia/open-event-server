@@ -71,7 +71,7 @@ class AccessCodeSchema(SoftDeletionSchema):
                 "tickets-number should be greater than max-quantity",
             )
 
-    id = fields.Integer(dump_ony=True)
+    id = fields.Integer()
     code = fields.Str(required=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)
