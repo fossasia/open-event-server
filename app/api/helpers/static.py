@@ -551,4 +551,4 @@ PAYMENT_CURRENCY_CHOICES = [
 
 AGE_GROUP_CHOICES = ['19 or less', '20 to 29', '30 to 39', '40 to 49', '50 or above']
 
-GENDER_CHOICES = ['Male', 'Female', 'Other']
+GENDER_CHOICES = ['Male', 'Female', 'Other', 'Diverse / Non-binary', 'Prefer not to share']
