@@ -22,6 +22,7 @@ class UsersGroupsRolesSchema(Schema):
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)
     accepted = fields.Bool(dump_only=True)
+    token = fields.Str(dump_only=True)
 
     group = Relationship(
         self_view='v1.users_groups_roles_group',
