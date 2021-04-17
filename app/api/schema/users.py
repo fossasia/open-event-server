@@ -41,7 +41,7 @@ class UserSchemaPublic(SoftDeletionSchema):
     was_registered_with_order = fields.Boolean()
 
     @pre_dump
-    def handle_deleted_or_private_users(self, data):
+    def handle_deleted_or_private_users(self, data, many):
         if not data:
             return data
         can_access = require_current_user() and (

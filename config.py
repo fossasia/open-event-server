@@ -41,6 +41,7 @@ class Config:
     TESTING = False
 
     SECRET_KEY = env.str('SECRET_KEY', default=None)
+    PAGE_SIZE = 20
 
     CACHING = False
     PROFILE = False

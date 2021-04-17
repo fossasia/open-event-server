@@ -25,8 +25,8 @@ class OrderSchema(Schema):
         self_view_kwargs = {'order_identifier': '<identifier>'}
         inflect = dasherize
 
-    @post_dump
-    def generate_payment_url(self, data):
+    @post_dump(pass_many=True)
+    def generate_payment_url(self, data, many):
         """
         generate payment url for an order
         :param data:
@@ -47,8 +47,8 @@ class OrderSchema(Schema):
             data['payment_mode'] = 'free'
         return data
 
-    id = fields.Str(dump_only=True)
-    identifier = fields.Str(dump_only=True)
+    id = fields.Str()
+    identifier = fields.Str()
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
@@ -77,12 +77,12 @@ class OrderSchema(Schema):
         ),
         allow_none=True,
     )
-    paid_via = fields.Str(dump_only=True)
+    paid_via = fields.Str()
     is_billing_enabled = fields.Boolean(default=False)
-    brand = fields.Str(dump_only=True)
-    exp_month = fields.Str(dump_only=True)
-    exp_year = fields.Str(dump_only=True)
-    last4 = fields.Str(dump_only=True)
+    brand = fields.Str()
+    exp_month = fields.Str()
+    exp_year = fields.Str()
+    last4 = fields.Str()
     status = fields.Str(
         validate=validate.OneOf(
             choices=[
@@ -96,10 +96,10 @@ class OrderSchema(Schema):
         )
     )
     discount_code_id = fields.Str(allow_none=True)
-    payment_url = fields.Str(dump_only=True)
+    payment_url = fields.Str()
     cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
-    tickets_pdf_url = fields.Url(dump_only=True)
+    tickets_pdf_url = fields.Url()
 
     # only used in the case of an on site attendee.
     on_site_tickets = fields.List(
