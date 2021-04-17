@@ -18,7 +18,7 @@ class VideoChannelList(ResourceList):
 
     methods = ['GET', 'POST']
     decorators = (api.has_permission('is_admin', methods="POST"),)
-    schema = VideoChannelSchemaPublic
+    schema = VideoChannelSchema
     data_layer = {
         'session': db.session,
         'model': VideoChannel,
@@ -36,7 +36,7 @@ class VideoChannelDetail(ResourceDetail):
             stream = safe_query_kwargs(VideoStream, kwargs, 'video_stream_id')
             kwargs['id'] = stream.channel_id
 
-    schema = VideoChannelSchemaPublic
+    schema = VideoChannelSchema
     decorators = (
         api.has_permission(
             'is_admin',
