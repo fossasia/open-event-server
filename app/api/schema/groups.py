@@ -50,6 +50,6 @@ class GroupSchema(SoftDeletionSchema):
         related_view='v1.users_groups_roles_list',
         related_view_kwargs={'group_id': '<id>'},
         schema='UsersGroupsRolesSchema',
-        type_='users-groups-roles',
+        type_='users-groups-role',
         many=True,
     )

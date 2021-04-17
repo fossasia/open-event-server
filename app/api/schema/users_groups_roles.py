@@ -14,7 +14,7 @@ class UsersGroupsRolesSchema(Schema):
         Meta class for users_groups_role Api Schema
         """
 
-        type_ = 'users-groups-roles'
+        type_ = 'users-groups-role'
         self_view = 'v1.users_groups_roles_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
