@@ -13,7 +13,11 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
+from app.api.chat.rocket_chat import (
+    RocketChatException,
+    get_rocket_chat_token,
+    rename_rocketchat_room,
+)
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
@@ -479,6 +483,8 @@ class EventDetail(ResourceDetail):
     EventDetail class for EventSchema
     """
 
+    event_name = 'test'
+
     def before_get(self, args, kwargs):
         """
         method for assigning schema based on access
@@ -525,6 +531,7 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        EventDetail.event_name = event.name
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
@@ -552,6 +559,8 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
+        if EventDetail.event_name != event.name:
+            rename_rocketchat_room(event=event)
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:
