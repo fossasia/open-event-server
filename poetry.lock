@@ -671,7 +671,7 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-admin"
-version = "1.5.7"
+version = "1.5.8"
 description = "Simple and extensible admin interface framework for Flask"
 category = "main"
 optional = false
@@ -2537,7 +2537,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "63e54b53752323092631200838afbd596d4bceef1f1221a1d07e6d1a7fa1d44e"
+content-hash = "eabd59a93afbc7cb614eaf176d1877c6125606ef56a5f5ebcfdfc8c466841a2e"
 
 [metadata.files]
 aiohttp = [
@@ -2876,7 +2876,7 @@ flask = [
     {file = "Flask-1.1.2.tar.gz", hash = "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060"},
 ]
 flask-admin = [
-    {file = "Flask-Admin-1.5.7.tar.gz", hash = "sha256:145f59407d78319925e20f7c3021f60c71f0cacc98e916e52000845dc4c63621"},
+    {file = "Flask-Admin-1.5.8.tar.gz", hash = "sha256:eb06a1f31b98881dee53a55c64faebd1990d6aac38826364b280df0b2679ff74"},
 ]
 flask-babel = [
     {file = "Flask-Babel-2.0.0.tar.gz", hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d"},
