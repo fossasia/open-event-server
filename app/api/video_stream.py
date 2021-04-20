@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from uuid import uuid4
 
 from flask import jsonify
@@ -9,7 +10,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
-from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.db import get_or_create, safe_query_kwargs
 from app.api.helpers.errors import (
     BadRequestError,
     ConflictError,
@@ -26,6 +27,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_channel import VideoChannel
+from app.models.video_recording import VideoRecording
 from app.models.video_stream import VideoStream
 from app.models.video_stream_moderator import VideoStreamModerator
 
@@ -151,6 +153,26 @@ def get_bbb_recordings(stream_id: int):
     channel = stream.channel
     bbb = BigBlueButton(channel.api_url, channel.api_key)
     result = bbb.request('getRecordings', params)
+
+    if result.data['response']['recordings']:
+        recordings = []
+        if type(result.data['response']['recordings']['recording']) is list:
+            recordings = result.data['response']['recordings']['recording']
+        else:
+            recordings.append(result.data['response']['recordings']['recording'])
+        for recording in recordings:
+            get_or_create(
+                VideoRecording,
+                bbb_record_id=recording['recordID'],
+                participants=recording['participants'],
+                url=recording['playback']['format']['url'],
+                start_time=datetime.fromtimestamp(
+                    int(int(recording['startTime']) / 1000)
+                ),
+                end_time=datetime.fromtimestamp(int(int(recording['endTime']) / 1000)),
+                stream=stream,
+            )
+
     return jsonify(result=result.data)
 
 
