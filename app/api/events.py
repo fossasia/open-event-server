@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
@@ -525,6 +525,7 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
 
         is_date_updated = (
             data.get('starts_at') != event.starts_at
@@ -554,9 +555,10 @@ class EventDetail(ResourceDetail):
 
     def after_update_object(self, event, data, view_kwargs):
         event_id = str(event.id)
-        # if data["name"] != event.name and event.chat_room_id:
-        #     from .helpers.tasks import rename_chat_room
-        #     rename_chat_room.delay(event_id)
+        if data["name"] != g.event_name and event.chat_room_id:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event_id)
 
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
