@@ -5,6 +5,7 @@ from flask_jwt_extended import current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
+from app.api.helpers.permissions import jwt_required
 from app.models.user import User
 from app.models.users_groups_role import UsersGroupsRoles
 
@@ -16,6 +17,7 @@ users_groups_roles_routes = Blueprint(
 
 
 @users_groups_roles_routes.route('/accept-invite', methods=['POST'])
+@jwt_required
 def accept_invite():
     token = request.json['data']['token']
 
