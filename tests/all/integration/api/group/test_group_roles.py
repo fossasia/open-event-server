@@ -13,7 +13,7 @@ def test_group_role_invite(db, client, user, jwt):
     data = json.dumps(
         {
             'data': {
-                'type': 'users-groups-roles',
+                'type': 'users-groups-role',
                 "attributes": {"email": "test@example.org"},
                 "relationships": {
                     "group": {"data": {"id": str(group.id), "type": "group"}},
