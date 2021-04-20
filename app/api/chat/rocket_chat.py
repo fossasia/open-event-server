@@ -135,11 +135,11 @@ class RocketChat:
             return self.register(user, event)
 
     def check_or_create_bot(self):
-        bot_email = 'openeventbot35@open-event.invalid'
+        bot_email = 'open-event-bot@open-event.invalid'
         bot_user, _ = get_or_create(
             User,
             _email=bot_email,
-            defaults=dict(password=generate_pass(), first_name='openevent-bot35'),
+            defaults=dict(password=generate_pass(), first_name='open-event-bot'),
         )
 
         return bot_user
