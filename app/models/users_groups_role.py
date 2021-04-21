@@ -56,7 +56,7 @@ class UsersGroupsRoles(db.Model):
         group = self.group
         role = self.role
         frontend_url = get_settings()['frontend_url']
-        link = f"{frontend_url}/users-groups-roles?token={self.token}"
+        link = f"{frontend_url}/group-invites?token={self.token}"
         if group.user != current_user:
             raise ForbiddenError({'pointer': 'group'}, 'Owner access is required.')
 
