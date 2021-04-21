@@ -669,5 +669,8 @@ def rename_chat_room(event_id):
     event = db.session.query(Event).filter_by(id=int(event_id)).first()
     try:
         rename_rocketchat_room(event=event)
-    except:
-        logger.exception('error while changing room name')
+        logging.info("Rocket chat room renamed successfully")
+    except Exception as e:
+        logging.exception(
+            f"The following error has occurred while renaming group chat - {str(e)}"
+        )
