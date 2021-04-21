@@ -260,7 +260,11 @@ from app.api.users_groups_roles import (
     UsersGroupsRolesListPost,
     UsersGroupsRolesRelationship,
 )
-from app.api.video_channel import VideoChannelDetail, VideoChannelList
+from app.api.video_channel import (
+    VideoChannelDetail,
+    VideoChannelList,
+    VideoChannelListPost,
+)
 from app.api.video_stream import (
     VideoStreamDetail,
     VideoStreamList,
@@ -1770,6 +1774,7 @@ api.route(
     '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
 # Video Channels
+api.route(VideoChannelListPost, 'video_channel_list_post', '/video-channels')
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
 api.route(
     VideoChannelDetail,

@@ -201,6 +201,7 @@ class VideoStreamList(ResourceList):
 
     def setup_channel(self, data):
         if not data.get('channel'):
+            self.channel = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
@@ -273,6 +274,8 @@ class VideoStreamDetail(ResourceDetail):
     @staticmethod
     def setup_channel(obj, data):
         if not data.get('channel') or obj.channel_id == int(data['channel']):
+            if not data.get('channel'):
+                obj.channel_id = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
