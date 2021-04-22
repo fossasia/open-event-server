@@ -210,7 +210,7 @@ def get_rocket_chat_token(user: User, event: Event = None):
 
 def rename_rocketchat_room(event: Event):
     settings = get_settings()
-    if not event.chat_room_id and not (api_url := settings['rocket_chat_url']):
+    if not event.chat_room_id or not (api_url := settings['rocket_chat_url']):
         return
 
     rocket_chat = RocketChat(api_url)
