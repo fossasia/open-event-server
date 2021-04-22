@@ -78,7 +78,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_ticket_form_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
-    paypal_email = fields.Str(allow_none=True)
+    paypal_email = fields.Email(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
