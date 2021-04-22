@@ -3,6 +3,7 @@ from flask_rest_jsonapi.schema import get_relationships
 from sqlalchemy import inspect
 
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.schema.base import TrimmedEmail
 from app.models.custom_form import CustomForms
 
 
@@ -17,7 +18,7 @@ def get_schema(form_fields):
         if field.type in ['text', 'checkbox', 'select', 'paragraph']:
             field_type = marshmallow.fields.Str
         elif field.type == 'email':
-            field_type = marshmallow.fields.Email
+            field_type = TrimmedEmail
         elif field.type == 'number':
             field_type = marshmallow.fields.Float
         else:

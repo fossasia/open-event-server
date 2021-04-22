@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 
 
 class UsersGroupsRolesSchema(Schema):
@@ -20,7 +21,7 @@ class UsersGroupsRolesSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Email(required=True)
+    email = TrimmedEmail(required=True)
     accepted = fields.Bool(dump_only=True)
     token = fields.Str(dump_only=True)
 
