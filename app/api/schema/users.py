@@ -5,7 +5,7 @@ from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.permission_manager import require_current_user
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 from app.models.user import User
 from utils.common import use_defaults
 
@@ -28,7 +28,7 @@ class UserSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Email(required=True)
+    email = TrimmedEmail(required=True)
     avatar_url = fields.Url(allow_none=True)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)

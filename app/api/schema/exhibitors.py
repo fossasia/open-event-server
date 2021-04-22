@@ -5,6 +5,7 @@ from marshmallow_jsonapi.flask import Relationship
 from marshmallow_jsonapi.flask import Schema as JSONAPISchema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 from app.models.exhibitor import Exhibitor
 
 
@@ -38,7 +39,7 @@ class ExhibitorSchema(JSONAPISchema):
     enable_video_room = fields.Boolean(allow_none=True, default=False)
     video_url = fields.Url(allow_none=True)
     slides_url = fields.Url(allow_none=True)
-    contact_email = fields.Email(allow_none=True)
+    contact_email = TrimmedEmail(allow_none=True)
     contact_link = fields.Str(allow_none=True)
     social_links = fields.Nested(ExhibitorSocialLinkSchema, many=True, allow_none=True)
     event = Relationship(

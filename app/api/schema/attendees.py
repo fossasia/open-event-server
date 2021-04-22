@@ -6,7 +6,7 @@ from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.static import AGE_GROUP_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 
 
 class AttendeeSchemaPublic(SoftDeletionSchema):
@@ -31,7 +31,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
-    email = fields.Email(allow_none=True)
+    email = TrimmedEmail(allow_none=True)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
