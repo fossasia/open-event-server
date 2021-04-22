@@ -555,7 +555,7 @@ class EventDetail(ResourceDetail):
 
     def after_update_object(self, event, data, view_kwargs):
         event_id = str(event.id)
-        if data.get('name') != g.event_name and event.chat_room_id:
+        if event.name != g.event_name and event.chat_room_id:
             from .helpers.tasks import rename_chat_room
 
             rename_chat_room.delay(event_id)
