@@ -20,7 +20,7 @@ class VideoStreamModeratorSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
 
     user = Relationship(
         dumps_only=True,

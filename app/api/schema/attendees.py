@@ -31,7 +31,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
-    email = fields.Str(allow_none=True)
+    email = fields.Email(allow_none=True)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)

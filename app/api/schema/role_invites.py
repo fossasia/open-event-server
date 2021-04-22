@@ -59,7 +59,7 @@ class RoleInviteSchema(Schema):
                     )
 
     id = fields.Str(dump_only=True)
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     hash = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
     role_name = fields.Str(
