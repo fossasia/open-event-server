@@ -209,13 +209,9 @@ def get_rocket_chat_token(user: User, event: Event = None):
 
 
 def rename_rocketchat_room(event: Event):
-    if not event.chat_room_id:
-        return
     settings = get_settings()
-    if not (api_url := settings['rocket_chat_url']):
-        raise RocketChatException(
-            'Rocket Chat Integration is not enabled', RocketChatException.CODES.DISABLED
-        )
+    if not event.chat_room_id and not (api_url := settings['rocket_chat_url']):
+        return
 
     rocket_chat = RocketChat(api_url)
     bot = rocket_chat.check_or_create_bot()

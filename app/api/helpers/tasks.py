@@ -667,5 +667,5 @@ def delete_translations(self, zip_file_path):
 @celery.task(name='rename.chat.room')
 def rename_chat_room(event_id):
     event = Event.query.get(event_id)
-    rename_rocketchat_room(event=event)
+    rename_rocketchat_room(event)
     logging.info("Rocket chat room renamed successfully")
