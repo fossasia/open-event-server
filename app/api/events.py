@@ -554,11 +554,10 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
-        event_id = str(event.id)
-        if event.name != g.event_name and event.chat_room_id:
+        if event.name != g.event_name:
             from .helpers.tasks import rename_chat_room
 
-            rename_chat_room.delay(event_id)
+            rename_chat_room.delay(event.id)
 
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
