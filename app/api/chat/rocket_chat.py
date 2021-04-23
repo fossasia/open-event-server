@@ -206,3 +206,32 @@ def get_rocket_chat_token(user: User, event: Event = None):
 
     rocket_chat = RocketChat(api_url)
     return rocket_chat.get_token(user, event)
+
+
+def rename_rocketchat_room(event: Event):
+    settings = get_settings()
+    if not event.chat_room_id or not (api_url := settings['rocket_chat_url']):
+        return
+
+    rocket_chat = RocketChat(api_url)
+    bot = rocket_chat.check_or_create_bot()
+    data = rocket_chat.get_token(bot)
+
+    bot_token = data['token']
+    bot_id = data['res']['data']['userId']
+
+    res = requests.post(
+        rocket_chat.api_url + '/api/v1/groups.rename',
+        json=dict(
+            name=event.chat_room_name,
+            roomId=event.chat_room_id,
+        ),
+        headers={
+            'X-Auth-Token': bot_token,
+            'X-User-Id': bot_id,
+        },
+    )
+
+    if not res.status_code == 200:
+        logger.error('Error while changing room name : %s', res.json())
+        raise RocketChatException('Error while changing room name', response=res)
