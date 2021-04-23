@@ -1,11 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
+class StripeAuthorizationSchemaPublic(Schema):
     """
     Stripe Authorization Schema
     """
