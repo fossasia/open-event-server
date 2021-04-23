@@ -116,6 +116,12 @@ from app.api.feedbacks import (
     FeedbackRelationship,
 )
 from app.api.full_text_search.events import EventSearchResultList
+from app.api.group_followers import (
+    GroupFollowerListPost,
+    UserGroupFollowedDetail,
+    UserGroupFollowedList,
+    UserGroupFollowedRelationship,
+)
 from app.api.groups import GroupDetail, GroupList, GroupListPost, GroupRelationship
 from app.api.import_jobs import ImportJobDetail, ImportJobList
 from app.api.mails import MailDetail, MailList
@@ -297,6 +303,7 @@ api.route(
     '/favourite-events/<int:user_favourite_event_id>/user',
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
+    '/followed-groups/<int:user_followed_group_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
     '/users-groups-roles/<int:users_groups_roles_id>/user',
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
@@ -1039,6 +1046,13 @@ api.route(
     'user_favourite_session_list_post',
     '/user-favourite-sessions',
 )
+
+api.route(
+    UserRelationship,
+    'user_user_followed_groups',
+    '/users/<int:id>/relationships/followed-groups',
+)
+
 api.route(
     UserFavouriteSessionList,
     'user_favourite_sessions_list',
@@ -1455,6 +1469,7 @@ api.route(
     '/groups/<int:id>',
     '/events/<int:event_id>/group',
     '/users-groups-roles/<int:users_groups_roles_id>/group',
+    '/user-groups-followed/<int:user_followed_group_id>/group',
 )
 api.route(
     GroupRelationship,
@@ -1472,6 +1487,41 @@ api.route(
     '/groups/<int:id>/relationships/user',
 )
 
+api.route(
+    GroupRelationship,
+    'user_group_followed',
+    '/groups/<int:id>/relationships/followed-groups',
+)
+
+# user groups followed
+api.route(
+    GroupFollowerListPost,
+    'user_groups_followed_list_post',
+    '/user-groups-followed',
+)
+
+api.route(
+    UserGroupFollowedList,
+    'user_group_followed_list',
+    '/users/<int:user_id>/followed-group',
+    '/groups/<int:group_id>/followed-group',
+)
+
+api.route(
+    UserGroupFollowedDetail,
+    'user_group_followed_detail',
+    '/user-groups-followed/<int:id>',
+)
+api.route(
+    UserGroupFollowedRelationship,
+    'user_followed_group_user',
+    '/user-groups-followed/<int:id>/relationships/user',
+)
+api.route(
+    UserGroupFollowedRelationship,
+    'user_followed_group_group',
+    '/user-groups-followed/<int:id>/relationships/group',
+)
 
 # event sub topics
 api.route(EventSubTopicListPost, 'event_sub_topic_list_post', '/event-sub-topics')
