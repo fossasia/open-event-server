@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 from uuid import uuid4
 
 from flask import jsonify
@@ -10,7 +9,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
-from app.api.helpers.db import get_or_create, safe_query_kwargs
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import (
     BadRequestError,
     ConflictError,
@@ -136,47 +135,6 @@ def create_bbb_meeting(channel, data):
 
 
 @streams_routes.route(
-    '/<int:stream_id>/recordings',
-)
-@jwt_required
-def get_bbb_recordings(stream_id: int):
-    stream = VideoStream.query.get_or_404(stream_id)
-    if not has_access('is_organizer', event_id=stream.event_id):
-        raise ForbiddenError(
-            {'pointer': 'event_id'},
-            'You need to be the event organizer to access video recordings.',
-        )
-
-    params = dict(
-        meetingID=stream.extra['response']['meetingID'],
-    )
-    channel = stream.channel
-    bbb = BigBlueButton(channel.api_url, channel.api_key)
-    result = bbb.request('getRecordings', params)
-
-    if result.data['response']['recordings']:
-        recordings = []
-        if type(result.data['response']['recordings']['recording']) is list:
-            recordings = result.data['response']['recordings']['recording']
-        else:
-            recordings.append(result.data['response']['recordings']['recording'])
-        for recording in recordings:
-            get_or_create(
-                VideoRecording,
-                bbb_record_id=recording['recordID'],
-                participants=recording['participants'],
-                url=recording['playback']['format']['url'],
-                start_time=datetime.fromtimestamp(
-                    int(int(recording['startTime']) / 1000)
-                ),
-                end_time=datetime.fromtimestamp(int(int(recording['endTime']) / 1000)),
-                stream=stream,
-            )
-
-    return jsonify(result=result.data)
-
-
-@streams_routes.route(
     '/<int:stream_id>/chat-token',
 )
 @jwt_required
@@ -273,6 +231,14 @@ class VideoStreamDetail(ResourceDetail):
                 VideoStreamModerator, view_kwargs, 'video_stream_moderator_id'
             )
             view_kwargs['id'] = moderator.video_stream_id
+
+        if view_kwargs.get('video_recording_id'):
+            video_recording = safe_query_kwargs(
+                VideoRecording,
+                view_kwargs,
+                'video_recording_id',
+            )
+            view_kwargs['id'] = video_recording.video_stream_id
 
     def after_get_object(self, stream, view_kwargs):
         if stream and not stream.user_can_access:

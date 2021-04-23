@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship, Schema
+from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Schema as JSONAPISchema
 
 from app.api.helpers.utilities import dasherize
 
 
-class VideoRecordingSchema(Schema):
+class VideoRecordingSchema(JSONAPISchema):
     class Meta:
         type_ = 'video-recording'
         self_view = 'v1.video_recording_detail'

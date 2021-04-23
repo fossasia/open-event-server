@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 8f37b4b2f690
+Revision ID: a739ff6a3855
 Revises: 01f7a9531f83
-Create Date: 2021-04-20 22:39:17.803887
+Create Date: 2021-04-23 22:23:47.165020
 
 """
 
@@ -12,7 +12,7 @@ import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = '8f37b4b2f690'
+revision = 'a739ff6a3855'
 down_revision = '01f7a9531f83'
 
 
@@ -25,8 +25,8 @@ def upgrade():
     sa.Column('url', sa.String(), nullable=False),
     sa.Column('start_time', sa.DateTime(), nullable=False),
     sa.Column('end_time', sa.DateTime(), nullable=False),
-    sa.Column('stream_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['stream_id'], ['video_streams.id'], ondelete='CASCADE'),
+    sa.Column('video_stream_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['video_stream_id'], ['video_streams.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

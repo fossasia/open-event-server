@@ -12,10 +12,10 @@ class VideoRecording(db.Model):
     start_time = db.Column(db.DateTime(timezone=False), nullable=False)
     end_time = db.Column(db.DateTime(timezone=False), nullable=False)
 
-    stream_id = db.Column(
-        db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE')
+    video_stream_id = db.Column(
+        db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE'), nullable=False
     )
-    stream = db.relationship('VideoStream', backref='recordings')
+    video_stream = db.relationship('VideoStream', backref='video_recordings')
 
     def __repr__(self):
-        return f'<VideoRecording {self.stream.name!r} {self.url!r}>'
+        return f'<VideoRecording {self.video_stream.name!r} {self.url!r}>'
