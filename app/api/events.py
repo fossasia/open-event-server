@@ -223,6 +223,7 @@ class EventList(ResourceList):
                         Group.id == UsersGroupsRoles.group_id,
                         Event.group_id == Group.id,
                         UsersGroupsRoles.email == current_user.email,
+                        UsersGroupsRoles.accepted == True,
                     ),
                 )
             )
