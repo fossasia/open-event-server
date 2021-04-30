@@ -1868,11 +1868,11 @@ python-versions = "*"
 
 [[package]]
 name = "python-slugify"
-version = "4.0.1"
+version = "5.0.0"
 description = "A Python Slugify application that handles Unicode"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = "!=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [package.dependencies]
 text-unidecode = ">=1.3"
@@ -2533,7 +2533,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "2d633262fe43526c3fa03e636bfc99858e1f611939c5abbee360b7caf0d4654d"
+content-hash = "7b3cd559bf8e9dcbc944c92c5ef08bded9df37c60db1417582b82bdce7fc625c"
 
 [metadata.files]
 aiohttp = [
@@ -3544,7 +3544,8 @@ python-pentabarf-xml = [
     {file = "python-pentabarf-xml-0.20.tar.gz", hash = "sha256:32f415ea60aed49c0ff541482e17d7b9e995cce8d42050b3dfe69d22cd59810d"},
 ]
 python-slugify = [
-    {file = "python-slugify-4.0.1.tar.gz", hash = "sha256:69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270"},
+    {file = "python-slugify-5.0.0.tar.gz", hash = "sha256:744cd5d42b381687657f3b652d1d9b183c0870ec43de23be682b6d83d69c6962"},
+    {file = "python_slugify-5.0.0-py2.py3-none-any.whl", hash = "sha256:2a497206413bebbab1d9004c44443b71f65a402653446af7246904ad1c0927d3"},
 ]
 pytype = [
     {file = "pytype-2021.4.26-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:0ec5f764ec6c68b9ef01286a34330b0a0fc47ad4091a601b980edebc0d363f67"},
