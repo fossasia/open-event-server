@@ -24,7 +24,6 @@ from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from app.api import routes  # noqa: Used for registering routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
-from app.api.bootstrap import api
 from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
@@ -148,6 +147,7 @@ def create_app():
         from app.api.imports import import_routes
         from app.api.uploads import upload_routes
         from app.api.users import user_misc_routes
+        from app.api.bootstrap import api_v1
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
         from app.api.auth import authorised_blueprint
@@ -167,7 +167,7 @@ def create_app():
         from app.api.video_stream import streams_routes
         from app.api.events import events_blueprint
 
-        api.init(app)
+        app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
         app.register_blueprint(upload_routes)
         app.register_blueprint(export_routes)

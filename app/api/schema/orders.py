@@ -5,7 +5,6 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import GetterRelationship
-from app.models import db
 from utils.common import use_defaults
 
 
@@ -53,7 +52,7 @@ class OrderSchema(Schema):
     amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
-    state = fields.Str(db.String, allow_none=True)
+    state = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     zipcode = fields.Str(allow_none=True)
     company = fields.Str(allow_none=True)

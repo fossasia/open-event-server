@@ -45,6 +45,7 @@ class Config:
     CACHING = False
     PROFILE = False
     SQLALCHEMY_RECORD_QUERIES = False
+    PAGE_SIZE = 20
 
     FLASK_ADMIN_SWATCH = 'lumen'
 
