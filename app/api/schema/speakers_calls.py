@@ -24,7 +24,7 @@ class SpeakersCallSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             speakers_calls = SpeakersCall.query.filter_by(
                 id=original_data['data']['id']
@@ -53,7 +53,7 @@ class SpeakersCallSchema(SoftDeletionSchema):
         #     raise UnprocessableEntityError({'pointer': '/data/attributes/ends-at'},
         #                               "speakers-call ends-at should be before event starts-at")
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     announcement = fields.Str(allow_none=True)
     starts_at = fields.DateTime(required=True)
     soft_ends_at = fields.DateTime(allow_none=True)

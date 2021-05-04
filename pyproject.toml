@@ -93,7 +93,6 @@ pytz = "2021.1"
 diff-match-patch = "20200713"
 blinker = "1.4"
 envparse = "0.2"
-flask-rest-jsonapi = {git = "https://github.com/fossasia/flask-rest-jsonapi.git", tag = "0.12.6.5"}
 wtforms = {version = "2.3.3", extras = ["email"]}
 flask-admin = "1.5.8"
 google-compute-engine = "2.8.13"

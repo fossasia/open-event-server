@@ -20,7 +20,7 @@ class VideoStreamModeratorSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     email = TrimmedEmail(required=True)
 
     user = Relationship(

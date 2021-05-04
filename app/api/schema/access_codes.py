@@ -26,7 +26,7 @@ class AccessCodeSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
@@ -43,7 +43,7 @@ class AccessCodeSchema(SoftDeletionSchema):
             )
 
     @validates_schema(pass_original=True)
-    def validate_order_quantity(self, data, original_data):
+    def validate_order_quantity(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
 
@@ -71,7 +71,7 @@ class AccessCodeSchema(SoftDeletionSchema):
                 "tickets-number should be greater than max-quantity",
             )
 
-    id = fields.Integer(dump_ony=True)
+    id = fields.Integer()
     code = fields.Str(required=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)

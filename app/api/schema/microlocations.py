@@ -21,7 +21,7 @@ class MicrolocationSchema(SoftDeletionSchema):
         self_view_many = 'v1.microlocation_list_post'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     latitude = fields.Float(validate=lambda n: -90 <= n <= 90, allow_none=True)
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)

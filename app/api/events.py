@@ -4,10 +4,10 @@ import pytz
 from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
 from flask_jwt_extended.view_decorators import jwt_optional
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
@@ -625,7 +625,7 @@ class EventCopySchema(Schema):
         self_view = 'v1.event_copy'
         self_view_kwargs = {'identifier': '<id>'}
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     identifier = fields.Str(dump_only=True)
 
 

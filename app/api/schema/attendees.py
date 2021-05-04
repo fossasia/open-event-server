@@ -28,7 +28,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     def validate_json(self, data, original_data):
         validate_complex_fields_json(self, data, original_data)
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
     email = TrimmedEmail(allow_none=True)

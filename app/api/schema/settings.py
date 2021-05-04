@@ -22,7 +22,7 @@ class SettingSchemaPublic(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
 
     # Name of the application. (Eg. Event Yay!, Open Event)
     app_name = fields.Str(allow_none=True)
@@ -140,7 +140,7 @@ class SettingSchemaNonAdmin(SettingSchemaPublic):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
 
     #
     # Generators
@@ -165,7 +165,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     #
     # General
     #

@@ -1,6 +1,6 @@
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.custom_forms import validate_custom_form_constraints_request
@@ -216,6 +216,8 @@ class SpeakerDetail(ResourceDetail):
                         speaker_id=speaker.id,
                     )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
+
+        return result
 
     decorators = (
         api.has_permission(

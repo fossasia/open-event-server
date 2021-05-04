@@ -27,7 +27,7 @@ class UserSchemaPublic(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     email = TrimmedEmail(required=True)
     avatar_url = fields.Url(allow_none=True)
     first_name = fields.Str(allow_none=True)

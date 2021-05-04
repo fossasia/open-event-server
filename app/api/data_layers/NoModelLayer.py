@@ -1,4 +1,4 @@
-from flask_rest_jsonapi.data_layers.base import BaseDataLayer
+from flask_combo_jsonapi.data_layers.base import BaseDataLayer
 
 from app.api.helpers.utilities import EmptyObject
 

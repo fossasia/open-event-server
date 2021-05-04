@@ -1,4 +1,4 @@
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
@@ -29,7 +29,7 @@ class RoleInviteSchema(Schema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_satus(self, data, original_data):
+    def validate_satus(self, data, original_data, **kwargs):
         if 'role' in data and 'role_name' in data:
             try:
                 role = Role.query.filter_by(id=data['role']).one()
@@ -59,7 +59,7 @@ class RoleInviteSchema(Schema):
                         "Role id do not match role name",
                     )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     email = TrimmedEmail(required=True)
     hash = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)

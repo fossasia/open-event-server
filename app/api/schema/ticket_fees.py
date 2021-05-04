@@ -21,7 +21,7 @@ class TicketFeesSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     currency = fields.Str(
         validate=validate.OneOf(choices=PAYMENT_CURRENCY_CHOICES), allow_none=True
     )

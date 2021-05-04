@@ -14,7 +14,7 @@ class EventCopyrightSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     holder = fields.Str(allow_none=True)
     holder_url = fields.Url(allow_none=True)
     licence = fields.Str(required=True)

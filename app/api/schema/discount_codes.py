@@ -1,4 +1,4 @@
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
@@ -74,7 +74,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_quantity(self, data, original_data):
+    def validate_quantity(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -104,7 +104,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
                 )
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             try:
@@ -148,7 +148,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_quantity(self, data, original_data):
+    def validate_quantity(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(
@@ -179,7 +179,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                 )
 
     @validates_schema(pass_original=True)
-    def validate_value(self, data, original_data):
+    def validate_value(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             try:
                 discount_code = DiscountCode.query.filter_by(

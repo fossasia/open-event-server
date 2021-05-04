@@ -23,7 +23,7 @@ class ServiceSchema(Schema):
         self_view_many = 'v1.service_list'
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(
         default="track",
         validate=validate.OneOf(

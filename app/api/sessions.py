@@ -3,10 +3,10 @@ from typing import Dict
 
 import pytz
 from flask import Blueprint, g, jsonify, request
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.querystring import QueryStringManager as QSManager
 from flask_jwt_extended import current_user
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
 from sqlalchemy import or_
 
 from app.api.bootstrap import api

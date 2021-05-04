@@ -19,7 +19,7 @@ def patch_defaults(schema, in_data):
 
 
 @pre_load
-def make_object(schema, in_data):
+def make_object(schema, in_data, **kwargs):
     """
     Returns the json data after adding defaults
     :param schema: Schema

@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail
+from flask_combo_jsonapi import ResourceDetail
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 

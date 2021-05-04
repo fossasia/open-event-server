@@ -88,7 +88,7 @@ class NotificationSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     created_at = fields.DateTime(dump_only=True)
     is_read = fields.Boolean()
     content = fields.Nested(NotificationContentSchema)

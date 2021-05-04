@@ -19,7 +19,7 @@ class ImportJobSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     task = fields.Str(allow_none=False)
     starts_at = fields.DateTime(required=True, timezone=True)
     result = fields.Str(allow_none=True)
