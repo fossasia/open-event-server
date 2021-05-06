@@ -25,6 +25,8 @@ def second_order_decorator(inner_dec):
             def fwrapper(*args, **kwargs):
                 return wrapped(*args, **kwargs)
 
+            fwrapper.__name__ = f.__name__
+
             return fwrapper
 
         return decwrapper

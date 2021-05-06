@@ -1,3 +1,4 @@
+import re
 from argparse import Namespace
 from datetime import datetime
 
@@ -60,6 +61,8 @@ class Event(SoftDeletionModel):
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
+    is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
     original_image_url = db.Column(db.String)
@@ -166,7 +169,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='owner_events',
@@ -177,7 +180,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='organizer_events',
@@ -187,7 +190,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='coorganizer_events',
@@ -197,7 +200,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id,'
+        ' and_(Role.id == UsersEventsRoles.role_id,'
         ' Role.name == "track_organizer"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
@@ -208,7 +211,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='registrar_events',
@@ -218,7 +221,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='moderator_events',
@@ -229,7 +232,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(UsersEventsRoles.deleted_at == None, Role.id == UsersEventsRoles.role_id))',
+        ' and_(Role.id == UsersEventsRoles.role_id))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='events',
@@ -249,16 +252,18 @@ class Event(SoftDeletionModel):
         self.description = clean_up_string(kwargs.get('description'))
         self.owner_description = clean_up_string(kwargs.get('owner_description'))
         self.code_of_conduct = clean_up_string(kwargs.get('code_of_conduct'))
+        self.after_order_message = clean_up_string(kwargs.get('after_order_message'))
 
     def __repr__(self):
         return '<Event %r>' % self.name
 
     def __setattr__(self, name, value):
-        allow_link = name == 'description' or 'owner_description'
+        allow_link = name == 'description' or 'owner_description' or 'after_order_message'
         if (
             name == 'owner_description'
             or name == 'description'
             or name == 'code_of_conduct'
+            or name == 'after_order_message'
         ):
             super().__setattr__(
                 name, clean_html(clean_up_string(value), allow_link=allow_link)
@@ -382,6 +387,10 @@ class Event(SoftDeletionModel):
         )
 
     @property
+    def chat_room_name(self):
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + self.identifier
+
+    @property
     def tickets_available(self):
         return self.calc_total_tickets_count()
 
@@ -415,6 +424,11 @@ class Event(SoftDeletionModel):
         return f"{frontend_url}/e/{self.identifier}"
 
     @property
+    def organizer_site_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/events/{self.identifier}"
+
+    @property
     def starts_at_tz(self):
         return self.starts_at.astimezone(pytz.timezone(self.timezone))
 
@@ -427,7 +441,7 @@ class Event(SoftDeletionModel):
         if self.location_name:
             return self.location_name
         elif self.online:
-            return 'Online'
+            return self.site_link
         return 'Location Not Announced'
 
     @property
@@ -441,6 +455,11 @@ class Event(SoftDeletionModel):
         if stream and stream.user_can_access:
             return stream
         return None
+
+    @property
+    def notify_staff(self):
+        """Who receive notifications about event"""
+        return self.organizers + [self.owner]
 
 
 @event.listens_for(Event, 'after_update')

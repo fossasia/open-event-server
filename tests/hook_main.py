@@ -23,9 +23,9 @@ from tests.factories.event_location import EventLocationFactory
 from tests.factories.custom_system_role import CustomSysRoleFactory
 from tests.factories.panel_permission import PanelPermissionFactory
 from tests.factories.user import UserFactory
-from tests.factories.notification_action import NotificationActionFactory
-from tests.factories.notification import NotificationFactory
+from tests.factories.notification import NotificationSubFactory
 from tests.factories.event import EventFactoryBasic
+from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
@@ -48,7 +48,7 @@ from tests.factories.event_role_permission import EventRolePermissionsFactory
 from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
-from tests.factories.session import SessionFactory
+from tests.factories.session import SessionFactory, SessionFactoryBasic
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
@@ -126,6 +126,7 @@ def before_each(transaction):
     with stash['app'].app_context():
         db.engine.execute("drop schema if exists public cascade")
         db.engine.execute("create schema public")
+        db.engine.execute('create extension if not exists citext')
         db.create_all()
         create_super_admin(api_username, api_password)
 
@@ -253,13 +254,7 @@ def user_notification(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -495,6 +490,20 @@ def discount_code_event_get_list(transaction):
 
         discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under a Group > List All Events under a Group")
+def group_event_get_list(transaction):
+    """
+    GET /groups/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
         db.session.commit()
 
 
@@ -787,6 +796,108 @@ def event_stripe_authorization(transaction):
     with stash['app'].app_context():
         stripe_authorization = StripeAuthorizationFactory()
         db.session.add(stripe_authorization)
+        db.session.commit()
+
+
+# ------------------------- Group -------------------------
+@hooks.before("Group > Group Collection > List All Groups")
+def group_get_list(transaction):
+    """
+    GET /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Groups under an User > List All Groups under an User")
+def group_get_list(transaction):
+    """
+    GET /users/1/groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Collection > Create Group")
+def group_post(transaction):
+    """
+    POST /groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Group Detail")
+def group_get_detail(transaction):
+    """
+    GET /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Get Group for an Event > Group Details for an Event")
+def group_get_detail_event(transaction):
+    """
+    GET /events/1/group
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+        event = EventFactoryBasic(group_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Update Group")
+def group_patch(transaction):
+    """
+    PATCH /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Group > Group Detail > Delete Group")
+def group_delete(transaction):
+    """
+    DELETE /groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        group = GroupFactory()
+        db.session.add(group)
         db.session.commit()
 
 
@@ -2137,13 +2248,7 @@ def notification_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -2155,13 +2260,7 @@ def notification_get_admin_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -2173,13 +2272,7 @@ def notification_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -2193,13 +2286,7 @@ def notification_get_detail_with_actions(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -2211,13 +2298,7 @@ def notification_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 
@@ -2229,13 +2310,7 @@ def notification_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        notification_action = NotificationActionFactory()
-        db.session.add(notification_action)
-        db.session.commit()
-
-        notification = NotificationFactory()
-        notification.actions = [notification_action]
-        db.session.add(notification)
+        NotificationSubFactory()
         db.session.commit()
 
 

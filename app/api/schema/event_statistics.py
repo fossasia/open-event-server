@@ -37,6 +37,7 @@ class EventStatisticsGeneralSchema(Schema):
     speakers = fields.Method("speakers_count")
     sessions = fields.Method("sessions_count")
     sponsors = fields.Method("sponsors_count")
+    speaker_without_session = fields.Method("speaker_without_session_count")
 
     @cache.memoize(50)
     def get_session_stats(self, event):
@@ -91,6 +92,13 @@ class EventStatisticsGeneralSchema(Schema):
         data['total'] = sum([x for _, x in stats])
 
         return data
+
+    def speaker_without_session_count(self, obj):
+        return Speaker.query.filter(
+            Speaker.sessions == None,
+            Speaker.event_id == obj.id,
+            Speaker.deleted_at == None,
+        ).count()
 
     @cache.memoize(50)
     def speakers_count(self, obj):

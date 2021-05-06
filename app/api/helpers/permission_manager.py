@@ -13,6 +13,7 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -186,7 +187,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
 
     if session.speakers:
         for speaker in session.speakers:
-            if speaker.user_id == user.id:
+            if speaker.user_id == user.id or speaker.email == user._email:
                 return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
@@ -545,3 +546,11 @@ def has_access(access_level, **kwargs):
 
 def is_logged_in() -> bool:
     return 'Authorization' in request.headers
+
+
+def require_current_user() -> Union[User, None]:
+    """Parses JWT and returns current_user if Authorization header is present, else None"""
+    if not is_logged_in():
+        return None
+    verify_jwt_in_request()
+    return current_user

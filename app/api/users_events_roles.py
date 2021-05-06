@@ -39,15 +39,9 @@ class UsersEventsRolesDetail(ResourceDetail):
     users_events_roles detail by id
     """
 
-    def before_update_object(self, users_events_roles, data, view_kwargs):
-        """
-        method to check for proper permissions for deleting
-        :param users_events_roles:
-        :param view_kwargs:
-        :return:
-        """
+    def before_delete_object(self, users_events_roles, view_kwargs):
         role = users_events_roles.role
-        if role and data.get('deleted_at'):
+        if role:
             if role.name == "owner":
                 raise ForbiddenError(
                     {'source': 'Role'},
@@ -67,7 +61,7 @@ class UsersEventsRolesDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': UsersEventsRoles,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {'before_delete_object': before_delete_object},
     }
 
 

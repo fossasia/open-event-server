@@ -1,7 +1,29 @@
+from marshmallow import Schema as JsonSchema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+
+
+class VideoStreamExtraOptionsSchema(JsonSchema):
+    record = fields.Boolean(default=False)
+    autoStartRecording = fields.Boolean(default=False)
+    muteOnStart = fields.Boolean(default=True)
+    welcome = fields.String(required=False, allow_none=True)
+    maxParticipants = fields.Integer(required=False, allow_none=True)
+    duration = fields.Integer(required=False, allow_none=True)
+    moderatorOnlyMessage = fields.String(required=False, allow_none=True)
+    logo = fields.URL(required=False, allow_none=True)
+    bannerText = fields.String(required=False, allow_none=True)
+    bannerColor = fields.String(required=False, allow_none=True)
+    guestPolicy = fields.String(required=False, allow_none=True)
+    allowModsToUnmuteUsers = fields.Boolean(default=True)
+
+
+class VideoStreamExtraSchema(JsonSchema):
+    autoplay = fields.Boolean(default=True)
+    loop = fields.Boolean(default=False)
+    bbb_options = fields.Nested(VideoStreamExtraOptionsSchema, allow_none=True)
 
 
 class VideoStreamSchema(Schema):
@@ -16,6 +38,7 @@ class VideoStreamSchema(Schema):
     url = fields.Url(required=True)
     password = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
+    extra = fields.Nested(VideoStreamExtraSchema, allow_none=True)
     rooms = Relationship(
         many=True,
         self_view='v1.video_stream_rooms',
@@ -41,4 +64,13 @@ class VideoStreamSchema(Schema):
         related_view_kwargs={'video_stream_id': '<id>'},
         schema='VideoChannelSchemaPublic',
         type_='video-channel',
+    )
+    moderators = Relationship(
+        many=True,
+        self_view='v1.video_stream_moderators',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_stream_moderator_list',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='VideoStreamModeratorSchema',
+        type_='video-stream-moderator',
     )

@@ -22,6 +22,7 @@ class Setup:
     def create_app():
         test_app = create_app()
         with test_app.test_request_context():
+            db.engine.execute('create extension if not exists citext')
             db.create_all()
             set_settings(app_name='Open Event', app_environment=Environment.TESTING)
 

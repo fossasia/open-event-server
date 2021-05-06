@@ -1,7 +1,7 @@
 from app.api.helpers.db import get_or_create
 
 # Admin message settings
-from app.api.helpers.system_mails import MAILS
+from app.api.helpers.system_mails import MailType
 from app.instance import current_app
 from app.models import db
 
@@ -23,6 +23,8 @@ from app.models.event_type import EventType
 from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
+from app.models.notification import NotificationType
+from app.models.notification_setting import NotificationSettings
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -334,37 +336,12 @@ def create_user_permissions():
 
 
 def create_admin_message_settings():
-    default_mails = [
-        "Next Event",
-        "Session Schedule Change",
-        "User email",
-        "Invitation For Papers",
-        "After Event",
-        "Ticket(s) Purchased",
-        "Session State Change",
-        "Event Published",
-        "Event Export Failed",
-        "Event Exported",
-        "Event Role Invitation",
-        "New Session Proposal",
-    ]
-    for mail in MAILS:
-        if mail in default_mails:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=True,
-                notification_status=True,
-                user_control_status=True,
-            )
-        else:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=False,
-                notification_status=False,
-                user_control_status=False,
-            )
+    for mail in MailType.entries():
+        get_or_create(MessageSettings, action=mail, defaults=dict(enabled=True))
+    for notification in NotificationType.entries():
+        get_or_create(
+            NotificationSettings, type=notification, defaults=dict(enabled=True)
+        )
 
 
 def create_custom_placeholders():
@@ -418,6 +395,27 @@ def populate():
         provider='jitsi',
         name='Jitsi Meet',
         defaults={'url': 'https://meet.jit.si', 'api_url': 'https://api.jitsi.net'},
+    )
+    get_or_create(
+        VideoChannel,
+        provider='youtube',
+        name='YouTube',
+        defaults={
+            'url': 'https://youtube.com',
+            'api_url': 'https://www.googleapis.com/youtube/v3',
+        },
+    )
+    get_or_create(
+        VideoChannel,
+        provider='vimeo',
+        name='Vimeo',
+        defaults={'url': 'https://vimeo.com', 'api_url': 'https://api.vimeo.com'},
+    )
+    get_or_create(
+        VideoChannel,
+        provider='3cx',
+        name='3CX',
+        defaults={'url': 'https://www.3cx.com/'},
     )
 
     db.session.commit()

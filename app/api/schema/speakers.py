@@ -1,11 +1,13 @@
-from marshmallow import validates_schema
+from marshmallow import validate, validates_schema
+from marshmallow.schema import Schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.fields import CustomFormValueField
+from app.api.helpers.static import GENDER_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 from utils.common import use_defaults
 
 
@@ -31,7 +33,7 @@ class SpeakerSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    email = fields.Str(allow_none=True)
+    email = TrimmedEmail(allow_none=True)
     photo_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(allow_none=True)
     small_image_url = fields.Url(allow_none=True)
@@ -44,6 +46,7 @@ class SpeakerSchema(SoftDeletionSchema):
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
+    mastodon = fields.Url(allow_none=True)
     linkedin = fields.Url(allow_none=True)
     instagram = fields.Url(allow_none=True)
     organisation = fields.Str(allow_none=True)
@@ -53,7 +56,7 @@ class SpeakerSchema(SoftDeletionSchema):
     country = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     address = fields.Str(allow_none=True)
-    gender = fields.Str(allow_none=True)
+    gender = fields.Str(allow_none=True, validate=validate.OneOf(choices=GENDER_CHOICES))
     order = fields.Integer(allow_none=True, default=0)
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
@@ -84,3 +87,8 @@ class SpeakerSchema(SoftDeletionSchema):
         many=True,
         type_='session',
     )
+
+
+class SpeakerReorderSchema(Schema):
+    speaker = fields.Integer(required=True)
+    order = fields.Integer(required=True)

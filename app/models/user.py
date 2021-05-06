@@ -3,17 +3,22 @@ from datetime import datetime
 
 import humanize
 import pytz
+from citext import CIText
+from coolname import generate
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
+from slugify import slugify
 from sqlalchemy import desc, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.utilities import get_serializer
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
+from app.models.event import Event
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -49,7 +54,7 @@ class User(SoftDeletionModel):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    _email = db.Column(db.String(120), unique=True, nullable=False)
+    _email = db.Column(CIText, unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
     facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
     facebook_login_hash = db.Column(db.String, nullable=True)
@@ -75,6 +80,10 @@ class User(SoftDeletionModel):
     is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     is_blocked = db.Column(db.Boolean, nullable=False, default=False)
+    is_profile_public = db.Column(
+        db.Boolean, nullable=False, default=False, server_default='False'
+    )
+    public_name = db.Column(db.String)
     was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
@@ -90,10 +99,11 @@ class User(SoftDeletionModel):
     billing_zip_code = db.Column(db.String)
     billing_additional_info = db.Column(db.String)
 
+    rocket_chat_token = db.Column(db.String)
+
     # relationships
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
-    favourite_sessions = db.relationship('UserFavouriteSession', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
@@ -187,11 +197,16 @@ class User(SoftDeletionModel):
         """
         Checks if a user has a particular Role at an Event.
         """
+        from app.models.users_groups_role import UsersGroupsRoles
+
         role = Role.query.filter_by(name=role_name).first()
-        uer = UER.query.filter_by(user=self, role=role, deleted_at=None)
+        uer = UER.query.filter_by(user=self, role=role)
+        ugr = UsersGroupsRoles.query.filter_by(user=self, role=role, accepted=True)
         if event_id:
             uer = uer.filter_by(event_id=event_id)
-        return bool(uer.first())
+            event = Event.query.get(event_id)
+            ugr = ugr.filter_by(group=event.group)
+        return bool(uer.first() or ugr.first())
 
     def is_owner(self, event_id):
         return self._is_role(Role.OWNER, event_id)
@@ -428,6 +443,23 @@ class User(SoftDeletionModel):
         )
 
     full_billing_address = property(get_full_billing_address)
+
+    @property
+    def anonymous_name(self):
+        return ' '.join(map(lambda x: x.capitalize(), generate(2)))
+
+    @property
+    def rocket_chat_username(self):
+        name = self.public_name or self.full_name or f'user_{self.id}'
+        return slugify(name, word_boundary=True, max_length=32, separator='.')
+
+    @property
+    def rocket_chat_password(self):
+        return get_serializer().dumps(f'rocket_chat_user_{self.id}')
+
+    @property
+    def is_rocket_chat_registered(self) -> bool:
+        return self.rocket_chat_token is not None
 
     def __repr__(self):
         return '<User %r>' % self.email

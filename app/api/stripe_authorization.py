@@ -1,3 +1,4 @@
+from flask.globals import g
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -55,7 +56,7 @@ class StripeAuthorizationListPost(ResourceList):
         """
         try:
             self.session.query(StripeAuthorization).filter_by(
-                event_id=data['event'], deleted_at=None
+                event_id=data['event']
             ).one()
         except NoResultFound:
             credentials = (
@@ -138,14 +139,19 @@ class StripeAuthorizationDetail(ResourceDetail):
             )
             view_kwargs['id'] = stripe_authorization.id
 
+    def before_delete_object(self, stripe_authorization, view_kwargs):
+        if not stripe_authorization:
+            return
+        g.event = stripe_authorization.event
+
     def after_delete_object(self, stripe_authorization, view_kwargs):
         """Make work after delete object
         :param stripe_authorization: stripe authorization.
         :param dict view_kwargs: kwargs from the resource view
         """
-        event = stripe_authorization.event
-        event.is_stripe_linked = False
-        save_to_db(event)
+        if event := g.get('event'):
+            event.is_stripe_linked = False
+            save_to_db(event)
 
     decorators = (jwt_required,)
     schema = StripeAuthorizationSchema
@@ -155,6 +161,7 @@ class StripeAuthorizationDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'after_delete_object': after_delete_object,
+            'before_delete_object': before_delete_object,
         },
     }
 

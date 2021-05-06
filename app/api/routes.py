@@ -127,10 +127,11 @@ from app.api.microlocations import (
     MicrolocationRelationshipOptional,
     MicrolocationRelationshipRequired,
 )
+from app.api.notification_settings import (
+    NotificationSettingsDetail,
+    NotificationSettingsList,
+)
 from app.api.notifications import (
-    NotificationActionDetail,
-    NotificationActionList,
-    NotificationActionRelationship,
     NotificationDetail,
     NotificationList,
     NotificationListAdmin,
@@ -253,11 +254,26 @@ from app.api.users_events_roles import (
     UsersEventsRolesList,
     UsersEventsRolesRelationship,
 )
-from app.api.video_channel import VideoChannelDetail, VideoChannelList
+from app.api.users_groups_roles import (
+    UsersGroupsRolesDetail,
+    UsersGroupsRolesList,
+    UsersGroupsRolesListPost,
+    UsersGroupsRolesRelationship,
+)
+from app.api.video_channel import (
+    VideoChannelDetail,
+    VideoChannelList,
+    VideoChannelListPost,
+)
 from app.api.video_stream import (
     VideoStreamDetail,
     VideoStreamList,
     VideoStreamRelationship,
+)
+from app.api.video_stream_moderators import (
+    VideoStreamModeratorDetail,
+    VideoStreamModeratorList,
+    VideoStreamModeratorRelationship,
 )
 
 # users
@@ -282,6 +298,8 @@ api.route(
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
+    '/users-groups-roles/<int:users_groups_roles_id>/user',
+    '/video-stream-moderator/<int:video_stream_moderator_id>/user',
 )
 api.route(
     UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications'
@@ -400,23 +418,6 @@ api.route(
     '/notifications/<int:id>/relationships/actions',
 )
 
-# notification actions
-api.route(
-    NotificationActionList,
-    'notification_actions_list',
-    '/notifications/<int:notification_id>/notification-actions',
-)
-api.route(
-    NotificationActionDetail,
-    'notification_action_detail',
-    '/notification-actions/<int:id>',
-)
-api.route(
-    NotificationActionRelationship,
-    'notification_actions_notification',
-    '/notification-actions/<int:id>/relationships/notification',
-)
-
 # email_notifications
 api.route(
     EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications'
@@ -443,6 +444,16 @@ api.route(
 # message_settings
 api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
 api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
+
+# notification settings
+api.route(
+    NotificationSettingsList, 'notification_settings_list', '/notification-settings'
+)
+api.route(
+    NotificationSettingsDetail,
+    'notification_setting_detail',
+    '/notification-settings/<int:id>',
+)
 
 # event_image_sizes
 api.route(
@@ -522,6 +533,7 @@ api.route(
     '/roles/<int:id>',
     '/role-invites/<int:role_invite_id>/role',
     '/users-events-roles/<int:users_events_roles_id>/role',
+    '/users-groups-roles/<int:users_groups_roles_id>/role',
 )
 
 # custom system roles
@@ -587,6 +599,32 @@ api.route(
     UsersEventsRolesRelationship,
     'users_events_roles_role',
     '/users-events-roles/<int:id>/relationships/role',
+)
+
+# users_groups_roles
+api.route(UsersGroupsRolesListPost, 'users_groups_roles_list_post', '/users-groups-roles')
+api.route(
+    UsersGroupsRolesDetail, 'users_groups_roles_detail', '/users-groups-roles/<int:id>'
+)
+api.route(
+    UsersGroupsRolesList,
+    'users_groups_roles_list',
+    '/groups/<int:group_id>/users-groups-roles',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_user',
+    '/users-groups-roles/<int:id>/relationships/user',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_group',
+    '/users-groups-roles/<int:id>/relationships/group',
+)
+api.route(
+    UsersGroupsRolesRelationship,
+    'users_groups_roles_role',
+    '/users-groups-roles/<int:id>/relationships/role',
 )
 
 # tickets
@@ -1004,9 +1042,10 @@ api.route(
 api.route(
     UserFavouriteSessionList,
     'user_favourite_sessions_list',
-    '/users/<int:user_id>/favourite-sessions',
-    '/sessions/<int:session_id>/favourite-sessions',
-    '/events/<int:event_id>/favourite-sessions',
+    '/user-favourite-sessions',
+    '/users/<int:user_id>/user-favourite-sessions',
+    '/sessions/<int:session_id>/user-favourite-sessions',
+    '/events/<int:event_id>/user-favourite-sessions',
 )
 api.route(
     UserFavouriteSessionDetail,
@@ -1036,6 +1075,7 @@ api.route(
     '/session-types/<int:session_type_id>/sessions',
     '/microlocations/<int:microlocation_id>/sessions',
     '/speakers/<int:speaker_id>/sessions',
+    '/exhibitors/<int:exhibitor_id>/sessions',
 )
 api.route(
     SessionDetail,
@@ -1069,6 +1109,11 @@ api.route(
     SessionRelationshipOptional,
     'session_speaker',
     '/sessions/<int:id>/relationships/speakers',
+)
+api.route(
+    SessionRelationshipOptional,
+    'session_exhibitor',
+    '/sessions/<int:id>/relationships/exhibitors',
 )
 api.route(
     SessionRelationshipOptional,
@@ -1409,6 +1454,12 @@ api.route(
     'group_detail',
     '/groups/<int:id>',
     '/events/<int:event_id>/group',
+    '/users-groups-roles/<int:users_groups_roles_id>/group',
+)
+api.route(
+    GroupRelationship,
+    'event_users_groups_roles',
+    '/groups/<int:id>/relationships/roles',
 )
 api.route(
     GroupRelationship,
@@ -1700,6 +1751,7 @@ api.route(
     '/microlocations/<int:room_id>/video-stream',
     '/events/<int:event_id>/video-stream',
     '/events/<event_identifier>/video-stream',
+    '/video-stream-moderators/<int:video_stream_moderator_id>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
@@ -1716,8 +1768,13 @@ api.route(
     'video_stream_channel',
     '/video-streams/<int:id>/relationships/video-channel',
 )
-
+api.route(
+    VideoStreamRelationship,
+    'video_stream_moderators',
+    '/video-streams/<int:id>/relationships/video-stream-moderators',
+)
 # Video Channels
+api.route(VideoChannelListPost, 'video_channel_list_post', '/video-channels')
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
 api.route(
     VideoChannelDetail,
@@ -1733,8 +1790,38 @@ api.route(
     'exhibitor_list',
     '/events/<int:event_id>/exhibitors',
     '/events/<event_identifier>/exhibitors',
+    '/sessions/<int:session_id>/exhibitors',
 )
 api.route(ExhibitorDetail, 'exhibitor_detail', '/exhibitors/<int:id>')
 api.route(
     ExhibitorRelationship, 'exhibitor_event', '/exhibitors/<int:id>/relationships/event'
+)
+api.route(
+    ExhibitorRelationship,
+    'exhibitor_session',
+    '/exhibitors/<int:id>/relationships/sessions',
+)
+
+# VideoStreamModerator
+api.route(
+    VideoStreamModeratorList,
+    'video_stream_moderator_list',
+    '/video-stream-moderators',
+    '/video-streams/<int:video_stream_id>/video-stream-moderators',
+    '/users/<int:user_id>/video-stream-moderators',
+)
+api.route(
+    VideoStreamModeratorDetail,
+    'video_stream_moderator_detail',
+    '/video-stream-moderators/<int:id>',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_user',
+    '/video-stream-moderators/<int:id>/relationships/user',
+)
+api.route(
+    VideoStreamModeratorRelationship,
+    'video_stream_moderator_stream',
+    '/video-stream-moderators/<int:id>/relationships/video-stream',
 )

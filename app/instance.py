@@ -162,6 +162,7 @@ def create_app():
         from app.api.custom.calendars import calendar_routes
         from app.api.tickets import tickets_routes
         from app.api.custom.role_invites import role_invites_routes
+        from app.api.custom.users_groups_roles import users_groups_roles_routes
         from app.api.custom.events import events_routes
         from app.api.video_stream import streams_routes
         from app.api.events import events_blueprint
@@ -190,6 +191,7 @@ def create_app():
         app.register_blueprint(calendar_routes)
         app.register_blueprint(streams_routes)
         app.register_blueprint(role_invites_routes)
+        app.register_blueprint(users_groups_roles_routes)
         app.register_blueprint(events_routes)
         app.register_blueprint(events_blueprint)
         app.register_blueprint(tickets_routes)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
@@ -13,12 +13,19 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
+from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    NotFoundError,
+    UnprocessableEntityError,
+)
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access, is_logged_in
+from app.api.helpers.permissions import jwt_required, to_event_id
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchema, EventSchemaPublic
 
@@ -31,9 +38,11 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_copyright import EventCopyright
 from app.models.event_invoice import EventInvoice
+from app.models.exhibitor import Exhibitor
 from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.microlocation import Microlocation
 from app.models.order import Order
 from app.models.role import Role
@@ -64,15 +73,11 @@ from app.models.video_stream import VideoStream
 events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
 
 
+@events_blueprint.route('/<string:event_identifier>/has-streams')
 @jwt_optional
-@events_blueprint.route('/<id>/has-streams')
-def has_streams(id):
-    query = get_event_query()
-    if id.isnumeric():
-        query = query.filter_by(id=id)
-    else:
-        query = query.filter_by(identifier=id)
-    event = query.first_or_404()
+@to_event_id
+def has_streams(event_id):
+    event = Event.query.get_or_404(event_id)
 
     exists = False
     if event.video_stream:
@@ -85,6 +90,36 @@ def has_streams(id):
         ).scalar()
     can_access = VideoStream(event_id=event.id).user_can_access
     return jsonify(dict(exists=exists, can_access=can_access))
+
+
+@events_blueprint.route(
+    '/<string:event_identifier>/chat-token',
+)
+@jwt_required
+@to_event_id
+def get_chat_token(event_id: int):
+    event = Event.query.get_or_404(event_id)
+
+    if not VideoStream(event_id=event.id).user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    try:
+        data = get_rocket_chat_token(current_user, event)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        else:
+            return jsonify(
+                {
+                    'success': False,
+                    'code': rce.code,
+                    'response': rce.response is not None and rce.response.json(),
+                }
+            )
 
 
 def validate_event(user, data):
@@ -179,7 +214,7 @@ class EventList(ResourceList):
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = query_.join(Event.roles).filter_by(user_id=user.id, deleted_at=None)
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -189,7 +224,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_owner_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.OWNER)
             )
@@ -203,7 +238,7 @@ class EventList(ResourceList):
 
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.ORGANIZER)
             )
@@ -216,7 +251,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_coorganizer_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == Role.COORGANIZER)
             )
@@ -234,7 +269,7 @@ class EventList(ResourceList):
             )
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == TRACK_ORGANIZER)
             )
@@ -247,7 +282,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_registrar_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == REGISTRAR)
             )
@@ -260,7 +295,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_moderator_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == MODERATOR)
             )
@@ -273,7 +308,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_marketer_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == MARKETER)
             )
@@ -286,7 +321,7 @@ class EventList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_sales_admin_id')
             query_ = (
                 query_.join(Event.roles)
-                .filter_by(user_id=user.id, deleted_at=None)
+                .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
                 .filter(Role.name == SALES_ADMIN)
             )
@@ -315,6 +350,7 @@ class EventList(ResourceList):
             )
 
         if view_kwargs.get('group_id') and 'GET' in request.method:
+            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'group_id') == view_kwargs['group_id']
             )
@@ -425,6 +461,7 @@ def get_id(view_kwargs):
         (Faq, 'faq_id'),
         (Feedback, 'feedback_id'),
         (VideoStream, 'video_stream_id'),
+        (Exhibitor, 'exhibitor_id'),
     ]
     for model, identifier in lookup_list:
         set_event_id(model, identifier, view_kwargs)
@@ -488,6 +525,8 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
+
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
@@ -515,6 +554,11 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
+        if event.name != g.event_name:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event.id)
+
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:

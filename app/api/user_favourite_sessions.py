@@ -1,11 +1,9 @@
 from flask_jwt_extended import current_user, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query_kwargs
-from app.api.helpers.errors import ConflictError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.errors import ConflictError, ForbiddenError
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_favourite_sessions import UserFavouriteSessionSchema
 from app.models import db
@@ -32,9 +30,9 @@ class UserFavouriteSessionListPost(ResourceList):
         require_relationship(['session'], data)
 
         data['user'] = current_user.id
-        user_favourite_session = find_user_favourite_session_by_id(
-            session_id=data['session']
-        )
+        user_favourite_session = UserFavouriteSession.query.filter_by(
+            session_id=data['session'], user=current_user
+        ).first()
         if user_favourite_session:
             raise ConflictError(
                 {'pointer': '/data/relationships/session'}, "Session already favourited"
@@ -59,35 +57,31 @@ class UserFavouriteSessionList(ResourceList):
     """
 
     def query(self, view_kwargs):
-        """
-        query method for SessionList class
-        :param view_kwargs:
-        :return:
-        """
-        query_ = self.session.query(UserFavouriteSession)
-        if view_kwargs.get('user_id') is not None:
+        query_ = UserFavouriteSession.query
+        if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
-        elif has_access('is_admin'):
-            pass
+            if user != current_user and not (
+                (is_logged_in() and has_access('is_admin')) or user.is_profile_public
+            ):
+                raise ForbiddenError({'pointer': 'user_id'})
+            query_ = query_.filter_by(user_id=user.id)
 
-        if view_kwargs.get('session_id'):
+        elif view_kwargs.get('session_id'):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
-            if not has_access('is_admin'):
-                query_ = query_.join(User).filter(User.id == current_user.id)
-            query_ = query_.join(Session).filter(Session.id == session.id)
+            query_ = query_.filter_by(session_id=session.id)
 
-        if view_kwargs.get('event_id'):
+        elif view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            if not has_access('is_admin'):
-                # if not(request.json['data']['all'] and has_access('is_coorganizer')):
-                query_ = query_.join(User).filter(User.id == current_user.id)
-            query_ = query_.join(Session.event).filter(Event.id == event.id)
+            query_ = query_.join(UserFavouriteSession.session).filter_by(
+                event_id=event.id
+            )
+
+        elif not has_access('is_admin'):
+            raise ForbiddenError({'pointer': 'user_id'}, 'Admin Access Required')
 
         return query_
 
     methods = ['GET']
-    decorators = (jwt_required,)
     schema = UserFavouriteSessionSchema
     data_layer = {
         'session': db.session,
@@ -101,22 +95,22 @@ class UserFavouriteSessionDetail(ResourceDetail):
     User Favourite Session detail by id
     """
 
-    def before_get_object(self, view_kwargs):
+    @staticmethod
+    def check_perm(fav):
+        if not has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=fav.session.event_id,
+            user_id=fav.user_id,
+        ):
+            raise ForbiddenError(
+                {'pointer': 'user_id'}, "User or Co-Organizer level access required"
+            )
 
-        if view_kwargs.get('id') is not None:
-            try:
-                user_favourite_session = find_user_favourite_session_by_id(
-                    session_id=view_kwargs['id']
-                )
-            except NoResultFound:
-                raise ObjectNotFound(
-                    {'source': '/data/relationships/session'}, "Object: not found"
-                )
-            else:
-                if user_favourite_session is not None:
-                    view_kwargs['id'] = user_favourite_session.id
-                else:
-                    view_kwargs['id'] = None
+    def after_get_object(self, fav, view_kwargs):
+        UserFavouriteSessionDetail.check_perm(fav)
+
+    def before_delete_object(self, fav, view_kwargs):
+        UserFavouriteSessionDetail.check_perm(fav)
 
     methods = ['GET', 'DELETE']
     decorators = (jwt_required,)
@@ -125,7 +119,8 @@ class UserFavouriteSessionDetail(ResourceDetail):
         'session': db.session,
         'model': UserFavouriteSession,
         'methods': {
-            'before_get_object': before_get_object,
+            'after_get_object': after_get_object,
+            'before_delete_object': before_delete_object,
         },
     }
 
@@ -139,9 +134,3 @@ class UserFavouriteSessionRelationship(ResourceRelationship):
     decorators = (jwt_required,)
     methods = ['GET']
     data_layer = {'session': db.session, 'model': UserFavouriteSession}
-
-
-def find_user_favourite_session_by_id(session_id):
-    return UserFavouriteSession.query.filter_by(
-        session_id=session_id, user=current_user
-    ).first()

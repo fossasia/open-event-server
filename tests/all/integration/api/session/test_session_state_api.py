@@ -122,11 +122,6 @@ def test_withdraw_speaker_allow(db, client, user, jwt, new_state, state):
 states = _create_permutations(['withdrawn'], ['pending'])
 
 
-@pytest.mark.parametrize('state,new_state', states)
-def test_revert_withdraw_speaker_disallow(db, client, user, jwt, new_state, state):
-    _test_state_change(db, client, user, jwt, new_state, state=state, event_owner=False)
-
-
 def test_withdraw_speaker_error(
     db, client, user, jwt, new_state='withdrawn', state='draft'
 ):
@@ -144,12 +139,6 @@ def test_withdraw_organizer_allow(db, client, user, jwt, new_state, state):
 
 
 states = _create_permutations(['withdrawn'], ['accepted', 'confirmed', 'rejected'])
-
-
-@pytest.mark.parametrize('state,new_state', states)
-def test_revert_withdraw_organizer_disallow(db, client, user, jwt, new_state, state):
-    _test_state_change(db, client, user, jwt, new_state, state=state)
-
 
 states = _create_permutations(['pending'], ['accepted', 'confirmed', 'rejected'])
 
@@ -176,11 +165,6 @@ def test_canceled_organizer_allow(db, client, user, jwt, new_state, state):
 
 
 states = _create_permutations(['pending', 'rejected', 'withdrawn'], ['canceled'])
-
-
-@pytest.mark.parametrize('state,new_state', states)
-def test_canceled_organizer_disallow(db, client, user, jwt, new_state, state):
-    _test_state_change(db, client, user, jwt, new_state, state=state)
 
 
 def test_confirmed_organizer_allow(

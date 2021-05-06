@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import GetterRelationship
 
 
 class UserFavouriteSessionSchema(Schema):
@@ -27,12 +28,13 @@ class UserFavouriteSessionSchema(Schema):
         type_='session',
     )
 
-    user = Relationship(
-        attribute='user',
+    user = GetterRelationship(
+        dump_only=True,
+        getter='safe_user',
         self_view='v1.user_favourite_session_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
         related_view_kwargs={'user_favourite_session_id': '<id>'},
-        schema='UserSchema',
+        schema='UserSchemaPublic',
         type_='user',
     )
