@@ -54,12 +54,12 @@ class GroupSchema(SoftDeletionSchema):
         many=True,
     )
 
-    groups_followed = Relationship(
-        self_view='v1.user_group_followed',
+    followers = Relationship(
+        self_view='v1.group_followers',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.user_group_followed_list',
+        related_view='v1.user_follow_group_list',
         related_view_kwargs={'group_id': '<id>'},
-        schema='GroupFollowerSchema',
+        schema='UserFollowGroupSchema',
         many=True,
-        type_='user-group-followed',
+        type_='user-follow-group',
     )

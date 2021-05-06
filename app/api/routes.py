@@ -116,12 +116,6 @@ from app.api.feedbacks import (
     FeedbackRelationship,
 )
 from app.api.full_text_search.events import EventSearchResultList
-from app.api.group_followers import (
-    GroupFollowerListPost,
-    UserGroupFollowedDetail,
-    UserGroupFollowedList,
-    UserGroupFollowedRelationship,
-)
 from app.api.groups import GroupDetail, GroupList, GroupListPost, GroupRelationship
 from app.api.import_jobs import ImportJobDetail, ImportJobList
 from app.api.mails import MailDetail, MailList
@@ -253,6 +247,12 @@ from app.api.user_favourite_sessions import (
     UserFavouriteSessionListPost,
     UserFavouriteSessionRelationship,
 )
+from app.api.user_follow_groups import (
+    UserFollowGroupDetail,
+    UserFollowGroupList,
+    UserFollowGroupListPost,
+    UserFollowGroupRelationship,
+)
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
 from app.api.users_events_roles import (
@@ -303,13 +303,18 @@ api.route(
     '/favourite-events/<int:user_favourite_event_id>/user',
     '/favourite-sessions/<int:user_favourite_session_id>/user',
     '/speakers/<int:speaker_id>/user',
-    '/followed-groups/<int:user_followed_group_id>/user',
     '/users-events-roles/<int:users_events_roles_id>/user',
     '/users-groups-roles/<int:users_groups_roles_id>/user',
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
+    '/user-follow-groups/<int:user_follow_group_id>/user',
 )
 api.route(
     UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications'
+)
+api.route(
+    UserRelationship,
+    'user_user_follow_groups',
+    '/users/<int:id>/relationships/followed-groups',
 )
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(
@@ -1469,7 +1474,7 @@ api.route(
     '/groups/<int:id>',
     '/events/<int:event_id>/group',
     '/users-groups-roles/<int:users_groups_roles_id>/group',
-    '/user-groups-followed/<int:user_followed_group_id>/group',
+    '/user-follow-groups/<int:user_follow_group_id>/group',
 )
 api.route(
     GroupRelationship,
@@ -1489,38 +1494,38 @@ api.route(
 
 api.route(
     GroupRelationship,
-    'user_group_followed',
-    '/groups/<int:id>/relationships/followed-groups',
+    'group_followers',
+    '/groups/<int:id>/relationships/followers',
 )
 
-# user groups followed
+# user follow groups
 api.route(
-    GroupFollowerListPost,
-    'user_groups_followed_list_post',
-    '/user-groups-followed',
-)
-
-api.route(
-    UserGroupFollowedList,
-    'user_group_followed_list',
-    '/users/<int:user_id>/followed-group',
-    '/groups/<int:group_id>/followed-group',
+    UserFollowGroupListPost,
+    'user_follow_group_list_post',
+    '/user-follow-groups',
 )
 
 api.route(
-    UserGroupFollowedDetail,
-    'user_group_followed_detail',
-    '/user-groups-followed/<int:id>',
+    UserFollowGroupList,
+    'user_follow_group_list',
+    '/users/<int:user_id>/followed-groups',
+    '/groups/<int:group_id>/followers',
+)
+
+api.route(
+    UserFollowGroupDetail,
+    'user_follow_group_detail',
+    '/user-follow-groups/<int:id>',
 )
 api.route(
-    UserGroupFollowedRelationship,
-    'user_followed_group_user',
-    '/user-groups-followed/<int:id>/relationships/user',
+    UserFollowGroupRelationship,
+    'user_follow_group_user',
+    '/user-follow-groups/<int:id>/relationships/user',
 )
 api.route(
-    UserGroupFollowedRelationship,
-    'user_followed_group_group',
-    '/user-groups-followed/<int:id>/relationships/group',
+    UserFollowGroupRelationship,
+    'user_follow_group_group',
+    '/user-follow-groups/<int:id>/relationships/group',
 )
 
 # event sub topics

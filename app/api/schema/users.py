@@ -286,13 +286,13 @@ class UserSchema(UserSchemaPublic):
         type_='user-favourite-session',
     )
     followed_groups = Relationship(
-        self_view='v1.user_user_followed_groups',
+        self_view='v1.user_user_follow_groups',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.user_group_followed_list',
+        related_view='v1.user_follow_group_list',
         related_view_kwargs={'user_id': '<id>'},
-        schema='GroupFollowerSchema',
+        schema='UserFollowGroupSchema',
         many=True,
-        type_='user-group-followed',
+        type_='user-follow-group',
     )
     orders = Relationship(
         attribute='orders',

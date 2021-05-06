@@ -5,16 +5,16 @@ from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.api.helpers.permission_manager import is_logged_in
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.group_followers import GroupFollowerSchema
+from app.api.schema.user_follow_groups import UserFollowGroupSchema
 from app.models import db
 from app.models.group import Group
-from app.models.group_follower import GroupFollower
 from app.models.user import User
+from app.models.user_follow_group import UserFollowGroup
 
 
-class GroupFollowerListPost(ResourceList):
+class UserFollowGroupListPost(ResourceList):
     """
-    Create Group Follower
+    Create User Follow Group
     """
 
     @classmethod
@@ -29,59 +29,67 @@ class GroupFollowerListPost(ResourceList):
         require_relationship(['group'], data)
 
         data['user'] = current_user.id
-        group_followed_user = GroupFollower.query.filter_by(
+        user_follow_group = UserFollowGroup.query.filter_by(
             group_id=data['group'], user=current_user
         ).first()
-        if group_followed_user:
+        if user_follow_group:
             raise ConflictError(
                 {'pointer': '/data/relationships/group'}, "Group already followed"
             )
 
     view_kwargs = True
     decorators = (jwt_required,)
-    schema = GroupFollowerSchema
+    schema = UserFollowGroupSchema
     methods = [
         'POST',
     ]
     data_layer = {
         'session': db.session,
-        'model': GroupFollower,
+        'model': UserFollowGroup,
         'methods': {'before_post': before_post},
     }
 
 
-class UserGroupFollowedList(ResourceList):
+class UserFollowGroupList(ResourceList):
     """
     List User Followed Groups
     """
 
     def query(self, view_kwargs):
-        query_ = GroupFollower.query
-        if view_kwargs.get('user_id'):
+        query_ = UserFollowGroup.query
+
+        if view_kwargs.get('user_id') is not None:
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if user != current_user or not is_logged_in():
                 raise ForbiddenError({'pointer': 'user_id'})
             query_ = query_.filter_by(user_id=user.id)
 
-        elif view_kwargs.get('group_id'):
+        elif view_kwargs.get('group_id') is not None:
             group = safe_query_kwargs(Group, view_kwargs, 'group_id')
             query_ = query_.filter_by(group_id=group.id)
 
         return query_
 
+    view_kwargs = True
     methods = ['GET']
-    schema = GroupFollowerSchema
+    decorators = (jwt_required,)
+    schema = UserFollowGroupSchema
     data_layer = {
         'session': db.session,
-        'model': GroupFollower,
+        'model': UserFollowGroup,
         'methods': {'query': query},
     }
 
 
-class UserGroupFollowedDetail(ResourceDetail):
+class UserFollowGroupDetail(ResourceDetail):
     """
     User followed group detail by id
     """
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('user_id'):
+            user = safe_query_kwargs(User, view_kwargs, 'user_id')
+            view_kwargs['id'] = user.id
 
     def after_get_object(self, follower, view_kwargs):
         if not follower:
@@ -91,12 +99,13 @@ class UserGroupFollowedDetail(ResourceDetail):
         if not follower:
             raise NotFoundError({'source': ''}, 'Group Not Found')
 
+    view_kwargs = True
     methods = ['GET', 'DELETE']
     decorators = (jwt_required,)
-    schema = GroupFollowerSchema
+    schema = UserFollowGroupSchema
     data_layer = {
         'session': db.session,
-        'model': GroupFollower,
+        'model': UserFollowGroup,
         'methods': {
             'after_get_object': after_get_object,
             'before_delete_object': before_delete_object,
@@ -104,12 +113,12 @@ class UserGroupFollowedDetail(ResourceDetail):
     }
 
 
-class UserGroupFollowedRelationship(ResourceRelationship):
+class UserFollowGroupRelationship(ResourceRelationship):
     """
     User Followed Group Relationship
     """
 
-    schema = GroupFollowerSchema
+    schema = UserFollowGroupSchema
     decorators = (jwt_required,)
     methods = ['GET']
-    data_layer = {'session': db.session, 'model': GroupFollower}
+    data_layer = {'session': db.session, 'model': UserFollowGroup}
