@@ -585,7 +585,7 @@ testing = ["pytest"]
 
 [[package]]
 name = "eventlet"
-version = "0.30.2"
+version = "0.31.0"
 description = "Highly concurrent networking library"
 category = "main"
 optional = false
@@ -2533,7 +2533,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "e8f5606d73544e2737328c1a78c607168ce7e36412baa6a3e2375c7d18f69d78"
+content-hash = "b6faed2646393632d837075e421ecdc7bae61a270916738a2df69956bb033ef8"
 
 [metadata.files]
 aiohttp = [
@@ -2849,8 +2849,8 @@ envparse = [
     {file = "envparse-0.2.0.tar.gz", hash = "sha256:4f3b9a27bb55d27f124eb4adf006fec05e4588891c9a054a183a112645056eb7"},
 ]
 eventlet = [
-    {file = "eventlet-0.30.2-py2.py3-none-any.whl", hash = "sha256:89cc6dbfef47c4629cefead5fde21c5f2b33464d57f7df5fc5148f8b4de3fbb5"},
-    {file = "eventlet-0.30.2.tar.gz", hash = "sha256:1811b122d9a45eb5bafba092d36911bca825f835cb648a862bbf984030acff9d"},
+    {file = "eventlet-0.31.0-py2.py3-none-any.whl", hash = "sha256:27ae41fad9deed9bbf4166f3e3b65acc15d524d42210a518e5877da85a6b8c5d"},
+    {file = "eventlet-0.31.0.tar.gz", hash = "sha256:b36ec2ecc003de87fc87b93197d77fea528aa0f9204a34fdf3b2f8d0f01e017b"},
 ]
 factory-boy = [
     {file = "factory_boy-3.2.0-py2.py3-none-any.whl", hash = "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4"},
