@@ -3,9 +3,9 @@ from marshmallow import pre_dump
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.permission_manager import is_logged_in
+from app.api.helpers.permission_manager import require_current_user
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 from app.models.user import User
 from utils.common import use_defaults
 
@@ -28,10 +28,12 @@ class UserSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Email(required=True)
+    email = TrimmedEmail(required=True)
     avatar_url = fields.Url(allow_none=True)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
+    public_name = fields.Str(allow_none=True)
+    is_profile_public = fields.Bool(default=False, allow_none=False)
     original_image_url = fields.Url(dump_only=True, allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
@@ -39,14 +41,13 @@ class UserSchemaPublic(SoftDeletionSchema):
     was_registered_with_order = fields.Boolean()
 
     @pre_dump
-    def handle_deleted_users(self, data):
+    def handle_deleted_or_private_users(self, data):
         if not data:
             return data
-        if data.deleted_at != None and not (
-            is_logged_in
-            and current_user
-            and (current_user.is_staff or current_user.id == data.id)
-        ):
+        can_access = require_current_user() and (
+            current_user.is_staff or current_user.id == data.id
+        )
+        if data.deleted_at != None and not can_access:
             user = User(
                 id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
             )
@@ -102,6 +103,7 @@ class UserSchema(UserSchemaPublic):
     billing_city = fields.Str(allow_none=True)
     billing_zip_code = fields.Str(allow_none=True)
     billing_additional_info = fields.Str(allow_none=True)
+    is_rocket_chat_registered = fields.Bool(dump_only=True)
     notifications = Relationship(
         self_view='v1.user_notification',
         self_view_kwargs={'id': '<id>'},

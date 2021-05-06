@@ -1,0 +1,17 @@
+{{ _('Hello') }} {{ name }},
+<br><br>
+{{ _('The invoice for your event') }} {{ event_name }} {{ _('on eventyay.com for') }} {{ date }} {{ _('is now available') }}.
+{{ _('Your invoice payment is due within 30 days') }}.
+<br><br>
+{{ _('Amount Due') }}: {{ amount }}
+<br><br>
+{{ _('Please pay within 30 days') }}.
+<br><br>
+{{ _('Pay Now at') }}: <a href='{{ payment_url }}'>{{ payment_url }}</a>
+<br><br>
+{{ _('A detailed invoice is available in') }} <a href='https://eventyay.com/account/billing/invoices/'>{{ _('the billing area') }}</a> {{ _('of your account') }}.
+{{ _('If you have any questions about invoices') }}, {{ _('please find more information on our FAQ at') }} <a href='https://support.eventyay.com'>https://support.eventyay.com</a>.
+<br><br>
+<em>{{ _('Thank you for using') }} {{ app_name }}!</em>
+<br><br>
+{{ app_name }} {{ _('Team') }}

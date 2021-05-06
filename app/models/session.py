@@ -23,6 +23,12 @@ speakers_sessions = db.Table(
 class Session(SoftDeletionModel):
     """Session model class"""
 
+    class State:
+        PENDING = 'pending'
+        ACCEPTED = 'accepted'
+        CONFIRMED = 'confirmed'
+        REJECTED = 'rejected'
+
     __tablename__ = 'sessions'
     __table_args__ = (
         db.Index('session_event_idx', 'event_id'),
@@ -38,6 +44,7 @@ class Session(SoftDeletionModel):
     linkedin = db.Column(db.String)
     instagram = db.Column(db.String)
     gitlab = db.Column(db.String)
+    mastodon = db.Column(db.String)
     short_abstract = db.Column(db.Text, default='')
     long_abstract = db.Column(db.Text, default='')
     comments = db.Column(db.Text)
@@ -66,6 +73,7 @@ class Session(SoftDeletionModel):
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    creator = db.relationship('User')
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
     submitted_at = db.Column(db.DateTime(timezone=True))
@@ -100,6 +108,12 @@ class Session(SoftDeletionModel):
     def rating_count(self):
         return func.count('1')
 
+    @aggregated(
+        'favourites', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def favourite_count(self):
+        return func.count('1')
+
     @property
     def favourite(self):
         if not current_user:
@@ -121,7 +135,7 @@ class Session(SoftDeletionModel):
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super().__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value), allow_link=True))
         else:
             super().__setattr__(name, value)
 

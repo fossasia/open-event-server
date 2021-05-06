@@ -90,6 +90,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "linkedin": "Linkedin",
         "instagram": "Instagram",
         "gitlab": "Gitlab",
+        "mastodon": "Mastodon",
     },
     "speaker": {
         "name": "Name",
@@ -113,6 +114,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "github": "GitHub",
         "linkedin": "Linkedin",
         "instagram": "Instagram",
+        "mastodon": "Mastodon",
     },
     "attendee": {
         "firstname": "First Name",

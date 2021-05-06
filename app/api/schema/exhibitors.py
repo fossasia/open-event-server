@@ -5,6 +5,7 @@ from marshmallow_jsonapi.flask import Relationship
 from marshmallow_jsonapi.flask import Schema as JSONAPISchema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 from app.models.exhibitor import Exhibitor
 
 
@@ -34,10 +35,11 @@ class ExhibitorSchema(JSONAPISchema):
     position = fields.Integer(allow_none=True, default=0)
     logo_url = fields.Url(allow_none=True)
     banner_url = fields.Url(allow_none=True)
+    thumbnail_image_url = fields.Url(allow_none=True)
     enable_video_room = fields.Boolean(allow_none=True, default=False)
     video_url = fields.Url(allow_none=True)
     slides_url = fields.Url(allow_none=True)
-    contact_email = fields.Str(allow_none=True)
+    contact_email = TrimmedEmail(allow_none=True)
     contact_link = fields.Str(allow_none=True)
     social_links = fields.Nested(ExhibitorSocialLinkSchema, many=True, allow_none=True)
     event = Relationship(
@@ -47,6 +49,15 @@ class ExhibitorSchema(JSONAPISchema):
         related_view_kwargs={'exhibitor_id': '<id>'},
         schema='EventSchemaPublic',
         type_='event',
+    )
+    sessions = Relationship(
+        many=True,
+        self_view='v1.exhibitor_session',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_list',
+        related_view_kwargs={'exhibitor_id': '<id>'},
+        schema='SessionSchema',
+        type_='session',
     )
 
 

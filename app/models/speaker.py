@@ -1,3 +1,5 @@
+from citext import CIText
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.helpers.timestamp import Timestamp
@@ -23,12 +25,13 @@ class Speaker(SoftDeletionModel, Timestamp):
     short_biography = db.Column(db.Text)
     long_biography = db.Column(db.Text)
     speaking_experience = db.Column(db.Text)
-    email = db.Column(db.String)
+    email = db.Column(CIText)
     mobile = db.Column(db.String)
     website = db.Column(db.String)
     twitter = db.Column(db.String)
     facebook = db.Column(db.String)
     github = db.Column(db.String)
+    mastodon = db.Column(db.String)
     linkedin = db.Column(db.String)
     instagram = db.Column(db.String)
     organisation = db.Column(db.String)

@@ -1,3 +1,5 @@
+import pytz
+
 from app.models.helpers.versioning import strip_tags
 
 
@@ -89,7 +91,10 @@ def export_attendees_csv(attendees, custom_forms):
 def export_sessions_csv(sessions):
     headers = [
         'Session Title',
+        'Session Starts At',
+        'Session Ends At',
         'Session Speakers',
+        'Speaker Emails',
         'Session Track',
         'Session Abstract Short',
         'Session Abstract Long',
@@ -109,14 +114,26 @@ def export_sessions_csv(sessions):
     for session in sessions:
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
-            if session.speakers:
-                in_session = ''
-                for speaker in session.speakers:
-                    if speaker.name:
-                        in_session += speaker.name + '; '
-                column.append(in_session[:-2])
-            else:
-                column.append('')
+            column.append(
+                session.starts_at.astimezone(pytz.timezone(session.event.timezone))
+                if session.starts_at
+                else ''
+            )
+            column.append(
+                session.ends_at.astimezone(pytz.timezone(session.event.timezone))
+                if session.ends_at
+                else ''
+            )
+            column.append(
+                '; '.join(
+                    list(filter(bool, map(lambda sp: sp.name, session.speakers or [])))
+                )
+            )
+            column.append(
+                '; '.join(
+                    list(filter(bool, map(lambda sp: sp.email, session.speakers or [])))
+                )
+            )
             column.append(
                 session.track.name if session.track and session.track.name else ''
             )

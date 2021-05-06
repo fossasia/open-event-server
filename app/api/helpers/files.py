@@ -129,7 +129,9 @@ def create_save_resized_image(
     return uploaded_url
 
 
-def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None):
+def create_save_image_sizes(
+    image_file, image_sizes_type, unique_identifier=None, folder=None
+):
     """
     Save the resized version of the background image
     :param unique_identifier:
@@ -168,23 +170,34 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
         unique_identifier = get_file_name()
 
     if image_sizes_type == 'speaker-image':
+        default_folder = 'users'
+        folder = folder or default_folder
+
         thumbnail_aspect = icon_aspect = small_aspect = True
         thumbnail_basewidth = (
             thumbnail_height_size
         ) = image_sizes.thumbnail_size_width_height
         icon_basewidth = icon_height_size = image_sizes.icon_size_width_height
         small_basewidth = small_height_size = image_sizes.small_size_width_height
-        original_upload_path = UPLOAD_PATHS['user']['original'].format(
-            identifier=unique_identifier
+        original_upload_path = (
+            UPLOAD_PATHS['user']['original']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        small_upload_path = UPLOAD_PATHS['user']['small'].format(
-            identifier=unique_identifier
+        small_upload_path = (
+            UPLOAD_PATHS['user']['small']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        thumbnail_upload_path = UPLOAD_PATHS['user']['thumbnail'].format(
-            identifier=unique_identifier
+        thumbnail_upload_path = (
+            UPLOAD_PATHS['user']['thumbnail']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        icon_upload_path = UPLOAD_PATHS['user']['icon'].format(
-            identifier=unique_identifier
+        icon_upload_path = (
+            UPLOAD_PATHS['user']['icon']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
         new_images = {
             'original_image_url': create_save_resized_image(
@@ -214,6 +227,9 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
         }
 
     else:
+        default_folder = 'events'
+        folder = folder or default_folder
+
         large_aspect = image_sizes.full_aspect if image_sizes.full_aspect else False
         large_basewidth = image_sizes.full_width if image_sizes.full_width else 1300
         large_height_size = image_sizes.full_height if image_sizes.full_width else 500
@@ -229,17 +245,25 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
         icon_aspect = image_sizes.icon_aspect if image_sizes.icon_aspect else False
         icon_basewidth = image_sizes.icon_width if image_sizes.icon_width else 75
         icon_height_size = image_sizes.icon_height if image_sizes.icon_height else 30
-        original_upload_path = UPLOAD_PATHS['event']['original'].format(
-            identifier=unique_identifier
+        original_upload_path = (
+            UPLOAD_PATHS['event']['original']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        large_upload_path = UPLOAD_PATHS['event']['large'].format(
-            identifier=unique_identifier
+        large_upload_path = (
+            UPLOAD_PATHS['event']['large']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        thumbnail_upload_path = UPLOAD_PATHS['event']['thumbnail'].format(
-            identifier=unique_identifier
+        thumbnail_upload_path = (
+            UPLOAD_PATHS['event']['thumbnail']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
-        icon_upload_path = UPLOAD_PATHS['event']['icon'].format(
-            identifier=unique_identifier
+        icon_upload_path = (
+            UPLOAD_PATHS['event']['icon']
+            .format(identifier=unique_identifier)
+            .replace(default_folder, folder)
         )
         new_images = {
             'original_image_url': create_save_resized_image(
@@ -387,7 +411,7 @@ def create_save_pdf(
     return new_file
 
 
-def generate_ics_file(event_id, temp=True):
+def generate_ics_file(event_id, temp=True, include_sessions=True):
     """
     Generate the ICS file for the {event_id}
     """
@@ -404,9 +428,9 @@ def generate_ics_file(event_id, temp=True):
 
     if not os.path.isdir(filedir):
         os.makedirs(filedir)
-    filename = "ical.ics"
+    filename = "event_ical.ics"
     file_path = os.path.join(filedir, filename)
     with open(file_path, "w") as temp_file:
-        temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+        temp_file.write(str(ICalExporter.export(event_id, include_sessions), 'utf-8'))
 
     return file_path

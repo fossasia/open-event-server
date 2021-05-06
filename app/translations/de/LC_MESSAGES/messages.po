@@ -6,20 +6,49 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-01-16 06:15+0530\n"
+"POT-Creation-Date: 2021-04-01 22:43+0530\n"
 "PO-Revision-Date: 2021-01-19 23:22+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
-"de/>\n"
 "Language: de\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-"
+"event/server/de/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
 "Generated-By: Babel 2.9.0\n"
+
+#: app/templates/email/organizer_contact_attendee.html:1
+#: app/templates/email/ticket_purchased.html:1
+#: app/templates/email/ticket_purchased_attendee.html:1
+#: app/templates/email/user_register.html:1
+msgid "Hello"
+msgstr "Hallo"
+
+#: app/templates/email/organizer_contact_attendee.html:2
+msgid "You have contacted the organizers of the event"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:3
+msgid "Below you find a copy of your email"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:7
+msgid "Organizers have received your message and will follow up with you"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:8
+msgid ""
+"This is a system message. Please do not reply to this message. Replies "
+"are not monitored"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:9
+#, fuzzy
+msgid "Thank you"
+msgstr "Vielen Dank"
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
@@ -42,14 +71,8 @@ msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
-"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das "
-"Konto zu verifizieren."
-
-#: app/templates/email/ticket_purchased.html:1
-#: app/templates/email/ticket_purchased_attendee.html:1
-#: app/templates/email/user_register.html:1
-msgid "Hello"
-msgstr "Hallo"
+"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das"
+" Konto zu verifizieren."
 
 #: app/templates/email/ticket_purchased.html:2
 msgid "Thank you for your ticket order for"
@@ -58,7 +81,8 @@ msgstr "Vielen Dank für die Ticketbestellung für"
 #: app/templates/email/ticket_purchased.html:3
 msgid "This is your order confirmation. You can download your tickets at"
 msgstr ""
-"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen unter"
+"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen "
+"unter"
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "Order Summary"
@@ -70,6 +94,7 @@ msgstr "Bestellung"
 
 #: app/templates/email/ticket_purchased.html:6
 #: app/templates/email/ticket_purchased_attendee.html:4
+#: app/templates/pdf/order_invoice.html:208
 msgid "Name"
 msgstr "Name"
 
@@ -80,6 +105,8 @@ msgstr "Ticket"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:8
+#: app/templates/pdf/order_invoice.html:185
+#: app/templates/pdf/order_invoice.html:210
 msgid "Quantity"
 msgstr "Anzahl"
 
@@ -109,8 +136,8 @@ msgstr "Team"
 msgid "Below you find a message from the organizer"
 msgstr "Unten finden Sie eine Nachricht vom Veranstalter"
 
-#: app/templates/email/ticket_purchased.html:23
-#: app/templates/email/ticket_purchased_attendee.html:21
+#: app/templates/email/ticket_purchased.html:28
+#: app/templates/email/ticket_purchased_attendee.html:26
 msgid "Login to manage your orders at"
 msgstr "Login zur Verwaltung der Bestellungen unter"
 
@@ -146,12 +173,78 @@ msgstr "Bitte besuchen Sie den folgenden Link, um Ihre E-Mail zu verifizieren:"
 msgid "Thank You"
 msgstr "Vielen Dank"
 
+#: app/templates/pdf/order_invoice.html:148
+msgid "INVOICE"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:162
+#, fuzzy
+msgid "Order Number"
+msgstr "Bestellübersicht"
+
+#: app/templates/pdf/order_invoice.html:163
+#, fuzzy
+msgid "Order By"
+msgstr "Bestellung"
+
+#: app/templates/pdf/order_invoice.html:169
+msgid "Information unavailable"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:172
+msgid "Order Status"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:176
+msgid "Pending"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:186
+msgid "Total Amount"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:187
+msgid "Payment Mode"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:191
+msgid "Payment pending"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:194
+msgid "Discount Code"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:198
+msgid "NA"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:209
+msgid "Price"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:211
+msgid "Sub-Total(net)"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:212
+msgid "VAT"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:213
+msgid "Tax Amount"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:242
+msgid "Grand Total"
+msgstr ""
+
 #: app/templates/pdf/order_invoice.html:250
+msgid "Invoice Footer"
+msgstr "Rechnungsfußzeile"
+
 #: app/templates/pdf/ticket_attendee.html:79
 #: app/templates/pdf/ticket_purchaser.html:80
 msgid "Organizer Message"
 msgstr "Nachricht des Veranstalters"
 
-#: app/templates/pdf/order_invoice.html:256
-msgid "Invoice Footer"
-msgstr "Rechnungsfußzeile"

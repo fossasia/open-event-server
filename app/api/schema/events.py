@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import GetterRelationship, SoftDeletionSchema
+from app.api.schema.base import GetterRelationship, SoftDeletionSchema, TrimmedEmail
 from app.models.event import Event
 
 
@@ -79,10 +79,12 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_video_room_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
-    paypal_email = fields.Str(allow_none=True)
+    paypal_email = TrimmedEmail(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
+    is_chat_enabled = fields.Bool(default=False)
+    chat_room_name = fields.Str(dump_only=True)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
     can_pay_by_cheque = fields.Bool(default=False)
@@ -351,6 +353,13 @@ class EventSchemaPublic(SoftDeletionSchema):
         schema='ExhibitorSchema',
         many=True,
         type_='exhibitor',
+    )
+    session_favourites = Relationship(
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+        many=True,
     )
 
 

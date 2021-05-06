@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 
 
 class VideoStreamModeratorSchema(Schema):
@@ -20,9 +21,10 @@ class VideoStreamModeratorSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    deleted_at = fields.DateTime(dump_only=True)
+    email = TrimmedEmail(required=True)
 
     user = Relationship(
+        dumps_only=True,
         self_view='v1.video_stream_moderator_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
@@ -32,7 +34,6 @@ class VideoStreamModeratorSchema(Schema):
     )
 
     video_stream = Relationship(
-        many=True,
         self_view='v1.video_stream_moderator_stream',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.video_stream_detail',

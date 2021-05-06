@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_for_monthly_fee_payment
-from app.api.helpers.notification import send_notif_monthly_fee_payment
+from app.api.helpers.notification import notify_monthly_payment
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.utilities import monthdelta, round_money
 from app.models import db
@@ -185,7 +185,7 @@ class EventInvoice(SoftDeletionModel):
         frontend_url = get_settings()['frontend_url']
         link = f'{frontend_url}/event-invoice/{self.identifier}/review'
         currency = self.event.payment_currency
-        amount = f"{currency} {self.amount}"
+        amount = f"{currency} {self.amount:.2f}"
         send_email_for_monthly_fee_payment(
             self.user,
             self.event.name,
@@ -196,13 +196,4 @@ class EventInvoice(SoftDeletionModel):
             follow_up=follow_up,
         )
         if isinstance(follow_up, bool):
-            send_notif_monthly_fee_payment(
-                self.user,
-                self.event.name,
-                prev_month,
-                amount,
-                app_name,
-                link,
-                self.event_id,
-                follow_up=follow_up,
-            )
+            notify_monthly_payment(self, follow_up)

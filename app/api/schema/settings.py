@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 from app.settings import Environment
 from utils.common import use_defaults
 
@@ -63,6 +64,8 @@ class SettingSchemaPublic(Schema):
     # Url of Frontend
     frontend_url = fields.Url(allow_none=True)
 
+    rocket_chat_url = fields.Url(allow_none=True)
+
     #
     # Cookie Policy
     #
@@ -110,7 +113,7 @@ class SettingSchemaPublic(Schema):
     # Admin Invoice Details
     admin_billing_contact_name = fields.Str(allow_none=True)
     admin_billing_phone = fields.Str(allow_none=True)
-    admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_email = TrimmedEmail(allow_none=True)
     admin_billing_state = fields.Str(allow_none=True)
     admin_billing_country = fields.Str(allow_none=True)
     admin_billing_tax_info = fields.Str(allow_none=True)
@@ -267,9 +270,11 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
 
+    rocket_chat_registration_secret = fields.Str(allow_none=True)
+
     # Event Invoices settings
     invoice_sending_day = fields.Integer(allow_none=False, default=1)
     invoice_sending_timezone = fields.Str(allow_none=False, default="UTC")
 
     # Admin Invoice Details
-    admin_billing_paypal_email = fields.Email(allow_none=True)
+    admin_billing_paypal_email = TrimmedEmail(allow_none=True)

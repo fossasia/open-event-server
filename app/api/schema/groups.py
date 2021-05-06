@@ -43,3 +43,13 @@ class GroupSchema(SoftDeletionSchema):
         type_='user',
         dump_only=True,
     )
+
+    roles = Relationship(
+        self_view='v1.event_users_groups_roles',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.users_groups_roles_list',
+        related_view_kwargs={'group_id': '<id>'},
+        schema='UsersGroupsRolesSchema',
+        type_='users-groups-role',
+        many=True,
+    )
