@@ -134,7 +134,7 @@ pep8 = "1.7.1"
 isort = "5.8.0"
 black = "21.5b1"
 pre-commit = "2.12.1"
-pytype = "2021.5.11"
+pytype = "2021.5.14"
 pycln = "0.0.2"
 pyupgrade = "2.15.0"
 # For testing
