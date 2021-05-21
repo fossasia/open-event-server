@@ -37,4 +37,8 @@ class UserFavouriteSession(db.Model, Timestamp):
                 public_name=name,
                 avatar_url=f'https://www.gravatar.com/avatar/{name_hash}?d=retro',
             )
+        if not self.user.avatar_url and not self.user.thumbnail_image_url:
+            name = self.user.anonymous_name
+            name_hash = md5(name.encode('utf-8')).hexdigest()
+            self.user.avatar_url = f'https://www.gravatar.com/avatar/{name_hash}?d=retro'
         return self.user
