@@ -1,57 +1,78 @@
+from sqlalchemy_utils import generic_relationship, generic_repr
+
 from app.models import db
-from app.models.base import SoftDeletionModel
-
-USER_CHANGE_EMAIL = "User email"
-PASSWORD_CHANGE = 'Change Password'
-TICKET_PURCHASED = 'Ticket(s) Purchased'
-TICKET_PURCHASED_ATTENDEE = 'Ticket Purchased to Attendee'
-EVENT_ROLE = 'Event Role Invitation'
-NEW_SESSION = 'New Session Proposal'
-EVENT_EXPORT_FAIL = 'Event Export Failed'
-EVENT_EXPORTED = 'Event Exported'
-EVENT_IMPORT_FAIL = 'Event Import Failed'
-EVENT_IMPORTED = 'Event Imported'
-SESSION_SCHEDULE = 'Session Schedule Change'
-NEXT_EVENT = 'Next Event'
-SESSION_STATE_CHANGE = 'Session State Change'
-INVITE_PAPERS = 'Invitation For Papers'
-AFTER_EVENT = 'After Event'
-EVENT_PUBLISH = 'Event Published'
-TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
-TICKET_RESEND_ORGANIZER = 'Ticket Resend'
-TICKET_CANCELLED = 'Ticket(s) cancelled'
-TICKET_CANCELLED_ORGANIZER = 'Ticket(s) cancelled organizer'
-MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
-MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
+from app.models.helpers.timestamp import Timestamp
 
 
-class NotificationAction(db.Model):
-    """
-    Model for storing user notification actions.
-    """
+class NotificationType:
+    TICKET_PURCHASED = 'ticket_purchased'
+    TICKET_PURCHASED_ATTENDEE = 'ticket_purchased_attendee'
+    TICKET_PURCHASED_ORGANIZER = 'ticket_purchased_organizer'
+    TICKET_CANCELLED = 'ticket_cancelled'
+    TICKET_CANCELLED_ORGANIZER = 'ticket_cancelled_organizer'
+    EVENT_ROLE = 'event_role'
+    NEW_SESSION = 'new_session'
+    SESSION_STATE_CHANGE = 'session_state_change'
+    MONTHLY_PAYMENT = 'monthly_payment'
+    MONTHLY_PAYMENT_FOLLOWUP = 'monthly_payment'
 
-    __tablename__ = 'notification_actions'
+    @staticmethod
+    def entries():
+        # Extract all values of defined entries after filtering internal keys
+        return list(
+            map(
+                lambda entry: entry[1],
+                filter(
+                    lambda entry: not entry[0].startswith('__') and type(entry[1]) == str,
+                    NotificationType.__dict__.items(),
+                ),
+            )
+        )
+
+
+@generic_repr
+class NotificationActor(db.Model, Timestamp):
+
+    __tablename__ = 'notification_actors'
 
     id = db.Column(db.Integer, primary_key=True)
 
-    action_type = db.Column(db.String)
-    subject = db.Column(db.String)
-    subject_id = db.Column(
-        db.String
-    )  # Contains the ID of the related subject, eg. session_id in case of new session.
-    link = db.Column(
-        db.String
-    )  # Contains the link if required to take action. Null in other cases.
-
-    notification_id = db.Column(
-        db.Integer, db.ForeignKey('notifications.id', ondelete='CASCADE')
+    actor_id = db.Column(
+        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
     )
-    notification = db.relationship(
-        'Notification', backref='actions', foreign_keys=[notification_id]
+    actor = db.relationship(
+        'User', backref='notification_actors', foreign_keys=[actor_id]
     )
 
+    content_id = db.Column(
+        db.Integer,
+        db.ForeignKey('notification_content.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+    content = db.relationship(
+        'NotificationContent', backref='actors', foreign_keys=[content_id]
+    )
 
-class Notification(SoftDeletionModel):
+
+@generic_repr
+class NotificationContent(db.Model, Timestamp):
+
+    __tablename__ = 'notification_content'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    type = db.Column(db.String, nullable=False)
+
+    target_type = db.Column(db.Unicode(255))
+    target_id = db.Column(db.Integer)
+    target = generic_relationship(target_type, target_id)
+
+    # For storing state of the action
+    target_action = db.Column(db.String)
+
+
+@generic_repr
+class Notification(db.Model, Timestamp):
     """
     Model for storing user notifications.
     """
@@ -60,13 +81,18 @@ class Notification(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
+    )
     user = db.relationship('User', backref='notifications', foreign_keys=[user_id])
 
-    title = db.Column(db.String)
-    message = db.Column(db.Text)
-    received_at = db.Column(db.DateTime(timezone=True))
-    is_read = db.Column(db.Boolean)
+    is_read = db.Column(db.Boolean, nullable=False, default=False, server_default='False')
 
-    def __repr__(self):
-        return f'<Notif {self.user}:{self.title}>'
+    content_id = db.Column(
+        db.Integer,
+        db.ForeignKey('notification_content.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+    content = db.relationship(
+        'NotificationContent', backref='content', foreign_keys=[content_id]
+    )

@@ -73,6 +73,7 @@ class Session(SoftDeletionModel):
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    creator = db.relationship('User')
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
     submitted_at = db.Column(db.DateTime(timezone=True))

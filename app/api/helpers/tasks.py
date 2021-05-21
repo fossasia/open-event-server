@@ -20,6 +20,7 @@ from sendgrid.helpers.mail import (
     Mail,
 )
 
+from app.api.chat.rocket_chat import rename_rocketchat_room
 from app.api.exports import event_export_task_base
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import (
@@ -29,7 +30,6 @@ from app.api.helpers.files import (
     generate_ics_file,
 )
 from app.api.helpers.mail import check_smtp_config, send_export_mail, send_import_mail
-from app.api.helpers.notification import send_notif_after_export, send_notif_after_import
 from app.api.helpers.pentabarfxml import PentabarfExporter
 from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
 from app.api.helpers.utilities import strip_tags
@@ -147,9 +147,7 @@ def send_email_task_sendgrid(payload):
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
-            logging.exception(
-                "The following error has occurred with sendgrid-{}".format(str(e))
-            )
+            logging.exception(f"The following error has occurred with sendgrid-{str(e)}")
 
 
 @celery.task(name='send.email.post.smtp')
@@ -293,7 +291,6 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, email, event_id, settings):
     event = safe_query(Event, 'id', event_id, 'event_id')
-    user = db.session.query(User).filter_by(email=email).first()
     smtp_encryption = get_settings()['smtp_encryption']
     try:
         logging.info('Exporting started')
@@ -310,9 +307,6 @@ def export_event_task(self, email, event_id, settings):
             )
         else:
             logging.warning('Error in sending export success email')
-        send_notif_after_export(
-            user=user, event_name=event.name, download_url=download_url
-        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in exporting.. sending email')
@@ -320,7 +314,6 @@ def export_event_task(self, email, event_id, settings):
             send_export_mail(email=email, event_name=event.name, error_text=str(e))
         else:
             logging.warning('Error in sending export error email')
-        send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
     return result
 
 
@@ -328,7 +321,6 @@ def export_event_task(self, email, event_id, settings):
 def import_event_task(self, email, file, source_type, creator_id):
     """Import Event Task"""
     task_id = self.request.id.__str__()  # str(async result)
-    user = db.session.query(User).filter_by(email=email).first()
     try:
         logging.info('Importing started')
         result = import_event_task_base(self, file, source_type, creator_id)
@@ -337,9 +329,6 @@ def import_event_task(self, email, file, source_type, creator_id):
         send_import_mail(
             email=email, event_name=result['event_name'], event_url=result['url']
         )
-        send_notif_after_import(
-            user=user, event_name=result['event_name'], event_url=result['url']
-        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in importing the event')
@@ -347,7 +336,6 @@ def import_event_task(self, email, file, source_type, creator_id):
             task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE'
         )
         send_import_mail(email=email, error_text=str(e))
-        send_notif_after_import(user=user, error_text=str(e))
 
     return result
 
@@ -674,3 +662,10 @@ def delete_translations(self, zip_file_path):
         os.remove(zip_file_path)
     except:
         logger.exception('Error while deleting translations zip file')
+
+
+@celery.task(name='rename.chat.room')
+def rename_chat_room(event_id):
+    event = Event.query.get(event_id)
+    rename_rocketchat_room(event)
+    logging.info("Rocket chat room renamed successfully")

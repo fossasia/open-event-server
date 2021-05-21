@@ -57,17 +57,17 @@
         {% if holder.status != "deleted" %}
             <tr class="padded">
                 <td><br>
-                    Order Number :<br>
-                    Order By :<br>
-                    Order Status :<br>
-                    Payment Mode :<br>
+                    Order Number:<br>
+                    Order By:<br>
+                    Order Status:<br>
+                    Payment Mode:<br>
                     {% if holder.order and holder.order.status == 'completed' %}
                         <span class="payment-via">Payment via {{ holder.order.paid_via | capitalize }}</span><br>
                     {% endif %}
                     {% if holder.order and holder.order.status == 'completed' %}
-                        Order Completed :
+                        Order Completed:
                     {% else %}
-                        Order Placed    :
+                        Order Placed:
                     {% endif %}<br>
                 </td>
                 <td><br>
@@ -110,9 +110,9 @@
                     {% for field in custom_forms %}
                         {{ field.name }} <br>
                      {% endfor %}
-                    Amount :<br>
-                    Ticket Name :<br>
-                    Status :<br>
+                    Amount:<br>
+                    Ticket Name:<br>
+                    Status:<br>
                  </td>
                  <td><br>
                      {% for field in custom_forms %}

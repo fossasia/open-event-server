@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
@@ -42,6 +42,7 @@ from app.models.exhibitor import Exhibitor
 from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.microlocation import Microlocation
 from app.models.order import Order
 from app.models.role import Role
@@ -106,7 +107,7 @@ def get_chat_token(event_id: int):
         raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
     try:
-        data = get_rocket_chat_token(current_user)
+        data = get_rocket_chat_token(current_user, event)
         return jsonify({'success': True, 'token': data['token']})
     except RocketChatException as rce:
         if rce.code == RocketChatException.CODES.DISABLED:
@@ -349,6 +350,7 @@ class EventList(ResourceList):
             )
 
         if view_kwargs.get('group_id') and 'GET' in request.method:
+            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'group_id') == view_kwargs['group_id']
             )
@@ -523,6 +525,8 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
+
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
@@ -550,6 +554,11 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
+        if event.name != g.event_name:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event.id)
+
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:

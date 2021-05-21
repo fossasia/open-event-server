@@ -15,22 +15,19 @@ from app.api.helpers.custom_forms import validate_custom_form_constraints_reques
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
-from app.api.helpers.notification import (
-    send_notif_new_session_organizer,
-    send_notif_session_state_change,
-)
+from app.api.helpers.notification import notify_new_session, notify_session_state_change
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
-from app.api.helpers.system_mails import MAILS, SESSION_STATE_CHANGE
+from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionNotifySchema, SessionSchema
 from app.models import db
+from app.models.exhibitor import Exhibitor
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.session_type import SessionType
 from app.models.speaker import Speaker
-from app.models.exhibitor import Exhibitor
 from app.models.track import Track
 from app.models.user import User
 
@@ -76,13 +73,10 @@ class SessionListPost(ResourceList):
         :return:
         """
         if session.event.get_owner():
-            event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, session)
-            send_notif_new_session_organizer(
-                owner, event_name, session.site_cfs_link, session.id
-            )
+            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
+            notify_new_session(session)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
@@ -245,7 +239,7 @@ def get_session_states():
 
 @sessions_blueprint.route('/mails')
 def get_session_state_change_mails():
-    return jsonify(MAILS[SESSION_STATE_CHANGE])
+    return jsonify(MAILS[MailType.SESSION_STATE_CHANGE])
 
 
 class SessionDetail(ResourceDetail):
@@ -378,21 +372,12 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
     for speaker in speakers:
         if not speaker.is_email_overridden:
             send_email_session_state_change(speaker.email, session, mail_override)
-            send_notif_session_state_change(
-                speaker.user,
-                session.title,
-                session.state,
-                session.site_cfs_link,
-                session.id,
-            )
 
     # Email for owner
-    if session.event.get_owner():
-        owner = session.event.get_owner()
+    if owner := session.event.get_owner():
         send_email_session_state_change(owner.email, session, mail_override)
-        send_notif_session_state_change(
-            owner, session.title, session.state, session.site_link, session.id
-        )
+
+    notify_session_state_change(session, current_user)
 
 
 @sessions_blueprint.route('/<int:id>/notify', methods=['POST'])

@@ -1,3 +1,4 @@
+import re
 from argparse import Namespace
 from datetime import datetime
 
@@ -61,6 +62,7 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
     original_image_url = db.Column(db.String)
@@ -385,6 +387,10 @@ class Event(SoftDeletionModel):
         )
 
     @property
+    def chat_room_name(self):
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + self.identifier
+
+    @property
     def tickets_available(self):
         return self.calc_total_tickets_count()
 
@@ -435,7 +441,7 @@ class Event(SoftDeletionModel):
         if self.location_name:
             return self.location_name
         elif self.online:
-            return 'Online'
+            return self.site_link
         return 'Location Not Announced'
 
     @property
@@ -449,6 +455,11 @@ class Event(SoftDeletionModel):
         if stream and stream.user_can_access:
             return stream
         return None
+
+    @property
+    def notify_staff(self):
+        """Who receive notifications about event"""
+        return self.organizers + [self.owner]
 
 
 @event.listens_for(Event, 'after_update')

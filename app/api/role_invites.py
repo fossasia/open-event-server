@@ -44,6 +44,14 @@ class RoleInviteListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if 'email' in data and 'event' in data:
+            role_already_exists = RoleInvite.query.filter_by(
+                email=data['email'], event_id=data['event']
+            ).count()
+        if role_already_exists:
+            raise ConflictError(
+                {'source': '/data'}, 'Role Invite has already been sent for this email.'
+            )
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
@@ -175,6 +183,9 @@ def accept_invite():
                     delete_previous_uer(past_owner)
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
+            # reset the group of event
+            event.group_id = None
+            save_to_db(event, 'Group ID Removed')
             uer = UsersEventsRoles(user=user, event=event, role=role)
             save_to_db(uer, 'User Event Role Created')
             if not user.is_verified:

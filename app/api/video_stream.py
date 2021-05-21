@@ -168,7 +168,7 @@ def get_chat_token(stream_id: int):
         raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
     try:
-        data = get_rocket_chat_token(current_user)
+        data = get_rocket_chat_token(current_user, event)
         return jsonify({'success': True, 'token': data['token']})
     except RocketChatException as rce:
         if rce.code == RocketChatException.CODES.DISABLED:
@@ -201,6 +201,7 @@ class VideoStreamList(ResourceList):
 
     def setup_channel(self, data):
         if not data.get('channel'):
+            self.channel = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
@@ -273,6 +274,8 @@ class VideoStreamDetail(ResourceDetail):
     @staticmethod
     def setup_channel(obj, data):
         if not data.get('channel') or obj.channel_id == int(data['channel']):
+            if not data.get('channel'):
+                obj.channel_id = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':

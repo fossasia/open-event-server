@@ -32,8 +32,9 @@ class BigBlueButton:
     def build_url(self, action: str, params: Dict[str, str] = None) -> str:
         url = self.api_url + '/' + action + '?'
 
+        params = params or {}
         params = {key: val for (key, val) in params.items() if val}
-        query = urlencode(params or {})
+        query = urlencode(params)
 
         url += query + '&checksum=' + self._checksum(action, query)
 
