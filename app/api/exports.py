@@ -195,7 +195,7 @@ def export_attendees_pdf(event_id):
 
 @export_routes.route(
     '/events/<string:event_identifier>/export/sessions/csv',
-    methods=['GET'],
+    methods=['POST'],
     endpoint='export_sessions_csv',
 )
 @to_event_id
@@ -203,7 +203,9 @@ def export_attendees_pdf(event_id):
 def export_sessions_csv(event_id):
     from .helpers.tasks import export_sessions_csv_task
 
-    task = export_sessions_csv_task.delay(event_id)
+    status = request.json.get('status')
+
+    task = export_sessions_csv_task.delay(event_id, status)
 
     create_export_job(task.id, event_id)
 
@@ -212,7 +214,7 @@ def export_sessions_csv(event_id):
 
 @export_routes.route(
     '/events/<string:event_identifier>/export/speakers/csv',
-    methods=['GET'],
+    methods=['POST'],
     endpoint='export_speakers_csv',
 )
 @to_event_id
@@ -220,7 +222,9 @@ def export_sessions_csv(event_id):
 def export_speakers_csv(event_id):
     from .helpers.tasks import export_speakers_csv_task
 
-    task = export_speakers_csv_task.delay(event_id)
+    status = request.json.get('status')
+
+    task = export_speakers_csv_task.delay(event_id, status)
 
     create_export_job(task.id, event_id)
 
