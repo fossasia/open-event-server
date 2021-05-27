@@ -225,12 +225,6 @@ class AttendeeDetail(ResourceDetail):
                 'Only admin or that user itself can update attendee info',
             )
 
-        if order.status != 'initializing':
-            raise UnprocessableEntityError(
-                {'pointer': '/data/id'},
-                "Attendee can't be updated because the corresponding order is not in initializing state",
-            )
-
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
                 raise UnprocessableEntityError(
