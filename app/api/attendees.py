@@ -225,10 +225,9 @@ class AttendeeDetail(ResourceDetail):
                 'Only admin or that user itself can update attendee info',
             )
 
-        if (
-            order.status != 'initializing'
-            and 'is_checked_in' in data
-            and obj.is_checked_in == data['is_checked_in']
+        if order.status != 'initializing' and (
+            'is_checked_in' not in data
+            or ('is_checked_in' in data and obj.is_checked_in == data['is_checked_in'])
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
