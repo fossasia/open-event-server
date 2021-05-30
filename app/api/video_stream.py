@@ -293,7 +293,7 @@ class VideoStreamDetail(ResourceDetail):
         VideoStreamDetail.setup_channel(obj, data)
 
     def after_update_object(self, stream, data, view_kwargs):
-        if stream.channel.provider == 'bbb':
+        if stream.channel and stream.channel.provider == 'bbb':
             params_isMeetingRunning = dict(
                 meetingID=stream.extra['response']['meetingID'],
             )
