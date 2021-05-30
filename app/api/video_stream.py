@@ -292,6 +292,31 @@ class VideoStreamDetail(ResourceDetail):
         VideoStreamDetail.check_extra(obj, data)
         VideoStreamDetail.setup_channel(obj, data)
 
+    def after_update_object(self, stream, data, view_kwargs):
+        if stream.channel.provider == 'bbb':
+            params_isMeetingRunning = dict(
+                meetingID=stream.extra['response']['meetingID'],
+            )
+
+            channel = stream.channel
+            bbb = BigBlueButton(channel.api_url, channel.api_key)
+            result_isMeetingRunning = bbb.request(
+                'isMeetingRunning', params_isMeetingRunning
+            )
+
+            if result_isMeetingRunning.data.get('response', {}).get('running') == 'true':
+                params_end_meeting = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                    password=stream.extra['response']['moderatorPW'],
+                )
+                result_end_meeting = bbb.request('end', params_end_meeting)
+
+                if not result_end_meeting.success:
+                    logger.error('Error while ending current BBB Meeting: %s', result)
+                    raise BadRequestError(
+                        '', 'Cannot end current Meeting on BigBlueButton'
+                    )
+
     def before_delete_object(self, obj, kwargs):
         check_event_access(obj.event_id)
         room_ids = [room.id for room in obj.rooms]
@@ -307,6 +332,7 @@ class VideoStreamDetail(ResourceDetail):
             'before_get_object': before_get_object,
             'after_get_object': after_get_object,
             'before_update_object': before_update_object,
+            'after_update_object': after_update_object,
             'before_delete_object': before_delete_object,
         },
     }
