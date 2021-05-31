@@ -1,5 +1,6 @@
 {{ _('Hello') }},
 <br/><br/>{{ _('You have been added as a video moderator of video %(video)s at event %(event)s.', video=video_stream_name, event=event_name) }}
+<br/><br/>{{ _('Moderators will get access to the event automatically. You do not need to get an additional ticket to access the event and moderator privileges.') }}
 {% if not user %}
     <br/><br/>
     {{ _('You need to register on the platform to access the video stream.') }}
