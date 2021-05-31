@@ -9,6 +9,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.video_channel import VideoChannel
+from app.models.video_stream_moderator import VideoStreamModerator
 
 
 class VideoStream(db.Model):
@@ -85,11 +86,20 @@ class VideoStream(db.Model):
         return user.email in list(map(lambda x: x.email, self.moderators))
 
     @property
+    def user_is_video_moderator(self):
+        user = current_user
+        if VideoStreamModerator.query.filter_by(email=user.email).first():
+            return True
+
+        return False
+
+    @property
     def user_can_access(self):
         if not current_user or not (self.event_id or self.rooms):
             return False
         return (
             self.user_is_moderator
+            or self.user_is_video_moderator
             or self.user_is_speaker(self._event_id)
             or db.session.query(
                 TicketHolder.query.filter_by(event_id=self._event_id, user=current_user)
