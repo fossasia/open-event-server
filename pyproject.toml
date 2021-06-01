@@ -136,7 +136,7 @@ black = "21.5b2"
 pre-commit = "2.13.0"
 pytype = "2021.5.25"
 pycln = "0.0.2"
-pyupgrade = "2.19.0"
+pyupgrade = "2.19.1"
 # For testing
 coverage = "5.5"
 dredd_hooks = "0.2"
