@@ -51,6 +51,16 @@ class SpeakersCallList(ResourceList):
                     {'source': ''},
                     "Speakers call date can\'t be after the event start date",
                 )
+            if not event.is_cfs_enabled:
+                raise ForbiddenError(
+                    {'source': ''},
+                    "CFS should be enabled",
+                )
+            if not speakers_call.announcement:
+                raise ForbiddenError(
+                    {'source': ''},
+                    "Announcement is required if CFS is enabled",
+                )
         except NoResultFound:
             pass
         else:
