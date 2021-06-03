@@ -112,6 +112,7 @@ class Event(SoftDeletionModel):
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(db.Boolean, default=False, nullable=False)
     is_billing_info_mandatory = db.Column(db.Boolean, default=False, nullable=False)
     can_pay_by_paypal = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'

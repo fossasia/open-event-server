@@ -80,6 +80,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     payment_currency = fields.Str(allow_none=True)
     paypal_email = TrimmedEmail(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
+    is_cfs_enabled = fields.Bool(default=False)
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     is_chat_enabled = fields.Bool(default=False)
