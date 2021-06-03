@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
@@ -537,6 +537,8 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
+
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
@@ -564,6 +566,11 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
+        if event.name != g.event_name:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event.id)
+
         if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:

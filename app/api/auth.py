@@ -106,7 +106,10 @@ def fresh_login():
 @jwt_refresh_token_required
 def refresh_token():
     current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user, fresh=False)
+    expiry_time = timedelta(minutes=90)
+    new_token = create_access_token(
+        identity=current_user, fresh=False, expires_delta=expiry_time
+    )
     return jsonify({'access_token': new_token})
 
 

@@ -19,3 +19,15 @@ class GetterRelationship(Relationship):
 
     def serialize(self, attr, obj, accessor=None):
         return super().serialize(getattr(self, 'getter') or attr, obj, accessor)
+
+
+class TrimmedEmail(fields.Email):
+    def _serialize(self, value, *args, **kwargs):
+        if hasattr(value, 'strip'):
+            value = value.strip()
+        return super()._serialize(value, *args, **kwargs)
+
+    def _deserialize(self, value, *args, **kwargs):
+        if hasattr(value, 'strip'):
+            value = value.strip()
+        return super()._deserialize(value, *args, **kwargs)

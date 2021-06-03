@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 
 
 class UsersGroupsRolesSchema(Schema):
@@ -14,14 +15,15 @@ class UsersGroupsRolesSchema(Schema):
         Meta class for users_groups_role Api Schema
         """
 
-        type_ = 'users-groups-roles'
+        type_ = 'users-groups-role'
         self_view = 'v1.users_groups_roles_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Email(required=True)
+    email = TrimmedEmail(required=True)
     accepted = fields.Bool(dump_only=True)
+    token = fields.Str(dump_only=True)
 
     group = Relationship(
         self_view='v1.users_groups_roles_group',

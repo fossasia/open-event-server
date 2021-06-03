@@ -20,6 +20,7 @@ from sendgrid.helpers.mail import (
     Mail,
 )
 
+from app.api.chat.rocket_chat import rename_rocketchat_room
 from app.api.exports import event_export_task_base
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import (
@@ -146,9 +147,7 @@ def send_email_task_sendgrid(payload):
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
-            logging.exception(
-                "The following error has occurred with sendgrid-{}".format(str(e))
-            )
+            logging.exception(f"The following error has occurred with sendgrid-{str(e)}")
 
 
 @celery.task(name='send.email.post.smtp')
@@ -663,3 +662,10 @@ def delete_translations(self, zip_file_path):
         os.remove(zip_file_path)
     except:
         logger.exception('Error while deleting translations zip file')
+
+
+@celery.task(name='rename.chat.room')
+def rename_chat_room(event_id):
+    event = Event.query.get(event_id)
+    rename_rocketchat_room(event)
+    logging.info("Rocket chat room renamed successfully")
