@@ -1,4 +1,4 @@
-# Open Event Server test
+# Open Event Server
 
 ![Open Event Server](/docs/images/open-event-server.png)
 
