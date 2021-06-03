@@ -7,8 +7,9 @@ from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 from tests.factories import common
 from tests.factories.attendee import AttendeeFactory
+from tests.factories.custom_form import CustomFormFactory
 from tests.factories.order import OrderFactory
-from tests.factories.session import SessionFactory
+from tests.factories.session import SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 
 
@@ -28,19 +29,19 @@ class TestExportCSV(OpenEventTestCase):
 
         with self.app.test_request_context():
             test_attendee = AttendeeFactory()
-            field_data = export_attendees_csv([test_attendee])
-            self.assertEqual(field_data[1][3], common.string_)
-            self.assertEqual(field_data[1][5], test_attendee.email)
+            custom_forms = CustomFormFactory()
+            field_data = export_attendees_csv([test_attendee], [custom_forms])
+            self.assertEqual(field_data[1][7], common.string_)
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():
             if not test_session:
-                test_session = SessionFactory()
+                test_session = SessionSubFactory()
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
 
             self.assertEqual(session_row[0], 'example (accepted)')
-            self.assertEqual(session_row[9], 'accepted')
+            self.assertEqual(session_row[12], 'accepted')
 
     def test_export_sessions_csv(self):
         """Method to check sessions data export"""
@@ -52,7 +53,7 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check sessions data export with no abstract"""
 
         with self.app.test_request_context():
-            test_session = SessionFactory()
+            test_session = SessionSubFactory()
             test_session.long_abstract = None
             test_session.level = None
             self._test_export_session_csv(test_session)
@@ -61,7 +62,7 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check that sessions details are correct"""
 
         with self.app.test_request_context():
-            test_session = SessionFactory(
+            test_session = SessionSubFactory(
                 short_abstract='short_abstract',
                 long_abstract='long_abstract',
                 comments='comment',
@@ -72,22 +73,34 @@ class TestExportCSV(OpenEventTestCase):
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
 
-            self.assertEqual(session_row[0], 'example (accepted)')
-            self.assertEqual(session_row[1], '')
-            self.assertEqual(session_row[2], common.string_)
-            self.assertEqual(session_row[3], 'short_abstract')
-            self.assertEqual(session_row[4], 'long_abstract')
-            self.assertEqual(session_row[5], 'comment')
-            self.assertEqual(session_row[6], common.date_.astimezone())
-            self.assertEqual(session_row[7], 'Yes')
-            self.assertEqual(session_row[8], 'level')
-            self.assertEqual(session_row[9], 'accepted')
-            self.assertEqual(session_row[10], common.string_)
-            self.assertEqual(session_row[11], '00:30')
-            self.assertEqual(session_row[12], 'English')
-            self.assertEqual(session_row[13], common.url_)
-            self.assertEqual(session_row[14], common.url_)
-            self.assertEqual(session_row[15], common.url_)
+            self.assertEquals(
+                session_row,
+                [
+                    'example (accepted)',
+                    test_session.starts_at.astimezone(
+                        pytz.timezone(test_session.event.timezone)
+                    ),
+                    test_session.ends_at.astimezone(
+                        pytz.timezone(test_session.event.timezone)
+                    ),
+                    '',
+                    '',
+                    common.string_,
+                    'short_abstract',
+                    'long_abstract',
+                    'comment',
+                    session_row[9],
+                    'Yes',
+                    'level',
+                    'accepted',
+                    '',
+                    '',
+                    'English',
+                    common.url_,
+                    common.url_,
+                    common.url_,
+                ],
+            )
 
     def test_export_speakers_csv(self):
         """Method to check speakers data export"""

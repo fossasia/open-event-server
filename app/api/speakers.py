@@ -9,7 +9,6 @@ from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.speaker import can_edit_after_cfs_ends
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
 from app.models import db
@@ -18,6 +17,22 @@ from app.models.session import Session
 from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.speaker import Speaker
 from app.models.user import User
+
+
+def check_email_override(data, event_id, speaker=None):
+    is_organizer = has_access('is_organizer', event_id=event_id)
+    email_overridden = data.get('is_email_overridden')
+    if email_overridden and not is_organizer:
+        raise ForbiddenError(
+            {'pointer': '/data/attributes/is_email_overridden'},
+            'Organizer access required to override email',
+        )
+    if not email_overridden and speaker:
+        email_overridden = speaker.is_email_overridden
+    if email_overridden:
+        data['email'] = None
+    elif not data.get('email') or not is_organizer:
+        data['email'] = current_user.email
 
 
 class SpeakerListPost(ResourceList):
@@ -54,8 +69,10 @@ class SpeakerListPost(ResourceList):
         ):
             raise ForbiddenError({'pointer': ''}, "Speakers are disabled for this Event")
 
+        check_email_override(data, data['event'])
+
         if (
-            not data.get('is_email_overridden')
+            data.get('email')
             and get_count(
                 db.session.query(Speaker).filter_by(
                     event_id=int(data['event']), email=data['email'], deleted_at=None
@@ -66,18 +83,7 @@ class SpeakerListPost(ResourceList):
             raise ForbiddenError(
                 {'pointer': ''}, 'Speaker with this Email ID already exists'
             )
-        is_organizer = has_access('is_organizer', event_id=data['event'])
-        if data.get('is_email_overridden') and not is_organizer:
-            raise ForbiddenError(
-                {'pointer': 'data/attributes/is_email_overridden'},
-                'Organizer access required to override email',
-            )
-        if not data.get('is_email_overridden') and is_organizer and not data.get('email'):
-            data['email'] = current_user.email
-        if not is_organizer and not data.get('email'):
-            raise ForbiddenError(
-                {'pointer': '/data/email'}, 'Email is required for speaker'
-            )
+
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
@@ -87,8 +93,12 @@ class SpeakerListPost(ResourceList):
                         f"Session: {session_id} not found",
                     )
 
+        excluded = []
+        if not data.get('email'):
+            # Don't check requirement of email if overriden
+            excluded = ['email']
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'speaker', self.schema, Speaker(event_id=data['event']), data
+            'speaker', self.schema, Speaker(event_id=data['event']), data, excluded
         )
 
     def after_create_object(self, speaker, data, view_kwargs):
@@ -174,30 +184,17 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if not can_edit_after_cfs_ends(speaker.event_id):
-            raise ForbiddenError(
-                {'source': ''}, "Cannot edit speaker after the call for speaker is ended"
-            )
-
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
-        if data.get('is_email_overridden') and not has_access(
-            'is_organizer', event_id=speaker.event_id
-        ):
-            raise ForbiddenError(
-                {'pointer': 'data/attributes/is_email_overridden'},
-                'Organizer access required to override email',
-            )
-        if (
-            data.get('is_email_overridden')
-            and has_access('is_organizer', event_id=speaker.event_id)
-            and not data.get('email')
-        ):
-            data['email'] = current_user.email
+        check_email_override(data, speaker.event_id, speaker)
 
+        excluded = []
+        if not data.get('email'):
+            # Don't check requirement of email if overriden
+            excluded = ['email']
         data['complex_field_values'] = validate_custom_form_constraints_request(
-            'speaker', self.resource.schema, speaker, data
+            'speaker', self.resource.schema, speaker, data, excluded
         )
 
     def after_patch(self, result):
@@ -214,7 +211,6 @@ class SpeakerDetail(ResourceDetail):
             for session in all_sessions:
                 if speaker in session.speakers:
                     session_speaker_link = SessionsSpeakersLink(
-                        session_state=session.state,
                         session_id=session.id,
                         event_id=session.event.id,
                         speaker_id=speaker.id,
@@ -226,14 +222,12 @@ class SpeakerDetail(ResourceDetail):
             'is_speaker_itself_or_admin',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
         api.has_permission(
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )
@@ -255,7 +249,6 @@ class SpeakerRelationshipRequired(ResourceRelationship):
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )
@@ -274,7 +267,6 @@ class SpeakerRelationshipOptional(ResourceRelationship):
             'is_coorganizer_or_user_itself',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=Speaker,
         ),
     )

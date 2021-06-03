@@ -11,6 +11,8 @@ class Microlocation(SoftDeletionModel):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     floor = db.Column(db.Integer)
+    hidden_in_scheduler = db.Column(db.Boolean, default=False, nullable=False)
+    position = db.Column(db.Integer, default=0, nullable=False)
     room = db.Column(db.String)
     session = db.relationship('Session', backref="microlocation")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
@@ -32,3 +34,7 @@ class Microlocation(SoftDeletionModel):
         if stream and stream.user_can_access:
             return stream
         return None
+
+    @safe_video_stream.setter
+    def safe_video_stream(self, value):
+        self.video_stream = value

@@ -1,4 +1,4 @@
-# Open Event Server
+# Open Event Server test
 
 ![Open Event Server](/docs/images/open-event-server.png)
 
@@ -74,7 +74,7 @@ Please get familiar with the components of the project in order to be able to co
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
 
-Note that open-event-server **works with Python 3.7** at the moment.
+Note that open-event-server **works with Python 3.8** at the moment.
 
 ### External Service Dependencies
 
@@ -202,10 +202,18 @@ apiary preview --path docs/api/api_blueprint.apib # opens browser with generated
 
 ### Testing
 
-Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
+Clone the repo and set up the server according to the steps listed. Make sure you have installed [Poetry](https://python-poetry.org/docs) and all the dependencies required for testing by running
 
 ```
-pip3 install -r requirements/tests.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install
+
+# Activate porject's virtual environment
+poetry shell
 ```
 
 #### Running unit tests

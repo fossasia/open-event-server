@@ -3,17 +3,15 @@ Notifications related to the various users about invites, ticket purchase, sessi
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `title`  | Title of the notification | string | - |
-| `message` | Message/content of the notification | string | - |
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
-| `received-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `created-at` | Notification created time | ISO 8601 (tz-aware) | - |
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + user_id: 2 (integer) - ID of the specific user in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `message`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Notifications [GET]
@@ -44,11 +42,8 @@ Get a list of Notifications.
                         }
                     },
                     "attributes": {
-                        "message": "example",
-                        "received-at": "2017-06-23T04:40:37.239724+00:00",
-                        "is-read": false,
-                        "title": "example",
-                        "deleted-at": null
+                        "created-at": "2017-06-23T04:40:37.239724+00:00",
+                        "is-read": false
                     },
                     "type": "notification",
                     "id": "1",
@@ -70,7 +65,7 @@ Get a list of Notifications.
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `message`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Notifications [GET]
@@ -101,10 +96,8 @@ Get a list of Notifications.
                         }
                     },
                     "attributes": {
-                        "message": "example",
-                        "received-at": "2017-06-23T04:40:37.239724+00:00",
-                        "is-read": false,
-                        "title": "example"
+                        "created-at": "2017-06-23T04:40:37.239724+00:00",
+                        "is-read": false
                     },
                     "type": "notification",
                     "id": "1",
@@ -150,23 +143,14 @@ Get a single notification.
                     }
                 },
                 "attributes": {
-                    "message": "example",
-                    "received-at": "2017-06-23T04:40:37.239724+00:00",
-                    "is-read": false,
-                    "deleted-at": null,
-                    "title": "example"
+                    "created-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": false
                 },
                 "type": "notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/notifications/1"
-                }
+                "id": "1"
             },
             "jsonapi": {
                 "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/notifications/1"
             }
         }
 
@@ -187,9 +171,7 @@ Update a single notification with `id`.
             {
               "data": {
                 "attributes": {
-                  "title": "example1",
-                  "message": "example1",
-                  "is-read": "true"
+                  "is-read": true
                 },
                 "type": "notification",
                 "id": "1"
@@ -209,23 +191,14 @@ Update a single notification with `id`.
                     }
                 },
                 "attributes": {
-                    "message": "example1",
-                    "received-at": "2017-06-23T04:40:37.239724+00:00",
-                    "is-read": true,
-                    "deleted-at": null,
-                    "title": "example1"
+                    "created-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": true
                 },
                 "type": "notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/notifications/1"
-                }
+                "id": "1"
             },
             "jsonapi": {
                 "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/notifications/1"
             }
         }
 
@@ -249,65 +222,4 @@ Delete a single notification.
           "jsonapi": {
             "version": "1.0"
           }
-        }
-
-
-## Notification Detail with Actions [/v1/notifications/{notification_id}?include=notification_actions]
-+ Parameters
-    + notification_id: 1 (integer) - ID of the notification in the form of an integer
-
-### Notification Detail with Actions [GET]
-Get a single notification and it's associated actions.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "user": {
-                        "links": {
-                            "self": "/v1/notifications/1/relationships/user",
-                            "related": "/v1/notifications/1/user"
-                        }
-                    }
-                },
-                "attributes": {
-                    "message": "example",
-                    "received-at": "2017-06-23T04:40:37.239724+00:00",
-                    "is-read": false,
-                    "deleted-at": null,
-                    "title": "example"
-                },
-                "type": "notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/notifications/1"
-                }
-            },
-            "included": [
-                {
-                    "type": "notification-action",
-                    "attributes": {
-                        "action-type": "view",
-                        "subject-id": "1",
-                        "subject": "event",
-                        "notification-id":"1"
-                    },
-                    "id": "1"
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/notifications/1"
-            }
         }

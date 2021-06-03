@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 3.7
+* Python 3.8
 * PostgreSQL
 * Redis
 
@@ -18,10 +18,20 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
 
-* **Step 1** - Install Python 3 requirements.
+* **Step 1** - Install Poetry and Python 3 requirements.
+
+This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
 
 ```sh
-pip3 install -r requirements.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
 ```
 
 
@@ -74,7 +84,7 @@ python3 manage.py db stamp head
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.instance.celery &
+celery -A app.instance.celery worker -B -l INFO -c 2 &
 unset INTEGRATE_SOCKETIO
 
 # run app

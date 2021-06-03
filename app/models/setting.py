@@ -133,6 +133,10 @@ class Setting(db.Model):
     # Google Analytics
     analytics_key = db.Column(db.String)
 
+    # Rocket Chat Integration
+    rocket_chat_url = db.Column(db.String)
+    rocket_chat_registration_secret = db.Column(db.String)
+
     #
     # Social links
     #
@@ -146,6 +150,7 @@ class Setting(db.Model):
     gitter_url = db.Column(db.String)
     telegram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
+    weblate_url = db.Column(db.String)
 
     #
     # Event Invoices settings
@@ -167,6 +172,7 @@ class Setting(db.Model):
     admin_billing_zip = db.Column(db.String)
     admin_billing_additional_info = db.Column(db.String)
     admin_billing_paypal_email = db.Column(db.String)
+    admin_billing_logo = db.Column(db.String)
     #
     # Generators
     #

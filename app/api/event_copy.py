@@ -56,9 +56,7 @@ def create_event_copy(identifier):
         event_id=event.id, deleted_at=None
     ).all()
     speaker_calls = SpeakersCall.query.filter_by(event_id=event.id, deleted_at=None).all()
-    user_event_roles = UsersEventsRoles.query.filter_by(
-        event_id=event.id, deleted_at=None
-    ).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id).all()
     taxes = Tax.query.filter_by(event_id=event.id, deleted_at=None).all()
 
     db.session.expunge(event)  # expunge the object from session

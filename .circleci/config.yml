@@ -2,29 +2,26 @@ version: 2
 jobs:
   dependencies:
     docker:
-      - image: circleci/python:3.7.4-node
+      - image: circleci/python:3.8.6-node
 
     working_directory: ~/code
 
     steps:
       - checkout
 
-      - run:
-          command: cat requirements/*.txt > requirements/combined.txt
-
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.5-dependencies-
 
       - run:
           name: Install Python Dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --exists-action w -r requirements/tests.txt
+            poetry install
 
       - run:
           name: Install Node Dependencies
@@ -36,11 +33,11 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+          key: v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
 
   dredd:
     docker:
-      - image: circleci/python:3.7.4-node
+      - image: circleci/python:3.8.6-node
         environment:
             APP_CONFIG: config.TestingConfig
             DATABASE_URL: postgresql://postgres@localhost/test
@@ -58,15 +55,12 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          command: cat requirements/*.txt > requirements/combined.txt
-
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.5-dependencies-
 
       - run:
           name: Create API blueprint
@@ -76,24 +70,29 @@ jobs:
           name: Test API Doc
           command: . venv/bin/activate && npx dredd
 
+      - add_ssh_keys:
+          fingerprints:
+            - "66:bd:79:0b:a9:ac:1d:0a:41:f3:26:dd:36:d9:a3:40"
+
+      - run:
+          name: Deploy API Docs
+          command: ./scripts/push_api_docs.sh
+
   pytype:
     docker:
-      - image: circleci/python:3.7.4-node
+      - image: circleci/python:3.8.6-node
 
     working_directory: ~/code
 
     steps:
       - checkout
 
-      - run:
-          command: cat requirements/*.txt > requirements/combined.txt
-
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.3-dependencies-{{ checksum "requirements/combined.txt" }}-{{ checksum "package.json" }}
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.3-dependencies-
+            - v1.5-dependencies-
 
       - restore_cache:
           keys:
@@ -108,6 +107,53 @@ jobs:
             - ./.pytype
           key: v1-pytype
 
+  test:
+    docker:
+      - image: circleci/python:3.8.6-node
+        environment:
+          APP_CONFIG: config.TestingConfig
+          DATABASE_URL: postgresql://postgres@localhost/test
+          TEST_DATABASE_URL: postgresql://postgres@localhost/test
+          SECRET_KEY: super secret key
+      # Services
+      - image: circleci/postgres:12-postgis-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test
+          POSTGRES_HOST_AUTH_METHOD: trust
+      - image: circleci/redis:5.0.6-alpine
+
+    working_directory: ~/code
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1.5-dependencies-
+
+      - run:
+          name: Test
+          command: |
+            . venv/bin/activate
+            ./scripts/test_multiple_heads.sh
+            mkdir test-results
+            pytest tests -v --junitxml=test-results/junit.xml --cov=.
+
+      - store_test_results:
+          path: test-results
+
+      - store_artifacts:
+          path: test-results  
+
+      - run:
+          name: Upload Coverage
+          command: . venv/bin/activate && bash <(curl -s https://codecov.io/bash)
+          when: on_success
+
 workflows:
   version: 2
   build-and-test:
@@ -117,5 +163,8 @@ workflows:
           requires:
             - dependencies
       - pytype:
+          requires:
+            - dependencies
+      - test:
           requires:
             - dependencies

@@ -1,15 +1,15 @@
 from flask import request
 from marshmallow import post_dump, validate, validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import GetterRelationship
 from app.models import db
 from utils.common import use_defaults
 
 
-class OnSiteTicketSchema(SoftDeletionSchema):
+class OnSiteTicketSchema(Schema):
     class Meta:
         type_ = 'on-site-ticket'
         inflect = dasherize
@@ -19,7 +19,7 @@ class OnSiteTicketSchema(SoftDeletionSchema):
 
 
 @use_defaults()
-class OrderSchema(SoftDeletionSchema):
+class OrderSchema(Schema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'
@@ -107,7 +107,8 @@ class OrderSchema(SoftDeletionSchema):
         cls_or_instance=fields.Nested(OnSiteTicketSchema), load_only=True, allow_none=True
     )
 
-    attendees = Relationship(
+    attendees = GetterRelationship(
+        getter='filtered_ticket_holders',
         attribute='ticket_holders',
         self_view='v1.order_attendee',
         self_view_kwargs={'order_identifier': '<identifier>'},
@@ -120,7 +121,6 @@ class OrderSchema(SoftDeletionSchema):
     )
 
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.order_ticket',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.ticket_list',
@@ -131,8 +131,8 @@ class OrderSchema(SoftDeletionSchema):
         dump_only=True,
     )
 
-    user = Relationship(
-        attribute='user',
+    user = GetterRelationship(
+        getter='safe_user',
         self_view='v1.order_user',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
@@ -143,7 +143,6 @@ class OrderSchema(SoftDeletionSchema):
     )
 
     event = Relationship(
-        attribute='event',
         self_view='v1.order_event',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.event_detail',
@@ -165,7 +164,6 @@ class OrderSchema(SoftDeletionSchema):
     )
 
     marketer = Relationship(
-        attribute='marketer',
         self_view='v1.order_marketer',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',
@@ -176,7 +174,6 @@ class OrderSchema(SoftDeletionSchema):
     )
 
     discount_code = Relationship(
-        attribute='discount_code',
         self_view='v1.order_discount',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.discount_code_detail',

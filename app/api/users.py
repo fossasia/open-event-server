@@ -1,25 +1,22 @@
-import base64
 import logging
+from datetime import datetime
 
-from flask import Blueprint, abort, jsonify, make_response, render_template, request
+from flask import Blueprint, abort, jsonify, make_response, request
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import get_count, safe_query_kwargs
+from app.api.helpers.db import get_count, safe_query_by, safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
-from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email, send_email_change_user_email
+from app.api.helpers.mail import send_email_change_user_email, send_user_register_email
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
-from app.api.helpers.system_mails import MAILS
 from app.api.helpers.user import (
     modify_email_for_user_to_be_deleted,
     modify_email_for_user_to_be_restored,
 )
-from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.schema.users import UserSchema, UserSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
@@ -28,7 +25,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import USER_REGISTER
+from app.models.group import Group
 from app.models.notification import Notification
 from app.models.order import Order
 from app.models.session import Session
@@ -36,7 +33,7 @@ from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
-from app.settings import get_settings
+from app.models.video_stream_moderator import VideoStreamModerator
 
 logger = logging.getLogger(__name__)
 
@@ -87,24 +84,7 @@ class UserList(ResourceList):
         :return:
         """
 
-        s = get_serializer()
-        hash = str(
-            base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
-            'utf-8',
-        )
-        link = make_frontend_url('/verify', {'token': hash})
-        settings = get_settings()
-        send_email(
-            to=user.email,
-            action=USER_REGISTER,
-            subject=MAILS[USER_REGISTER]['subject'].format(app_name=settings['app_name']),
-            html=render_template(
-                'email/user_register.html',
-                email=user.email,
-                link=link,
-                settings=get_settings(),
-            ),
-        )
+        send_user_register_email(user)
         # TODO Handle in a celery task
         # if data.get('original_image_url'):
         #     try:
@@ -237,6 +217,13 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('group_id') is not None:
+            group = safe_query_kwargs(Group, view_kwargs, 'group_id')
+            if group.user_id is not None:
+                view_kwargs['id'] = group.user_id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('discount_code_id') is not None:
             discount_code = safe_query_kwargs(
                 DiscountCode,
@@ -259,6 +246,18 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('video_stream_moderator_id') is not None:
+            moderator = safe_query_kwargs(
+                VideoStreamModerator,
+                view_kwargs,
+                'video_stream_moderator_id',
+            )
+            user = safe_query_by(User, moderator.email, param='email')
+            if user is not None:
+                view_kwargs['id'] = user.id
+            else:
+                view_kwargs['id'] = None
+
     def before_update_object(self, user, data, view_kwargs):
         # TODO: Make a celery task for this
         # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
@@ -276,7 +275,13 @@ class UserDetail(ResourceDetail):
         if data.get('deleted_at') != user.deleted_at:
             if has_access('is_user_itself', user_id=user.id) or has_access('is_admin'):
                 if data.get('deleted_at'):
-                    if len(user.events) != 0:
+                    event_exists = db.session.query(
+                        Event.query.filter_by(deleted_at=None)
+                        .join(Event.users)
+                        .filter(User.id == user.id)
+                        .exists()
+                    ).scalar()
+                    if event_exists:
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
@@ -285,6 +290,8 @@ class UserDetail(ResourceDetail):
                     order_exists = db.session.query(
                         TicketHolder.query.filter_by(user=user)
                         .join(Order)
+                        .join(Order.event)
+                        .filter(Event.ends_at > datetime.now())
                         .filter(
                             or_(
                                 Order.status == 'completed',

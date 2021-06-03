@@ -1,22 +1,31 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
+from flask.blueprints import Blueprint
+from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended.view_decorators import jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
-from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
+from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    NotFoundError,
+    UnprocessableEntityError,
+)
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access, is_logged_in
+from app.api.helpers.permissions import jwt_required, to_event_id
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchema, EventSchemaPublic
 
@@ -29,9 +38,11 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_copyright import EventCopyright
 from app.models.event_invoice import EventInvoice
+from app.models.exhibitor import Exhibitor
 from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.microlocation import Microlocation
 from app.models.order import Order
 from app.models.role import Role
@@ -48,12 +59,8 @@ from app.models.ticket import Ticket, TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import (
-    ATTENDEE,
-    COORGANIZER,
     MARKETER,
     MODERATOR,
-    ORGANIZER,
-    OWNER,
     REGISTRAR,
     SALES_ADMIN,
     TRACK_ORGANIZER,
@@ -61,16 +68,68 @@ from app.models.user import (
 )
 from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
+from app.models.video_stream import VideoStream
+
+events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
+
+
+@events_blueprint.route('/<string:event_identifier>/has-streams')
+@jwt_optional
+@to_event_id
+def has_streams(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    exists = False
+    if event.video_stream:
+        exists = True
+    else:
+        exists = db.session.query(
+            VideoStream.query.join(VideoStream.rooms)
+            .filter(Microlocation.event_id == event.id)
+            .exists()
+        ).scalar()
+    can_access = VideoStream(event_id=event.id).user_can_access
+    return jsonify(dict(exists=exists, can_access=can_access))
+
+
+@events_blueprint.route(
+    '/<string:event_identifier>/chat-token',
+)
+@jwt_required
+@to_event_id
+def get_chat_token(event_id: int):
+    event = Event.query.get_or_404(event_id)
+
+    if not VideoStream(event_id=event.id).user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    try:
+        data = get_rocket_chat_token(current_user, event)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        else:
+            return jsonify(
+                {
+                    'success': False,
+                    'code': rce.code,
+                    'response': rce.response is not None and rce.response.json(),
+                }
+            )
 
 
 def validate_event(user, data):
     if not user.can_create_event():
         raise ForbiddenError({'source': ''}, "Please verify your Email")
 
-    if data.get('state', None) == 'published' and not user.can_publish_event():
+    if data.get('state', None) == Event.State.PUBLISHED and not user.can_publish_event():
         raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
 
-    if not data.get('name', None) and data.get('state', None) == 'published':
+    if not data.get('name', None) and data.get('state', None) == Event.State.PUBLISHED:
         raise ConflictError(
             {'pointer': '/data/attributes/name'},
             "Event Name is required to publish the event",
@@ -96,16 +155,38 @@ def validate_date(event, data):
             {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at"
         )
 
-    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
-        if event and event.deleted_at and not data.get('deleted_at'):
-            data['state'] = 'draft'
-        elif event and not event.deleted_at and data.get('deleted_at'):
-            pass
-        else:
-            raise UnprocessableEntityError(
-                {'pointer': '/data/attributes/starts-at'},
-                "starts-at should be after current date-time",
+    if (data['ends_at'] - data['starts_at']).days > 20:
+        raise UnprocessableEntityError(
+            {'pointer': '/data/attributes/ends-at'},
+            "Event duration can not be more than 20 days",
+        )
+
+
+def get_event_query():
+    query_ = Event.query
+    if get_jwt_identity() is None or not current_user.is_staff:
+        # If user is not admin, we only show published events
+        query_ = query_.filter_by(state=Event.State.PUBLISHED)
+    if is_logged_in():
+        # For a specific user accessing the API, we show all
+        # events managed by them, even if they're not published
+        verify_jwt_in_request()
+        query2 = Event.query
+        query2 = (
+            query2.join(Event.roles)
+            .filter_by(user_id=current_user.id)
+            .join(UsersEventsRoles.role)
+            .filter(
+                or_(
+                    Role.name == Role.COORGANIZER,
+                    Role.name == Role.ORGANIZER,
+                    Role.name == Role.OWNER,
+                )
             )
+        )
+        query_ = query_.union(query2)
+
+    return query_
 
 
 class EventList(ResourceList):
@@ -127,39 +208,13 @@ class EventList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Event)
-        if get_jwt_identity() is None or not current_user.is_staff:
-            # If user is not admin, we only show published events
-            query_ = query_.filter_by(state='published')
-        if is_logged_in():
-            # For a specific user accessing the API, we show all
-            # events managed by them, even if they're not published
-            verify_jwt_in_request()
-            query2 = self.session.query(Event)
-            query2 = (
-                query2.join(Event.roles)
-                .filter_by(user_id=current_user.id)
-                .join(UsersEventsRoles.role)
-                .filter(
-                    or_(
-                        Role.name == COORGANIZER,
-                        Role.name == ORGANIZER,
-                        Role.name == OWNER,
-                    )
-                )
-            )
-            query_ = query_.union(query2)
+        query_ = get_event_query()
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = (
-                query_.join(Event.roles)
-                .filter_by(user_id=user.id)
-                .join(UsersEventsRoles.role)
-                .filter(Role.name != ATTENDEE)
-            )
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -171,7 +226,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == OWNER)
+                .filter(Role.name == Role.OWNER)
             )
 
         if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
@@ -185,7 +240,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == ORGANIZER)
+                .filter(Role.name == Role.ORGANIZER)
             )
 
         if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
@@ -198,7 +253,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == COORGANIZER)
+                .filter(Role.name == Role.COORGANIZER)
             )
 
         if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
@@ -294,6 +349,12 @@ class EventList(ResourceList):
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
             )
 
+        if view_kwargs.get('group_id') and 'GET' in request.method:
+            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'group_id') == view_kwargs['group_id']
+            )
+
         return query_
 
     def before_post(self, args, kwargs, data=None):
@@ -307,7 +368,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         validate_event(user, data)
-        if data['state'] != 'draft':
+        if data['state'] != Event.State.DRAFT:
             validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
@@ -319,7 +380,7 @@ class EventList(ResourceList):
         :return:
         """
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
-        role = Role.query.filter_by(name=OWNER).first()
+        role = Role.query.filter_by(name=Role.OWNER).first()
         uer = UsersEventsRoles(user=user, event=event, role=role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(
@@ -334,7 +395,7 @@ class EventList(ResourceList):
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)
 
-        if event.state == 'published' and event.schedule_published_on:
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
 
         if data.get('original_image_url'):
@@ -355,267 +416,60 @@ class EventList(ResourceList):
     }
 
 
+def set_event_id(model, identifier, kwargs, attr='event_id', column_name='id'):
+    if kwargs.get('id'):  # ID already set
+        return
+    if kwargs.get(identifier) is None:
+        return
+    item = safe_query_kwargs(model, kwargs, identifier, column_name=column_name)
+    kwargs['id'] = getattr(item, attr, None)
+
+
 def get_id(view_kwargs):
     """
     method to get the resource id for fetching details
     :param view_kwargs:
     :return:
     """
-    if view_kwargs.get('identifier'):
-        event = safe_query_kwargs(Event, view_kwargs, 'identifier', 'identifier')
-        view_kwargs['id'] = event.id
+    set_event_id(Event, 'identifier', view_kwargs, attr='id', column_name='identifier')
 
-    if view_kwargs.get('sponsor_id') is not None:
-        sponsor = safe_query_kwargs(Sponsor, view_kwargs, 'sponsor_id')
-        if sponsor.event_id is not None:
-            view_kwargs['id'] = sponsor.event_id
-        else:
-            view_kwargs['id'] = None
+    lookup_list = [
+        (Sponsor, 'sponsor_id'),
+        (UserFavouriteEvent, 'user_favourite_event_id'),
+        (EventCopyright, 'copyright_id'),
+        (Track, 'track_id'),
+        (SessionType, 'session_type_id'),
+        (FaqType, 'faq_type_id'),
+        (EventInvoice, 'event_invoice_id'),
+        (DiscountCode, 'discount_code_id'),
+        (Session, 'session_id'),
+        (SocialLink, 'social_link_id'),
+        (Tax, 'tax_id'),
+        (StripeAuthorization, 'stripe_authorization_id'),
+        (DiscountCode, 'discount_code_id'),
+        (SpeakersCall, 'speakers_call_id'),
+        (Ticket, 'ticket_id'),
+        (TicketTag, 'ticket_tag_id'),
+        (RoleInvite, 'role_invite_id'),
+        (UsersEventsRoles, 'users_events_role_id'),
+        (AccessCode, 'access_code_id'),
+        (Speaker, 'speaker_id'),
+        (EmailNotification, 'email_notification_id'),
+        (Microlocation, 'microlocation_id'),
+        (TicketHolder, 'attendee_id'),
+        (CustomForms, 'custom_form_id'),
+        (Faq, 'faq_id'),
+        (Feedback, 'feedback_id'),
+        (VideoStream, 'video_stream_id'),
+        (Exhibitor, 'exhibitor_id'),
+    ]
+    for model, identifier in lookup_list:
+        set_event_id(model, identifier, view_kwargs)
 
-    if view_kwargs.get('user_favourite_event_id') is not None:
-        user_favourite_event = safe_query_kwargs(
-            UserFavouriteEvent,
-            view_kwargs,
-            'user_favourite_event_id',
-        )
-        if user_favourite_event.event_id is not None:
-            view_kwargs['id'] = user_favourite_event.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('copyright_id') is not None:
-        copyright = safe_query_kwargs(EventCopyright, view_kwargs, 'copyright_id')
-        if copyright.event_id is not None:
-            view_kwargs['id'] = copyright.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('track_id') is not None:
-        track = safe_query_kwargs(Track, view_kwargs, 'track_id')
-        if track.event_id is not None:
-            view_kwargs['id'] = track.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('session_type_id') is not None:
-        session_type = safe_query_kwargs(SessionType, view_kwargs, 'session_type_id')
-        if session_type.event_id is not None:
-            view_kwargs['id'] = session_type.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('faq_type_id') is not None:
-        faq_type = safe_query_kwargs(FaqType, view_kwargs, 'faq_type_id')
-        if faq_type.event_id is not None:
-            view_kwargs['id'] = faq_type.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('event_invoice_id') is not None:
-        event_invoice = safe_query_kwargs(EventInvoice, view_kwargs, 'event_invoice_id')
-        if event_invoice.event_id is not None:
-            view_kwargs['id'] = event_invoice.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('event_invoice_identifier') is not None:
-        event_invoice = safe_query_kwargs(
-            EventInvoice, view_kwargs, 'event_invoice_identifier', 'identifier'
-        )
-        if event_invoice.event_id is not None:
-            view_kwargs['id'] = event_invoice.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('discount_code_id') is not None:
-        discount_code = safe_query_kwargs(DiscountCode, view_kwargs, 'discount_code_id')
-        if discount_code.event_id is not None:
-            view_kwargs['id'] = discount_code.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('session_id') is not None:
-        sessions = safe_query_kwargs(Session, view_kwargs, 'session_id')
-        if sessions.event_id is not None:
-            view_kwargs['id'] = sessions.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('social_link_id') is not None:
-        social_link = safe_query_kwargs(SocialLink, view_kwargs, 'social_link_id')
-        if social_link.event_id is not None:
-            view_kwargs['id'] = social_link.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('tax_id') is not None:
-        tax = safe_query_kwargs(Tax, view_kwargs, 'tax_id')
-        if tax.event_id is not None:
-            view_kwargs['id'] = tax.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('stripe_authorization_id') is not None:
-        stripe_authorization = safe_query_kwargs(
-            StripeAuthorization,
-            view_kwargs,
-            'stripe_authorization_id',
-        )
-        if stripe_authorization.event_id is not None:
-            view_kwargs['id'] = stripe_authorization.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('user_id') is not None:
-        try:
-            discount_code = (
-                db.session.query(DiscountCode)
-                .filter_by(id=view_kwargs['discount_code_id'])
-                .one()
-            )
-        except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': 'discount_code_id'},
-                "DiscountCode: {} not found".format(view_kwargs['discount_code_id']),
-            )
-        else:
-            if discount_code.event_id is not None:
-                view_kwargs['id'] = discount_code.event_id
-            else:
-                view_kwargs['id'] = None
-
-    if view_kwargs.get('speakers_call_id') is not None:
-        speakers_call = safe_query_kwargs(SpeakersCall, view_kwargs, 'speakers_call_id')
-        if speakers_call.event_id is not None:
-            view_kwargs['id'] = speakers_call.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('ticket_id') is not None:
-        ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
-        if ticket.event_id is not None:
-            view_kwargs['id'] = ticket.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('ticket_tag_id') is not None:
-        ticket_tag = safe_query_kwargs(TicketTag, view_kwargs, 'ticket_tag_id')
-        if ticket_tag.event_id is not None:
-            view_kwargs['id'] = ticket_tag.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('role_invite_id') is not None:
-        role_invite = safe_query_kwargs(RoleInvite, view_kwargs, 'role_invite_id')
-        if role_invite.event_id is not None:
-            view_kwargs['id'] = role_invite.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('users_events_role_id') is not None:
-        users_events_role = safe_query_kwargs(
-            UsersEventsRoles,
-            view_kwargs,
-            'users_events_role_id',
-        )
-        if users_events_role.event_id is not None:
-            view_kwargs['id'] = users_events_role.event_id
-
-    if view_kwargs.get('access_code_id') is not None:
-        access_code = safe_query_kwargs(AccessCode, view_kwargs, 'access_code_id')
-        if access_code.event_id is not None:
-            view_kwargs['id'] = access_code.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('speaker_id'):
-        try:
-            speaker = (
-                db.session.query(Speaker).filter_by(id=view_kwargs['speaker_id']).one()
-            )
-        except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': 'speaker_id'},
-                "Speaker: {} not found".format(view_kwargs['speaker_id']),
-            )
-        else:
-            if speaker.event_id:
-                view_kwargs['id'] = speaker.event_id
-            else:
-                view_kwargs['id'] = None
-
-    if view_kwargs.get('email_notification_id'):
-        try:
-            email_notification = (
-                db.session.query(EmailNotification)
-                .filter_by(id=view_kwargs['email_notification_id'])
-                .one()
-            )
-        except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': 'email_notification_id'},
-                "Email Notification: {} not found".format(
-                    view_kwargs['email_notification_id']
-                ),
-            )
-        else:
-            if email_notification.event_id:
-                view_kwargs['id'] = email_notification.event_id
-            else:
-                view_kwargs['id'] = None
-
-    if view_kwargs.get('microlocation_id'):
-        try:
-            microlocation = (
-                db.session.query(Microlocation)
-                .filter_by(id=view_kwargs['microlocation_id'])
-                .one()
-            )
-        except NoResultFound:
-            raise ObjectNotFound(
-                {'parameter': 'microlocation_id'},
-                "Microlocation: {} not found".format(view_kwargs['microlocation_id']),
-            )
-        else:
-            if microlocation.event_id:
-                view_kwargs['id'] = microlocation.event_id
-            else:
-                view_kwargs['id'] = None
-
-    if view_kwargs.get('attendee_id'):
-        attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
-        if attendee.event_id is not None:
-            view_kwargs['id'] = attendee.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('custom_form_id') is not None:
-        custom_form = safe_query_kwargs(CustomForms, view_kwargs, 'custom_form_id')
-        if custom_form.event_id is not None:
-            view_kwargs['id'] = custom_form.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('faq_id') is not None:
-        faq = safe_query_kwargs(Faq, view_kwargs, 'faq_id')
-        if faq.event_id is not None:
-            view_kwargs['id'] = faq.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('order_identifier') is not None:
-        order = safe_query_kwargs(Order, view_kwargs, 'order_identifier', 'identifier')
-        if order.event_id is not None:
-            view_kwargs['id'] = order.event_id
-        else:
-            view_kwargs['id'] = None
-
-    if view_kwargs.get('feedback_id') is not None:
-        feedback = safe_query_kwargs(Feedback, view_kwargs, 'feedback_id')
-        if feedback.event_id is not None:
-            view_kwargs['id'] = feedback.event_id
-        else:
-            view_kwargs['id'] = None
+    set_event_id(
+        EventInvoice, 'event_invoice_identifier', view_kwargs, column_name='identifier'
+    )
+    set_event_id(Order, 'order_identifier', view_kwargs, column_name='identifier')
 
     return view_kwargs
 
@@ -646,17 +500,8 @@ class EventDetail(ResourceDetail):
         """
         get_id(view_kwargs)
 
-        if view_kwargs.get('order_identifier') is not None:
-            order = safe_query_kwargs(
-                Order, view_kwargs, 'order_identifier', 'identifier'
-            )
-            if order.event_id is not None:
-                view_kwargs['id'] = order.event_id
-            else:
-                view_kwargs['id'] = None
-
     def after_get_object(self, event, view_kwargs):
-        if event.state == "draft":
+        if event and event.state == Event.State.DRAFT:
             if not is_logged_in() or not has_access('is_coorganizer', event_id=event.id):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
@@ -680,11 +525,16 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
+
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
         )
-        is_draft_published = event.state == "draft" and data.get('state') == "published"
+        is_draft_published = (
+            event.state == Event.State.DRAFT
+            and data.get('state') == Event.State.PUBLISHED
+        )
         is_event_restored = event.deleted_at and not data.get('deleted_at')
 
         if is_date_updated or is_draft_published or is_event_restored:
@@ -704,7 +554,12 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
-        if event.state == 'published' and event.schedule_published_on:
+        if event.name != g.event_name:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event.id)
+
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:
             clear_export_urls(event)
@@ -848,16 +703,40 @@ class UpcomingEventList(EventList):
             .filter(
                 Event.starts_at > current_time,
                 Event.ends_at > current_time,
-                Event.state == 'published',
-                Event.privacy == 'public',
+                Event.state == Event.State.PUBLISHED,
+                Event.privacy == Event.Privacy.PUBLIC,
                 or_(
                     Event.is_promoted,
                     and_(
+                        Event.is_demoted == False,
                         Event.original_image_url != None,
                         Event.logo_url != None,
                         Event.event_type_id != None,
                         Event.event_topic_id != None,
                         Event.event_sub_topic_id != None,
+                        Event.tickets.any(
+                            and_(
+                                Ticket.deleted_at == None,
+                                Ticket.is_hidden == False,
+                                Ticket.sales_ends_at > current_time,
+                                db.session.query(TicketHolder.id)
+                                .join(Order)
+                                .filter(
+                                    TicketHolder.ticket_id == Ticket.id,
+                                    TicketHolder.order_id == Order.id,
+                                    TicketHolder.deleted_at.is_(None),
+                                )
+                                .filter(
+                                    or_(
+                                        Order.status == 'placed',
+                                        Order.status == 'completed',
+                                    )
+                                )
+                                .count()
+                                < Ticket.quantity,
+                            )
+                        ),
+                        Event.social_link.any(SocialLink.name == "twitter"),
                     ),
                 ),
             )

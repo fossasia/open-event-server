@@ -1,8 +1,12 @@
+from flask_jwt_extended import current_user
+from marshmallow import pre_dump
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
+from app.api.helpers.permission_manager import require_current_user
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
+from app.models.user import User
 from utils.common import use_defaults
 
 
@@ -24,15 +28,31 @@ class UserSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Email(required=True)
+    email = TrimmedEmail(required=True)
     avatar_url = fields.Url(allow_none=True)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
+    public_name = fields.Str(allow_none=True)
+    is_profile_public = fields.Bool(default=False, allow_none=False)
     original_image_url = fields.Url(dump_only=True, allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
     icon_image_url = fields.Url(dump_only=True, allow_none=True)
     was_registered_with_order = fields.Boolean()
+
+    @pre_dump
+    def handle_deleted_or_private_users(self, data):
+        if not data:
+            return data
+        can_access = require_current_user() and (
+            current_user.is_staff or current_user.id == data.id
+        )
+        if data.deleted_at != None and not can_access:
+            user = User(
+                id=0, email='deleted@eventyay.com', first_name='deleted', last_name='user'
+            )
+            return user
+        return data
 
 
 class UserSchema(UserSchemaPublic):
@@ -66,8 +86,8 @@ class UserSchema(UserSchemaPublic):
     is_user_track_organizer = fields.Boolean(dump_only=True)
     is_user_moderator = fields.Boolean(dump_only=True)
     is_user_registrar = fields.Boolean(dump_only=True)
-    is_user_attendee = fields.Boolean(dump_only=True)
     is_verified = fields.Boolean()
+    is_blocked = fields.Boolean()
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
@@ -83,8 +103,8 @@ class UserSchema(UserSchemaPublic):
     billing_city = fields.Str(allow_none=True)
     billing_zip_code = fields.Str(allow_none=True)
     billing_additional_info = fields.Str(allow_none=True)
+    is_rocket_chat_registered = fields.Bool(dump_only=True)
     notifications = Relationship(
-        attribute='notifications',
         self_view='v1.user_notification',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.notification_list',
@@ -104,7 +124,6 @@ class UserSchema(UserSchemaPublic):
         type_='feedback',
     )
     event_invoices = Relationship(
-        attribute='event_invoices',
         self_view='v1.user_event_invoices',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_invoice_list',
@@ -124,7 +143,6 @@ class UserSchema(UserSchemaPublic):
         type_='speaker',
     )
     access_codes = Relationship(
-        attribute='access_codes',
         self_view='v1.user_access_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.access_code_list',
@@ -133,7 +151,6 @@ class UserSchema(UserSchemaPublic):
         type_='access-codes',
     )
     discount_codes = Relationship(
-        attribute='discount_codes',
         self_view='v1.user_discount_codes',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.discount_code_list',
@@ -142,7 +159,6 @@ class UserSchema(UserSchemaPublic):
         type_='discount-codes',
     )
     email_notifications = Relationship(
-        attribute='email_notifications',
         self_view='v1.user_email_notifications',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.email_notification_list',
@@ -152,7 +168,6 @@ class UserSchema(UserSchemaPublic):
         type_='email-notification',
     )
     alternate_emails = Relationship(
-        attribute='alternate_emails',
         self_view='v1.user_emails',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_emails_list',
@@ -170,6 +185,15 @@ class UserSchema(UserSchemaPublic):
         schema='SessionSchema',
         many=True,
         type_='session',
+    )
+    groups = Relationship(
+        self_view='v1.user_group',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.group_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='GroupSchema',
+        many=True,
+        type_='group',
     )
     owner_events = Relationship(
         self_view='v1.user_owner_events',
@@ -252,6 +276,15 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='user-favourite-event',
     )
+    favourite_sessions = Relationship(
+        self_view='v1.user_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        many=True,
+        type_='user-favourite-session',
+    )
     orders = Relationship(
         attribute='orders',
         self_view='v1.user_orders',
@@ -263,7 +296,6 @@ class UserSchema(UserSchemaPublic):
         type_='order',
     )
     marketer_events = Relationship(
-        attribute='marketer_events',
         self_view='v1.user_marketer_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',
@@ -272,7 +304,6 @@ class UserSchema(UserSchemaPublic):
         many=True,
     )
     sales_admin_events = Relationship(
-        attribute='sales_admin_events',
         self_view='v1.user_sales_admin_events',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_list',

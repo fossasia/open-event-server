@@ -1,3 +1,5 @@
+import os
+
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
@@ -41,11 +43,9 @@ def ticket_attendee_authorized(order_identifier):
             or order.is_attendee(current_user)
         ):
             file_path = order.ticket_pdf_path
-            try:
-                return send_from_directory('../', file_path, as_attachment=True)
-            except FileNotFoundError:
+            if not os.path.isfile(file_path):
                 create_pdf_tickets_for_holder(order)
-                return send_from_directory('../', file_path, as_attachment=True)
+            return send_from_directory('../', file_path, as_attachment=True)
         else:
             raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     else:
@@ -145,3 +145,29 @@ def create_order():
     order.populate_and_save()
 
     return OrderSchema().dump(order)
+
+
+@order_blueprint.route('/attendees/<int:attendee_id>.pdf')
+@jwt_required
+def ticket_attendee_pdf(attendee_id):
+    ticket_holder = TicketHolder.query.get(attendee_id)
+    if ticket_holder is None:
+        raise NotFoundError(
+            {'source': ''}, 'This attendee is not associated with any ticket'
+        )
+
+    if not (
+        current_user.is_staff
+        or ticket_holder.order.user_id == current_user.id
+        or ticket_holder.user == current_user
+        or has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=ticket_holder.event_id,
+            user_id=ticket_holder.user.id,
+        )
+    ):
+        raise ForbiddenError({'source': ''}, 'Unauthorized Access')
+    file_path = ticket_holder.pdf_url_path
+    if not os.path.isfile(file_path):
+        create_pdf_tickets_for_holder(ticket_holder.order)
+    return send_from_directory('../', file_path, as_attachment=True)

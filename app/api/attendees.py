@@ -32,7 +32,6 @@ def get_sold_and_reserved_tickets_count(ticket_id):
             TicketHolder.deleted_at.is_(None),
         )
         .filter(
-            Order.deleted_at.is_(None),
             or_(
                 Order.status == 'placed',
                 Order.status == 'completed',
@@ -133,16 +132,20 @@ class AttendeeList(ResourceList):
                 'order_identifier',
                 'identifier',
             )
+
+            is_coorganizer = has_access(
+                'is_coorganizer',
+                event_id=order.event_id,
+            )
             if not (
-                has_access(
-                    'is_coorganizer_or_user_itself',
-                    event_id=order.event_id,
-                    user_id=order.user_id,
-                )
+                is_coorganizer
+                or current_user.id == order.user_id
                 or order.is_attendee(current_user)
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
+            if not is_coorganizer and current_user.id != order.user_id:
+                query_ = query_.filter(TicketHolder.user == current_user)
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
@@ -222,7 +225,10 @@ class AttendeeDetail(ResourceDetail):
                 'Only admin or that user itself can update attendee info',
             )
 
-        if order.status != 'initializing':
+        if order.status != 'initializing' and (
+            'is_checked_in' not in data
+            or ('is_checked_in' in data and obj.is_checked_in == data['is_checked_in'])
+        ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
                 "Attendee can't be updated because the corresponding order is not in initializing state",
@@ -293,8 +299,12 @@ class AttendeeDetail(ResourceDetail):
                     obj.attendee_notes, data['attendee_notes']
                 )
 
-        data['complex_field_values'] = validate_custom_form_constraints_request(
-            'attendee', self.resource.schema, obj, data
+        data['complex_field_values'] = (
+            validate_custom_form_constraints_request(
+                'attendee', self.resource.schema, obj, data
+            )
+            if obj.event.is_ticket_form_enabled
+            else None
         )
 
     decorators = (jwt_required,)

@@ -122,7 +122,7 @@ def validate_discount_code(
 
     now = pytz.utc.localize(datetime.utcnow())
     valid_from = discount_code.valid_from
-    valid_till = discount_code.valid_till
+    valid_till = discount_code.valid_expire_time
     if not discount_code.is_active or not valid_from <= now <= valid_till:
         logger.warning(
             "Discount code inactive or expired",
@@ -167,9 +167,12 @@ def is_discount_available(discount_code, tickets=None, ticket_holders=None):
         for ticket in tickets:
             if int(ticket['id']) in ticket_ids:
                 qty += ticket.get('quantity', 1)
+
+    max_quantity = qty if discount_code.max_quantity < 0 else discount_code.max_quantity
+
     available = (
         (qty + old_holders) <= discount_code.tickets_number
-        and discount_code.min_quantity <= qty <= discount_code.max_quantity
+        and discount_code.min_quantity <= qty <= max_quantity
     )
     if not available:
         logger.warning(

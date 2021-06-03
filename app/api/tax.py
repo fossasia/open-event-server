@@ -132,7 +132,6 @@ class TaxDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=Tax,
             methods="PATCH,DELETE",
         ),
@@ -154,7 +153,6 @@ class TaxRelationship(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=Tax,
             methods="PATCH,DELETE",
         ),

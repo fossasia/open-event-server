@@ -1,27 +1,38 @@
-FROM python:3.7-alpine as base
+FROM python:3.8.6-alpine as base
 
 ####
 
 FROM base as builder
 
-WORKDIR /install
-
 RUN apk update && \
-  apk add --virtual build-deps git gcc python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
+  apk add --virtual build-deps make git g++ python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
   apk add postgresql-dev
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
-ADD requirements.txt /requirements.txt
-ADD requirements /requirements/
+ENV POETRY_HOME=/opt/poetry \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1
+    
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN pip install --prefix=/install --no-warn-script-location -r /requirements.txt
+RUN set -eo pipefail; wget -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+
+WORKDIR /opt/pysetup
+
+COPY pyproject.toml ./
+COPY poetry.lock ./
+
+RUN poetry install --no-root --no-dev
 
 ####
 
 FROM base
 
-COPY --from=builder /install /usr/local
+COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
+
+ENV PATH="/opt/pysetup/.venv/bin:$PATH"
+
 RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
 # PDF Generation: weasyprint
 RUN apk --no-cache add cairo-dev pango-dev ttf-opensans

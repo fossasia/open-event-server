@@ -88,7 +88,6 @@ class EventCopyrightDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=EventCopyright,
             methods="PATCH,DELETE",
         ),
@@ -110,7 +109,6 @@ class EventCopyrightRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=EventCopyright,
             methods="PATCH",
         ),

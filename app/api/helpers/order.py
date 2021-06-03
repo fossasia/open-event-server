@@ -16,8 +16,8 @@ from app.api.helpers.mail import (
     send_order_purchase_organizer_email,
 )
 from app.api.helpers.notification import (
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
+    notify_ticket_purchase_attendee,
+    notify_ticket_purchase_organizer,
 )
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
@@ -81,33 +81,27 @@ def create_pdf_tickets_for_holder(order):
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
+            extra_identifiers={'extra_identifier': order.identifier},
             upload_dir='generated/tickets/',
         )
 
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
-            if (not holder.user) or holder.user.id != order.user_id:
-                # holder is not the order buyer.
-                pdf = create_save_pdf(
-                    render_template(
-                        'pdf/ticket_attendee.html', order=order, holder=holder
-                    ),
-                    UPLOAD_PATHS['pdf']['tickets_all'],
-                    dir_path='/static/uploads/pdf/tickets/',
-                    identifier=order.identifier,
-                    upload_dir='generated/tickets/',
-                )
-            else:
-                # holder is the order buyer.
-                pdf = order.tickets_pdf_url
+            # create attendee pdf for every ticket holder
+            pdf = create_save_pdf(
+                render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                UPLOAD_PATHS['pdf']['tickets_all'],
+                dir_path='/static/uploads/pdf/tickets/',
+                identifier=order.identifier,
+                extra_identifiers={'extra_identifier': holder.id},
+                upload_dir='generated/tickets/',
+            )
             holder.pdf_url = pdf
             save_to_db(holder)
 
         # create order invoices pdf
-        order_tickets = OrderTicket.query.filter_by(
-            order_id=order.id, deleted_at=None
-        ).all()
+        order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
         create_save_pdf(
             render_template(
@@ -121,6 +115,7 @@ def create_pdf_tickets_for_holder(order):
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
             upload_dir='generated/invoices/',
+            new_renderer=True,
         )
         save_to_db(order)
 
@@ -309,7 +304,7 @@ def on_order_completed(order):
 
     # send email and notifications.
     send_email_to_attendees(order)
-    send_notif_to_attendees(order)
+    notify_ticket_purchase_attendee(order)
 
     if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
         order.completed_at = datetime.utcnow()
@@ -320,5 +315,4 @@ def on_order_completed(order):
         )
     )
     send_order_purchase_organizer_email(order, organizer_set)
-    for organizer in organizer_set:
-        send_notif_ticket_purchase_organizer(organizer, order)
+    notify_ticket_purchase_organizer(order)

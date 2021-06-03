@@ -7,10 +7,8 @@ from redis.exceptions import LockError
 from sqlalchemy import distinct, or_
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.mail import send_email_after_event
-from app.api.helpers.notification import send_notif_after_event
 from app.api.helpers.query import get_user_event_roles_by_role_name
-from app.api.helpers.utilities import make_dict, monthdelta
+from app.api.helpers.utilities import monthdelta
 from app.instance import celery
 from app.models import db
 from app.models.event import Event
@@ -27,39 +25,37 @@ logger = logging.getLogger(__name__)
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')
 def send_after_event_mail():
-    from app.instance import current_app as app
-
-    with app.app_context():
-        events = Event.query.filter_by(state='published', deleted_at=None).all()
-        for event in events:
-            organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
-            speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
-            owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
-            current_time = datetime.datetime.now(pytz.timezone(event.timezone))
-            time_difference = current_time - event.ends_at
-            time_difference_minutes = (time_difference.days * 24 * 60) + (
-                time_difference.seconds / 60
-            )
-            frontend_url = get_settings()['frontend_url']
-            if current_time > event.ends_at and time_difference_minutes < 1440:
-                unique_emails = set()
-                user_objects = []
-                for speaker in speakers:
-                    if not speaker.is_email_overridden:
-                        unique_emails.add(speaker.user.email)
-                        user_objects.append(speaker.user)
-                for organizer in organizers:
-                    unique_emails.add(organizer.user.email)
-                    user_objects.append(organizer.user)
-                if owner:
-                    unique_emails.add(owner.user.email)
-                    user_objects.append(owner.user)
-                for email in unique_emails:
-                    send_email_after_event(email, event.name, frontend_url)
-                # Unique user's dict based on their id.
-                unique_users_dict = make_dict(user_objects, "id")
-                for user in unique_users_dict.values():
-                    send_notif_after_event(user, event.name)
+    current_time = datetime.datetime.now()
+    events = (
+        Event.query.filter_by(state='published', deleted_at=None)
+        .filter(
+            Event.ends_at < current_time,
+            current_time - Event.ends_at < datetime.timedelta(days=1),
+        )
+        .all()
+    )
+    for event in events:
+        organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
+        speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
+        owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
+        unique_emails = set()
+        user_objects = []
+        for speaker in speakers:
+            if not speaker.is_email_overridden:
+                unique_emails.add(speaker.user.email)
+                user_objects.append(speaker.user)
+        for organizer in organizers:
+            unique_emails.add(organizer.user.email)
+            user_objects.append(organizer.user)
+        if owner:
+            unique_emails.add(owner.user.email)
+            user_objects.append(owner.user)
+        # for email in unique_emails:
+        #     send_email_after_event(email, event.name, frontend_url)
+        #  Unique user's dict based on their id.
+        # unique_users_dict = make_dict(user_objects, "id")
+        # for user in unique_users_dict.values():
+        #     send_notif_after_event(user, event.name)
 
 
 @celery.task(base=RequestContextTask, name='change.session.state.on.event.completion')

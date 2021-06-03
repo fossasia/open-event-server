@@ -2,7 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import GetterRelationship, SoftDeletionSchema
 
 
 class MicrolocationSchema(SoftDeletionSchema):
@@ -26,6 +26,8 @@ class MicrolocationSchema(SoftDeletionSchema):
     latitude = fields.Float(validate=lambda n: -90 <= n <= 90, allow_none=True)
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
     floor = fields.Integer(allow_none=True)
+    hidden_in_scheduler = fields.Boolean(default=False)
+    position = fields.Integer(allow_none=True, default=0)
     room = fields.Str(allow_none=True)
     sessions = Relationship(
         attribute='session',
@@ -38,7 +40,6 @@ class MicrolocationSchema(SoftDeletionSchema):
         type_='session',
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.microlocation_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -46,8 +47,8 @@ class MicrolocationSchema(SoftDeletionSchema):
         schema='EventSchemaPublic',
         type_='event',
     )
-    video_stream = Relationship(
-        attribute='safe_video_stream',
+    video_stream = GetterRelationship(
+        getter='safe_video_stream',
         self_view='v1.microlocation_video_stream',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.video_stream_detail',

@@ -1,3 +1,4 @@
+from citext import CIText
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
@@ -17,7 +18,7 @@ class DiscountCode(SoftDeletionModel):
     )
 
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String, nullable=False)
+    code = db.Column(CIText, nullable=False)
     discount_url = db.Column(db.String)
     value = db.Column(db.Float, nullable=False)
     type = db.Column(db.String, nullable=False)
@@ -46,7 +47,7 @@ class DiscountCode(SoftDeletionModel):
         return (
             TicketHolder.query.filter_by(deleted_at=None)
             .join(Order)
-            .filter_by(discount_code_id=self.id, deleted_at=None)
+            .filter_by(discount_code_id=self.id)
             .filter(Order.status.in_(['completed', 'placed']))
         )
 
@@ -57,6 +58,10 @@ class DiscountCode(SoftDeletionModel):
     @property
     def confirmed_attendees_count(self) -> int:
         return get_count(self.get_confirmed_attendees_query())
+
+    @property
+    def valid_expire_time(self):
+        return self.valid_till or self.event.ends_at
 
     def get_supported_tickets(self, ticket_ids=None):
         query = Ticket.query.with_parent(self).filter_by(deleted_at=None)

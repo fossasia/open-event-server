@@ -9,8 +9,9 @@ class SpeakersCall(SoftDeletionModel):
 
     __tablename__ = 'speakers_calls'
     id = db.Column(db.Integer, primary_key=True)
-    announcement = db.Column(db.Text, nullable=False)
+    announcement = db.Column(db.Text, nullable=True)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
+    soft_ends_at = db.Column(db.DateTime(timezone=True), nullable=True)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False, default='public')

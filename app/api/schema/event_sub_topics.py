@@ -33,7 +33,6 @@ class EventSubTopicSchema(Schema):
         type_='event',
     )
     event_topic = Relationship(
-        attribute='event_topic',
         self_view='v1.event_sub_topic_event_topic',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_topic_detail',
@@ -42,7 +41,6 @@ class EventSubTopicSchema(Schema):
         type_='event-topic',
     )
     custom_placeholder = Relationship(
-        attribute='custom_placeholder',
         self_view='v1.event_sub_topic_custom_placeholder',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.custom_placeholder_detail',

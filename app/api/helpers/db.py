@@ -6,6 +6,7 @@ import uuid
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.models import db
@@ -102,21 +103,28 @@ def safe_query(model, column_name, value, parameter_name):
     )
 
 
-def get_or_create(model, **kwargs):
+def get_or_create(model, defaults=None, **kwargs):
     """
     This function queries a record in the model, if not found it will create one.
     :param model: db Model to be queried
     :param **kwargs: Arguments to the filter_by method of sqlalchemy.orm.query.Query.filter_by to be filtered by
     """
-    was_created = False
-    instance = db.session.query(model).filter_by(**kwargs).first()
+    fetch = lambda: db.session.query(model).filter_by(**kwargs).first()
+    instance = fetch()
     if instance:
-        return instance, was_created
+        return instance, False
+    kwargs.update(defaults or {})
     instance = model(**kwargs)
-    db.session.add(instance)
-    db.session.commit()
-    was_created = True
-    return instance, was_created
+    try:
+        db.session.add(instance)
+        db.session.commit()
+        return instance, True
+    except IntegrityError:
+        db.session.rollback()
+        instance = fetch()
+        if not instance:
+            raise
+        return instance, False
 
 
 def get_count(query):
@@ -149,12 +157,14 @@ def get_new_slug(model, name):
     return f'{slug}-{uuid.uuid4().hex}'
 
 
-def get_new_identifier(model, length=None):
+def get_new_identifier(model=None, length=None):
     if not length:
         identifier = str(uuid.uuid4())
     else:
         identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
-    count = get_count(model.query.filter_by(identifier=identifier))
+    count = (
+        0 if model is None else get_count(model.query.filter_by(identifier=identifier))
+    )
     if not identifier.isdigit() and count == 0:
         return identifier
     return get_new_identifier(model)

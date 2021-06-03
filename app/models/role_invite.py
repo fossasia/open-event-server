@@ -2,10 +2,18 @@ import random
 from datetime import datetime, timedelta
 
 import pytz
+from flask_jwt_extended import current_user
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
+from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.mail import send_email_role_invite
+from app.api.helpers.notification import notify_event_role_invitation
+from app.api.helpers.permission_manager import has_access
 from app.models import db
+from app.models.event import Event
+from app.models.user import User
+from app.settings import get_settings
 
 
 def generate_hash():
@@ -42,6 +50,21 @@ class RoleInvite(db.Model):
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)
         return datetime.now(pytz.utc) > self.created_at + timedelta(hours=24)
+
+    def send_invite(self):
+        """
+        Send mail to invitee
+        """
+        user = User.query.filter_by(email=self.email).first()
+        event = Event.query.filter_by(id=self.event_id).first()
+        frontend_url = get_settings()['frontend_url']
+        link = f"{frontend_url}/role-invites?token={self.hash}"
+        if not has_access('is_coorganizer', event_id=event.id):
+            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
+
+        send_email_role_invite(self.email, self.role_name, event.name, link)
+        if user:
+            notify_event_role_invitation(self, user, current_user)
 
     def __repr__(self):
         return '<RoleInvite {!r}:{!r}:{!r}>'.format(

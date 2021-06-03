@@ -1,0 +1,133 @@
+# Group Users Events Roles
+
+Users Events Roles for Events. Can only be edited, deleted and queried by event co-organizers.
+
+## Users Events Roles Collection List [/v1/events/{event_identifier}/users-events-roles{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Users Events Roles [GET]
+Get a list of Users Events Roles.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "users-events-roles",
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/users-events-roles/1/relationships/user",
+                                "related": "/v1/users-events-roles/1/user"
+                            }
+                        },
+                        "role": {
+                            "links": {
+                                "self": "/v1/users-events-roles/1/relationships/role",
+                                "related": "/v1/users-events-roles/1/role"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/users-events-roles/1/relationships/event",
+                                "related": "/v1/users-events-roles/1/event"
+                            }
+                        }
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/users-events-roles/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/events/1/users-events-roles"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Users Events Roles Details [/v1/users-events-roles/{users_events_roles_id}]
++ Parameters
+    + users_events_roles_id: 1 (integer) - ID of the users events roles in the form of an integer
+
+### Users Events Roles Details [GET]
+Get a single users events roles.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "users-events-roles",
+                "id": "1",
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/users-events-roles/1/relationships/event",
+                            "related": "/v1/users-events-roles/1/event"
+                        }
+                    },
+                    "role": {
+                        "links": {
+                            "self": "/v1/users-events-roles/1/relationships/role",
+                            "related": "/v1/users-events-roles/1/role"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/users-events-roles/1/relationships/user",
+                            "related": "/v1/users-events-roles/1/user"
+                        }
+                    }
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Delete Users Events Roles [DELETE]
+Delete a single users events roles.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }

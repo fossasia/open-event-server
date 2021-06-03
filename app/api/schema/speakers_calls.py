@@ -54,15 +54,15 @@ class SpeakersCallSchema(SoftDeletionSchema):
         #                               "speakers-call ends-at should be before event starts-at")
 
     id = fields.Str(dump_only=True)
-    announcement = fields.Str(required=True)
+    announcement = fields.Str(allow_none=True)
     starts_at = fields.DateTime(required=True)
+    soft_ends_at = fields.DateTime(allow_none=True)
     ends_at = fields.DateTime(required=True)
     hash = fields.Str(allow_none=True)
     privacy = fields.String(
         validate=validate.OneOf(choices=["private", "public"]), allow_none=True
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.speakers_call_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

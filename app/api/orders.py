@@ -23,7 +23,7 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_order_cancel_email
-from app.api.helpers.notification import send_notif_ticket_cancel
+from app.api.helpers.notification import notify_ticket_cancel
 from app.api.helpers.order import (
     create_onsite_attendees_for_order,
     delete_related_attendees_for_order,
@@ -309,7 +309,10 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('status') in ['pending', 'placed', 'completed']:
+        if (
+            data.get('status') in ['pending', 'placed', 'completed']
+            and order.event.is_ticket_form_enabled
+        ):
             attendees = order.ticket_holders
             for attendee in attendees:
                 validate_custom_form_constraints_request(
@@ -349,7 +352,7 @@ class OrderDetail(ResourceDetail):
                         if element not in relationships and data[element] != getattr(
                             order, element, None
                         ):
-                            if element != 'status' and element != 'deleted_at':
+                            if element != 'status':
                                 raise ForbiddenError(
                                     {'pointer': f'data/{element}'},
                                     f"You cannot update {element} of an order",
@@ -374,11 +377,20 @@ class OrderDetail(ResourceDetail):
                             check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
-            if order.status != 'initializing' and order.status != 'pending':
+            status = data.get('status')
+            if (
+                order.status != Order.Status.INITIALIZING
+                and order.status != Order.Status.PENDING
+                and status != Order.Status.CANCELLED
+            ):
                 raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
+            if status == Order.Status.CANCELLED:
+                # If this is a cancellation request, we revert all PATCH changes except status = cancelled
+                data.clear()
+                data['status'] = Order.Status.CANCELLED
             for element in data:
                 if data[element]:
                     if (
@@ -441,40 +453,20 @@ class OrderDetail(ResourceDetail):
         :return:
         """
 
-        if order.status == 'cancelled' and order.deleted_at is None:
+        if order.status == 'cancelled':
             send_order_cancel_email(order)
-            send_notif_ticket_cancel(order)
+            notify_ticket_cancel(order, current_user)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif (
-            order.status == 'completed' or order.status == 'placed'
-        ) and order.deleted_at is None:
+        elif order.status == 'completed' or order.status == 'placed':
             on_order_completed(order)
-
-    def before_delete_object(self, order, view_kwargs):
-        """
-        method to check for proper permissions for deleting
-        :param order:
-        :param view_kwargs:
-        :return:
-        """
-        if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenError({'source': ''}, 'Access Forbidden')
-        if (
-            order.amount
-            and order.amount > 0
-            and (order.status == 'completed' or order.status == 'placed')
-        ):
-            raise ConflictError(
-                {'source': ''}, 'You cannot delete a placed/completed paid order.'
-            )
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (
         jwt_required,
-        api.has_permission('auth_required', methods="PATCH,DELETE", model=Order),
+        api.has_permission('auth_required', methods="PATCH", model=Order),
     )
     schema = OrderSchema
     data_layer = {
@@ -482,7 +474,6 @@ class OrderDetail(ResourceDetail):
         'model': Order,
         'methods': {
             'before_update_object': before_update_object,
-            'before_delete_object': before_delete_object,
             'before_get_object': before_get_object,
             'after_update_object': after_update_object,
         },

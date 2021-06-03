@@ -1,0 +1,281 @@
+# Group Favourite Sessions
+
+This Group's APIs can be used for adding a particular session to the favourite list of the user.
+
+## Favourite Sessions Collection [/v1/user-favourite-sessions]
+
+### Create a Favourite Session [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+            {
+                "data": {
+                    "type": "user-favourite-session",
+                    "relationships": {
+                        "session": {
+                            "data": {
+                                "id": "1",
+                                "type": "session"
+                            }
+                        }
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-favourite-session",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-sessions/1/relationships/user",
+                            "related": "/v1/favourite-sessions/1/user"
+                        }
+                    },
+                    "session": {
+                        "links": {
+                            "self": "/v1/user-favourite-sessions/1/relationships/session",
+                            "related": "/v1/user-favourite-sessions/1/session"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-favourite-sessions/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-favourite-sessions/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Collection List [/v1/user/1/favourite-sessions]
+
+### List All Favourite Sessions of an User [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-session",
+                    "id": "1",
+                    "relationships": {
+                        "session": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/session",
+                                "related": "/v1/user-favourite-sessions/1/session"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/user",
+                                "related": "/v1/favourite-sessions/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-sessions/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-sessions"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Collection List [/v1/session/1/favourite-sessions]
+
+### List All Favourite Sessions of a Session [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-session",
+                    "id": "1",
+                    "relationships": {
+                        "session": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/session",
+                                "related": "/v1/user-favourite-sessions/1/session"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/user",
+                                "related": "/v1/favourite-sessions/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-sessions/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-sessions"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Collection List [/v1/event/1/favourite-sessions]
+
+### List All Favourite Sessions of an Event [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-session",
+                    "id": "1",
+                    "relationships": {
+                        "session": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/session",
+                                "related": "/v1/user-favourite-sessions/1/session"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-sessions/1/relationships/user",
+                                "related": "/v1/favourite-sessions/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-sessions/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-sessions"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Sessions Detail [/v1/user-favourite-sessions/{session_id}]
++ Parameters
+    + session_id: 1 (integer) - ID of the Session in the form of an integer
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/user-favourite-sessions/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "data": {
+                "type": "user-favourite-session",
+                "links": {
+                    "self": "/v1/user-favourite-sessions/1"
+                },
+                "id": "1",
+                "attributes": {
+                    "deleted-at": null
+                },
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "related": "/v1/favourite-sessions/1/user",
+                            "self": "/v1/user-favourite-sessions/1/relationships/user"
+                        }
+                    },
+                    "session": {
+                        "links": {
+                            "related": "/v1/user-favourite-sessions/1/session",
+                            "self": "/v1/user-favourite-sessions/1/relationships/session"
+                        }
+                    }
+                }
+            }
+        }
+
+### Delete Favourite Session [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

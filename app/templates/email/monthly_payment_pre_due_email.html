@@ -1,0 +1,18 @@
+{{ _('Hello') }} {{ name }},
+<br><br>
+{{ _("This is a reminder that we haven't received your payment for your invoice for") }} {{ event_name }} {{ _('for') }} {{ date }}. {{ _('Payment is fast and simple using your credit card or PayPal account') }}.
+<br><br>
+{{ _('Amount Due') }}: {{ amount }}
+<br><br>
+{{ _('Please pay within 2 days') }}.
+<br><br>
+{{ _('Pay Now at') }}: <a href='{{ payment_url }}'>{{ payment_url }}</a>
+<br><br>
+{{ _('Late payments can be subject to a') }} 5% {{ _('finance fee') }}.
+<br><br>
+{{ _('A detailed invoice is available in') }} <a href='https://eventyay.com/account/billing/invoices/'>{{ _('the billing area') }}</a> {{ _('of your account') }}.
+{{ _('If you have any questions about invoices') }}, {{ _('please find more information on our FAQ at') }} <a href='https://support.eventyay.com'>https://support.eventyay.com</a>.
+<br><br>
+<em>{{ _('Thank you for using') }} {{ app_name }}!</em>
+<br><br>
+{{ app_name }} {{ _('Team') }} 

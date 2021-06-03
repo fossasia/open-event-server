@@ -1,11 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
+from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
 
 
-class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
+class StripeAuthorizationSchemaPublic(Schema):
     """
     Stripe Authorization Schema
     """
@@ -24,7 +23,6 @@ class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
     stripe_publishable_key = fields.Str(dump_only=True)
 
     event = Relationship(
-        attribute='event',
         self_view='v1.stripe_authorization_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

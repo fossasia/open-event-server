@@ -1,12 +1,13 @@
 import logging
 from datetime import datetime, timedelta
 
+import pytz
 from flask.templating import render_template
 from sqlalchemy.sql import func
 
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_for_monthly_fee_payment
-from app.api.helpers.notification import send_notif_monthly_fee_payment
+from app.api.helpers.notification import notify_monthly_payment
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.utilities import monthdelta, round_money
 from app.models import db
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 class EventInvoice(SoftDeletionModel):
     DUE_DATE_DAYS = 30
+    MIN_AMOUNT = 2  # Minimum amount for which the invoice will be generated
 
     __tablename__ = 'event_invoices'
 
@@ -127,6 +129,14 @@ class EventInvoice(SoftDeletionModel):
                     self.event,
                 )
                 return
+            if not force and self.amount < EventInvoice.MIN_AMOUNT:
+                logger.warning(
+                    'Invoice amount of Event %s is %f which is less than %f, hence skipping generation',
+                    self.event,
+                    self.amount,
+                    EventInvoice.MIN_AMOUNT,
+                )
+                return
             net_revenue = round_money(gross_revenue - invoice_amount)
             orders_query = self.event.get_orders_query(
                 start=latest_invoice_date, end=self.issued_at
@@ -166,12 +176,16 @@ class EventInvoice(SoftDeletionModel):
         return self.invoice_pdf_url
 
     def send_notification(self, follow_up=False):
-        prev_month = self.previous_month_date.strftime("%b %Y")  # Displayed as Aug 2016
+        prev_month = self.previous_month_date.astimezone(
+            pytz.timezone(self.event.timezone)
+        ).strftime(
+            "%b %Y"
+        )  # Displayed as Aug 2016
         app_name = get_settings()['app_name']
         frontend_url = get_settings()['frontend_url']
         link = f'{frontend_url}/event-invoice/{self.identifier}/review'
         currency = self.event.payment_currency
-        amount = f"{currency} {self.amount}"
+        amount = f"{currency} {self.amount:.2f}"
         send_email_for_monthly_fee_payment(
             self.user,
             self.event.name,
@@ -182,13 +196,4 @@ class EventInvoice(SoftDeletionModel):
             follow_up=follow_up,
         )
         if isinstance(follow_up, bool):
-            send_notif_monthly_fee_payment(
-                self.user,
-                self.event.name,
-                prev_month,
-                amount,
-                app_name,
-                link,
-                self.event_id,
-                follow_up=follow_up,
-            )
+            notify_monthly_payment(self, follow_up)

@@ -59,7 +59,6 @@ class SocialLinkDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SocialLink,
         ),
     )
@@ -77,7 +76,6 @@ class SocialLinkRelationship(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SocialLink,
         ),
     )

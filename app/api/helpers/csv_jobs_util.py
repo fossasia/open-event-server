@@ -1,3 +1,5 @@
+import pytz
+
 from app.models.helpers.versioning import strip_tags
 
 
@@ -37,22 +39,23 @@ def export_orders_csv(orders):
     return rows
 
 
-def export_attendees_csv(attendees):
+def export_attendees_csv(attendees, custom_forms):
+
     headers = [
         'Order#',
         'Order Date',
         'Status',
-        'First Name',
-        'Last Name',
-        'Email',
-        'Country',
         'Payment Type',
         'Ticket Name',
         'Ticket Price',
         'Ticket Type',
     ]
 
+    for fields in custom_forms:
+        headers.append(fields.name)
+
     rows = [headers]
+
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
@@ -62,10 +65,6 @@ def export_attendees_csv(attendees):
             str(attendee.order.status)
             if attendee.order and attendee.order.status
             else '-',
-            str(attendee.firstname) if attendee.firstname else '',
-            str(attendee.lastname) if attendee.lastname else '',
-            str(attendee.email) if attendee.email else '',
-            str(attendee.country) if attendee.country else '',
             str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
@@ -75,6 +74,14 @@ def export_attendees_csv(attendees):
             else '0',
             str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '',
         ]
+        for field in custom_forms:
+            if field.is_complex:
+                fields_dict = attendee.complex_field_values
+                column.append(
+                    fields_dict.get(field.identifier, '') if fields_dict else ''
+                )
+            else:
+                column.append(getattr(attendee, field.identifier, ''))
 
         rows.append(column)
 
@@ -84,7 +91,10 @@ def export_attendees_csv(attendees):
 def export_sessions_csv(sessions):
     headers = [
         'Session Title',
+        'Session Starts At',
+        'Session Ends At',
         'Session Speakers',
+        'Speaker Emails',
         'Session Track',
         'Session Abstract Short',
         'Session Abstract Long',
@@ -104,14 +114,26 @@ def export_sessions_csv(sessions):
     for session in sessions:
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
-            if session.speakers:
-                in_session = ''
-                for speaker in session.speakers:
-                    if speaker.name:
-                        in_session += speaker.name + '; '
-                column.append(in_session[:-2])
-            else:
-                column.append('')
+            column.append(
+                session.starts_at.astimezone(pytz.timezone(session.event.timezone))
+                if session.starts_at
+                else ''
+            )
+            column.append(
+                session.ends_at.astimezone(pytz.timezone(session.event.timezone))
+                if session.ends_at
+                else ''
+            )
+            column.append(
+                '; '.join(
+                    list(filter(bool, map(lambda sp: sp.name, session.speakers or [])))
+                )
+            )
+            column.append(
+                '; '.join(
+                    list(filter(bool, map(lambda sp: sp.email, session.speakers or [])))
+                )
+            )
             column.append(
                 session.track.name if session.track and session.track.name else ''
             )

@@ -1,10 +1,13 @@
+from datetime import datetime
 from typing import Dict
 
+import pytz
 from flask import Blueprint, g, jsonify, request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.querystring import QueryStringManager as QSManager
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.events import Event
@@ -12,17 +15,14 @@ from app.api.helpers.custom_forms import validate_custom_form_constraints_reques
 from app.api.helpers.db import get_count, safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_new_session, send_email_session_state_change
-from app.api.helpers.notification import (
-    send_notif_new_session_organizer,
-    send_notif_session_state_change,
-)
+from app.api.helpers.notification import notify_new_session, notify_session_state_change
 from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
-from app.api.helpers.speaker import can_edit_after_cfs_ends
-from app.api.helpers.system_mails import MAILS, SESSION_STATE_CHANGE
+from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionNotifySchema, SessionSchema
 from app.models import db
+from app.models.exhibitor import Exhibitor
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.session_speaker_link import SessionsSpeakersLink
@@ -47,7 +47,7 @@ class SessionListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'track'], data)
+        require_relationship(['event'], data)
         data['creator_id'] = current_user.id
         if (
             get_count(
@@ -73,17 +73,13 @@ class SessionListPost(ResourceList):
         :return:
         """
         if session.event.get_owner():
-            event_name = session.event.name
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, event_name, session.site_link)
-            send_notif_new_session_organizer(
-                owner, event_name, session.site_link, session.id
-            )
+            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
+            notify_new_session(session)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
-                session_state=session.state,
                 session_id=session.id,
                 event_id=session.event.id,
                 speaker_id=speaker.id,
@@ -151,10 +147,12 @@ class SessionList(ResourceList):
         elif view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             query_ = (
-                query_.join(User)
-                .join(Speaker)
+                query_.join(Session.speakers)
                 .filter(
-                    User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)
+                    Session.creator_id == user.id
+                    or Session.speakers.any(
+                        or_(Speaker.user_id == user.id, Speaker.email == user.email)
+                    )
                 )
                 .distinct(*get_distinct_sort_fields(SessionSchema, Session, sort=False))
                 .order_by(*get_distinct_sort_fields(SessionSchema, Session))
@@ -163,6 +161,10 @@ class SessionList(ResourceList):
             speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
+        elif view_kwargs.get('exhibitor_id'):
+            exhibitor = safe_query_kwargs(Exhibitor, view_kwargs, 'exhibitor_id')
+            # session-exhibitor :: many-to-many relationship
+            query_ = Session.query.filter(Session.exhibitors.any(id=exhibitor.id))
         elif view_kwargs.get('event_id') or view_kwargs.get('event_identifier'):
             query_ = event_query(query_, view_kwargs)
 
@@ -184,25 +186,39 @@ SESSION_STATE_DICT = {
             'confirmed': True,
         },
         'accepted': {
+            'pending': True,
             'withdrawn': True,
             'rejected': True,
             'confirmed': True,
             'canceled': True,
         },
         'confirmed': {
+            'pending': True,
             'withdrawn': True,
             'accepted': True,
             'rejected': True,
             'canceled': True,
         },
-        'rejected': {'withdrawn': True, 'accepted': True, 'confirmed': True},
+        'rejected': {
+            'pending': True,
+            'withdrawn': True,
+            'accepted': True,
+            'confirmed': True,
+        },
         'canceled': {
+            'pending': True,
             'withdrawn': True,
             'accepted': True,
             'rejected': True,
             'confirmed': True,
         },
-        'withdrawn': {},  # Withdrawn is final
+        'withdrawn': {
+            'pending': True,
+            'withdrawn': True,
+            'accepted': True,
+            'rejected': True,
+            'canceled': True,
+        },
     },
     'speaker': {
         'draft': {'pending': True},
@@ -223,7 +239,7 @@ def get_session_states():
 
 @sessions_blueprint.route('/mails')
 def get_session_state_change_mails():
-    return jsonify(MAILS[SESSION_STATE_CHANGE])
+    return jsonify(MAILS[MailType.SESSION_STATE_CHANGE])
 
 
 class SessionDetail(ResourceDetail):
@@ -244,6 +260,8 @@ class SessionDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
     def after_get_object(self, session, view_kwargs):
+        if not session:
+            return
         is_speaker_or_admin = is_logged_in() and has_access(
             'is_speaker_for_session', id=session.id
         )
@@ -269,7 +287,14 @@ class SessionDetail(ResourceDetail):
 
         new_state = data.get('state')
 
-        if new_state and new_state != session.state:
+        if (
+            new_state
+            and new_state != session.state
+            and (
+                is_organizer
+                or (session.ends_at and session.ends_at > datetime.now(pytz.utc))
+            )
+        ):
             # State change detected. Verify that state change is allowed
             g.send_email = new_state in [
                 'accepted',
@@ -290,11 +315,6 @@ class SessionDetail(ResourceDetail):
                     {'pointer': '/data/attributes/state'},
                     f'You cannot change a session state from "{session.state}" to "{new_state}"',
                 )
-
-        if not can_edit_after_cfs_ends(session.event_id):
-            raise ForbiddenError(
-                {'source': ''}, "Cannot edit session after the call for speaker is ended"
-            )
 
         # We allow organizers and admins to edit session without validations
         complex_field_values = data.get('complex_field_values', 'absent')
@@ -322,15 +342,10 @@ class SessionDetail(ResourceDetail):
             else:
                 is_patch_request = True
 
-            if is_patch_request:
-                for focus_session in entry_count:
-                    focus_session.session_state = session.state
-                db.session.commit()
-            else:
+            if not is_patch_request:
                 current_session = Session.query.filter_by(id=session.id).first()
                 for speaker in current_session.speakers:
                     session_speaker_link = SessionsSpeakersLink(
-                        session_state=session.state,
                         session_id=session.id,
                         event_id=session.event.id,
                         speaker_id=speaker.id,
@@ -357,17 +372,12 @@ def notify_for_session(session, mail_override: Dict[str, str] = None):
     for speaker in speakers:
         if not speaker.is_email_overridden:
             send_email_session_state_change(speaker.email, session, mail_override)
-            send_notif_session_state_change(
-                speaker.user, session.title, session.state, session.site_link, session.id
-            )
 
     # Email for owner
-    if session.event.get_owner():
-        owner = session.event.get_owner()
+    if owner := session.event.get_owner():
         send_email_session_state_change(owner.email, session, mail_override)
-        send_notif_session_state_change(
-            owner, session.title, session.state, session.site_link, session.id
-        )
+
+    notify_session_state_change(session, current_user)
 
 
 @sessions_blueprint.route('/<int:id>/notify', methods=['POST'])

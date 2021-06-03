@@ -1,4 +1,4 @@
-# Translations template for PROJECT.
+# Norwegian Bokmål (Norway) translations for PROJECT.
 # Copyright (C) 2020 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
@@ -7,18 +7,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-11-07 15:52+0530\n"
+"POT-Creation-Date: 2021-04-01 22:43+0530\n"
 "PO-Revision-Date: 2020-11-08 23:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"open-event/server/nb_NO/>\n"
 "Language: nb_NO\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects"
+"/open-event/server/nb_NO/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: app/templates/email/organizer_contact_attendee.html:1
+#: app/templates/email/ticket_purchased.html:1
+#: app/templates/email/ticket_purchased_attendee.html:1
+#: app/templates/email/user_register.html:1
+msgid "Hello"
+msgstr "Hei"
+
+#: app/templates/email/organizer_contact_attendee.html:2
+msgid "You have contacted the organizers of the event"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:3
+msgid "Below you find a copy of your email"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:7
+msgid "Organizers have received your message and will follow up with you"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:8
+msgid ""
+"This is a system message. Please do not reply to this message. Replies "
+"are not monitored"
+msgstr ""
+
+#: app/templates/email/organizer_contact_attendee.html:9
+#, fuzzy
+msgid "Thank you"
+msgstr "Takk"
 
 #: app/templates/email/password_change.html:1
 #, fuzzy
@@ -44,14 +73,8 @@ msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
-"Bruk følgende lenke for å tilbakestille passordet ditt og bekrefte kontoen "
-"din."
-
-#: app/templates/email/ticket_purchased.html:1
-#: app/templates/email/ticket_purchased_attendee.html:1
-#: app/templates/email/user_register.html:1
-msgid "Hello"
-msgstr "Hei"
+"Bruk følgende lenke for å tilbakestille passordet ditt og bekrefte "
+"kontoen din."
 
 #: app/templates/email/ticket_purchased.html:2
 msgid "Thank you for your ticket order for"
@@ -71,6 +94,7 @@ msgstr "Ordre"
 
 #: app/templates/email/ticket_purchased.html:6
 #: app/templates/email/ticket_purchased_attendee.html:4
+#: app/templates/pdf/order_invoice.html:208
 msgid "Name"
 msgstr "Navn"
 
@@ -80,6 +104,9 @@ msgid "Ticket"
 msgstr "Billett"
 
 #: app/templates/email/ticket_purchased.html:10
+#: app/templates/email/ticket_purchased_attendee.html:8
+#: app/templates/pdf/order_invoice.html:185
+#: app/templates/pdf/order_invoice.html:210
 msgid "Quantity"
 msgstr "Mengde"
 
@@ -106,14 +133,18 @@ msgstr "Lag"
 
 #: app/templates/email/ticket_purchased.html:19
 #: app/templates/email/ticket_purchased_attendee.html:17
+msgid "Below you find a message from the organizer"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:28
+#: app/templates/email/ticket_purchased_attendee.html:26
 #, fuzzy
 msgid "Login to manage your orders at"
 msgstr "Logg inn for å håndtere dine ordrer på"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "This is a confirmation mail of your tickets for the event"
-msgstr ""
-"Dette er en bekreftelse du får per e-post for dine billetter til hendelsen"
+msgstr "Dette er en bekreftelse du får per e-post for dine billetter til hendelsen"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "You can download your tickets at"
@@ -142,3 +173,79 @@ msgstr "Besøk følgende lenke for å bekrefte din e-post:"
 #: app/templates/email/user_register.html:5
 msgid "Thank You"
 msgstr "Takk"
+
+#: app/templates/pdf/order_invoice.html:148
+msgid "INVOICE"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:162
+#, fuzzy
+msgid "Order Number"
+msgstr "Ordresammendrag"
+
+#: app/templates/pdf/order_invoice.html:163
+#, fuzzy
+msgid "Order By"
+msgstr "Ordre"
+
+#: app/templates/pdf/order_invoice.html:169
+msgid "Information unavailable"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:172
+msgid "Order Status"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:176
+msgid "Pending"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:186
+msgid "Total Amount"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:187
+msgid "Payment Mode"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:191
+msgid "Payment pending"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:194
+msgid "Discount Code"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:198
+msgid "NA"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:209
+msgid "Price"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:211
+msgid "Sub-Total(net)"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:212
+msgid "VAT"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:213
+msgid "Tax Amount"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:242
+msgid "Grand Total"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:250
+msgid "Invoice Footer"
+msgstr ""
+
+#: app/templates/pdf/ticket_attendee.html:79
+#: app/templates/pdf/ticket_purchaser.html:80
+msgid "Organizer Message"
+msgstr ""
+

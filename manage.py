@@ -8,10 +8,15 @@ from sqlalchemy.engine import reflection
 
 from app.api.helpers.db import save_to_db
 from app.instance import current_app as app
-from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
+from app.api.helpers.tasks import (
+    resize_event_images_task,
+    resize_speaker_images_task,
+    resize_exhibitor_images_task,
+)
 from app.models import db
 from app.models.event import Event, get_new_event_identifier
 from app.models.speaker import Speaker
+from app.models.exhibitor import Exhibitor
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
 
@@ -41,6 +46,17 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_exhibitor_images():
+    exhibitors = Exhibitor.query.filter(
+        Exhibitor.banner_url.isnot(None), Exhibitor.thumbnail_image_url == None
+    ).all()
+    print(f'Resizing images of { len(exhibitors) } exhibitors...')
+    for exhibitor in exhibitors:
+        print(f'Resizing Exhibitor { exhibitor.id }')
+        resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
 
 
 @manager.command
@@ -75,7 +91,7 @@ def fix_event_and_speaker_images():
 
 @manager.command
 def fix_digit_identifier():
-    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
+    events = Event.query.filter(Event.identifier.op('~')(r'^[0-9\.]+$')).all()
     for event in events:
         event.identifier = get_new_event_identifier()
         db.session.add(event)
@@ -129,6 +145,7 @@ def initialize_db(credentials):
         if table_name not in table_names:
             print("[LOG] Table not found. Attempting creation")
             try:
+                db.engine.execute('create extension if not exists citext')
                 db.create_all()
                 stamp()
             except Exception:
@@ -147,7 +164,7 @@ def initialize_db(credentials):
 
 
 @manager.command
-def prepare_kubernetes_db(credentials='open_event_test_user@fossasia.org:fossasia'):
+def prepare_db(credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
         initialize_db(credentials)
 
