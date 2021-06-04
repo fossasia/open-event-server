@@ -579,13 +579,13 @@ def export_sessions_csv_task(self, event_id, status='all'):
 
     if status == 'all':
         sessions = Session.query.filter(
-            Session.event_id == event_id, Session.deleted_at == None
+            Session.event_id == event_id, Session.deleted_at.is_(None)
         ).all()
     else:
         sessions = Session.query.filter(
             Session.state == status,
             Session.event_id == event_id,
-            Session.deleted_at == None,
+            Session.deleted_at.is_(None),
         ).all()
 
     try:
@@ -632,19 +632,19 @@ def export_speakers_csv_task(self, event_id, status='all'):
 
     if status == 'without_session':
         speakers = Speaker.query.filter(
-            Speaker.sessions == None,
+            Speaker.sessions.is_(None),
             Speaker.event_id == event_id,
-            Speaker.deleted_at == None,
+            Speaker.deleted_at.is_(None),
         ).all()
     elif status == 'all':
         speakers = Speaker.query.filter(
-            Speaker.event_id == event_id, Speaker.deleted_at == None
+            Speaker.event_id == event_id, Speaker.deleted_at.is_(None)
         ).all()
     else:
         speakers = Speaker.query.filter(
             Speaker.sessions.any(state=status),
             Speaker.event_id == event_id,
-            Speaker.deleted_at == None,
+            Speaker.deleted_at.is_(None),
         ).all()
 
     try:

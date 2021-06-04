@@ -187,13 +187,19 @@ Start a celery task to export the list of sessions of the event with that event_
 to get the status of the export task.
 
 
-### Start a Task to Export Sessions of an Event as CSV [GET]
+### Start a Task to Export Sessions of an Event as CSV [POST]
 
 + Request
 
     + Headers
 
             Authorization: JWT <Auth Key>
+    
+    + Body
+
+            {
+                "status": "all"
+            }
 
 + Response 200 (application/json)
 
@@ -208,13 +214,20 @@ Start a celery task to export the list of speakers of the event with that event_
 to get the status of the export task.
 
 
-### Start a Task to Export Speakers of an Event as CSV [GET]
+### Start a Task to Export Speakers of an Event as CSV [POST]
 
 + Request
 
     + Headers
 
             Authorization: JWT <Auth Key>
+    
+    + Body
+
+            {
+                "status": "all"
+            }
+        
 
 + Response 200 (application/json)
 
