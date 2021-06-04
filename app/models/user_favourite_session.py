@@ -1,5 +1,3 @@
-from hashlib import md5
-
 from flask_jwt_extended import current_user
 
 from app.models import db
@@ -30,11 +28,9 @@ class UserFavouriteSession(db.Model, Timestamp):
         )
         if not self.user.is_profile_public and not can_access:
             name = self.user.anonymous_name
-            name_hash = md5(name.encode('utf-8')).hexdigest()
             return User(
                 id=self.user.id,
                 email='example@eventyay.com',
                 public_name=name,
-                avatar_url=f'https://www.gravatar.com/avatar/{name_hash}?d=retro',
             )
         return self.user
