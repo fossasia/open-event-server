@@ -2,6 +2,7 @@ import datetime
 import logging
 
 import pytz
+from flask import render_template
 from flask_celeryext import RequestContextTask
 from redis.exceptions import LockError
 from sqlalchemy import and_, distinct, or_
@@ -9,7 +10,7 @@ from sqlalchemy import and_, distinct, or_
 from app.api.helpers.db import save_to_db
 from app.api.helpers.mail import send_email
 from app.api.helpers.query import get_user_event_roles_by_role_name
-from app.api.helpers.system_mails import MailType
+from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import monthdelta
 from app.instance import celery
 from app.models import db
@@ -55,15 +56,20 @@ def ticket_sales_end_mail():
             unique_emails.add(owner.user.email)
             user_objects.append(owner.user)
 
-    emails = user_objects
-    send_email(
-        to=emails[0],
-        action=MailType.SESSION_STATE_CHANGE,
-        subject="email after sales ends",
-        html="message",
-        bcc=emails[1:],
-        reply_to=emails[-1],
-    )
+        emails = user_objects
+        action = MailType.TICKET_SALES_END
+        mail = MAILS[action]
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=get_settings(),
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')

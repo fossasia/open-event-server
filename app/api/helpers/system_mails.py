@@ -32,6 +32,7 @@ class MailType:
     TEST_MAIL = 'test_mail'
     CONTACT_ORGANIZERS = 'contact_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
+    TICKET_SALES_END = 'ticket_sales_end'
 
     @staticmethod
     def entries():
@@ -116,6 +117,11 @@ MAILS = {
             "Thank you.<br/>"
             "{frontend_link}",
         },
+    },
+    MailType.TICKET_SALES_END: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket sales end for event {event_name}',
+        'template': 'email/ticket_sales_end.html',
     },
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
