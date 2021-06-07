@@ -624,7 +624,7 @@ doc = ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "8.5.0"
+version = "8.5.1"
 description = "Faker is a Python package that generates fake data for you."
 category = "main"
 optional = false
@@ -1172,7 +1172,7 @@ pytz = "*"
 
 [[package]]
 name = "identify"
-version = "2.2.7"
+version = "2.2.9"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -2193,7 +2193,7 @@ url = ["furl (>=0.4.1)"]
 
 [[package]]
 name = "starkbank-ecdsa"
-version = "1.1.0"
+version = "1.1.1"
 description = "A lightweight and fast pure python ECDSA library"
 category = "main"
 optional = false
@@ -2295,7 +2295,7 @@ python-versions = "*"
 
 [[package]]
 name = "typing-inspect"
-version = "0.6.0"
+version = "0.7.0"
 description = "Runtime inspection utilities for typing module."
 category = "dev"
 optional = false
@@ -2546,7 +2546,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "357f85d1fc123a35fc36a1002595fcdcfbd53757205290cd1044a39f5845ddc9"
+content-hash = "1368a9d5926c0b23fbcb1204d03505b72f96e24308170c3b33fba59cff6784d0"
 
 [metadata.files]
 aiohttp = [
@@ -2886,8 +2886,8 @@ factory-boy = [
     {file = "factory_boy-3.2.0.tar.gz", hash = "sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b"},
 ]
 faker = [
-    {file = "Faker-8.5.0-py3-none-any.whl", hash = "sha256:adaf9bb2f2f1176d3aa802cf5b76971f6c18289522e1990c330986d5596ed2ef"},
-    {file = "Faker-8.5.0.tar.gz", hash = "sha256:37c7460f5535e62e563169c1689116e35af7391615a54cb8535d9c0e6c5dfdc9"},
+    {file = "Faker-8.5.1-py3-none-any.whl", hash = "sha256:6c790ef9e6619933e2907ad36ae4d1c32254ec717b077d0e90e69b2760751e0d"},
+    {file = "Faker-8.5.1.tar.gz", hash = "sha256:7ef2de62e276c884ea8b273be2719ce4f6c9e6a99115f275d9fe3997c263f73c"},
 ]
 fastapi = [
     {file = "fastapi-0.65.1-py3-none-any.whl", hash = "sha256:7619282fbce0ec53c7dfa3fa262280c00ace9f6d772cfd06e4ab219dce66985e"},
@@ -3119,8 +3119,8 @@ icalendar = [
     {file = "icalendar-4.0.7.tar.gz", hash = "sha256:0fc18d87f66e0b5da84fa731389496cfe18e4c21304e8f6713556b2e8724a7a4"},
 ]
 identify = [
-    {file = "identify-2.2.7-py2.py3-none-any.whl", hash = "sha256:92d6ad08eca19ceb17576733759944b94c0761277ddc3acf65e75e57ef190e32"},
-    {file = "identify-2.2.7.tar.gz", hash = "sha256:c29e74c3671fe9537715cb695148231d777170ca1498e1c30c675d4ea782afe9"},
+    {file = "identify-2.2.9-py2.py3-none-any.whl", hash = "sha256:96c57d493184daecc7299acdeef0ad7771c18a59931ea927942df393688fe849"},
+    {file = "identify-2.2.9.tar.gz", hash = "sha256:3a8493cf49cfe4b28d50865e38f942c11be07a7b0aab8e715073e17f145caacc"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -3864,7 +3864,7 @@ sqlalchemy-utils = [
     {file = "SQLAlchemy_Utils-0.37.6-py3-none-any.whl", hash = "sha256:be857f494b29a74f048f1f6ab23ed179cb869300acac79bfbe42f5b5fe087c38"},
 ]
 starkbank-ecdsa = [
-    {file = "starkbank-ecdsa-1.1.0.tar.gz", hash = "sha256:423f81bb55c896a3c85ee98ac7da98826721eaee918f5c0c1dfff99e1972da0c"},
+    {file = "starkbank-ecdsa-1.1.1.tar.gz", hash = "sha256:f7b434b4a1e0ba082fb1804b908b79523973fd17b1fde377078857f7cee299d1"},
 ]
 starlette = [
     {file = "starlette-0.14.2-py3-none-any.whl", hash = "sha256:3c8e48e52736b3161e34c9f0e8153b4f32ec5d8995a3ee1d59410d92f75162ed"},
@@ -3932,9 +3932,9 @@ typing-extensions = [
     {file = "typing_extensions-3.10.0.0.tar.gz", hash = "sha256:50b6f157849174217d0656f99dc82fe932884fb250826c18350e159ec6cdf342"},
 ]
 typing-inspect = [
-    {file = "typing_inspect-0.6.0-py2-none-any.whl", hash = "sha256:de08f50a22955ddec353876df7b2545994d6df08a2f45d54ac8c05e530372ca0"},
-    {file = "typing_inspect-0.6.0-py3-none-any.whl", hash = "sha256:3b98390df4d999a28cf5b35d8b333425af5da2ece8a4ea9e98f71e7591347b4f"},
-    {file = "typing_inspect-0.6.0.tar.gz", hash = "sha256:8f1b1dd25908dbfd81d3bebc218011531e7ab614ba6e5bf7826d887c834afab7"},
+    {file = "typing_inspect-0.7.0-py2-none-any.whl", hash = "sha256:e942841c8ce2a80c5e5fbec88d7075c71487cb3cacb945de763094dc3e78be0c"},
+    {file = "typing_inspect-0.7.0-py3-none-any.whl", hash = "sha256:118ebe93e4702647200ef946ea8bfd4508b4e5ff2cc8ed6e85a21f5c554dd660"},
+    {file = "typing_inspect-0.7.0.tar.gz", hash = "sha256:b0879cbc15d086f0ca7066eb775c062333e96f6d4622193d2423d8649c778480"},
 ]
 tzlocal = [
     {file = "tzlocal-2.1-py2.py3-none-any.whl", hash = "sha256:e2cb6c6b5b604af38597403e9852872d7f534962ae2954c7f35efcb1ccacf4a4"},
