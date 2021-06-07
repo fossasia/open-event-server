@@ -79,7 +79,7 @@ forex-python = "1.5"
 pycryptodome = "3.10.1"
 oauth2 = "~1.9.0"
 qrcode = "6.1"
-python-magic = "0.4.23"
+python-magic = "0.4.24"
 python-dotenv = "0.17.1"
 python-geoip = "1.2"
 "marrow.mailer" = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "6933606"}
