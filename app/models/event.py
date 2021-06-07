@@ -441,7 +441,7 @@ class Event(SoftDeletionModel):
         if self.location_name:
             return self.location_name
         elif self.online:
-            return 'Online'
+            return self.site_link
         return 'Location Not Announced'
 
     @property

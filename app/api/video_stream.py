@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 streams_routes = Blueprint('streams', __name__, url_prefix='/v1/video-streams')
 
-default_options = {'record': False, 'autoStartRecording': False, 'muteOnStart': True}
+default_options = {'record': True, 'autoStartRecording': False, 'muteOnStart': True}
 
 
 def check_same_event(room_ids):
