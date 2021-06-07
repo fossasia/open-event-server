@@ -59,17 +59,18 @@ def ticket_sales_end_mail():
         emails = user_objects
         action = MailType.TICKET_SALES_END
         mail = MAILS[action]
-        send_email(
-            to=emails[0],
-            action=action,
-            subject=mail['subject'].format(event_name=event.name),
-            html=render_template(
-                mail['template'],
-                settings=get_settings(),
-            ),
-            bcc=emails[1:],
-            reply_to=emails[-1],
-        )
+        if len(emails) > 0:
+            send_email(
+                to=emails[0],
+                action=action,
+                subject=mail['subject'].format(event_name=event.name),
+                html=render_template(
+                    mail['template'],
+                    settings=get_settings(),
+                ),
+                bcc=emails[1:],
+                reply_to=emails[-1],
+            )
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')
