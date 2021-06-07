@@ -4,10 +4,12 @@ import logging
 import pytz
 from flask_celeryext import RequestContextTask
 from redis.exceptions import LockError
-from sqlalchemy import distinct, or_
+from sqlalchemy import and_, distinct, or_
 
 from app.api.helpers.db import save_to_db
+from app.api.helpers.mail import send_email
 from app.api.helpers.query import get_user_event_roles_by_role_name
+from app.api.helpers.system_mails import MailType
 from app.api.helpers.utilities import monthdelta
 from app.instance import celery
 from app.models import db
@@ -16,11 +18,52 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.settings import get_settings
 from app.views.redis_store import redis_store
 
 logger = logging.getLogger(__name__)
+
+
+@celery.task(base=RequestContextTask, name='send.ticket.sales.end.mail')
+def ticket_sales_end_mail():
+    current_time = datetime.datetime.now()
+    events = (
+        Event.query.filter_by(state='published', deleted_at=None)
+        .filter(
+            Event.ends_at < current_time,
+            current_time - Event.ends_at < datetime.timedelta(days=1),
+            Event.tickets.any(
+                and_(
+                    Ticket.deleted_at == None,
+                    Ticket.sales_ends_at > current_time,
+                )
+            ),
+        )
+        .all()
+    )
+    for event in events:
+        organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
+        owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
+        unique_emails = set()
+        user_objects = []
+        for organizer in organizers:
+            unique_emails.add(organizer.user.email)
+            user_objects.append(organizer.user)
+        if owner:
+            unique_emails.add(owner.user.email)
+            user_objects.append(owner.user)
+
+    emails = user_objects
+    send_email(
+        to=emails[0],
+        action=MailType.SESSION_STATE_CHANGE,
+        subject="email after sales ends",
+        html="message",
+        bcc=emails[1:],
+        reply_to=emails[-1],
+    )
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')
@@ -249,6 +292,7 @@ def setup_scheduled_task(sender, **kwargs):
 
     # Every day at 5:30
     sender.add_periodic_task(crontab(hour=5, minute=30), send_after_event_mail)
+    sender.add_periodic_task(crontab(hour=5, minute=30), ticket_sales_end_mail)
     # Every 1st day of month at 0:00
     sender.add_periodic_task(
         crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice
