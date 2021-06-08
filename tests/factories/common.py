@@ -23,6 +23,8 @@ timezone_ = 'UTC'
 environment_ = 'testing'
 secret_ = 'ABCDefghIJKLmnop'
 fee_ = 1.23
+average_rating_ = 3
+rating_count_ = 1
 slug_ = factory.Sequence(lambda n: f'example_slug{n}')
 
 
