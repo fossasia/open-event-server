@@ -11,7 +11,7 @@ class TestEventValidation(TestCase):
         :return:
         """
         schema = SessionTypeSchema()
-        data = {'length': '%12:%23'}
+        data = {'length': '12:23'}
         SessionTypeSchema.validate_length(schema, data)
 
 
