@@ -906,7 +906,7 @@ SQLAlchemy = ">=0.8.0"
 
 [[package]]
 name = "forex-python"
-version = "1.5"
+version = "1.6"
 description = "Foreign exchange rates and currency conversion."
 category = "main"
 optional = false
@@ -2546,7 +2546,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "63b3faa9ab008189f622a14a75ad8827626afede0480fbdf874f11b5d4a270bc"
+content-hash = "aa7516f5f43f5046afc5fd47f1583ec8a622e7ef62eacc2a1420805492de6532"
 
 [metadata.files]
 aiohttp = [
@@ -2958,7 +2958,8 @@ flask-sqlalchemy = [
     {file = "Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl", hash = "sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390"},
 ]
 forex-python = [
-    {file = "forex-python-1.5.tar.gz", hash = "sha256:928951a0be8bf1139a07d21da0437ba111ef69a4d6c59b9252083611036548d5"},
+    {file = "forex-python-1.6.tar.gz", hash = "sha256:b402f7bae4909bd3f6cc0579cf6236a37b4e8e3043775bb741da7bb6c7f99604"},
+    {file = "forex_python-1.6-py3-none-any.whl", hash = "sha256:e50c5f952c489885236ce229217bdd489f2722428d4b103973c413244ba21af5"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
