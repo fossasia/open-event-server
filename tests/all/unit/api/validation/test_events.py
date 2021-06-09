@@ -23,7 +23,7 @@ class TestEventValidation(TestCase):
         """
         schema = EventSchemaPublic()
         original_data = {'data': {}}
-        data = {}
+        data = {'timezone': ''}
         with self.assertRaises(UnprocessableEntityError):
             EventSchemaPublic.validate_timezone(schema, data, original_data)
 
