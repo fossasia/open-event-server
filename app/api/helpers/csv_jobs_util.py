@@ -109,6 +109,8 @@ def export_sessions_csv(sessions):
         'Slides',
         'Audio',
         'Video',
+        'Average Rating',
+        'Number of Ratings',
     ]
     rows = [headers]
     for session in sessions:
@@ -162,6 +164,8 @@ def export_sessions_csv(sessions):
             column.append(session.slides_url if session.slides_url else '')
             column.append(session.audio_url if session.audio_url else '')
             column.append(session.video_url if session.video_url else '')
+            column.append(session.average_rating)
+            column.append(session.rating_count)
             rows.append(column)
 
     return rows

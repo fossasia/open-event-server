@@ -68,6 +68,8 @@ class TestExportCSV(OpenEventTestCase):
                 comments='comment',
                 level='level',
                 created_at=common.date_,
+                average_rating=common.average_rating_,
+                rating_count=common.rating_count_,
             )
             db.session.commit()
             field_data = export_sessions_csv([test_session])
@@ -99,6 +101,8 @@ class TestExportCSV(OpenEventTestCase):
                     common.url_,
                     common.url_,
                     common.url_,
+                    common.average_rating_,
+                    common.rating_count_,
                 ],
             )
 

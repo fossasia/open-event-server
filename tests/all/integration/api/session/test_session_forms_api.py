@@ -183,7 +183,7 @@ def test_edit_session_required_fields_complete(db, client, user, jwt):
                 "attributes": {
                     "title": "Move Away",
                     "subtitle": "Moooove",
-                    "level": "456345678",
+                    "level": "Expert",
                     "short-abstract": "Speaking since birth",
                     "complex-field-values": {
                         "bojack": "horseman"
@@ -206,7 +206,7 @@ def test_edit_session_required_fields_complete(db, client, user, jwt):
 
     assert session.title == 'Move Away'
     assert session.subtitle == 'Moooove'
-    assert session.level == '456345678'
+    assert session.level == 'Expert'
     assert session.short_abstract == 'Speaking since birth'
     assert session.complex_field_values is None
 
@@ -223,7 +223,7 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
                 "attributes": {
                     "title": "Move Away",
                     "subtitle": "Moooove",
-                    "level": "456345678",
+                    "level": "Expert",
                     "short-abstract": "Speaking since birth",
                     "complex-field-values": {
                         "bojack": "horseman"
@@ -250,7 +250,7 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
 
     assert session.title == 'Move Away'
     assert session.subtitle == 'Moooove'
-    assert session.level == '456345678'
+    assert session.level == 'Expert'
     assert session.short_abstract == 'Speaking since birth'
     assert session.complex_field_values is None
 

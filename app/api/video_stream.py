@@ -26,6 +26,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_channel import VideoChannel
+from app.models.video_recording import VideoRecording
 from app.models.video_stream import VideoStream
 from app.models.video_stream_moderator import VideoStreamModerator
 
@@ -134,27 +135,6 @@ def create_bbb_meeting(channel, data):
 
 
 @streams_routes.route(
-    '/<int:stream_id>/recordings',
-)
-@jwt_required
-def get_bbb_recordings(stream_id: int):
-    stream = VideoStream.query.get_or_404(stream_id)
-    if not has_access('is_organizer', event_id=stream.event_id):
-        raise ForbiddenError(
-            {'pointer': 'event_id'},
-            'You need to be the event organizer to access video recordings.',
-        )
-
-    params = dict(
-        meetingID=stream.extra['response']['meetingID'],
-    )
-    channel = stream.channel
-    bbb = BigBlueButton(channel.api_url, channel.api_key)
-    result = bbb.request('getRecordings', params)
-    return jsonify(result=result.data)
-
-
-@streams_routes.route(
     '/<int:stream_id>/chat-token',
 )
 @jwt_required
@@ -251,6 +231,14 @@ class VideoStreamDetail(ResourceDetail):
                 VideoStreamModerator, view_kwargs, 'video_stream_moderator_id'
             )
             view_kwargs['id'] = moderator.video_stream_id
+
+        if view_kwargs.get('video_recording_id'):
+            video_recording = safe_query_kwargs(
+                VideoRecording,
+                view_kwargs,
+                'video_recording_id',
+            )
+            view_kwargs['id'] = video_recording.video_stream_id
 
     def after_get_object(self, stream, view_kwargs):
         if stream and not stream.user_can_access:
