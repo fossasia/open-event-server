@@ -39,7 +39,7 @@ class TestExceptionsHelperValidation(TestCase):
 
         # Server Error
         with self.assertRaises(ServerError):
-            raise ServerError({'source': ''}, "Server Down")
+            raise ServerError({'source': ''}, "Internal Server Error")
 
         # Bad Request Error
         with self.assertRaises(BadRequestError):
