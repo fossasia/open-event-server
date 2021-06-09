@@ -79,7 +79,6 @@ def export_attendees_csv(attendees, custom_forms):
         headers.append(fields.name)
 
     rows = [headers]
-
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
@@ -101,7 +100,6 @@ def export_attendees_csv(attendees, custom_forms):
             if attendee.order.tax_business_info
             else '',
             str(attendee.order.address) if attendee.order.address else '',
-            str(attendee.order.company) if attendee.order.company else '',
             str(attendee.order.company) if attendee.order.company else '',
             str(attendee.order.country) if attendee.order.country else '',
             str(attendee.order.state) if attendee.order.state else '',
