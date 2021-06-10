@@ -142,7 +142,7 @@ class TestTicketValidation(TestCase):
         original_data = {}
         TicketSchema.validate_discount_code(schema, data, original_data)
 
-    def test_discount_code_pass(self):
+    def test_discount_code_fail(self):
         """
         Tickets Validate discount code - Tests if exception is raised
         :return:
