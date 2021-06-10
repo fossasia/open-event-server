@@ -38,6 +38,10 @@ class NotificationContentSchema(NormalSchema):
 
     @post_dump(pass_original=True)
     def add_target(self, data, obj):
+        if obj.target is None:
+            # handler -> if target data is deleted after generation of notification.
+            # to be implemented in future -> delete notification if target is deleted ex. RoleInvite.
+            return {}
         event = None
         if obj.target_type == 'Order':
             serialized = normalize_jsonapi_data(
