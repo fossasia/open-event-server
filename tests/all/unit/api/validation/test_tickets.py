@@ -150,7 +150,7 @@ class TestTicketValidation(TestCase):
         schema = TicketSchema()
         data = {}
         original_data = {
-            'data': {'relationships': {'discount-codes': {'data': [{'id': 'see-ya'}]}}},
+            'data': {'relationships': {'discount-codes': {'data': [{'id': ''}]}}},
             'relationships': {},
         }
         with self.assertRaises(UnprocessableEntityError):
