@@ -41,7 +41,6 @@ def test_ticket_sales_end(db, client, admin_jwt):
 
 def test_ticket_sales_end(db, client, admin_jwt):
     ticket = TicketSubFactory()
-    ticket.has_current_orders = True
     db.session.commit()
 
     data = json.dumps(
@@ -61,4 +60,4 @@ def test_ticket_sales_end(db, client, admin_jwt):
         data=data,
     )
 
-    assert response.status_code == 403
+    assert response.status_code == 200
