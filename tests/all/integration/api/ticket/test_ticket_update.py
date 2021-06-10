@@ -60,4 +60,4 @@ def test_ticket_sales_end(db, client, admin_jwt):
         data=data,
     )
 
-    assert response.status_code == 201
+    assert response.status_code == 200
