@@ -15,9 +15,9 @@ class TestSessionTypesValidation(TestCase):
         data = {'length': '12:23'}
         SessionTypeSchema.validate_length(schema, data)
 
-    def test_validate_length_format(self):
+    def test_validate_length_exception(self):
         """
-        Session Types Validate length - Tests if the function runs without an exception
+        Session Types Validate length - Tests if exception is raised
         :return:
         """
         schema = SessionTypeSchema()
