@@ -39,7 +39,7 @@ def test_ticket_sales_end(db, client, admin_jwt):
     assert response.status_code == 422
 
 
-def test_ticket_has_sales(db, client, admin_jwt):
+def test_ticket_sales_end(db, client, admin_jwt):
     ticket = TicketSubFactory()
     db.session.commit()
 
@@ -48,7 +48,7 @@ def test_ticket_has_sales(db, client, admin_jwt):
             'data': {
                 'type': 'ticket',
                 'id': str(ticket.id),
-                "attributes": {"deleted-at": "2020-10-01T1:00:00+00:00"},
+                "attributes": {"deleted-at": "2199-10-01T1:00:00+00:00"},
             }
         }
     )
@@ -60,15 +60,4 @@ def test_ticket_has_sales(db, client, admin_jwt):
         data=data,
     )
 
-    assert json.loads(response.data) == {
-        'errors': [
-            {
-                'detail': "Can't delete a ticket that has sales",
-                'source': {'param': 'ticket_id'},
-                'status': 403,
-                'title': 'Forbidden',
-            }
-        ],
-        'jsonapi': {'version': '1.0'},
-    }
-    assert response.status_code == 403
+    assert response.status_code == 201

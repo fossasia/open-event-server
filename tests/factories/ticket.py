@@ -23,7 +23,6 @@ class TicketFactoryBase(BaseFactory):
     is_hidden = True
     min_order = 0
     max_order = 10
-    has_current_orders = True
 
 
 class TicketFactory(TicketFactoryBase):
