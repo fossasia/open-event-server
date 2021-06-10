@@ -128,7 +128,7 @@ class TestTicketValidation(TestCase):
 
     def test_price_lt_eq_zero(self):
         """
-        Tickets Validate Price - Tests if exception is raised
+        Tickets Validate Price - Tests if exception is raised when price is less than or equal to zero
         :return:
         """
         schema = TicketSchema()
