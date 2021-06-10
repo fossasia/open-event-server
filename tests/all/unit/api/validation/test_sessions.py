@@ -24,7 +24,7 @@ class TestSessionValidation(TestCase):
 
     def test_fields_pass(self):
         """
-        Sessions Validate Date - Tests if the function runs without an exception
+        Sessions Validate Message - Tests if the function runs without an exception
         :return:
         """
         schema = SessionSchema()
