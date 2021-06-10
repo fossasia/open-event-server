@@ -1,6 +1,7 @@
 import unittest
 from unittest import TestCase
 
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.session_types import SessionTypeSchema
 
 
