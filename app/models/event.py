@@ -63,7 +63,7 @@ class Event(SoftDeletionModel):
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
     is_document_enabled = db.Column(db.Boolean, default=False, nullable=False)
-    # document_links = db.Column(db.JSON)
+    document_links = db.Column(db.JSON)
     chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
