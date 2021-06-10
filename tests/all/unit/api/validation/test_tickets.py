@@ -134,7 +134,7 @@ class TestTicketValidation(TestCase):
 
     def test_discount_code_pass(self):
         """
-        Tickets Validate Price - Tests if exception is raised
+        Tickets Validate discount code - Tests if no exception is raised
         :return:
         """
         schema = TicketSchema()
