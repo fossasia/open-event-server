@@ -48,8 +48,10 @@ def test_ticket_has_sales(db, client, admin_jwt):
             'data': {
                 'type': 'ticket',
                 'id': str(ticket.id),
-                "has-current-orders": True,
-                "attributes": {"deleted-at": "2020-10-01T1:00:00+00:00"},
+                "attributes": {
+                    "deleted-at": "2020-10-01T1:00:00+00:00",
+                    "has-current-orders": True,
+                },
             }
         }
     )
