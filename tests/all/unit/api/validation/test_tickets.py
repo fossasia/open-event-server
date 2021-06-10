@@ -121,14 +121,21 @@ class TestTicketValidation(TestCase):
         schema = TicketSchema()
         data = {'type': 'free'}
         TicketSchema.validate_price(schema, data)
+        data = {'type': 'free', 'price': -120}
+        TicketSchema.validate_price(schema, data)
+        data = {'type': 'paid', 'price': 120}
+        TicketSchema.validate_price(schema, data)
 
-    def test_price_lt_zero(self):
+    def test_price_lt_eq_zero(self):
         """
         Tickets Validate Price - Tests if exception is raised
         :return:
         """
         schema = TicketSchema()
-        data = {'type': 'paid'}
+        data = {'type': 'paid', 'price': -100}
+        with self.assertRaises(UnprocessableEntityError):
+            TicketSchema.validate_price(schema, data)
+        data = {'type': 'paid', 'price': 0}
         with self.assertRaises(UnprocessableEntityError):
             TicketSchema.validate_price(schema, data)
 
