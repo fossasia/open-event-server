@@ -142,6 +142,20 @@ class TestTicketValidation(TestCase):
         original_data = {}
         TicketSchema.validate_discount_code(schema, data, original_data)
 
+    def test_discount_code_pass(self):
+        """
+        Tickets Validate discount code - Tests if exception is raised
+        :return:
+        """
+        schema = TicketSchema()
+        data = {}
+        original_data = {
+            'data': {'relationships': {'discount-codes': {'data': [{'id': 'see-ya'}]}}},
+            'relationships': {},
+        }
+        with self.assertRaises(UnprocessableEntityError):
+            TicketSchema.validate_discount_code(schema, data, original_data)
+
 
 if __name__ == '__main__':
     unittest.main()
