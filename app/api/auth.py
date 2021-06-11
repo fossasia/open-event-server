@@ -46,7 +46,7 @@ from app.extensions.limiter import limiter
 from app.models import db
 from app.models.user import User
 
-logging = logging.getlogging(__name__)
+logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
