@@ -54,6 +54,7 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
+            logging.error('Password should be at least 8 characters long')
             raise UnprocessableEntityError(
                 {'source': '/data/attributes/password'},
                 'Password should be at least 8 characters long',
@@ -62,11 +63,13 @@ class UserList(ResourceList):
             db.session.query(User.id).filter_by(email=data['email'].strip()).scalar()
             is not None
         ):
+            logging.error('Email already exists')
             raise ConflictError(
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 
         if data.get('is_verified'):
+            logging.error("You are not allowed to submit this field")
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/is-verified'},
                 "You are not allowed to submit this field",
@@ -282,6 +285,7 @@ class UserDetail(ResourceDetail):
                         .exists()
                     ).scalar()
                     if event_exists:
+                        logging.error("Users associated with events cannot be deleted")
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
@@ -318,6 +322,7 @@ class UserDetail(ResourceDetail):
                     data['email'] = user.email
                 user.deleted_at = data.get('deleted_at')
             else:
+                logging.info("You are not authorized to update this information.")
                 raise ForbiddenError(
                     {'source': ''}, "You are not authorized to update this information."
                 )
@@ -327,6 +332,7 @@ class UserDetail(ResourceDetail):
             and data.get('is_verified') is not None
             and data.get('is_verified') != user.is_verified
         ):
+            logging.info("Admin access is required to update this information.")
             raise ForbiddenError(
                 {'pointer': '/data/attributes/is-verified'},
                 "Admin access is required to update this information.",
@@ -343,6 +349,7 @@ class UserDetail(ResourceDetail):
                 verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
+                logging.error("Email already exists")
                 raise ConflictError(
                     {'pointer': '/data/attributes/email'}, "Email already exists"
                 )

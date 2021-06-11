@@ -46,7 +46,7 @@ from app.extensions.limiter import limiter
 from app.models import db
 from app.models.user import User
 
-logger = logging.getLogger(__name__)
+logging = logging.getlogging(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
@@ -58,15 +58,18 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     criterion = [username, password]
 
     if not all(criterion):
+        logging.error('username or password missing')
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
 
     if not identity or (existing_identity and identity != existing_identity):
         # For fresh login, credentials should match existing user
+        logging.error('Invalid Credentials')
         return jsonify(error='Invalid Credentials'), 401
 
     if identity.is_blocked:
+        logging.info('Admin has marked this account as spam')
         return jsonify(error='Admin has marked this account as spam'), 401
 
     remember_me = data.get('remember-me')
@@ -284,21 +287,25 @@ def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
     except base64.binascii.Error:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
     except Exception:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
     except Exception:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
+        logging.info('Email Verified')
         return make_response(jsonify(message="Email Verified"), 200)
 
 
@@ -307,11 +314,13 @@ def resend_verification_email():
     try:
         email = request.json['data']['email']
     except TypeError:
+        logging.error('Bad Request')
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
+        logging.info('User with email: ' + email + ' not found.')
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
@@ -325,7 +334,7 @@ def resend_verification_email():
         )
         link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
-
+        logging.info('Verification email resent')
         return make_response(jsonify(message="Verification email resent"), 200)
 
 
@@ -340,12 +349,13 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
+        logging.error('Bad Request Error')
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        logger.info('Tried to reset password not existing email %s', email)
+        logging.info('Tried to reset password not existing email %s', email)
     else:
         send_password_reset_email(user)
 
@@ -366,6 +376,7 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).one()
     except NoResultFound:
+        logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         user.password = password
@@ -391,14 +402,17 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
+        logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
+                logging.error('Old and New passwords must be different')
                 raise BadRequestError(
                     {'source': ''}, 'Old and New passwords must be different'
                 )
             if len(new_password) < 8:
+                logging.error('Password should have minimum 8 characters')
                 raise BadRequestError(
                     {'source': ''}, 'Password should have minimum 8 characters'
                 )
@@ -406,6 +420,7 @@ def change_password():
             save_to_db(user)
             send_password_change_email(user)
         else:
+            logging.error('Wrong Password. Please enter correct current password.')
             raise BadRequestError(
                 {'source': ''}, 'Wrong Password. Please enter correct current password.'
             )
