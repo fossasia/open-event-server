@@ -565,8 +565,29 @@ def export_attendees_pdf_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.sessions.csv', bind=True)
-def export_sessions_csv_task(self, event_id):
-    sessions = db.session.query(Session).filter_by(event_id=event_id)
+def export_sessions_csv_task(self, event_id, status='all'):
+    if status not in [
+        'all',
+        'pending',
+        'accepted',
+        'confirmed',
+        'rejected',
+        'withdrawn',
+        'canceled',
+    ]:
+        status = 'all'
+
+    if status == 'all':
+        sessions = Session.query.filter(
+            Session.event_id == event_id, Session.deleted_at.is_(None)
+        ).all()
+    else:
+        sessions = Session.query.filter(
+            Session.state == status,
+            Session.event_id == event_id,
+            Session.deleted_at.is_(None),
+        ).all()
+
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
@@ -595,8 +616,37 @@ def export_sessions_csv_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
-def export_speakers_csv_task(self, event_id):
-    speakers = db.session.query(Speaker).filter_by(event_id=event_id)
+def export_speakers_csv_task(self, event_id, status='all'):
+
+    if status not in [
+        'all',
+        'pending',
+        'accepted',
+        'confirmed',
+        'rejected',
+        'withdrawn',
+        'canceled',
+        'without_session',
+    ]:
+        status = 'all'
+
+    if status == 'without_session':
+        speakers = Speaker.query.filter(
+            Speaker.sessions.is_(None),
+            Speaker.event_id == event_id,
+            Speaker.deleted_at.is_(None),
+        ).all()
+    elif status == 'all':
+        speakers = Speaker.query.filter(
+            Speaker.event_id == event_id, Speaker.deleted_at.is_(None)
+        ).all()
+    else:
+        speakers = Speaker.query.filter(
+            Speaker.sessions.any(state=status),
+            Speaker.event_id == event_id,
+            Speaker.deleted_at.is_(None),
+        ).all()
+
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
