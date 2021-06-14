@@ -22,6 +22,7 @@ class GroupSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
+    created_at = fields.DateTime(dump_only=True, timezone=True)
 
     events = Relationship(
         self_view='v1.group_events',

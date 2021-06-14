@@ -271,6 +271,11 @@ from app.api.video_channel import (
     VideoChannelList,
     VideoChannelListPost,
 )
+from app.api.video_recordings import (
+    VideoRecordingDetail,
+    VideoRecordingList,
+    VideoRecordingRelationship,
+)
 from app.api.video_stream import (
     VideoStreamDetail,
     VideoStreamList,
@@ -1807,6 +1812,7 @@ api.route(
     '/events/<int:event_id>/video-stream',
     '/events/<event_identifier>/video-stream',
     '/video-stream-moderators/<int:video_stream_moderator_id>/video-stream',
+    '/video-recordings/<int:video_recording_id>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
@@ -1828,6 +1834,11 @@ api.route(
     'video_stream_moderators',
     '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
+api.route(
+    VideoStreamRelationship,
+    'video_stream_recordings',
+    '/video-streams/<int:id>/relationships/video-recordings',
+)
 # Video Channels
 api.route(VideoChannelListPost, 'video_channel_list_post', '/video-channels')
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
@@ -1836,6 +1847,19 @@ api.route(
     'video_channel_detail',
     '/video-channels/<int:id>',
     '/video-streams/<int:video_stream_id>/video-channel',
+)
+
+# Video Recordings
+api.route(
+    VideoRecordingList,
+    'video_recording_list',
+    '/video-streams/<int:video_stream_id>/video-recordings',
+)
+api.route(VideoRecordingDetail, 'video_recording_detail', '/video-recordings/<int:id>')
+api.route(
+    VideoRecordingRelationship,
+    'video_recording_stream',
+    '/video-recordings/<int:id>/relationships/video-stream',
 )
 
 # Exhibitors
