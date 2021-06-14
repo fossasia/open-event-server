@@ -205,11 +205,39 @@ class VideoStreamList(ResourceList):
 
         return query_
 
+    def after_create_object(self, stream, data, view_kwargs):
+        if stream.channel and stream.channel.provider == 'bbb':
+            params_isMeetingRunning = dict(
+                meetingID=stream.extra['response']['meetingID'],
+            )
+
+            channel = stream.channel
+            bbb = BigBlueButton(channel.api_url, channel.api_key)
+            result_isMeetingRunning = bbb.request(
+                'isMeetingRunning', params_isMeetingRunning
+            )
+
+            if result_isMeetingRunning.data.get('response', {}).get('running') == 'true':
+                params_end_meeting = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                    password=stream.extra['response']['moderatorPW'],
+                )
+                result_end_meeting = bbb.request('end', params_end_meeting)
+
+                if not result_end_meeting.success:
+                    logger.error(
+                        'Error while ending current BBB Meeting after create BBB meeting: %s',
+                        result_end_meeting,
+                    )
+
     schema = VideoStreamSchema
     data_layer = {
         'session': db.session,
         'model': VideoStream,
-        'methods': {'query': query},
+        'methods': {
+            'query': query,
+            'after_create_object': after_create_object,
+        },
     }
 
 
