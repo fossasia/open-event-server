@@ -526,6 +526,17 @@ class EventDetail(ResourceDetail):
         :return:
         """
         g.event_name = event.name
+        if (
+            db.session.query(Event)
+            .filter(
+                and_(Event.id == event.id, Event.tickets.any(Ticket.deleted_at == None))
+            )
+            .count()
+            == 0
+        ):
+            raise ForbiddenError(
+                {'source': ''}, "Tickets are required for publishing an event."
+            )
 
         is_date_updated = (
             data.get('starts_at') != event.starts_at
