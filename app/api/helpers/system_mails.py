@@ -120,7 +120,7 @@ MAILS = {
     },
     MailType.TICKET_SALES_END: {
         'recipient': 'Owner, Organizer',
-        'subject': 'Ticket sales end for event {event_name}',
+        'subject': 'Ticket sales end for your event',
         'template': 'email/ticket_sales_end.html',
     },
     MailType.NEW_SESSION: {
