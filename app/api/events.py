@@ -533,6 +533,7 @@ class EventDetail(ResourceDetail):
             )
             .count()
             == 0
+            and event.state == "published"
         ):
             raise ForbiddenError(
                 {'source': ''}, "Tickets are required for publishing an event."
