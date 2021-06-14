@@ -59,7 +59,7 @@ def export_attendees_csv(attendees, custom_forms):
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
-            str(attendee.order.created_at)
+            str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
             if attendee.order and attendee.order.created_at
             else '-',
             str(attendee.order.status)
@@ -117,12 +117,16 @@ def export_sessions_csv(sessions):
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
             column.append(
-                session.starts_at.astimezone(pytz.timezone(session.event.timezone))
+                session.starts_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.starts_at
                 else ''
             )
             column.append(
-                session.ends_at.astimezone(pytz.timezone(session.event.timezone))
+                session.ends_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.ends_at
                 else ''
             )
@@ -146,7 +150,11 @@ def export_sessions_csv(sessions):
                 strip_tags(session.long_abstract) if session.long_abstract else ''
             )
             column.append(strip_tags(session.comments) if session.comments else '')
-            column.append(session.created_at if session.created_at else '')
+            column.append(
+                session.created_at.strftime('%B %-d, %Y %H:%M %z')
+                if session.created_at
+                else ''
+            )
             column.append('Yes' if session.is_mail_sent else 'No')
             column.append(session.level)
             column.append(session.state)
