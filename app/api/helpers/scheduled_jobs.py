@@ -56,7 +56,7 @@ def ticket_sales_end_mail():
             unique_emails.add(owner.user.email)
             user_objects.append(owner.user)
 
-        emails = user_objects
+        emails = list(unique_emails)
         action = MailType.TICKET_SALES_END
         mail = MAILS[action]
         if len(emails) > 0:
