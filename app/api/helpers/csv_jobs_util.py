@@ -45,7 +45,6 @@ def export_orders_csv(orders):
                 str(order.tax_business_info) if order.tax_business_info else '',
                 str(order.address) if order.address else '',
                 str(order.company) if order.company else '',
-                str(order.company) if order.company else '',
                 str(order.country) if order.country else '',
                 str(order.state) if order.state else '',
                 str(order.city) if order.city else '',
