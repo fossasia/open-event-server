@@ -11,6 +11,7 @@ from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
+from app.api.speaker_invites import SpeakerInvite
 from app.models import db
 from app.models.event import Event
 from app.models.session import Session
@@ -87,11 +88,15 @@ class SpeakerListPost(ResourceList):
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
-                if not has_access('is_session_self_submitted', session_id=session_id):
-                    raise ObjectNotFound(
-                        {'parameter': 'session_id'},
-                        f"Session: {session_id} not found",
-                    )
+                speaker_invite = SpeakerInvite.query.filter_by(
+                    email=data.get('email'), session_id=session_id
+                ).one()
+                if not speaker_invite:
+                    if not has_access('is_session_self_submitted', session_id=session_id):
+                        raise ObjectNotFound(
+                            {'parameter': 'session_id'},
+                            f"Session: {session_id} not found",
+                        )
 
         excluded = []
         if not data.get('email'):
@@ -176,6 +181,18 @@ class SpeakerDetail(ResourceDetail):
     Speakers Detail by id
     """
 
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('speaker_invite_id'):
+            speaker_invite = safe_query_kwargs(
+                SpeakerInvite, view_kwargs, 'speaker_invite_id'
+            )
+            view_kwargs['id'] = speaker_invite.speaker_id
+
     def before_update_object(self, speaker, data, view_kwargs):
         """
         method to save image urls before updating speaker object
@@ -235,7 +252,10 @@ class SpeakerDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Speaker,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {
+            'before_update_object': before_update_object,
+            'before_get_object': before_get_object,
+        },
     }
 
 
