@@ -529,7 +529,7 @@ class EventDetail(ResourceDetail):
         if (
             db.session.query(Event)
             .filter(
-                and_(Event.id == event.id, Event.tickets.any(Ticket.deleted_at is None))
+                and_(Event.id == event.id, Event.tickets.any(Ticket.deleted_at == None))
             )
             .count()
             == 0
