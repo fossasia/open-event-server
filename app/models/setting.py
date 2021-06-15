@@ -32,6 +32,7 @@ class Setting(db.Model):
     order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
     # Start Page Event ID (Default: NULL)
     start_pg_event_id = db.Column(db.String, nullable=True, default=None)
+    start_pg_enabled = db.Column(db.String, nullable=True, default='default')
 
     # Maximum number of complex custom fields allowed for a given form
     max_complex_custom_fields = db.Column(db.Integer, default=30, nullable=False)

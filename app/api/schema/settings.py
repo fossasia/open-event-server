@@ -37,6 +37,7 @@ class SettingSchemaPublic(Schema):
 
     # Start Page Event ID
     start_pg_event_id = fields.Str(allow_none=True, default=None)
+    start_pg_enabled = fields.Str(allow_none=True, default='default')
 
     # Maximum number of complex custom fields allowed for a given form
     max_complex_custom_fields = fields.Integer(
