@@ -46,13 +46,10 @@ def ticket_sales_end_mail():
         organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
         owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
         unique_emails = set()
-        user_objects = []
         for organizer in organizers:
             unique_emails.add(organizer.user.email)
-            user_objects.append(organizer.user)
         if owner:
             unique_emails.add(owner.user.email)
-            user_objects.append(owner.user)
 
         emails = list(unique_emails)
 

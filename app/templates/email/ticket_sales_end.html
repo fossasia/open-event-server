@@ -2,18 +2,21 @@
 <br/><br/>
 {{ _('This is an automatic message from eventyay.com.') }}
 <br/><br/>
-{{ _('The ticket sales period for one or several of your tickets for [Event Name] has ended. If you would like to reactivate ticket sales for these tickets, please login to your account and edit the sales period for your tickets.') }}
+{{ _('The ticket sales period for one or several of your tickets for ')}} {{event_name}} {{(' has ended. If you would like to reactivate ticket sales for these tickets, please login to your account and edit the sales period for your tickets.') }}
+<br/><br/>
+{{ _('Ticket Sales have ended for:') }}<br/>
+{{ticket_names}}
 <br/><br/>
 {{ _('Steps to change the ticket sales period:') }}
 <br/>
-{{ _('Login to your account.') }}<br/>
-{{ _('On the top right click “Manage Events”. ') }}<br/>
-{{ _('On the Events Dashboard choose the event you want to edit and click the “Edit Symbol” of the event.') }}<br/>
-{{ _('You are now editing the “Basic Details” of your event. Scroll down to the tickets section, choose the ticket you want to edit and click on the “Settings Symbol” of the ticket.') }}<br/>
-{{ _('In the ticket settings adjust the sales period for the ticket.') }}<br/>
-{{ _('Repeat the steps for other tickets, if any.') }}<br/>
-{{ _('Scroll to the bottom of the page and save the changes by clicking “Publish”.') }}<br/>
-{{ _('You can access the dashboard of the event here [Event Dashboard Link].') }}<br/>
+{{ _('1. Login to your account.') }}<br/>
+{{ _('2. On the top right click “Manage Events”. ') }}<br/>
+{{ _('3. On the Events Dashboard choose the event you want to edit and click the “Edit Symbol” of the event.') }}<br/>
+{{ _('4. You are now editing the “Basic Details” of your event. Scroll down to the tickets section, choose the ticket you want to edit and click on the “Settings Symbol” of the ticket.') }}<br/>
+{{ _('5. In the ticket settings adjust the sales period for the ticket.') }}<br/>
+{{ _('6. Repeat the steps for other tickets, if any.') }}<br/>
+{{ _('7. Scroll to the bottom of the page and save the changes by clicking “Publish”.') }}<br/>
+{{ _('You can access the dashboard of the event here ') }} <a href={{ event_dashboard }}>{{event_dashboard}} </a><br/>
 <br/><br/>
 {{ _('Thank you.') }}
 <br/><br/>

@@ -1,4 +1,5 @@
 import base64
+import datetime
 import logging
 import os
 from itertools import groupby
@@ -164,8 +165,18 @@ def send_email_new_session(email, session):
 
 def send_email_ticket_sales_end(event, emails):
     """email for ticket sales end"""
+    current_time = datetime.datetime.now()
     action = MailType.TICKET_SALES_END
     mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at > current_time:
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings.frontend_url + '/events/' + event.identifier
     if len(emails) > 0:
         send_email(
             to=emails[0],
@@ -173,10 +184,13 @@ def send_email_ticket_sales_end(event, emails):
             subject=mail['subject'].format(event_name=event.name),
             html=render_template(
                 mail['template'],
-                settings=get_settings(),
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
             ),
             bcc=emails[1:],
-            reply_to=emails[0],
+            reply_to=emails[-1],
         )
 
 
