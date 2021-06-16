@@ -171,7 +171,7 @@ def send_email_ticket_sales_end(event, emails):
     settings = get_settings()
     tickets = []
     for ticket in event.tickets:
-        if ticket.sales_ends_at > current_time:
+        if ticket.sales_ends_at < current_time:
             tickets.append(ticket.name)
 
     ticket_names = ", ".join(tickets)

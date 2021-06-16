@@ -31,12 +31,11 @@ def ticket_sales_end_mail():
     events = (
         Event.query.filter_by(state='published', deleted_at=None)
         .filter(
-            Event.ends_at < current_time,
-            current_time - Event.ends_at < datetime.timedelta(days=1),
+            Event.ends_at > current_time,
             Event.tickets.any(
                 and_(
                     Ticket.deleted_at == None,
-                    Ticket.sales_ends_at > current_time,
+                    Ticket.sales_ends_at < current_time,
                 )
             ),
         )
