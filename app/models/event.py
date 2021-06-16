@@ -145,6 +145,7 @@ class Event(SoftDeletionModel):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
+    has_session_levels = db.Column(db.Boolean, default=False, nullable=True)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
     live_stream_url = db.Column(db.String)
