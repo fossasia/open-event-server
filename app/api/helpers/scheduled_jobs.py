@@ -7,6 +7,7 @@ from redis.exceptions import LockError
 from sqlalchemy import and_, distinct, or_
 
 from app.api.helpers.db import save_to_db
+from app.api.helpers.mail import send_email_ticket_sales_end
 from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
 from app.instance import celery
@@ -41,7 +42,21 @@ def ticket_sales_end_mail():
         )
         .all()
     )
-    send_email_ticket_sales_end(events)
+    for event in events:
+        organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
+        owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
+        unique_emails = set()
+        user_objects = []
+        for organizer in organizers:
+            unique_emails.add(organizer.user.email)
+            user_objects.append(organizer.user)
+        if owner:
+            unique_emails.add(owner.user.email)
+            user_objects.append(owner.user)
+
+        emails = list(unique_emails)
+
+        send_email_ticket_sales_end(event, emails)
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')

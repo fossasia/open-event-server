@@ -162,35 +162,22 @@ def send_email_new_session(email, session):
     )
 
 
-def send_email_ticket_sales_end(events):
+def send_email_ticket_sales_end(event, emails):
     """email for ticket sales end"""
-    for event in events:
-        organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
-        owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
-        unique_emails = set()
-        user_objects = []
-        for organizer in organizers:
-            unique_emails.add(organizer.user.email)
-            user_objects.append(organizer.user)
-        if owner:
-            unique_emails.add(owner.user.email)
-            user_objects.append(owner.user)
-
-        emails = list(unique_emails)
-        action = MailType.TICKET_SALES_END
-        mail = MAILS[action]
-        if len(emails) > 0:
-            send_email(
-                to=emails[0],
-                action=action,
-                subject=mail['subject'].format(event_name=event.name),
-                html=render_template(
-                    mail['template'],
-                    settings=get_settings(),
-                ),
-                bcc=emails[1:],
-                reply_to=emails[0],
-            )
+    action = MailType.TICKET_SALES_END
+    mail = MAILS[action]
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=get_settings(),
+            ),
+            bcc=emails[1:],
+            reply_to=emails[0],
+        )
 
 
 def send_email_session_state_change(email, session, mail_override: Dict[str, str] = None):
