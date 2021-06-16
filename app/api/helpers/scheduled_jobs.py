@@ -63,7 +63,7 @@ def ticket_sales_end_mail():
             send_email(
                 to=emails[0],
                 action=action,
-                subject=mail['subject'],
+                subject=mail['subject'].format(event_name=event.name),
                 html=render_template(
                     mail['template'],
                     settings=get_settings(),
