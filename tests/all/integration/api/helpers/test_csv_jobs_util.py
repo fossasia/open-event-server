@@ -33,7 +33,7 @@ class TestExportCSV(OpenEventTestCase):
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
             field_data = export_attendees_csv([test_attendee], [custom_forms])
-            self.assertEqual(field_data[1][7], 'tax id')
+            self.assertEqual(field_data[1][8], 'tax id')
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():

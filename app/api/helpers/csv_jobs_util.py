@@ -62,6 +62,7 @@ def export_attendees_csv(attendees, custom_forms):
         'Order Date',
         'Status',
         'Payment Type',
+        'Payment Mode',
         'Ticket Name',
         'Ticket Price',
         'Ticket Type',
@@ -87,6 +88,9 @@ def export_attendees_csv(attendees, custom_forms):
             str(attendee.order.status)
             if attendee.order and attendee.order.status
             else '-',
+            str(attendee.order.paid_via)
+            if attendee.order and attendee.order.paid_via
+            else '',
             str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
