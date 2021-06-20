@@ -65,6 +65,15 @@ class VideoStreamSchema(Schema):
         schema='VideoChannelSchemaPublic',
         type_='video-channel',
     )
+    video_recordings = Relationship(
+        many=True,
+        self_view='v1.video_stream_recordings',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.video_recording_list',
+        related_view_kwargs={'video_stream_id': '<id>'},
+        schema='VideoRecordingSchema',
+        type_='video-recording',
+    )
     moderators = Relationship(
         many=True,
         self_view='v1.video_stream_moderators',

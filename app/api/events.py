@@ -68,7 +68,6 @@ from app.models.user import (
 )
 from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
-from app.models.users_groups_role import UsersGroupsRoles
 from app.models.video_stream import VideoStream
 
 events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
@@ -215,18 +214,7 @@ class EventList(ResourceList):
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-
-            query_ = query_.join(Event.roles).filter(
-                or_(
-                    UsersEventsRoles.user_id == user.id,
-                    and_(
-                        Group.id == UsersGroupsRoles.group_id,
-                        Event.group_id == Group.id,
-                        UsersGroupsRoles.email == current_user.email,
-                        UsersGroupsRoles.accepted == True,
-                    ),
-                )
-            )
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(

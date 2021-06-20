@@ -1,0 +1,245 @@
+# Translations template for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-04-01 22:43+0530\n"
+"PO-Revision-Date: 2021-06-18 13:39+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/open-event/"
+"server/hr/>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: app/templates/email/organizer_contact_attendee.html:1
+#: app/templates/email/ticket_purchased.html:1
+#: app/templates/email/ticket_purchased_attendee.html:1
+#: app/templates/email/user_register.html:1
+msgid "Hello"
+msgstr "Bok"
+
+#: app/templates/email/organizer_contact_attendee.html:2
+msgid "You have contacted the organizers of the event"
+msgstr "Kontaktirao/la si organizatore događaja"
+
+#: app/templates/email/organizer_contact_attendee.html:3
+msgid "Below you find a copy of your email"
+msgstr "Ispod se nalazi kopija tvog emaila"
+
+#: app/templates/email/organizer_contact_attendee.html:7
+msgid "Organizers have received your message and will follow up with you"
+msgstr "Organizatori su primili tvoju poruku i javit će ti se"
+
+#: app/templates/email/organizer_contact_attendee.html:8
+msgid ""
+"This is a system message. Please do not reply to this message. Replies "
+"are not monitored"
+msgstr "Ovo je poruka sustava. Ne odgovaraj na ovu poruku. Odgovori se ne prate"
+
+#: app/templates/email/organizer_contact_attendee.html:9
+msgid "Thank you"
+msgstr "Hvala"
+
+#: app/templates/email/password_change.html:1
+msgid "Your password has been successfully changed."
+msgstr "Tvoja je lozinka uspješno promijenjena."
+
+#: app/templates/email/password_change.html:2
+msgid "Please login with your new password."
+msgstr "Prijavi se s novom lozinkom."
+
+#: app/templates/email/password_reset.html:1
+msgid "Please use the following link to reset your password."
+msgstr "Koristi sljedeću poveznicu za ponovno postavljanje tvoje lozinke."
+
+#: app/templates/email/password_reset.html:3
+msgid "Or paste this token in your"
+msgstr "Ili umetni ovaj token u tvoju"
+
+#: app/templates/email/password_reset_and_verify.html:1
+msgid ""
+"Please use the following link to reset your password and verify your "
+"account."
+msgstr ""
+"Koristi sljedeću poveznicu za poništavanje tvoje lozinke i potvrđivanje tvog "
+"računa."
+
+#: app/templates/email/ticket_purchased.html:2
+msgid "Thank you for your ticket order for"
+msgstr "Hvala na naručivanju ulaznice za"
+
+#: app/templates/email/ticket_purchased.html:3
+msgid "This is your order confirmation. You can download your tickets at"
+msgstr "Ovo je potvrda za tvoju narudžbu. Ulaznice možeš preuzeti na"
+
+#: app/templates/email/ticket_purchased.html:4
+msgid "Order Summary"
+msgstr "Sažetak narudžbe"
+
+#: app/templates/email/ticket_purchased.html:5
+msgid "Order"
+msgstr "Narudžba"
+
+#: app/templates/email/ticket_purchased.html:6
+#: app/templates/email/ticket_purchased_attendee.html:4
+#: app/templates/pdf/order_invoice.html:208
+msgid "Name"
+msgstr "Ime"
+
+#: app/templates/email/ticket_purchased.html:9
+#: app/templates/email/ticket_purchased_attendee.html:7
+msgid "Ticket"
+msgstr "Ulaznica"
+
+#: app/templates/email/ticket_purchased.html:10
+#: app/templates/email/ticket_purchased_attendee.html:8
+#: app/templates/pdf/order_invoice.html:185
+#: app/templates/pdf/order_invoice.html:210
+msgid "Quantity"
+msgstr "Količina"
+
+#: app/templates/email/ticket_purchased.html:13
+#: app/templates/email/ticket_purchased_attendee.html:11
+msgid "About this event"
+msgstr "O ovom događaju"
+
+#: app/templates/email/ticket_purchased.html:14
+#: app/templates/email/ticket_purchased_attendee.html:12
+msgid "Date"
+msgstr "Datum"
+
+#: app/templates/email/ticket_purchased.html:16
+#: app/templates/email/ticket_purchased_attendee.html:14
+msgid "Best regards"
+msgstr "Puno pozdrava"
+
+#: app/templates/email/ticket_purchased.html:17
+#: app/templates/email/ticket_purchased_attendee.html:15
+#: app/templates/email/user_register.html:6
+msgid "Team"
+msgstr "Tim"
+
+#: app/templates/email/ticket_purchased.html:19
+#: app/templates/email/ticket_purchased_attendee.html:17
+msgid "Below you find a message from the organizer"
+msgstr "Ispod se nalazi poruka organizatora"
+
+#: app/templates/email/ticket_purchased.html:28
+#: app/templates/email/ticket_purchased_attendee.html:26
+msgid "Login to manage your orders at"
+msgstr "Za upravljanje tvojim nalozima, prijavi se"
+
+#: app/templates/email/ticket_purchased_attendee.html:2
+msgid "This is a confirmation mail of your tickets for the event"
+msgstr "Ovo je potvrdna email poruka za tvoje ulaznice za događaj"
+
+#: app/templates/email/ticket_purchased_attendee.html:2
+msgid "You can download your tickets at"
+msgstr "Tvoje ulaznice možeš preuzeti na"
+
+#: app/templates/email/ticket_purchased_attendee.html:3
+msgid "Ticket Summary"
+msgstr "Sažetak ulaznice"
+
+#: app/templates/email/user_register.html:2
+msgid "Your account has been created on"
+msgstr "Tvoj račun je svtoren"
+
+#: app/templates/email/user_register.html:2
+msgid "Congratulations!"
+msgstr "Čestitamo!"
+
+#: app/templates/email/user_register.html:3
+msgid "Your login is"
+msgstr "Tvoj prijava je"
+
+#: app/templates/email/user_register.html:4
+msgid "Please visit the following link to verify your email:"
+msgstr "Pritisni sljedeću poveznicu za potvrđivanje tvoje email adrese:"
+
+#: app/templates/email/user_register.html:5
+msgid "Thank You"
+msgstr "Hvala"
+
+#: app/templates/pdf/order_invoice.html:148
+msgid "INVOICE"
+msgstr "RAČUN"
+
+#: app/templates/pdf/order_invoice.html:162
+msgid "Order Number"
+msgstr "Broj narudžbe"
+
+#: app/templates/pdf/order_invoice.html:163
+msgid "Order By"
+msgstr "Narudžba po"
+
+#: app/templates/pdf/order_invoice.html:169
+msgid "Information unavailable"
+msgstr "Informacija nije dostupna"
+
+#: app/templates/pdf/order_invoice.html:172
+msgid "Order Status"
+msgstr "Stanje narudžbe"
+
+#: app/templates/pdf/order_invoice.html:176
+msgid "Pending"
+msgstr "Na čekanju"
+
+#: app/templates/pdf/order_invoice.html:186
+msgid "Total Amount"
+msgstr "Ukupni iznos"
+
+#: app/templates/pdf/order_invoice.html:187
+msgid "Payment Mode"
+msgstr "Način plaćanja"
+
+#: app/templates/pdf/order_invoice.html:191
+msgid "Payment pending"
+msgstr "Još neplaćeno"
+
+#: app/templates/pdf/order_invoice.html:194
+msgid "Discount Code"
+msgstr "Šifra popusta"
+
+#: app/templates/pdf/order_invoice.html:198
+msgid "NA"
+msgstr "--"
+
+#: app/templates/pdf/order_invoice.html:209
+msgid "Price"
+msgstr "Cijena"
+
+#: app/templates/pdf/order_invoice.html:211
+msgid "Sub-Total(net)"
+msgstr "Podzbroj (neto)"
+
+#: app/templates/pdf/order_invoice.html:212
+msgid "VAT"
+msgstr "PDV"
+
+#: app/templates/pdf/order_invoice.html:213
+msgid "Tax Amount"
+msgstr "Iznos poreza"
+
+#: app/templates/pdf/order_invoice.html:242
+msgid "Grand Total"
+msgstr "Sveukupno"
+
+#: app/templates/pdf/order_invoice.html:250
+msgid "Invoice Footer"
+msgstr "Podnožje računa"
+
+#: app/templates/pdf/ticket_attendee.html:79
+#: app/templates/pdf/ticket_purchaser.html:80
+msgid "Organizer Message"
+msgstr "Poruka organizatora"
