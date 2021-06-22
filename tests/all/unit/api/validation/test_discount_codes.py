@@ -1,5 +1,8 @@
 import unittest
+from datetime import datetime
 from unittest import TestCase
+
+from pytz import timezone
 
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
@@ -15,6 +18,41 @@ class TestDiscountCodeValidation(TestCase):
         original_data = {'data': {}}
         data = {'min_quantity': 10, 'max_quantity': 20, 'tickets_number': 30}
         DiscountCodeSchemaTicket.validate_quantity(schema, data, original_data)
+
+    def test_date_pass(self):
+        """
+        Discount Code Validate Date - Tests if the function runs without an exception
+        :return:
+        """
+        schema = DiscountCodeSchemaTicket()
+        original_data = {'data': {}}
+        data = {
+            'valid_from': datetime(2099, 8, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'valid_till': datetime(2099, 9, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+        }
+        DiscountCodeSchemaTicket.validate_date(schema, data, original_data)
+
+    def test_date_start_gt_end(self):
+        """
+        Discount Code Validate Date - Tests if exception is raised when ends_at is before starts_at
+        :return:
+        """
+        schema = DiscountCodeSchemaTicket()
+        original_data = {'data': {}}
+        data = {
+            'valid_from': datetime(2099, 9, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+            'valid_till': datetime(2099, 8, 4, 12, 30, 45).replace(
+                tzinfo=timezone('UTC')
+            ),
+        }
+        with self.assertRaises(UnprocessableEntityError):
+            DiscountCodeSchemaTicket.validate_date(schema, data, original_data)
 
     def test_quantity_min_gt_max(self):
         """
