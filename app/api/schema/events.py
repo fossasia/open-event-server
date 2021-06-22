@@ -17,7 +17,6 @@ class DocumentLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
 
-
 class EventSchemaPublic(SoftDeletionSchema):
     class Meta:
         type_ = 'event'
