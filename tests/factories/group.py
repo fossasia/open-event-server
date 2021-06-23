@@ -17,5 +17,9 @@ class GroupFactory(GroupFactoryBase):
     user_id = 1
 
 
+class GroupFactoryBasic(GroupFactoryBase):
+    user_id = 1
+
+
 class GroupSubFactory(GroupFactoryBase):
     user = factory.SubFactory(UserFactory)
