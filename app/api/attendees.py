@@ -225,14 +225,8 @@ class AttendeeDetail(ResourceDetail):
                 'Only admin or that user itself can update attendee info',
             )
 
-        if order.status != 'initializing' and (
-            'is_checked_in' not in data
-            or (
-                'is_checked_in' in data
-                and 'checkin_times' in data
-                and obj.is_checked_in == data['is_checked_in']
-                and obj.checkin_times == data['checkin_times']
-            )
+        if order.status != 'initializing' and (    
+            'checkin_times' not in data
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
@@ -257,13 +251,6 @@ class AttendeeDetail(ResourceDetail):
             ):
                 data['checkin_times'] = '{},{}'.format(
                     obj.checkin_times, data['checkin_times']
-                )
-            elif obj.checkin_times and data['checkin_times'] in obj.checkin_times.split(
-                ","
-            ):
-                raise UnprocessableEntityError(
-                    {'pointer': '/data/attributes/checkin_times'},
-                    "Check in time already present",
                 )
 
             if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
