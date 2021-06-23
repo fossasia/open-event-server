@@ -32,6 +32,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.models.user_follow_group import UserFollowGroup
 from app.models.users_events_role import UsersEventsRoles
 from app.models.video_stream_moderator import VideoStreamModerator
 
@@ -258,6 +259,15 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('user_follow_group_id') is not None:
+            user_follow_group = safe_query_kwargs(
+                UserFollowGroup, view_kwargs, 'user_follow_group_id'
+            )
+            if user_follow_group.id is not None:
+                view_kwargs['id'] = user_follow_group.user_id
+            else:
+                view_kwargs['id'] = None
+
     def before_update_object(self, user, data, view_kwargs):
         # TODO: Make a celery task for this
         # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
@@ -398,9 +408,10 @@ class UserDetail(ResourceDetail):
                 EmailNotification,
                 Speaker,
                 User,
+                UserFollowGroup,
             ],
             fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
-                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
+                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id, user_follow_group_id",
             leave_if=lambda a: a.get('attendee_id'),
         ),
     )
