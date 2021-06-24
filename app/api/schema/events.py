@@ -1,6 +1,7 @@
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
+from marshmallow.schema import Schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from pytz import timezone
@@ -10,6 +11,11 @@ from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import GetterRelationship, SoftDeletionSchema, TrimmedEmail
 from app.models.event import Event
+
+
+class DocumentLinkSchema(Schema):
+    name = fields.String(required=True)
+    link = fields.String(required=True)
 
 
 class EventSchemaPublic(SoftDeletionSchema):
@@ -83,6 +89,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     is_chat_enabled = fields.Bool(default=False)
+    is_document_enabled = fields.Boolean(default=False)
+    document_links = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     chat_room_name = fields.Str(dump_only=True)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
