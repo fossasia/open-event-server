@@ -13,6 +13,7 @@ from app.api.schema.groups import GroupSchema
 from app.models import db
 from app.models.event import Event
 from app.models.group import Group
+from app.models.user_follow_group import UserFollowGroup
 from app.models.users_groups_role import UsersGroupsRoles
 
 
@@ -102,6 +103,14 @@ class GroupDetail(ResourceDetail):
                 'users_groups_roles_id',
             )
             view_kwargs['id'] = users_groups_role.role_id
+
+        if view_kwargs.get('user_follow_group_id') is not None:
+            user_follow_group = safe_query_kwargs(
+                UserFollowGroup,
+                view_kwargs,
+                'user_follow_group_id',
+            )
+            view_kwargs['id'] = user_follow_group.group_id
 
     def before_update_object(self, group, data, view_kwargs):
         """
