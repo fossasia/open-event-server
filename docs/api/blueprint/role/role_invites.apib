@@ -239,11 +239,11 @@ Delete a single role invite.
 ### Get User Email Detail By Role Invite Token [POST]
 Get a single user email by sending role invite hash.
 
-+ Request
++ Request (application/json)
 
     + Headers
     
-            Content-Type: application/vnd.api+json
+            Content-Type: application/json
 
             Authorization: JWT <Auth Key>
 
@@ -254,7 +254,7 @@ Get a single user email by sending role invite hash.
                     "token": "149889783495332276669212664484219865405"
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 200 (application/json)
 
         {
           "email": "user0@example.com"
@@ -265,11 +265,11 @@ Get a single user email by sending role invite hash.
 ### Accept Role Invite using Token [POST]
 Accept Role Invitation by role invite hash
 
-+ Request
++ Request (application/json)
 
     + Headers
            
-            Content-Type: application/vnd.api+json
+            Content-Type: application/json
 
             Authorization: JWT <Auth Key>
 
@@ -280,7 +280,7 @@ Accept Role Invitation by role invite hash
                     "token": "149889783495332276669212664484219865405"
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 200 (application/json)
 
         {
           "email": "user0@example.com",
