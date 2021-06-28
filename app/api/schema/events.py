@@ -89,6 +89,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     is_chat_enabled = fields.Bool(default=False)
+    is_videoroom_enabled = fields.Bool(default=False)
     is_document_enabled = fields.Boolean(default=False)
     document_links = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     chat_room_name = fields.Str(dump_only=True)
