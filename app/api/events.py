@@ -547,7 +547,7 @@ class EventDetail(ResourceDetail):
                     if not document.get('name') or not document.get('link'):
                        raise UnprocessableEntityError(
                             {'pointer': '/'},
-                            "enter required fields link and name",
+                            "Enter required fields link and name",
                         )
 
 
