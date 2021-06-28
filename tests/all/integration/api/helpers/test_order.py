@@ -28,7 +28,7 @@ class TestOrderUtilities(OpenEventTestCase):
                 minutes=order_expiry_time
             )
             set_expiry_for_order(obj)
-            self.assertEqual(obj.status, 'expired')
+            assert obj.status == 'expired'
 
     def test_should_not_expire_valid_orders(self):
         """Method to test to not mark valid orders as expired"""
@@ -39,7 +39,7 @@ class TestOrderUtilities(OpenEventTestCase):
             obj.event = event
             db.session.commit()
             set_expiry_for_order(obj)
-            self.assertEqual(obj.status, 'initializing')
+            assert obj.status == 'initializing'
 
     def test_should_delete_related_attendees(self):
         """Method to test to delete related attendees of an event"""
@@ -55,7 +55,7 @@ class TestOrderUtilities(OpenEventTestCase):
 
             delete_related_attendees_for_order(obj)
             order = db.session.query(Order).filter(Order.id == obj.id).first()
-            self.assertEqual(len(order.ticket_holders), 0)
+            assert len(order.ticket_holders) == 0
 
     def test_count_sold_and_reserved_tickets(self):
         """Method to test the count query of sold tickets"""
@@ -124,10 +124,10 @@ class TestOrderUtilities(OpenEventTestCase):
 
             count = get_sold_and_reserved_tickets_count(ticket.id)
 
-            self.assertEqual(count, 13)
+            assert count == 13
 
             # Last 2 attendees belong to other ticket
-            self.assertEqual(get_sold_and_reserved_tickets_count(other_ticket.id), 2)
+            assert get_sold_and_reserved_tickets_count(other_ticket.id) == 2
 
 
 if __name__ == '__main__':
