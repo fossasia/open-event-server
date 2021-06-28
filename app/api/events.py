@@ -542,12 +542,13 @@ class EventDetail(ResourceDetail):
 
         if data.get('is_document_enabled'):
             d = data.get('document_links')
-            for document in d:
-                if (document.get('name') == '') or (document.get('link')==''):
-                   raise UnprocessableEntityError(
-                        {'pointer': '/'},
-                        "enter required fields link and name",
-                    )
+            if d:
+                for document in d:
+                    if not document.get('name') or not document.get('link'):
+                       raise UnprocessableEntityError(
+                            {'pointer': '/'},
+                            "enter required fields link and name",
+                        )
 
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
