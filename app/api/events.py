@@ -540,6 +540,16 @@ class EventDetail(ResourceDetail):
         if is_date_updated or is_draft_published or is_event_restored:
             validate_date(event, data)
 
+        if data.get('is_document_enabled'):
+            d = data.get('document_links')
+            for document in d:
+                if (document.get('name') == '') or (document.get('link')==''):
+                   raise UnprocessableEntityError(
+                        {'pointer': '/'},
+                        "enter required fields link and name",
+                    )
+
+
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
                 raise ForbiddenError(
