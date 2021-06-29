@@ -83,10 +83,10 @@ class TestExportCSV(OpenEventTestCase):
                     'example (accepted)',
                     test_session.starts_at.astimezone(
                         pytz.timezone(test_session.event.timezone)
-                    ),
+                    ).strftime('%B %-d, %Y %H:%M %z'),
                     test_session.ends_at.astimezone(
                         pytz.timezone(test_session.event.timezone)
-                    ),
+                    ).strftime('%B %-d, %Y %H:%M %z'),
                     '',
                     '',
                     common.string_,
