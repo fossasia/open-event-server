@@ -111,7 +111,7 @@ tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
 name = "astroid"
-version = "2.5.6"
+version = "2.6.1"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
@@ -1706,14 +1706,14 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.8.3"
+version = "2.9.0"
 description = "python code static checker"
 category = "dev"
 optional = false
 python-versions = "~=3.6"
 
 [package.dependencies]
-astroid = "2.5.6"
+astroid = ">=2.6.1,<2.7"
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
 isort = ">=4.2.5,<6"
 mccabe = ">=0.6,<0.7"
@@ -2547,7 +2547,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "81b3394898d83652e6a2b391024113be5b9d4d3373c64b82bd29ba493b4eb7c9"
+content-hash = "b5263b33a1c606536ea9319b691003f23897b090cddb929df65bd041e0164636"
 
 [metadata.files]
 aiohttp = [
@@ -2619,8 +2619,8 @@ asgiref = [
     {file = "asgiref-3.3.4.tar.gz", hash = "sha256:d1216dfbdfb63826470995d31caed36225dcaf34f182e0fa257a4dd9e86f1b78"},
 ]
 astroid = [
-    {file = "astroid-2.5.6-py3-none-any.whl", hash = "sha256:4db03ab5fc3340cf619dbc25e42c2cc3755154ce6009469766d7143d1fc2ee4e"},
-    {file = "astroid-2.5.6.tar.gz", hash = "sha256:8a398dfce302c13f14bab13e2b14fe385d32b73f4e4853b9bdfb64598baa1975"},
+    {file = "astroid-2.6.1-py3-none-any.whl", hash = "sha256:54810a3639365ae98b1f03897e73918111acb3a494065b9970a822e940764fa4"},
+    {file = "astroid-2.6.1.tar.gz", hash = "sha256:19fd2d2e12bc3cae95687e8264b6593fe07339181a273eeb095da0e70faf4399"},
 ]
 async-timeout = [
     {file = "async-timeout-3.0.1.tar.gz", hash = "sha256:0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f"},
@@ -3515,8 +3515,8 @@ pyjwt = [
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
 ]
 pylint = [
-    {file = "pylint-2.8.3-py3-none-any.whl", hash = "sha256:792b38ff30903884e4a9eab814ee3523731abd3c463f3ba48d7b627e87013484"},
-    {file = "pylint-2.8.3.tar.gz", hash = "sha256:0a049c5d47b629d9070c3932d13bff482b12119b6a241a93bc460b0be16953c8"},
+    {file = "pylint-2.9.0-py3-none-any.whl", hash = "sha256:45b68315081027f1f8cbd20f870d23152ff94090487f022e7c32694a70954d65"},
+    {file = "pylint-2.9.0.tar.gz", hash = "sha256:697f69ec93ad6ec9cf0eecff54ac7e1fb836e1330807a2d077173de42b54cf14"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
