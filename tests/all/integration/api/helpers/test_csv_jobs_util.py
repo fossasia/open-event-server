@@ -21,8 +21,8 @@ class TestExportCSV(OpenEventTestCase):
             test_order = OrderFactory(created_at=datetime.now())
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
-            self.assertEqual(field_data[1][2], 'initializing')
-            self.assertEqual(field_data[1][5], '2')
+            assert field_data[1][2] == 'initializing'
+            assert field_data[1][5] == '2'
 
     def test_export_attendees_csv(self):
         """Method to check the attendees data export"""
@@ -33,7 +33,7 @@ class TestExportCSV(OpenEventTestCase):
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
             field_data = export_attendees_csv([test_attendee], [custom_forms])
-            self.assertEqual(field_data[1][8], 'tax id')
+            assert field_data[1][8] == 'tax id'
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():
@@ -42,8 +42,8 @@ class TestExportCSV(OpenEventTestCase):
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
 
-            self.assertEqual(session_row[0], 'example (accepted)')
-            self.assertEqual(session_row[12], 'accepted')
+            assert session_row[0] == 'example (accepted)'
+            assert session_row[12] == 'accepted'
 
     def test_export_sessions_csv(self):
         """Method to check sessions data export"""
@@ -77,8 +77,7 @@ class TestExportCSV(OpenEventTestCase):
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
 
-            self.assertEquals(
-                session_row,
+            assert session_row == \
                 [
                     'example (accepted)',
                     test_session.starts_at.astimezone(
@@ -105,8 +104,7 @@ class TestExportCSV(OpenEventTestCase):
                     common.url_,
                     common.average_rating_,
                     common.rating_count_,
-                ],
-            )
+                ]
 
     def test_export_speakers_csv(self):
         """Method to check speakers data export"""
@@ -127,22 +125,22 @@ class TestExportCSV(OpenEventTestCase):
             user.id = 2
             field_data = export_speakers_csv([test_speaker])
             speaker_row = field_data[1]
-            self.assertEqual(speaker_row[0], 'Mario Behling')
-            self.assertEqual(speaker_row[1], 'user0@example.com')
-            self.assertEqual(speaker_row[2], '')
-            self.assertEqual(speaker_row[3], '9004345009')
-            self.assertEqual(speaker_row[4], 'Speaker Bio')
-            self.assertEqual(speaker_row[5], 'FOSSASIA')
-            self.assertEqual(speaker_row[6], 'position')
-            self.assertEqual(speaker_row[7], '1')
-            self.assertEqual(speaker_row[8], 'No')
-            self.assertEqual(speaker_row[9], 'Berlin')
-            self.assertEqual(speaker_row[10], 'Germany')
-            self.assertEqual(speaker_row[11], common.url_)
-            self.assertEqual(speaker_row[12], common.url_)
-            self.assertEqual(speaker_row[13], common.url_)
-            self.assertEqual(speaker_row[14], common.url_)
-            self.assertEqual(speaker_row[15], common.url_)
+            assert speaker_row[0] == 'Mario Behling'
+            assert speaker_row[1] == 'user0@example.com'
+            assert speaker_row[2] == ''
+            assert speaker_row[3] == '9004345009'
+            assert speaker_row[4] == 'Speaker Bio'
+            assert speaker_row[5] == 'FOSSASIA'
+            assert speaker_row[6] == 'position'
+            assert speaker_row[7] == '1'
+            assert speaker_row[8] == 'No'
+            assert speaker_row[9] == 'Berlin'
+            assert speaker_row[10] == 'Germany'
+            assert speaker_row[11] == common.url_
+            assert speaker_row[12] == common.url_
+            assert speaker_row[13] == common.url_
+            assert speaker_row[14] == common.url_
+            assert speaker_row[15] == common.url_
 
 
 if __name__ == '__main__':
