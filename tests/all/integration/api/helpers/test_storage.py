@@ -27,7 +27,7 @@ class TestStorage(OpenEventTestCase):
 
         with self.app.test_request_context():
             actual_response = upload_local(uploadedfile_object, 'upload_key')
-            self.assertEqual(expected_response, actual_response)
+            assert expected_response == actual_response
 
 
 if __name__ == '__main__':
