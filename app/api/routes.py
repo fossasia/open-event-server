@@ -1853,7 +1853,6 @@ api.route(
 api.route(
     VideoRecordingList,
     'video_recording_list',
-    '/video-recordings',
     '/video-streams/<int:video_stream_id>/video-recordings',
 )
 api.route(VideoRecordingDetail, 'video_recording_detail', '/video-recordings/<int:id>')

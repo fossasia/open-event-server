@@ -16,42 +16,40 @@ from app.models.video_stream import VideoStream
 
 class VideoRecordingList(ResourceList):
     def before_get(self, args, kwargs):
-        if kwargs.get('video_stream_id'):
-            stream = safe_query_kwargs(VideoStream, kwargs, 'video_stream_id', 'id')
-
-            if not has_access('is_organizer', event_id=stream.event_id):
-                raise ForbiddenError(
-                    {'pointer': 'event_id'},
-                    'You need to be the event organizer to access video recordings.',
-                )
-
-            params = dict(
-                meetingID=stream.extra['response']['meetingID'],
+        stream = safe_query_kwargs(VideoStream, kwargs, 'video_stream_id', 'id')
+        if not has_access('is_organizer', event_id=stream.event_id):
+            raise ForbiddenError(
+                {'pointer': 'event_id'},
+                'You need to be the event organizer to access video recordings.',
             )
-            channel = stream.channel
-            bbb = BigBlueButton(channel.api_url, channel.api_key)
-            result = bbb.request('getRecordings', params)
 
-            if result.data['response']['recordings']:
-                recordings = []
-                if type(result.data['response']['recordings']['recording']) is list:
-                    recordings = result.data['response']['recordings']['recording']
-                else:
-                    recordings.append(result.data['response']['recordings']['recording'])
-                for recording in recordings:
-                    get_or_create(
-                        VideoRecording,
-                        bbb_record_id=recording['recordID'],
-                        participants=recording['participants'],
-                        url=recording['playback']['format']['url'],
-                        start_time=datetime.fromtimestamp(
-                            int(int(recording['startTime']) / 1000)
-                        ),
-                        end_time=datetime.fromtimestamp(
-                            int(int(recording['endTime']) / 1000)
-                        ),
-                        video_stream=stream,
-                    )
+        params = dict(
+            meetingID=stream.extra['response']['meetingID'],
+        )
+        channel = stream.channel
+        bbb = BigBlueButton(channel.api_url, channel.api_key)
+        result = bbb.request('getRecordings', params)
+
+        if result.data['response']['recordings']:
+            recordings = []
+            if type(result.data['response']['recordings']['recording']) is list:
+                recordings = result.data['response']['recordings']['recording']
+            else:
+                recordings.append(result.data['response']['recordings']['recording'])
+            for recording in recordings:
+                get_or_create(
+                    VideoRecording,
+                    bbb_record_id=recording['recordID'],
+                    participants=recording['participants'],
+                    url=recording['playback']['format']['url'],
+                    start_time=datetime.fromtimestamp(
+                        int(int(recording['startTime']) / 1000)
+                    ),
+                    end_time=datetime.fromtimestamp(
+                        int(int(recording['endTime']) / 1000)
+                    ),
+                    video_stream=stream,
+                )
 
     def query(self, view_kwargs):
         query_ = VideoRecording.query
@@ -60,13 +58,6 @@ class VideoRecordingList(ResourceList):
             query_ = VideoRecording.query.filter(
                 VideoRecording.video_stream_id == stream.id
             )
-        else:
-            if not has_access('is_admin'):
-                raise ForbiddenError(
-                    {'pointer': 'user'},
-                    'You need to be the admin to access video recordings.',
-                )
-
         return query_
 
     methods = ['GET']
