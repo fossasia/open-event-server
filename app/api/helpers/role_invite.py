@@ -44,7 +44,6 @@ def delete_pending_owner(event_id):
         role_name='owner',
         status='pending',
     )
-    print(role_invites)
     if role_invites:
         for rinvite in role_invites:
             db.session.delete(rinvite)
