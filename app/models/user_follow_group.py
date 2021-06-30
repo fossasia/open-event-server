@@ -4,6 +4,7 @@ from app.models.helpers.timestamp import Timestamp
 
 class UserFollowGroup(db.Model, Timestamp):
     __tablename__ = 'user_follow_groups'
+    __table_args__ = (db.UniqueConstraint('group_id', 'user_id', name='uq_group_user'),)
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
