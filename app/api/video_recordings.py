@@ -4,7 +4,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.helpers.db import get_or_create, safe_query_kwargs
-from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.video_recordings import VideoRecordingSchema
