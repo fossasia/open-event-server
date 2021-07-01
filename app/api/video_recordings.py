@@ -100,7 +100,31 @@ class VideoRecordingDetail(ResourceDetail):
                 'You need to be the event organizer to access video recordings.',
             )
 
-    methods = ['GET']
+    def before_delete_object(self, video_recording, kwargs):
+        """
+        before delete object method for recording detail
+        :param obj:
+        :param kwargs:
+        :return:
+        """
+        if not has_access('is_admin'):
+            raise ForbiddenError(
+                {'source': 'User'}, 'You are not authorized to access this.'
+            )
+        stream = video_recording.video_stream
+        params = dict(
+            recordID=video_recording.bbb_record_id,
+        )
+        channel = stream.channel
+        bbb = BigBlueButton(channel.api_url, channel.api_key)
+        result = bbb.request('deleteRecordings', params)
+
+        if not result.success:
+            raise UnprocessableEntityError(
+                {'source': 'recording_id'}, 'error while deleting recording'
+            )
+
+    methods = ['GET', 'DELETE']
     schema = VideoRecordingSchema
     decorators = (jwt_required,)
     data_layer = {
@@ -109,6 +133,7 @@ class VideoRecordingDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'after_get_object': after_get_object,
+            'before_delete_object': before_delete_object,
         },
     }
 
