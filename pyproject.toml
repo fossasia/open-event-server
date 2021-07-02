@@ -135,7 +135,7 @@ isort = "5.9.1"
 black = "21.6b0"
 pre-commit = "2.13.0"
 pytype = "2021.6.17"
-pycln = "0.0.2"
+pycln = "0.0.3"
 pyupgrade = "2.19.4"
 # For testing
 coverage = "5.5"
