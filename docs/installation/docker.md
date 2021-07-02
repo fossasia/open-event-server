@@ -19,7 +19,7 @@ git clone https://github.com/fossasia/open-event-server.git && cd open-event-ser
   cp .env.example .env
 ```
 Add  SECRET_KEY in the env file to run properly in production mode . To generate a good secret value run python -c 'import secrets;print(secrets.token_hex())'
-  
+
 * In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up -d` to start the server.
@@ -36,7 +36,7 @@ Add  SECRET_KEY in the env file to run properly in production mode . To generate
 * Then open a new terminal window in same directory and run the following.
 
 ```bash
-docker-compose run web python3 manage.py db upgrade
+docker-compose run web flask db upgrade
 ```
 
 * That should be all. Open `localhost:8080` in web browser to view the updated open-event-server.

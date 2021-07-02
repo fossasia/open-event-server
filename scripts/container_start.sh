@@ -9,9 +9,9 @@ if [ "$DEPLOYMENT" == "api" ]
 then
     echo "[LOG] Waiting for Database" && ./scripts/wait-for.sh ${POSTGRES_HOST}:5432 --timeout=60 -- echo "[LOG] Database Up"
     echo "[LOG] Preparing database"
-    python manage.py prepare_db
+    flask prepare_db
     echo "[LOG] Running migrations"
-    python manage.py db upgrade
+    flask db upgrade
     export PORT=${PORT:-8080}
     export GUNICORN_WORKERS=${GUNICORN_WORKERS:-4}
     export GUNICORN_LOG_LEVEL=${GUNICORN_LOG_LEVEL:-info}

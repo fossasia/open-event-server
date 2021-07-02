@@ -419,8 +419,3 @@ def populate():
     )
 
     db.session.commit()
-
-
-if __name__ == '__main__':
-    with current_app.app_context():
-        populate()

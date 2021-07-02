@@ -173,13 +173,13 @@ When writing changes to models. Use migrations.
 
 ```
  # To generate a migration after doing a model update
- python3 manage.py db migrate
+ flask db migrate
 
  # To sync Database
- python3 manage.py db upgrade
+ flask db upgrade
 
  # To rollback
- python3 manage.py db downgrade
+flask db downgrade
 ```
 
 When checking in code for models, please update migrations as well.

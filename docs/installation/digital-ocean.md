@@ -95,9 +95,9 @@ docker-compose run web /bin/bash
 * When bash opens, run the following commands and exit.
 
 ```bash
-python3 create_db.py
+flask create_db
 # ^^ write super_admin email and password when asked
-python3 manage.py db stamp head
+flask db stamp head
 ```
 
 * That's it. Visit the `$IP` (example 104.236.228.132) to view the open event server. You can close the 2nd terminal window if you wish.

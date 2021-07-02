@@ -1,2 +1,2 @@
-release: python manage.py prepare_db && python manage.py db upgrade
+release: flask prepare_db && flask db upgrade
 web: sh ./scripts/heroku.sh
