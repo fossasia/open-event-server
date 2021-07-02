@@ -1940,7 +1940,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [[package]]
 name = "qrcode"
-version = "7.0"
+version = "7.1"
 description = "QR Code image generator"
 category = "main"
 optional = false
@@ -2546,7 +2546,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "060305a4516e035e73d299207cb128442fd91d35eeeba044c408bc4e6dc7cf9a"
+content-hash = "1cbc6e88d3188004d8d0d3a4cef590e4cbbdd7fbcdf15382499530b755fa46d8"
 
 [metadata.files]
 aiohttp = [
@@ -3632,7 +3632,7 @@ pyyaml = [
     {file = "PyYAML-5.4.1.tar.gz", hash = "sha256:607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e"},
 ]
 qrcode = [
-    {file = "qrcode-7.0.tar.gz", hash = "sha256:963046df808fbcc9f28200108ce235128921af225302145238981913705ecaff"},
+    {file = "qrcode-7.1.tar.gz", hash = "sha256:59ba630fa2adb637b06571e6ceec1bb0ecf372c458c4447ceba763061bd3af72"},
 ]
 redis = [
     {file = "redis-3.5.3-py2.py3-none-any.whl", hash = "sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24"},
