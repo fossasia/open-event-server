@@ -20,7 +20,6 @@ from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 from app.api.attendees import (
     AttendeeDetail,
     AttendeeList,
-    AttendeeListPost,
     AttendeeRelationshipOptional,
     AttendeeRelationshipRequired,
 )
@@ -1399,7 +1398,6 @@ api.route(
 )
 
 # attendees
-api.route(AttendeeListPost, 'attendee_list_post', '/attendees')
 api.route(
     AttendeeList,
     'attendee_list',

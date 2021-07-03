@@ -177,8 +177,6 @@ class TicketSchema(TicketSchemaPublic):
     attendees = Relationship(
         self_view='v1.ticket_attendees',
         self_view_kwargs={'id': '<id>'},
-        related_view='v1.attendee_list_post',
-        related_view_kwargs={'ticket_id': '<id>'},
         schema='AttendeeSchema',
         many=True,
         type_='attendee',
