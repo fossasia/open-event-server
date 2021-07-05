@@ -61,7 +61,7 @@ This Group's APIs can be used for adding a particular group to the followed grou
             }
 }
 
-## Followed Groups Collection List [/v1/users/1/follow-groups]
+## Followed Groups Collection List [/v1/users/1/followed-groups]
 
 ### List All Followed Groups of an User [GET]
 
@@ -69,6 +69,8 @@ This Group's APIs can be used for adding a particular group to the followed grou
 
     + Headers
 
+            Content-Type: application/vnd.api+json
+            
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
