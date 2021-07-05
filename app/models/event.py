@@ -76,6 +76,7 @@ class Event(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    is_oneclick_signup_enabled = db.Column(db.Boolean)
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
