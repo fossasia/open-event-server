@@ -87,15 +87,6 @@ class SpeakerSchema(SoftDeletionSchema):
         many=True,
         type_='session',
     )
-    speaker_invites = Relationship(
-        self_view='v1.speaker_speaker_invites',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.speaker_invite_list',
-        related_view_kwargs={'speaker_id': '<id>'},
-        schema='SpeakerInviteSchema',
-        many=True,
-        type_='speaker-invite',
-    )
 
 
 class SpeakerReorderSchema(Schema):

@@ -605,7 +605,6 @@ api.route(
     'speaker_invite_list',
     '/sessions/<int:session_id>/speaker-invites',
     '/events/<int:event_id>/speaker-invites',
-    '/speakers/<int:speaker_id>/speaker-invites',
 )
 api.route(SpeakerInviteDetail, 'speaker_invite_detail', '/speaker-invites/<int:id>')
 api.route(
@@ -617,11 +616,6 @@ api.route(
     SpeakerInviteRelationship,
     'speaker_invite_event',
     '/speaker-invites/<int:id>/relationships/event',
-)
-api.route(
-    SpeakerInviteRelationship,
-    'speaker_invite_speaker',
-    '/speaker-invites/<int:id>/relationships/speaker',
 )
 
 # users_events_roles
@@ -1313,7 +1307,6 @@ api.route(
     SpeakerDetail,
     'speaker_detail',
     '/speakers/<int:id>',
-    '/speaker-invites/<int:speaker_invite_id>/speaker',
 )
 api.route(
     SpeakerRelationshipRequired, 'speaker_event', '/speakers/<int:id>/relationships/event'
@@ -1325,11 +1318,6 @@ api.route(
     SpeakerRelationshipOptional,
     'speaker_session',
     '/speakers/<int:id>/relationships/sessions',
-)
-api.route(
-    SpeakerRelationshipOptional,
-    'speaker_speaker_invites',
-    '/speakers/<int:id>/relationships/speaker-invites',
 )
 
 # event_copyright

@@ -45,12 +45,3 @@ class SpeakerInviteSchema(Schema):
         schema='EventSchemaPublic',
         type_='event',
     )
-
-    speaker = Relationship(
-        self_view='v1.speaker_invite_speaker',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.speaker_detail',
-        related_view_kwargs={'speaker_invite_id': '<id>'},
-        schema='SpeakerSchema',
-        type_='speaker',
-    )

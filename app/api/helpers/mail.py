@@ -229,7 +229,7 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
-def send_email_speaker_invite(email, session, link, inviter_email):
+def send_email_speaker_invite(email, session, cfs_link, inviter_email):
     """email for speaker invite"""
     action = MailType.SPEAKER_INVITE
     app_name = get_settings()['app_name']
@@ -245,7 +245,7 @@ def send_email_speaker_invite(email, session, link, inviter_email):
             event=session.event.name,
             app_name=app_name,
             inviter_email=inviter_email,
-            link=link,
+            cfs_link=cfs_link,
         ),
     )
 

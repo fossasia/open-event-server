@@ -1,10 +1,15 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    NotFoundError,
+    UnprocessableEntityError,
+)
 from app.api.helpers.permission_manager import has_access, jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speaker_invites import SpeakerInviteSchema
@@ -37,7 +42,7 @@ class SpeakerInviteListPost(ResourceList):
         if not has_access('is_speaker_for_session', id=data['session']):
             raise ForbiddenError({'source': ''}, 'Speaker access is required.')
         if data.get('status'):
-            if data['status'] == 'accepted':
+            if not data['status'] == 'pending':
                 raise ForbiddenError(
                     {'source': ''}, 'Speaker Invite can not created with accepted status.'
                 )
@@ -102,16 +107,8 @@ class SpeakerInviteList(ResourceList):
                 raise ForbiddenError({'source': ''}, 'Speaker access is required.')
             query_ = query_.filter_by(session_id=session.id)
 
-        elif view_kwargs.get('speaker_id'):
-            speaker = safe_query_kwargs(Speaker, view_kwargs, 'speaker_id')
-            if not speaker.email == current_user.email:
-                raise ForbiddenError({'source': ''}, 'Invitee access is required.')
-            query_ = query_.filter_by(speaker_id=speaker.id)
-
         elif view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            if not has_access('is_coorganizer', event_id=event.id):
-                raise ForbiddenError({'source': ''}, "Minimum Organizer access required")
             query_ = query_.filter_by(event_id=event.id)
 
         elif not has_access('is_admin'):
@@ -147,49 +144,6 @@ class SpeakerInviteDetail(ResourceDetail):
                     {'source': ''}, 'Speaker or Invitee access is required.'
                 )
 
-    def before_update_object(self, speaker_invite, data, view_kwargs):
-        """
-        method to check for proper permissions for updating
-        :param custom_placeholder:
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if speaker_invite.status == 'accepted':
-            raise ConflictError(
-                {'pointer': '/data/status'},
-                'You cannot update an accepted speaker invite.',
-            )
-        if not speaker_invite.email == current_user.email:
-            raise ForbiddenError({'source': ''}, 'Invitee access is required.')
-        if (
-            data['email'] != speaker_invite.email
-            or int(data['session']) != speaker_invite.session_id
-            or int(data['event']) != speaker_invite.event_id
-        ):
-            raise ForbiddenError(
-                {'source': ''},
-                'Invitee can only update status and speaker of speaker invite.',
-            )
-        elif data.get('speaker'):
-            speaker = Speaker.query.get_or_404(data['speaker'])
-            if speaker.email != current_user.email:
-                raise ForbiddenError(
-                    {'source': ''}, 'Invitee can only add himself as speaker.'
-                )
-        elif data.get('status'):
-            if data['status'] == 'pending' and data['status'] != speaker_invite.status:
-                raise ForbiddenError(
-                    {'source': ''}, 'Invitee can not change status to pending.'
-                )
-
-    def after_update_object(self, speaker_invite, data, view_kwargs):
-        if speaker_invite.status == 'accepted':
-            user = User.query.filter(User.id == speaker_invite.speaker.user_id).first()
-            if not user.is_verified:
-                user.is_verified = True
-                save_to_db(user, 'user is verified')
-
     def before_delete_object(self, speaker_invite, view_kwargs):
         """
         method to check for proper permissions for deleting
@@ -205,17 +159,15 @@ class SpeakerInviteDetail(ResourceDetail):
                 'You cannot delete an accepted speaker invite.',
             )
 
-    methods = ['GET', 'PATCH', 'DELETE']
+    methods = ['GET', 'DELETE']
     decorators = (jwt_required,)
     schema = SpeakerInviteSchema
     data_layer = {
         'session': db.session,
         'model': SpeakerInvite,
         'methods': {
-            'before_delete_object': before_delete_object,
             'after_get_object': after_get_object,
-            'before_update_object': before_update_object,
-            'after_update_object': after_update_object,
+            'before_delete_object': before_delete_object,
         },
     }
 
@@ -231,71 +183,107 @@ class SpeakerInviteRelationship(ResourceRelationship):
     data_layer = {'session': db.session, 'model': SpeakerInvite}
 
 
-@speaker_invites_misc_routes.route('/speaker_invites/user', methods=['POST'])
-def fetch_user():
-    token = request.json['data']['token']
-    try:
-        speaker_invite = SpeakerInvite.query.filter_by(token=token).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Speaker Invite Not Found')
-    else:
-        if speaker_invite.status != 'pending':
-            NotFoundError({'source': ''}, 'Speaker Invite Not Found')
-        user = User.query.filter(User.email == speaker_invite.email).first()
-        is_registered = True if user else False
-        return jsonify(
-            {
-                "email": speaker_invite.email,
-                "invite_status": speaker_invite.status,
-                "is_registered": is_registered,
-            }
-        )
-
-
-@speaker_invites_misc_routes.route('/speaker_invites/speaker', methods=['POST'])
+@speaker_invites_misc_routes.route(
+    '/speaker-invites/<int:speaker_invite_id>/accept-invite'
+)
 @jwt_required
-def fetch_speaker():
-    token = request.json['data']['token']
+def accept_invite(speaker_invite_id):
     try:
-        speaker_invite = SpeakerInvite.query.filter_by(token=token).one()
+        speaker_invite = SpeakerInvite.query.filter_by(id=speaker_invite_id).one()
     except NoResultFound:
         raise NotFoundError({'source': ''}, 'Speaker Invite Not Found')
     else:
-        if current_user.email == speaker_invite.email:
-            if speaker_invite.speaker:
-                return jsonify({"is_already_created": True})
-            speaker = Speaker.query.filter_by(
-                email=speaker_invite.email, event_id=speaker_invite.event_id
-            ).first()
-            if speaker:
-                speaker_invite.speaker_id = speaker.id
-                save_to_db(speaker_invite, 'Add speaker in speaker_invite')
-                return jsonify({"is_already_created": True})
-            else:
-                return jsonify({"is_already_created": False})
-        else:
+        if not current_user.email == speaker_invite.email:
             raise ForbiddenError({'source': ''}, 'Invitee access is required.')
-
-
-@speaker_invites_misc_routes.route('/speaker_invites/data', methods=['POST'])
-@jwt_required
-def fetch_data():
-    token = request.json['data']['token']
-    try:
-        speaker_invite = SpeakerInvite.query.filter_by(token=token).one()
-    except NoResultFound:
-        raise NotFoundError({'source': ''}, 'Speaker Invite Not Found')
-    else:
-        if current_user.email == speaker_invite.email:
-            return jsonify(
-                {
-                    "email": speaker_invite.email,
-                    "status": speaker_invite.status,
-                    "invite_id": speaker_invite.id,
-                    "event_id": speaker_invite.event_id,
-                    "session_id": speaker_invite.session_id,
-                    "speaker_id": speaker_invite.speaker_id,
-                }
+        elif speaker_invite.status == 'accepted':
+            raise ConflictError(
+                {'pointer': '/data/status'},
+                'Speaker invite is already accepted.',
             )
-        else:
+        elif speaker_invite.status == 'rejected':
+            raise ConflictError(
+                {'pointer': '/data/status'},
+                'Rejected speaker invite can not be accepted.',
+            )
+        try:
+            user = User.query.filter_by(email=speaker_invite.email).first()
+        except NoResultFound:
+            raise NotFoundError(
+                {'source': ''}, 'User corresponding to speaker invite not Found'
+            )
+        if not user.is_verified:
+            raise ForbiddenError(
+                {'source': ''}, 'User corresponding to speaker invite is unverified.'
+            )
+        try:
+            session = Session.query.filter_by(id=speaker_invite.session_id).one()
+        except NoResultFound:
+            raise NotFoundError(
+                {'source': ''}, 'Session corresponding to speaker invite not Found'
+            )
+        speaker = Speaker.query.filter_by(
+            email=speaker_invite.email, event_id=speaker_invite.event_id
+        ).first()
+        if not speaker:
+            raise NotFoundError(
+                {'source': ''}, 'Speaker corresponding to speaker invite not Found'
+            )
+        try:
+            speaker.sessions.append(session)
+            db.session.commit()
+        except Exception:
+            raise UnprocessableEntityError(
+                {'source': ''}, 'error while accepting speaker invite.'
+            )
+        try:
+            speaker_invite.status = 'accepted'
+            save_to_db(speaker_invite, {'speaker invite accepetd'})
+        except Exception:
+            raise UnprocessableEntityError(
+                {'source': ''}, 'error while accepting speaker invite.'
+            )
+    return jsonify(
+        {
+            "email": user.email,
+            "event": speaker_invite.event_id,
+            "event_identifier": speaker_invite.event.identifier,
+            "session": session.id,
+            "speaker": speaker.id,
+            "name": user.fullname if user.fullname else None,
+        }
+    )
+
+
+@speaker_invites_misc_routes.route(
+    '/speaker-invites/<int:speaker_invite_id>/reject-invite'
+)
+@jwt_required
+def reject_invite(speaker_invite_id):
+    try:
+        speaker_invite = SpeakerInvite.query.filter_by(id=speaker_invite_id).one()
+    except NoResultFound:
+        raise NotFoundError({'source': ''}, 'Speaker Invite Not Found')
+    else:
+        if not current_user.email == speaker_invite.email:
             raise ForbiddenError({'source': ''}, 'Invitee access is required.')
+        elif speaker_invite.status == 'accepted':
+            raise ConflictError(
+                {'pointer': '/data/status'},
+                'Accepted speaker invite can not be rejected.',
+            )
+        elif speaker_invite.status == 'rejected':
+            raise ConflictError(
+                {'pointer': '/data/status'},
+                'Speaker invite is already rejected.',
+            )
+        try:
+            speaker_invite.status = 'rejected'
+            save_to_db(speaker_invite, {'speaker invite rejected'})
+        except Exception:
+            raise UnprocessableEntityError(
+                {'source': ''}, 'error while rejecting speaker invite.'
+            )
+    return jsonify(
+        success=True,
+        message="Speaker invite rejected successfully",
+    )

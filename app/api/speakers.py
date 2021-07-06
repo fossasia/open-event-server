@@ -181,18 +181,6 @@ class SpeakerDetail(ResourceDetail):
     Speakers Detail by id
     """
 
-    def before_get_object(self, view_kwargs):
-        """
-        before get method to get the resource id for fetching details
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('speaker_invite_id'):
-            speaker_invite = safe_query_kwargs(
-                SpeakerInvite, view_kwargs, 'speaker_invite_id'
-            )
-            view_kwargs['id'] = speaker_invite.speaker_id
-
     def before_update_object(self, speaker, data, view_kwargs):
         """
         method to save image urls before updating speaker object
@@ -254,7 +242,6 @@ class SpeakerDetail(ResourceDetail):
         'model': Speaker,
         'methods': {
             'before_update_object': before_update_object,
-            'before_get_object': before_get_object,
         },
     }
 
