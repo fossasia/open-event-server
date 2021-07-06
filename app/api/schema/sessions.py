@@ -18,6 +18,11 @@ from app.models.session import Session
 from utils.common import use_defaults
 
 
+class DocumentLinkSchema(Schema):
+    name = fields.String(required=True)
+    link = fields.String(required=True)
+
+
 @use_defaults()
 class SessionSchema(SoftDeletionSchema):
     """
@@ -82,7 +87,7 @@ class SessionSchema(SoftDeletionSchema):
     starts_at = fields.DateTime(allow_none=True)
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
-    slides_url = fields.Url(allow_none=True)
+    slides_url = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     website = fields.Url(allow_none=True)
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
