@@ -11,7 +11,6 @@ from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers import SpeakerSchema
-from app.api.speaker_invites import SpeakerInvite
 from app.models import db
 from app.models.event import Event
 from app.models.session import Session
@@ -88,15 +87,11 @@ class SpeakerListPost(ResourceList):
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
-                speaker_invite = SpeakerInvite.query.filter_by(
-                    email=data.get('email'), session_id=session_id
-                ).one()
-                if not speaker_invite:
-                    if not has_access('is_session_self_submitted', session_id=session_id):
-                        raise ObjectNotFound(
-                            {'parameter': 'session_id'},
-                            f"Session: {session_id} not found",
-                        )
+                if not has_access('is_session_self_submitted', session_id=session_id):
+                    raise ObjectNotFound(
+                        {'parameter': 'session_id'},
+                        f"Session: {session_id} not found",
+                    )
 
         excluded = []
         if not data.get('email'):
