@@ -15,6 +15,7 @@ class Group(SoftDeletionModel):
     user_id = db.Column(
         db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False
     )
+    social_links = db.Column(db.JSON)
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     modified_at: datetime = db.Column(
         db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
