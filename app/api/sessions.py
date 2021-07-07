@@ -275,7 +275,7 @@ class SessionDetail(ResourceDetail):
         if not current_user:
             raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
         speaker_invite = SpeakerInvite.query.filter_by(
-            email=current_user.email, session_id=session.id
+            email=current_user.email, session_id=session.id, status='pending'
         ).first()
         if (
             session.state not in ['accepted', 'confirmed']
