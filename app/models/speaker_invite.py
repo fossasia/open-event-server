@@ -1,5 +1,3 @@
-from sqlalchemy.schema import UniqueConstraint
-
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.mail import send_email_speaker_invite
 from app.api.helpers.permission_manager import has_access
@@ -11,14 +9,6 @@ from app.settings import get_settings
 
 class SpeakerInvite(db.Model, Timestamp):
     __tablename__ = 'speaker_invites'
-    __table_args__ = (
-        UniqueConstraint(
-            'email',
-            'session_id',
-            'event_id',
-            name='email_session_event_uc',
-        ),
-    )
 
     id = db.Column(db.Integer, primary_key=True)
 

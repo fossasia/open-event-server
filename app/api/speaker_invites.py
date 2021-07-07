@@ -58,11 +58,11 @@ class SpeakerInviteListPost(ResourceList):
             invite_already_exists = SpeakerInvite.query.filter_by(
                 email=data['email'], session_id=data['session'], status='pending'
             ).count()
-            already_speaker = Session.query.filter(
+            already_have_session = Session.query.filter(
                 Session.id == data['session'],
                 Session.speakers.any(Speaker.email == data['email']),
             ).count()
-        if already_speaker:
+        if already_have_session:
             raise ForbiddenError({'source': '/data'}, 'Invitee is already a speaker.')
         if invite_already_exists:
             raise ConflictError(
@@ -138,6 +138,8 @@ class SpeakerInviteDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if not speaker_invite:
+            return
         if not speaker_invite.email == current_user.email:
             if not has_access('is_speaker_for_session', id=speaker_invite.session_id):
                 raise ForbiddenError(
