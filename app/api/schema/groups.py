@@ -6,7 +6,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 
 
-class SocialLinkSchema(Schema):
+class GroupSocialLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
     is_custom = fields.Boolean(default=False)
@@ -30,7 +30,7 @@ class GroupSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    social_links = fields.Nested(SocialLinkSchema, many=True)
+    social_links = fields.Nested(GroupSocialLinkSchema, many=True)
 
     events = Relationship(
         self_view='v1.group_events',
