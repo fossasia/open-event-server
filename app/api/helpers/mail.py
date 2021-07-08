@@ -165,18 +165,17 @@ def send_email_new_session(email, session):
 
 def send_email_ticket_sales_end(event, emails):
     """email for ticket sales end"""
-    current_time = datetime.datetime.now()
     action = MailType.TICKET_SALES_END
     mail = MAILS[action]
     settings = get_settings()
     tickets = []
     for ticket in event.tickets:
-        if ticket.sales_ends_at < current_time:
+        if ticket.sales_ends_at < datetime.datetime.now(ticket.sales_ends_at.tzinfo):
             tickets.append(ticket.name)
 
     ticket_names = ", ".join(tickets)
 
-    event_dashboard = settings.frontend_url + '/events/' + event.identifier
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
     if len(emails) > 0:
         send_email(
             to=emails[0],
