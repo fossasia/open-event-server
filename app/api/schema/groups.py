@@ -34,6 +34,7 @@ class GroupSchema(SoftDeletionSchema):
     logo_url = fields.Url(allow_none=True)
     banner_url = fields.Url(allow_none=True)
     about = fields.Str(allow_none=True)
+
     events = Relationship(
         self_view='v1.group_events',
         self_view_kwargs={'id': '<id>'},
