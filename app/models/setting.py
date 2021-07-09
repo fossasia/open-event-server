@@ -199,6 +199,17 @@ class Setting(db.Model):
         db.String, default="https://next.eventyay.com/cookie-policy"
     )
 
+    #
+    # image and slide size
+    #
+    logo_size = db.Column(db.Integer, nullable=False, default=1000, server_default='1000')
+    image_size = db.Column(
+        db.Integer, nullable=False, default=10000, server_default='10000'
+    )
+    slide_size = db.Column(
+        db.Integer, nullable=False, default=20000, server_default='20000'
+    )
+
     @hybrid_property
     def is_paypal_activated(self):
         if (
