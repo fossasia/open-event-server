@@ -128,6 +128,13 @@ class SettingSchemaPublic(Schema):
     admin_billing_additional_info = fields.Str(allow_none=True)
     admin_billing_logo = fields.Url(allow_none=True)
 
+    #
+    # image and slide size
+    #
+    logo_size = fields.Integer(allow_none=False, default=1000)
+    image_size = fields.Integer(allow_none=False, default=10000)
+    slide_size = fields.Integer(allow_none=False, default=20000)
+
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
