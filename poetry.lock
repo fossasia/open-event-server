@@ -1921,7 +1921,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.20.0"
+version = "2.21.0"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -2547,7 +2547,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "ec027fe342b1902298505e601b61f0b4925d2e0d2ac94b35514dc793aa4f1a07"
+content-hash = "4e48e3c263077e96a8f639c377d17a47151b1ad3783666e035c3bb9480c6d76d"
 
 [metadata.files]
 aiohttp = [
@@ -3358,6 +3358,11 @@ pep8 = [
     {file = "pep8-1.7.1.tar.gz", hash = "sha256:fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374"},
 ]
 pillow = [
+    {file = "Pillow-8.3.1-1-cp36-cp36m-win_amd64.whl", hash = "sha256:fd7eef578f5b2200d066db1b50c4aa66410786201669fb76d5238b007918fb24"},
+    {file = "Pillow-8.3.1-1-cp37-cp37m-win_amd64.whl", hash = "sha256:75e09042a3b39e0ea61ce37e941221313d51a9c26b8e54e12b3ececccb71718a"},
+    {file = "Pillow-8.3.1-1-cp38-cp38-win_amd64.whl", hash = "sha256:c0e0550a404c69aab1e04ae89cca3e2a042b56ab043f7f729d984bf73ed2a093"},
+    {file = "Pillow-8.3.1-1-cp39-cp39-win_amd64.whl", hash = "sha256:479ab11cbd69612acefa8286481f65c5dece2002ffaa4f9db62682379ca3bb77"},
+    {file = "Pillow-8.3.1-1-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:f156d6ecfc747ee111c167f8faf5f4953761b5e66e91a4e6767e548d0f80129c"},
     {file = "Pillow-8.3.1-cp36-cp36m-macosx_10_10_x86_64.whl", hash = "sha256:196560dba4da7a72c5e7085fccc5938ab4075fd37fe8b5468869724109812edd"},
     {file = "Pillow-8.3.1-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:29c9569049d04aaacd690573a0398dbd8e0bf0255684fee512b413c2142ab723"},
     {file = "Pillow-8.3.1-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:c088a000dfdd88c184cc7271bfac8c5b82d9efa8637cd2b68183771e3cf56f04"},
@@ -3598,8 +3603,8 @@ pytz = [
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.20.0-py2.py3-none-any.whl", hash = "sha256:e646016d0e4a0fc171fd0a56177facf0f16dd2a7b30b2a3a08aa4ad9dd90e0d2"},
-    {file = "pyupgrade-2.20.0.tar.gz", hash = "sha256:33848f4656fd8f35bfe073e6f23b0e249f010533ab06b6866d57f812b3e026a2"},
+    {file = "pyupgrade-2.21.0-py2.py3-none-any.whl", hash = "sha256:e06f47fadbea99a7c03c0ec78214413ee0f4165ef3f33185f9c85c318c6430d1"},
+    {file = "pyupgrade-2.21.0.tar.gz", hash = "sha256:833c1aa26ed974d5e5a098c5d204b94a8a75b3d935d7cc781390821c03476d74"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
