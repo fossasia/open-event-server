@@ -207,6 +207,15 @@ class SessionSchema(SoftDeletionSchema):
         many=True,
         type_='user-favourite-session',
     )
+    speaker_invites = Relationship(
+        self_view='v1.session_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        many=True,
+        type_='speaker-invite',
+    )
 
 
 # Used for customization of email notification subject and message body

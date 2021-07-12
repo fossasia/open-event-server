@@ -370,6 +370,15 @@ class EventSchemaPublic(SoftDeletionSchema):
         type_='user-favourite-session',
         many=True,
     )
+    speaker_invites = Relationship(
+        self_view='v1.event_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        type_='speaker-invite',
+        many=True,
+    )
 
 
 class EventSchema(EventSchemaPublic):
