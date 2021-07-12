@@ -182,6 +182,12 @@ from app.api.social_links import (
     SocialLinkRelationship,
 )
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
+from app.api.speaker_invites import (
+    SpeakerInviteDetail,
+    SpeakerInviteList,
+    SpeakerInviteListPost,
+    SpeakerInviteRelationship,
+)
 from app.api.speakers import (
     SpeakerDetail,
     SpeakerList,
@@ -592,6 +598,26 @@ api.route(
     '/role-invites/<int:id>/relationships/role',
 )
 
+# speaker_invites
+api.route(SpeakerInviteListPost, 'speaker_invite_list_post', '/speaker-invites')
+api.route(
+    SpeakerInviteList,
+    'speaker_invite_list',
+    '/sessions/<int:session_id>/speaker-invites',
+    '/events/<int:event_id>/speaker-invites',
+)
+api.route(SpeakerInviteDetail, 'speaker_invite_detail', '/speaker-invites/<int:id>')
+api.route(
+    SpeakerInviteRelationship,
+    'speaker_invite_session',
+    '/speaker-invites/<int:id>/relationships/session',
+)
+api.route(
+    SpeakerInviteRelationship,
+    'speaker_invite_event',
+    '/speaker-invites/<int:id>/relationships/event',
+)
+
 # users_events_roles
 api.route(
     UsersEventsRolesDetail, 'users_events_roles_detail', '/users-events-roles/<int:id>'
@@ -768,6 +794,7 @@ api.route(
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
+    '/speaker-invites/<int:speaker_invite_id>/event',
 )
 api.route(
     EventRelationship,
@@ -992,6 +1019,12 @@ api.route(
     '/events/<int:id>/relationships/exhibitors',
     '/events/<identifier>/relationships/exhibitors',
 )
+api.route(
+    EventRelationship,
+    'event_speaker_invites',
+    '/events/<int:id>/relationships/speaker-invites',
+    '/events/<identifier>/relationships/speaker-invites',
+)
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
@@ -1107,6 +1140,7 @@ api.route(
     '/sessions/<int:id>',
     '/feedbacks/<int:feedback_id>/event',
     '/user-favourite-sessions/<int:user_favourite_session_id>/session',
+    '/speaker-invites/<int:speaker_invite_id>/session',
 )
 api.route(
     SessionRelationshipOptional,
@@ -1148,6 +1182,11 @@ api.route(
     SessionRelationshipOptional,
     'session_user_favourite_sessions',
     '/sessions/<int:id>/relationships/favourite-sessions',
+)
+api.route(
+    SessionRelationshipOptional,
+    'session_speaker_invites',
+    '/sessions/<int:id>/relationships/speaker-invites',
 )
 
 # social_links
@@ -1264,7 +1303,11 @@ api.route(
     '/sessions/<int:session_id>/speakers',
     '/users/<int:user_id>/speakers',
 )
-api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>')
+api.route(
+    SpeakerDetail,
+    'speaker_detail',
+    '/speakers/<int:id>',
+)
 api.route(
     SpeakerRelationshipRequired, 'speaker_event', '/speakers/<int:id>/relationships/event'
 )
