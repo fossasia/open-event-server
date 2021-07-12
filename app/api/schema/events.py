@@ -66,6 +66,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     show_remaining_tickets = fields.Bool(allow_none=False, default=False)
     owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
+    is_oneclick_signup_enabled = fields.Bool(default=False)
     has_owner_info = fields.Bool(default=False)
     owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
