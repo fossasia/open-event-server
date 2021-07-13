@@ -31,6 +31,9 @@ class GroupSchema(SoftDeletionSchema):
     name = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
     social_links = fields.Nested(GroupSocialLinkSchema, many=True)
+    logo_url = fields.Url(allow_none=True)
+    banner_url = fields.Url(allow_none=True)
+    about = fields.Str(allow_none=True)
 
     events = Relationship(
         self_view='v1.group_events',
