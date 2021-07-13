@@ -33,6 +33,9 @@ class AdminSalesByEventsSchema(Schema):
     ends_at = fields.DateTime()
     payment_currency = fields.String()
     payment_country = fields.String()
+    type = fields.Method('event_type')
+    owner = fields.Method('event_owner')
+    owner_id = fields.Method('event_owner_id')
     sales = fields.Method('calc_sales')
 
     @staticmethod
@@ -42,6 +45,24 @@ class AdminSalesByEventsSchema(Schema):
         placed, completed and pending orders
         """
         return summary(obj)
+
+    def event_owner(self, obj):
+        return str(obj.owner.first_name + ' ' +obj.owner.last_name)
+
+    def event_owner_id(self, obj):
+        return obj.owner.id
+    
+
+    def event_type(self, obj):
+        t = 'To be announced'
+        if(obj.online):
+            if(obj.location_name):
+                t='Hybrid'
+            else:
+                t='Online'
+        elif(obj.location_name):
+            t = 'Venue'
+        return str(t)
 
 
 class AdminSalesByEventsList(ResourceList):
