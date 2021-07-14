@@ -42,7 +42,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     paypal_token = fields.Str(allow_none=True)
     status = fields.Str(
         validate=validate.OneOf(
-            choices=["paid", "due", "refunding", "refunded", "failed"]
+            choices=["paid", "due", "refunding", "refunded", "failed", "resolved"]
         ),
         allow_none=True,
     )
