@@ -14,6 +14,7 @@ from app.api.admin_sales.locations import AdminSalesByLocationList
 from app.api.admin_sales.marketer import AdminSalesByMarketerList
 from app.api.admin_sales.organizer import AdminSalesByOrganizersList
 from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
+from app.api.admin_statistics_api.groups import AdminStatisticsGroupDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
 from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
 from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
@@ -1825,6 +1826,11 @@ api.route(
 )
 api.route(
     AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails'
+)
+api.route(
+    AdminStatisticsGroupDetail,
+    'admin_statistics_group_detail',
+    '/admin/statistics/groups',
 )
 
 # Admin Sales
