@@ -47,7 +47,7 @@ class AdminSalesByEventsSchema(Schema):
         return summary(obj)
 
     def event_owner(self, obj):
-        return str(obj.owner.first_name + ' ' +obj.owner.last_name)
+        return str(obj.owner.email)
 
     def event_owner_id(self, obj):
         return obj.owner.id
