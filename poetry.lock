@@ -568,7 +568,7 @@ requests = ["requests (>=2.4.0,<3.0.0)"]
 
 [[package]]
 name = "elasticsearch-dsl"
-version = "7.0.0"
+version = "7.4.0"
 description = "Python client for Elasticsearch"
 category = "main"
 optional = false
@@ -580,7 +580,7 @@ python-dateutil = "*"
 six = "*"
 
 [package.extras]
-develop = ["mock", "pytest (>=3.0.0)", "pytest-cov", "pytz", "coverage (<5.0.0)", "sphinx", "sphinx-rtd-theme"]
+develop = ["mock", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<3.0.0)", "pytz", "coverage (<5.0.0)", "sphinx", "sphinx-rtd-theme"]
 
 [[package]]
 name = "email-validator"
@@ -2556,7 +2556,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "c0721d2e9ffb4918dbee33e68f9dd2f82168d4b98b05fc8e88ae919442a7ef38"
+content-hash = "95c84126ef0c5a3b884ee273a4a3ced13a88b30a0396f139a21d091ec0836769"
 
 [metadata.files]
 aiohttp = [
@@ -2881,8 +2881,8 @@ elasticsearch = [
     {file = "elasticsearch-7.12.0.tar.gz", hash = "sha256:9a77172be02bc4855210d83f0f1346a1e7d421e3cb2ca47ba81ac0c5a717b3a0"},
 ]
 elasticsearch-dsl = [
-    {file = "elasticsearch-dsl-7.0.0.tar.gz", hash = "sha256:2aedc2a4dbba9870249a57d1798ec29e44404619bded66ac920f5d6a1cbb6f22"},
-    {file = "elasticsearch_dsl-7.0.0-py2.py3-none-any.whl", hash = "sha256:763fb28add254f2c3a1d071cd114466d8a27f640e02a874afba7b8a04147c094"},
+    {file = "elasticsearch-dsl-7.4.0.tar.gz", hash = "sha256:c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d"},
+    {file = "elasticsearch_dsl-7.4.0-py2.py3-none-any.whl", hash = "sha256:046ea10820b94c075081b528b4526c5bc776bda4226d702f269a5f203232064b"},
 ]
 email-validator = [
     {file = "email-validator-1.1.2.tar.gz", hash = "sha256:1a13bd6050d1db4475f13e444e169b6fe872434922d38968c67cea9568cce2f0"},
