@@ -170,7 +170,73 @@ def send_email_ticket_sales_end(event, emails):
     settings = get_settings()
     tickets = []
     for ticket in event.tickets:
-        if ticket.sales_ends_at < datetime.datetime.now(ticket.sales_ends_at.tzinfo):
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=1)
+        ):
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
+
+
+def send_email_ticket_sales_end_tomorrow(event, emails):
+    """email for ticket sales end"""
+    action = MailType.TICKET_SALES_END_TOMORROW
+    mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=-1)
+        ):
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
+
+
+def send_email_ticket_sales_end_next_week(event, emails):
+    """email for ticket sales end"""
+    action = MailType.TICKET_SALES_END_NEXT_WEEK
+    mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=-7)
+        ):
             tickets.append(ticket.name)
 
     ticket_names = ", ".join(tickets)

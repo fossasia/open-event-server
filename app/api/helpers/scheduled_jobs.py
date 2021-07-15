@@ -4,10 +4,14 @@ import logging
 import pytz
 from flask_celeryext import RequestContextTask
 from redis.exceptions import LockError
-from sqlalchemy import and_, distinct, or_
+from sqlalchemy import and_, distinct, func, or_
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.mail import send_email_ticket_sales_end
+from app.api.helpers.mail import (
+    send_email_ticket_sales_end,
+    send_email_ticket_sales_end_next_week,
+    send_email_ticket_sales_end_tomorrow,
+)
 from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
 from app.instance import celery
@@ -28,31 +32,74 @@ logger = logging.getLogger(__name__)
 @celery.task(base=RequestContextTask, name='send.ticket.sales.end.mail')
 def ticket_sales_end_mail():
     current_time = datetime.datetime.now()
-    events = (
+    current_day = datetime.date.today()
+    last_day = current_day - datetime.timedelta(days=1)
+    next_day = current_day - datetime.timedelta(days=-1)
+    next_week = current_day - datetime.timedelta(days=-7)
+    events_with_expired_tickets = (
         Event.query.filter_by(state='published', deleted_at=None)
         .filter(
             Event.ends_at > current_time,
             Event.tickets.any(
                 and_(
                     Ticket.deleted_at == None,
-                    Ticket.sales_ends_at < current_time,
+                    func.date(Ticket.sales_ends_at) == last_day,
                 )
             ),
         )
         .all()
     )
-    for event in events:
-        organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
-        owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
-        unique_emails = set()
-        for organizer in organizers:
-            unique_emails.add(organizer.user.email)
-        if owner:
-            unique_emails.add(owner.user.email)
-
-        emails = list(unique_emails)
-
+    events_whose_ticket_expiring_tomorrow = (
+        Event.query.filter_by(state='published', deleted_at=None)
+        .filter(
+            Event.ends_at > current_time,
+            Event.tickets.any(
+                and_(
+                    Ticket.deleted_at == None,
+                    func.date(Ticket.sales_ends_at) == next_day,
+                )
+            ),
+        )
+        .all()
+    )
+    events_whose_ticket_expiring_next_week = (
+        Event.query.filter_by(state='published', deleted_at=None)
+        .filter(
+            Event.ends_at > current_time,
+            Event.tickets.any(
+                and_(
+                    Ticket.deleted_at == None,
+                    func.date(Ticket.sales_ends_at) == next_week,
+                )
+            ),
+        )
+        .all()
+    )
+    for event in events_with_expired_tickets:
+        emails = get_emails_for_sales_end_email(event)
         send_email_ticket_sales_end(event, emails)
+
+    for event in events_whose_ticket_expiring_tomorrow:
+        emails = get_emails_for_sales_end_email(event)
+        send_email_ticket_sales_end_tomorrow(event, emails)
+
+    for event in events_whose_ticket_expiring_next_week:
+        emails = get_emails_for_sales_end_email(event)
+        send_email_ticket_sales_end_next_week(event, emails)
+
+
+def get_emails_for_sales_end_email(event):
+    organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
+    owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
+    unique_emails = set()
+    for organizer in organizers:
+        unique_emails.add(organizer.user.email)
+    if owner:
+        unique_emails.add(owner.user.email)
+
+    emails = list(unique_emails)
+
+    return emails
 
 
 @celery.task(base=RequestContextTask, name='send.after.event.mail')

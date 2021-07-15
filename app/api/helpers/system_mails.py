@@ -33,6 +33,8 @@ class MailType:
     CONTACT_ORGANIZERS = 'contact_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
     TICKET_SALES_END = 'ticket_sales_end'
+    TICKET_SALES_END_TOMORROW = 'ticket_sales_end_tomorrow'
+    TICKET_SALES_END_NEXT_WEEK = 'ticket_sales_end_next_week'
 
     @staticmethod
     def entries():
@@ -120,8 +122,18 @@ MAILS = {
     },
     MailType.TICKET_SALES_END: {
         'recipient': 'Owner, Organizer',
-        'subject': 'Ticket sales end for your event {event_name}',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ended',
         'template': 'email/ticket_sales_end.html',
+    },
+    MailType.TICKET_SALES_END_TOMORROW: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ending in 24 Hours',
+        'template': 'email/ticket_sales_end_tomorrow.html',
+    },
+    MailType.TICKET_SALES_END_NEXT_WEEK: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period fors One or Several Tickets for {event_name} Ending in 7 Days',
+        'template': 'email/ticket_sales_end_next_week.html',
     },
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
