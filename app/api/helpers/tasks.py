@@ -4,6 +4,7 @@ import logging
 import os
 import urllib.error
 import uuid
+from datetime import datetime
 
 import requests
 from flask import current_app, render_template
@@ -611,6 +612,54 @@ def export_sessions_csv_task(self, event_id, status='all'):
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.exception('Error in exporting sessions as CSV')
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.adminsales.csv', bind=True)
+def export_admin_sales_csv_task(self, event_id, status='all'):
+    if status not in [
+        'all',
+        'live',
+        'past',
+    ]:
+        status = 'all'
+
+    if status == 'all':
+        sales = Event.query.all()
+    elif status == 'live':
+        sales = Event.query.filter(
+            Event.starts_at <= datetime.datetime.utcnow,
+            Event.ends_at >= datetime.datetime.utcnow,
+        ).all()
+    elif status == 'past':
+        sales = Event.query.filter(
+            Event.ends_at <= datetime.datetime.utcnow,
+        ).all()
+
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = f"sales-{uuid.uuid1().hex}.csv"
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_sessions_csv
+
+            content = export_sessions_csv(sessions)
+            for row in content:
+                writer.writerow(row)
+        sales_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        sales_csv_url = upload(
+            sales_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+        )
+        result = {'download_url': sales_csv_url}
+    except Exception as e:
+        result = {'__error': True, 'result': str(e)}
+        logging.exception('Error in exporting sales as CSV')
 
     return result
 

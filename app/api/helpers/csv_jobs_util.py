@@ -214,6 +214,23 @@ def export_sessions_csv(sessions):
     return rows
 
 
+def export_sales_csv(sales):
+    headers = [
+        'Event Name',
+        'Owner Name',
+        'Event Type',
+        'Event Date',
+        'Created at',
+    ]
+    rows = [headers]
+    for sale in sales:
+        if not sale.deleted_at:
+            column = [sale.name]
+            rows.append(column)
+
+    return rows
+
+
 def export_speakers_csv(speakers):
     headers = [
         'Speaker Name',
