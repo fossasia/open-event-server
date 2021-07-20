@@ -646,9 +646,9 @@ def export_admin_sales_csv_task(self, event_id, status='all'):
 
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
-            from app.api.helpers.csv_jobs_util import export_sessions_csv
+            from app.api.helpers.csv_jobs_util import export_sales_csv
 
-            content = export_sessions_csv(sessions)
+            content = export_sales_csv(sales)
             for row in content:
                 writer.writerow(row)
         sales_csv_file = UploadedFile(file_path=file_path, filename=filename)
