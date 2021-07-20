@@ -204,6 +204,15 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='event',
     )
+    owner_groups = Relationship(
+        self_view='v1.user_owner_groups',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.group_list',
+        related_view_kwargs={'user_owner_id': '<id>'},
+        schema='GroupSchema',
+        many=True,
+        type_='group',
+    )
     organizer_events = Relationship(
         self_view='v1.user_organizer_events',
         self_view_kwargs={'id': '<id>'},
@@ -221,6 +230,24 @@ class UserSchema(UserSchemaPublic):
         schema='EventSchema',
         many=True,
         type_='event',
+    )
+    organizer_groups = Relationship(
+        self_view='v1.user_organizer_groups',
+        self_view_kwargs={'id': '<id>'},
+        related_view_kwargs={'user_organizer_id': '<id>'},
+        related_view='v1.group_list',
+        schema='GroupSchema',
+        many=True,
+        type_='group',
+    )
+    coorganizer_groups = Relationship(
+        self_view='v1.user_coorganizer_groups',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.group_list',
+        related_view_kwargs={'user_coorganizer_id': '<id>'},
+        schema='GroupSchema',
+        many=True,
+        type_='group',
     )
     track_organizer_events = Relationship(
         self_view='v1.user_track_organizer_events',

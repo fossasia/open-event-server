@@ -353,14 +353,27 @@ api.route(
     UserRelationship, 'user_owner_events', '/users/<int:id>/relationships/owner-events'
 )
 api.route(
+    UserRelationship, 'user_owner_groups', '/users/<int:id>/relationships/owner-groups'
+)
+api.route(
     UserRelationship,
     'user_organizer_events',
     '/users/<int:id>/relationships/organizer-events',
 )
 api.route(
     UserRelationship,
+    'user_organizer_groups',
+    '/users/<int:id>/relationships/organizer-groups',
+)
+api.route(
+    UserRelationship,
     'user_coorganizer_events',
     '/users/<int:id>/relationships/coorganizer-events',
+)
+api.route(
+    UserRelationship,
+    'user_coorganizer_groups',
+    '/users/<int:id>/relationships/coorganizer-groups',
 )
 api.route(
     UserRelationship,

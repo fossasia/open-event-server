@@ -26,6 +26,40 @@ class Group(SoftDeletionModel):
     user = db.relationship('User', backref='groups')
     roles = db.relationship("UsersGroupsRoles", backref="group")
 
+    owner = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersGroupsRoles, Role,'
+        ' and_(Role.id == UsersGroupsRoles.role_id, Role.name == "owner"))',
+        primaryjoin='UsersGroupsRoles.group_id == Group.id',
+        secondaryjoin='User.id == UsersGroupsRoles.user_id',
+        backref='owner_groups',
+        sync_backref=False,
+        uselist=False,
+    )
+
+    organizers = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersGroupsRoles, Role,'
+        ' and_(Role.id == UsersGroupsRoles.role_id, Role.name == "organizer"))',
+        primaryjoin='UsersGroupsRoles.group_id == Group.id',
+        secondaryjoin='User.id == UsersGroupsRoles.user_id',
+        backref='organizer_groups',
+        sync_backref=False,
+    )
+
+    coorganizers = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersGroupsRoles, Role,'
+        ' and_(Role.id == UsersGroupsRoles.role_id, Role.name == "coorganizer"))',
+        primaryjoin='UsersGroupsRoles.group_id == Group.id',
+        secondaryjoin='User.id == UsersGroupsRoles.user_id',
+        backref='coorganizer_groups',
+        sync_backref=False,
+    )
+
     @property
     def follower(self):
         if not current_user:
