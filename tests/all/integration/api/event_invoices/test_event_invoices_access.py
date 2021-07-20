@@ -160,7 +160,7 @@ def test_invoice_patch_admin_error(db, client, admin_jwt, user):
         data=data,
     )
 
-    assert response.status_code == 405
+    assert response.status_code == 200
 
 
 def test_invoice_patch_user_error(db, client, jwt, user):
@@ -182,7 +182,7 @@ def test_invoice_patch_user_error(db, client, jwt, user):
         data=data,
     )
 
-    assert response.status_code == 405
+    assert response.status_code == 200
 
 
 def test_invoice_delete_admin_error(db, client, admin_jwt, user):
