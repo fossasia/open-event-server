@@ -24,7 +24,7 @@ def export_event(event_id):
     response = to_ical(
         event, include_sessions=include_sessions, my_schedule=my_schedule, user_id=user_id
     )
-    response = strip_tags(str(response))
+    response = strip_tags(str(response), ['a'])
     response = str(response).replace("\\r\\n", " ")
     response = make_response(response)
     response.headers['Content-Type'] = 'text/calendar'
