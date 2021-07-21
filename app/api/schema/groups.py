@@ -3,10 +3,10 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 
 
-class SocialLinkSchema(Schema):
+class GroupSocialLinkSchema(Schema):
     name = fields.String(required=True)
     link = fields.String(required=True)
     is_custom = fields.Boolean(default=False)
@@ -30,7 +30,12 @@ class GroupSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    social_links = fields.Nested(SocialLinkSchema, many=True)
+    social_links = fields.Nested(GroupSocialLinkSchema, many=True)
+    contact_email = TrimmedEmail(allow_none=True)
+    contact_link = fields.Str(allow_none=True)
+    logo_url = fields.Url(allow_none=True)
+    banner_url = fields.Url(allow_none=True)
+    about = fields.Str(allow_none=True)
 
     events = Relationship(
         self_view='v1.group_events',

@@ -51,6 +51,7 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
+from app.models.speaker_invite import SpeakerInvite
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.stripe_authorization import StripeAuthorization
@@ -451,6 +452,7 @@ def get_id(view_kwargs):
         (Ticket, 'ticket_id'),
         (TicketTag, 'ticket_tag_id'),
         (RoleInvite, 'role_invite_id'),
+        (SpeakerInvite, 'speaker_invite_id'),
         (UsersEventsRoles, 'users_events_role_id'),
         (AccessCode, 'access_code_id'),
         (Speaker, 'speaker_id'),
