@@ -67,7 +67,7 @@ class Session(SoftDeletionModel):
 
     feedbacks = db.relationship('Feedback', backref="session")
     slides_url = db.Column(db.String)
-    multiple_slides_url = db.Column(db.JSON)
+    slides = db.Column(db.JSON)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)

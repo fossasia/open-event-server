@@ -88,7 +88,7 @@ class SessionSchema(SoftDeletionSchema):
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
-    multiple_slides_url = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
+    slides = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     website = fields.Url(allow_none=True)
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)

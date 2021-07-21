@@ -15,7 +15,7 @@ def db_migrate_speaker_doc(db):
         dict.append({'name': row['title'], 'link': row['slides_url']})
         data = f"'{json.dumps(dict)}'"
         id = row['id']
-        conn.execute(f'UPDATE sessions SET multiple_slides_url = {data} WHERE id = {id}')
+        conn.execute(f'UPDATE sessions SET slides = {data} WHERE id = {id}')
 
 
 if __name__ == "__main__":
