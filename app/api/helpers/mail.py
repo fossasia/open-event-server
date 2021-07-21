@@ -268,6 +268,27 @@ def send_email_group_role_invite(email, role_name, group_name, link):
     )
 
 
+def send_email_announce_event(event, groupp, emails):
+    """email for announce event"""
+
+    action = MailType.ANNOUNCE_EVENT
+    mail = MAILS[action]
+    settings = get_settings()
+
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_name=event.name,
+            ),
+            bcc=emails[1:],
+        )
+
+
 def send_email_for_monthly_fee_payment(
     user, event_name, previous_month, amount, app_name, link, follow_up=False
 ):

@@ -106,6 +106,9 @@ class Event(SoftDeletionModel):
         db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
     )
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='SET NULL'))
+    is_announced = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
