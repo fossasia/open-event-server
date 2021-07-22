@@ -6,6 +6,8 @@ from app.api.helpers.permissions import jwt_required
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import strip_tags
 from app.models.group import Group
+from app.models.role import Role
+from app.models.users_groups_role import UsersGroupsRoles
 
 groups_routes = Blueprint('groups_routes', __name__, url_prefix='/v1/groups')
 
@@ -14,12 +16,11 @@ groups_routes = Blueprint('groups_routes', __name__, url_prefix='/v1/groups')
 @jwt_required
 def contact_group_organizer(group_id):
     group = Group.query.get_or_404(group_id)
-    organizers_emails = list(
-        set(
-            list(map(lambda x: x.email, group.organizers))
-            + list(map(lambda x: x.email, group.coorganizers))
-        )
-    )
+    organizer_role = Role.query.filter_by(name='organizer').first()
+    group_roles = UsersGroupsRoles.query.filter_by(
+        group_id=group_id, role_id=organizer_role.id, accepted=True
+    ).all()
+    organizers_emails = list(set(list(map(lambda x: x.email, group_roles))))
     email = strip_tags(request.json.get('email'))
     context = {
         'attendee_name': current_user.fullname,
