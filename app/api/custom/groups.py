@@ -34,7 +34,7 @@ def contact_group_organizer(group_id):
     action = MailType.CONTACT_GROUP_ORGANIZERS
     mail = MAILS[action]
     send_email(
-        to=group.owner.email,
+        to=group.user.email,
         action=action,
         subject=group.name + ": Question from " + current_user.fullname,
         html=organizer_mail.format(**context),
