@@ -7,7 +7,7 @@ from app.api.schema.base import TrimmedEmail
 
 class UsersGroupsRolesSchema(Schema):
     """
-    Api schema for users_grouops_role Model
+    Api schema for users_groups_role Model
     """
 
     class Meta:
