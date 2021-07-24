@@ -56,5 +56,4 @@ def clean_html(html, allow_link=False):
 def strip_tags(html):
     if html is None:
         return None
-
     return bleach.clean(html)
