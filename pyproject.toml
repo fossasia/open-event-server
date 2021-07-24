@@ -126,6 +126,7 @@ coolname = "^1.1.0"
 python-slugify = "^5.0.2"
 cryptography = "3.3.2" # Downgraded to avoid alpine build error
 Flask-Migrate = "2.7.0"
+html2text = "^2020.1.16"
 
 [tool.poetry.dev-dependencies]
 nose = "1.3.7"

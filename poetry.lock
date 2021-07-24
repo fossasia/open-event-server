@@ -1119,6 +1119,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "html2text"
+version = "2020.1.16"
+description = "Turn HTML into equivalent Markdown-structured text."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "html5lib"
 version = "1.1"
 description = "HTML parser based on the WHATWG HTML specification"
@@ -2565,7 +2573,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "dd4135af3d4ec5e2d2f8c9bdc5445cd785b0be7c2a81e41295c6ba7fd9051f69"
+content-hash = "c5083591f4ec9b3437f0fe2454d7604ec3fceead4b85374064816a92b08cbd15"
 
 [metadata.files]
 aiohttp = [
@@ -3108,6 +3116,10 @@ h11 = [
 ]
 healthcheck = [
     {file = "healthcheck-1.3.3.tar.gz", hash = "sha256:3b6e56dcaf9c5a52296e32d713e8f3bbb1b86ff88d4d06906b7a5105923a711c"},
+]
+html2text = [
+    {file = "html2text-2020.1.16-py3-none-any.whl", hash = "sha256:c7c629882da0cf377d66f073329ccf34a12ed2adf0169b9285ae4e63ef54c82b"},
+    {file = "html2text-2020.1.16.tar.gz", hash = "sha256:e296318e16b059ddb97f7a8a1d6a5c1d7af4544049a01e261731d2d5cc277bbb"},
 ]
 html5lib = [
     {file = "html5lib-1.1-py2.py3-none-any.whl", hash = "sha256:0d78f8fde1c230e99fe37986a60526d7049ed4bf8a9fadbad5f00e22e58e041d"},

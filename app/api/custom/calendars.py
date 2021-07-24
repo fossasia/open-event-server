@@ -7,6 +7,12 @@ from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.permissions import to_event_id
 from app.models.event import Event
 from app.models.helpers.versioning import strip_tags
+import html2text
+
+
+h = html2text.HTML2Text()
+h.ignore_links = False
+
 calendar_routes = Blueprint('calendars', __name__, url_prefix='/v1/events')
 
 
@@ -24,8 +30,7 @@ def export_event(event_id):
     response = to_ical(
         event, include_sessions=include_sessions, my_schedule=my_schedule, user_id=user_id
     )
-    attrs = {'a': ['href']}
-    response = strip_tags(str(response), ['a'], attrs)
+    response = h.handle(str(response))
     response = str(response).replace("\\r\\n", " ")
     response = make_response(response)
     response.headers['Content-Type'] = 'text/calendar'
