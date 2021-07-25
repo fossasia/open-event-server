@@ -268,7 +268,7 @@ def send_email_group_role_invite(email, role_name, group_name, link):
     )
 
 
-def send_email_announce_event(event, groupp, emails):
+def send_email_announce_event(event, group, emails):
     """email for announce event"""
 
     action = MailType.ANNOUNCE_EVENT
