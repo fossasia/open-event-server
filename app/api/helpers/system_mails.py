@@ -32,6 +32,7 @@ class MailType:
     MONTHLY_PAYMENT_POST_DUE = 'monthly_payment_post_due'
     TEST_MAIL = 'test_mail'
     CONTACT_ORGANIZERS = 'contact_organizers'
+    CONTACT_GROUP_ORGANIZERS = 'contact_group_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
     ANNOUNCE_EVENT = "announce_event"
 
@@ -236,6 +237,10 @@ MAILS = {
     MailType.CONTACT_ORGANIZERS: {
         'recipient': 'Owner, Organizer',
         'template': 'email/organizer_contact_attendee.html',
+    },
+    MailType.CONTACT_GROUP_ORGANIZERS: {
+        'recipient': 'Owner, Organizer',
+        'template': 'email/group_contact_user.html',
     },
     MailType.TEST_MAIL: {
         'recipient': 'User',
