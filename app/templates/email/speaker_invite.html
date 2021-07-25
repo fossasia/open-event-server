@@ -1,9 +1,9 @@
 {{ _('Hello') }},
 <br><br>
-{{ _('You have been invited as a speaker for the session submission') }} {{ session_title }} {{ _('for the') }} <a href={{ event_link }} target='_blank'>{{ event_name }}</a> {{ _('on') }} <a href={{ frontend_url }} target='_blank'>{{ app_name }}</a>  {{ _('by') }} {{ inviter_name }}({{ inviter_email }}).
-<br>
+{{ _('You have been invited as a speaker for the session submission') }} "{{ session_title }}" {{ _('for the event') }} <a href={{ event_link }} target='_blank'>{{ event_name }}</a> {{ _('on') }} <a href={{ frontend_url }} target='_blank'>{{ app_name }}</a>  {{ _('by') }} {{ inviter_name }} {{ inviter_email }}.
+<br><br>
 {{ _('You can accept or reject this invitation from') }}  <a href={{ cfs_link }} target='_blank'>{{ _('Call for Speakers') }}</a> {{ _('page') }}.
-<br>
+<br><br>
 {{ _('If you do not have an account yet you need to register before you can accept the invite') }}.
 <br/><br/> {{ _('Best regards') }},
 <br/>{{ app_name }}
