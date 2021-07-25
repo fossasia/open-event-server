@@ -77,7 +77,7 @@ class EventInvoiceDetail(ResourceDetail):
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
     methods = [
-        'GET',
+        'GET','PATCH'
     ]
     decorators = (jwt_required,)
     schema = EventInvoiceSchema

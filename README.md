@@ -212,7 +212,7 @@ source ~/.profile
 # Install Python dependencies
 poetry install
 
-# Activate porject's virtual environment
+# Activate project's virtual environment
 poetry shell
 ```
 

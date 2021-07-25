@@ -14,7 +14,7 @@ class TestEventUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             save_to_db(event)
             create_custom_forms_for_attendees(event)
-            self.assertEqual(get_count(CustomForms.query), 3)
+            assert get_count(CustomForms.query) == 3
 
 
 if __name__ == '__main__':

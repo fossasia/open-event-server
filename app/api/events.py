@@ -51,6 +51,7 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
+from app.models.speaker_invite import SpeakerInvite
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.stripe_authorization import StripeAuthorization
@@ -451,6 +452,7 @@ def get_id(view_kwargs):
         (Ticket, 'ticket_id'),
         (TicketTag, 'ticket_tag_id'),
         (RoleInvite, 'role_invite_id'),
+        (SpeakerInvite, 'speaker_invite_id'),
         (UsersEventsRoles, 'users_events_role_id'),
         (AccessCode, 'access_code_id'),
         (Speaker, 'speaker_id'),
@@ -539,6 +541,17 @@ class EventDetail(ResourceDetail):
 
         if is_date_updated or is_draft_published or is_event_restored:
             validate_date(event, data)
+
+        if data.get('is_document_enabled'):
+            d = data.get('document_links')
+            if d:
+                for document in d:
+                    if not document.get('name') or not document.get('link'):
+                       raise UnprocessableEntityError(
+                            {'pointer': '/'},
+                            "Enter required fields link and name",
+                        )
+
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):

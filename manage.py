@@ -98,39 +98,6 @@ def fix_digit_identifier():
     db.session.commit()
 
 
-@manager.option('-e', '--event', help='Event ID. Eg. 1')
-def fix_speaker_images(event):
-    from app.helpers.sessions_speakers.speakers import speaker_image_sizes
-    from app.helpers.sessions_speakers.speakers import save_resized_photo
-    import urllib
-    from app.helpers.storage import generate_hash
-
-    event_id = int(event)
-    image_sizes = speaker_image_sizes()
-    speakers = Speaker.query.filter_by(event_id=event_id).all()
-    for speaker in speakers:
-        if speaker.photo and speaker.photo.strip() != '':
-            file_relative_path = (
-                'static/media/temp/' + generate_hash(str(speaker.id)) + '.jpg'
-            )
-            file_path = app.config['BASE_DIR'] + '/' + file_relative_path
-            urllib.urlretrieve(speaker.photo, file_path)
-            speaker.small = save_resized_photo(
-                file_path, event_id, speaker.id, 'small', image_sizes
-            )
-            speaker.thumbnail = save_resized_photo(
-                file_path, event_id, speaker.id, 'thumbnail', image_sizes
-            )
-            speaker.icon = save_resized_photo(
-                file_path, event_id, speaker.id, 'icon', image_sizes
-            )
-            db.session.add(speaker)
-            os.remove(file_path)
-            print("Downloaded " + speaker.photo + " into " + file_relative_path)
-        print("Processed - " + str(speaker.id))
-    db.session.commit()
-
-
 @manager.option(
     '-c', '--credentials', help='Super admin credentials. Eg. username:password'
 )
