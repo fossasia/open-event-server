@@ -83,6 +83,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_promoted = fields.Bool(default=False)
     is_demoted = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
+    is_cfs_enabled = fields.Bool(default=False)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     paypal_email = TrimmedEmail(allow_none=True)
@@ -110,8 +111,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
-    live_stream_url = fields.Url(allow_none=True)
-    webinar_url = fields.Url(allow_none=True)
     refund_policy = fields.String(allow_none=True)
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
 
