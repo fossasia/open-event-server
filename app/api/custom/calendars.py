@@ -6,7 +6,6 @@ from flask_jwt_extended.view_decorators import jwt_optional
 from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.permissions import to_event_id
 from app.models.event import Event
-from app.models.helpers.versioning import strip_tags
 import html2text
 
 
