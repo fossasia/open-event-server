@@ -80,6 +80,9 @@ class Event(SoftDeletionModel):
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
