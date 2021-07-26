@@ -8,7 +8,6 @@ from app.api.helpers.permissions import to_event_id
 from app.models.event import Event
 import html2text
 
-
 h = html2text.HTML2Text()
 h.ignore_links = False
 
