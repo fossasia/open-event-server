@@ -147,17 +147,15 @@
     <header class="clearfix">
       <h1>{{ _('INVOICE') }}</h1>
       {% if order.status != "deleted" %}
-          {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
-            <div>{{ order.Company or '' }}</div>
-            <div class="preserve-newline">{{ order.address or '' }}</div>
-            <div>{{ order.tax_business_info or '' }}</div>
-            <div>{{ order.city or '' }}</div>
-            <div>{{ order.state or '' }}</div>
-            <div>{{ order.zipcode or '' }}</div>
-            <div>{{ order.country or '' }}</div>
+            <div style="text-transform: uppercase;" >{{ order.event.owner.company or '' }}</div>
+            <div class="preserve-newline">{{ order.event.owner.billing_address or '' }}</div>
+            <div>{{ order.event.owner.billing_city or '' }}</div>
+            <div>{{ order.event.owner.billing_state or '' }}</div>
+            <div>{{ order.event.owner.billing_zip_code or '' }}</div>
+            <div>{{ order.event.owner.billing_country or '' }}</div>
+            <div> {{ 'Tax ID: ' ~ order.event.owner.billing_tax_info or '' }}</div>
           </div>
-          {% endif %}
           <div id="project">
             <div><span>{{ _('Order Number') }} </span> {{ order.get_invoice_number() }}</div>
             <div><span>{{ _('Order By') }}</span>
@@ -169,6 +167,15 @@
                   {{ _('Information unavailable') }}
               {% endif %}
             </div>
+            {% if order.is_billing_enabled %}
+              <div style="text-transform: uppercase;" > <span>{{ _('Organisation') }} </span>{{ order.company or '' }}</div>
+              <div class="preserve-newline">{{ order.address or '' }}</div>
+              <div>{{ order.city or '' }}</div>
+              <div>{{ order.state or '' }}</div>
+              <div>{{ order.zipcode or '' }}</div>
+              <div>{{ order.country or '' }}</div>
+              <div> {{ 'Tax ID: ' ~ order.tax_business_info or '' }}</div>
+            {% endif %}
             <div><span> {{ _('Order Status') }}</span>
               {% if order.status == 'completed' %}
                   {{ order.status | capitalize }}
@@ -211,6 +218,7 @@
             <th>{{ _('Sub-Total(net)') }}</th>
             <th>{{ _('VAT') }}</th>
             <th>{{ _('Tax Amount') }}</th>
+            <th>{{ _('Discount') }}</th>
           </tr>
         </thead>
         <tbody>
