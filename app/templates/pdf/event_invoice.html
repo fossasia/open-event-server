@@ -164,9 +164,9 @@
         {% endif %}
       </div>
       <div id="project">
-        {{% if user.company %}}
+        {% if user.company %}
           <div><span>ORGANISATION</span> {{ user.company }}</div>
-        {{% endif %}}
+        {% endif %}
         <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
         <div><span>ADDRESS</span> <div class="preserve-newline" style="display: inline-block">{{ user.full_billing_address }}</div> </div>
         <div><span>EMAIL</span> <a href="{{ user._email }}">{{ user._email }}</a></div>
