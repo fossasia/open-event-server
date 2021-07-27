@@ -5,6 +5,7 @@ from flask_jwt_extended import current_user
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.user_follow_group import UserFollowGroup
+from app.settings import get_settings
 
 
 class Group(SoftDeletionModel):
@@ -31,3 +32,8 @@ class Group(SoftDeletionModel):
         if not current_user:
             return None
         return UserFollowGroup.query.filter_by(user=current_user, group=self).first()
+
+    @property
+    def view_page_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/groups/{self.id}"

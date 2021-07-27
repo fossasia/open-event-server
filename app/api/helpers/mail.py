@@ -273,7 +273,6 @@ def send_email_announce_event(event, group, emails):
 
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
-    settings = get_settings()
 
     if len(emails) > 0:
         send_email(
@@ -282,8 +281,14 @@ def send_email_announce_event(event, group, emails):
             subject=mail['subject'].format(event_name=event.name),
             html=render_template(
                 mail['template'],
-                settings=settings,
                 event_name=event.name,
+                event_description=event.description,
+                event_url=event.site_link,
+                event_location=event.normalized_location,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+                group_name=group.name,
+                group_url=group.view_page_link,
+                app_name=get_settings()['app_name'],
             ),
             bcc=emails[1:],
         )
