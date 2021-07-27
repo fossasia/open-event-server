@@ -80,7 +80,7 @@ pycryptodome = "3.10.1"
 oauth2 = "~1.9.0"
 qrcode = "7.2"
 python-magic = "0.4.24"
-python-dotenv = "0.18.0"
+python-dotenv = "0.19.0"
 python-geoip = "1.2"
 "marrow.mailer" = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "6933606"}
 "marrow.util" = {git = "https://github.com/LexMachinaInc/util.git", rev = "d820293"}
@@ -137,7 +137,7 @@ black = "21.7b0"
 pre-commit = "2.13.0"
 pytype = "2021.6.17"
 pycln = "0.0.4"
-pyupgrade = "2.21.2"
+pyupgrade = "2.23.0"
 # For testing
 coverage = "5.5"
 dredd_hooks = "0.2"
