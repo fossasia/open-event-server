@@ -8,6 +8,10 @@ from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
 from app.models.session import Session
+import html2text
+
+h = html2text.HTML2Text()
+h.ignore_links = False
 
 
 def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
@@ -24,7 +28,9 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
     event_component.add('dtstart', event.starts_at_tz)
     event_component.add('dtend', event.ends_at_tz)
     event_component.add('location', event.normalized_location)
-    event_component.add('description', event.description)
+    response = h.handle(str(event.description))
+    response = str(response).replace("\\r\\n", " ")
+    event_component.add('description', response)
     if event.has_coordinates:
         event_component.add('geo', (event.latitude, event.longitude))
     if event.owner_description:
