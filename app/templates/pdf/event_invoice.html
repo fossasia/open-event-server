@@ -164,6 +164,9 @@
         {% endif %}
       </div>
       <div id="project">
+        {{% if user.company %}}
+        <div><span>ORGANISATION</span> {{ user.company }}</div>
+        {{% endif %}}
         <div><span>CLIENT</span> {{ user.billing_contact_name or user.fullname }}</div>
         <div><span>ADDRESS</span> <div class="preserve-newline" style="display: inline-block">{{ user.full_billing_address }}</div> </div>
         <div><span>EMAIL</span> <a href="{{ user._email }}">{{ user._email }}</a></div>
@@ -209,6 +212,7 @@
       </table>
       <div id="notices">
         <div>NOTICE:</div>
+        <div class="notice">Reverse charge: Recipient of service is liable for VAT.</div>
         <div class="notice">A finance charge of 5% will be made on unpaid balances after 30 days.</div>
       </div>
     </main>
