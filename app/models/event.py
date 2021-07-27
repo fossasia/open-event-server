@@ -76,9 +76,13 @@ class Event(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    is_oneclick_signup_enabled = db.Column(db.Boolean)
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
@@ -151,8 +155,6 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
-    live_stream_url = db.Column(db.String)
-    webinar_url = db.Column(db.String)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )

@@ -6,7 +6,7 @@ from app.api.helpers.utilities import dasherize
 
 
 class VideoStreamExtraOptionsSchema(JsonSchema):
-    record = fields.Boolean(default=False)
+    record = fields.Boolean(default=True)
     autoStartRecording = fields.Boolean(default=False)
     muteOnStart = fields.Boolean(default=True)
     welcome = fields.String(required=False, allow_none=True)
@@ -18,6 +18,7 @@ class VideoStreamExtraOptionsSchema(JsonSchema):
     bannerColor = fields.String(required=False, allow_none=True)
     guestPolicy = fields.String(required=False, allow_none=True)
     allowModsToUnmuteUsers = fields.Boolean(default=True)
+    endCurrentMeeting = fields.Boolean(default=False)
 
 
 class VideoStreamExtraSchema(JsonSchema):
