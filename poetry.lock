@@ -1907,7 +1907,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2021.6.17"
+version = "2021.7.27"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -1919,6 +1919,7 @@ importlab = ">=0.6.1"
 ninja = ">=1.10.0.post2"
 pyyaml = ">=3.11"
 six = "*"
+tabulate = "*"
 toml = "*"
 typed_ast = ">=1.4.3"
 
@@ -2231,6 +2232,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
 requests = {version = ">=2.20", markers = "python_version >= \"3.0\""}
+
+[[package]]
+name = "tabulate"
+version = "0.8.9"
+description = "Pretty-print tabular data"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+widechars = ["wcwidth"]
 
 [[package]]
 name = "text-unidecode"
@@ -2565,7 +2577,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "b459e7faf0ab17d13ce98111dde2596b769f54c4b2711013006e031531998b9b"
+content-hash = "a6b801faea063e793121971b0a2a402c9615d8a9b9c0c544ab06fb6ffde6fa7f"
 
 [metadata.files]
 aiohttp = [
@@ -3610,15 +3622,15 @@ python-slugify = [
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
 ]
 pytype = [
-    {file = "pytype-2021.6.17-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:11cb61517d697dcf4ecbbc4d0d8a1b8fd0b41d7587e60a4cd6f23eee5bea6c85"},
-    {file = "pytype-2021.6.17-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:17106c7785a798150d5e5718632377992733f5157973a813b6b7ac2777bcb92d"},
-    {file = "pytype-2021.6.17-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:eed85e69c84d89743d5ba6524b2f234da1ee52eb190dcf8ea87c6b85859dbcc7"},
-    {file = "pytype-2021.6.17-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dded86d62225c0b1274054bc96e080e4162651226e3810633344f432c160aed1"},
-    {file = "pytype-2021.6.17-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:c8eeedc0f776f263bd02934ee0d5555f4fa3447d41378e98a5c8051287da8872"},
-    {file = "pytype-2021.6.17-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:acc234baf1d2b9b47018a01fbb1be3d632fa7a0e7cfe10f3dc18b1f3a7fdb188"},
-    {file = "pytype-2021.6.17-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:8f2886525c49f512a066ea25fecc260f46ae2e5021806fec3816c1a2ef2550cb"},
-    {file = "pytype-2021.6.17-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:388a279eb1683739dab0f3c47564779396413f856a931422e4db05bd49b1a1a6"},
-    {file = "pytype-2021.6.17.tar.gz", hash = "sha256:8f11a4b93fb807ff849a0cbff926c17ef6147f5f5bb8a28875e8fbea91b853f5"},
+    {file = "pytype-2021.7.27-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:8376a196b00984be7b65562d6a739c168b0599fbc7617c214771ffa7e953add5"},
+    {file = "pytype-2021.7.27-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f04f7ab370957fcb4ebb8edcad570c2f1acb17ff9e5380a959e7fd9074a415f8"},
+    {file = "pytype-2021.7.27-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:7fe23f901007653ae3dce9903a846f4c9aa6787ea14c284b193c06bca718c6a7"},
+    {file = "pytype-2021.7.27-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5ae65184435957f36f48d7ff78be4d73c0659ea9c2d05cd64fd275eb60610436"},
+    {file = "pytype-2021.7.27-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:6c75b09d795f09c94ff31467c43c1aaddb3648f9edb51b80cce58917363cbc87"},
+    {file = "pytype-2021.7.27-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c3f91df57efb61557c20e3887f17c2374c61e1e736c2bb99ab9ebe31f176a706"},
+    {file = "pytype-2021.7.27-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:96e82a5d5ec2c0856920b031d583747d4d90171d5b88b9bb742f35762aee0d70"},
+    {file = "pytype-2021.7.27-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:545c07ba0afb0616aa4ae9a853336eed815394e86600161ceecfb8e98f3e8b4c"},
+    {file = "pytype-2021.7.27.tar.gz", hash = "sha256:130c0da905a70d2ee441f1bd156b186cb962e52d9fa024a6f067b0822a62b24e"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
@@ -3912,6 +3924,10 @@ starlette = [
 stripe = [
     {file = "stripe-2.60.0-py2.py3-none-any.whl", hash = "sha256:0050763cb67df6745973bd9757f7a765bed1b82b5d5261fb8908cfc6ec9e5200"},
     {file = "stripe-2.60.0.tar.gz", hash = "sha256:8966b7793014380f60c6f121ba333d6f333a55818edaf79c8d70464ce0a7a808"},
+]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
