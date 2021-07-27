@@ -59,9 +59,8 @@
         #project span {
           color: #5D6975;
           text-align: right;
-          width: 65px;
+          width: 52px;
           margin-right: 10px;
-          margin-left: 10px;
           display: inline-block;
           font-size: 0.8em;
           vertical-align: top;
@@ -149,7 +148,7 @@
       {% if order.status != "deleted" %}
           <div id="company" class="clearfix">
             <div style="text-transform: uppercase;" >{{ order.event.owner.company or '' }}</div>
-            <div class="preserve-newline">{{ order.event.owner.billing_address or '' }}</div>
+            <div class="preserve-newline"><span>{{ _('address') }} </span> {{ order.event.owner.billing_address or '' }}</div>
             <div>{{ order.event.owner.billing_city or '' }}</div>
             <div>{{ order.event.owner.billing_state or '' }}</div>
             <div>{{ order.event.owner.billing_zip_code or '' }}</div>
@@ -169,7 +168,7 @@
             </div>
             {% if order.is_billing_enabled %}
               <div style="text-transform: uppercase;" > <span>{{ _('Organisation') }} </span>{{ order.company or '' }}</div>
-              <div class="preserve-newline">{{ order.address or '' }}</div>
+              <div class="preserve-newline"><span>{{ _('address') }} </span>{{ order.address or '' }}</div>
               <div>{{ order.city or '' }}</div>
               <div>{{ order.state or '' }}</div>
               <div>{{ order.zipcode or '' }}</div>
@@ -215,10 +214,10 @@
             <th>{{ _('Name') }}</th>
             <th>{{ _('Price') }}</th>
             <th>{{ _('Quantity') }}</th>
+            <th>{{ _('Discount') }}</th>
             <th>{{ _('Sub-Total(net)') }}</th>
             <th>{{ _('VAT') }}</th>
             <th>{{ _('Tax Amount') }}</th>
-            <th>{{ _('Discount') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -229,6 +228,7 @@
                 {{ event.payment_currency }}{{ order_ticket.ticket.price }}
             </td>
             <td>{{ order_ticket.quantity }}</td>
+            <td>{{ order_ticket.discount_code }}</td>
             <td class="total">{{ event.payment_currency }}{{ order_ticket.quantity*order_ticket.ticket.price }}</td>
             {% if tax %}
                 <td>{{ tax.rate }}%</td>
