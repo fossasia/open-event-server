@@ -7,7 +7,6 @@ from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.permissions import to_event_id
 from app.models.event import Event
 
-
 calendar_routes = Blueprint('calendars', __name__, url_prefix='/v1/events')
 
 
@@ -25,6 +24,7 @@ def export_event(event_id):
     response = to_ical(
         event, include_sessions=include_sessions, my_schedule=my_schedule, user_id=user_id
     )
+
     response = make_response(response)
     response.headers['Content-Type'] = 'text/calendar'
     if 'download' in request.args:
