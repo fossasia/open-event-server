@@ -29,7 +29,7 @@ def announce_event(group_id, event_id):
         raise ForbiddenError({'source': 'event_id'}, "Event does not belong to the group")
     if group.user_id != current_user.id:
         raise ForbiddenError(
-            {'source': 'user_id'}, "User have not permissions to announce event"
+            {'source': 'user_id'}, "User does not have permissions to announce event"
         )
     if event.is_announced:
         raise ForbiddenError({'source': 'event_id'}, "Event has already been announced")
