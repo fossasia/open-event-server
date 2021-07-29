@@ -222,10 +222,11 @@ def export_sales_csv():
     from .helpers.tasks import export_admin_sales_csv_task
 
     status = request.json.get('status')
+    # here using event_id zero for admin export tasks
+    event_id = 0
 
-    task = export_admin_sales_csv_task.delay(status)
-
-    # create_export_job(task.id, event_id)
+    task = export_admin_sales_csv_task.delay(event_id, status)
+    create_export_job(task.id, event_id)
 
     return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 

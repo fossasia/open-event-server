@@ -51,16 +51,15 @@ class AdminSalesByEventsSchema(Schema):
 
     def event_owner_id(self, obj):
         return obj.owner.id
-    
 
     def event_type(self, obj):
         t = 'To be announced'
-        if(obj.online):
-            if(obj.location_name):
-                t='Hybrid'
+        if obj.online:
+            if obj.location_name:
+                t = 'Hybrid'
             else:
-                t='Online'
-        elif(obj.location_name):
+                t = 'Online'
+        elif obj.location_name:
             t = 'Venue'
         return str(t)
 

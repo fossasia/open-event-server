@@ -1,5 +1,6 @@
 import pytz
 
+from app.api.admin_sales.utils import summary
 from app.models.helpers.versioning import strip_tags
 
 
@@ -217,15 +218,35 @@ def export_sessions_csv(sessions):
 def export_sales_csv(sales):
     headers = [
         'Event Name',
-        'Owner Name',
+        'Owner Email',
         'Event Type',
         'Event Date',
-        'Created at',
+        'Ticket (Completed)',
+        'Sales (Completed)',
+        'Ticket (Placed)',
+        'Sales (Placed)',
+        'Ticket (Pending)',
+        'Sales (Pending)',
     ]
     rows = [headers]
     for sale in sales:
         if not sale.deleted_at:
             column = [sale.name]
+            column.append(sale.owner.email)
+            column.append('to be announced')
+            column.append(
+                sale.starts_at.astimezone(pytz.timezone(sale.timezone)).strftime(
+                    '%B %-d, %Y %H:%M %z'
+                )
+                if sale.starts_at
+                else ''
+            )
+            column.append(summary(sale)['completed']['ticket_count'])
+            column.append(summary(sale)['completed']['sales_total'])
+            column.append(summary(sale)['placed']['ticket_count'])
+            column.append(summary(sale)['placed']['sales_total'])
+            column.append(summary(sale)['pending']['ticket_count'])
+            column.append(summary(sale)['pending']['sales_total'])
             rows.append(column)
 
     return rows
