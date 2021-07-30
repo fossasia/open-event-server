@@ -647,7 +647,7 @@ text-unidecode = "1.3"
 
 [[package]]
 name = "fastapi"
-version = "0.67.0"
+version = "0.68.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -1221,7 +1221,7 @@ python-versions = "*"
 
 [[package]]
 name = "isort"
-version = "5.9.2"
+version = "5.9.3"
 description = "A Python utility / library to sort Python imports."
 category = "dev"
 optional = false
@@ -1717,7 +1717,7 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.9.5"
+version = "2.9.6"
 description = "python code static checker"
 category = "dev"
 optional = false
@@ -1831,11 +1831,11 @@ six = ">=1.5"
 
 [[package]]
 name = "python-dotenv"
-version = "0.18.0"
+version = "0.19.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.5"
 
 [package.extras]
 cli = ["click (>=5.0)"]
@@ -1932,7 +1932,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.21.2"
+version = "2.23.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -2063,7 +2063,7 @@ starkbank-ecdsa = ">=1.0.0"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.3.0"
+version = "1.3.1"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -2565,7 +2565,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "496752b82ea963fd0c0a3661fb29098fdb6cdbcff1dfc2ee2dbff52d0a5742d6"
+content-hash = "bf449cac27f4de78365f062719714cc34160f233e15516ddef20b67cd9b8b075"
 
 [metadata.files]
 aiohttp = [
@@ -2913,8 +2913,8 @@ faker = [
     {file = "Faker-8.1.0.tar.gz", hash = "sha256:26c7c3df8d46f1db595a34962f8967021dd90bbd38cc6e27461a3fb16cd413ae"},
 ]
 fastapi = [
-    {file = "fastapi-0.67.0-py3-none-any.whl", hash = "sha256:b05f5af77af3b21cab896b8dade8b383b2d2f254caae4681a56313e29196f1ac"},
-    {file = "fastapi-0.67.0.tar.gz", hash = "sha256:24f45d65e589db3bab162c02a1e2e8b798c098861b1fa3e266efeb71b4faa8e2"},
+    {file = "fastapi-0.68.0-py3-none-any.whl", hash = "sha256:f4dba2596b1e0a1f962834c3b9ec4291a7aec387a1031c6c2e25bf239d27fd0f"},
+    {file = "fastapi-0.68.0.tar.gz", hash = "sha256:c9256a89b0436223b45f53fe3a39b178f3da6be5841a2c59deedff4b676d003f"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
@@ -3158,8 +3158,8 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 isort = [
-    {file = "isort-5.9.2-py3-none-any.whl", hash = "sha256:eed17b53c3e7912425579853d078a0832820f023191561fcee9d7cae424e0813"},
-    {file = "isort-5.9.2.tar.gz", hash = "sha256:f65ce5bd4cbc6abdfbe29afc2f0245538ab358c14590912df638033f157d555e"},
+    {file = "isort-5.9.3-py3-none-any.whl", hash = "sha256:e17d6e2b81095c9db0a03a8025a957f334d6ea30b26f9ec70805411e5c7c81f2"},
+    {file = "isort-5.9.3.tar.gz", hash = "sha256:9c2ea1e62d871267b78307fe511c0838ba0da28698c5732d54e2790bf3ba9899"},
 ]
 itsdangerous = [
     {file = "itsdangerous-2.0.1-py3-none-any.whl", hash = "sha256:5174094b9637652bdb841a3029700391451bd092ba3db90600dea710ba28e97c"},
@@ -3542,8 +3542,8 @@ pyjwt = [
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
 ]
 pylint = [
-    {file = "pylint-2.9.5-py3-none-any.whl", hash = "sha256:748f81e5776d6273a6619506e08f1b48ff9bcb8198366a56821cf11aac14fc87"},
-    {file = "pylint-2.9.5.tar.gz", hash = "sha256:1f333dc72ef7f5ea166b3230936ebcfb1f3b722e76c980cb9fe6b9f95e8d3172"},
+    {file = "pylint-2.9.6-py3-none-any.whl", hash = "sha256:2e1a0eb2e8ab41d6b5dbada87f066492bb1557b12b76c47c2ee8aa8a11186594"},
+    {file = "pylint-2.9.6.tar.gz", hash = "sha256:8b838c8983ee1904b2de66cce9d0b96649a91901350e956d78f289c3bc87b48e"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
@@ -3577,8 +3577,8 @@ python-dateutil = [
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
 ]
 python-dotenv = [
-    {file = "python-dotenv-0.18.0.tar.gz", hash = "sha256:effaac3c1e58d89b3ccb4d04a40dc7ad6e0275fda25fd75ae9d323e2465e202d"},
-    {file = "python_dotenv-0.18.0-py2.py3-none-any.whl", hash = "sha256:dd8fe852847f4fbfadabf6183ddd4c824a9651f02d51714fa075c95561959c7d"},
+    {file = "python-dotenv-0.19.0.tar.gz", hash = "sha256:f521bc2ac9a8e03c736f62911605c5d83970021e3fa95b37d769e2bbbe9b6172"},
+    {file = "python_dotenv-0.19.0-py2.py3-none-any.whl", hash = "sha256:aae25dc1ebe97c420f50b81fb0e5c949659af713f31fdb63c749ca68748f34b1"},
 ]
 python-editor = [
     {file = "python-editor-1.0.4.tar.gz", hash = "sha256:51fda6bcc5ddbbb7063b2af7509e43bd84bfc32a4ff71349ec7847713882327b"},
@@ -3625,8 +3625,8 @@ pytz = [
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.21.2-py2.py3-none-any.whl", hash = "sha256:0b923ec80a835f199a41572e184718b5b748f780144956aa8a88c1b10410339b"},
-    {file = "pyupgrade-2.21.2.tar.gz", hash = "sha256:9f2d20dc75383a509eb0f15326f33ab3f3707958e1570df72f85bf77bb8a8935"},
+    {file = "pyupgrade-2.23.1-py2.py3-none-any.whl", hash = "sha256:c5edad3d830c48b04f4f388321350fd84280c36e5fb20f4e29e0b8f935d58ba4"},
+    {file = "pyupgrade-2.23.1.tar.gz", hash = "sha256:959b9dfd0a86380d68a1164b1290ee7ec9edbcd1a246b2dbba0ac88645f8fd23"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
@@ -3794,8 +3794,8 @@ sendgrid = [
     {file = "sendgrid-6.7.1.tar.gz", hash = "sha256:1c1cca97ab968f81af43ddbbe44aade5a689da27e3e4975dc366042499620abe"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.3.0.tar.gz", hash = "sha256:5210a712dd57d88d225c1fc3fe3a3626fee493637bcd54e204826cf04b8d769c"},
-    {file = "sentry_sdk-1.3.0-py2.py3-none-any.whl", hash = "sha256:6864dcb6f7dec692635e5518c2a5c80010adf673c70340817f1a1b713d65bb41"},
+    {file = "sentry-sdk-1.3.1.tar.gz", hash = "sha256:ebe99144fa9618d4b0e7617e7929b75acd905d258c3c779edcd34c0adfffe26c"},
+    {file = "sentry_sdk-1.3.1-py2.py3-none-any.whl", hash = "sha256:f33d34c886d0ba24c75ea8885a8b3a172358853c7cbde05979fc99c29ef7bc52"},
 ]
 simplejson = [
     {file = "simplejson-3.17.2-cp27-cp27m-macosx_10_13_x86_64.whl", hash = "sha256:2d3eab2c3fe52007d703a26f71cf649a8c771fcdd949a3ae73041ba6797cfcf8"},

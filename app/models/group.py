@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from flask_jwt_extended import current_user
+from sqlalchemy import func
+from sqlalchemy_utils import aggregated
 
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -19,12 +21,17 @@ class Group(SoftDeletionModel):
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
     about = db.Column(db.Text)
-    contact_email = db.Column(db.String)
-    contact_link = db.Column(db.String)
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     modified_at: datetime = db.Column(
         db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
     )
+
+    @aggregated(
+        'followers', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def follower_count(self):
+        return func.count('1')
+
     user = db.relationship('User', backref='groups')
     roles = db.relationship("UsersGroupsRoles", backref="group")
 
