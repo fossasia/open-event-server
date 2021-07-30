@@ -150,6 +150,7 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.speaker_invites import speaker_invites_misc_routes
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
@@ -164,6 +165,7 @@ def create_app():
         from app.api.custom.role_invites import role_invites_routes
         from app.api.custom.users_groups_roles import users_groups_roles_routes
         from app.api.custom.events import events_routes
+        from app.api.custom.groups import groups_routes
         from app.api.video_stream import streams_routes
         from app.api.events import events_blueprint
 
@@ -179,6 +181,7 @@ def create_app():
         app.register_blueprint(attendee_blueprint)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(speaker_invites_misc_routes)
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
@@ -193,6 +196,7 @@ def create_app():
         app.register_blueprint(role_invites_routes)
         app.register_blueprint(users_groups_roles_routes)
         app.register_blueprint(events_routes)
+        app.register_blueprint(groups_routes)
         app.register_blueprint(events_blueprint)
         app.register_blueprint(tickets_routes)
 

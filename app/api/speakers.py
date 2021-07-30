@@ -235,7 +235,9 @@ class SpeakerDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Speaker,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {
+            'before_update_object': before_update_object,
+        },
     }
 
 
