@@ -17,15 +17,11 @@ jobs:
       -
         name: Set Docker Hub namespace
         if: ${{ github.repository_owner == 'fossasia' }}
-        env:
-          DOCKERHUB_SPACE: eventyay
-        run: echo $DOCKERHUB_SPACE
+        run: echo "DOCKERHUB_SPACE=eventyay" >> $GITHUB_ENV
       -
         name: Set Docker Hub namespace
         if: ${{ github.repository_owner != 'fossasia' }}
-        env:
-          DOCKERHUB_SPACE: ${{ github.repository_owner }}
-        run: echo $DOCKERHUB_SPACE
+        run: echo "DOCKERHUB_SPACE=${{ github.repository_owner }}" >> $GITHUB_ENV
       -
         name: Login to DockerHub
         uses: docker/login-action@v1
