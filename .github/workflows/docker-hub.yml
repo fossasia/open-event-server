@@ -13,7 +13,6 @@ jobs:
     steps:
       -
         name: Set up Docker Buildx
-        if: ${{ secrets.DOCKERHUB_USERNAME }}
         uses: docker/setup-buildx-action@v1
       -
         name: Set Docker Hub namespace
