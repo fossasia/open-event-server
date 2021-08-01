@@ -33,6 +33,7 @@ class GroupSchema(SoftDeletionSchema):
     social_links = fields.Nested(GroupSocialLinkSchema, many=True)
     logo_url = fields.Url(allow_none=True)
     banner_url = fields.Url(allow_none=True)
+    follower_count = fields.Integer(dump_only=True)
     about = fields.Str(allow_none=True)
 
     events = Relationship(

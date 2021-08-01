@@ -4,6 +4,7 @@ from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.helpers.timestamp import Timestamp
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.settings import get_settings
 
 
@@ -35,8 +36,10 @@ class SpeakerInvite(db.Model, Timestamp):
         cfs_link = f"{frontend_url}/e/{self.event.identifier}/cfs"
         if not has_access('is_speaker_for_session', id=session.id):
             raise ForbiddenError({'source': ''}, "Speaker Access Required")
-
-        send_email_speaker_invite(self.email, session, cfs_link, inviter_email)
+        inviter = Speaker.query.filter_by(
+            email=inviter_email, event_id=session.event_id, deleted_at=None
+        ).first()
+        send_email_speaker_invite(self.email, session, cfs_link, inviter)
 
     def __repr__(self):
         return f'<SpeakerInvite {self.email!r}:{self.session_id!r}>'
