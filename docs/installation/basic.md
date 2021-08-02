@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-<<<<<<< HEAD
+
 * Python 3.7
 * Postgres
 * OpenSSL
@@ -16,15 +16,9 @@ brew install postgresql
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib libssl-dev
-=======
-* Python 3.8
-* PostgreSQL
-* Redis
-
 
 ```sh
 xargs -a deb-packages.txt sudo apt install
->>>>>>> development
 ```
 
 ## Steps
