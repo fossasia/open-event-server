@@ -22,41 +22,5 @@ class EventCopyright(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('copyright', uselist=False))
 
-    def __init__(
-        self,
-        holder=None,
-        holder_url=None,
-        licence=None,
-        licence_url=None,
-        year=None,
-        logo=None,
-        event_id=None,
-        deleted_at=None,
-    ):
-        self.holder = holder
-        self.holder_url = holder_url
-        self.licence = licence
-        self.licence_url = licence_url
-        self.year = year
-        self.logo = logo
-        self.event_id = event_id
-        self.deleted_at = deleted_at
-
     def __repr__(self):
         return '<Copyright %r>' % self.holder
-
-    def __str__(self):
-        return self.__repr__()
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'holder': self.holder,
-            'holder_url': self.holder_url,
-            'licence': self.licence,
-            'licence_url': self.licence_url,
-            'year': self.year,
-            'logo': self.logo,
-        }

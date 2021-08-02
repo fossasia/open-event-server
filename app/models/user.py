@@ -3,17 +3,22 @@ from datetime import datetime
 
 import humanize
 import pytz
+from citext import CIText
+from coolname import generate
 from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
+from slugify import slugify
 from sqlalchemy import desc, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.utilities import get_serializer
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
+from app.models.event import Event
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -38,12 +43,8 @@ SYS_ROLES_LIST = [
 ]
 
 # Event-specific
-OWNER = 'owner'
-ORGANIZER = 'organizer'
-COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
 MODERATOR = 'moderator'
-ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
@@ -53,7 +54,7 @@ class User(SoftDeletionModel):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    _email = db.Column(db.String(120), unique=True, nullable=False)
+    _email = db.Column(CIText, unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
     facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
     facebook_login_hash = db.Column(db.String, nullable=True)
@@ -78,6 +79,11 @@ class User(SoftDeletionModel):
     is_sales_admin = db.Column(db.Boolean, default=False)
     is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
+    is_blocked = db.Column(db.Boolean, nullable=False, default=False)
+    is_profile_public = db.Column(
+        db.Boolean, nullable=False, default=False, server_default='False'
+    )
+    public_name = db.Column(db.String)
     was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
@@ -92,6 +98,8 @@ class User(SoftDeletionModel):
     billing_city = db.Column(db.String)
     billing_zip_code = db.Column(db.String)
     billing_additional_info = db.Column(db.String)
+
+    rocket_chat_token = db.Column(db.String)
 
     # relationships
     speaker = db.relationship('Speaker', backref="user")
@@ -185,42 +193,29 @@ class User(SoftDeletionModel):
 
         return True
 
-    def has_role(self, event_id):
-        """
-        Checks if user has any of the Roles at an Event.
-        Exclude Attendee Role.
-        """
-        attendee_role = Role.query.filter_by(name=ATTENDEE).first()
-        uer = UER.query.filter(
-            UER.user == self, UER.event_id == event_id, UER.role != attendee_role
-        ).first()
-        if uer is None:
-            return False
-        else:
-            return True
-
     def _is_role(self, role_name, event_id=None):
         """
         Checks if a user has a particular Role at an Event.
         """
+        from app.models.users_groups_role import UsersGroupsRoles
+
         role = Role.query.filter_by(name=role_name).first()
+        uer = UER.query.filter_by(user=self, role=role)
+        ugr = UsersGroupsRoles.query.filter_by(user=self, role=role, accepted=True)
         if event_id:
-            uer = UER.query.filter_by(user=self, event_id=event_id, role=role).first()
-        else:
-            uer = UER.query.filter_by(user=self, role=role).first()
-        if not uer:
-            return False
-        else:
-            return True
+            uer = uer.filter_by(event_id=event_id)
+            event = Event.query.get(event_id)
+            ugr = ugr.filter_by(group=event.group)
+        return bool(uer.first() or ugr.first())
 
     def is_owner(self, event_id):
-        return self._is_role(OWNER, event_id)
+        return self._is_role(Role.OWNER, event_id)
 
     def is_organizer(self, event_id):
-        return self._is_role(ORGANIZER, event_id)
+        return self._is_role(Role.ORGANIZER, event_id)
 
     def is_coorganizer(self, event_id):
-        return self._is_role(COORGANIZER, event_id)
+        return self._is_role(Role.COORGANIZER, event_id)
 
     def is_track_organizer(self, event_id):
         return self._is_role(TRACK_ORGANIZER, event_id)
@@ -231,27 +226,24 @@ class User(SoftDeletionModel):
     def is_registrar(self, event_id):
         return self._is_role(REGISTRAR, event_id)
 
-    def is_attendee(self, event_id):
-        return self._is_role(ATTENDEE, event_id)
-
     def has_event_access(self, event_id):
         return (
-            self._is_role(OWNER, event_id)
-            or self._is_role(ORGANIZER, event_id)
-            or self._is_role(COORGANIZER, event_id)
+            self._is_role(Role.OWNER, event_id)
+            or self._is_role(Role.ORGANIZER, event_id)
+            or self._is_role(Role.COORGANIZER, event_id)
         )
 
     @hybrid_property
     def is_user_owner(self):
-        return self._is_role(OWNER)
+        return self._is_role(Role.OWNER)
 
     @hybrid_property
     def is_user_organizer(self):
-        return self._is_role(ORGANIZER)
+        return self._is_role(Role.ORGANIZER)
 
     @hybrid_property
     def is_user_coorganizer(self):
-        return self._is_role(COORGANIZER)
+        return self._is_role(Role.COORGANIZER)
 
     @hybrid_property
     def is_user_track_organizer(self):
@@ -264,10 +256,6 @@ class User(SoftDeletionModel):
     @hybrid_property
     def is_user_registrar(self):
         return self._is_role(REGISTRAR)
-
-    @hybrid_property
-    def is_user_attendee(self):
-        return self._is_role(ATTENDEE)
 
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
@@ -319,10 +307,7 @@ class User(SoftDeletionModel):
                 .filter(Session.id == session_id)
                 .one()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:
@@ -335,10 +320,7 @@ class User(SoftDeletionModel):
                 .filter(Session.event_id == event_id)
                 .first()
             )
-            if session:
-                return True
-            else:
-                return False
+            return bool(session)
         except MultipleResultsFound:
             return False
         except NoResultFound:
@@ -392,18 +374,6 @@ class User(SoftDeletionModel):
             return False
         return perm.panel_name
 
-    def can_download_tickets(self, order):
-        permissible_users = [holder.id for holder in order.ticket_holders] + [
-            order.user.id
-        ]
-        if (
-            self.is_staff
-            or self.has_event_access(order.event.id)
-            or self.id in permissible_users
-        ):
-            return True
-        return False
-
     def can_access_panel(self, panel_name):
         """
         Check if user can access an Admin Panel
@@ -447,28 +417,58 @@ class User(SoftDeletionModel):
 
     # update last access time
     def update_lat(self):
-        self.last_accessed_at = datetime.now(pytz.utc)
+        self.last_accessed_at = datetime.now()
 
+    # Deprecated
     @property
     def fullname(self):
-        firstname = self.first_name if self.first_name else ''
-        lastname = self.last_name if self.last_name else ''
-        if firstname and lastname:
-            return '{} {}'.format(firstname, lastname)
-        else:
-            return ''
+        return self.full_name
+
+    @property
+    def full_name(self):
+        return ' '.join(filter(None, [self.first_name, self.last_name]))
+
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
+            filter(
+                None,
+                [
+                    self.billing_address,
+                    self.billing_city,
+                    self.billing_state,
+                    self.billing_zip_code,
+                    self.billing_country,
+                ],
+            )
+        )
+
+    full_billing_address = property(get_full_billing_address)
+
+    @property
+    def anonymous_name(self):
+        return ' '.join(map(lambda x: x.capitalize(), generate(2)))
+
+    @property
+    def rocket_chat_username(self):
+        name = self.public_name or self.full_name or f'user_{self.id}'
+        return slugify(name, word_boundary=True, max_length=32, separator='.')
+
+    @property
+    def rocket_chat_password(self):
+        return get_serializer().dumps(f'rocket_chat_user_{self.id}')
+
+    @property
+    def is_rocket_chat_registered(self) -> bool:
+        return self.rocket_chat_token is not None
 
     def __repr__(self):
         return '<User %r>' % self.email
 
-    def __str__(self):
-        return self.__repr__()
-
     def __setattr__(self, name, value):
         if name == 'details':
-            super(User, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)))
         else:
-            super(User, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
 
 @event.listens_for(User, 'init')

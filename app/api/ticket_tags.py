@@ -1,8 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -27,7 +27,7 @@ class TicketTagListPost(ResourceList):
         require_relationship(['event'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+            raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
     schema = TicketTagSchema
     methods = [
@@ -49,9 +49,9 @@ class TicketTagList(ResourceList):
         """
         query_ = self.session.query(TicketTag)
         if view_kwargs.get('ticket_id'):
-            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -72,7 +72,6 @@ class TicketTagDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )
@@ -90,7 +89,6 @@ class TicketTagRelationshipRequired(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )
@@ -110,7 +108,6 @@ class TicketTagRelationshipOptional(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=TicketTag,
         ),
     )

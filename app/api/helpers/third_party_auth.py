@@ -123,7 +123,7 @@ class TwitterOAuth:
         )
 
     def get_authorized_client(self, oauth_verifier, oauth_token):
-        resp, content = self.get_access_token(oauth_verifier, oauth_token)
+        _, content = self.get_access_token(oauth_verifier, oauth_token)
         access_token = dict(urllib.parse.parse_qsl(content))
         token = oauth2.Token(
             access_token["oauth_token"], access_token["oauth_token_secret"]

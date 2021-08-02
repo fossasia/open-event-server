@@ -1,0 +1,36 @@
+{{- if .Values.frontend.enable }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "open-event.name" . }}-frontend
+    helm.sh/chart: {{ include "open-event.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: {{ include "open-event.name" . }}
+  name: {{.Values.frontend.name}}
+spec:
+  replicas: {{.Values.frontend.replicas}}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "open-event.name" . }}-frontend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "open-event.name" . }}-frontend
+    spec:
+      containers:
+        {{- if .Values.env }}
+      - env:
+{{- toYaml .Values.env | nindent 8 }}
+        {{- end }}
+        image: "{{ .Values.frontend.image.repo }}:{{ .Values.frontend.image.tag }}"
+        imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
+        name: {{ .Values.frontend.name }}
+        ports:
+        - name: {{ .Values.frontend.serviceName }}
+          containerPort: {{ .Values.frontend.servicePort }}
+          protocol: TCP
+{{end}}

@@ -29,11 +29,11 @@ class AdminSalesInvoicesSchema(Schema):
 
     @staticmethod
     def format_event_name(self):
-        return '{}'.format(self.event.name)
+        return f'{self.event.name}'
 
     @staticmethod
     def format_sent_to(self):
-        return '{} <{}>'.format(self.user.fullname, self.user.email)
+        return f'{self.user.fullname} <{self.user.email}>'
 
 
 class AdminSalesInvoicesList(ResourceList):

@@ -16,8 +16,7 @@ def get_new_social_link_identifier(length=8):
     count = get_count(SocialLink.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
-    else:
-        return get_new_social_link_identifier(length)
+    return get_new_social_link_identifier(length)
 
 
 class SocialLink(SoftDeletionModel):
@@ -25,29 +24,9 @@ class SocialLink(SoftDeletionModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=False)
-    identifier = db.Column(db.String)
+    identifier = db.Column(db.String, default=get_new_social_link_identifier)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="social_link")
 
-    def __init__(
-        self, name=None, link=None, event_id=None, deleted_at=None, identifier=None
-    ):
-        self.name = name
-        self.link = link
-        self.event_id = event_id
-        self.deleted_at = deleted_at
-        if identifier:
-            self.identifier = identifier
-        else:
-            self.identifier = get_new_social_link_identifier()
-
     def __repr__(self):
         return '<SocialLink %r>' % self.name
-
-    def __str__(self):
-        return self.__repr__()
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {'id': self.id, 'name': self.name, 'link': self.link}

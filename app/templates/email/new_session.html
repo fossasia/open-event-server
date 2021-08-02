@@ -1,0 +1,16 @@
+{{ _('Hello') }},
+<br/><br/>{{ _('This is an automatic email from') }} {{ app_name }} {{ _('for organizers of the') }} <a href={{ session.event.site_link }} target='_blank'>{{ session.event.name }}</a>.
+<br/><br/>
+{{ _('Your') }} <a href={{ session.site_cfs_link }} target='_blank'> {{ _('Call for Speakers') }}</a> {{ _('has received a new session proposal with the following details') }}:
+<br/><br/>
+{{ _('Session') }}: {{ session.title}} <br/>
+{% if session.short_abstract %}
+    {{ _('Abstract') }}: {{ session.short_abstract }} <br/>
+{% endif %}
+<br/>
+
+{{ _('You can view all speaker details on the speaker profile page and the session proposal on the') }} <a href={{ session.organizer_site_link }} target='_blank'>{{ _('session page') }}</a>.<br/><br/>
+{{ _('To change the status of sessions please go to the') }}  <a href={{ session_overview_link }} target='_blank'>{{ _('sessions overview page') }}</a> {{ _('and click on the status badge of the session') }}.<br/><br/>
+
+{{ _('Thank you') }}.<br/>
+<a href={{ front_page }} target='_blank'>{{ front_page }}</a><br/>

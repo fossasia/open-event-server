@@ -30,13 +30,13 @@ class EventLocationList(ResourceList):
         locations = []
         for location, _ in popular_locations:
             if location is not None:
-                new_location = EventLocation(location)
+                new_location = EventLocation(name=location)
                 new_location.id = len(locations)
                 locations.append(new_location)
         schema = EventLocationSchema()
         result = schema.dump(locations, many=True).data
         view_kwargs = (
-            request.view_args if getattr(self, 'view_kwargs', None) is True else dict()
+            request.view_args if getattr(self, 'view_kwargs', None) is True else {}
         )
         add_pagination_links(
             result, len(locations), qs, url_for(self.view, **view_kwargs)

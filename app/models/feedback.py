@@ -17,31 +17,11 @@ class Feedback(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     session_id = db.Column(db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE'))
 
-    def __init__(
-        self,
-        rating=None,
-        comment=None,
-        event_id=None,
-        user_id=None,
-        session_id=None,
-        deleted_at=None,
-    ):
-        rating = float(rating)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # TODO(Areeb): Test rating rounding on __init__
+        rating = float(kwargs.get('rating'))
         self.rating = round(rating * 2, 0) / 2  # Rounds to nearest 0.5
-
-        self.comment = comment
-        self.event_id = event_id
-        self.user_id = user_id
-        self.session_id = session_id
-        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Feedback %r>' % self.rating
-
-    def __str__(self):
-        return self.__repr__()
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {'id': self.id, 'rating': self.rating, 'comment': self.comment}

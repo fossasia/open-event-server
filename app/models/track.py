@@ -13,31 +13,12 @@ class Track(SoftDeletionModel):
     sessions = db.relationship('Session', backref='track')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
-    def __init__(
-        self,
-        name=None,
-        description=None,
-        event_id=None,
-        session=None,
-        color=None,
-        deleted_at=None,
-    ):
-        self.name = name
-        self.description = description
-        self.event_id = event_id
-        self.session_id = session
-        self.color = color
-        self.deleted_at = deleted_at
-
     @staticmethod
     def get_service_name():
         return 'track'
 
     def __repr__(self):
         return '<Track %r>' % self.name
-
-    def __str__(self):
-        return self.__repr__()
 
     @property
     def font_color(self):
@@ -61,12 +42,3 @@ class Track(SoftDeletionModel):
                 / 255
             )
         return '#000000' if (a < 0.5) else '#ffffff'
-
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'color': self.color,
-            'font_color': self.font_color,
-        }

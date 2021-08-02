@@ -30,8 +30,11 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.mail import send_email_confirmation, send_email_with_action
-from app.api.helpers.notification import send_notification_with_action
+from app.api.helpers.mail import (
+    send_email_confirmation,
+    send_password_change_email,
+    send_password_reset_email,
+)
 from app.api.helpers.third_party_auth import (
     FbOAuth,
     GoogleOAuth,
@@ -41,10 +44,7 @@ from app.api.helpers.third_party_auth import (
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.mail import PASSWORD_CHANGE, PASSWORD_RESET, PASSWORD_RESET_AND_VERIFY
-from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
-from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
@@ -58,12 +58,19 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     criterion = [username, password]
 
     if not all(criterion):
+        logging.error('username or password missing')
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
+
     if not identity or (existing_identity and identity != existing_identity):
         # For fresh login, credentials should match existing user
+        logging.error('Invalid Credentials')
         return jsonify(error='Invalid Credentials'), 401
+
+    if identity.is_blocked:
+        logging.info('Admin has marked this account as spam')
+        return jsonify(error='Admin has marked this account as spam'), 401
 
     remember_me = data.get('remember-me')
     include_in_response = data.get('include-in-response')
@@ -102,7 +109,10 @@ def fresh_login():
 @jwt_refresh_token_required
 def refresh_token():
     current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user, fresh=False)
+    expiry_time = timedelta(minutes=90)
+    new_token = create_access_token(
+        identity=current_user, fresh=False, expires_delta=expiry_time
+    )
     return jsonify({'access_token': new_token})
 
 
@@ -131,14 +141,12 @@ def redirect_uri(provider):
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 404)
+        return make_response(jsonify(message=f"No support for {provider}"), 404)
 
     client_id = provider_class.get_client_id()
     if not client_id:
         return make_response(
-            jsonify(
-                message="{} client id is not configured on the server".format(provider)
-            ),
+            jsonify(message=f"{provider} client id is not configured on the server"),
             404,
         )
 
@@ -180,7 +188,7 @@ def get_token(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -250,7 +258,7 @@ def login_user(provider):
             200,
         )
 
-    elif provider == 'google':
+    if provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
@@ -269,7 +277,7 @@ def login_user(provider):
             'client_secret': provider_class.get_client_secret(),
         }
     else:
-        return make_response(jsonify(message="No support for {}".format(provider)), 200)
+        return make_response(jsonify(message=f"No support for {provider}"), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
@@ -279,21 +287,25 @@ def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
     except base64.binascii.Error:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        logging.error('Invalid Token')
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
     except Exception:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        logging.error('Invalid Token')
+        raise BadRequestError({'source': ''}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
     except Exception:
-        return BadRequestError({'source': ''}, 'Invalid Token').respond()
+        logging.error('Invalid Token')
+        raise BadRequestError({'source': ''}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
+        logging.info('Email Verified')
         return make_response(jsonify(message="Email Verified"), 200)
 
 
@@ -302,14 +314,16 @@ def resend_verification_email():
     try:
         email = request.json['data']['email']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        logging.error('Bad Request')
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return UnprocessableEntityError(
+        logging.info('User with email: ' + email + ' not found.')
+        raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
-        ).respond()
+        )
     else:
         serializer = get_serializer()
         hash_ = str(
@@ -318,9 +332,9 @@ def resend_verification_email():
             ),
             'utf-8',
         )
-        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash_})
+        link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
-
+        logging.info('Verification email resent')
         return make_response(jsonify(message="Verification email resent"), 200)
 
 
@@ -335,34 +349,19 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
-        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+        logging.error('Bad Request Error')
+        raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        logger.info('Tried to reset password not existing email %s', email)
+        logging.info('Tried to reset password not existing email %s', email)
     else:
-        link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        if user.was_registered_with_order:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET_AND_VERIFY,
-                app_name=get_settings()['app_name'],
-                link=link,
-            )
-        else:
-            send_email_with_action(
-                user,
-                PASSWORD_RESET,
-                app_name=get_settings()['app_name'],
-                link=link,
-                token=user.reset_password,
-            )
+        send_password_reset_email(user)
 
     return make_response(
         jsonify(
-            message="If your email was registered with us, you'll get an \
-                         email with reset link shortly",
+            message="If your email was registered with us, you'll get an email with reset link shortly",
             email=email,
         ),
         200,
@@ -377,7 +376,8 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User Not Found').respond()
+        logging.info('User Not Found')
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         user.password = password
         if not user.is_verified:
@@ -402,29 +402,28 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User Not Found').respond()
+        logging.info('User Not Found')
+        raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
-                return BadRequestError(
+                logging.error('Old and New passwords must be different')
+                raise BadRequestError(
                     {'source': ''}, 'Old and New passwords must be different'
-                ).respond()
+                )
             if len(new_password) < 8:
-                return BadRequestError(
+                logging.error('Password should have minimum 8 characters')
+                raise BadRequestError(
                     {'source': ''}, 'Password should have minimum 8 characters'
-                ).respond()
+                )
             user.password = new_password
             save_to_db(user)
-            send_email_with_action(
-                user, PASSWORD_CHANGE, app_name=get_settings()['app_name']
-            )
-            send_notification_with_action(
-                user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']
-            )
+            send_password_change_email(user)
         else:
-            return BadRequestError(
+            logging.error('Wrong Password. Please enter correct current password.')
+            raise BadRequestError(
                 {'source': ''}, 'Wrong Password. Please enter correct current password.'
-            ).respond()
+            )
 
     return jsonify(
         {
@@ -438,7 +437,7 @@ def change_password():
 
 def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (
+    response.headers['Content-Disposition'] = 'attachment; filename={}-{}.pdf'.format(
         file_name_prefix,
         identifier,
     )

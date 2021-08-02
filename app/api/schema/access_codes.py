@@ -2,7 +2,7 @@ from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 from app.models.access_code import AccessCode
@@ -27,17 +27,17 @@ class AccessCodeSchema(SoftDeletionSchema):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
+        ends_at = data.get('valid_till', None)
         if 'id' in original_data['data']:
             access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
 
             if 'valid_from' not in data:
                 data['valid_from'] = access_code.valid_from
 
-            if 'valid_till' not in data:
-                data['valid_till'] = access_code.valid_till
+            ends_at = data.get('valid_till') or access_code.valid_expire_time
 
-        if data['valid_from'] > data['valid_till']:
-            raise UnprocessableEntity(
+        if ends_at and data['valid_from'] > ends_at:
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/valid-till'},
                 "valid_till should be after valid_from",
             )
@@ -60,13 +60,13 @@ class AccessCodeSchema(SoftDeletionSchema):
         max_quantity = data.get('max_quantity', None)
         tickets_number = data.get('tickets_number', None)
         if min_quantity and max_quantity and (min_quantity > max_quantity):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/min-quantity'},
                 "min-quantity should be less than max-quantity",
             )
 
         if tickets_number and max_quantity and (tickets_number < max_quantity):
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/tickets-number'},
                 "tickets-number should be greater than max-quantity",
             )
@@ -82,9 +82,8 @@ class AccessCodeSchema(SoftDeletionSchema):
     min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(required=True)
-    valid_till = fields.DateTime(required=True)
+    valid_till = fields.DateTime(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.access_code_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -102,7 +101,6 @@ class AccessCodeSchema(SoftDeletionSchema):
         type_='user',
     )
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.access_code_tickets',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.ticket_list',

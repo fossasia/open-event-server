@@ -1,9 +1,9 @@
-from marshmallow import validate as validate
+from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 
 
 class UserEmailSchema(SoftDeletionSchema):
@@ -22,14 +22,13 @@ class UserEmailSchema(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email_address = fields.Email(allow_none=False)
+    email_address = TrimmedEmail(allow_none=False)
     type = fields.Str(
         allow_none=False,
         validate=validate.OneOf(choices=["home", "work", "business", "office", "other"]),
     )
     user_id = fields.Integer(allow_none=False)
     user = Relationship(
-        attribute='user',
         self_view='v1.user_emails_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

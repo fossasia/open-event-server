@@ -1,8 +1,8 @@
 import unittest
 
 from app.api.schema.speakers_calls import SpeakersCallSchema
-from app.factories.speakers_call import SpeakersCallFactory
 from tests.all.integration.utils import OpenEventTestCase
+from tests.factories.speakers_call import SpeakersCallFactory
 
 
 class TestSpeakersCallValidation(OpenEventTestCase):

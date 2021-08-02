@@ -5,7 +5,7 @@ echo "[LOG] Using redis: ${REDIS_URL}"
 if [ "$DEPLOYMENT" == "api" ]
 then
     echo "[LOG] Preparing database"
-    python manage.py prepare_kubernetes_db
+    python manage.py prepare_db
     echo "[LOG] Running migrations"
     python manage.py db upgrade
     echo "[LOG] Starting gunicorn on port 8080"
@@ -15,5 +15,5 @@ if [ "$DEPLOYMENT" == "celery" ]
 then
     echo "[LOG] Starting celery worker"
     export INTEGRATE_SOCKETIO=false
-    celery worker -A app.instance.celery --loglevel=warning
+    celery -A app.instance.celery worker -B --loglevel=warning
 fi

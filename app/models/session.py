@@ -1,13 +1,16 @@
 import datetime
 
 import pytz
+from flask_jwt_extended import current_user
 from sqlalchemy import event, func
 from sqlalchemy.sql import func as sql_func
+from sqlalchemy_utils import aggregated
 
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_html, clean_up_string
+from app.models.user_favourite_session import UserFavouriteSession
 
 speakers_sessions = db.Table(
     'speakers_sessions',
@@ -20,13 +23,30 @@ speakers_sessions = db.Table(
 class Session(SoftDeletionModel):
     """Session model class"""
 
+    class State:
+        PENDING = 'pending'
+        ACCEPTED = 'accepted'
+        CONFIRMED = 'confirmed'
+        REJECTED = 'rejected'
+
     __tablename__ = 'sessions'
-    __versioned__ = {'exclude': []}
+    __table_args__ = (
+        db.Index('session_event_idx', 'event_id'),
+        db.Index('session_state_idx', 'state'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
-    short_abstract = db.Column(db.Text)
-    long_abstract = db.Column(db.Text)
+    website = db.Column(db.String)
+    twitter = db.Column(db.String)
+    facebook = db.Column(db.String)
+    github = db.Column(db.String)
+    linkedin = db.Column(db.String)
+    instagram = db.Column(db.String)
+    gitlab = db.Column(db.String)
+    mastodon = db.Column(db.String)
+    short_abstract = db.Column(db.Text, default='')
+    long_abstract = db.Column(db.Text, default='')
     comments = db.Column(db.Text)
     language = db.Column(db.String)
     level = db.Column(db.String)
@@ -53,83 +73,16 @@ class Session(SoftDeletionModel):
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    creator = db.relationship('User')
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
-    last_modified_at = db.Column(
-        db.DateTime(timezone=True), default=datetime.datetime.utcnow
-    )
+    last_modified_at = db.Column(db.DateTime(timezone=True), default=func.now())
     send_email = db.Column(db.Boolean, nullable=True)
     is_locked = db.Column(db.Boolean, default=False, nullable=False)
     complex_field_values = db.Column(db.JSON)
-
-    def __init__(
-        self,
-        title=None,
-        subtitle=None,
-        short_abstract='',
-        long_abstract='',
-        comments=None,
-        starts_at=None,
-        ends_at=None,
-        track_id=None,
-        language=None,
-        microlocation_id=None,
-        speakers=None,
-        event_id=None,
-        creator_id=None,
-        state="pending",
-        slides_url=None,
-        video_url=None,
-        audio_url=None,
-        signup_url=None,
-        session_type_id=None,
-        level=None,
-        created_at=None,
-        submission_modifier=None,
-        is_mail_sent=False,
-        deleted_at=None,
-        submitted_at=None,
-        last_modified_at=None,
-        send_email=None,
-        is_locked=False,
-        complex_field_values=None,
-    ):
-
-        if speakers is None:
-            speakers = []
-
-        self.title = title
-        self.subtitle = subtitle
-        self.short_abstract = short_abstract
-        self.long_abstract = long_abstract
-        self.comments = comments
-        self.starts_at = starts_at
-        self.ends_at = ends_at
-        self.track_id = track_id
-        self.language = language
-        self.microlocation_id = microlocation_id
-        self.speakers = speakers
-        self.event_id = event_id
-        self.creator_id = creator_id
-        self.state = state
-        self.slides_url = slides_url
-        self.video_url = video_url
-        self.audio_url = audio_url
-        self.signup_url = signup_url
-        self.session_type_id = session_type_id
-        self.level = level
-        self.created_at = created_at
-        self.deleted_at = deleted_at
-        self.is_mail_sent = is_mail_sent
-        self.submitted_at = submitted_at
-        self.submission_modifier = submission_modifier
-        self.last_modified_at = datetime.datetime.now(pytz.utc)
-        self.send_email = send_email
-        self.is_locked = is_locked
-        self.complex_field_values = complex_field_values
 
     @staticmethod
     def get_service_name():
@@ -139,31 +92,52 @@ class Session(SoftDeletionModel):
     def is_accepted(self):
         return self.state == "accepted"
 
-    def get_average_rating(self):
-        avg = (
-            db.session.query(func.avg(Feedback.rating))
-            .filter_by(session_id=self.id)
-            .scalar()
-        )
-        if avg is not None:
-            avg = round(avg, 2)
-        return avg
+    @property
+    def organizer_site_link(self):
+        return self.event.organizer_site_link + f"/session/{self.id}"
+
+    @aggregated(
+        'feedbacks', db.Column(db.Float, default=0, server_default='0', nullable=False)
+    )
+    def average_rating(self):
+        return func.coalesce(func.avg(Feedback.rating), 0)
+
+    @aggregated(
+        'feedbacks', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def rating_count(self):
+        return func.count('1')
+
+    @aggregated(
+        'favourites', db.Column(db.Integer, default=0, server_default='0', nullable=False)
+    )
+    def favourite_count(self):
+        return func.count('1')
 
     @property
-    def average_rating(self):
-        return self.get_average_rating()
+    def favourite(self):
+        if not current_user:
+            return None
+        return UserFavouriteSession.query.filter_by(
+            user=current_user, session=self
+        ).first()
+
+    @property
+    def site_link(self):
+        return self.event.site_link + f"/session/{self.id}"
+
+    @property
+    def site_cfs_link(self):
+        return self.event.site_link + f"/cfs/session/{self.id}"
 
     def __repr__(self):
         return '<Session %r>' % self.title
 
-    def __str__(self):
-        return self.__repr__()
-
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
-            super(Session, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value), allow_link=True))
         else:
-            super(Session, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
 
 @event.listens_for(Session, 'before_update')

@@ -7,7 +7,6 @@ from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
-from app.models.order import Order, OrderTicket
 
 
 class AdminSalesByEventsSchema(Schema):
@@ -26,10 +25,17 @@ class AdminSalesByEventsSchema(Schema):
         inflect = dasherize
 
     id = fields.String()
+    identifier = fields.String()
     name = fields.String()
+    created_at = fields.DateTime()
+    deleted_at = fields.DateTime()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     payment_currency = fields.String()
+    payment_country = fields.String()
+    type = fields.Method('event_type')
+    owner = fields.Method('event_owner')
+    owner_id = fields.Method('event_owner_id')
     sales = fields.Method('calc_sales')
 
     @staticmethod
@@ -38,7 +44,25 @@ class AdminSalesByEventsSchema(Schema):
         Returns sales (dictionary with total sales and ticket count) for
         placed, completed and pending orders
         """
-        return summary(obj.orders)
+        return summary(obj)
+
+    def event_owner(self, obj):
+        return str(obj.owner.email)
+
+    def event_owner_id(self, obj):
+        return obj.owner.id
+    
+
+    def event_type(self, obj):
+        t = 'To be announced'
+        if(obj.online):
+            if(obj.location_name):
+                t='Hybrid'
+            else:
+                t='Online'
+        elif(obj.location_name):
+            t = 'Venue'
+        return str(t)
 
 
 class AdminSalesByEventsList(ResourceList):
@@ -48,7 +72,7 @@ class AdminSalesByEventsList(ResourceList):
     """
 
     def query(self, _):
-        return self.session.query(Event).outerjoin(Order).outerjoin(OrderTicket)
+        return Event.query
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)

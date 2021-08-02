@@ -13,14 +13,5 @@ class UserEmail(SoftDeletionModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship("User", backref="alternate_emails", foreign_keys=[user_id])
 
-    def __init__(self, email_address=None, type=None, user_id=None, deleted_at=None):
-        self.email_address = email_address
-        self.type = type
-        self.user_id = user_id
-        self.deleted_at = deleted_at
-
     def __repr__(self):
         return '<Email %r>' % self.email_address
-
-    def __str__(self):
-        return self.__repr__()

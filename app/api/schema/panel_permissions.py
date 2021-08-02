@@ -23,7 +23,6 @@ class PanelPermissionSchema(Schema):
     panel_name = fields.String(allow_none=False)
     can_access = fields.Boolean()
     custom_system_roles = Relationship(
-        attribute='custom_system_roles',
         many=True,
         self_view='v1.panel_permissions_custom_system_roles',
         self_view_kwargs={'id': '<id>'},

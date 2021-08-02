@@ -19,7 +19,7 @@ app.db
 .bundle/
 .vscode/
 venv/
-.venv
+.venv*
 
 # Static files at 'app/static/vendor'
 app/static/vendor
@@ -57,6 +57,8 @@ src
 generated/
 
 docker-compose.override.yml
-celerybeat-schedule.*
+celerybeat-schedule*
 .coverage
 .pytype
+.tool-versions
+*.mo

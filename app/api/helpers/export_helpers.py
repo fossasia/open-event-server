@@ -118,7 +118,7 @@ EXPORTS = [
 ]
 
 # strings to remove in a filename
-FILENAME_EXCLUDE = '<>:"/\|?*;'
+FILENAME_EXCLUDE = r'<>:"/\|?*;'
 
 
 # FUNCTIONS
@@ -128,11 +128,11 @@ def sorted_dict(data):
     """
     sorts a json (dict/list->dict) and returns OrderedDict
     """
-    if type(data) == OrderedDict:
+    if type(data) is OrderedDict:
         data = dict(data)
-    if type(data) == dict:
+    if type(data) is dict:
         data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
-    elif type(data) == list:
+    elif type(data) is list:
         for count in range(len(data)):
             data[count] = OrderedDict(
                 sorted(list(data[count].items()), key=lambda t: t[0])
@@ -270,8 +270,7 @@ def export_event_json(event_id, settings):
 def get_current_user():
     if current_user:
         return current_user
-    else:
-        return current_logged_user
+    return current_logged_user
 
 
 # HELPERS

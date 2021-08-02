@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from pytz import timezone
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.speakers_calls import SpeakersCallSchema
 
 
@@ -39,7 +39,7 @@ class TestSpeakersCallValidation(TestCase):
                 tzinfo=timezone('UTC')
             ),
         }
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             SpeakersCallSchema.validate_date(schema, data, original_data)
 
     # def test_date_start_gt_event_end(self):
@@ -56,7 +56,7 @@ class TestSpeakersCallValidation(TestCase):
     #         'ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC')),
     #         'event_starts_at': datetime(2003, 9, 2, 12, 30, 45).replace(tzinfo=timezone('UTC'))
     #     }
-    #     with self.assertRaises(UnprocessableEntity):
+    #     with self.assertRaises(UnprocessableEntityError):
     #         SpeakersCallSchema.validate_date(schema, data, original_data)
 
     # def test_date_end_gt_event_end(self):
@@ -73,7 +73,7 @@ class TestSpeakersCallValidation(TestCase):
     #         'ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC')),
     #         'event_starts_at': datetime(2003, 9, 5, 12, 30, 45).replace(tzinfo=timezone('UTC'))
     #     }
-    #     with self.assertRaises(UnprocessableEntity):
+    #     with self.assertRaises(UnprocessableEntityError):
     #         SpeakersCallSchema.validate_date(schema, data, original_data)
 
 

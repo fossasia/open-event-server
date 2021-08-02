@@ -40,7 +40,7 @@ class SocialLinkList(ResourceList):
         :return:
         """
         query_ = self.session.query(SocialLink)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         return query_
 
     view_kwargs = True
@@ -59,7 +59,6 @@ class SocialLinkDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SocialLink,
         ),
     )
@@ -77,7 +76,6 @@ class SocialLinkRelationship(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=SocialLink,
         ),
     )

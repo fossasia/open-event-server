@@ -16,7 +16,7 @@ class EventsRolePermissionSchema(Schema):
         Meta class for Notification API schema
         """
 
-        type_ = 'event-role-permission'
+        type_ = 'event-role-permissions'
         self_view = 'v1.events_role_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.events_role_list'
@@ -28,7 +28,6 @@ class EventsRolePermissionSchema(Schema):
     can_update = fields.Boolean(default=False)
     can_delete = fields.Boolean(default=False)
     role = Relationship(
-        attribute='role',
         self_view='v1.event_role_role',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.role_detail',
@@ -37,7 +36,6 @@ class EventsRolePermissionSchema(Schema):
         type_='role',
     )
     service = Relationship(
-        attribute='service',
         self_view='v1.event_role_service',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.service_detail',

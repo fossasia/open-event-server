@@ -1,0 +1,5 @@
+# Requirements: monitor program should be placed in /usr/bin and healthcheck.io check IDs for both DB and media backups 
+# should be replaced below in placeholders
+# m h  dom mon dow   command
+0 2 * * * (/usr/bin/monitor '<healthcheck_id>' '/home/fossasia/scripts/db_backup.sh') >> /var/log/fossasia/db-bak.log 2>&1
+0 */12 * * * (/usr/bin/monitor '<healthcheck_id>' '/home/fossasia/scripts/media_backup.sh') >> /var/log/fossasia/media-bak.log 2>&1

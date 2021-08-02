@@ -21,7 +21,6 @@ class EventLocationSchema(Schema):
     name = fields.Str(required=True)
     slug = fields.Str(dump_only=True)
     events = Relationship(
-        attribute='event',
         related_view='v1.event_list',
         related_view_kwargs={'event_location_id': '<id>'},
         many=True,

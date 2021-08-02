@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 from datetime import datetime
+
 from sqlalchemy.sql import func
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 
-TICKET = 'ticket'
-EVENT = 'event'
 
-
-@dataclass(init=True, repr=True, unsafe_hash=True)
+@dataclass(init=False, unsafe_hash=True)
 class AccessCode(SoftDeletionModel):
     __tablename__ = "access_codes"
 
@@ -43,18 +42,5 @@ class AccessCode(SoftDeletionModel):
         return 'access_code'
 
     @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'code': self.code,
-            'access_url': self.access_url,
-            'tickets_number': self.tickets_number,
-            'min_quantity': self.min_quantity,
-            'max_quantity': self.max_quantity,
-            'used_for': self.used_for,
-            'valid_from': self.valid_from,
-            'valid_till': self.valid_till,
-            'event_id': self.event_id,
-            'is_active': self.is_active,
-        }
+    def valid_expire_time(self):
+        return self.valid_till or self.event.ends_at

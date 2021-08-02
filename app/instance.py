@@ -8,41 +8,38 @@ import sentry_sdk
 import sqlalchemy as sa
 import stripe
 from celery.signals import after_task_publish
+from flask_babel import Babel
 from envparse import env
-from flask import Flask, json, make_response
+from flask import Flask, json, make_response, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
 from flask_migrate import Migrate
-from flask_rest_jsonapi.errors import jsonapi_errors
-from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck
-from pytz import utc
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
-from app.api import routes
+from app.api import routes  # noqa: Used for registering routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
+from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
+from app.api.helpers.mail_recorder import MailRecorder
 from app.extensions import limiter, shell
 from app.models import db
-from app.models.event import Event
-from app.models.role_invite import RoleInvite
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
 from app.views.blueprints import BlueprintsManager
-from app.views.elastic_search import client
 from app.views.healthcheck import (
-    check_migrations,
     health_check_celery,
     health_check_db,
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
+from app.graphql import views as graphql_views
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -78,6 +75,7 @@ def create_app():
     global app_created
     if not app_created:
         BlueprintsManager.register(app)
+        graphql_views.init_app(app)
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
@@ -129,6 +127,8 @@ def create_app():
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
     app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
 
+    app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
+
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
@@ -150,14 +150,24 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.speaker_invites import speaker_invites_misc_routes
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
+        from app.api.sessions import sessions_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
         from app.api.custom.orders import ticket_blueprint
         from app.api.custom.orders import order_blueprint
         from app.api.custom.invoices import event_blueprint
+        from app.api.custom.calendars import calendar_routes
+        from app.api.tickets import tickets_routes
+        from app.api.custom.role_invites import role_invites_routes
+        from app.api.custom.users_groups_roles import users_groups_roles_routes
+        from app.api.custom.events import events_routes
+        from app.api.custom.groups import groups_routes
+        from app.api.video_stream import streams_routes
+        from app.api.events import events_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -171,6 +181,7 @@ def create_app():
         app.register_blueprint(attendee_blueprint)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(speaker_invites_misc_routes)
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
@@ -179,11 +190,20 @@ def create_app():
         app.register_blueprint(ticket_blueprint)
         app.register_blueprint(order_blueprint)
         app.register_blueprint(event_blueprint)
+        app.register_blueprint(sessions_blueprint)
+        app.register_blueprint(calendar_routes)
+        app.register_blueprint(streams_routes)
+        app.register_blueprint(role_invites_routes)
+        app.register_blueprint(users_groups_roles_routes)
+        app.register_blueprint(events_routes)
+        app.register_blueprint(groups_routes)
+        app.register_blueprint(events_blueprint)
+        app.register_blueprint(tickets_routes)
 
         add_engine_pidguard(db.engine)
 
-        if app.config[
-            'SQLALCHEMY_DATABASE_URI'  # pytype: disable=attribute-error
+        if app.config[  # pytype: disable=attribute-error
+            'SQLALCHEMY_DATABASE_URI'
         ].startswith("sqlite://"):
             sqlite_datetime_fix()
 
@@ -204,6 +224,8 @@ def create_app():
                 CeleryIntegration(),
                 SqlalchemyIntegration(),
             ],
+            release=app.config['SENTRY_RELEASE_NAME'],
+            traces_sample_rate=app.config['SENTRY_TRACES_SAMPLE_RATE'],
         )
 
     # redis
@@ -220,6 +242,19 @@ def create_app():
 current_app = create_app()
 init_filters(app)
 
+# Babel
+babel = Babel(current_app)
+
+
+@babel.localeselector
+def get_locale():
+    # Try to guess the language from the user accept
+    # header the browser transmits. We support de/fr/en in this
+    # example. The best match wins.
+    # pytype: disable=mro-error
+    return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
+    # pytype: enable=mro-error
+
 
 # http://stackoverflow.com/questions/26724623/
 @app.before_request
@@ -232,8 +267,6 @@ def track_user():
 health = HealthCheck(current_app, "/health-check")
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
-with current_app.app_context():
-    current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
 
@@ -263,14 +296,10 @@ def update_sent_state(sender=None, headers=None, **kwargs):
 @app.errorhandler(500)
 def internal_server_error(error):
     if current_app.config['PROPOGATE_ERROR'] is True:
-        exc = JsonApiException({'pointer': ''}, str(error))
+        exc = ErrorResponse(str(error))
     else:
-        exc = JsonApiException({'pointer': ''}, 'Unknown error')
-    return make_response(
-        json.dumps(jsonapi_errors([exc.to_dict()])),
-        exc.status,
-        {'Content-Type': 'application/vnd.api+json'},
-    )
+        exc = ErrorResponse('Unknown error')
+    return exc.respond()
 
 
 @app.errorhandler(429)
@@ -280,6 +309,11 @@ def ratelimit_handler(error):
         429,
         {'Content-Type': 'application/vnd.api+json'},
     )
+
+
+@app.errorhandler(ErrorResponse)
+def handle_exception(error: ErrorResponse):
+    return error.respond()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,4 @@
-from datetime import datetime
-
-import pytz
+from sqlalchemy.sql import func
 
 from app.models import db
 
@@ -40,18 +38,8 @@ class Activity(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     actor = db.Column(db.String)  # user email + id
-    time = db.Column(db.DateTime(timezone=True))
+    time = db.Column(db.DateTime(timezone=True), default=func.now())
     action = db.Column(db.String)
-
-    def __init__(self, actor=None, time=None, action=None):
-        self.actor = actor
-        self.time = time
-        if self.time is None:
-            self.time = datetime.now(pytz.utc)
-        self.action = action
 
     def __repr__(self):
         return '<Activity by %s>' % self.actor
-
-    def __str__(self):
-        return self.__repr__()

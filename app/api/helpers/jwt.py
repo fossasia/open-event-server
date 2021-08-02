@@ -20,8 +20,7 @@ def jwt_authenticate(email, password):
     auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
     if auth_ok:
         return user
-    else:
-        return None
+    return None
 
 
 def jwt_user_loader(identity):
@@ -35,7 +34,7 @@ def get_identity():
     """
     token = None
     try:
-        token, header = _decode_jwt_from_request('access')
+        token, _ = _decode_jwt_from_request('access')
     except (JWTExtendedException, PyJWTError):
         token = getattr(ctx_stack.top, 'expired_jwt', None)
 
