@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
+
 from sqlalchemy.sql import func
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -38,3 +40,7 @@ class AccessCode(SoftDeletionModel):
     @staticmethod
     def get_service_name():
         return 'access_code'
+
+    @property
+    def valid_expire_time(self):
+        return self.valid_till or self.event.ends_at

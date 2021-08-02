@@ -30,6 +30,9 @@ class Setting(db.Model):
     static_domain = db.Column(db.String)
     # Order Expiry Time in Minutes
     order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
+    # Start Page Event ID (Default: NULL)
+    start_pg_event_id = db.Column(db.String, nullable=True, default=None)
+    start_pg_enabled = db.Column(db.String, nullable=True, default='default')
 
     # Maximum number of complex custom fields allowed for a given form
     max_complex_custom_fields = db.Column(db.Integer, default=30, nullable=False)
@@ -133,6 +136,10 @@ class Setting(db.Model):
     # Google Analytics
     analytics_key = db.Column(db.String)
 
+    # Rocket Chat Integration
+    rocket_chat_url = db.Column(db.String)
+    rocket_chat_registration_secret = db.Column(db.String)
+
     #
     # Social links
     #
@@ -141,7 +148,12 @@ class Setting(db.Model):
     twitter_url = db.Column(db.String)
     support_url = db.Column(db.String)
     facebook_url = db.Column(db.String)
+    instagram_url = db.Column(db.String)
+    patreon_url = db.Column(db.String)
+    gitter_url = db.Column(db.String)
+    telegram_url = db.Column(db.String)
     youtube_url = db.Column(db.String)
+    weblate_url = db.Column(db.String)
 
     #
     # Event Invoices settings
@@ -162,6 +174,8 @@ class Setting(db.Model):
     admin_billing_city = db.Column(db.String)
     admin_billing_zip = db.Column(db.String)
     admin_billing_additional_info = db.Column(db.String)
+    admin_billing_paypal_email = db.Column(db.String)
+    admin_billing_logo = db.Column(db.String)
     #
     # Generators
     #
@@ -185,6 +199,17 @@ class Setting(db.Model):
         db.String, default="https://next.eventyay.com/cookie-policy"
     )
 
+    #
+    # image and slide size
+    #
+    logo_size = db.Column(db.Integer, nullable=False, default=1000, server_default='1000')
+    image_size = db.Column(
+        db.Integer, nullable=False, default=10000, server_default='10000'
+    )
+    slide_size = db.Column(
+        db.Integer, nullable=False, default=20000, server_default='20000'
+    )
+
     @hybrid_property
     def is_paypal_activated(self):
         if (
@@ -193,10 +218,9 @@ class Setting(db.Model):
             and self.paypal_sandbox_secret
         ):
             return True
-        elif self.paypal_client and self.paypal_secret:
+        if self.paypal_client and self.paypal_secret:
             return True
-        else:
-            return False
+        return False
 
     @hybrid_property
     def is_stripe_activated(self):
@@ -207,10 +231,7 @@ class Setting(db.Model):
 
     @hybrid_property
     def is_alipay_activated(self):
-        if self.alipay_publishable_key and self.alipay_secret_key:
-            return True
-        else:
-            return False
+        return bool(self.alipay_publishable_key and self.alipay_secret_key)
 
     @hybrid_property
     def is_omise_activated(self):
@@ -220,7 +241,26 @@ class Setting(db.Model):
             and self.omise_test_secret
         ):
             return True
-        elif self.omise_live_public and self.omise_live_secret:
+        if self.omise_live_public and self.omise_live_secret:
             return True
-        else:
-            return False
+        return False
+
+    @property
+    def is_billing_paypal_activated(self):
+        return self.admin_billing_paypal_email is not None
+
+    def get_full_billing_address(self, sep: str = '\n') -> str:
+        return sep.join(
+            filter(
+                None,
+                [
+                    self.admin_billing_address,
+                    self.admin_billing_city,
+                    self.admin_billing_state,
+                    self.admin_billing_zip,
+                    self.admin_billing_country,
+                ],
+            )
+        )
+
+    full_billing_address = property(get_full_billing_address)

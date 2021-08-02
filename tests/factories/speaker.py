@@ -1,7 +1,7 @@
 import factory
 
-import tests.factories.common as common
 from app.models.speaker import Speaker
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.session import SessionFactory
@@ -35,11 +35,16 @@ class SpeakerFactoryBase(BaseFactory):
     gender = common.string_
     heard_from = common.string_
     sponsorship_required = common.string_
-    event_id = 1
-    user_id = 2
 
 
 class SpeakerFactory(SpeakerFactoryBase):
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
     session = factory.RelatedFactory(SessionFactory)
+    event_id = 1
+    user_id = 2
+
+
+class SpeakerSubFactory(SpeakerFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)
+    user = factory.SubFactory(UserFactory)

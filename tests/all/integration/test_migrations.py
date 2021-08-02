@@ -9,7 +9,7 @@ class TestMigrations(OpenEventTestCase):
 
         with self.app.test_request_context():
             result = check_migrations().split(',')
-            self.assertEqual(result[0], 'success')
+            assert result[0] == 'success'
 
     def test_populate(self):
         """Method to test populate command"""

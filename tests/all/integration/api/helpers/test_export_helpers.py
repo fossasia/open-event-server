@@ -4,11 +4,11 @@ from flask_login import login_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.export_helpers import create_export_job
-from tests.factories.event import EventFactoryBasic
-from tests.factories.export_job import ExportJobFactory
 from app.models.export_job import ExportJob
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
+from tests.factories.event import EventFactoryBasic
+from tests.factories.export_job import ExportJobFactory
 
 
 class TestExportJobHelpers(OpenEventTestCase):
@@ -27,8 +27,8 @@ class TestExportJobHelpers(OpenEventTestCase):
             login_user(user)
             create_export_job(test_task_id, export_event_id)
             export_job = ExportJob.query.filter_by(event=test_related_event).first()
-            self.assertEqual(export_job.event.name, 'example')
-            self.assertEqual(export_job.user_email, 'user0@example.com')
+            assert export_job.event.name == 'example'
+            assert export_job.user_email == 'user0@example.com'
 
 
 if __name__ == '__main__':

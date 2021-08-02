@@ -1,0 +1,18 @@
+{{ _('Hello') }} {{ name }},
+<br><br>
+{{ _('Your payment is now past due') }}.<br> {{ _('Please pay this invoice immediately to avoid your account being suspended') }}.
+<br><br>
+{{ _('Amount Due') }}: {{ amount }}
+<br><br>
+{{ _('Please pay immediately at') }}: <a href='{{ payment_url }}'>{{ payment_url }}</a>
+<br><br>
+{{ _('Late payments can be subject to a') }} 5% {{ _('finance fee') }}.
+<br><br>
+{{ _('A detailed invoice is available in') }} <a href='https://eventyay.com/account/billing/invoices/'>{{ _('the billing area') }}</a> {{ _('of your account') }}.
+{{ _('If you have any questions about invoices') }}, {{ _('please find more information on our FAQ at') }} <a href='https://support.eventyay.com'>https://support.eventyay.com</a>.
+<br><br>
+{{ _('If you feel this invoice is incorrect or have any questions, you can contact our support team for assistance') }}.
+<br><br>
+<em>{{ _('Thank you for using') }} {{ app_name }}!</em>
+<br><br>
+{{ app_name }} {{ _('Team') }} 

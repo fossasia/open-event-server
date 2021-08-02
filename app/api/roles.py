@@ -1,13 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.roles import RoleSchema
 from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
+from app.models.users_groups_role import UsersGroupsRoles
 
 
 class RoleList(ResourceList):
@@ -32,26 +33,24 @@ class RoleDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('role_invite_id') is not None:
-            role_invite = safe_query(
-                self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id'
-            )
-            if role_invite.role_id is not None:
-                view_kwargs['id'] = role_invite.role_id
-            else:
-                view_kwargs['id'] = None
+            role_invite = safe_query_kwargs(RoleInvite, view_kwargs, 'role_invite_id')
+            view_kwargs['id'] = role_invite.role_id
 
-        if view_kwargs.get('users_events_role_id') is not None:
-            users_events_role = safe_query(
-                self,
+        if view_kwargs.get('users_events_roles_id') is not None:
+            users_events_role = safe_query_kwargs(
                 UsersEventsRoles,
-                'id',
-                view_kwargs['users_events_role_id'],
-                'users_events_role_id',
+                view_kwargs,
+                'users_events_roles_id',
             )
-            if users_events_role.role_id is not None:
-                view_kwargs['id'] = users_events_role.role_id
-            else:
-                view_kwargs['id'] = None
+            view_kwargs['id'] = users_events_role.role_id
+
+        if view_kwargs.get('users_groups_roles_id') is not None:
+            users_groups_role = safe_query_kwargs(
+                UsersGroupsRoles,
+                view_kwargs,
+                'users_groups_roles_id',
+            )
+            view_kwargs['id'] = users_groups_role.role_id
 
     def before_update_object(self, role, data, view_kwargs):
         """
@@ -71,7 +70,7 @@ class RoleDetail(ResourceDetail):
                 'attendee',
                 'track_organizer',
             ]:
-                raise UnprocessableEntity(
+                raise UnprocessableEntityError(
                     {'data': 'name'}, "The given name cannot be updated"
                 )
 
@@ -91,7 +90,7 @@ class RoleDetail(ResourceDetail):
             'attendee',
             'track_organizer',
         ]:
-            raise UnprocessableEntity(
+            raise UnprocessableEntityError(
                 {'data': 'name'}, "The resource with given name cannot be deleted"
             )
 
@@ -100,5 +99,8 @@ class RoleDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Role,
-        'methods': {'before_get_object': before_get_object},
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_delete_object': before_delete_object,
+        },
     }

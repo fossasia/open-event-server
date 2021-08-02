@@ -1,5 +1,113 @@
 ## Changelog
 
+#### v1.19.1 (2020-12-04):
+
+**Hot Fix Release**
+
+##### Bug Fixes
+
+- Make speaker email nullable
+- Give access to order tickets and attendees to organizers
+- Use identifier for export instead of field identifier
+
+##### Maintenance
+
+- Upgrade to celery v5
+
+#### v1.19.0 (2020-11-30):
+
+##### Features
+- Add video stream/conference integration support
+- Add separate tickets for each attendee
+- Improve Order Emails to include more details
+- Change PDFs to correct timezone info
+- Make emails translatable
+- Add simpler ICS export
+- Improve upcoming events criteria
+
+##### Bug Fixes
+
+- Remove ability to delete orders
+- Remove ability to edit role invites. *As an alternative, please delete an invite and resend another*
+- Fix user deletion API logic
+- Fix PDF issues related to emails and orders
+- Fix minimum amount for generating invoice
+
+##### Maintenance
+
+- Add support for gevent worker. **Note**: eventlet is deprecated and will be removed in next release
+- Remove discrepancies in prod and code migrations
+- Dependency Updates
+
+*More details in Releases Section*
+
+#### v1.18.0 (2020-10-07):
+
+##### Features
+- Add invoice generation, billing and payment logic
+- Add ability to create online events
+- Add more social media URLs in settings
+
+##### Bug Fixes
+
+- Fix Admin Sales API
+- Fix Admin's ability to view draft events
+- Fix long standing paypal charging issue
+- Fix proper float level amount usage in payments
+
+##### Maintenance
+
+- Make celery container depend on web, to avoid DB race issue
+- Remove soft deletion from some models
+- Upgrade python code syntax to latest versions and remove code smells
+- Add tests for disabled dredd sections
+- Dependency Updates
+
+*More details in Releases Section*
+
+#### v1.17.0 (2020-08-13):
+
+##### Features
+**Major Changes in Sessions API and session state changes**
+*Note: There are no breaking changes in API but more integrity checks have been put in place*
+- Add session mails and notify endpoint
+- Add session state change emails
+- Add session states and mails API
+- Add session state transition validation
+- Add cancelled and withdrawn state to session
+- Add session custom form validations
+
+Other additions:
+- Add option to disable order attachment PDF
+- Add instagram_url in settings model
+
+##### Bug Fixes
+
+- Add public payment gateway key in settings
+- Allow orgnizers to unlock sessions and override session form validations
+- Add hack to remove duplicate sessions in user sessions API
+- Send after event emails and notifs to unique receivers
+- Fail order status transition to pending if incomplete attendee info
+
+##### Maintenance
+
+- Remove modules from project (were confusing, obsolete and broken)
+- Dependency Updates
+
+*More details in Releases Section*
+
+#### v1.16.0 (2020-07-06):
+
+**MAJOR BREAKING CHANGES**
+Order API has changed and old API has been deprecated and limited to avoid data integrity bugs. Please check the changes thoroughly before upgrading
+
+- Switch to new Orders API with proper testing of discount code, tax and amount calculation
+- Add constraint checks on attendee custom forms and order status
+- Change custom form model schema to allow custom fields
+- Add endpoint for upcoming events (beta)
+- Various testing and maintenance improvements  
+- Various dependency updates
+
 #### v1.15.0 (2020-04-15):
 
 **BREAKING CHANGE**

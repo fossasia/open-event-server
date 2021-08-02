@@ -2,7 +2,7 @@ import datetime
 import unittest
 from unittest import TestCase
 
-from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.access_codes import AccessCodeSchema
 
 
@@ -25,7 +25,7 @@ class TestAccessCodeValidation(TestCase):
         schema = AccessCodeSchema()
         original_data = {'data': {}}
         data = {'min_quantity': 10, 'max_quantity': 5, 'tickets_number': 30}
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             AccessCodeSchema.validate_order_quantity(schema, data, original_data)
 
     def test_quantity_max_gt_ticket(self):
@@ -36,7 +36,7 @@ class TestAccessCodeValidation(TestCase):
         schema = AccessCodeSchema()
         original_data = {'data': {}}
         data = {'min_quantity': 10, 'max_quantity': 20, 'tickets_number': 15}
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             AccessCodeSchema.validate_order_quantity(schema, data, original_data)
 
     def test_date_valid_from_gt_valid_till(self):
@@ -50,7 +50,7 @@ class TestAccessCodeValidation(TestCase):
             'valid_from': datetime.datetime(2019, 1, 1),
             'valid_till': datetime.datetime(2018, 1, 1),
         }
-        with self.assertRaises(UnprocessableEntity):
+        with self.assertRaises(UnprocessableEntityError):
             AccessCodeSchema.validate_date(schema, data, original_data)
 
     def test_date_pass(self):

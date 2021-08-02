@@ -1,16 +1,15 @@
 import factory
 
-import tests.factories.common as common
 from app.models.ticket import Ticket
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 
 
-class TicketFactory(BaseFactory):
+class TicketFactoryBase(BaseFactory):
     class Meta:
         model = Ticket
 
-    event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_
     description = common.string_
     type = common.string_
@@ -24,4 +23,12 @@ class TicketFactory(BaseFactory):
     is_hidden = True
     min_order = 0
     max_order = 10
+
+
+class TicketFactory(TicketFactoryBase):
+    event = factory.RelatedFactory(EventFactoryBasic)
     event_id = 1
+
+
+class TicketSubFactory(TicketFactoryBase):
+    event = factory.SubFactory(EventFactoryBasic)

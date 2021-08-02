@@ -1,5 +1,4 @@
 import json
-
 from typing import Union
 
 from flask import make_response
@@ -78,3 +77,21 @@ class BadRequestError(ErrorResponse):
 
     status = 400
     title = 'Bad Request'
+
+
+class ConflictError(ErrorResponse):
+    """
+    Default class for 409 Error
+    """
+
+    title = "Conflict"
+    status = 409
+
+
+class MethodNotAllowed(ErrorResponse):
+    """
+    Default Class to throw HTTP 405 Exception
+    """
+
+    title = "Method Not Allowed"
+    status = 405

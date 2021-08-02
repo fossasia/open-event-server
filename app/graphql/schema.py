@@ -1,6 +1,7 @@
 import graphene
 
 from app.models.setting import Setting
+
 from .types.settings.schema import Settings
 
 

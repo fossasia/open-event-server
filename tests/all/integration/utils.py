@@ -14,7 +14,7 @@ def get_or_create_super_admin():
 
 class OpenEventLegacyTestCase(unittest.TestCase):
     """Sets up and tears down database on each run of tests
-       Only use for those tests where OpenEventTestCase does not work"""
+    Only use for those tests where OpenEventTestCase does not work"""
 
     def setUp(self) -> None:
         self.app = Setup.create_app()
@@ -25,7 +25,7 @@ class OpenEventLegacyTestCase(unittest.TestCase):
 
 class OpenEventTestCase(unittest.TestCase):
     """Sets up and tears down database once per class and
-       uses nested transaction rollback for each test"""
+    uses nested transaction rollback for each test"""
 
     @classmethod
     def setUpClass(cls) -> None:

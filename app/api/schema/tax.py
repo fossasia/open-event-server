@@ -19,7 +19,6 @@ class TaxSchemaPublic(SoftDeletionSchema):
     rate = fields.Float(validate=lambda n: 0 <= n <= 100, required=True)
     is_tax_included_in_price = fields.Boolean(default=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.tax_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

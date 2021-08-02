@@ -1,12 +1,14 @@
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
-class Role(SoftDeletionModel):
-    """Event Role
-    """
+class Role(db.Model):
+    """Event Role"""
 
     __tablename__ = 'roles'
+
+    OWNER = 'owner'
+    ORGANIZER = 'organizer'
+    COORGANIZER = 'coorganizer'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)

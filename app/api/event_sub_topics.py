@@ -2,8 +2,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.custom_placeholders import CustomPlaceholder
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.event_sub_topics import EventSubTopicSchema
@@ -28,7 +28,7 @@ class EventSubTopicListPost(ResourceList):
         """
         require_relationship(['event_topic'], data)
         if not has_access('is_admin'):
-            raise ForbiddenException({'source': ''}, 'Admin access is required.')
+            raise ForbiddenError({'source': ''}, 'Admin access is required.')
 
     view_kwargs = True
     methods = [
@@ -52,9 +52,7 @@ class EventSubTopicList(ResourceList):
 
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            event_topic = safe_query(
-                self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id'
-            )
+            event_topic = safe_query_kwargs(EventTopic, view_kwargs, 'event_topic_id')
             query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
@@ -82,28 +80,22 @@ class EventSubTopicDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('event_identifier'):
-            event = safe_query(
-                self,
-                Event,
-                'identifier',
-                view_kwargs['event_identifier'],
-                'event_identifier',
+            event = safe_query_kwargs(
+                Event, view_kwargs, 'event_identifier', 'identifier'
             )
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             if event.event_sub_topic_id:
                 view_kwargs['id'] = event.event_sub_topic_id
             else:
                 view_kwargs['id'] = None
 
         if view_kwargs.get('custom_placeholder_id'):
-            custom_placeholder = safe_query(
-                self,
+            custom_placeholder = safe_query_kwargs(
                 CustomPlaceholder,
-                'id',
-                view_kwargs['custom_placeholder_id'],
+                view_kwargs,
                 'custom_placeholder_id',
             )
             if custom_placeholder.event_sub_topic_id:

@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import TrimmedEmail
 
 
 class MailSchema(Schema):
@@ -21,7 +22,7 @@ class MailSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    recipient = fields.Email(dump_only=True)
+    recipient = TrimmedEmail(dump_only=True)
     time = fields.DateTime(dump_only=True)
     action = fields.Str(dump_only=True)
     subject = fields.Str(dump_only=True)

@@ -1,9 +1,9 @@
 import factory
 
+from app.models.email_notification import EmailNotification
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
-from app.models.email_notification import EmailNotification
 
 
 class EmailNotificationFactory(BaseFactory):

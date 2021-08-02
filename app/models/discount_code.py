@@ -1,17 +1,24 @@
+from citext import CIText
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
+from app.api.helpers.ticketing import is_discount_available, validate_discount_code
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order
+from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 
 
 class DiscountCode(SoftDeletionModel):
     __tablename__ = "discount_codes"
+    __table_args__ = (
+        UniqueConstraint('event_id', 'code', 'deleted_at', name='uq_event_discount_code'),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String, nullable=False)
+    code = db.Column(CIText, nullable=False)
     discount_url = db.Column(db.String)
     value = db.Column(db.Float, nullable=False)
     type = db.Column(db.String, nullable=False)
@@ -40,7 +47,7 @@ class DiscountCode(SoftDeletionModel):
         return (
             TicketHolder.query.filter_by(deleted_at=None)
             .join(Order)
-            .filter_by(discount_code_id=self.id, deleted_at=None)
+            .filter_by(discount_code_id=self.id)
             .filter(Order.status.in_(['completed', 'placed']))
         )
 
@@ -51,3 +58,21 @@ class DiscountCode(SoftDeletionModel):
     @property
     def confirmed_attendees_count(self) -> int:
         return get_count(self.get_confirmed_attendees_query())
+
+    @property
+    def valid_expire_time(self):
+        return self.valid_till or self.event.ends_at
+
+    def get_supported_tickets(self, ticket_ids=None):
+        query = Ticket.query.with_parent(self).filter_by(deleted_at=None)
+        if ticket_ids:
+            query = query.filter(Ticket.id.in_(ticket_ids))
+        return query
+
+    def is_available(self, tickets=None, ticket_holders=None):
+        return is_discount_available(self, tickets=tickets, ticket_holders=ticket_holders)
+
+    def validate(self, tickets=None, ticket_holders=None, event_id=None):
+        return validate_discount_code(
+            self, tickets=tickets, ticket_holders=ticket_holders, event_id=event_id
+        )

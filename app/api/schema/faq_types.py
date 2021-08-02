@@ -22,7 +22,6 @@ class FaqTypeSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.faq_type_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -31,7 +30,6 @@ class FaqTypeSchema(Schema):
         type_='event',
     )
     faqs = Relationship(
-        attribute='faqs',
         self_view='v1.faq_type_faqs',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.faq_list',

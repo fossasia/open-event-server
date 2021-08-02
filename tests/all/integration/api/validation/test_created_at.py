@@ -13,12 +13,12 @@ from tests.factories.role_invite import RoleInviteFactory
 from tests.factories.session import SessionFactory
 from tests.factories.user import UserFactory
 from tests.factories.user_token_blacklist import UserTokenBlacklistFactory
+from tests.factories.video_channel import VideoChannelFactory
 
 
 class TestCreatedAtValidation(OpenEventLegacyTestCase):
     def test_created_at(self):
-        """ Validate time : Tests if created_at is set to current time in all models
-        """
+        """Validate time : Tests if created_at is set to current time in all models"""
         with self.app.test_request_context():
             model_factories = [
                 UserFactory,
@@ -36,6 +36,7 @@ class TestCreatedAtValidation(OpenEventLegacyTestCase):
                 AttendeeFactory,
                 DiscountCodeFactory,
                 EventInvoiceFactory,
+                VideoChannelFactory,
             ]
             for model_factory in model_factories:
                 with self.subTest(model_factory=model_factory):
@@ -46,15 +47,13 @@ class TestCreatedAtValidation(OpenEventLegacyTestCase):
                     else:
                         current_time = datetime.now(timezone.utc).astimezone()
                     created_at_db = test_model.created_at
-                    self.assertIsNotNone(
-                        created_at_db, 'created_at None for ' + str(model_factory)
-                    )
+                    assert created_at_db is not None, 'created_at None for ' + str(model_factory)
                     time_diff = current_time - created_at_db
-                    allowed_time_lag = timedelta(milliseconds=250)
+                    allowed_time_lag = timedelta(milliseconds=300)
                     message = "created_at not set" " to current time in {} \n".format(
                         model_factory
                     )
-                    self.assertLessEqual(time_diff, allowed_time_lag, message)
+                    assert time_diff <= allowed_time_lag, message
 
 
 if __name__ == "__main__":

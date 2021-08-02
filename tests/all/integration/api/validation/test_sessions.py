@@ -1,8 +1,8 @@
 import unittest
 
 from app.api.schema.sessions import SessionSchema
-from tests.factories.session import SessionFactory
 from tests.all.integration.utils import OpenEventTestCase
+from tests.factories.session import SessionFactory
 
 
 class TestSessionValidation(OpenEventTestCase):

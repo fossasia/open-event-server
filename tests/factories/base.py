@@ -1,7 +1,7 @@
 import factory
+from objproxies import CallbackProxy
 
 from app.models import db
-from objproxies import CallbackProxy
 
 
 class BaseFactory(factory.alchemy.SQLAlchemyModelFactory):

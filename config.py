@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 import os
+import sys
 
 from envparse import env
 
@@ -7,7 +7,7 @@ env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.14.0'
+VERSION_NAME = '1.19.1'
 
 LANGUAGES = {
     'en': 'English',
@@ -49,6 +49,23 @@ class Config:
     FLASK_ADMIN_SWATCH = 'lumen'
 
     VERSION = VERSION_NAME
+    ACCEPTED_LANGUAGES = [
+        'en',
+        'bn',
+        'de',
+        'es',
+        'fr',
+        'hi',
+        'id',
+        'ja',
+        'ko',
+        'pl',
+        'ru',
+        'th',
+        'vi',
+        'zh_Hans',
+        'zh_Hant',
+    ]
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
@@ -59,6 +76,10 @@ class Config:
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SENTRY_DSN = env('SENTRY_DSN', default=None)
+    SENTRY_RELEASE_NAME = (
+        env('SENTRY_PROJECT_NAME', default='eventyay-server') + '@' + VERSION_NAME
+    )
+    SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.1)
     ENABLE_ELASTICSEARCH = env.bool('ENABLE_ELASTICSEARCH', default=False)
     ELASTICSEARCH_HOST = env('ELASTICSEARCH_HOST', default='localhost:9200')
     REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
@@ -72,11 +93,13 @@ class Config:
         'API_PROPOGATE_UNCAUGHT_EXCEPTIONS', default=True
     )
     ETAG = True
-    SENTRY_TRACES_SAMPLE_RATE = env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.01)
+    ATTACH_ORDER_PDF = env.bool('ATTACH_ORDER_PDF', default=True)
+    # Allow unverified users to buy free tickets. Default: False
+    ALLOW_UNVERIFIED_FREE_ORDERS = env.bool('ALLOW_UNVERIFIED_FREE_ORDERS', default=False)
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
-        exit()
+        sys.exit()
 
     BASE_DIR = basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'

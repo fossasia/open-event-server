@@ -40,7 +40,7 @@ def create_event_copy(identifier):
     if identifier.isdigit():
         id = 'id'
 
-    event = safe_query(db, Event, id, identifier, 'event_' + id)
+    event = safe_query(Event, id, identifier, 'event_' + id)
 
     if not has_access('is_coorganizer', event_id=event.id):
         return abort(make_response(jsonify(error="Access Forbidden"), 403))
@@ -51,14 +51,12 @@ def create_event_copy(identifier):
         event_id=event.id, deleted_at=None
     ).all()
     tracks = Track.query.filter_by(event_id=event.id, deleted_at=None).all()
-    custom_forms = CustomForms.query.filter_by(event_id=event.id, deleted_at=None).all()
+    custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
     discount_codes = DiscountCode.query.filter_by(
         event_id=event.id, deleted_at=None
     ).all()
     speaker_calls = SpeakersCall.query.filter_by(event_id=event.id, deleted_at=None).all()
-    user_event_roles = UsersEventsRoles.query.filter_by(
-        event_id=event.id, deleted_at=None
-    ).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id).all()
     taxes = Tax.query.filter_by(event_id=event.id, deleted_at=None).all()
 
     db.session.expunge(event)  # expunge the object from session

@@ -8,11 +8,11 @@ class TestFields(TestCase):
     def test_extracts_fields(self):
         self.assertTrue(
             set(extract_from_marshmallow(SettingSchemaPublic)).issuperset(
-                set(['id', 'app_name', 'is_paytm_activated'])
+                {'id', 'app_name', 'is_paytm_activated'}
             )
         )
         self.assertFalse(
             set(extract_from_marshmallow(SettingSchemaPublic)).issuperset(
-                set(['paypal_secret'])
+                {'paypal_secret'}
             )
         )

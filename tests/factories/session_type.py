@@ -1,7 +1,7 @@
 import factory
 
-import tests.factories.common as common
 from app.models.session_type import SessionType
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 

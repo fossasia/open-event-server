@@ -1,21 +1,31 @@
 import factory
 
-import tests.factories.common as common
 from app.models.role_invite import RoleInvite
+from tests.factories import common
 from tests.factories.base import BaseFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.role import RoleFactory
 
 
-class RoleInviteFactory(BaseFactory):
+class RoleInviteFactoryBase(BaseFactory):
     class Meta:
         model = RoleInvite
 
-    event = factory.RelatedFactory(EventFactoryBasic)
-    role = factory.RelatedFactory(RoleFactory)
     email = common.email_
     hash = common.string_
     status = common.string_
     role_name = common.string_
+
+
+class RoleInviteFactory(RoleInviteFactoryBase):
+
+    event = factory.RelatedFactory(EventFactoryBasic)
+    role = factory.RelatedFactory(RoleFactory)
     event_id = 1
     role_id = 1
+
+
+class RoleInviteSubFactory(RoleInviteFactoryBase):
+
+    event = factory.SubFactory(EventFactoryBasic)
+    role = factory.SubFactory(RoleFactory)

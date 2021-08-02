@@ -1,7 +1,7 @@
 from app.api.helpers.db import get_or_create
 
 # Admin message settings
-from app.api.helpers.system_mails import MAILS
+from app.api.helpers.system_mails import MailType
 from app.instance import current_app
 from app.models import db
 
@@ -23,7 +23,8 @@ from app.models.event_type import EventType
 from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
-from app.models.module import Module
+from app.models.notification import NotificationType
+from app.models.notification_setting import NotificationSettings
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -37,18 +38,11 @@ from app.models.setting import Setting
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.user import (
-    ATTENDEE,
-    COORGANIZER,
-    MODERATOR,
-    ORGANIZER,
-    OWNER,
-    REGISTRAR,
-    TRACK_ORGANIZER,
-)
+from app.models.user import MODERATOR, REGISTRAR, TRACK_ORGANIZER
 
 # User Permissions
 from app.models.user_permission import UserPermission
+from app.models.video_channel import VideoChannel
 
 SALES = 'sales'
 ADMIN = 'admin'
@@ -63,13 +57,14 @@ CONTENT = 'content'
 
 
 def create_roles():
-    get_or_create(Role, name=ORGANIZER, title_name='Organizer')
-    get_or_create(Role, name=COORGANIZER, title_name='Co-organizer')
-    get_or_create(Role, name=TRACK_ORGANIZER, title_name='Track Organizer')
-    get_or_create(Role, name=MODERATOR, title_name='Moderator')
-    get_or_create(Role, name=ATTENDEE, title_name='Attendee')
-    get_or_create(Role, name=REGISTRAR, title_name='Registrar')
-    get_or_create(Role, name=OWNER, title_name='Owner')
+    get_or_create(Role, name=Role.ORGANIZER, defaults=dict(title_name='Organizer'))
+    get_or_create(Role, name=Role.COORGANIZER, defaults=dict(title_name='Co-Organizer'))
+    get_or_create(Role, name=Role.OWNER, defaults=dict(title_name='Owner'))
+
+    # Deprecated
+    get_or_create(Role, name=TRACK_ORGANIZER, defaults=dict(title_name='Track Organizer'))
+    get_or_create(Role, name=MODERATOR, defaults=dict(title_name='Moderator'))
+    get_or_create(Role, name=REGISTRAR, defaults=dict(title_name='Registrar'))
 
 
 def create_services():
@@ -122,10 +117,6 @@ def create_speaker_image_sizes():
         thumbnail_size_width_height=500,
         thumbnail_quality=80,
     )
-
-
-def create_modules():
-    get_or_create(Module, donation_include=False)
 
 
 def create_event_topics():
@@ -243,23 +234,21 @@ def create_event_locations():
 
 
 def create_permissions():
-    orgr = Role.query.get(1)
-    coorgr = Role.query.get(2)
-    track_orgr = Role.query.get(3)
-    mod = Role.query.get(4)
-    attend = Role.query.get(5)
-    regist = Role.query.get(6)
-    ownr = Role.query.get(7)
-    track = Service.query.get(1)
-    session = Service.query.get(2)
-    speaker = Service.query.get(3)
-    sponsor = Service.query.get(4)
-    microlocation = Service.query.get(5)
+    ownr = Role.query.filter_by(name=Role.OWNER).first()
+    orgr = Role.query.filter_by(name=Role.ORGANIZER).first()
+    coorgr = Role.query.filter_by(name=Role.COORGANIZER).first()
+    track_orgr = Role.query.filter_by(name=TRACK_ORGANIZER).first()
+    mod = Role.query.filter_by(name=MODERATOR).first()
+    regist = Role.query.filter_by(name=REGISTRAR).first()
+    track = Service.query.filter_by(name=Track.get_service_name()).first()
+    session = Service.query.filter_by(name=Session.get_service_name()).first()
+    speaker = Service.query.filter_by(name=Speaker.get_service_name()).first()
+    sponsor = Service.query.filter_by(name=Sponsor.get_service_name()).first()
+    microlocation = Service.query.filter_by(name=Microlocation.get_service_name()).first()
 
     # For ORGANIZER and OWNER
     # All four permissions set to True
     services = [track, session, speaker, sponsor, microlocation]
-    roles = [attend, regist]
     for service in services:
         perm, _ = get_or_create(Permission, role=ownr, service=service)
         db.session.add(perm)
@@ -287,14 +276,12 @@ def create_permissions():
         perm.can_create, perm.can_update, perm.can_delete = False, False, False
         db.session.add(perm)
 
-    # For ATTENDEE and REGISTRAR
+    # For REGISTRAR
     services = [track, session, speaker, sponsor, microlocation]
-    roles = [attend, regist]
-    for role in roles:
-        for service in services:
-            perm, _ = get_or_create(Permission, role=role, service=service)
-            perm.can_create, perm.can_update, perm.can_delete = False, False, False
-            db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=regist, service=service)
+        perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
 
 def create_custom_sys_roles():
@@ -349,37 +336,12 @@ def create_user_permissions():
 
 
 def create_admin_message_settings():
-    default_mails = [
-        "Next Event",
-        "Session Schedule Change",
-        "User email",
-        "Invitation For Papers",
-        "After Event",
-        "Ticket(s) Purchased",
-        "Session Accept or Reject",
-        "Event Published",
-        "Event Export Failed",
-        "Event Exported",
-        "Event Role Invitation",
-        "New Session Proposal",
-    ]
-    for mail in MAILS:
-        if mail in default_mails:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=True,
-                notification_status=True,
-                user_control_status=True,
-            )
-        else:
-            get_or_create(
-                MessageSettings,
-                action=mail,
-                mail_status=False,
-                notification_status=False,
-                user_control_status=False,
-            )
+    for mail in MailType.entries():
+        get_or_create(MessageSettings, action=mail, defaults=dict(enabled=True))
+    for notification in NotificationType.entries():
+        get_or_create(
+            NotificationSettings, type=notification, defaults=dict(enabled=True)
+        )
 
 
 def create_custom_placeholders():
@@ -412,8 +374,6 @@ def populate():
     create_user_permissions()
     print('Creating settings...')
     create_settings()
-    print('Creating modules...')
-    create_modules()
     print('Creating event image size...')
     create_event_image_sizes()
     print('Creating speaker image size...')
@@ -430,31 +390,33 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
-
-    db.session.commit()
-
-
-def populate_without_print():
-    """
-    Create defined Roles, Services and Permissions.
-    """
-    create_roles()
-    create_services()
-    create_permissions()
-    create_custom_sys_roles()
-    create_panels()
-    create_panel_permissions()
-    create_user_permissions()
-    create_settings()
-    create_modules()
-    create_event_image_sizes()
-    create_speaker_image_sizes()
-    create_event_topics()
-    create_event_sub_topics()
-    create_event_types()
-    create_event_locations()
-    create_admin_message_settings()
-    create_custom_placeholders()
+    get_or_create(
+        VideoChannel,
+        provider='jitsi',
+        name='Jitsi Meet',
+        defaults={'url': 'https://meet.jit.si', 'api_url': 'https://api.jitsi.net'},
+    )
+    get_or_create(
+        VideoChannel,
+        provider='youtube',
+        name='YouTube',
+        defaults={
+            'url': 'https://youtube.com',
+            'api_url': 'https://www.googleapis.com/youtube/v3',
+        },
+    )
+    get_or_create(
+        VideoChannel,
+        provider='vimeo',
+        name='Vimeo',
+        defaults={'url': 'https://vimeo.com', 'api_url': 'https://api.vimeo.com'},
+    )
+    get_or_create(
+        VideoChannel,
+        provider='3cx',
+        name='3CX',
+        defaults={'url': 'https://www.3cx.com/'},
+    )
 
     db.session.commit()
 

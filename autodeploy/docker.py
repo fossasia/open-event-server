@@ -1,6 +1,6 @@
 import logging
 
-from command import execute
+from .command import execute
 
 logger = logging.getLogger(__name__)
 

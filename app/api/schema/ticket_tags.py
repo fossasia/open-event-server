@@ -23,7 +23,6 @@ class TicketTagSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     name = fields.Str(allow_none=True)
     tickets = Relationship(
-        attribute='tickets',
         self_view='v1.ticket_tag_ticket',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.ticket_list',
@@ -33,7 +32,6 @@ class TicketTagSchema(SoftDeletionSchema):
         type_='ticket',
     )
     event = Relationship(
-        attribute='event',
         self_view='v1.ticket_tag_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

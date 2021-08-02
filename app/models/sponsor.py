@@ -26,6 +26,6 @@ class Sponsor(SoftDeletionModel):
 
     def __setattr__(self, name, value):
         if name == 'description':
-            super(Sponsor, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super().__setattr__(name, clean_html(clean_up_string(value)))
         else:
-            super(Sponsor, self).__setattr__(name, value)
+            super().__setattr__(name, value)

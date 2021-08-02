@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -50,11 +50,9 @@ class FaqList(ResourceList):
         :return:
         """
         query_ = self.session.query(Faq)
-        query_ = event_query(self, query_, view_kwargs)
+        query_ = event_query(query_, view_kwargs)
         if view_kwargs.get('faq_type_id') is not None:
-            faq_type = safe_query(
-                self, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id'
-            )
+            faq_type = safe_query_kwargs(FaqType, view_kwargs, 'faq_type_id')
             query_ = query_.join(FaqType).filter(FaqType.id == faq_type.id)
         return query_
 
@@ -75,7 +73,6 @@ class FaqDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH,DELETE",
         ),
@@ -93,7 +90,6 @@ class FaqRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH",
         ),
@@ -112,7 +108,6 @@ class FaqRelationshipOptional(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Faq,
             methods="PATCH",
         ),

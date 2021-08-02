@@ -1,6 +1,5 @@
 from errno import errorcode
 
-from flask import current_app
 from redis.exceptions import ConnectionError
 from sentry_sdk import capture_exception, capture_message
 
@@ -22,7 +21,7 @@ def health_check_celery():
     except ConnectionError as e:
         capture_exception(e)
         return False, 'cannot connect to redis server'
-    except IOError as e:
+    except OSError as e:
         msg = "Error connecting to the backend: " + str(e)
         if len(e.args) > 0 and errorcode.get(e.args[0]) == 'ECONNREFUSED':
             msg += ' Check that the Redis server is running.'
@@ -73,21 +72,13 @@ def check_migrations():
             db.session.query(model).first()
         except:
             capture_exception()
-            return 'failure,{} model out of date with migrations'.format(model)
+            return f'failure,{model} model out of date with migrations'
     return 'success,database up to date with migrations'
 
 
 def health_check_migrations():
-    """
-    Parses config var 'MIGRATION_STATUS' obtained from check_migrations function
-    :return:
-    """
-    if 'MIGRATION_STATUS' in current_app.config:
-        result = current_app.config['MIGRATION_STATUS'].split(',')
-        if result[0] == 'success':
-            return True, result[1]
-        else:
-            # the exception will be caught in check_migrations function, so no need for sentry catching exception here
-            return False, result[1]
-    else:
-        return False, 'The health_check_migration test is still running'
+    result = check_migrations().split(',')
+    if result[0] == 'success':
+        return True, result[1]
+    # the exception will be caught in check_migrations function, so no need for sentry catching exception here
+    return False, result[1]

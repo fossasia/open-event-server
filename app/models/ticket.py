@@ -1,6 +1,10 @@
+from sqlalchemy import or_
+
+from app.api.helpers.errors import ConflictError
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.order import Order, OrderTicket
+from app.models.ticket_holder import TicketHolder
 
 access_codes_tickets = db.Table(
     'access_codes_tickets',
@@ -103,10 +107,39 @@ class Ticket(SoftDeletionModel):
         return bool(count > 0)
 
     def tags_csv(self):
-        """Return list of Tags in CSV.
-        """
+        """Return list of Tags in CSV."""
         tag_names = [tag.name for tag in self.tags]
         return ','.join(tag_names)
+
+    @property
+    def has_current_orders(self):
+        return db.session.query(
+            Order.query.join(TicketHolder)
+            .filter(
+                TicketHolder.ticket_id == self.id,
+                or_(
+                    Order.status == 'completed',
+                    Order.status == 'placed',
+                    Order.status == 'pending',
+                    Order.status == 'initializing',
+                ),
+            )
+            .exists()
+        ).scalar()
+
+    @property
+    def reserved_count(self):
+        from app.api.attendees import get_sold_and_reserved_tickets_count
+
+        return get_sold_and_reserved_tickets_count(self.id)
+
+    @property
+    def is_available(self):
+        return self.reserved_count < self.quantity
+
+    def raise_if_unavailable(self):
+        if not self.is_available:
+            raise ConflictError({'id': self.id}, f'Ticket "{self.name}" already sold out')
 
     def __repr__(self):
         return '<Ticket %r>' % self.name
