@@ -1,13 +1,14 @@
-from flask import request
+from flask import Blueprint, jsonify
 from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.attendees import get_sold_and_reserved_tickets_count
 from app.api.bootstrap import api
 from app.api.helpers.db import get_count, safe_query_kwargs
-from app.api.helpers.errors import ConflictError, UnprocessableEntityError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
@@ -18,6 +19,31 @@ from app.models.event import Event
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.ticket_holder import TicketHolder
+
+tickets_routes = Blueprint('tickets_routes', __name__, url_prefix='/v1/events')
+
+
+@tickets_routes.route('/<id>/tickets/availability')
+def get_stock(id):
+    event_id = id
+
+    if not id.isnumeric():
+        event_id = Event.query.filter_by(identifier=id).first_or_404().id
+
+    tickets = Ticket.query.filter_by(
+        event_id=event_id, deleted_at=None, is_hidden=False
+    ).all()
+    stock = []
+    for ticket in tickets:
+        availability = {}
+        total_count = ticket.quantity - get_sold_and_reserved_tickets_count(ticket.id)
+        availability["id"] = ticket.id
+        availability["name"] = ticket.name
+        availability["quantity"] = ticket.quantity
+        availability["available"] = max(0, total_count)
+        stock.append(availability)
+
+    return jsonify(stock)
 
 
 class TicketListPost(ResourceList):
@@ -80,7 +106,7 @@ class TicketListPost(ResourceList):
             if data.get('sales_ends_at') > event.ends_at:
                 raise UnprocessableEntityError(
                     {'sales_ends_at': '/data/attributes/sales-ends-at'},
-                    "Ticket end date cannot be greater than event end date",
+                    f"End of ticket sales date of '{data.get('name')}' cannot be after end of event date",
                 )
 
     schema = TicketSchema
@@ -123,7 +149,7 @@ class TicketList(ResourceList):
         :return:
         """
 
-        if 'Authorization' in request.headers:
+        if is_logged_in():
             verify_jwt_in_request()
             if current_user.is_super_admin or current_user.is_admin:
                 query_ = self.session.query(Ticket)
@@ -147,7 +173,9 @@ class TicketList(ResourceList):
 
         if view_kwargs.get('discount_code_id'):
             discount_code = safe_query_kwargs(
-                DiscountCode, view_kwargs, 'discount_code_id',
+                DiscountCode,
+                view_kwargs,
+                'discount_code_id',
             )
             # discount_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
@@ -171,14 +199,19 @@ class TicketList(ResourceList):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="POST",
             check=lambda a: a.get('event_id') or a.get('event_identifier'),
         ),
     )
     schema = TicketSchema
-    data_layer = {'session': db.session, 'model': Ticket, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': Ticket,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class TicketDetail(ResourceDetail):
@@ -234,11 +267,22 @@ class TicketDetail(ResourceDetail):
                     "Event having paid ticket must have a payment method",
                 )
 
+        if data.get('deleted_at') and ticket.has_current_orders:
+            raise ForbiddenError(
+                {'param': 'ticket_id'},
+                "Can't delete a ticket that has sales",
+            )
+
+        if data.get('sales_ends_at') and data['sales_ends_at'] > ticket.event.ends_at:
+            raise UnprocessableEntityError(
+                {'sales_ends_at': '/data/attributes/sales-ends-at'},
+                f"End of ticket sales date of '{ticket.name}' cannot be after end of event date",
+            )
+
     decorators = (
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH,DELETE",
         ),
@@ -263,7 +307,6 @@ class TicketRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH",
         ),
@@ -282,7 +325,6 @@ class TicketRelationshipOptional(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=Ticket,
             methods="PATCH,DELETE",
         ),

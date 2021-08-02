@@ -2,6 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
+<<<<<<< HEAD
 * Python 3.7
 * Postgres
 * OpenSSL
@@ -15,6 +16,15 @@ brew install postgresql
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib libssl-dev
+=======
+* Python 3.8
+* PostgreSQL
+* Redis
+
+
+```sh
+xargs -a deb-packages.txt sudo apt install
+>>>>>>> development
 ```
 
 ## Steps
@@ -63,10 +73,24 @@ Open a terminal and enter the following commands to setup a virtual environment
 . venv/bin/activate
 ```
 
+<<<<<<< HEAD
 Now to install the dependencies using pip, type
+=======
+* **Step 1** - Install Poetry and Python 3 requirements.
+
+This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
+>>>>>>> development
 
 ```sh
-pip3 install -r requirements.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
 ```
 
 # System Wide Installation
@@ -136,9 +160,9 @@ python3 manage.py db stamp head
 **Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
+<<<<<<< HEAD
 # Install and run redis
 # For Ubuntu, Debian and alike
 sudo apt-get install redis-server
@@ -148,11 +172,13 @@ sudo dnf install redis
 brew install redis
 brew services start redis
 
+=======
+>>>>>>> development
 # run worker
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-celery worker -A app.instance.celery &
+celery -A app.instance.celery worker -B -l INFO -c 2 &
 unset INTEGRATE_SOCKETIO
 
 # run app

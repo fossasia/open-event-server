@@ -72,7 +72,7 @@ class SpeakersCallList(ResourceList):
 
 class SpeakersCallDetail(ResourceDetail):
     """
-     speakers call detail by id
+    speakers call detail by id
     """
 
     def before_patch(self, args, kwargs, data):
@@ -139,7 +139,6 @@ class SpeakersCallDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=SpeakersCall,
             methods="PATCH,DELETE",
         ),
@@ -161,7 +160,6 @@ class SpeakersCallRelationship(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch="event_id",
-            fetch_as="event_id",
             model=SpeakersCall,
             methods="PATCH,DELETE",
         ),

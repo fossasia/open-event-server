@@ -48,5 +48,6 @@ class EventFactoryBasic(BaseFactory):
     event_topic_id = None
     event_sub_topic_id = None
     discount_code_id = None
+    group_id = None
     refund_policy = 'All sales are final. No refunds shall be issued in any case.'
     is_stripe_linked = False

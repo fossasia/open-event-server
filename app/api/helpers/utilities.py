@@ -3,6 +3,7 @@
 import random
 import re
 import string
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Dict
 
 import bleach
@@ -50,9 +51,26 @@ def require_relationship(resource_list, data):
     for resource in resource_list:
         if resource not in data:
             raise UnprocessableEntityError(
-                {'pointer': '/data/relationships/{}'.format(resource)},
-                "A valid relationship with {} resource is required".format(resource),
+                {'pointer': f'/data/relationships/{resource}'},
+                f"A valid relationship with {resource} resource is required",
             )
+
+
+def require_exclusive_relationship(resource_list, data, optional=False):
+    """Only one of the passed relationships should be present"""
+    present = False
+    multiple = False
+    for resource in resource_list:
+        if resource in data:
+            if present:
+                multiple = True
+            present = True
+
+    if multiple or not (optional or present):
+        raise UnprocessableEntityError(
+            {'pointer': f'/data/relationships'},
+            f"A valid relationship with either of resources is required: {resource_list}",
+        )
 
 
 def string_empty(value):
@@ -65,7 +83,9 @@ def strip_tags(html):
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
-def get_serializer(secret_key='secret_key'):
+def get_serializer(secret_key=None):
+    if not secret_key:
+        secret_key = current_app.config['SECRET_KEY']
     return Serializer(secret_key)
 
 
@@ -151,6 +171,10 @@ def update_state(task_handle, state, result=None):
         task_handle.update_state(state=state, meta=result)
 
 
+def round_money(money):
+    return Decimal(money).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+
 static_page = 'https://eventyay.com/'
 image_link = 'https://www.gstatic.com/webp/gallery/1.jpg'
 
@@ -161,3 +185,14 @@ TASK_RESULTS = {}
 
 class EmptyObject:
     pass
+
+
+def group_by(items, key):
+    result = {}
+    for item in items:
+        result[item[key]] = result.get(item[key], []) + [item]
+    return result
+
+
+def changed(obj, data: Dict, attr: str) -> bool:
+    return data.get(attr) and (data[attr] != getattr(obj, attr))

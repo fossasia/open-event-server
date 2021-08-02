@@ -1,11 +1,11 @@
-from flask import request
+from flask.globals import g
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
 from app.api.helpers.payment import StripePaymentsManager
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.stripe_authorization import (
@@ -56,11 +56,13 @@ class StripeAuthorizationListPost(ResourceList):
         """
         try:
             self.session.query(StripeAuthorization).filter_by(
-                event_id=data['event'], deleted_at=None
+                event_id=data['event']
             ).one()
         except NoResultFound:
-            credentials = StripePaymentsManager.get_event_organizer_credentials_from_stripe(
-                data['stripe_auth_code']
+            credentials = (
+                StripePaymentsManager.get_event_organizer_credentials_from_stripe(
+                    data['stripe_auth_code']
+                )
             )
             if 'error' in credentials:
                 raise UnprocessableEntityError(
@@ -114,9 +116,7 @@ class StripeAuthorizationDetail(ResourceDetail):
         :return:
         """
         kwargs = get_id(kwargs)
-        if 'Authorization' in request.headers and has_access(
-            'is_coorganizer', event_id=kwargs['id']
-        ):
+        if is_logged_in() and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = StripeAuthorizationSchema
         else:
             self.schema = StripeAuthorizationSchemaPublic
@@ -139,14 +139,19 @@ class StripeAuthorizationDetail(ResourceDetail):
             )
             view_kwargs['id'] = stripe_authorization.id
 
+    def before_delete_object(self, stripe_authorization, view_kwargs):
+        if not stripe_authorization:
+            return
+        g.event = stripe_authorization.event
+
     def after_delete_object(self, stripe_authorization, view_kwargs):
         """Make work after delete object
         :param stripe_authorization: stripe authorization.
         :param dict view_kwargs: kwargs from the resource view
         """
-        event = stripe_authorization.event
-        event.is_stripe_linked = False
-        save_to_db(event)
+        if event := g.get('event'):
+            event.is_stripe_linked = False
+            save_to_db(event)
 
     decorators = (jwt_required,)
     schema = StripeAuthorizationSchema
@@ -156,6 +161,7 @@ class StripeAuthorizationDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'after_delete_object': after_delete_object,
+            'before_delete_object': before_delete_object,
         },
     }
 

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Starts and Stops the Health Check Monitor trigger on healthcheck.io
+# Place in /usr/bin with appropriate execute permissions and use as instructed in crontab
+
+curl -fsS --retry 3 https://hc-ping.com/$1/start;
+set -e
+eval $2;
+curl -fsS --retry 3 https://hc-ping.com/$1;

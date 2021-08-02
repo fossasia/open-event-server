@@ -89,7 +89,10 @@ class CustomFormDetail(ResourceDetail):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
         elif view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
-                Event, view_kwargs, 'event_identifier', 'identifier',
+                Event,
+                view_kwargs,
+                'event_identifier',
+                'identifier',
             )
 
         if event:
@@ -100,7 +103,6 @@ class CustomFormDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=CustomForms,
             methods="PATCH,DELETE",
         ),
@@ -122,7 +124,6 @@ class CustomFormRelationshipRequired(ResourceRelationship):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=CustomForms,
             methods="PATCH",
         ),

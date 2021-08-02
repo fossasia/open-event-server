@@ -31,3 +31,24 @@ def delete_previous_uer(uer):
     except Exception:
         logger.exception('UER or Role Invite delete exception!')
         db.session.rollback()
+
+
+def delete_pending_owner(event_id):
+    """
+    delete previous pending owner invites before adding a new one
+    :param uer: User Event Role to be deleted.
+    :return:
+    """
+    role_invites = db.session.query(RoleInvite).filter_by(
+        event_id=event_id,
+        role_name='owner',
+        status='pending',
+    )
+    if role_invites:
+        for rinvite in role_invites:
+            db.session.delete(rinvite)
+    try:
+        db.session.commit()
+    except Exception:
+        logger.exception('UER or Role Invite delete exception!')
+        db.session.rollback()

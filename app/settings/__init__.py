@@ -3,7 +3,6 @@ from flask import current_app
 from sqlalchemy import desc
 
 from app.models.setting import Environment, Setting
-from app.models.ticket_fee import TicketFees
 
 
 def get_settings(from_db=False):

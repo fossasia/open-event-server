@@ -22,10 +22,8 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             pentabarf_export = PentabarfExporter()
             pentabarf_string = pentabarf_export.export(test_event.id)
             pentabarf_original = fromstring(pentabarf_string)
-            self.assertEqual(pentabarf_original.find('conference/title').text, "example")
-            self.assertEqual(
-                pentabarf_original.find('conference/start').text, "2099-12-13"
-            )
+            assert pentabarf_original.find('conference/title').text == "example"
+            assert pentabarf_original.find('conference/start').text == "2099-12-13"
 
     def test_export_with_none_ends(self):
         """Test to check event with session with none ends in pentabarfxml format"""
@@ -35,9 +33,7 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             pentabarf_export = PentabarfExporter()
             pentabarf_string = pentabarf_export.export(session.event.id)
             pentabarf_original = fromstring(pentabarf_string)
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/duration').text, None
-            )
+            assert pentabarf_original.find('day/room/event/duration').text == None
 
     def test_export_with_none_starts(self):
         """Test to check event with session with none starts in pentabarfxml format"""
@@ -47,7 +43,7 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             pentabarf_export = PentabarfExporter()
             pentabarf_string = pentabarf_export.export(session.event.id)
             pentabarf_original = fromstring(pentabarf_string)
-            self.assertEqual(pentabarf_original.find('day/room/event'), None)
+            assert pentabarf_original.find('day/room/event') == None
 
     def test_export_with_multiple_sessions(self):
         """Test to check event with sessions in pentabarfxml format"""
@@ -101,64 +97,32 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             pentabarf_string = pentabarf_export.export(keynote.event.id)
             pentabarf_original = fromstring(pentabarf_string)
 
-            self.assertEqual(
-                pentabarf_original.find('conference/title').text, "Awesome Conference"
-            )
-            self.assertEqual(
-                pentabarf_original.find('conference/start').text, '2019-10-15'
-            )
-            self.assertEqual(pentabarf_original.find('conference/end').text, '2019-10-16')
-            self.assertEqual(pentabarf_original.find('conference/days').text, '1')
+            assert pentabarf_original.find('conference/title').text == "Awesome Conference"
+            assert pentabarf_original.find('conference/start').text == '2019-10-15'
+            assert pentabarf_original.find('conference/end').text == '2019-10-16'
+            assert pentabarf_original.find('conference/days').text == '1'
 
-            self.assertEqual(
-                pentabarf_original.find('day/room').attrib['name'], 'Great Hall'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/title').text, 'Keynote'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/track').text, 'Amazing Track'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/start').text, '10:25'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/duration').text, '00:45'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day/room/event/persons/person[@id="2"]').text,
-                'Hong Phuc Dang',
-            )
-            self.assertEqual(
-                len(pentabarf_original.find('day/room/event/persons').getchildren()), 2
-            )
+            assert pentabarf_original.find('day/room').attrib['name'] == 'Great Hall'
+            assert pentabarf_original.find('day/room/event/title').text == 'Keynote'
+            assert pentabarf_original.find('day/room/event/track').text == 'Amazing Track'
+            assert pentabarf_original.find('day/room/event/start').text == '10:25'
+            assert pentabarf_original.find('day/room/event/duration').text == '00:45'
+            assert pentabarf_original.find('day/room/event/persons/person[@id="2"]').text == \
+                'Hong Phuc Dang'
+            assert len(pentabarf_original.find('day/room/event/persons').getchildren()) == 2
 
-            self.assertEqual(
-                pentabarf_original.find('day/room/event[2]/title').text, 'Hot Session'
-            )
+            assert pentabarf_original.find('day/room/event[2]/title').text == 'Hot Session'
 
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room/event/title').text, 'Future Session'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room/event/persons/person').text,
-                'Pranav Mistry',
-            )
+            assert pentabarf_original.find('day[2]/room/event/title').text == 'Future Session'
+            assert pentabarf_original.find('day[2]/room/event/persons/person').text == \
+                'Pranav Mistry'
 
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room[2]').attrib['name'], 'Assembly Hall'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room[2]/event/title').text,
-                'Bye Bye Session',
-            )
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room[2]/event/duration').text, '01:30'
-            )
-            self.assertEqual(
-                pentabarf_original.find('day[2]/room[2]/event/persons/person').text,
-                'Mario Behling',
-            )
+            assert pentabarf_original.find('day[2]/room[2]').attrib['name'] == 'Assembly Hall'
+            assert pentabarf_original.find('day[2]/room[2]/event/title').text == \
+                'Bye Bye Session'
+            assert pentabarf_original.find('day[2]/room[2]/event/duration').text == '01:30'
+            assert pentabarf_original.find('day[2]/room[2]/event/persons/person').text == \
+                'Mario Behling'
 
 
 if __name__ == '__main__':

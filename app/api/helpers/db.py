@@ -1,9 +1,12 @@
+import binascii
 import logging
+import os
 import uuid
 
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.models import db
@@ -47,7 +50,12 @@ def safe_query_kwargs(model, kwargs, parameter_name, column_name='id'):
     :param column_name: Name of column default is 'id'.
     :return:
     """
-    return safe_query(model, column_name, kwargs[parameter_name], parameter_name,)
+    return safe_query(
+        model,
+        column_name,
+        kwargs[parameter_name],
+        parameter_name,
+    )
 
 
 def safe_query_without_soft_deleted_entries(
@@ -69,8 +77,8 @@ def safe_query_without_soft_deleted_entries(
         record = record.one()
     except NoResultFound:
         raise ObjectNotFound(
-            {'parameter': '{}'.format(parameter_name)},
-            "{}: {} not found".format(model.__name__, value),
+            {'parameter': f'{parameter_name}'},
+            f"{model.__name__}: {value} not found",
         )
     else:
         return record
@@ -95,22 +103,28 @@ def safe_query(model, column_name, value, parameter_name):
     )
 
 
-def get_or_create(model, **kwargs):
+def get_or_create(model, defaults=None, **kwargs):
     """
     This function queries a record in the model, if not found it will create one.
     :param model: db Model to be queried
     :param **kwargs: Arguments to the filter_by method of sqlalchemy.orm.query.Query.filter_by to be filtered by
     """
-    was_created = False
-    instance = db.session.query(model).filter_by(**kwargs).first()
+    fetch = lambda: db.session.query(model).filter_by(**kwargs).first()
+    instance = fetch()
     if instance:
-        return instance, was_created
-    else:
-        instance = model(**kwargs)
+        return instance, False
+    kwargs.update(defaults or {})
+    instance = model(**kwargs)
+    try:
         db.session.add(instance)
         db.session.commit()
-        was_created = True
-        return instance, was_created
+        return instance, True
+    except IntegrityError:
+        db.session.rollback()
+        instance = fetch()
+        if not instance:
+            raise
+        return instance, False
 
 
 def get_count(query):
@@ -140,14 +154,17 @@ def get_new_slug(model, name):
     count = get_count(model.query.filter_by(slug=slug))
     if count == 0:
         return slug
+    return f'{slug}-{uuid.uuid4().hex}'
+
+
+def get_new_identifier(model=None, length=None):
+    if not length:
+        identifier = str(uuid.uuid4())
     else:
-        return '{}-{}'.format(slug, uuid.uuid4().hex)
-
-
-def get_new_identifier(model):
-    identifier = str(uuid.uuid4())
-    count = get_count(model.query.filter_by(identifier=identifier))
-    if count == 0:
+        identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
+    count = (
+        0 if model is None else get_count(model.query.filter_by(identifier=identifier))
+    )
+    if not identifier.isdigit() and count == 0:
         return identifier
-    else:
-        return get_new_identifier(model)
+    return get_new_identifier(model)

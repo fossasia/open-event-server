@@ -91,7 +91,7 @@ class UserEmailListPost(ResourceList):
 
 class UserEmailDetail(ResourceDetail):
     """
-   User Email detail by id
+    User Email detail by id
     """
 
     schema = UserEmailSchema
@@ -99,7 +99,6 @@ class UserEmailDetail(ResourceDetail):
         api.has_permission(
             'is_user_itself',
             fetch='user_id',
-            fetch_as="user_id",
             model=UserEmail,
             methods="PATCH,DELETE",
         ),

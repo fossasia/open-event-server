@@ -24,7 +24,6 @@ class FaqSchema(SoftDeletionSchema):
     question = fields.Str(required=True)
     answer = fields.Str(required=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.faq_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -33,7 +32,6 @@ class FaqSchema(SoftDeletionSchema):
         type_='event',
     )
     faq_type = Relationship(
-        attribute='faq_type',
         self_view='v1.faq_faq_type',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.faq_type_detail',

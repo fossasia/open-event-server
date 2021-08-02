@@ -6,7 +6,7 @@ from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.static import AGE_GROUP_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
-from app.api.schema.base import SoftDeletionSchema
+from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
 
 
 class AttendeeSchemaPublic(SoftDeletionSchema):
@@ -31,7 +31,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
     lastname = fields.Str(required=True)
-    email = fields.Str(allow_none=True)
+    email = TrimmedEmail(allow_none=True)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
@@ -50,7 +50,12 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
     github = fields.Url(allow_none=True)
+    instagram = fields.Url(allow_none=True)
+    linkedin = fields.Url(allow_none=True)
     gender = fields.Str(allow_none=True)
+    accept_video_recording = fields.Boolean(allow_none=True)
+    accept_share_details = fields.Boolean(allow_none=True)
+    accept_receive_emails = fields.Boolean(allow_none=True)
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
@@ -60,13 +65,12 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     is_checked_in = fields.Boolean()
     device_name_checkin = fields.Str(allow_none=True)
     checkin_times = fields.Str(allow_none=True)
-    checkout_times = fields.Str(allow_none=True, dump_only=True)
+    checkout_times = fields.Str(allow_none=True)
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     event = Relationship(
-        attribute='event',
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -76,13 +80,21 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         dump_only=True,
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.attendee_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
         related_view_kwargs={'attendee_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+        dump_only=True,
+    )
+    ticket = Relationship(
+        self_view='v1.attendee_ticket',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.ticket_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='TicketSchemaPublic',
+        type_='ticket',
         dump_only=True,
     )
 
@@ -102,16 +114,6 @@ class AttendeeSchema(AttendeeSchemaPublic):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    ticket = Relationship(
-        attribute='ticket',
-        self_view='v1.attendee_ticket',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.ticket_detail',
-        related_view_kwargs={'attendee_id': '<id>'},
-        schema='TicketSchemaPublic',
-        type_='ticket',
-        dump_only=True,
-    )
     order = Relationship(
         self_view='v1.attendee_order',
         self_view_kwargs={'id': '<id>'},

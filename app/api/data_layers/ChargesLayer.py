@@ -32,7 +32,7 @@ class ChargesLayer(BaseDataLayer):
                     view_kwargs['order_identifier']
                 ),
             )
-        elif (
+        if (
             order.status == 'cancelled'
             or order.status == 'expired'
             or order.status == 'completed'
@@ -41,7 +41,7 @@ class ChargesLayer(BaseDataLayer):
                 {'parameter': 'id'},
                 "You cannot charge payments on a cancelled, expired or completed order",
             )
-        elif (not order.amount) or order.amount == 0:
+        if (not order.amount) or order.amount == 0:
             raise ConflictError(
                 {'parameter': 'id'}, "You cannot charge payments on a free order"
             )

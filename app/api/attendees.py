@@ -32,7 +32,6 @@ def get_sold_and_reserved_tickets_count(ticket_id):
             TicketHolder.deleted_at.is_(None),
         )
         .filter(
-            Order.deleted_at.is_(None),
             or_(
                 Order.status == 'placed',
                 Order.status == 'completed',
@@ -54,7 +53,7 @@ def get_sold_and_reserved_tickets_count(ticket_id):
 
 class AttendeeListPost(ResourceList):
     """
-       List and create Attendees through direct URL
+    List and create Attendees through direct URL
     """
 
     def before_post(self, args, kwargs, data):
@@ -90,12 +89,12 @@ class AttendeeListPost(ResourceList):
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Attendee needs to be checked in first",
                 )
-            elif 'checkin_times' not in data or data['checkin_times'] is None:
+            if 'checkin_times' not in data or data['checkin_times'] is None:
                 raise UnprocessableEntityError(
                     {'pointer': '/data/attributes/device_name_checkin'},
                     "Check in Times missing",
                 )
-            elif len(data['checkin_times'].split(",")) != len(
+            if len(data['checkin_times'].split(",")) != len(
                 data['device_name_checkin'].split(",")
             ):
                 raise UnprocessableEntityError(
@@ -128,13 +127,25 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query_kwargs(
-                Order, view_kwargs, 'order_identifier', 'identifier',
+                Order,
+                view_kwargs,
+                'order_identifier',
+                'identifier',
             )
-            if not has_access('is_registrar', event_id=order.event_id) and not has_access(
-                'is_user_itself', user_id=order.user_id
+
+            is_coorganizer = has_access(
+                'is_coorganizer',
+                event_id=order.event_id,
+            )
+            if not (
+                is_coorganizer
+                or current_user.id == order.user_id
+                or order.is_attendee(current_user)
             ):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
+            if not is_coorganizer and current_user.id != order.user_id:
+                query_ = query_.filter(TicketHolder.user == current_user)
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query_kwargs(Ticket, view_kwargs, 'ticket_id')
@@ -150,13 +161,14 @@ class AttendeeList(ResourceList):
                 User.id == user.id
             )
 
-        query_ = event_query(query_, view_kwargs, permission='is_registrar')
+        query_ = event_query(query_, view_kwargs, restrict=True)
         return query_
 
     view_kwargs = True
     methods = [
         'GET',
     ]
+    decorators = (jwt_required,)
     schema = AttendeeSchema
     data_layer = {
         'session': db.session,
@@ -213,7 +225,9 @@ class AttendeeDetail(ResourceDetail):
                 'Only admin or that user itself can update attendee info',
             )
 
-        if order.status != 'initializing':
+        if order.status != 'initializing' and (
+            'checkin_times' not in data
+        ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/id'},
                 "Attendee can't be updated because the corresponding order is not in initializing state",
@@ -232,44 +246,33 @@ class AttendeeDetail(ResourceDetail):
                     {'pointer': '/data/attributes/checkin_times'},
                     "Check in time missing while trying to check in attendee",
                 )
-            else:
-                if obj.checkin_times and data[
-                    'checkin_times'
-                ] not in obj.checkin_times.split(","):
-                    data['checkin_times'] = '{},{}'.format(
-                        obj.checkin_times, data['checkin_times']
-                    )
-                elif obj.checkin_times and data[
-                    'checkin_times'
-                ] in obj.checkin_times.split(","):
-                    raise UnprocessableEntityError(
-                        {'pointer': '/data/attributes/checkin_times'},
-                        "Check in time already present",
+            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(
+                ","
+            ):
+                data['checkin_times'] = '{},{}'.format(
+                    obj.checkin_times, data['checkin_times']
+                )
+
+            if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
+                if obj.device_name_checkin is not None:
+                    data['device_name_checkin'] = '{},{}'.format(
+                        obj.device_name_checkin, data['device_name_checkin']
                     )
 
-                if (
-                    'device_name_checkin' in data
-                    and data['device_name_checkin'] is not None
+                if len(data['checkin_times'].split(",")) != len(
+                    data['device_name_checkin'].split(",")
                 ):
-                    if obj.device_name_checkin is not None:
-                        data['device_name_checkin'] = '{},{}'.format(
-                            obj.device_name_checkin, data['device_name_checkin']
-                        )
-
-                    if len(data['checkin_times'].split(",")) != len(
-                        data['device_name_checkin'].split(",")
-                    ):
-                        raise UnprocessableEntityError(
-                            {'pointer': '/data/attributes/device_name_checkin'},
-                            "Check in Time missing for the corresponding device name",
-                        )
+                    raise UnprocessableEntityError(
+                        {'pointer': '/data/attributes/device_name_checkin'},
+                        "Check in Time missing for the corresponding device name",
+                    )
+            else:
+                if obj.device_name_checkin is not None:
+                    data['device_name_checkin'] = '{},{}'.format(
+                        obj.device_name_checkin, '-'
+                    )
                 else:
-                    if obj.device_name_checkin is not None:
-                        data['device_name_checkin'] = '{},{}'.format(
-                            obj.device_name_checkin, '-'
-                        )
-                    else:
-                        data['device_name_checkin'] = '-'
+                    data['device_name_checkin'] = '-'
 
         if 'is_checked_out' in data and data['is_checked_out']:
             attendee = safe_query(TicketHolder, 'id', kwargs['id'], 'attendee_id')
@@ -288,8 +291,12 @@ class AttendeeDetail(ResourceDetail):
                     obj.attendee_notes, data['attendee_notes']
                 )
 
-        data['complex_field_values'] = validate_custom_form_constraints_request(
-            'attendee', self.resource.schema, obj, data
+        data['complex_field_values'] = (
+            validate_custom_form_constraints_request(
+                'attendee', self.resource.schema, obj, data
+            )
+            if obj.event.is_ticket_form_enabled
+            else None
         )
 
     decorators = (jwt_required,)

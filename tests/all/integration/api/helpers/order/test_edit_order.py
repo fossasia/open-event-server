@@ -6,6 +6,7 @@ from app.models.ticket_holder import TicketHolder
 from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderSubFactory
+from tests.factories.user import UserFactory
 
 
 def create_order(db, user):
@@ -62,6 +63,35 @@ def test_ignore_on_order_attendee_update(client, db, user, jwt):
     order = Order.query.get(order_id)
     assert response.status_code == 200
     assert len(order.ticket_holders) == 3
+
+
+def test_order_get(client, db, user, jwt):
+    user1 = UserFactory(is_admin=False)
+    order_id = create_order(db, user1)
+    order = Order.query.get(order_id)
+    attendee = AttendeeSubFactory(order=order, email=user.email)
+
+    db.session.commit()
+
+    response = client.get(
+        f'/v1/orders/{order_id}?include=user',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    assert json.loads(response.data)['data']['relationships']['user']['data'] == None
+
+    response = client.get(
+        f'/v1/attendees/{attendee.id}?include=order.user',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    assert (
+        json.loads(response.data)['included'][0]['relationships']['user']['data'] == None
+    )
 
 
 def test_ignore_on_order_event_update(client, db, user, jwt):

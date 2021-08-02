@@ -75,8 +75,8 @@ UPLOAD_PATHS = {
     'pdf': {
         'ticket_attendee': 'attendees/tickets/pdf/{identifier}',
         'order': 'orders/invoices/pdf/{identifier}',
-        'tickets_all': 'orders/tickets/pdf/{identifier}',
-        'event_invoice': 'events/organizer/invoices/pdf/{identifier}',
+        'tickets_all': 'orders/tickets/pdf/{identifier}/{extra_identifier}',
+        'event_invoice': 'events/organizer/invoices/pdf/{event_identifier}/{identifier}',
     },
 }
 
@@ -159,12 +159,11 @@ def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
         return upload_to_aws(
             aws_bucket_name, aws_region, aws_key, aws_secret, uploaded_file, key, **kwargs
         )
-    elif gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
+    if gs_bucket_name and gs_key and gs_secret and storage_place == 'gs':
         return upload_to_gs(
             gs_bucket_name, gs_key, gs_secret, uploaded_file, key, **kwargs
         )
-    else:
-        return upload_local(uploaded_file, key, upload_dir, **kwargs)
+    return upload_local(uploaded_file, key, upload_dir, **kwargs)
 
 
 def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):

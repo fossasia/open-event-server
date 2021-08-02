@@ -1,4 +1,4 @@
-# Open Event Server
+# Open Event Server test
 
 ![Open Event Server](/docs/images/open-event-server.png)
 
@@ -67,7 +67,7 @@ Please get familiar with the components of the project in order to be able to co
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
 
-Note that open-event-server **works with Python 3.7** at the moment.
+Note that open-event-server **works with Python 3.8** at the moment.
 
 ### External Service Dependencies
 
@@ -97,7 +97,7 @@ Required keys can be obtained from [https://developers.google.com/maps/documenta
 
 #### Media Storage - Local/Amazon S3/Google Cloud
 
-Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
+Media (like audio, avatars and logos) can be stored either Locally, on Amazon S3 or on Google Storage.
 
 1. [Amazon S3 Setup Instructions](/docs/general/amazon-s3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
@@ -179,7 +179,14 @@ When checking in code for models, please update migrations as well.
 
 ### API documentation
 
-The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+The api is documented using [api blueprint](https://apiblueprint.org/). First, generate the description/blueprint `.apib` file using:
+
+```bash
+npx aglio --input docs/api/api_blueprint_source.apib --compile --output docs/api/api_blueprint.apib # generate the description .apib file
+
+```
+
+Local changes to the description can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
 
 ```bash
 gem install apiaryio # dependency
@@ -188,10 +195,18 @@ apiary preview --path docs/api/api_blueprint.apib # opens browser with generated
 
 ### Testing
 
-Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
+Clone the repo and set up the server according to the steps listed. Make sure you have installed [Poetry](https://python-poetry.org/docs) and all the dependencies required for testing by running
 
 ```
-pip3 install -r requirements/tests.txt
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+source ~/.profile
+
+# Install Python dependencies
+poetry install
+
+# Activate project's virtual environment
+poetry shell
 ```
 
 #### Running unit tests

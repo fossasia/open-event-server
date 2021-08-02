@@ -36,14 +36,14 @@ class EventTopicList(ResourceList):
                 raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
-            except IOError:
+            except OSError:
                 raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
-            except IOError:
+            except OSError:
                 raise UnprocessableEntityError(
                     {'source': ''}, 'Default Image is absent in server'
                 )
@@ -86,7 +86,9 @@ class EventTopicDetail(ResourceDetail):
 
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query_kwargs(
-                EventSubTopic, view_kwargs, 'event_sub_topic_id',
+                EventSubTopic,
+                view_kwargs,
+                'event_sub_topic_id',
             )
             if event_sub_topic.event_topic_id:
                 view_kwargs['id'] = event_sub_topic.event_topic_id
@@ -110,14 +112,14 @@ class EventTopicDetail(ResourceDetail):
                 raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Invalid Image URL'
                 )
-            except IOError:
+            except OSError:
                 raise UnprocessableEntityError(
                     {'source': 'attributes/system-image-url'}, 'Image is absent at URL'
                 )
         else:
             try:
                 uploaded_image = create_system_image(unique_identifier=event_topic.id)
-            except IOError:
+            except OSError:
                 raise UnprocessableEntityError(
                     {'source': ''}, 'Default Image is absent in server'
                 )

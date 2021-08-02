@@ -113,6 +113,42 @@ class TestTicketValidation(TestCase):
         with self.assertRaises(UnprocessableEntityError):
             TicketSchema.validate_quantity(schema, data)
 
+    def test_price_pass(self):
+        """
+        Tickets Validate Price - Tests if no exception is raised
+        :return:
+        """
+        schema = TicketSchema()
+        data = {'type': 'free'}
+        TicketSchema.validate_price(schema, data)
+        data = {'type': 'free', 'price': -120}
+        TicketSchema.validate_price(schema, data)
+        data = {'type': 'paid', 'price': 120}
+        TicketSchema.validate_price(schema, data)
+
+    def test_price_lt_eq_zero(self):
+        """
+        Tickets Validate Price - Tests if exception is raised when price is less than or equal to zero
+        :return:
+        """
+        schema = TicketSchema()
+        data = {'type': 'paid', 'price': -100}
+        with self.assertRaises(UnprocessableEntityError):
+            TicketSchema.validate_price(schema, data)
+        data = {'type': 'paid', 'price': 0}
+        with self.assertRaises(UnprocessableEntityError):
+            TicketSchema.validate_price(schema, data)
+
+    def test_discount_code_pass(self):
+        """
+        Tickets Validate discount code - Tests if no exception is raised
+        :return:
+        """
+        schema = TicketSchema()
+        data = {}
+        original_data = {}
+        TicketSchema.validate_discount_code(schema, data, original_data)
+
 
 if __name__ == '__main__':
     unittest.main()

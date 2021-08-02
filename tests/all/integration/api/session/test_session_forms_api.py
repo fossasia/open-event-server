@@ -152,7 +152,10 @@ def test_create_session_required_fields_missing(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/sessions', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/sessions',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     assert response.status_code == 422
@@ -180,7 +183,7 @@ def test_edit_session_required_fields_complete(db, client, user, jwt):
                 "attributes": {
                     "title": "Move Away",
                     "subtitle": "Moooove",
-                    "level": "456345678",
+                    "level": "Expert",
                     "short-abstract": "Speaking since birth",
                     "complex-field-values": {
                         "bojack": "horseman"
@@ -203,7 +206,7 @@ def test_edit_session_required_fields_complete(db, client, user, jwt):
 
     assert session.title == 'Move Away'
     assert session.subtitle == 'Moooove'
-    assert session.level == '456345678'
+    assert session.level == 'Expert'
     assert session.short_abstract == 'Speaking since birth'
     assert session.complex_field_values is None
 
@@ -220,7 +223,7 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
                 "attributes": {
                     "title": "Move Away",
                     "subtitle": "Moooove",
-                    "level": "456345678",
+                    "level": "Expert",
                     "short-abstract": "Speaking since birth",
                     "complex-field-values": {
                         "bojack": "horseman"
@@ -235,7 +238,10 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/sessions', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/sessions',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     assert response.status_code == 201
@@ -244,7 +250,7 @@ def test_create_session_required_fields_complete(db, client, user, jwt):
 
     assert session.title == 'Move Away'
     assert session.subtitle == 'Moooove'
-    assert session.level == '456345678'
+    assert session.level == 'Expert'
     assert session.short_abstract == 'Speaking since birth'
     assert session.complex_field_values is None
 
@@ -359,7 +365,10 @@ def test_custom_form_create_complex_fields_missing_required(db, client, user, jw
     )
 
     response = client.post(
-        '/v1/sessions', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/sessions',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     db.session.refresh(session)
@@ -441,7 +450,10 @@ def test_custom_form_create_complex_fields_complete(db, client, user, jwt):
     )
 
     response = client.post(
-        '/v1/sessions', content_type='application/vnd.api+json', headers=jwt, data=data,
+        '/v1/sessions',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
     )
 
     session = Session.query.get(json.loads(response.data)['data']['id'])
@@ -506,7 +518,9 @@ def test_edit_session_only_state(db, client, user, jwt):
             'data': {
                 'type': 'session',
                 'id': str(session.id),
-                "attributes": {"state": "withdrawn",},
+                "attributes": {
+                    "state": "withdrawn",
+                },
             }
         }
     )

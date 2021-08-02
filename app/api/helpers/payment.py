@@ -10,7 +10,7 @@ from app.api.helpers import checksum
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError
-from app.api.helpers.utilities import represents_int
+from app.api.helpers.utilities import represents_int, round_money
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import Environment, get_settings
@@ -49,27 +49,22 @@ class StripePaymentsManager:
                     'SECRET_KEY': settings['stripe_test_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_test_publishable_key"],
                 }
-            elif settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
+            if settings['stripe_secret_key'] and settings["stripe_publishable_key"]:
                 return {
                     'SECRET_KEY': settings['stripe_secret_key'],
                     'PUBLISHABLE_KEY': settings["stripe_publishable_key"],
                 }
-            else:
-                return None
+            return None
+        if represents_int(event):
+            authorization = StripeAuthorization.query.filter_by(event_id=event).first()
         else:
-            if represents_int(event):
-                authorization = StripeAuthorization.query.filter_by(
-                    event_id=event
-                ).first()
-            else:
-                authorization = event.stripe_authorization
-            if authorization:
-                return {
-                    'SECRET_KEY': authorization.stripe_secret_key,
-                    'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
-                }
-            else:
-                return None
+            authorization = event.stripe_authorization
+        if authorization:
+            return {
+                'SECRET_KEY': authorization.stripe_secret_key,
+                'PUBLISHABLE_KEY': authorization.stripe_publishable_key,
+            }
+        return None
 
     @staticmethod
     def get_event_organizer_credentials_from_stripe(stripe_auth_code):
@@ -171,16 +166,15 @@ class PayPalPaymentsManager:
                 {'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'"
             )
 
-        paypal_client = settings.get('{}_client'.format(paypal_key), None)
-        paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
+        paypal_client = settings.get(f'{paypal_key}_client', None)
+        paypal_secret = settings.get(f'{paypal_key}_secret', None)
 
         if not paypal_client or not paypal_secret:
             raise ConflictError(
                 {'pointer': ''},
                 "Payments through Paypal have not been configured on the platform",
             )
-
-        paypalrestsdk.configure(
+        return paypalrestsdk.configure(
             {
                 "mode": paypal_mode,
                 "client_id": paypal_client,
@@ -189,18 +183,20 @@ class PayPalPaymentsManager:
         )
 
     @staticmethod
-    def create_payment(order, return_url, cancel_url):
+    def create_payment(order, return_url, cancel_url, payee_email=None):
         """
         Create payment for an order
         :param order: Order to create payment for.
         :param return_url: return url for the payment.
         :param cancel_url: cancel_url for the payment.
+        :param payee_email: email of the payee. Default to event paypal email if not set
         :return: request_id or the error message along with an indicator.
         """
-        if (not order.event.paypal_email) or order.event.paypal_email == '':
+        payee_email = payee_email or order.event.paypal_email
+        if not payee_email:
             raise ConflictError(
                 {'pointer': ''},
-                "Payments through Paypal hasn't been configured for the event",
+                "Payments through Paypal hasn't been configured for the billing",
             )
 
         PayPalPaymentsManager.configure_paypal()
@@ -213,10 +209,10 @@ class PayPalPaymentsManager:
                 "transactions": [
                     {
                         "amount": {
-                            "total": int(order.amount),
+                            "total": float(round_money(order.amount)),
                             "currency": order.event.payment_currency,
                         },
-                        "payee": {"email": order.event.paypal_email},
+                        "payee": {"email": payee_email},
                     }
                 ],
             }
@@ -224,8 +220,7 @@ class PayPalPaymentsManager:
 
         if payment.create():
             return True, payment.id
-        else:
-            return False, payment.error
+        return False, payment.error
 
     @staticmethod
     def verify_payment(payment_id, order):
@@ -251,14 +246,13 @@ class PayPalPaymentsManager:
 
             if float(amount_server) != order.amount:
                 return False, 'Payment amount does not match order'
-            elif currency_server != order.event.payment_currency:
+            if currency_server != order.event.payment_currency:
                 return False, 'Payment currency does not match order'
-            elif sale_state != 'completed':
+            if sale_state != 'completed':
                 return False, 'Sale not completed'
-            elif PayPalPaymentsManager.used_payment(payment_id, order):
+            if PayPalPaymentsManager.used_payment(payment_id, order):
                 return False, 'Payment already been verified'
-            else:
-                return True, None
+            return True, None
         except paypalrestsdk.ResourceNotFound:
             return False, 'Payment Not Found'
 
@@ -271,8 +265,7 @@ class PayPalPaymentsManager:
             order.paypal_token = payment_id
             save_to_db(order)
             return False
-        else:
-            return True
+        return True
 
     @staticmethod
     def execute_payment(paypal_payer_id, paypal_payment_id):
@@ -282,13 +275,12 @@ class PayPalPaymentsManager:
         :param paypal_payer_id: payer_id
         :return: Result of the transaction.
         """
-
+        PayPalPaymentsManager.configure_paypal()
         payment = paypalrestsdk.Payment.find(paypal_payment_id)
 
         if payment.execute({"payer_id": paypal_payer_id}):
             return True, 'Successfully Executed'
-        else:
-            return False, payment.error
+        return False, payment.error
 
 
 class AliPayPaymentsManager:

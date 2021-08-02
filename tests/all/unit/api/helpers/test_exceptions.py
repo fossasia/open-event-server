@@ -2,9 +2,12 @@ import unittest
 from unittest import TestCase
 
 from app.api.helpers.errors import (
+    BadRequestError,
     ConflictError,
     ForbiddenError,
     MethodNotAllowed,
+    NotFoundError,
+    ServerError,
     UnprocessableEntityError,
 )
 
@@ -29,6 +32,18 @@ class TestExceptionsHelperValidation(TestCase):
         # Forbidden Exception
         with self.assertRaises(ForbiddenError):
             raise ForbiddenError({'source': ''}, "Access Forbidden")
+
+        # Not Found Error
+        with self.assertRaises(NotFoundError):
+            raise NotFoundError({'source': ''}, "Not Found")
+
+        # Server Error
+        with self.assertRaises(ServerError):
+            raise ServerError({'source': ''}, "Internal Server Error")
+
+        # Bad Request Error
+        with self.assertRaises(BadRequestError):
+            raise BadRequestError({'source': ''}, "Bad Request")
 
         # Method Not Allowed Exception
         with self.assertRaises(MethodNotAllowed):

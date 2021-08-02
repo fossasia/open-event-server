@@ -19,7 +19,7 @@ translations_dir = 'app/translations'
 def download_translations():
     """Admin Translations Downloads"""
     uuid_literal = uuid.uuid4()
-    zip_file = "translations{}".format(uuid_literal)
+    zip_file = f"translations{uuid_literal}"
     zip_file_ext = zip_file + '.zip'
     shutil.make_archive(zip_file, "zip", translations_dir)
     shutil.move(zip_file_ext, temp_dir)

@@ -8,10 +8,15 @@ from sqlalchemy.engine import reflection
 
 from app.api.helpers.db import save_to_db
 from app.instance import current_app as app
-from app.api.helpers.tasks import resize_event_images_task, resize_speaker_images_task
+from app.api.helpers.tasks import (
+    resize_event_images_task,
+    resize_speaker_images_task,
+    resize_exhibitor_images_task,
+)
 from app.models import db
 from app.models.event import Event, get_new_event_identifier
 from app.models.speaker import Speaker
+from app.models.exhibitor import Exhibitor
 from populate_db import populate
 from tests.all.integration.auth_helper import create_super_admin
 
@@ -28,9 +33,7 @@ def list_routes():
     output = []
     for rule in app.url_map.iter_rules():
         methods = ','.join(rule.methods)
-        line = urllib.parse.unquote(
-            "{:50s} {:20s} {}".format(rule.endpoint, methods, rule)
-        )
+        line = urllib.parse.unquote(f"{rule.endpoint:50s} {methods:20s} {rule}")
         output.append(line)
 
     for line in sorted(output):
@@ -43,6 +46,17 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_exhibitor_images():
+    exhibitors = Exhibitor.query.filter(
+        Exhibitor.banner_url.isnot(None), Exhibitor.thumbnail_image_url == None
+    ).all()
+    print(f'Resizing images of { len(exhibitors) } exhibitors...')
+    for exhibitor in exhibitors:
+        print(f'Resizing Exhibitor { exhibitor.id }')
+        resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
 
 
 @manager.command
@@ -77,43 +91,10 @@ def fix_event_and_speaker_images():
 
 @manager.command
 def fix_digit_identifier():
-    events = Event.query.filter(Event.identifier.op('~')('^[0-9\.]+$')).all()
+    events = Event.query.filter(Event.identifier.op('~')(r'^[0-9\.]+$')).all()
     for event in events:
         event.identifier = get_new_event_identifier()
         db.session.add(event)
-    db.session.commit()
-
-
-@manager.option('-e', '--event', help='Event ID. Eg. 1')
-def fix_speaker_images(event):
-    from app.helpers.sessions_speakers.speakers import speaker_image_sizes
-    from app.helpers.sessions_speakers.speakers import save_resized_photo
-    import urllib
-    from app.helpers.storage import generate_hash
-
-    event_id = int(event)
-    image_sizes = speaker_image_sizes()
-    speakers = Speaker.query.filter_by(event_id=event_id).all()
-    for speaker in speakers:
-        if speaker.photo and speaker.photo.strip() != '':
-            file_relative_path = (
-                'static/media/temp/' + generate_hash(str(speaker.id)) + '.jpg'
-            )
-            file_path = app.config['BASE_DIR'] + '/' + file_relative_path
-            urllib.urlretrieve(speaker.photo, file_path)
-            speaker.small = save_resized_photo(
-                file_path, event_id, speaker.id, 'small', image_sizes
-            )
-            speaker.thumbnail = save_resized_photo(
-                file_path, event_id, speaker.id, 'thumbnail', image_sizes
-            )
-            speaker.icon = save_resized_photo(
-                file_path, event_id, speaker.id, 'icon', image_sizes
-            )
-            db.session.add(speaker)
-            os.remove(file_path)
-            print("Downloaded " + speaker.photo + " into " + file_relative_path)
-        print("Processed - " + str(speaker.id))
     db.session.commit()
 
 
@@ -131,6 +112,7 @@ def initialize_db(credentials):
         if table_name not in table_names:
             print("[LOG] Table not found. Attempting creation")
             try:
+                db.engine.execute('create extension if not exists citext')
                 db.create_all()
                 stamp()
             except Exception:
@@ -149,7 +131,7 @@ def initialize_db(credentials):
 
 
 @manager.command
-def prepare_kubernetes_db(credentials='open_event_test_user@fossasia.org:fossasia'):
+def prepare_db(credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
         initialize_db(credentials)
 

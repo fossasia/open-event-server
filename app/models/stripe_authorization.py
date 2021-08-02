@@ -1,10 +1,9 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
-from app.models.base import SoftDeletionModel
 
 
-class StripeAuthorization(SoftDeletionModel):
+class StripeAuthorization(db.Model):
     """
     Stripe authorization information for an event.
     """

@@ -94,7 +94,9 @@ class EventSubTopicDetail(ResourceDetail):
 
         if view_kwargs.get('custom_placeholder_id'):
             custom_placeholder = safe_query_kwargs(
-                CustomPlaceholder, view_kwargs, 'custom_placeholder_id',
+                CustomPlaceholder,
+                view_kwargs,
+                'custom_placeholder_id',
             )
             if custom_placeholder.event_sub_topic_id:
                 view_kwargs['id'] = custom_placeholder.event_sub_topic_id

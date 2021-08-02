@@ -1,15 +1,15 @@
 import json
 import logging
 import time
-from datetime import datetime
 
 import omise
 import requests
-from flask import Blueprint, jsonify, redirect, request, url_for
+from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
@@ -22,17 +22,12 @@ from app.api.helpers.errors import (
     UnprocessableEntityError,
 )
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_to_attendees, send_order_cancel_email
-from app.api.helpers.notification import (
-    send_notif_ticket_cancel,
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
-)
+from app.api.helpers.mail import send_order_cancel_email
+from app.api.helpers.notification import notify_ticket_cancel
 from app.api.helpers.order import (
     create_onsite_attendees_for_order,
-    create_pdf_tickets_for_holder,
     delete_related_attendees_for_order,
-    set_expiry_for_order,
+    on_order_completed,
 )
 from app.api.helpers.payment import (
     AliPayPaymentsManager,
@@ -43,7 +38,6 @@ from app.api.helpers.payment import (
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.ticketing import validate_discount_code, validate_ticket_holders
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.attendees import AttendeeSchema
@@ -63,17 +57,17 @@ def check_event_user_ticket_holders(order, data, element):
         getattr(order, element, None).id
     ):
         raise ForbiddenError(
-            {'pointer': 'data/{}'.format(element)},
-            "You cannot update {} of an order".format(element),
+            {'pointer': f'data/{element}'},
+            f"You cannot update {element} of an order",
         )
-    elif element == 'ticket_holders':
+    if element == 'ticket_holders':
         ticket_holders = []
         for ticket_holder in order.ticket_holders:
             ticket_holders.append(str(ticket_holder.id))
         if data[element] != ticket_holders and element not in get_updatable_fields():
             raise ForbiddenError(
-                {'pointer': 'data/{}'.format(element)},
-                "You cannot update {} of an order".format(element),
+                {'pointer': f'data/{element}'},
+                f"You cannot update {element} of an order",
             )
 
 
@@ -87,7 +81,7 @@ def is_payment_valid(order, mode):
             and order.last4
             and order.exp_month
         )
-    elif mode == 'paypal':
+    if mode == 'paypal':
         return (order.paid_via == 'paypal') and order.transaction_id
 
 
@@ -114,56 +108,6 @@ def check_billing_info(data):
         )
 
 
-def on_order_completed(order):
-    # send e-mail and notifications if the order status is completed
-    if not (order.status == 'completed' or order.status == 'placed'):
-        return
-    # fetch tickets attachment
-    order_identifier = order.identifier
-
-    key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-    ticket_path = (
-        'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
-
-    key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-    invoice_path = (
-        'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + order_identifier
-        + '.pdf'
-    )
-
-    # send email and notifications.
-    send_email_to_attendees(
-        order=order,
-        purchaser_id=current_user.id,
-        attachments=[ticket_path, invoice_path],
-    )
-
-    send_notif_to_attendees(order, current_user.id)
-
-    if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-        order.completed_at = datetime.utcnow()
-
-    order_url = make_frontend_url(
-        path='/orders/{identifier}'.format(identifier=order.identifier)
-    )
-    for organizer in set(
-        order.event.organizers + order.event.coorganizers + [order.event.owner]
-    ):
-        if not organizer:
-            continue
-        send_notif_ticket_purchase_organizer(
-            organizer,
-            order.invoice_number,
-            order_url,
-            order.event.name,
-            order.identifier,
-        )
-
-
 def save_order(order):
     order_tickets = {}
     for holder in order.ticket_holders:
@@ -174,9 +118,6 @@ def save_order(order):
             order_tickets[holder.ticket_id] += 1
 
     order.user = current_user
-
-    # create pdf tickets.
-    create_pdf_tickets_for_holder(order)
 
     for ticket in order_tickets:
         od = OrderTicket(
@@ -197,7 +138,9 @@ def validate_attendees(ticket_holders):
         if ticket_holder.ticket.type == 'free':
             free_ticket_quantity += 1
 
-    if not current_user.is_verified and free_ticket_quantity == len(ticket_holders):
+    if not current_app.config['ALLOW_UNVERIFIED_FREE_ORDERS'] and (
+        not current_user.is_verified and free_ticket_quantity == len(ticket_holders)
+    ):
         raise ForbiddenError(
             {'pointer': '/data/relationships/user', 'code': 'unverified-user'},
             "Unverified user cannot place free orders",
@@ -292,18 +235,6 @@ class OrdersList(ResourceList):
     OrderList class for OrderSchema
     """
 
-    def before_get(self, args, kwargs):
-        """
-        before get method to get the resource id for fetching details
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        if kwargs.get('event_id') and not has_access(
-            'is_coorganizer', event_id=kwargs['event_id']
-        ):
-            raise ForbiddenError({'source': ''}, "Co-Organizer Access Required")
-
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
         if view_kwargs.get('user_id'):
@@ -311,17 +242,14 @@ class OrdersList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
-            query_ = query_.join(User, User.id == Order.user_id).filter(
-                User.id == user.id
+            query_ = (
+                query_.join(TicketHolder)
+                .join(User, User.id == Order.user_id)
+                .filter(or_(User.id == user.id, TicketHolder.user == user))
             )
         else:
             # orders under an event
-            query_ = event_query(query_, view_kwargs)
-
-        # expire the initializing orders if the time limit is over.
-        orders = query_.all()
-        for order in orders:
-            set_expiry_for_order(order)
+            query_ = event_query(query_, view_kwargs, restrict=True)
 
         return query_
 
@@ -355,17 +283,17 @@ class OrderDetail(ResourceDetail):
         elif view_kwargs.get('id'):
             order = safe_query_by_id(Order, view_kwargs['id'])
 
-        if not has_access(
-            'is_coorganizer_or_user_itself',
-            event_id=order.event_id,
-            user_id=order.user_id,
+        if not (
+            has_access(
+                'is_coorganizer_or_user_itself',
+                event_id=order.event_id,
+                user_id=order.user_id,
+            )
+            or order.is_attendee(current_user)
         ):
             raise ForbiddenError(
                 {'source': ''}, 'You can only access your orders or your event\'s orders'
             )
-
-        # expire the initializing order if time limit is over.
-        set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
         """
@@ -381,7 +309,10 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('status') in ['pending', 'placed', 'completed']:
+        if (
+            data.get('status') in ['pending', 'placed', 'completed']
+            and order.event.is_ticket_form_enabled
+        ):
             attendees = order.ticket_holders
             for attendee in attendees:
                 validate_custom_form_constraints_request(
@@ -409,11 +340,10 @@ class OrderDetail(ResourceDetail):
                             and element not in get_updatable_fields()
                         ):
                             raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
-                                "You cannot update {} of an order".format(element),
+                                {'pointer': f'data/{element}'},
+                                f"You cannot update {element} of an order",
                             )
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+                        check_event_user_ticket_holders(order, data, element)
 
             else:
                 # Order created from the public pages.
@@ -422,12 +352,12 @@ class OrderDetail(ResourceDetail):
                         if element not in relationships and data[element] != getattr(
                             order, element, None
                         ):
-                            if element != 'status' and element != 'deleted_at':
+                            if element != 'status':
                                 raise ForbiddenError(
-                                    {'pointer': 'data/{}'.format(element)},
-                                    "You cannot update {} of an order".format(element),
+                                    {'pointer': f'data/{element}'},
+                                    f"You cannot update {element} of an order",
                                 )
-                            elif (
+                            if (
                                 element == 'status'
                                 and order.amount
                                 and order.status == 'completed'
@@ -437,7 +367,7 @@ class OrderDetail(ResourceDetail):
                                     {'pointer': 'data/status'},
                                     "You cannot update the status of a completed paid order",
                                 )
-                            elif element == 'status' and order.status == 'cancelled':
+                            if element == 'status' and order.status == 'cancelled':
                                 # Since the tickets have been unlocked and we can't revert it.
                                 raise ForbiddenError(
                                     {'pointer': 'data/status'},
@@ -447,36 +377,41 @@ class OrderDetail(ResourceDetail):
                             check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
-            if order.status != 'initializing' and order.status != 'pending':
+            status = data.get('status')
+            if (
+                order.status != Order.Status.INITIALIZING
+                and order.status != Order.Status.PENDING
+                and status != Order.Status.CANCELLED
+            ):
                 raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
-            else:
-                for element in data:
-                    if data[element]:
-                        if (
-                            element == 'is_billing_enabled'
-                            and order.status == 'completed'
-                            and data[element] != getattr(order, element, None)
-                        ):
-                            raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
-                                "You cannot update {} of a completed order".format(
-                                    element
-                                ),
-                            )
-                        elif (
-                            element not in relationships
-                            and data[element] != getattr(order, element, None)
-                            and element not in get_updatable_fields()
-                        ):
-                            raise ForbiddenError(
-                                {'pointer': 'data/{}'.format(element)},
-                                "You cannot update {} of an order".format(element),
-                            )
-                        else:
-                            check_event_user_ticket_holders(order, data, element)
+            if status == Order.Status.CANCELLED:
+                # If this is a cancellation request, we revert all PATCH changes except status = cancelled
+                data.clear()
+                data['status'] = Order.Status.CANCELLED
+            for element in data:
+                if data[element]:
+                    if (
+                        element == 'is_billing_enabled'
+                        and order.status == 'completed'
+                        and data[element] != getattr(order, element, None)
+                    ):
+                        raise ForbiddenError(
+                            {'pointer': f'data/{element}'},
+                            f"You cannot update {element} of a completed order",
+                        )
+                    if (
+                        element not in relationships
+                        and data[element] != getattr(order, element, None)
+                        and element not in get_updatable_fields()
+                    ):
+                        raise ForbiddenError(
+                            {'pointer': f'data/{element}'},
+                            f"You cannot update {element} of an order",
+                        )
+                    check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(
@@ -491,7 +426,7 @@ class OrderDetail(ResourceDetail):
                 {'pointer': '/data/attributes/payment-mode'},
                 "payment-mode cannot be free for order with amount > 0",
             )
-        elif (
+        if (
             data.get('status') == 'completed'
             and data.get('payment_mode') == 'stripe'
             and not is_payment_valid(order, 'stripe')
@@ -500,7 +435,7 @@ class OrderDetail(ResourceDetail):
                 {'pointer': '/data/attributes/payment-mode'},
                 "insufficient data to verify stripe payment",
             )
-        elif (
+        if (
             data.get('status') == 'completed'
             and data.get('payment_mode') == 'paypal'
             and not is_payment_valid(order, 'paypal')
@@ -517,90 +452,21 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        # create pdf tickets.
-        create_pdf_tickets_for_holder(order)
 
-        if order.status == 'cancelled' and order.deleted_at is None:
+        if order.status == 'cancelled':
             send_order_cancel_email(order)
-            send_notif_ticket_cancel(order)
+            notify_ticket_cancel(order, current_user)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif (
-            order.status == 'completed' or order.status == 'placed'
-        ) and order.deleted_at is None:
-            # Send email to attendees with invoices and tickets attached
-            order_identifier = order.identifier
-
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = (
-                'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = (
-                'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-                + order_identifier
-                + '.pdf'
-            )
-
-            # send email and notifications.
-            send_email_to_attendees(
-                order=order,
-                purchaser_id=current_user.id,
-                attachments=[ticket_path, invoice_path],
-            )
-
-            send_notif_to_attendees(order, current_user.id)
-
-            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
-                order.completed_at = datetime.utcnow()
-
-            order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
-            )
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.identifier,
-                )
-
-    def before_delete_object(self, order, view_kwargs):
-        """
-        method to check for proper permissions for deleting
-        :param order:
-        :param view_kwargs:
-        :return:
-        """
-        if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenError({'source': ''}, 'Access Forbidden')
-        elif (
-            order.amount
-            and order.amount > 0
-            and (order.status == 'completed' or order.status == 'placed')
-        ):
-            raise ConflictError(
-                {'source': ''}, 'You cannot delete a placed/completed paid order.'
-            )
+        elif order.status == 'completed' or order.status == 'placed':
+            on_order_completed(order)
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (
         jwt_required,
-        api.has_permission('auth_required', methods="PATCH,DELETE", model=Order),
+        api.has_permission('auth_required', methods="PATCH", model=Order),
     )
     schema = OrderSchema
     data_layer = {
@@ -608,7 +474,6 @@ class OrderDetail(ResourceDetail):
         'model': Order,
         'methods': {
             'before_update_object': before_update_object,
-            'before_delete_object': before_delete_object,
             'before_get_object': before_get_object,
             'after_update_object': after_update_object,
         },
@@ -702,8 +567,7 @@ def create_paypal_payment(order_identifier):
 
     if status:
         return jsonify(status=True, payment_id=response)
-    else:
-        return jsonify(status=False, error=response)
+    return jsonify(status=False, error=response)
 
 
 @order_misc_routes.route(
@@ -767,9 +631,8 @@ def alipay_return_uri(order_identifier):
             order = safe_query(Order, 'identifier', order_identifier, 'identifier')
             order.status = 'completed'
             save_to_db(order)
-            return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
-        else:
-            return jsonify(status=False, error='Charge object failure')
+            return redirect(make_frontend_url(f'/orders/{order_identifier}/view'))
+        return jsonify(status=False, error='Charge object failure')
     except TypeError:
         return jsonify(status=False, error='Source object status error')
 
@@ -809,10 +672,9 @@ def omise_checkout(order_identifier):
                 charge.failure_message, charge.failure_code
             ),
         )
-    else:
-        logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
+    logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
-        return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
+    return redirect(make_frontend_url(f'orders/{order_identifier}/view'))
 
 
 @order_misc_routes.route(
@@ -840,8 +702,13 @@ def initiate_transaction(order_identifier):
         "websiteName": "eventyay",
         "orderId": order_identifier,
         "callbackUrl": "",
-        "txnAmount": {"value": order.amount, "currency": "INR",},
-        "userInfo": {"custId": order.user.id,},
+        "txnAmount": {
+            "value": order.amount,
+            "currency": "INR",
+        },
+        "userInfo": {
+            "custId": order.user.id,
+        },
     }
     checksum = PaytmPaymentsManager.generate_checksum(paytm_params)
     # head parameters

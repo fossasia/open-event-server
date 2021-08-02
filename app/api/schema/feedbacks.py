@@ -27,7 +27,6 @@ class FeedbackSchema(SoftDeletionSchema):
     rating = fields.Float(required=True, validate=Range(min=1, max=5))
     comment = fields.Str(required=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.feedback_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',
@@ -36,7 +35,6 @@ class FeedbackSchema(SoftDeletionSchema):
         type_='event',
     )
     session = Relationship(
-        attribute='session',
         self_view='v1.feedback_session',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.session_detail',
@@ -45,7 +43,6 @@ class FeedbackSchema(SoftDeletionSchema):
         type_='session',
     )
     user = Relationship(
-        attribute='user',
         self_view='v1.feedback_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',

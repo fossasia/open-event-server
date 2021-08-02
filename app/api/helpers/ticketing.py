@@ -2,21 +2,11 @@ import logging
 from datetime import datetime
 
 import pytz
-from flask_jwt_extended import current_user
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, safe_query_by_id, save_to_db
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
-from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.notification import (
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
-)
-from app.api.helpers.order import (
-    create_pdf_tickets_for_holder,
-    delete_related_attendees_for_order,
-)
+from app.api.helpers.order import delete_related_attendees_for_order, on_order_completed
 from app.api.helpers.payment import PayPalPaymentsManager, StripePaymentsManager
 from app.models import db
 from app.models.ticket import Ticket
@@ -132,7 +122,7 @@ def validate_discount_code(
 
     now = pytz.utc.localize(datetime.utcnow())
     valid_from = discount_code.valid_from
-    valid_till = discount_code.valid_till
+    valid_till = discount_code.valid_expire_time
     if not discount_code.is_active or not valid_from <= now <= valid_till:
         logger.warning(
             "Discount code inactive or expired",
@@ -177,9 +167,12 @@ def is_discount_available(discount_code, tickets=None, ticket_holders=None):
         for ticket in tickets:
             if int(ticket['id']) in ticket_ids:
                 qty += ticket.get('quantity', 1)
+
+    max_quantity = qty if discount_code.max_quantity < 0 else discount_code.max_quantity
+
     available = (
         (qty + old_holders) <= discount_code.tickets_number
-        and discount_code.min_quantity <= qty <= discount_code.max_quantity
+        and discount_code.min_quantity <= qty <= max_quantity
     )
     if not available:
         logger.warning(
@@ -291,40 +284,18 @@ class TicketingManager:
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            # create tickets.
-            create_pdf_tickets_for_holder(order)
-
-            # send email and notifications.
-            send_email_to_attendees(order, current_user.id)
-            send_notif_to_attendees(order, current_user.id)
-
-            order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
-            )
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer, order.invoice_number, order_url, order.event.name, order.id
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.id,
-                )
+            on_order_completed(order)
 
             return True, 'Charge successful'
-        else:
-            # payment failed hence expire the order
-            order.status = 'expired'
-            save_to_db(order)
+        # payment failed hence expire the order
+        order.status = 'expired'
+        save_to_db(order)
 
-            # delete related attendees to unlock the tickets
-            delete_related_attendees_for_order(order)
+        # delete related attendees to unlock the tickets
+        delete_related_attendees_for_order(order)
 
-            # return the failure message from stripe.
-            return False, charge.failure_message
+        # return the failure message from stripe.
+        return False, charge.failure_message
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
@@ -353,37 +324,15 @@ class TicketingManager:
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            # create tickets
-            create_pdf_tickets_for_holder(order)
-
-            # send email and notifications
-            send_email_to_attendees(order, order.user_id)
-            send_notif_to_attendees(order, order.user_id)
-
-            order_url = make_frontend_url(
-                path='/orders/{identifier}'.format(identifier=order.identifier)
-            )
-            for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(
-                    organizer, order.invoice_number, order_url, order.event.name, order.id
-                )
-            if order.event.owner:
-                send_notif_ticket_purchase_organizer(
-                    order.event.owner,
-                    order.invoice_number,
-                    order_url,
-                    order.event.name,
-                    order.id,
-                )
+            on_order_completed(order)
 
             return True, 'Charge successful'
-        else:
-            # payment failed hence expire the order
-            order.status = 'expired'
-            save_to_db(order)
+        # payment failed hence expire the order
+        order.status = 'expired'
+        save_to_db(order)
 
-            # delete related attendees to unlock the tickets
-            delete_related_attendees_for_order(order)
+        # delete related attendees to unlock the tickets
+        delete_related_attendees_for_order(order)
 
-            # return the error message from Paypal
-            return False, error
+        # return the error message from Paypal
+        return False, error

@@ -1,4 +1,4 @@
-from marshmallow import validate as validate
+from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
@@ -31,17 +31,27 @@ class CustomFormSchema(Schema):
     type = fields.Str(
         default="text",
         validate=validate.OneOf(
-            choices=["text", "checkbox", "select", "file", "image", "email", "number"]
+            choices=[
+                "text",
+                "checkbox",
+                "select",
+                "file",
+                "image",
+                "email",
+                "number",
+                "paragraph",
+            ]
         ),
     )
     name = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
+    is_public = fields.Boolean(default=False)
+    position = fields.Integer(allow_none=True, default=0)
     is_complex = fields.Boolean(dump_only=True)
     is_fixed = fields.Boolean(default=False)
     event = Relationship(
-        attribute='event',
         self_view='v1.custom_form_event',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.event_detail',

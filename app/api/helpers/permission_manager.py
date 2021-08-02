@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 
 from flask import request
@@ -12,6 +13,9 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 
 @jwt_required
@@ -110,13 +114,14 @@ def is_coorganizer_endpoint_related_to_event(
     """
     user = get_identity()
 
-    if user.is_staff:
-        verify_jwt_in_request()
-        return view(*view_args, **view_kwargs)
+    if user:
+        if user.is_staff:
+            verify_jwt_in_request()
+            return view(*view_args, **view_kwargs)
 
-    if user.has_event_access(kwargs['event_id']):
-        verify_jwt_in_request()
-        return view(*view_args, **view_kwargs)
+        if user.has_event_access(kwargs['event_id']):
+            verify_jwt_in_request()
+            return view(*view_args, **view_kwargs)
 
     raise ForbiddenError({'source': ''}, 'Co-organizer access is required.')
 
@@ -163,24 +168,26 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
+    not_found = NotFoundError({'parameter': 'id'}, 'Session not found.')
+    try:
+        session = Session.query.filter(Session.id == view_kwargs['id']).one()
+    except NoResultFound:
+        raise not_found
+
     user = current_user
-    if user.is_admin or user.is_super_admin:
-        return view(*view_args, **view_kwargs)
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    try:
-        session = Session.query.filter(Session.id == view_kwargs['id']).one()
-    except NoResultFound:
-        raise NotFoundError({'parameter': 'id'}, 'Session not found.')
+    if session.deleted_at is not None:
+        raise not_found
 
     if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)
 
     if session.speakers:
         for speaker in session.speakers:
-            if speaker.user_id == user.id:
+            if speaker.user_id == user.id or speaker.email == user._email:
                 return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
@@ -500,10 +507,16 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 fetched = getattr(data, fetch) if hasattr(data, fetch) else None
 
         if fetched:
-            if 'fetch_as' in kwargs:
-                kwargs[kwargs['fetch_as']] = fetched
-            elif 'fetch' in kwargs:
-                kwargs[kwargs['fetch']] = fetched
+            fetch_as = kwargs.get('fetch_as')
+            fetch = kwargs.get('fetch')
+            if fetch_as == fetch:
+                logger.warning(
+                    "If 'fetch_as' is same as 'fetch', then it is redundant: %s", fetch
+                )
+            if fetch_as:
+                kwargs[fetch_as] = fetched
+            elif fetch:
+                kwargs[fetch] = fetched
         else:
             raise NotFoundError({'source': ''}, 'Object not found.')
     if args[0] in permissions:
@@ -521,9 +534,23 @@ def has_access(access_level, **kwargs):
     """
     if access_level in permissions:
         try:
-            auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
+            auth = permissions[access_level](
+                lambda *a, **b: True, (), kwargs, (), **kwargs
+            )
             if type(auth) is bool and auth is True:
                 return True
         except ForbiddenError:
             pass
     return False
+
+
+def is_logged_in() -> bool:
+    return 'Authorization' in request.headers
+
+
+def require_current_user() -> Union[User, None]:
+    """Parses JWT and returns current_user if Authorization header is present, else None"""
+    if not is_logged_in():
+        return None
+    verify_jwt_in_request()
+    return current_user

@@ -50,7 +50,13 @@ class FaqTypeList(ResourceList):
         'GET',
     ]
     schema = FaqTypeSchema
-    data_layer = {'session': db.session, 'model': FaqType, 'methods': {'query': query,}}
+    data_layer = {
+        'session': db.session,
+        'model': FaqType,
+        'methods': {
+            'query': query,
+        },
+    }
 
 
 class FaqTypeDetail(ResourceDetail):
@@ -77,7 +83,6 @@ class FaqTypeDetail(ResourceDetail):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=FaqType,
         ),
     )
@@ -100,7 +105,6 @@ class FaqTypeRelationshipRequired(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=FaqType,
         ),
     )
@@ -118,7 +122,6 @@ class FaqTypeRelationshipOptional(ResourceRelationship):
             'is_coorganizer',
             methods="PATCH,DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=FaqType,
         ),
     )

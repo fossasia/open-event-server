@@ -53,7 +53,7 @@ class AccessCodeListPost(ResourceList):
                     if not ticket_object.is_hidden:
                         raise ConflictError(
                             {'pointer': '/data/relationships/tickets'},
-                            "Ticket with id {} is public.".format(ticket)
+                            f"Ticket with id {ticket} is public."
                             + " Access code cannot be applied to public tickets",
                         )
                 except NoResultFound:
@@ -85,7 +85,7 @@ class AccessCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(AccessCode)
-        query_ = event_query(query_, view_kwargs, permission='is_coorganizer')
+        query_ = event_query(query_, view_kwargs, restrict=True)
         if view_kwargs.get('user_id'):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
@@ -108,7 +108,9 @@ class AccessCodeList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': AccessCode,
-        'methods': {'query': query,},
+        'methods': {
+            'query': query,
+        },
     }
 
 
@@ -164,14 +166,12 @@ class AccessCodeDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=AccessCode,
             methods="PATCH",
         ),
         api.has_permission(
             'is_coorganizer_but_not_admin',
             fetch='event_id',
-            fetch_as="event_id",
             model=AccessCode,
             methods="DELETE",
         ),
