@@ -27,8 +27,8 @@ class TestExportJobHelpers(OpenEventTestCase):
             login_user(user)
             create_export_job(test_task_id, export_event_id)
             export_job = ExportJob.query.filter_by(event=test_related_event).first()
-            self.assertEqual(export_job.event.name, 'example')
-            self.assertEqual(export_job.user_email, 'user0@example.com')
+            assert export_job.event.name == 'example'
+            assert export_job.user_email == 'user0@example.com'
 
 
 if __name__ == '__main__':

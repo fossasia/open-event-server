@@ -26,6 +26,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_channel import VideoChannel
+from app.models.video_recording import VideoRecording
 from app.models.video_stream import VideoStream
 from app.models.video_stream_moderator import VideoStreamModerator
 
@@ -33,7 +34,12 @@ logger = logging.getLogger(__name__)
 
 streams_routes = Blueprint('streams', __name__, url_prefix='/v1/video-streams')
 
-default_options = {'record': False, 'autoStartRecording': False, 'muteOnStart': True}
+default_options = {
+    'record': True,
+    'autoStartRecording': False,
+    'muteOnStart': True,
+    'endCurrentMeeting': False,
+}
 
 
 def check_same_event(room_ids):
@@ -134,27 +140,6 @@ def create_bbb_meeting(channel, data):
 
 
 @streams_routes.route(
-    '/<int:stream_id>/recordings',
-)
-@jwt_required
-def get_bbb_recordings(stream_id: int):
-    stream = VideoStream.query.get_or_404(stream_id)
-    if not has_access('is_organizer', event_id=stream.event_id):
-        raise ForbiddenError(
-            {'pointer': 'event_id'},
-            'You need to be the event organizer to access video recordings.',
-        )
-
-    params = dict(
-        meetingID=stream.extra['response']['meetingID'],
-    )
-    channel = stream.channel
-    bbb = BigBlueButton(channel.api_url, channel.api_key)
-    result = bbb.request('getRecordings', params)
-    return jsonify(result=result.data)
-
-
-@streams_routes.route(
     '/<int:stream_id>/chat-token',
 )
 @jwt_required
@@ -220,11 +205,39 @@ class VideoStreamList(ResourceList):
 
         return query_
 
+    def after_create_object(self, stream, data, view_kwargs):
+        if stream.channel and stream.channel.provider == 'bbb':
+            params_isMeetingRunning = dict(
+                meetingID=stream.extra['response']['meetingID'],
+            )
+
+            channel = stream.channel
+            bbb = BigBlueButton(channel.api_url, channel.api_key)
+            result_isMeetingRunning = bbb.request(
+                'isMeetingRunning', params_isMeetingRunning
+            )
+
+            if result_isMeetingRunning.data.get('response', {}).get('running') == 'true':
+                params_end_meeting = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                    password=stream.extra['response']['moderatorPW'],
+                )
+                result_end_meeting = bbb.request('end', params_end_meeting)
+
+                if not result_end_meeting.success:
+                    logger.error(
+                        'Error while ending current BBB Meeting after create BBB meeting: %s',
+                        result_end_meeting,
+                    )
+
     schema = VideoStreamSchema
     data_layer = {
         'session': db.session,
         'model': VideoStream,
-        'methods': {'query': query},
+        'methods': {
+            'query': query,
+            'after_create_object': after_create_object,
+        },
     }
 
 
@@ -251,6 +264,14 @@ class VideoStreamDetail(ResourceDetail):
                 VideoStreamModerator, view_kwargs, 'video_stream_moderator_id'
             )
             view_kwargs['id'] = moderator.video_stream_id
+
+        if view_kwargs.get('video_recording_id'):
+            video_recording = safe_query_kwargs(
+                VideoRecording,
+                view_kwargs,
+                'video_recording_id',
+            )
+            view_kwargs['id'] = video_recording.video_stream_id
 
     def after_get_object(self, stream, view_kwargs):
         if stream and not stream.user_can_access:
@@ -292,6 +313,39 @@ class VideoStreamDetail(ResourceDetail):
         VideoStreamDetail.check_extra(obj, data)
         VideoStreamDetail.setup_channel(obj, data)
 
+    def after_update_object(self, stream, data, view_kwargs):
+        if stream.channel and stream.channel.provider == 'bbb':
+            bbb_options = stream.extra.get('bbb_options')
+            if bbb_options and bbb_options.get('endCurrentMeeting'):
+                params_isMeetingRunning = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                )
+
+                channel = stream.channel
+                bbb = BigBlueButton(channel.api_url, channel.api_key)
+                result_isMeetingRunning = bbb.request(
+                    'isMeetingRunning', params_isMeetingRunning
+                )
+
+                if (
+                    result_isMeetingRunning.data.get('response', {}).get('running')
+                    == 'true'
+                ):
+                    params_end_meeting = dict(
+                        meetingID=stream.extra['response']['meetingID'],
+                        password=stream.extra['response']['moderatorPW'],
+                    )
+                    result_end_meeting = bbb.request('end', params_end_meeting)
+
+                    if not result_end_meeting.success:
+                        logger.error(
+                            'Error while ending current BBB Meeting: %s',
+                            result_end_meeting,
+                        )
+                        raise BadRequestError(
+                            '', 'Cannot end current Meeting on BigBlueButton'
+                        )
+
     def before_delete_object(self, obj, kwargs):
         check_event_access(obj.event_id)
         room_ids = [room.id for room in obj.rooms]
@@ -307,6 +361,7 @@ class VideoStreamDetail(ResourceDetail):
             'before_get_object': before_get_object,
             'after_get_object': after_get_object,
             'before_update_object': before_update_object,
+            'after_update_object': after_update_object,
             'before_delete_object': before_delete_object,
         },
     }

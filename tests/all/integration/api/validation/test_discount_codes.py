@@ -5,6 +5,7 @@ from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.discount_code import DiscountCodeFactory
 from tests.factories.ticket import TicketFactory
+import pytest
 
 
 class TestDiscountCodeValidation(OpenEventLegacyTestCase):
@@ -32,7 +33,7 @@ class TestDiscountCodeValidation(OpenEventLegacyTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntityError):
+            with pytest.raises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_free_ticket(self):
@@ -46,7 +47,7 @@ class TestDiscountCodeValidation(OpenEventLegacyTestCase):
             schema = DiscountCodeSchemaTicket()
             original_data = {'data': {}}
             data = {'type': 'amount', 'value': 150, 'tickets': ['1']}
-            with self.assertRaises(UnprocessableEntityError):
+            with pytest.raises(UnprocessableEntityError):
                 DiscountCodeSchemaTicket.validate_value(schema, data, original_data)
 
     def test_quantity_db_populate(self):

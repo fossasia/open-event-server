@@ -11,6 +11,8 @@ class OrderFactoryBase(BaseFactory):
 
     payment_mode = 'free'
     status = 'initializing'
+    tax_business_info = 'tax id'
+    company = 'company'
 
 
 class OrderSubFactory(OrderFactoryBase):

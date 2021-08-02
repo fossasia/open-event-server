@@ -14,6 +14,7 @@ from app.api.admin_sales.locations import AdminSalesByLocationList
 from app.api.admin_sales.marketer import AdminSalesByMarketerList
 from app.api.admin_sales.organizer import AdminSalesByOrganizersList
 from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
+from app.api.admin_statistics_api.groups import AdminStatisticsGroupDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
 from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
 from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
@@ -182,6 +183,12 @@ from app.api.social_links import (
     SocialLinkRelationship,
 )
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
+from app.api.speaker_invites import (
+    SpeakerInviteDetail,
+    SpeakerInviteList,
+    SpeakerInviteListPost,
+    SpeakerInviteRelationship,
+)
 from app.api.speakers import (
     SpeakerDetail,
     SpeakerList,
@@ -247,6 +254,12 @@ from app.api.user_favourite_sessions import (
     UserFavouriteSessionListPost,
     UserFavouriteSessionRelationship,
 )
+from app.api.user_follow_groups import (
+    UserFollowGroupDetail,
+    UserFollowGroupList,
+    UserFollowGroupListPost,
+    UserFollowGroupRelationship,
+)
 from app.api.user_permission import UserPermissionDetail, UserPermissionList
 from app.api.users import UserDetail, UserList, UserRelationship
 from app.api.users_events_roles import (
@@ -264,6 +277,11 @@ from app.api.video_channel import (
     VideoChannelDetail,
     VideoChannelList,
     VideoChannelListPost,
+)
+from app.api.video_recordings import (
+    VideoRecordingDetail,
+    VideoRecordingList,
+    VideoRecordingRelationship,
 )
 from app.api.video_stream import (
     VideoStreamDetail,
@@ -300,9 +318,15 @@ api.route(
     '/users-events-roles/<int:users_events_roles_id>/user',
     '/users-groups-roles/<int:users_groups_roles_id>/user',
     '/video-stream-moderator/<int:video_stream_moderator_id>/user',
+    '/user-follow-groups/<int:user_follow_group_id>/user',
 )
 api.route(
     UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications'
+)
+api.route(
+    UserRelationship,
+    'user_user_follow_groups',
+    '/users/<int:id>/relationships/followed-groups',
 )
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(
@@ -575,6 +599,26 @@ api.route(
     '/role-invites/<int:id>/relationships/role',
 )
 
+# speaker_invites
+api.route(SpeakerInviteListPost, 'speaker_invite_list_post', '/speaker-invites')
+api.route(
+    SpeakerInviteList,
+    'speaker_invite_list',
+    '/sessions/<int:session_id>/speaker-invites',
+    '/events/<int:event_id>/speaker-invites',
+)
+api.route(SpeakerInviteDetail, 'speaker_invite_detail', '/speaker-invites/<int:id>')
+api.route(
+    SpeakerInviteRelationship,
+    'speaker_invite_session',
+    '/speaker-invites/<int:id>/relationships/session',
+)
+api.route(
+    SpeakerInviteRelationship,
+    'speaker_invite_event',
+    '/speaker-invites/<int:id>/relationships/event',
+)
+
 # users_events_roles
 api.route(
     UsersEventsRolesDetail, 'users_events_roles_detail', '/users-events-roles/<int:id>'
@@ -751,6 +795,7 @@ api.route(
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
+    '/speaker-invites/<int:speaker_invite_id>/event',
 )
 api.route(
     EventRelationship,
@@ -975,6 +1020,12 @@ api.route(
     '/events/<int:id>/relationships/exhibitors',
     '/events/<identifier>/relationships/exhibitors',
 )
+api.route(
+    EventRelationship,
+    'event_speaker_invites',
+    '/events/<int:id>/relationships/speaker-invites',
+    '/events/<identifier>/relationships/speaker-invites',
+)
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
@@ -1039,6 +1090,13 @@ api.route(
     'user_favourite_session_list_post',
     '/user-favourite-sessions',
 )
+
+api.route(
+    UserRelationship,
+    'user_user_followed_groups',
+    '/users/<int:id>/relationships/followed-groups',
+)
+
 api.route(
     UserFavouriteSessionList,
     'user_favourite_sessions_list',
@@ -1083,6 +1141,7 @@ api.route(
     '/sessions/<int:id>',
     '/feedbacks/<int:feedback_id>/event',
     '/user-favourite-sessions/<int:user_favourite_session_id>/session',
+    '/speaker-invites/<int:speaker_invite_id>/session',
 )
 api.route(
     SessionRelationshipOptional,
@@ -1124,6 +1183,11 @@ api.route(
     SessionRelationshipOptional,
     'session_user_favourite_sessions',
     '/sessions/<int:id>/relationships/favourite-sessions',
+)
+api.route(
+    SessionRelationshipOptional,
+    'session_speaker_invites',
+    '/sessions/<int:id>/relationships/speaker-invites',
 )
 
 # social_links
@@ -1240,7 +1304,11 @@ api.route(
     '/sessions/<int:session_id>/speakers',
     '/users/<int:user_id>/speakers',
 )
-api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>')
+api.route(
+    SpeakerDetail,
+    'speaker_detail',
+    '/speakers/<int:id>',
+)
 api.route(
     SpeakerRelationshipRequired, 'speaker_event', '/speakers/<int:id>/relationships/event'
 )
@@ -1455,6 +1523,7 @@ api.route(
     '/groups/<int:id>',
     '/events/<int:event_id>/group',
     '/users-groups-roles/<int:users_groups_roles_id>/group',
+    '/user-follow-groups/<int:user_follow_group_id>/group',
 )
 api.route(
     GroupRelationship,
@@ -1472,6 +1541,41 @@ api.route(
     '/groups/<int:id>/relationships/user',
 )
 
+api.route(
+    GroupRelationship,
+    'group_followers',
+    '/groups/<int:id>/relationships/followers',
+)
+
+# user follow groups
+api.route(
+    UserFollowGroupListPost,
+    'user_follow_group_list_post',
+    '/user-follow-groups',
+)
+
+api.route(
+    UserFollowGroupList,
+    'user_follow_group_list',
+    '/users/<int:user_id>/followed-groups',
+    '/groups/<int:group_id>/followers',
+)
+
+api.route(
+    UserFollowGroupDetail,
+    'user_follow_group_detail',
+    '/user-follow-groups/<int:id>',
+)
+api.route(
+    UserFollowGroupRelationship,
+    'user_follow_group_user',
+    '/user-follow-groups/<int:id>/relationships/user',
+)
+api.route(
+    UserFollowGroupRelationship,
+    'user_follow_group_group',
+    '/user-follow-groups/<int:id>/relationships/group',
+)
 
 # event sub topics
 api.route(EventSubTopicListPost, 'event_sub_topic_list_post', '/event-sub-topics')
@@ -1723,6 +1827,11 @@ api.route(
 api.route(
     AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails'
 )
+api.route(
+    AdminStatisticsGroupDetail,
+    'admin_statistics_group_detail',
+    '/admin/statistics/groups',
+)
 
 # Admin Sales
 api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
@@ -1752,6 +1861,7 @@ api.route(
     '/events/<int:event_id>/video-stream',
     '/events/<event_identifier>/video-stream',
     '/video-stream-moderators/<int:video_stream_moderator_id>/video-stream',
+    '/video-recordings/<int:video_recording_id>/video-stream',
 )
 api.route(
     VideoStreamRelationship,
@@ -1773,6 +1883,11 @@ api.route(
     'video_stream_moderators',
     '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
+api.route(
+    VideoStreamRelationship,
+    'video_stream_recordings',
+    '/video-streams/<int:id>/relationships/video-recordings',
+)
 # Video Channels
 api.route(VideoChannelListPost, 'video_channel_list_post', '/video-channels')
 api.route(VideoChannelList, 'video_channel_list', '/video-channels')
@@ -1781,6 +1896,20 @@ api.route(
     'video_channel_detail',
     '/video-channels/<int:id>',
     '/video-streams/<int:video_stream_id>/video-channel',
+)
+
+# Video Recordings
+api.route(
+    VideoRecordingList,
+    'video_recording_list',
+    '/video-recordings',
+    '/video-streams/<int:video_stream_id>/video-recordings',
+)
+api.route(VideoRecordingDetail, 'video_recording_detail', '/video-recordings/<int:id>')
+api.route(
+    VideoRecordingRelationship,
+    'video_recording_stream',
+    '/video-recordings/<int:id>/relationships/video-stream',
 )
 
 # Exhibitors
