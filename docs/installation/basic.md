@@ -67,13 +67,9 @@ Open a terminal and enter the following commands to setup a virtual environment
 . venv/bin/activate
 ```
 
-<<<<<<< HEAD
-Now to install the dependencies using pip, type
-=======
 * **Step 1** - Install Poetry and Python 3 requirements.
 
 This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
->>>>>>> development
 
 ```sh
 # Install Poetry
@@ -156,7 +152,7 @@ python3 manage.py db stamp head
 * **Step 6** - Start the application along with the needed services.
 
 ```sh
-<<<<<<< HEAD
+
 # Install and run redis
 # For Ubuntu, Debian and alike
 sudo apt-get install redis-server
@@ -166,8 +162,6 @@ sudo dnf install redis
 brew install redis
 brew services start redis
 
-=======
->>>>>>> development
 # run worker
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
