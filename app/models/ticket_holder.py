@@ -4,6 +4,7 @@ from datetime import datetime
 from io import BytesIO
 
 import qrcode
+from citext import CIText
 
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models import db
@@ -17,7 +18,7 @@ class TicketHolder(SoftDeletionModel):
     id: int = db.Column(db.Integer, primary_key=True)
     firstname: str = db.Column(db.String, nullable=False)
     lastname: str = db.Column(db.String, nullable=False)
-    email: str = db.Column(db.String)
+    email: str = db.Column(CIText)
     address: str = db.Column(db.String)
     city: str = db.Column(db.String)
     state: str = db.Column(db.String)
@@ -35,8 +36,13 @@ class TicketHolder(SoftDeletionModel):
     blog: str = db.Column(db.String)
     twitter: str = db.Column(db.String)
     facebook: str = db.Column(db.String)
+    instagram: str = db.Column(db.String)
+    linkedin: str = db.Column(db.String)
     github: str = db.Column(db.String)
     gender: str = db.Column(db.String)
+    accept_video_recording: bool = db.Column(db.Boolean)
+    accept_share_details: bool = db.Column(db.Boolean)
+    accept_receive_emails: bool = db.Column(db.Boolean)
     age_group: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)

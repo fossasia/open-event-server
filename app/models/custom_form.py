@@ -61,6 +61,7 @@ ATTENDEE_FORM = {
     "github": {"include": 1, "require": 0},
     "gender": {"include": 0, "require": 0},
     "age_group": {"include": 0, "require": 0},
+    "accept_video_recording": {"include": 0, "require": 0},
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
@@ -82,6 +83,14 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "slidesUrl": "Slide",
         "videoUrl": "Video",
         "audioUrl": "Audio",
+        "website": "Website",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "github": "GitHub",
+        "linkedin": "Linkedin",
+        "instagram": "Instagram",
+        "gitlab": "Gitlab",
+        "mastodon": "Mastodon",
     },
     "speaker": {
         "name": "Name",
@@ -105,6 +114,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "github": "GitHub",
         "linkedin": "Linkedin",
         "instagram": "Instagram",
+        "mastodon": "Mastodon",
     },
     "attendee": {
         "firstname": "First Name",
@@ -128,8 +138,13 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "twitter": "Twitter",
         "facebook": "Facebook",
         "github": "GitHub",
+        "linkedin": "LinkedIn",
+        "instagram": "Instagram",
         "gender": "Gender",
         "ageGroup": "Age Group",
+        "acceptVideoRecording": "Photo & video & text consent",
+        "acceptShareDetails": "Partner contact consent",
+        "acceptReceiveEmails": "Email consent",
     },
 }
 
@@ -157,6 +172,7 @@ class CustomForms(db.Model):
     is_required = db.Column(db.Boolean, default=False)
     is_included = db.Column(db.Boolean, default=False)
     is_fixed = db.Column(db.Boolean, default=False)
+    position = db.Column(db.Integer, default=0, nullable=False)
     is_public = db.Column(db.Boolean, nullable=False, default=False)
     is_complex = db.Column(db.Boolean, nullable=False, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))

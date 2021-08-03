@@ -15,10 +15,8 @@ class TestLogging(OpenEventTestCase):
             record_activity('create_user', login_user=test_user, user=test_user)
             user_id_format = ' (' + str(test_user.id) + ')'
             test_actor = test_user.email + user_id_format
-            self.assertTrue(
-                'User logging@test.com' + user_id_format + ' created',
-                db.session.query(Activity).filter_by(actor=test_actor).first().action,
-            )
+            assert 'User logging@test.com' + user_id_format + ' created', \
+                db.session.query(Activity).filter_by(actor=test_actor).first().action
 
     def test_record_activity_invalid_template(self):
         """Test to record activity for invalid template"""
@@ -27,10 +25,8 @@ class TestLogging(OpenEventTestCase):
             record_activity('invalid_template', login_user=test_user, user=test_user)
             user_id_format = ' (' + str(test_user.id) + ')'
             test_actor = test_user.email + user_id_format
-            self.assertTrue(
-                '[ERROR LOGGING] invalid_template',
-                db.session.query(Activity).filter_by(actor=test_actor).first().action,
-            )
+            assert '[ERROR LOGGING] invalid_template', \
+                db.session.query(Activity).filter_by(actor=test_actor).first().action
 
 
 if __name__ == '__main__':

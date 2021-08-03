@@ -6,132 +6,241 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2020-11-07 15:52+0530\n"
-"PO-Revision-Date: 2017-01-13 14:36+0000\n"
-"Last-Translator: Phillips Zhu <phizzarfernos@gmail.com>\n"
+"POT-Creation-Date: 2021-04-01 22:43+0530\n"
+"PO-Revision-Date: 2021-04-07 02:26+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-event/"
+"server/id/>\n"
 "Language: id\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-event"
-"/organizer-server/id/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.6-dev\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: app/templates/email/organizer_contact_attendee.html:1
+#: app/templates/email/ticket_purchased.html:1
+#: app/templates/email/ticket_purchased_attendee.html:1
+#: app/templates/email/user_register.html:1
+msgid "Hello"
+msgstr "Halo"
+
+#: app/templates/email/organizer_contact_attendee.html:2
+msgid "You have contacted the organizers of the event"
+msgstr "Anda telah menghubungi penyelenggara acara"
+
+#: app/templates/email/organizer_contact_attendee.html:3
+msgid "Below you find a copy of your email"
+msgstr "Di bawah ini adalah salinan email Anda"
+
+#: app/templates/email/organizer_contact_attendee.html:7
+msgid "Organizers have received your message and will follow up with you"
+msgstr "Penyelenggara telah menerima pesan Anda dan akan menindaklanjutinya"
+
+#: app/templates/email/organizer_contact_attendee.html:8
+msgid ""
+"This is a system message. Please do not reply to this message. Replies "
+"are not monitored"
+msgstr ""
+"Ini adalah pesan sistem. Jangan membalas pesan ini. Balasan tidak dipantau"
+
+#: app/templates/email/organizer_contact_attendee.html:9
+msgid "Thank you"
+msgstr "Terima kasih"
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "Kata sandi Anda berhasil diubah."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr ""
+msgstr "Silakan masuk dengan kata sandi baru Anda."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "Silakan gunakan tautan berikut untuk mengatur ulang kata sandi Anda."
 
 #: app/templates/email/password_reset.html:3
 msgid "Or paste this token in your"
-msgstr ""
+msgstr "Atau tempelkan token ini di"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
-
-#: app/templates/email/ticket_purchased.html:1
-#: app/templates/email/ticket_purchased_attendee.html:1
-#: app/templates/email/user_register.html:1
-msgid "Hello"
-msgstr ""
+"Silakan gunakan tautan berikut untuk mengatur ulang kata sandi dan "
+"memverifikasi akun Anda."
 
 #: app/templates/email/ticket_purchased.html:2
 msgid "Thank you for your ticket order for"
-msgstr ""
+msgstr "Terima kasih atas pesanan tiket Anda untuk"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "This is your order confirmation. You can download your tickets at"
-msgstr ""
+msgstr "Ini adalah konfirmasi pesanan Anda. Tiket dapat diunduh di"
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "Order Summary"
-msgstr ""
+msgstr "Ringkasan Pesanan"
 
 #: app/templates/email/ticket_purchased.html:5
 msgid "Order"
-msgstr ""
+msgstr "Pesanan"
 
 #: app/templates/email/ticket_purchased.html:6
 #: app/templates/email/ticket_purchased_attendee.html:4
+#: app/templates/pdf/order_invoice.html:208
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:7
 msgid "Ticket"
-msgstr ""
+msgstr "Tiket"
 
 #: app/templates/email/ticket_purchased.html:10
+#: app/templates/email/ticket_purchased_attendee.html:8
+#: app/templates/pdf/order_invoice.html:185
+#: app/templates/pdf/order_invoice.html:210
 msgid "Quantity"
-msgstr ""
+msgstr "Jumlah"
 
 #: app/templates/email/ticket_purchased.html:13
 #: app/templates/email/ticket_purchased_attendee.html:11
 msgid "About this event"
-msgstr ""
+msgstr "Tentang acara ini"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:12
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 #: app/templates/email/ticket_purchased.html:16
 #: app/templates/email/ticket_purchased_attendee.html:14
 msgid "Best regards"
-msgstr ""
+msgstr "Dengan hormat"
 
 #: app/templates/email/ticket_purchased.html:17
 #: app/templates/email/ticket_purchased_attendee.html:15
 #: app/templates/email/user_register.html:6
 msgid "Team"
-msgstr ""
+msgstr "Tim"
 
 #: app/templates/email/ticket_purchased.html:19
 #: app/templates/email/ticket_purchased_attendee.html:17
+msgid "Below you find a message from the organizer"
+msgstr "Di bawah ini Anda menemukan pesan dari penyelenggara"
+
+#: app/templates/email/ticket_purchased.html:28
+#: app/templates/email/ticket_purchased_attendee.html:26
 msgid "Login to manage your orders at"
-msgstr ""
+msgstr "Masuk untuk mengelola pesanan Anda di"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "This is a confirmation mail of your tickets for the event"
-msgstr ""
+msgstr "Ini adalah email konfirmasi tiket Anda untuk acara tersebut"
 
 #: app/templates/email/ticket_purchased_attendee.html:2
 msgid "You can download your tickets at"
-msgstr ""
+msgstr "Anda dapat mengunduh tiket di"
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 msgid "Ticket Summary"
-msgstr ""
+msgstr "Ringkasan Tiket"
 
 #: app/templates/email/user_register.html:2
 msgid "Your account has been created on"
-msgstr ""
+msgstr "Akun Anda telah dibuat pada"
 
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "Selamat!"
 
 #: app/templates/email/user_register.html:3
 msgid "Your login is"
-msgstr ""
+msgstr "Login Anda adalah"
 
 #: app/templates/email/user_register.html:4
 msgid "Please visit the following link to verify your email:"
-msgstr ""
+msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
 
 #: app/templates/email/user_register.html:5
 msgid "Thank You"
-msgstr ""
+msgstr "Terima kasih"
+
+#: app/templates/pdf/order_invoice.html:148
+msgid "INVOICE"
+msgstr "FAKTUR"
+
+#: app/templates/pdf/order_invoice.html:162
+msgid "Order Number"
+msgstr "Nomor Pesanan"
+
+#: app/templates/pdf/order_invoice.html:163
+msgid "Order By"
+msgstr "Urut berdasarkan"
+
+#: app/templates/pdf/order_invoice.html:169
+msgid "Information unavailable"
+msgstr "Informasi tidak tersedia"
+
+#: app/templates/pdf/order_invoice.html:172
+msgid "Order Status"
+msgstr "Status Pesanan"
+
+#: app/templates/pdf/order_invoice.html:176
+msgid "Pending"
+msgstr "Tertunda"
+
+#: app/templates/pdf/order_invoice.html:186
+msgid "Total Amount"
+msgstr "Jumlah Total"
+
+#: app/templates/pdf/order_invoice.html:187
+msgid "Payment Mode"
+msgstr "Mode Pembayaran"
+
+#: app/templates/pdf/order_invoice.html:191
+msgid "Payment pending"
+msgstr "Pembayaran tertunda"
+
+#: app/templates/pdf/order_invoice.html:194
+msgid "Discount Code"
+msgstr "Kode Diskon"
+
+#: app/templates/pdf/order_invoice.html:198
+msgid "NA"
+msgstr "NA"
+
+#: app/templates/pdf/order_invoice.html:209
+msgid "Price"
+msgstr "Harga"
+
+#: app/templates/pdf/order_invoice.html:211
+msgid "Sub-Total(net)"
+msgstr "Sub-Total (bersih)"
+
+#: app/templates/pdf/order_invoice.html:212
+msgid "VAT"
+msgstr "Ppn"
+
+#: app/templates/pdf/order_invoice.html:213
+msgid "Tax Amount"
+msgstr "Jumlah Pajak"
+
+#: app/templates/pdf/order_invoice.html:242
+msgid "Grand Total"
+msgstr "Total Keseluruhan"
+
+#: app/templates/pdf/order_invoice.html:250
+msgid "Invoice Footer"
+msgstr "Footer Faktur"
+
+#: app/templates/pdf/ticket_attendee.html:79
+#: app/templates/pdf/ticket_purchaser.html:80
+msgid "Organizer Message"
+msgstr "Pesan Penyelenggara"

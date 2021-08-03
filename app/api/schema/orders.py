@@ -131,7 +131,8 @@ class OrderSchema(Schema):
         dump_only=True,
     )
 
-    user = Relationship(
+    user = GetterRelationship(
+        getter='safe_user',
         self_view='v1.order_user',
         self_view_kwargs={'order_identifier': '<identifier>'},
         related_view='v1.user_detail',

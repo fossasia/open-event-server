@@ -99,7 +99,6 @@ class UserEmailDetail(ResourceDetail):
         api.has_permission(
             'is_user_itself',
             fetch='user_id',
-            fetch_as="user_id",
             model=UserEmail,
             methods="PATCH,DELETE",
         ),

@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 
 from flask import request
@@ -12,6 +13,9 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 
 @jwt_required
@@ -183,7 +187,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
 
     if session.speakers:
         for speaker in session.speakers:
-            if speaker.user_id == user.id:
+            if speaker.user_id == user.id or speaker.email == user._email:
                 return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
@@ -503,10 +507,16 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 fetched = getattr(data, fetch) if hasattr(data, fetch) else None
 
         if fetched:
-            if 'fetch_as' in kwargs:
-                kwargs[kwargs['fetch_as']] = fetched
-            elif 'fetch' in kwargs:
-                kwargs[kwargs['fetch']] = fetched
+            fetch_as = kwargs.get('fetch_as')
+            fetch = kwargs.get('fetch')
+            if fetch_as == fetch:
+                logger.warning(
+                    "If 'fetch_as' is same as 'fetch', then it is redundant: %s", fetch
+                )
+            if fetch_as:
+                kwargs[fetch_as] = fetched
+            elif fetch:
+                kwargs[fetch] = fetched
         else:
             raise NotFoundError({'source': ''}, 'Object not found.')
     if args[0] in permissions:
@@ -536,3 +546,11 @@ def has_access(access_level, **kwargs):
 
 def is_logged_in() -> bool:
     return 'Authorization' in request.headers
+
+
+def require_current_user() -> Union[User, None]:
+    """Parses JWT and returns current_user if Authorization header is present, else None"""
+    if not is_logged_in():
+        return None
+    verify_jwt_in_request()
+    return current_user

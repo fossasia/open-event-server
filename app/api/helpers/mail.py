@@ -1,6 +1,6 @@
 import base64
 import logging
-from datetime import datetime
+import os
 from itertools import groupby
 from typing import Dict
 
@@ -8,33 +8,13 @@ from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.files import make_frontend_url
+from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
-from app.api.helpers.system_mails import MAILS
+from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
-from app.models.mail import (
-    AFTER_EVENT,
-    EVENT_EXPORT_FAIL,
-    EVENT_EXPORTED,
-    EVENT_IMPORT_FAIL,
-    EVENT_IMPORTED,
-    EVENT_ROLE,
-    MONTHLY_PAYMENT_EMAIL,
-    MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
-    MONTHLY_PAYMENT_POST_DUE_EMAIL,
-    MONTHLY_PAYMENT_PRE_DUE_EMAIL,
-    NEW_SESSION,
-    SESSION_STATE_CHANGE,
-    TEST_MAIL,
-    TICKET_CANCELLED,
-    TICKET_PURCHASED,
-    TICKET_PURCHASED_ATTENDEE,
-    TICKET_PURCHASED_ORGANIZER,
-    USER_CHANGE_EMAIL,
-    USER_CONFIRM,
-    USER_EVENT_ROLE,
-    Mail,
-)
+from app.models.event import Event
+from app.models.mail import Mail
+from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
@@ -53,11 +33,15 @@ def check_smtp_config(config):
     return True
 
 
-def send_email(to, action, subject, html, attachments=None, bcc=None):
+def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=None):
     """
     Sends email and records it in DB
     """
     from .tasks import get_smtp_config, send_email_task_sendgrid, send_email_task_smtp
+
+    if not MessageSettings.is_enabled(action):
+        logger.info("Mail of type %s is not enabled. Hence, skipping...", action)
+        return
 
     if isinstance(to, User):
         logger.warning('to argument should be an email string, not a User object')
@@ -79,6 +63,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
         'html': html,
         'attachments': attachments,
         'bcc': bcc,
+        'reply_to': reply_to,
     }
 
     if not (current_app.config['TESTING'] or email_service == 'disable'):
@@ -118,7 +103,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None):
     return True
 
 
-def send_email_with_action(user, action, bcc=None, **kwargs):
+def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
     """
     A general email helper to use in the APIs
     :param user: email or user to which email is to be sent
@@ -126,36 +111,53 @@ def send_email_with_action(user, action, bcc=None, **kwargs):
     :param kwargs:
     :return:
     """
+    if not MessageSettings.is_enabled(action):
+        logger.info("Mail of type %s is not enabled. Hence, skipping...", action)
+        return
+
     if isinstance(user, User):
         user = user.email
+
+    template_path = 'email/' + template_name.lower() + '.html'
 
     send_email(
         to=user,
         action=action,
         subject=MAILS[action]['subject'].format(**kwargs),
-        html=MAILS[action]['message'].format(**kwargs),
+        html=render_template(template_path, **kwargs),
         bcc=bcc,
     )
 
 
 def send_email_confirmation(email, link):
     """account confirmation"""
+    action = MailType.USER_CONFIRM
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=USER_CONFIRM,
-        subject=MAILS[USER_CONFIRM]['subject'],
-        html=MAILS[USER_CONFIRM]['message'].format(email=email, link=link),
+        action=action,
+        subject=mail['subject'],
+        html=render_template(mail['template'], email=email, link=link),
     )
 
 
-def send_email_new_session(email, event_name, link):
+def send_email_new_session(email, session):
     """email for new session"""
+    app_name = get_settings()['app_name']
+    front_page = get_settings()['frontend_url']
+    session_overview_link = session.event.organizer_site_link + "/sessions/pending"
+    action = MailType.NEW_SESSION
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=NEW_SESSION,
-        subject=MAILS[NEW_SESSION]['subject'].format(event_name=event_name),
-        html=MAILS[NEW_SESSION]['message'].format(
-            email=email, event_name=event_name, link=link
+        action=action,
+        subject=mail['subject'].format(session=session),
+        html=render_template(
+            mail['template'],
+            session=session,
+            session_overview_link=session_overview_link,
+            app_name=app_name,
+            front_page=front_page,
         ),
     )
 
@@ -167,10 +169,10 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     settings = get_settings()
     app_name = settings['app_name']
     frontend_url = settings['frontend_url']
-
     context = {
         'session_name': session.title,
         'session_link': session.site_link,
+        'session_cfs_link': session.site_cfs_link,
         'session_state': session.state,
         'event_name': event.name,
         'event_link': event.site_link,
@@ -179,7 +181,7 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
     }
 
     try:
-        mail = MAILS[SESSION_STATE_CHANGE][session.state]
+        mail = MAILS[MailType.SESSION_STATE_CHANGE][session.state]
         if mail_override:
             mail = mail.copy()
             mail['subject'] = mail_override.get('subject') or mail['subject']
@@ -189,49 +191,81 @@ def send_email_session_state_change(email, session, mail_override: Dict[str, str
         logger.error('No mail found for session state change: ' + session.state)
         return
 
+    organizers_email = list(
+        map(
+            lambda x: x.email,
+            session.event.organizers + session.event.coorganizers + [session.event.owner],
+        )
+    )
+    bcc = list(set(organizers_email + mail.get('bcc', [])))
+    if email in bcc:
+        bcc.remove(email)  # to, cc, bcc should have unique emails
+
     send_email(
         to=email,
-        action=SESSION_STATE_CHANGE,
+        action=MailType.SESSION_STATE_CHANGE,
         subject=mail['subject'].format(**context),
         html=mail['message'].format(**context),
-        bcc=mail['bcc'],
+        bcc=bcc,
+        reply_to=session.event.owner.email,
     )
 
 
 def send_email_role_invite(email, role_name, event_name, link):
     """email for role invite"""
+    action = MailType.EVENT_ROLE
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=EVENT_ROLE,
-        subject=MAILS[EVENT_ROLE]['subject'].format(role=role_name, event=event_name),
-        html=MAILS[EVENT_ROLE]['message'].format(
-            email=email, role=role_name, event=event_name, link=link
+        action=action,
+        subject=mail['subject'].format(role=role_name, event=event_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            role=role_name,
+            event=event_name,
+            link=link,
         ),
     )
 
 
-def send_user_email_role_invite(email, role_name, event_name, link):
-    """email for role invite"""
+def send_email_speaker_invite(email, session, cfs_link, inviter):
+    """email for speaker invite"""
+    action = MailType.SPEAKER_INVITE
+    app_name = get_settings()['app_name']
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=USER_EVENT_ROLE,
-        subject=MAILS[USER_EVENT_ROLE]['subject'].format(
-            role=role_name, event=event_name
-        ),
-        html=MAILS[USER_EVENT_ROLE]['message'].format(
-            email=email, role=role_name, event=event_name, link=link
+        action=action,
+        subject=mail['subject'].format(session=session.title),
+        html=render_template(
+            mail['template'],
+            session_title=session.title,
+            event_name=session.event.name,
+            event_link=session.event.site_link,
+            app_name=app_name,
+            frontend_url=get_settings()['frontend_url'],
+            inviter_email=inviter.email,
+            inviter_name=inviter.name,
+            cfs_link=cfs_link,
         ),
     )
 
 
-def send_email_after_event(email, event_name, frontend_url):
+def send_email_group_role_invite(email, role_name, group_name, link):
     """email for role invite"""
+    action = MailType.GROUP_ROLE
+    mail = MAILS[action]
     send_email(
         to=email,
-        action=AFTER_EVENT,
-        subject=MAILS[AFTER_EVENT]['subject'].format(event_name=event_name),
-        html=MAILS[AFTER_EVENT]['message'].format(
-            email=email, event_name=event_name, url=frontend_url
+        action=action,
+        subject=mail['subject'].format(role=role_name, group=group_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            role=role_name,
+            group=group_name,
+            link=link,
         ),
     )
 
@@ -241,20 +275,22 @@ def send_email_for_monthly_fee_payment(
 ):
     """email for monthly fee payment"""
     options = {
-        False: MONTHLY_PAYMENT_EMAIL,
-        True: MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
-        'pre_due': MONTHLY_PAYMENT_PRE_DUE_EMAIL,
-        'post_due': MONTHLY_PAYMENT_POST_DUE_EMAIL,
+        False: MailType.MONTHLY_PAYMENT,
+        True: MailType.MONTHLY_PAYMENT_FOLLOWUP,
+        'pre_due': MailType.MONTHLY_PAYMENT_PRE_DUE,
+        'post_due': MailType.MONTHLY_PAYMENT_POST_DUE,
     }
     key = options[follow_up]
+    mail = MAILS[key]
     email = user.email
     send_email(
         to=email,
         action=key,
-        subject=MAILS[key]['subject'].format(
+        subject=mail['subject'].format(
             date=previous_month, event_name=event_name, app_name=app_name
         ),
-        html=MAILS[key]['message'].format(
+        html=render_template(
+            mail['template'],
             name=user.full_name,
             email=email,
             event_name=event_name,
@@ -270,45 +306,53 @@ def send_email_for_monthly_fee_payment(
 def send_export_mail(email, event_name, error_text=None, download_url=None):
     """followup export link in email"""
     if error_text:
+        action = MailType.EVENT_EXPORT_FAIL
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=EVENT_EXPORT_FAIL,
-            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(error_text=error_text),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], error_text=error_text),
         )
     elif download_url:
+        action = MailType.EVENT_EXPORTED
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=EVENT_EXPORTED,
-            subject=MAILS[EVENT_EXPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_EXPORTED]['message'].format(download_url=download_url),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], download_url=download_url),
         )
 
 
 def send_import_mail(email, event_name=None, error_text=None, event_url=None):
     """followup export link in email"""
     if error_text:
+        action = MailType.EVENT_IMPORT_FAIL
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=EVENT_IMPORT_FAIL,
-            subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
-            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(error_text=error_text),
+            action=action,
+            subject=mail['subject'],
+            html=render_template(mail['template'], error_text=error_text),
         )
     elif event_url:
+        action = MailType.EVENT_IMPORTED
+        mail = MAILS[action]
         send_email(
             to=email,
-            action=EVENT_IMPORTED,
-            subject=MAILS[EVENT_IMPORTED]['subject'].format(event_name=event_name),
-            html=MAILS[EVENT_IMPORTED]['message'].format(event_url=event_url),
+            action=action,
+            subject=mail['subject'].format(event_name=event_name),
+            html=render_template(mail['template'], event_url=event_url),
         )
 
 
 def send_test_email(recipient):
     send_email(
         to=recipient,
-        action=TEST_MAIL,
-        subject=MAILS[TEST_MAIL]['subject'],
-        html=MAILS[TEST_MAIL]['message'],
+        action=MailType.TEST_MAIL,
+        subject=MAILS[MailType.TEST_MAIL]['subject'],
+        html=MAILS[MailType.TEST_MAIL]['message'],
     )
 
 
@@ -319,14 +363,31 @@ def send_email_change_user_email(user, email):
         'utf-8',
     )
     link = make_frontend_url('/email/verify', {'token': hash_})
-    send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
-    send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
+    send_email_with_action(
+        user.email, MailType.USER_CONFIRM, 'user_confirm', email=user.email, link=link
+    )
+    send_email_with_action(
+        email,
+        MailType.USER_CHANGE_EMAIL,
+        'user_change_email',
+        email=email,
+        new_email=user.email,
+    )
 
 
 def send_email_to_attendees(order):
     attachments = None
     if current_app.config['ATTACH_ORDER_PDF']:
         attachments = [order.ticket_pdf_path, order.invoice_pdf_path]
+
+    event = order.event
+    ical_file_path = generate_ics_file(event.id, include_sessions=False)
+
+    if os.path.exists(ical_file_path):
+        if attachments is None:
+            attachments = [ical_file_path]
+        else:
+            attachments.append(ical_file_path)
 
     attendees = (
         TicketHolder.query.options(
@@ -337,7 +398,6 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
-    event = order.event
     context = dict(
         order=order,
         settings=get_settings(),
@@ -345,19 +405,21 @@ def send_email_to_attendees(order):
     )
 
     buyer_email = order.user.email
+    action = MailType.TICKET_PURCHASED
+    mail = MAILS[action]
     send_email(
         to=buyer_email,
-        action=TICKET_PURCHASED,
-        subject=MAILS[TICKET_PURCHASED]['subject'].format(
+        action=action,
+        subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
         ),
-        html=render_template(
-            'email/ticket_purchased.html', attendees=attendees, **context
-        ),
+        html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
     )
 
+    action = MailType.TICKET_PURCHASED_ATTENDEE
+    mail = MAILS[action]
     for email, attendees_group in email_group:
         if email == buyer_email:
             # Ticket holder is the purchaser
@@ -366,13 +428,13 @@ def send_email_to_attendees(order):
         # The Ticket holder is not the purchaser
         send_email(
             to=email,
-            action=TICKET_PURCHASED_ATTENDEE,
-            subject=MAILS[TICKET_PURCHASED_ATTENDEE]['subject'].format(
+            action=action,
+            subject=mail['subject'].format(
                 event_name=event.name,
                 invoice_id=order.invoice_number,
             ),
             html=render_template(
-                'email/ticket_purchased_attendee.html',
+                mail['template'],
                 attendees=list(attendees_group),
                 **context,
             ),
@@ -391,7 +453,11 @@ def send_order_purchase_organizer_email(order, recipients):
     emails = list({organizer.email for organizer in recipients})
     if emails:
         send_email_with_action(
-            emails[0], TICKET_PURCHASED_ORGANIZER, bcc=emails[1:], **context
+            emails[0],
+            MailType.TICKET_PURCHASED_ORGANIZER,
+            'ticket_purchased_organizer',
+            bcc=emails[1:],
+            **context,
         )
 
 
@@ -402,17 +468,102 @@ def send_order_cancel_email(order):
             cancel_note=order.cancel_note
         )
 
+    order_url = (
+        get_settings()['frontend_url'] + '/orders/' + str(order.identifier) + '/view/'
+    )
+    event_url = get_settings()['frontend_url'] + '/e/' + order.event.identifier
+
+    action = MailType.TICKET_CANCELLED
+    mail = MAILS[action]
     send_email(
         to=order.user.email,
-        action=TICKET_CANCELLED,
-        subject=MAILS[TICKET_CANCELLED]['subject'].format(
+        action=action,
+        subject=mail['subject'].format(
             event_name=order.event.name,
             invoice_id=order.invoice_number,
         ),
-        html=MAILS[TICKET_CANCELLED]['message'].format(
+        html=render_template(
+            mail['template'],
             event_name=order.event.name,
-            frontend_url=get_settings()['frontend_url'],
+            order_url=order_url,
+            event_url=event_url,
             cancel_msg=cancel_msg,
             app_name=get_settings()['app_name'],
+        ),
+    )
+
+
+def send_password_change_email(user):
+    action = MailType.PASSWORD_CHANGE
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(mail['template']),
+    )
+
+
+def send_password_reset_email(user):
+    link = make_frontend_url('/reset-password', {'token': user.reset_password})
+    action = (
+        MailType.PASSWORD_RESET_AND_VERIFY
+        if user.was_registered_with_order
+        else MailType.PASSWORD_RESET
+    )
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=get_settings()['app_name']),
+        html=render_template(
+            mail['template'],
+            link=link,
+            settings=get_settings(),
+            token=user.reset_password,
+        ),
+    )
+
+
+def send_user_register_email(user):
+    s = get_serializer()
+    hash = str(
+        base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()),
+        'utf-8',
+    )
+    link = make_frontend_url('/verify', {'token': hash})
+    settings = get_settings()
+    action = MailType.USER_REGISTER
+    mail = MAILS[action]
+    send_email(
+        to=user.email,
+        action=action,
+        subject=mail['subject'].format(app_name=settings['app_name']),
+        html=render_template(
+            mail['template'],
+            email=user.email,
+            link=link,
+            settings=get_settings(),
+        ),
+    )
+
+
+def send_email_to_moderator(video_stream_moderator):
+    action = MailType.VIDEO_MODERATOR_INVITE
+    mail = MAILS[action]
+    event = Event.query.get(video_stream_moderator.video_stream._event_id)
+    send_email(
+        to=video_stream_moderator.email,
+        action=action,
+        subject=mail['subject'].format(
+            video_name=video_stream_moderator.video_stream.name, event_name=event.name
+        ),
+        html=render_template(
+            mail['template'],
+            registration_url=make_frontend_url('/register'),
+            event_name=event.name,
+            video_stream_name=video_stream_moderator.video_stream.name,
+            user=video_stream_moderator.user,
+            settings=get_settings(),
         ),
     )

@@ -166,14 +166,12 @@ class AccessCodeDetail(ResourceDetail):
         api.has_permission(
             'is_coorganizer',
             fetch='event_id',
-            fetch_as="event_id",
             model=AccessCode,
             methods="PATCH",
         ),
         api.has_permission(
             'is_coorganizer_but_not_admin',
             fetch='event_id',
-            fetch_as="event_id",
             model=AccessCode,
             methods="DELETE",
         ),

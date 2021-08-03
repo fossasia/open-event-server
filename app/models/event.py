@@ -1,3 +1,4 @@
+import re
 from argparse import Namespace
 from datetime import datetime
 
@@ -5,6 +6,7 @@ import flask_login as login
 import pytz
 from flask import current_app
 from sqlalchemy import event
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
@@ -15,13 +17,13 @@ from app.models.event_topic import EventTopic
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_html, clean_up_string
 from app.models.order import Order
+from app.models.role import Role
 from app.models.search import sync
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee, get_maximum_fee
 from app.models.ticket_holder import TicketHolder
-from app.models.user import ATTENDEE, ORGANIZER, OWNER
 from app.settings import get_settings
 
 
@@ -32,10 +34,20 @@ def get_new_event_identifier(length=8):
 class Event(SoftDeletionModel):
     """Event object table"""
 
+    class State:
+        PUBLISHED = 'published'
+        DRAFT = 'draft'
+
+    class Privacy:
+        PUBLIC = 'public'
+        PRIVATE = 'private'
+
     __tablename__ = 'events'
     __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
-    identifier = db.Column(db.String, default=get_new_event_identifier)
+    identifier = db.Column(
+        db.String, default=get_new_event_identifier, nullable=False, unique=True
+    )
     name = db.Column(db.String, nullable=False)
     external_event_url = db.Column(db.String)
     logo_url = db.Column(db.String)
@@ -49,7 +61,14 @@ class Event(SoftDeletionModel):
     searchable_location_name = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
+    is_demoted = db.Column(db.Boolean, default=False, nullable=False)
+    is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    is_videoroom_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    is_document_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    document_links = db.Column(JSONB)
+    chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
+    after_order_message = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
     large_image_url = db.Column(db.String)
@@ -57,14 +76,19 @@ class Event(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    is_oneclick_signup_enabled = db.Column(db.Boolean)
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
     speaker = db.relationship('Speaker', backref="event")
     sponsor = db.relationship('Sponsor', backref="event")
+    exhibitors = db.relationship('Exhibitor', backref="event")
     tickets = db.relationship('Ticket', backref="event_")
     tags = db.relationship('TicketTag', backref='events')
     roles = db.relationship("UsersEventsRoles", backref="event")
@@ -84,6 +108,7 @@ class Event(SoftDeletionModel):
     event_sub_topic_id = db.Column(
         db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
     )
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='SET NULL'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -130,8 +155,6 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
-    live_stream_url = db.Column(db.String)
-    webinar_url = db.Column(db.String)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )
@@ -147,6 +170,7 @@ class Event(SoftDeletionModel):
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id]
     )
+    group = db.relationship('Group', backref='events', foreign_keys=[group_id])
     owner = db.relationship(
         'User',
         viewonly=True,
@@ -214,7 +238,7 @@ class Event(SoftDeletionModel):
         'User',
         viewonly=True,
         secondary='join(UsersEventsRoles, Role,'
-        ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
+        ' and_(Role.id == UsersEventsRoles.role_id))',
         primaryjoin='UsersEventsRoles.event_id == Event.id',
         secondaryjoin='User.id == UsersEventsRoles.user_id',
         backref='events',
@@ -234,16 +258,18 @@ class Event(SoftDeletionModel):
         self.description = clean_up_string(kwargs.get('description'))
         self.owner_description = clean_up_string(kwargs.get('owner_description'))
         self.code_of_conduct = clean_up_string(kwargs.get('code_of_conduct'))
+        self.after_order_message = clean_up_string(kwargs.get('after_order_message'))
 
     def __repr__(self):
         return '<Event %r>' % self.name
 
     def __setattr__(self, name, value):
-        allow_link = name == 'description' or 'owner_description'
+        allow_link = name == 'description' or 'owner_description' or 'after_order_message'
         if (
             name == 'owner_description'
             or name == 'description'
             or name == 'code_of_conduct'
+            or name == 'after_order_message'
         ):
             super().__setattr__(
                 name, clean_html(clean_up_string(value), allow_link=allow_link)
@@ -310,31 +336,12 @@ class Event(SoftDeletionModel):
     def average_rating(self):
         return self.get_average_rating()
 
-    def get_organizer(self):
-        """returns organizer of an event"""
-        for role in self.roles:
-            if role.role.name == ORGANIZER:
-                return role.user
-        return None
-
     def get_owner(self):
         """returns owner of an event"""
         for role in self.roles:
-            if role.role.name == OWNER:
+            if role.role.name == Role.OWNER:
                 return role.user
         return None
-
-    def has_staff_access(self, user_id):
-        """does user have role other than attendee"""
-        for _ in self.roles:
-            if _.user_id == (login.current_user.id if not user_id else int(user_id)):
-                if _.role.name != ATTENDEE:
-                    return True
-        return False
-
-    def get_staff_roles(self):
-        """returns only roles which are staff i.e. not attendee"""
-        return [role for role in self.roles if role.role.name != ATTENDEE]
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -386,6 +393,10 @@ class Event(SoftDeletionModel):
         )
 
     @property
+    def chat_room_name(self):
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + self.identifier
+
+    @property
     def tickets_available(self):
         return self.calc_total_tickets_count()
 
@@ -419,6 +430,11 @@ class Event(SoftDeletionModel):
         return f"{frontend_url}/e/{self.identifier}"
 
     @property
+    def organizer_site_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/events/{self.identifier}"
+
+    @property
     def starts_at_tz(self):
         return self.starts_at.astimezone(pytz.timezone(self.timezone))
 
@@ -431,7 +447,7 @@ class Event(SoftDeletionModel):
         if self.location_name:
             return self.location_name
         elif self.online:
-            return 'Online'
+            return self.site_link
         return 'Location Not Announced'
 
     @property
@@ -445,6 +461,11 @@ class Event(SoftDeletionModel):
         if stream and stream.user_can_access:
             return stream
         return None
+
+    @property
+    def notify_staff(self):
+        """Who receive notifications about event"""
+        return self.organizers + [self.owner]
 
 
 @event.listens_for(Event, 'after_update')

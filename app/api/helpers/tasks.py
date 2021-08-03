@@ -20,16 +20,16 @@ from sendgrid.helpers.mail import (
     Mail,
 )
 
+from app.api.chat.rocket_chat import rename_rocketchat_room
 from app.api.exports import event_export_task_base
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import (
     create_save_image_sizes,
     create_save_pdf,
     create_save_resized_image,
+    generate_ics_file,
 )
-from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.mail import check_smtp_config, send_export_mail, send_import_mail
-from app.api.helpers.notification import send_notif_after_export, send_notif_after_import
 from app.api.helpers.pentabarfxml import PentabarfExporter
 from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
 from app.api.helpers.utilities import strip_tags
@@ -40,6 +40,7 @@ from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
+from app.models.exhibitor import Exhibitor
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -111,17 +112,24 @@ def send_email_task_sendgrid(payload):
     if payload['bcc'] is not None:
         message.bcc = payload['bcc']
 
+    if payload['reply_to'] is not None:
+        message.reply_to = payload['reply_to']
+
     if payload['attachments'] is not None:
-        for attachment in payload['attachments']:
-            with open(attachment, 'rb') as f:
+        for filename in payload['attachments']:
+            with open(filename, 'rb') as f:
                 file_data = f.read()
                 f.close()
             encoded = base64.b64encode(file_data).decode()
             attachment = Attachment()
             attachment.file_content = FileContent(encoded)
-            attachment.file_type = FileType('application/pdf')
-            attachment.file_name = FileName(payload['to'])
             attachment.disposition = Disposition('attachment')
+            if filename.endswith('.pdf'):
+                attachment.file_type = FileType('application/pdf')
+                attachment.file_name = FileName(payload['to'])
+            elif filename.endswith('.ics'):
+                attachment.file_type = FileType('text/calendar')
+                attachment.file_name = FileName('ical.ics')
             message.add_attachment(attachment)
     sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
     logging.info(
@@ -139,9 +147,7 @@ def send_email_task_sendgrid(payload):
         elif e.code == 554:
             empty_attachments_send(sendgrid_client, message)
         else:
-            logging.exception(
-                "The following error has occurred with sendgrid-{}".format(str(e))
-            )
+            logging.exception(f"The following error has occurred with sendgrid-{str(e)}")
 
 
 @celery.task(name='send.email.post.smtp')
@@ -157,6 +163,8 @@ def send_email_task_smtp(payload):
     message.rich = payload['html']
     if payload['bcc'] is not None:
         message.bcc = payload['bcc']
+    if payload['reply_to'] is not None:
+        message.reply = payload['reply_to']
     if payload['attachments'] is not None:
         for attachment in payload['attachments']:
             message.attach(name=attachment)
@@ -186,6 +194,32 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.exception(
             'Error encountered while generating resized images for event with id: {}'.format(
                 event_id
+            )
+        )
+
+
+@celery.task(base=RequestContextTask, name='resize.exhibitor.images', bind=True)
+def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
+    exhibitor = Exhibitor.query.get(exhibitor_id)
+    try:
+        logging.info(
+            'Exhibitor image resizing tasks started for exhibitor with id {}: {}'.format(
+                exhibitor_id, photo_url
+            )
+        )
+        uploaded_images = create_save_image_sizes(
+            photo_url, 'event-image', exhibitor_id, folder='exhibitors'
+        )
+        exhibitor.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        exhibitor.banner_url = uploaded_images['large_image_url']
+        save_to_db(exhibitor)
+        logging.info(
+            f'Resized images saved successfully for exhibitor with id: {exhibitor_id}'
+        )
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL, OSError):
+        logging.exception(
+            'Error encountered while generating resized images for exhibitor with id: {}'.format(
+                exhibitor_id
             )
         )
 
@@ -257,7 +291,6 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
 def export_event_task(self, email, event_id, settings):
     event = safe_query(Event, 'id', event_id, 'event_id')
-    user = db.session.query(User).filter_by(email=email).first()
     smtp_encryption = get_settings()['smtp_encryption']
     try:
         logging.info('Exporting started')
@@ -274,9 +307,6 @@ def export_event_task(self, email, event_id, settings):
             )
         else:
             logging.warning('Error in sending export success email')
-        send_notif_after_export(
-            user=user, event_name=event.name, download_url=download_url
-        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in exporting.. sending email')
@@ -284,7 +314,6 @@ def export_event_task(self, email, event_id, settings):
             send_export_mail(email=email, event_name=event.name, error_text=str(e))
         else:
             logging.warning('Error in sending export error email')
-        send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
     return result
 
 
@@ -292,7 +321,6 @@ def export_event_task(self, email, event_id, settings):
 def import_event_task(self, email, file, source_type, creator_id):
     """Import Event Task"""
     task_id = self.request.id.__str__()  # str(async result)
-    user = db.session.query(User).filter_by(email=email).first()
     try:
         logging.info('Importing started')
         result = import_event_task_base(self, file, source_type, creator_id)
@@ -301,9 +329,6 @@ def import_event_task(self, email, file, source_type, creator_id):
         send_import_mail(
             email=email, event_name=result['event_name'], event_url=result['url']
         )
-        send_notif_after_import(
-            user=user, event_name=result['event_name'], event_url=result['url']
-        )
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in importing the event')
@@ -311,7 +336,6 @@ def import_event_task(self, email, file, source_type, creator_id):
             task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE'
         )
         send_import_mail(email=email, error_text=str(e))
-        send_notif_after_import(user=user, error_text=str(e))
 
     return result
 
@@ -321,22 +345,9 @@ def export_ical_task(self, event_id, temp=True):
     event = safe_query(Event, 'id', event_id, 'event_id')
 
     try:
-        if temp:
-            filedir = os.path.join(
-                current_app.config.get('BASE_DIR'),
-                f'static/uploads/temp/{event_id}/',
-            )
-        else:
-            filedir = os.path.join(
-                current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/'
-            )
+        file_path = generate_ics_file(event_id, temp)
 
-        if not os.path.isdir(filedir):
-            os.makedirs(filedir)
-        filename = "ical.ics"
-        file_path = os.path.join(filedir, filename)
-        with open(file_path, "w") as temp_file:
-            temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+        filename = os.path.basename(file_path)
         ical_file = UploadedFile(file_path=file_path, filename=filename)
         if temp:
             ical_url = upload(
@@ -554,8 +565,29 @@ def export_attendees_pdf_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.sessions.csv', bind=True)
-def export_sessions_csv_task(self, event_id):
-    sessions = db.session.query(Session).filter_by(event_id=event_id)
+def export_sessions_csv_task(self, event_id, status='all'):
+    if status not in [
+        'all',
+        'pending',
+        'accepted',
+        'confirmed',
+        'rejected',
+        'withdrawn',
+        'canceled',
+    ]:
+        status = 'all'
+
+    if status == 'all':
+        sessions = Session.query.filter(
+            Session.event_id == event_id, Session.deleted_at.is_(None)
+        ).all()
+    else:
+        sessions = Session.query.filter(
+            Session.state == status,
+            Session.event_id == event_id,
+            Session.deleted_at.is_(None),
+        ).all()
+
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
@@ -584,8 +616,37 @@ def export_sessions_csv_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
-def export_speakers_csv_task(self, event_id):
-    speakers = db.session.query(Speaker).filter_by(event_id=event_id)
+def export_speakers_csv_task(self, event_id, status='all'):
+
+    if status not in [
+        'all',
+        'pending',
+        'accepted',
+        'confirmed',
+        'rejected',
+        'withdrawn',
+        'canceled',
+        'without_session',
+    ]:
+        status = 'all'
+
+    if status == 'without_session':
+        speakers = Speaker.query.filter(
+            Speaker.sessions.is_(None),
+            Speaker.event_id == event_id,
+            Speaker.deleted_at.is_(None),
+        ).all()
+    elif status == 'all':
+        speakers = Speaker.query.filter(
+            Speaker.event_id == event_id, Speaker.deleted_at.is_(None)
+        ).all()
+    else:
+        speakers = Speaker.query.filter(
+            Speaker.sessions.any(state=status),
+            Speaker.event_id == event_id,
+            Speaker.deleted_at.is_(None),
+        ).all()
+
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
@@ -651,3 +712,10 @@ def delete_translations(self, zip_file_path):
         os.remove(zip_file_path)
     except:
         logger.exception('Error while deleting translations zip file')
+
+
+@celery.task(name='rename.chat.room')
+def rename_chat_room(event_id):
+    event = Event.query.get(event_id)
+    rename_rocketchat_room(event)
+    logging.info("Rocket chat room renamed successfully")

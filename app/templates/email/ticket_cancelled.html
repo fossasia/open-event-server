@@ -1,0 +1,8 @@
+{{ _('Hello') }},
+<br/> {{ _('Your order') }} {{ order_id }} {{ _('for') }}  {{ event_name }} {{ _('has been cancelled') }}.
+<br/> {{ _('The information about your cancelled order is here') }}: <a href= {{ order_url }} target='_blank'>{{ order_url }}</a>.
+<br/> {{ _('If you have not done this cancellation by yourself') }}, {{ _('please check with the owner of the order or the organizer of the event for more information about the cancellation') }}.
+<br/> {{ _('To contact event organizers please use the contact form on the event page here') }}: <a href={{ event_url }} target='_blank'>{{ event_url }}</a>
+<br/> {{ _('You need to login to access the form') }}.
+<br/> {{ _('Best regards') }},
+<br/>{{ app_name }} {{ _('Team') }}.

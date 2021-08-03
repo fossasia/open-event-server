@@ -83,7 +83,9 @@ def strip_tags(html):
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
-def get_serializer(secret_key='secret_key'):
+def get_serializer(secret_key=None):
+    if not secret_key:
+        secret_key = current_app.config['SECRET_KEY']
     return Serializer(secret_key)
 
 
@@ -183,3 +185,14 @@ TASK_RESULTS = {}
 
 class EmptyObject:
     pass
+
+
+def group_by(items, key):
+    result = {}
+    for item in items:
+        result[item[key]] = result.get(item[key], []) + [item]
+    return result
+
+
+def changed(obj, data: Dict, attr: str) -> bool:
+    return data.get(attr) and (data[attr] != getattr(obj, attr))

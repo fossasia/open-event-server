@@ -8,6 +8,7 @@ from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
+from app.models.users_groups_role import UsersGroupsRoles
 
 
 class RoleList(ResourceList):
@@ -33,21 +34,23 @@ class RoleDetail(ResourceDetail):
         """
         if view_kwargs.get('role_invite_id') is not None:
             role_invite = safe_query_kwargs(RoleInvite, view_kwargs, 'role_invite_id')
-            if role_invite.role_id is not None:
-                view_kwargs['id'] = role_invite.role_id
-            else:
-                view_kwargs['id'] = None
+            view_kwargs['id'] = role_invite.role_id
 
-        if view_kwargs.get('users_events_role_id') is not None:
+        if view_kwargs.get('users_events_roles_id') is not None:
             users_events_role = safe_query_kwargs(
                 UsersEventsRoles,
                 view_kwargs,
-                'users_events_role_id',
+                'users_events_roles_id',
             )
-            if users_events_role.role_id is not None:
-                view_kwargs['id'] = users_events_role.role_id
-            else:
-                view_kwargs['id'] = None
+            view_kwargs['id'] = users_events_role.role_id
+
+        if view_kwargs.get('users_groups_roles_id') is not None:
+            users_groups_role = safe_query_kwargs(
+                UsersGroupsRoles,
+                view_kwargs,
+                'users_groups_roles_id',
+            )
+            view_kwargs['id'] = users_groups_role.role_id
 
     def before_update_object(self, role, data, view_kwargs):
         """
@@ -96,5 +99,8 @@ class RoleDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Role,
-        'methods': {'before_get_object': before_get_object},
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_delete_object': before_delete_object,
+        },
     }

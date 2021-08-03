@@ -27,6 +27,7 @@ def client(app):
 
 @pytest.fixture(scope='module')
 def database(app):
+    _db.engine.execute('create extension if not exists citext')
     _db.create_all()
     set_settings(app_name='Open Event', app_environment=Environment.TESTING)
     yield _db

@@ -1,8 +1,11 @@
 from datetime import datetime
 
 import pytz
-from flask import request
+from flask import g, request
+from flask.blueprints import Blueprint
+from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended.view_decorators import jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -10,12 +13,19 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
+from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
-from app.api.helpers.errors import ConflictError, ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import (
+    ConflictError,
+    ForbiddenError,
+    NotFoundError,
+    UnprocessableEntityError,
+)
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access, is_logged_in
+from app.api.helpers.permissions import jwt_required, to_event_id
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchema, EventSchemaPublic
 
@@ -28,9 +38,11 @@ from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_copyright import EventCopyright
 from app.models.event_invoice import EventInvoice
+from app.models.exhibitor import Exhibitor
 from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
+from app.models.group import Group
 from app.models.microlocation import Microlocation
 from app.models.order import Order
 from app.models.role import Role
@@ -39,6 +51,7 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
+from app.models.speaker_invite import SpeakerInvite
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.stripe_authorization import StripeAuthorization
@@ -47,12 +60,8 @@ from app.models.ticket import Ticket, TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import (
-    ATTENDEE,
-    COORGANIZER,
     MARKETER,
     MODERATOR,
-    ORGANIZER,
-    OWNER,
     REGISTRAR,
     SALES_ADMIN,
     TRACK_ORGANIZER,
@@ -62,15 +71,66 @@ from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
 from app.models.video_stream import VideoStream
 
+events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
+
+
+@events_blueprint.route('/<string:event_identifier>/has-streams')
+@jwt_optional
+@to_event_id
+def has_streams(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    exists = False
+    if event.video_stream:
+        exists = True
+    else:
+        exists = db.session.query(
+            VideoStream.query.join(VideoStream.rooms)
+            .filter(Microlocation.event_id == event.id)
+            .exists()
+        ).scalar()
+    can_access = VideoStream(event_id=event.id).user_can_access
+    return jsonify(dict(exists=exists, can_access=can_access))
+
+
+@events_blueprint.route(
+    '/<string:event_identifier>/chat-token',
+)
+@jwt_required
+@to_event_id
+def get_chat_token(event_id: int):
+    event = Event.query.get_or_404(event_id)
+
+    if not VideoStream(event_id=event.id).user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    try:
+        data = get_rocket_chat_token(current_user, event)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        else:
+            return jsonify(
+                {
+                    'success': False,
+                    'code': rce.code,
+                    'response': rce.response is not None and rce.response.json(),
+                }
+            )
+
 
 def validate_event(user, data):
     if not user.can_create_event():
         raise ForbiddenError({'source': ''}, "Please verify your Email")
 
-    if data.get('state', None) == 'published' and not user.can_publish_event():
+    if data.get('state', None) == Event.State.PUBLISHED and not user.can_publish_event():
         raise ForbiddenError({'source': ''}, "Only verified accounts can publish events")
 
-    if not data.get('name', None) and data.get('state', None) == 'published':
+    if not data.get('name', None) and data.get('state', None) == Event.State.PUBLISHED:
         raise ConflictError(
             {'pointer': '/data/attributes/name'},
             "Event Name is required to publish the event",
@@ -96,6 +156,39 @@ def validate_date(event, data):
             {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at"
         )
 
+    if (data['ends_at'] - data['starts_at']).days > 20:
+        raise UnprocessableEntityError(
+            {'pointer': '/data/attributes/ends-at'},
+            "Event duration can not be more than 20 days",
+        )
+
+
+def get_event_query():
+    query_ = Event.query
+    if get_jwt_identity() is None or not current_user.is_staff:
+        # If user is not admin, we only show published events
+        query_ = query_.filter_by(state=Event.State.PUBLISHED)
+    if is_logged_in():
+        # For a specific user accessing the API, we show all
+        # events managed by them, even if they're not published
+        verify_jwt_in_request()
+        query2 = Event.query
+        query2 = (
+            query2.join(Event.roles)
+            .filter_by(user_id=current_user.id)
+            .join(UsersEventsRoles.role)
+            .filter(
+                or_(
+                    Role.name == Role.COORGANIZER,
+                    Role.name == Role.ORGANIZER,
+                    Role.name == Role.OWNER,
+                )
+            )
+        )
+        query_ = query_.union(query2)
+
+    return query_
+
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -116,39 +209,13 @@ class EventList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Event)
-        if get_jwt_identity() is None or not current_user.is_staff:
-            # If user is not admin, we only show published events
-            query_ = query_.filter_by(state='published')
-        if is_logged_in():
-            # For a specific user accessing the API, we show all
-            # events managed by them, even if they're not published
-            verify_jwt_in_request()
-            query2 = self.session.query(Event)
-            query2 = (
-                query2.join(Event.roles)
-                .filter_by(user_id=current_user.id)
-                .join(UsersEventsRoles.role)
-                .filter(
-                    or_(
-                        Role.name == COORGANIZER,
-                        Role.name == ORGANIZER,
-                        Role.name == OWNER,
-                    )
-                )
-            )
-            query_ = query_.union(query2)
+        query_ = get_event_query()
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-            query_ = (
-                query_.join(Event.roles)
-                .filter_by(user_id=user.id)
-                .join(UsersEventsRoles.role)
-                .filter(Role.name != ATTENDEE)
-            )
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -160,7 +227,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == OWNER)
+                .filter(Role.name == Role.OWNER)
             )
 
         if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
@@ -174,7 +241,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == ORGANIZER)
+                .filter(Role.name == Role.ORGANIZER)
             )
 
         if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
@@ -187,7 +254,7 @@ class EventList(ResourceList):
                 query_.join(Event.roles)
                 .filter_by(user_id=user.id)
                 .join(UsersEventsRoles.role)
-                .filter(Role.name == COORGANIZER)
+                .filter(Role.name == Role.COORGANIZER)
             )
 
         if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
@@ -283,6 +350,12 @@ class EventList(ResourceList):
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id']
             )
 
+        if view_kwargs.get('group_id') and 'GET' in request.method:
+            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'group_id') == view_kwargs['group_id']
+            )
+
         return query_
 
     def before_post(self, args, kwargs, data=None):
@@ -296,7 +369,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         validate_event(user, data)
-        if data['state'] != 'draft':
+        if data['state'] != Event.State.DRAFT:
             validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
@@ -308,7 +381,7 @@ class EventList(ResourceList):
         :return:
         """
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
-        role = Role.query.filter_by(name=OWNER).first()
+        role = Role.query.filter_by(name=Role.OWNER).first()
         uer = UsersEventsRoles(user=user, event=event, role=role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(
@@ -323,7 +396,7 @@ class EventList(ResourceList):
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)
 
-        if event.state == 'published' and event.schedule_published_on:
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
 
         if data.get('original_image_url'):
@@ -379,6 +452,7 @@ def get_id(view_kwargs):
         (Ticket, 'ticket_id'),
         (TicketTag, 'ticket_tag_id'),
         (RoleInvite, 'role_invite_id'),
+        (SpeakerInvite, 'speaker_invite_id'),
         (UsersEventsRoles, 'users_events_role_id'),
         (AccessCode, 'access_code_id'),
         (Speaker, 'speaker_id'),
@@ -389,6 +463,7 @@ def get_id(view_kwargs):
         (Faq, 'faq_id'),
         (Feedback, 'feedback_id'),
         (VideoStream, 'video_stream_id'),
+        (Exhibitor, 'exhibitor_id'),
     ]
     for model, identifier in lookup_list:
         set_event_id(model, identifier, view_kwargs)
@@ -428,7 +503,7 @@ class EventDetail(ResourceDetail):
         get_id(view_kwargs)
 
     def after_get_object(self, event, view_kwargs):
-        if event and event.state == "draft":
+        if event and event.state == Event.State.DRAFT:
             if not is_logged_in() or not has_access('is_coorganizer', event_id=event.id):
                 raise ObjectNotFound({'parameter': '{id}'}, "Event: not found")
 
@@ -452,15 +527,31 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        g.event_name = event.name
+
         is_date_updated = (
             data.get('starts_at') != event.starts_at
             or data.get('ends_at') != event.ends_at
         )
-        is_draft_published = event.state == "draft" and data.get('state') == "published"
+        is_draft_published = (
+            event.state == Event.State.DRAFT
+            and data.get('state') == Event.State.PUBLISHED
+        )
         is_event_restored = event.deleted_at and not data.get('deleted_at')
 
         if is_date_updated or is_draft_published or is_event_restored:
             validate_date(event, data)
+
+        if data.get('is_document_enabled'):
+            d = data.get('document_links')
+            if d:
+                for document in d:
+                    if not document.get('name') or not document.get('link'):
+                       raise UnprocessableEntityError(
+                            {'pointer': '/'},
+                            "Enter required fields link and name",
+                        )
+
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
@@ -476,7 +567,12 @@ class EventDetail(ResourceDetail):
             start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
-        if event.state == 'published' and event.schedule_published_on:
+        if event.name != g.event_name:
+            from .helpers.tasks import rename_chat_room
+
+            rename_chat_room.delay(event.id)
+
+        if event.state == Event.State.PUBLISHED and event.schedule_published_on:
             start_export_tasks(event)
         else:
             clear_export_urls(event)
@@ -620,11 +716,12 @@ class UpcomingEventList(EventList):
             .filter(
                 Event.starts_at > current_time,
                 Event.ends_at > current_time,
-                Event.state == 'published',
-                Event.privacy == 'public',
+                Event.state == Event.State.PUBLISHED,
+                Event.privacy == Event.Privacy.PUBLIC,
                 or_(
                     Event.is_promoted,
                     and_(
+                        Event.is_demoted == False,
                         Event.original_image_url != None,
                         Event.logo_url != None,
                         Event.event_type_id != None,

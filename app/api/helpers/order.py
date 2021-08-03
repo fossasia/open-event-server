@@ -16,8 +16,8 @@ from app.api.helpers.mail import (
     send_order_purchase_organizer_email,
 )
 from app.api.helpers.notification import (
-    send_notif_ticket_purchase_organizer,
-    send_notif_to_attendees,
+    notify_ticket_purchase_attendee,
+    notify_ticket_purchase_organizer,
 )
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
@@ -115,6 +115,7 @@ def create_pdf_tickets_for_holder(order):
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
             upload_dir='generated/invoices/',
+            new_renderer=True,
         )
         save_to_db(order)
 
@@ -303,7 +304,7 @@ def on_order_completed(order):
 
     # send email and notifications.
     send_email_to_attendees(order)
-    send_notif_to_attendees(order)
+    notify_ticket_purchase_attendee(order)
 
     if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
         order.completed_at = datetime.utcnow()
@@ -314,5 +315,4 @@ def on_order_completed(order):
         )
     )
     send_order_purchase_organizer_email(order, organizer_set)
-    for organizer in organizer_set:
-        send_notif_ticket_purchase_organizer(organizer, order)
+    notify_ticket_purchase_organizer(order)

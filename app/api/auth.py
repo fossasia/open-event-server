@@ -6,7 +6,7 @@ from datetime import timedelta
 from functools import wraps
 
 import requests
-from flask import Blueprint, jsonify, make_response, render_template, request, send_file
+from flask import Blueprint, jsonify, make_response, request, send_file
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -30,9 +30,11 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.jwt import jwt_authenticate
-from app.api.helpers.mail import send_email, send_email_confirmation
-from app.api.helpers.notification import send_notification_with_action
-from app.api.helpers.system_mails import MAILS
+from app.api.helpers.mail import (
+    send_email_confirmation,
+    send_password_change_email,
+    send_password_reset_email,
+)
 from app.api.helpers.third_party_auth import (
     FbOAuth,
     GoogleOAuth,
@@ -42,10 +44,7 @@ from app.api.helpers.third_party_auth import (
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.mail import PASSWORD_CHANGE, PASSWORD_RESET, PASSWORD_RESET_AND_VERIFY
-from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
-from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
@@ -59,12 +58,19 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     criterion = [username, password]
 
     if not all(criterion):
+        logging.error('username or password missing')
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
+
     if not identity or (existing_identity and identity != existing_identity):
         # For fresh login, credentials should match existing user
+        logging.error('Invalid Credentials')
         return jsonify(error='Invalid Credentials'), 401
+
+    if identity.is_blocked:
+        logging.info('Admin has marked this account as spam')
+        return jsonify(error='Admin has marked this account as spam'), 401
 
     remember_me = data.get('remember-me')
     include_in_response = data.get('include-in-response')
@@ -103,7 +109,10 @@ def fresh_login():
 @jwt_refresh_token_required
 def refresh_token():
     current_user = get_jwt_identity()
-    new_token = create_access_token(identity=current_user, fresh=False)
+    expiry_time = timedelta(minutes=90)
+    new_token = create_access_token(
+        identity=current_user, fresh=False, expires_delta=expiry_time
+    )
     return jsonify({'access_token': new_token})
 
 
@@ -278,21 +287,25 @@ def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
     except base64.binascii.Error:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
     s = get_serializer()
 
     try:
         data = s.loads(token)
     except Exception:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
 
     try:
         user = User.query.filter_by(email=data[0]).one()
     except Exception:
+        logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
     else:
         user.is_verified = True
         save_to_db(user)
+        logging.info('Email Verified')
         return make_response(jsonify(message="Email Verified"), 200)
 
 
@@ -301,11 +314,13 @@ def resend_verification_email():
     try:
         email = request.json['data']['email']
     except TypeError:
+        logging.error('Bad Request')
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
+        logging.info('User with email: ' + email + ' not found.')
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
@@ -319,7 +334,7 @@ def resend_verification_email():
         )
         link = make_frontend_url('/verify', {'token': hash_})
         send_email_confirmation(user.email, link)
-
+        logging.info('Verification email resent')
         return make_response(jsonify(message="Verification email resent"), 200)
 
 
@@ -334,38 +349,15 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
+        logging.error('Bad Request Error')
         raise BadRequestError({'source': ''}, 'Bad Request Error')
 
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        logger.info('Tried to reset password not existing email %s', email)
+        logging.info('Tried to reset password not existing email %s', email)
     else:
-        link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        if user.was_registered_with_order:
-            send_email(
-                to=user.email,
-                action=PASSWORD_RESET_AND_VERIFY,
-                subject=MAILS[PASSWORD_RESET_AND_VERIFY]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
-                html=render_template('email/password_reset_and_verify.html', link=link),
-            )
-
-        else:
-            send_email(
-                to=user.email,
-                action=PASSWORD_RESET,
-                subject=MAILS[PASSWORD_RESET]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
-                html=render_template(
-                    'email/password_reset.html',
-                    link=link,
-                    settings=get_settings(),
-                    token=user.reset_password,
-                ),
-            )
+        send_password_reset_email(user)
 
     return make_response(
         jsonify(
@@ -384,6 +376,7 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).one()
     except NoResultFound:
+        logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         user.password = password
@@ -409,31 +402,25 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
+        logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
     else:
         if user.is_correct_password(old_password):
             if user.is_correct_password(new_password):
+                logging.error('Old and New passwords must be different')
                 raise BadRequestError(
                     {'source': ''}, 'Old and New passwords must be different'
                 )
             if len(new_password) < 8:
+                logging.error('Password should have minimum 8 characters')
                 raise BadRequestError(
                     {'source': ''}, 'Password should have minimum 8 characters'
                 )
             user.password = new_password
             save_to_db(user)
-            send_email(
-                to=user.email,
-                action=PASSWORD_CHANGE,
-                subject=MAILS[PASSWORD_CHANGE]['subject'].format(
-                    app_name=get_settings()['app_name']
-                ),
-                html=render_template('email/password_change.html'),
-            )
-            send_notification_with_action(
-                user, PASSWORD_CHANGE_NOTIF, app_name=get_settings()['app_name']
-            )
+            send_password_change_email(user)
         else:
+            logging.error('Wrong Password. Please enter correct current password.')
             raise BadRequestError(
                 {'source': ''}, 'Wrong Password. Please enter correct current password.'
             )

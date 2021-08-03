@@ -1,6 +1,7 @@
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
+from marshmallow.schema import Schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from pytz import timezone
@@ -8,8 +9,13 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.utilities import dasherize
-from app.api.schema.base import GetterRelationship, SoftDeletionSchema
+from app.api.schema.base import GetterRelationship, SoftDeletionSchema, TrimmedEmail
 from app.models.event import Event
+
+
+class DocumentLinkSchema(Schema):
+    name = fields.String(required=True)
+    link = fields.String(required=True)
 
 
 class EventSchemaPublic(SoftDeletionSchema):
@@ -52,6 +58,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
+    after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)
@@ -59,6 +66,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     show_remaining_tickets = fields.Bool(allow_none=False, default=False)
     owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
+    is_oneclick_signup_enabled = fields.Bool(default=False)
     has_owner_info = fields.Bool(default=False)
     owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
@@ -73,13 +81,20 @@ class EventSchemaPublic(SoftDeletionSchema):
     schedule_published_on = fields.DateTime(allow_none=True)
     is_featured = fields.Bool(default=False)
     is_promoted = fields.Bool(default=False)
+    is_demoted = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
+    is_cfs_enabled = fields.Bool(default=False)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
-    paypal_email = fields.Str(allow_none=True)
+    paypal_email = TrimmedEmail(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
+    is_chat_enabled = fields.Bool(default=False)
+    is_videoroom_enabled = fields.Bool(default=False)
+    is_document_enabled = fields.Boolean(default=False)
+    document_links = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
+    chat_room_name = fields.Str(dump_only=True)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
     can_pay_by_cheque = fields.Bool(default=False)
@@ -96,8 +111,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
-    live_stream_url = fields.Url(allow_none=True)
-    webinar_url = fields.Url(allow_none=True)
     refund_policy = fields.String(allow_none=True)
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
 
@@ -265,6 +278,14 @@ class EventSchemaPublic(SoftDeletionSchema):
         schema='EventSubTopicSchema',
         type_='event-sub-topic',
     )
+    group = Relationship(
+        self_view='v1.event_group',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.group_detail',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='GroupSchema',
+        type_='group',
+    )
     custom_forms = Relationship(
         attribute='custom_form',
         self_view='v1.event_custom_forms',
@@ -331,6 +352,31 @@ class EventSchemaPublic(SoftDeletionSchema):
         related_view_kwargs={'event_id': '<id>'},
         schema='VideoStreamSchema',
         type_='video-stream',
+    )
+    exhibitors = Relationship(
+        self_view='v1.event_exhibitor',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.exhibitor_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='ExhibitorSchema',
+        many=True,
+        type_='exhibitor',
+    )
+    session_favourites = Relationship(
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+        many=True,
+    )
+    speaker_invites = Relationship(
+        self_view='v1.event_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        type_='speaker-invite',
+        many=True,
     )
 
 
@@ -419,4 +465,13 @@ class EventSchema(EventSchemaPublic):
         schema='AttendeeSchema',
         many=True,
         type_='attendee',
+    )
+    roles = Relationship(
+        self_view='v1.event_users_events_roles',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.users_events_roles_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='UsersEventsRolesSchema',
+        type_='users-events-roles',
+        many=True,
     )

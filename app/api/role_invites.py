@@ -7,7 +7,7 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
-from app.api.helpers.role_invite import delete_previous_uer
+from app.api.helpers.role_invite import delete_pending_owner, delete_previous_uer
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.role_invites import RoleInviteSchema
 from app.models import db
@@ -44,10 +44,20 @@ class RoleInviteListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if 'email' in data and 'event' in data:
+            role_already_exists = RoleInvite.query.filter_by(
+                email=data['email'], event_id=data['event']
+            ).count()
+        if role_already_exists:
+            raise ConflictError(
+                {'source': '/data'}, 'Role Invite has already been sent for this email.'
+            )
         if data['role_name'] == 'owner' and not has_access(
             'is_owner', event_id=data['event']
         ):
             raise ForbiddenError({'source': ''}, 'Owner access is required.')
+        if data['role_name'] == 'owner':
+             delete_pending_owner(data['event'])
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
@@ -89,9 +99,7 @@ class RoleInviteList(ResourceList):
 
     view_kwargs = True
     methods = ['GET']
-    decorators = (
-        api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id"),
-    )
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id'),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session, 'model': RoleInvite, 'methods': {'query': query}}
 
@@ -119,7 +127,6 @@ class RoleInviteDetail(ResourceDetail):
             'is_organizer',
             methods="DELETE",
             fetch="event_id",
-            fetch_as="event_id",
             model=RoleInvite,
         ),
     )
@@ -174,10 +181,17 @@ def accept_invite():
                 past_owner = UsersEventsRoles.query.filter_by(
                     event=event, role=role
                 ).first()
+                oldrole = Role.query.filter_by(name='organizer').first()
+                prevuser = User.query.filter_by(id=past_owner.user_id).first()
                 if past_owner:
                     delete_previous_uer(past_owner)
+                    puer = UsersEventsRoles(user=prevuser, event=event, role=oldrole)
+                    save_to_db(puer, 'User Event Role changed')
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
+            # reset the group of event
+            event.group_id = None
+            save_to_db(event, 'Group ID Removed')
             uer = UsersEventsRoles(user=user, event=event, role=role)
             save_to_db(uer, 'User Event Role Created')
             if not user.is_verified:
@@ -188,6 +202,7 @@ def accept_invite():
         {
             "email": user.email,
             "event": role_invite.event_id,
+            "event_identifier": role_invite.event.identifier,
             "name": user.fullname if user.fullname else None,
             "role": uer.role.name,
         }

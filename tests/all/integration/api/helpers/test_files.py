@@ -39,8 +39,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
                 + '/static/uploads/'
                 + uploaded_img.filename
             )
-            self.assertEqual(file_path, actual_file_path)
-            self.assertTrue(os.path.exists(file_path))
+            assert file_path == actual_file_path
+            assert os.path.exists(file_path)
 
     def test_upload_single_file(self):
         """Method to test uploading of single file"""
@@ -74,8 +74,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
             actual_file_path = (
                 self.app.config.get('BASE_DIR') + '/static/uploads/' + filename
             )
-            self.assertEqual(file_path, actual_file_path)
-            self.assertTrue(os.path.exists(file_path))
+            assert file_path == actual_file_path
+            assert os.path.exists(file_path)
 
     def test_upload_multiple_file(self):
         """Method to test uploading of multiple files"""
@@ -117,8 +117,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
                 actual_file_path = (
                     self.app.config.get('BASE_DIR') + '/static/uploads/' + filename
                 )
-                self.assertEqual(file_path, actual_file_path)
-                self.assertTrue(os.path.exists(file_path))
+                assert file_path == actual_file_path
+                assert os.path.exists(file_path)
 
     def test_create_save_resized_image(self):
         """Method to test create resized images"""
@@ -135,9 +135,9 @@ class TestFilesHelperValidation(OpenEventTestCase):
             resized_image_path = urlparse(resized_image_url).path
             resized_image_file = self.app.config.get('BASE_DIR') + resized_image_path
             resized_width, resized_height = self.getsizes(resized_image_file)
-            self.assertTrue(os.path.exists(resized_image_file))
-            self.assertEqual(resized_width, width)
-            self.assertEqual(resized_height, height)
+            assert os.path.exists(resized_image_file)
+            assert resized_width == width
+            assert resized_height == height
 
     def test_create_save_image_sizes(self):
         """Method to test create image sizes"""
@@ -173,10 +173,10 @@ class TestFilesHelperValidation(OpenEventTestCase):
             resized_width_thumbnail, _ = self.getsizes(resized_image_file_thumbnail)
             resized_width_icon, _ = self.getsizes(resized_image_file_icon)
 
-            self.assertTrue(os.path.exists(resized_image_file))
-            self.assertEqual(resized_width_large, width_large)
-            self.assertEqual(resized_width_thumbnail, width_thumbnail)
-            self.assertEqual(resized_width_icon, width_icon)
+            assert os.path.exists(resized_image_file)
+            assert resized_width_large == width_large
+            assert resized_width_thumbnail == width_thumbnail
+            assert resized_width_icon == width_icon
 
 
 if __name__ == '__main__':

@@ -49,6 +49,13 @@ class OrderTicket(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
 
+    class Status:
+        INITIALIZING = 'initializing'
+        PENDING = 'pending'
+        COMPLETED = 'completed'
+        CANCELLED = 'cancelled'
+        EXPIRED = 'expired'
+
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True, default=get_new_id)
     amount = db.Column(db.Float, nullable=False, default=0)
@@ -169,6 +176,20 @@ class Order(db.Model):
         ):
             query_ = query_.filter(TicketHolder.user == current_user)
         return query_.all()
+
+    @property
+    def safe_user(self):
+        from app.api.helpers.permission_manager import has_access
+
+        if (
+            not has_access(
+                'is_coorganizer',
+                event_id=self.event_id,
+            )
+            and current_user.id != self.user_id
+        ):
+            return None
+        return self.user
 
     @property
     def site_view_link(self) -> str:

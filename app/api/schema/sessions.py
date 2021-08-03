@@ -6,9 +6,10 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.static import LEVEL_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
@@ -67,17 +68,14 @@ class SessionSchema(SoftDeletionSchema):
 
         if 'microlocation' in data:
             if not has_access('is_coorganizer', event_id=data['event']):
-                raise ForbiddenError(
-                    {'pointer': '/relationships/microlocation'},
-                    'Co-organizer access is required.',
-                )
+                del data['microlocation']
 
         validate_complex_fields_json(self, data, original_data)
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str(allow_none=True)
-    level = fields.Str(allow_none=True)
+    level = fields.Str(allow_none=True, validate=validate.OneOf(choices=LEVEL_CHOICES))
     short_abstract = fields.Str(allow_none=True)
     long_abstract = fields.Str(allow_none=True)
     comments = fields.Str(allow_none=True)
@@ -85,6 +83,14 @@ class SessionSchema(SoftDeletionSchema):
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
+    website = fields.Url(allow_none=True)
+    twitter = fields.Url(allow_none=True)
+    facebook = fields.Url(allow_none=True)
+    github = fields.Url(allow_none=True)
+    linkedin = fields.Url(allow_none=True)
+    instagram = fields.Url(allow_none=True)
+    gitlab = fields.Url(allow_none=True)
+    mastodon = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
     audio_url = fields.Url(allow_none=True)
     signup_url = fields.Url(allow_none=True)
@@ -111,6 +117,8 @@ class SessionSchema(SoftDeletionSchema):
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)
+    rating_count = fields.Integer(dump_only=True)
+    favourite_count = fields.Integer(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     microlocation = Relationship(
         self_view='v1.session_microlocation',
@@ -162,6 +170,16 @@ class SessionSchema(SoftDeletionSchema):
         schema='SpeakerSchema',
         type_='speaker',
     )
+    exhibitors = Relationship(
+        dump_only=True,
+        many=True,
+        self_view='v1.session_exhibitor',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.exhibitor_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='ExhibitorSchema',
+        type_='exhibitor',
+    )
     creator = Relationship(
         attribute='user',
         self_view='v1.session_user',
@@ -170,6 +188,33 @@ class SessionSchema(SoftDeletionSchema):
         related_view_kwargs={'session_id': '<id>'},
         schema='UserSchemaPublic',
         type_='user',
+    )
+    favourite = Relationship(
+        dump_only=True,
+        self_view='v1.session_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        type_='user-favourite-session',
+    )
+    favourites = Relationship(
+        self_view='v1.session_user_favourite_sessions',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_sessions_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='UserFavouriteSessionSchema',
+        many=True,
+        type_='user-favourite-session',
+    )
+    speaker_invites = Relationship(
+        self_view='v1.session_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        many=True,
+        type_='speaker-invite',
     )
 
 

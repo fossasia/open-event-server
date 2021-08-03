@@ -23,7 +23,7 @@ from app.api.helpers.errors import (
 )
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_order_cancel_email
-from app.api.helpers.notification import send_notif_ticket_cancel
+from app.api.helpers.notification import notify_ticket_cancel
 from app.api.helpers.order import (
     create_onsite_attendees_for_order,
     delete_related_attendees_for_order,
@@ -452,11 +452,20 @@ class OrderDetail(ResourceDetail):
                             check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
-            if order.status != 'initializing' and order.status != 'pending':
+            status = data.get('status')
+            if (
+                order.status != Order.Status.INITIALIZING
+                and order.status != Order.Status.PENDING
+                and status != Order.Status.CANCELLED
+            ):
                 raise ForbiddenError(
                     {'pointer': ''},
                     "You cannot update a non-initialized or non-pending order",
                 )
+            if status == Order.Status.CANCELLED:
+                # If this is a cancellation request, we revert all PATCH changes except status = cancelled
+                data.clear()
+                data['status'] = Order.Status.CANCELLED
             for element in data:
                 if data[element]:
                     if (
@@ -523,7 +532,7 @@ class OrderDetail(ResourceDetail):
 
         if order.status == 'cancelled':
             send_order_cancel_email(order)
-            send_notif_ticket_cancel(order)
+            notify_ticket_cancel(order, current_user)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)

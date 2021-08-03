@@ -9,6 +9,17 @@ from app.models.video_channel import VideoChannel
 from app.models.video_stream import VideoStream
 
 
+class VideoChannelListPost(ResourceList):
+
+    methods = ['POST']
+    decorators = (api.has_permission('is_admin', methods="POST"),)
+    schema = VideoChannelSchema
+    data_layer = {
+        'session': db.session,
+        'model': VideoChannel,
+    }
+
+
 class VideoChannelList(ResourceList):
     def before_get(self, args, kwargs):
         if is_logged_in() and has_access('is_admin'):
@@ -16,8 +27,7 @@ class VideoChannelList(ResourceList):
         else:
             self.schema = VideoChannelSchemaPublic
 
-    methods = ['GET', 'POST']
-    decorators = (api.has_permission('is_admin', methods="POST"),)
+    methods = ['GET']
     schema = VideoChannelSchemaPublic
     data_layer = {
         'session': db.session,
@@ -36,7 +46,7 @@ class VideoChannelDetail(ResourceDetail):
             stream = safe_query_kwargs(VideoStream, kwargs, 'video_stream_id')
             kwargs['id'] = stream.channel_id
 
-    schema = VideoChannelSchemaPublic
+    schema = VideoChannelSchema
     decorators = (
         api.has_permission(
             'is_admin',

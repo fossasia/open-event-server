@@ -3,11 +3,12 @@ from uuid import uuid4
 
 from flask import jsonify
 from flask.blueprints import Blueprint
-from flask_jwt_extended import current_user
+from flask_jwt_extended import current_user, jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
 
+from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import (
     BadRequestError,
@@ -25,11 +26,20 @@ from app.models import db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.video_channel import VideoChannel
+from app.models.video_recording import VideoRecording
 from app.models.video_stream import VideoStream
+from app.models.video_stream_moderator import VideoStreamModerator
 
 logger = logging.getLogger(__name__)
 
 streams_routes = Blueprint('streams', __name__, url_prefix='/v1/video-streams')
+
+default_options = {
+    'record': True,
+    'autoStartRecording': False,
+    'muteOnStart': True,
+    'endCurrentMeeting': False,
+}
 
 
 def check_same_event(room_ids):
@@ -69,11 +79,14 @@ def join_stream(stream_id: int):
             'Join action is not applicable on this stream provider',
         )
 
+    options = stream.extra.get('bbb_options') or default_options
+
     params = dict(
         name=stream.name,
         meetingID=stream.extra['response']['meetingID'],
         moderatorPW=stream.extra['response']['moderatorPW'],
         attendeePW=stream.extra['response']['attendeePW'],
+        **options,
     )
 
     channel = stream.channel
@@ -81,7 +94,7 @@ def join_stream(stream_id: int):
     result = bbb.request('create', params)
 
     if result.success and result.data:
-        stream.extra = result.data
+        stream.extra = {**result.data, 'bbb_options': options}
         db.session.commit()
     elif (
         result.data and result.data.get('response', {}).get('messageKey') == 'idNotUnique'
@@ -95,7 +108,9 @@ def join_stream(stream_id: int):
     join_url = bbb.build_url(
         'join',
         {
-            'fullName': current_user.full_name,
+            'fullName': current_user.public_name
+            or current_user.full_name
+            or current_user.anonymous_name,
             'join_via_html5': 'true',
             'meetingID': params['meetingID'],
             'password': params[
@@ -111,13 +126,46 @@ def create_bbb_meeting(channel, data):
     # Create BBB meeting
     bbb = BigBlueButton(channel.api_url, channel.api_key)
     meeting_id = str(uuid4())
-    res = bbb.request('create', dict(name=data['name'], meetingID=meeting_id))
+    options = data['extra'].get('bbb_options') or default_options
+    res = bbb.request(
+        'create',
+        dict(name=data['name'], meetingID=meeting_id, **options),
+    )
 
     if not (res.success and res.data):
         logger.error('Error creating BBB Meeting: %s', res)
         raise UnprocessableEntityError('', 'Cannot create Meeting on BigBlueButton')
 
-    data['extra'] = res.data
+    data['extra'] = {**res.data, 'bbb_options': options}
+
+
+@streams_routes.route(
+    '/<int:stream_id>/chat-token',
+)
+@jwt_required
+def get_chat_token(stream_id: int):
+    stream = VideoStream.query.get_or_404(stream_id)
+    event = stream.event
+    if not stream.user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    try:
+        data = get_rocket_chat_token(current_user, event)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        else:
+            return jsonify(
+                {
+                    'success': False,
+                    'code': rce.code,
+                    'response': rce.response is not None and rce.response.json(),
+                }
+            )
 
 
 class VideoStreamList(ResourceList):
@@ -138,6 +186,7 @@ class VideoStreamList(ResourceList):
 
     def setup_channel(self, data):
         if not data.get('channel'):
+            self.channel = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
@@ -156,11 +205,39 @@ class VideoStreamList(ResourceList):
 
         return query_
 
+    def after_create_object(self, stream, data, view_kwargs):
+        if stream.channel and stream.channel.provider == 'bbb':
+            params_isMeetingRunning = dict(
+                meetingID=stream.extra['response']['meetingID'],
+            )
+
+            channel = stream.channel
+            bbb = BigBlueButton(channel.api_url, channel.api_key)
+            result_isMeetingRunning = bbb.request(
+                'isMeetingRunning', params_isMeetingRunning
+            )
+
+            if result_isMeetingRunning.data.get('response', {}).get('running') == 'true':
+                params_end_meeting = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                    password=stream.extra['response']['moderatorPW'],
+                )
+                result_end_meeting = bbb.request('end', params_end_meeting)
+
+                if not result_end_meeting.success:
+                    logger.error(
+                        'Error while ending current BBB Meeting after create BBB meeting: %s',
+                        result_end_meeting,
+                    )
+
     schema = VideoStreamSchema
     data_layer = {
         'session': db.session,
         'model': VideoStream,
-        'methods': {'query': query},
+        'methods': {
+            'query': query,
+            'after_create_object': after_create_object,
+        },
     }
 
 
@@ -182,6 +259,20 @@ class VideoStreamDetail(ResourceDetail):
             )
             view_kwargs['id'] = video_stream.id
 
+        if view_kwargs.get('video_stream_moderator_id'):
+            moderator = safe_query_kwargs(
+                VideoStreamModerator, view_kwargs, 'video_stream_moderator_id'
+            )
+            view_kwargs['id'] = moderator.video_stream_id
+
+        if view_kwargs.get('video_recording_id'):
+            video_recording = safe_query_kwargs(
+                VideoRecording,
+                view_kwargs,
+                'video_recording_id',
+            )
+            view_kwargs['id'] = video_recording.video_stream_id
+
     def after_get_object(self, stream, view_kwargs):
         if stream and not stream.user_can_access:
             raise ObjectNotFound(
@@ -189,8 +280,23 @@ class VideoStreamDetail(ResourceDetail):
             )
 
     @staticmethod
+    def check_extra(obj, data):
+        if not data.get('extra'):
+            return
+        channel_id = data.get('channel') or obj.channel_id
+        if not channel_id:
+            return
+        channel = VideoChannel.query.get(channel_id)
+        if channel.provider not in ['youtube', 'vimeo', 'bbb']:
+            del data['extra']
+        else:
+            data['extra'] = {**(obj.extra or {}), **(data.get('extra') or {})}
+
+    @staticmethod
     def setup_channel(obj, data):
         if not data.get('channel') or obj.channel_id == int(data['channel']):
+            if not data.get('channel'):
+                obj.channel_id = None
             return
         channel = VideoChannel.query.get(data['channel'])
         if channel.provider == 'bbb':
@@ -204,7 +310,41 @@ class VideoStreamDetail(ResourceDetail):
         room_ids = rooms + [room.id for room in obj.rooms]
         if room_ids:
             check_same_event(room_ids)
+        VideoStreamDetail.check_extra(obj, data)
         VideoStreamDetail.setup_channel(obj, data)
+
+    def after_update_object(self, stream, data, view_kwargs):
+        if stream.channel and stream.channel.provider == 'bbb':
+            bbb_options = stream.extra.get('bbb_options')
+            if bbb_options and bbb_options.get('endCurrentMeeting'):
+                params_isMeetingRunning = dict(
+                    meetingID=stream.extra['response']['meetingID'],
+                )
+
+                channel = stream.channel
+                bbb = BigBlueButton(channel.api_url, channel.api_key)
+                result_isMeetingRunning = bbb.request(
+                    'isMeetingRunning', params_isMeetingRunning
+                )
+
+                if (
+                    result_isMeetingRunning.data.get('response', {}).get('running')
+                    == 'true'
+                ):
+                    params_end_meeting = dict(
+                        meetingID=stream.extra['response']['meetingID'],
+                        password=stream.extra['response']['moderatorPW'],
+                    )
+                    result_end_meeting = bbb.request('end', params_end_meeting)
+
+                    if not result_end_meeting.success:
+                        logger.error(
+                            'Error while ending current BBB Meeting: %s',
+                            result_end_meeting,
+                        )
+                        raise BadRequestError(
+                            '', 'Cannot end current Meeting on BigBlueButton'
+                        )
 
     def before_delete_object(self, obj, kwargs):
         check_event_access(obj.event_id)
@@ -213,7 +353,7 @@ class VideoStreamDetail(ResourceDetail):
             check_same_event(room_ids)
 
     schema = VideoStreamSchema
-    decorators = (jwt_required,)
+    decorators = (jwt_optional,)
     data_layer = {
         'session': db.session,
         'model': VideoStream,
@@ -221,6 +361,7 @@ class VideoStreamDetail(ResourceDetail):
             'before_get_object': before_get_object,
             'after_get_object': after_get_object,
             'before_update_object': before_update_object,
+            'after_update_object': after_update_object,
             'before_delete_object': before_delete_object,
         },
     }
