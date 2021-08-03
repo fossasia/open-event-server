@@ -25,7 +25,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     created_at = fields.DateTime(allow_none=True)
     issued_at = fields.DateTime(dump_only=True)
     due_at = fields.DateTime(dump_only=True)
-    completed_at = fields.DateTime(default=None)
+    completed_at = fields.DateTime(default=None, allow_none=True)
     transaction_id = fields.Str(allow_none=True)
     paid_via = fields.Str(
         validate=validate.OneOf(
@@ -42,7 +42,7 @@ class EventInvoiceSchema(SoftDeletionSchema):
     paypal_token = fields.Str(allow_none=True)
     status = fields.Str(
         validate=validate.OneOf(
-            choices=["paid", "due", "refunding", "refunded", "failed"]
+            choices=["paid", "due", "refunding", "refunded", "failed", "resolved"]
         ),
         allow_none=True,
     )
