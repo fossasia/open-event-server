@@ -6,6 +6,7 @@ from flask_celeryext import RequestContextTask
 from redis.exceptions import LockError
 from sqlalchemy import distinct, or_
 
+from app.api.admin_sales.utils import summary
 from app.api.helpers.db import save_to_db
 from app.api.helpers.query import get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
@@ -71,6 +72,14 @@ def change_session_state_on_event_completion():
         for session in sessions_to_be_changed:
             session.state = 'rejected'
             save_to_db(session, f'Changed {session.title} session state to rejected')
+
+
+@celery.task(base=RequestContextTask, name='update.sales.of.events')
+def update_sales_of_events():
+    events = Event.query.all()
+    for event in events:
+        event.rough_sales = summary(event, return_rough_sales=True)
+        save_to_db(event)
 
 
 @celery.task(base=RequestContextTask, name='expire.pending.tickets')
@@ -249,6 +258,7 @@ def setup_scheduled_task(sender, **kwargs):
 
     # Every day at 5:30
     sender.add_periodic_task(crontab(hour=5, minute=30), send_after_event_mail)
+    sender.add_periodic_task(crontab(hour=5, minute=30), update_sales_of_events)
     # Every 1st day of month at 0:00
     sender.add_periodic_task(
         crontab(minute=0, hour=0, day_of_month=1), send_monthly_event_invoice

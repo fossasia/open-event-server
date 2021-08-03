@@ -388,6 +388,7 @@ class EventSchema(EventSchemaPublic):
         self_view_many = 'v1.event_list'
         inflect = dasherize
 
+    rough_sales = fields.Integer(dump_only=True)
     event_invoices = Relationship(
         attribute='invoices',
         self_view='v1.event_event_invoice',
