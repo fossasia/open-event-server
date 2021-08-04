@@ -27,6 +27,13 @@ Add  SECRET_KEY in the env file to run properly in production mode . To generate
 * That's it. Go to `localhost:8080` on the web browser and Open Event Orga Server will be live.
 
 
+### Installing open-event-frontend
+
+* For installing the frontend using docker-compose, follow these [steps](https://github.com/fossasia/open-event-frontend/blob/development/docs/installation/docker.md).
+
+* Change the API host in the *.env* file of the **frontend** to `localhost:8080`.
+
+
 ### Updating the Docker image
 
 * To update the Docker image with a more recent version of open-event-server, you follow the same steps.
