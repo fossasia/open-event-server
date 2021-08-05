@@ -4,6 +4,7 @@ from marshmallow_jsonapi.flask import Schema
 
 from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
+from app.api.helpers.db import save_to_db
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
@@ -25,7 +26,7 @@ class AdminSalesByEventsSchema(Schema):
         inflect = dasherize
 
     id = fields.String()
-    rough_sales = fields.Integer()
+    total_sales = fields.Integer()
     identifier = fields.String()
     name = fields.String()
     created_at = fields.DateTime()
@@ -74,7 +75,17 @@ class AdminSalesByEventsList(ResourceList):
     def query(self, _):
         return Event.query
 
+    def before_get(self, args, kwargs):
+        events = Event.query.all()
+        for event in events:
+            event.total_sales = summary(event, return_total_sales=True)
+            save_to_db(event)
+
     methods = ['GET']
     decorators = (api.has_permission('is_admin'),)
     schema = AdminSalesByEventsSchema
-    data_layer = {'model': Event, 'session': db.session, 'methods': {'query': query}}
+    data_layer = {
+        'model': Event,
+        'session': db.session,
+        'methods': {'query': query, 'before_get': before_get},
+    }

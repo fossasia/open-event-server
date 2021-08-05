@@ -30,7 +30,7 @@ def status_summary(sales_summary, tickets_summary, status):
     }
 
 
-def summary(event, return_rough_sales=False):
+def summary(event, return_total_sales=False):
     """
     Returns sales as dictionary for all status codes
     """
@@ -51,9 +51,9 @@ def summary(event, return_rough_sales=False):
     sales_stats = {
         s: status_summary(sales_summary, tickets_summary, s) for s in status_codes
     }
-    if not return_rough_sales:
+    if not return_total_sales:
         return sales_stats
-    rough_sales = 0
+    total_sales = 0
     for status in status_codes:
-        rough_sales += sales_stats[status]['sales_total']
-    return rough_sales
+        total_sales += sales_stats[status]['sales_total']
+    return total_sales
