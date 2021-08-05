@@ -53,7 +53,7 @@ jobs.sqlite
 # for -e pip packages
 src
 
-#tickets
+# tickets
 generated/
 
 docker-compose.override.yml
