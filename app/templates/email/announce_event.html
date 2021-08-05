@@ -1,17 +1,22 @@
 {{ _('Hello') }},<br/><br/>
-{{ _('We can’t wait to welcome you for') }} {{ event_name }}! {{ _('We’re pretty confident that you’re going to love it') }}.<br/>
-{{ _('Until then') }}, {{ _('take a look at the following event details to take full advantage of') }} {{ event_name}}.
-<br/><br/> 
-{{ _('Name of event') }}: {{ event_name}}<br/>
-{{ _('Name of group') }}: {{ group_name}}<br/>
+
+{{ _('Your group') }} <a href={{ group_url }} target='_blank'>{{ group_name }}</a> {{ _('has just scheduled ') }} "<a href={{ event_url }} target='_blank'>{{ event_name }}</a>"! {{ _('We’re pretty confident that you’re going to love it') }}.
+<br/><br/>
 {{ _('Date') }}: {{ event_date }}<br/>
+{{ _('Time') }}: {{ event_time }}<br/>
 {{ _('Location') }}: {{ event_location }}<br/>
-{{ _('Link to public event page') }}: <a href={{ event_url }} target='_blank'>{{ event_url }}</a><br/>
+<br/><br/> 
+<a href={{ event_url }} target='_blank'>{{ _('Reserve your spot') }}</a>!
+<br/><br/> 
 {{ _('Event description') }}: 
     {% autoescape false %}
         {{ event_description }}
     {% endautoescape %}
 <br/><br/>
+{{ _('Best regards') }},
+<br/>
+{{ app_name }} {{ _('Team') }}.
+<br/><br/> 
+
+
 {{ _('You’re getting this message because your') }} {{ app_name }} {{ _('account is connected to this email address') }}. {{ _('You can unsubscribe from similar emails from this group by unfollowing the group') }} <a href={{ group_url }} target='_blank'>{{ _('here') }}</a>.
-<br/><br/> {{ _('Best regards') }},
-<br/>{{ app_name }} {{ _('Team') }}.

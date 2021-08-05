@@ -280,7 +280,11 @@ def send_email_announce_event(event, group, emails):
         send_email(
             to=emails[0],
             action=action,
-            subject=mail['subject'].format(event_name=event.name),
+            subject=mail['subject'].format(
+                event_name=event.name,
+                group_name=group.name,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+            ),
             html=render_template(
                 mail['template'],
                 event_name=event.name,
@@ -288,6 +292,7 @@ def send_email_announce_event(event, group, emails):
                 event_url=event.site_link,
                 event_location=event.normalized_location,
                 event_date=event.starts_at.strftime('%d %B %Y'),
+                event_time=event.starts_at.strftime("%H:%M (%Z)"),
                 group_name=group.name,
                 group_url=group.view_page_link,
                 app_name=get_settings()['app_name'],

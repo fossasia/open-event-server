@@ -254,7 +254,7 @@ MAILS = {
     },
     MailType.ANNOUNCE_EVENT: {
         'recipient': 'User',
-        'subject': 'Join us at "{event_name}"',
+        'subject': 'Join {event_name} from {group_name} on {event_date}',
         'template': 'email/announce_event.html',
     },
 }
