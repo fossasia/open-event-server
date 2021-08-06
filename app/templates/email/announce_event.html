@@ -18,5 +18,4 @@
 {{ app_name }} {{ _('Team') }}.
 <br/><br/> 
 
-
-{{ _('You’re getting this message because your') }} {{ app_name }} {{ _('account is connected to this email address') }}. {{ _('You can unsubscribe from similar emails from this group by unfollowing the group') }} <a href={{ group_url }} target='_blank'>{{ _('here') }}</a>.
+{{ _('You’re getting this message because you are a group member of') }} <a href={{ group_url }} target='_blank'>{{ group_name }}</a> {{ _('on') }} {{ app_name }}. {{ _('You can unsubscribe from emails from this group by unfollowing the group') }} <a href={{ group_url }} target='_blank'>{{ _('here') }}</a>.
