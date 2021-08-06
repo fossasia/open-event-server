@@ -270,6 +270,37 @@ def send_email_group_role_invite(email, role_name, group_name, link):
     )
 
 
+def send_email_announce_event(event, group, emails):
+    """email for announce event"""
+
+    action = MailType.ANNOUNCE_EVENT
+    mail = MAILS[action]
+
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(
+                event_name=event.name,
+                group_name=group.name,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+            ),
+            html=render_template(
+                mail['template'],
+                event_name=event.name,
+                event_description=event.description,
+                event_url=event.site_link,
+                event_location=event.normalized_location,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+                event_time=event.starts_at.strftime("%H:%M (%Z)"),
+                group_name=group.name,
+                group_url=group.view_page_link,
+                app_name=get_settings()['app_name'],
+            ),
+            bcc=emails[1:],
+        )
+
+
 def send_email_for_monthly_fee_payment(
     user, event_name, previous_month, amount, app_name, link, follow_up=False
 ):
