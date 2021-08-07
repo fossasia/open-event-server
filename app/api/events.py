@@ -547,11 +547,10 @@ class EventDetail(ResourceDetail):
             if d:
                 for document in d:
                     if not document.get('name') or not document.get('link'):
-                       raise UnprocessableEntityError(
+                        raise UnprocessableEntityError(
                             {'pointer': '/'},
                             "Enter required fields link and name",
                         )
-
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
@@ -565,6 +564,10 @@ class EventDetail(ResourceDetail):
             and data['original_image_url'] != event.original_image_url
         ):
             start_image_resizing_tasks(event, data['original_image_url'])
+        if data.get('group') != event.group_id:
+            if event.is_announced:
+                event.is_announced = False
+                save_to_db(event)
 
     def after_update_object(self, event, data, view_kwargs):
         if event.name != g.event_name:
