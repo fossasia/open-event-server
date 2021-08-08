@@ -6,6 +6,7 @@ import flask_login as login
 import pytz
 from flask import current_app
 from sqlalchemy import event
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_new_identifier
@@ -62,6 +63,9 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    is_videoroom_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    is_document_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    document_links = db.Column(JSONB)
     chat_room_id = db.Column(db.String)
     description = db.Column(db.Text)
     after_order_message = db.Column(db.Text)
@@ -72,9 +76,13 @@ class Event(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    is_oneclick_signup_enabled = db.Column(db.Boolean)
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
@@ -101,6 +109,9 @@ class Event(SoftDeletionModel):
         db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
     )
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='SET NULL'))
+    is_announced = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -147,8 +158,6 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
-    live_stream_url = db.Column(db.String)
-    webinar_url = db.Column(db.String)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )

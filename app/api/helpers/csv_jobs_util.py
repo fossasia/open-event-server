@@ -9,12 +9,20 @@ def export_orders_csv(orders):
         'Order Date',
         'Status',
         'Payment Type',
+        'Payment Mode',
         'Total Amount',
         'Quantity',
         'Discount Code',
         'First Name',
         'Last Name',
         'Email',
+        'Tax ID',
+        'Address',
+        'Company',
+        'Country',
+        'State',
+        'City',
+        'Zipcode',
     ]
 
     rows = [headers]
@@ -25,6 +33,7 @@ def export_orders_csv(orders):
                 str(order.created_at) if order.created_at else '',
                 str(order.status) if order.status else '',
                 str(order.paid_via) if order.paid_via else '',
+                str(order.payment_mode) if order.payment_mode else '',
                 str(order.amount) if order.amount else '',
                 str(order.tickets_count),
                 str(order.discount_code.code) if order.discount_code else '',
@@ -33,6 +42,13 @@ def export_orders_csv(orders):
                 else '',
                 str(order.user.last_name) if order.user and order.user.last_name else '',
                 str(order.user.email) if order.user and order.user.email else '',
+                str(order.tax_business_info) if order.tax_business_info else '',
+                str(order.address) if order.address else '',
+                str(order.company) if order.company else '',
+                str(order.country) if order.country else '',
+                str(order.state) if order.state else '',
+                str(order.city) if order.city else '',
+                str(order.zipcode) if order.zipcode else '',
             ]
             rows.append(column)
 
@@ -46,25 +62,35 @@ def export_attendees_csv(attendees, custom_forms):
         'Order Date',
         'Status',
         'Payment Type',
+        'Payment Mode',
         'Ticket Name',
         'Ticket Price',
         'Ticket Type',
+        'Tax ID',
+        'Address',
+        'Company',
+        'Country',
+        'State',
+        'City',
+        'Zipcode',
     ]
 
     for fields in custom_forms:
         headers.append(fields.name)
 
     rows = [headers]
-
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
-            str(attendee.order.created_at)
+            str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
             if attendee.order and attendee.order.created_at
             else '-',
             str(attendee.order.status)
             if attendee.order and attendee.order.status
             else '-',
+            str(attendee.order.paid_via)
+            if attendee.order and attendee.order.paid_via
+            else '',
             str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
@@ -73,6 +99,15 @@ def export_attendees_csv(attendees, custom_forms):
             if attendee.ticket and attendee.ticket.price
             else '0',
             str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '',
+            str(attendee.order.tax_business_info)
+            if attendee.order.tax_business_info
+            else '',
+            str(attendee.order.address) if attendee.order.address else '',
+            str(attendee.order.company) if attendee.order.company else '',
+            str(attendee.order.country) if attendee.order.country else '',
+            str(attendee.order.state) if attendee.order.state else '',
+            str(attendee.order.city) if attendee.order.city else '',
+            str(attendee.order.zipcode) if attendee.order.zipcode else '',
         ]
         for field in custom_forms:
             if field.is_complex:
@@ -109,18 +144,24 @@ def export_sessions_csv(sessions):
         'Slides',
         'Audio',
         'Video',
+        'Average Rating',
+        'Number of Ratings',
     ]
     rows = [headers]
     for session in sessions:
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
             column.append(
-                session.starts_at.astimezone(pytz.timezone(session.event.timezone))
+                session.starts_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.starts_at
                 else ''
             )
             column.append(
-                session.ends_at.astimezone(pytz.timezone(session.event.timezone))
+                session.ends_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.ends_at
                 else ''
             )
@@ -144,7 +185,11 @@ def export_sessions_csv(sessions):
                 strip_tags(session.long_abstract) if session.long_abstract else ''
             )
             column.append(strip_tags(session.comments) if session.comments else '')
-            column.append(session.created_at if session.created_at else '')
+            column.append(
+                session.created_at.strftime('%B %-d, %Y %H:%M %z')
+                if session.created_at
+                else ''
+            )
             column.append('Yes' if session.is_mail_sent else 'No')
             column.append(session.level)
             column.append(session.state)
@@ -162,6 +207,8 @@ def export_sessions_csv(sessions):
             column.append(session.slides_url if session.slides_url else '')
             column.append(session.audio_url if session.audio_url else '')
             column.append(session.video_url if session.video_url else '')
+            column.append(session.average_rating)
+            column.append(session.rating_count)
             rows.append(column)
 
     return rows

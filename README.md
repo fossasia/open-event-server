@@ -212,7 +212,7 @@ source ~/.profile
 # Install Python dependencies
 poetry install
 
-# Activate porject's virtual environment
+# Activate project's virtual environment
 poetry shell
 ```
 
@@ -250,6 +250,20 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 ```
 * Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` respectively in your root directory.
 
+### Pre-commits guide
+
+Git hook scripts are useful for identifying simple issues before submission to code review.
+
+#### Install the git hook scripts:
+* run pre-commit install to set up the git hook scripts
+```sh
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+```
+* now pre-commit will run automatically on git commit!
+
+#### For configuration, [Click Here](https://pre-commit.com/)
+
 ## Logging
 
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/general/logs.md).
@@ -263,7 +277,6 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 If you would like to contribute to the translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
 Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
-
 
 ## Contributions, Bug Reports, Feature Requests
 

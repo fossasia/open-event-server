@@ -9,12 +9,18 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.fields import CustomFormValueField
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.static import LEVEL_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema
 from app.models.helpers.versioning import clean_html
 from app.models.session import Session
 from utils.common import use_defaults
+
+
+class DocumentLinkSchema(Schema):
+    name = fields.String(required=True)
+    link = fields.String(required=True)
 
 
 @use_defaults()
@@ -74,7 +80,7 @@ class SessionSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str(allow_none=True)
-    level = fields.Str(allow_none=True)
+    level = fields.Str(allow_none=True, validate=validate.OneOf(choices=LEVEL_CHOICES))
     short_abstract = fields.Str(allow_none=True)
     long_abstract = fields.Str(allow_none=True)
     comments = fields.Str(allow_none=True)
@@ -82,6 +88,7 @@ class SessionSchema(SoftDeletionSchema):
     ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
+    slides = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     website = fields.Url(allow_none=True)
     twitter = fields.Url(allow_none=True)
     facebook = fields.Url(allow_none=True)
@@ -205,6 +212,15 @@ class SessionSchema(SoftDeletionSchema):
         schema='UserFavouriteSessionSchema',
         many=True,
         type_='user-favourite-session',
+    )
+    speaker_invites = Relationship(
+        self_view='v1.session_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        many=True,
+        type_='speaker-invite',
     )
 
 

@@ -32,6 +32,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.models.user_follow_group import UserFollowGroup
 from app.models.users_events_role import UsersEventsRoles
 from app.models.video_stream_moderator import VideoStreamModerator
 
@@ -54,6 +55,7 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
+            logging.error('Password should be at least 8 characters long')
             raise UnprocessableEntityError(
                 {'source': '/data/attributes/password'},
                 'Password should be at least 8 characters long',
@@ -62,11 +64,13 @@ class UserList(ResourceList):
             db.session.query(User.id).filter_by(email=data['email'].strip()).scalar()
             is not None
         ):
+            logging.error('Email already exists')
             raise ConflictError(
                 {'pointer': '/data/attributes/email'}, "Email already exists"
             )
 
         if data.get('is_verified'):
+            logging.error("You are not allowed to submit this field")
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/is-verified'},
                 "You are not allowed to submit this field",
@@ -258,6 +262,15 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('user_follow_group_id') is not None:
+            user_follow_group = safe_query_kwargs(
+                UserFollowGroup, view_kwargs, 'user_follow_group_id'
+            )
+            if user_follow_group.id is not None:
+                view_kwargs['id'] = user_follow_group.user_id
+            else:
+                view_kwargs['id'] = None
+
     def before_update_object(self, user, data, view_kwargs):
         # TODO: Make a celery task for this
         # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
@@ -282,6 +295,7 @@ class UserDetail(ResourceDetail):
                         .exists()
                     ).scalar()
                     if event_exists:
+                        logging.error("Users associated with events cannot be deleted")
                         raise ForbiddenError(
                             {'source': ''},
                             "Users associated with events cannot be deleted",
@@ -318,6 +332,7 @@ class UserDetail(ResourceDetail):
                     data['email'] = user.email
                 user.deleted_at = data.get('deleted_at')
             else:
+                logging.info("You are not authorized to update this information.")
                 raise ForbiddenError(
                     {'source': ''}, "You are not authorized to update this information."
                 )
@@ -327,6 +342,7 @@ class UserDetail(ResourceDetail):
             and data.get('is_verified') is not None
             and data.get('is_verified') != user.is_verified
         ):
+            logging.info("Admin access is required to update this information.")
             raise ForbiddenError(
                 {'pointer': '/data/attributes/is-verified'},
                 "Admin access is required to update this information.",
@@ -343,6 +359,7 @@ class UserDetail(ResourceDetail):
                 verify_fresh_jwt_in_request()
                 view_kwargs['email_changed'] = user.email
             else:
+                logging.error("Email already exists")
                 raise ConflictError(
                     {'pointer': '/data/attributes/email'}, "Email already exists"
                 )
@@ -398,9 +415,10 @@ class UserDetail(ResourceDetail):
                 EmailNotification,
                 Speaker,
                 User,
+                UserFollowGroup,
             ],
             fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
-                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
+                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id, user_follow_group_id",
             leave_if=lambda a: a.get('attendee_id'),
         ),
     )

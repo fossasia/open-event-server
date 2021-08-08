@@ -51,6 +51,7 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
+from app.models.speaker_invite import SpeakerInvite
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.stripe_authorization import StripeAuthorization
@@ -68,7 +69,6 @@ from app.models.user import (
 )
 from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
-from app.models.users_groups_role import UsersGroupsRoles
 from app.models.video_stream import VideoStream
 
 events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
@@ -215,18 +215,7 @@ class EventList(ResourceList):
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
-
-            query_ = query_.join(Event.roles).filter(
-                or_(
-                    UsersEventsRoles.user_id == user.id,
-                    and_(
-                        Group.id == UsersGroupsRoles.group_id,
-                        Event.group_id == Group.id,
-                        UsersGroupsRoles.email == current_user.email,
-                        UsersGroupsRoles.accepted == True,
-                    ),
-                )
-            )
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id)
 
         if view_kwargs.get('user_owner_id') and 'GET' in request.method:
             if not has_access(
@@ -463,6 +452,7 @@ def get_id(view_kwargs):
         (Ticket, 'ticket_id'),
         (TicketTag, 'ticket_tag_id'),
         (RoleInvite, 'role_invite_id'),
+        (SpeakerInvite, 'speaker_invite_id'),
         (UsersEventsRoles, 'users_events_role_id'),
         (AccessCode, 'access_code_id'),
         (Speaker, 'speaker_id'),
@@ -552,6 +542,16 @@ class EventDetail(ResourceDetail):
         if is_date_updated or is_draft_published or is_event_restored:
             validate_date(event, data)
 
+        if data.get('is_document_enabled'):
+            d = data.get('document_links')
+            if d:
+                for document in d:
+                    if not document.get('name') or not document.get('link'):
+                        raise UnprocessableEntityError(
+                            {'pointer': '/'},
+                            "Enter required fields link and name",
+                        )
+
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0 and not has_access('is_super_admin'):
                 raise ForbiddenError(
@@ -564,6 +564,10 @@ class EventDetail(ResourceDetail):
             and data['original_image_url'] != event.original_image_url
         ):
             start_image_resizing_tasks(event, data['original_image_url'])
+        if data.get('group') != event.group_id:
+            if event.is_announced:
+                event.is_announced = False
+                save_to_db(event)
 
     def after_update_object(self, event, data, view_kwargs):
         if event.name != g.event_name:

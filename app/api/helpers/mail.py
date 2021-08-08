@@ -229,6 +229,29 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
+def send_email_speaker_invite(email, session, cfs_link, inviter):
+    """email for speaker invite"""
+    action = MailType.SPEAKER_INVITE
+    app_name = get_settings()['app_name']
+    mail = MAILS[action]
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(session=session.title),
+        html=render_template(
+            mail['template'],
+            session_title=session.title,
+            event_name=session.event.name,
+            event_link=session.event.site_link,
+            app_name=app_name,
+            frontend_url=get_settings()['frontend_url'],
+            inviter_email=inviter.email,
+            inviter_name=inviter.name,
+            cfs_link=cfs_link,
+        ),
+    )
+
+
 def send_email_group_role_invite(email, role_name, group_name, link):
     """email for role invite"""
     action = MailType.GROUP_ROLE
@@ -245,6 +268,37 @@ def send_email_group_role_invite(email, role_name, group_name, link):
             link=link,
         ),
     )
+
+
+def send_email_announce_event(event, group, emails):
+    """email for announce event"""
+
+    action = MailType.ANNOUNCE_EVENT
+    mail = MAILS[action]
+
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(
+                event_name=event.name,
+                group_name=group.name,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+            ),
+            html=render_template(
+                mail['template'],
+                event_name=event.name,
+                event_description=event.description,
+                event_url=event.site_link,
+                event_location=event.normalized_location,
+                event_date=event.starts_at.strftime('%d %B %Y'),
+                event_time=event.starts_at.strftime("%H:%M (%Z)"),
+                group_name=group.name,
+                group_url=group.view_page_link,
+                app_name=get_settings()['app_name'],
+            ),
+            bcc=emails[1:],
+        )
 
 
 def send_email_for_monthly_fee_payment(
