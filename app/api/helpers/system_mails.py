@@ -34,6 +34,7 @@ class MailType:
     CONTACT_ORGANIZERS = 'contact_organizers'
     CONTACT_GROUP_ORGANIZERS = 'contact_group_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
+    ANNOUNCE_EVENT = "announce_event"
 
     @staticmethod
     def entries():
@@ -250,5 +251,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Video Moderator of video {video_name} at event {event_name}',
         'template': 'email/video_stream_moderator.html',
+    },
+    MailType.ANNOUNCE_EVENT: {
+        'recipient': 'User',
+        'subject': 'Join {event_name} from {group_name} on {event_date}',
+        'template': 'email/announce_event.html',
     },
 }
