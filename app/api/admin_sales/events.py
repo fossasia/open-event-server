@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
-from app.api.admin_sales.utils import summary
+from app.api.admin_sales.utils import event_type, summary
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -33,7 +33,7 @@ class AdminSalesByEventsSchema(Schema):
     ends_at = fields.DateTime()
     payment_currency = fields.String()
     payment_country = fields.String()
-    type = fields.Method('event_type')
+    type = fields.Method('e_type')
     owner = fields.Method('event_owner')
     owner_id = fields.Method('event_owner_id')
     sales = fields.Method('calc_sales')
@@ -52,16 +52,8 @@ class AdminSalesByEventsSchema(Schema):
     def event_owner_id(self, obj):
         return obj.owner.id
 
-    def event_type(self, obj):
-        t = 'To be announced'
-        if obj.online:
-            if obj.location_name:
-                t = 'Hybrid'
-            else:
-                t = 'Online'
-        elif obj.location_name:
-            t = 'Venue'
-        return str(t)
+    def e_type(self, obj):
+        return event_type(obj)
 
 
 class AdminSalesByEventsList(ResourceList):

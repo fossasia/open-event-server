@@ -6,6 +6,7 @@ import urllib.error
 import uuid
 from datetime import datetime
 
+import pytz
 import requests
 from flask import current_app, render_template
 from flask_celeryext import FlaskCeleryExt, RequestContextTask
@@ -617,7 +618,8 @@ def export_sessions_csv_task(self, event_id, status='all'):
 
 
 @celery.task(base=RequestContextTask, name='export.adminsales.csv', bind=True)
-def export_admin_sales_csv_task(self, event_id, status='all'):
+def export_admin_sales_csv_task(self, status='all'):
+    current_time = datetime.now(pytz.utc)
     if status not in [
         'all',
         'live',
@@ -629,12 +631,12 @@ def export_admin_sales_csv_task(self, event_id, status='all'):
         sales = Event.query.all()
     elif status == 'live':
         sales = Event.query.filter(
-            Event.starts_at <= datetime.utcnow(),
-            Event.ends_at >= datetime.utcnow(),
+            Event.starts_at <= current_time,
+            Event.ends_at >= current_time,
         ).all()
     elif status == 'past':
         sales = Event.query.filter(
-            Event.ends_at <= datetime.utcnow(),
+            Event.ends_at <= current_time,
         ).all()
 
     try:
@@ -654,7 +656,7 @@ def export_admin_sales_csv_task(self, event_id, status='all'):
         sales_csv_file = UploadedFile(file_path=file_path, filename=filename)
         sales_csv_url = upload(
             sales_csv_file,
-            UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''),
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id='admin', identifier=''),
         )
         result = {'download_url': sales_csv_url}
     except Exception as e:

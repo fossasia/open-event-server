@@ -1,6 +1,6 @@
 import pytz
 
-from app.api.admin_sales.utils import summary
+from app.api.admin_sales.utils import event_type, summary
 from app.models.helpers.versioning import strip_tags
 
 
@@ -218,6 +218,7 @@ def export_sessions_csv(sessions):
 def export_sales_csv(sales):
     headers = [
         'Event Name',
+        'Owner Name',
         'Owner Email',
         'Event Type',
         'Event Date',
@@ -232,8 +233,9 @@ def export_sales_csv(sales):
     for sale in sales:
         if not sale.deleted_at:
             column = [sale.name]
+            column.append(sale.owner.first_name if sale.owner.first_name else '')
             column.append(sale.owner.email)
-            column.append('to be announced')
+            column.append(event_type(sale))
             column.append(
                 sale.starts_at.astimezone(pytz.timezone(sale.timezone)).strftime(
                     '%B %-d, %Y %H:%M %z'
