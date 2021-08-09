@@ -82,6 +82,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_featured = fields.Bool(default=False)
     is_promoted = fields.Bool(default=False)
     is_demoted = fields.Bool(default=False)
+    is_announced = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
     is_cfs_enabled = fields.Bool(default=False)
     payment_country = fields.Str(allow_none=True)
