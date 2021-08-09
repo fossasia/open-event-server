@@ -26,7 +26,6 @@ class AdminSalesByEventsSchema(Schema):
         inflect = dasherize
 
     id = fields.String()
-    total_sales = fields.Integer()
     identifier = fields.String()
     name = fields.String()
     created_at = fields.DateTime()
@@ -35,18 +34,15 @@ class AdminSalesByEventsSchema(Schema):
     ends_at = fields.DateTime()
     payment_currency = fields.String()
     payment_country = fields.String()
+    completed_order_sales = fields.Integer(dump_only=True)
+    placed_order_sales = fields.Integer(dump_only=True)
+    pending_order_sales = fields.Integer(dump_only=True)
+    completed_order_tickets = fields.Integer(dump_only=True)
+    placed_order_tickets = fields.Integer(dump_only=True)
+    pending_order_tickets = fields.Integer(dump_only=True)
     type = fields.Method('event_type')
     owner = fields.Method('event_owner')
     owner_id = fields.Method('event_owner_id')
-    sales = fields.Method('calc_sales')
-
-    @staticmethod
-    def calc_sales(obj):
-        """
-        Returns sales (dictionary with total sales and ticket count) for
-        placed, completed and pending orders
-        """
-        return summary(obj)
 
     def event_owner(self, obj):
         return str(obj.owner.email)
@@ -78,7 +74,13 @@ class AdminSalesByEventsList(ResourceList):
     def before_get(self, args, kwargs):
         events = Event.query.all()
         for event in events:
-            event.total_sales = summary(event, return_total_sales=True)
+            sales = summary(event)
+            event.completed_order_sales = sales['completed']['sales_total']
+            event.placed_order_sales = sales['placed']['sales_total']
+            event.pending_order_sales = sales['pending']['sales_total']
+            event.completed_order_tickets = sales['completed']['ticket_count']
+            event.placed_order_tickets = sales['placed']['ticket_count']
+            event.pending_order_tickets = sales['pending']['ticket_count']
             save_to_db(event)
 
     methods = ['GET']

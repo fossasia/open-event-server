@@ -158,7 +158,12 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
-    total_sales = db.Column(db.Integer)
+    completed_order_sales = db.Column(db.Integer)
+    placed_order_sales = db.Column(db.Integer)
+    pending_order_sales = db.Column(db.Integer)
+    completed_order_tickets = db.Column(db.Integer)
+    placed_order_tickets = db.Column(db.Integer)
+    pending_order_tickets = db.Column(db.Integer)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )
