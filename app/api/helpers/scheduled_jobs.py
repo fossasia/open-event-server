@@ -130,7 +130,7 @@ def send_event_fee_notification_followup(follow_up=True):
         logger.warning('Not valid follow up request: %s', follow_up)
         return
     query = EventInvoice.query.filter(
-        EventInvoice.amount > 0, EventInvoice.status != 'paid'
+        EventInvoice.amount > 0, EventInvoice.status != 'paid', EventInvoice.status != 'resolved', EventInvoice.status != 'refunded', EventInvoice.status != 'refunding'
     )
     this_month = this_month_date()
     if follow_up != 'post_due':
