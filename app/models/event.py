@@ -2,6 +2,8 @@ import re
 from argparse import Namespace
 from datetime import datetime
 
+from sqlalchemy.sql.expression import true
+
 import flask_login as login
 import pytz
 from flask import current_app
@@ -452,6 +454,15 @@ class Event(SoftDeletionModel):
         elif self.online:
             return self.site_link
         return 'Location Not Announced'
+
+    @property
+    def event_location_status(self):
+        if self.online:
+            return 'Online (Please login to the platform to access the video room on the event page)'
+        elif self.location_name:
+            return self.location_name
+        else:
+            return 'Location Not Announced'
 
     @property
     def has_coordinates(self):
