@@ -37,6 +37,7 @@ class MailType:
     TICKET_SALES_END = 'ticket_sales_end'
     TICKET_SALES_END_TOMORROW = 'ticket_sales_end_tomorrow'
     TICKET_SALES_END_NEXT_WEEK = 'ticket_sales_end_next_week'
+    ANNOUNCE_EVENT = "announce_event"
 
     @staticmethod
     def entries():
@@ -268,5 +269,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Video Moderator of video {video_name} at event {event_name}',
         'template': 'email/video_stream_moderator.html',
+    },
+    MailType.ANNOUNCE_EVENT: {
+        'recipient': 'User',
+        'subject': 'Join {event_name} from {group_name} on {event_date}',
+        'template': 'email/announce_event.html',
     },
 }
