@@ -265,3 +265,20 @@ def export_speakers_csv(speakers):
         rows.append(column)
 
     return rows
+
+
+def export_group_followers_csv(followers):
+    headers = ['Name', 'Email', 'Group Join Date', 'Group Owner']
+    rows = [headers]
+    for follower in followers:
+        column = [follower.user.public_name if follower.user.public_name else '']
+        column.append(follower.user._email if follower.user._email else '')
+        column.append(
+            follower.created_at.strftime('%B %-d, %Y %H:%M %z')
+            if follower.created_at
+            else ''
+        )
+        column.append(follower.group.user._email if follower.group.user._email else '')
+        rows.append(column)
+
+    return rows

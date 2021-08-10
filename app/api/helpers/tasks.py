@@ -47,6 +47,7 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.models.user_follow_group import UserFollowGroup
 from app.settings import get_settings
 
 from .import_helpers import update_import_job
@@ -719,3 +720,35 @@ def rename_chat_room(event_id):
     event = Event.query.get(event_id)
     rename_rocketchat_room(event)
     logging.info("Rocket chat room renamed successfully")
+
+
+@celery.task(base=RequestContextTask, name='export.group.followers.csv', bind=True)
+def export_group_followers_csv_task(self, group_id):
+
+    followers = UserFollowGroup.query.filter_by(group_id=group_id).all()
+
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = f"group-followers-{uuid.uuid1().hex}.csv"
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_group_followers_csv
+
+            content = export_group_followers_csv(followers)
+            for row in content:
+                writer.writerow(row)
+        group_followers_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        group_followers_csv_url = upload(
+            group_followers_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id='group', identifier=''),
+        )
+        result = {'download_url': group_followers_csv_url}
+    except Exception as e:
+        result = {'__error': True, 'result': str(e)}
+        logging.exception('Error in exporting group followers as CSV')
+
+    return result
