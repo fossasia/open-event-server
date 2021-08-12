@@ -2,6 +2,7 @@ from flask_jwt_extended import current_user
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
+from app.api.helpers.db import safe_query_kwargs
 from app.api.bootstrap import api
 from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.utilities import require_relationship
@@ -20,6 +21,10 @@ class UsersGroupsRolesList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = UsersGroupsRoles.query
+        if view_kwargs.get('group_id'):
+            group = safe_query_kwargs(Group, view_kwargs, 'group_id')
+            print(group)
+            query_ = query_.filter_by(group_id=group.id)
         return query_
 
     view_kwargs = True
