@@ -1,5 +1,6 @@
 import pytz
 
+from app.api.helpers.group_user_role import get_user_group_role
 from app.models.helpers.versioning import strip_tags
 
 
@@ -268,7 +269,12 @@ def export_speakers_csv(speakers):
 
 
 def export_group_followers_csv(followers):
-    headers = ['Name', 'Email', 'Group Join Date', 'Group Owner']
+    headers = [
+        'Public Profile Name',
+        'Email',
+        'Group Join Date',
+        'Role (Owner, Organizer, Follower)',
+    ]
     rows = [headers]
     for follower in followers:
         column = [follower.user.public_name if follower.user.public_name else '']
@@ -278,7 +284,7 @@ def export_group_followers_csv(followers):
             if follower.created_at
             else ''
         )
-        column.append(follower.group.user._email if follower.group.user._email else '')
+        column.append(get_user_group_role(follower.user_id, follower.group_id))
         rows.append(column)
 
     return rows
