@@ -1,5 +1,6 @@
 import pytz
 
+from app.api.admin_sales.utils import event_type, summary
 from app.api.helpers.group_user_role import get_user_group_role
 from app.models.helpers.versioning import strip_tags
 
@@ -210,6 +211,45 @@ def export_sessions_csv(sessions):
             column.append(session.video_url if session.video_url else '')
             column.append(session.average_rating)
             column.append(session.rating_count)
+            rows.append(column)
+
+    return rows
+
+
+def export_sales_csv(sales):
+    headers = [
+        'Event Name',
+        'Owner Name',
+        'Owner Email',
+        'Event Type',
+        'Event Date',
+        'Ticket (Completed)',
+        'Sales (Completed)',
+        'Ticket (Placed)',
+        'Sales (Placed)',
+        'Ticket (Pending)',
+        'Sales (Pending)',
+    ]
+    rows = [headers]
+    for sale in sales:
+        if not sale.deleted_at:
+            column = [sale.name]
+            column.append(sale.owner.first_name if sale.owner.first_name else '')
+            column.append(sale.owner.email)
+            column.append(event_type(sale))
+            column.append(
+                sale.starts_at.astimezone(pytz.timezone(sale.timezone)).strftime(
+                    '%B %-d, %Y %H:%M %z'
+                )
+                if sale.starts_at
+                else ''
+            )
+            column.append(summary(sale)['completed']['ticket_count'])
+            column.append(summary(sale)['completed']['sales_total'])
+            column.append(summary(sale)['placed']['ticket_count'])
+            column.append(summary(sale)['placed']['sales_total'])
+            column.append(summary(sale)['pending']['ticket_count'])
+            column.append(summary(sale)['pending']['sales_total'])
             rows.append(column)
 
     return rows
