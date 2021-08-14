@@ -30,6 +30,22 @@ def status_summary(sales_summary, tickets_summary, status):
     }
 
 
+def event_type(event):
+    """
+    Returns event type as string
+    """
+    t = 'To be announced'
+    if event.online:
+        if event.location_name:
+            t = 'Hybrid'
+        else:
+            t = 'Online'
+    elif event.location_name:
+        t = 'Venue'
+
+    return str(t)
+
+
 def summary(event):
     """
     Returns sales as dictionary for all status codes
