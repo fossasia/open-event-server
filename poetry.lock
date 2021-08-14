@@ -100,7 +100,7 @@ with-fonttools = ["fonttools (>=3.0)", "fonttools (>=4.0)"]
 
 [[package]]
 name = "asgiref"
-version = "3.3.4"
+version = "3.4.1"
 description = "ASGI specs, helper code, and adapters"
 category = "main"
 optional = false
@@ -2051,7 +2051,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.7.1"
+version = "6.8.0"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2350,15 +2350,15 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "uvicorn"
-version = "0.14.0"
+version = "0.15.0"
 description = "The lightning-fast ASGI server."
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-asgiref = ">=3.3.4"
-click = ">=7"
+asgiref = ">=3.4.0"
+click = ">=7.0"
 colorama = {version = ">=0.4", optional = true, markers = "sys_platform == \"win32\" and extra == \"standard\""}
 h11 = ">=0.8"
 httptools = {version = ">=0.2.0,<0.3.0", optional = true, markers = "extra == \"standard\""}
@@ -2565,7 +2565,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "a65b09a1bfbcaf6b0b4ab8c5452e3f1f3958bc385367d36a966605f4224b500d"
+content-hash = "fc206f2b5196d8df69a7968604f417fe737bfec926e01153518fb8a2c1cc6691"
 
 [metadata.files]
 aiohttp = [
@@ -2633,8 +2633,8 @@ arabic-reshaper = [
     {file = "arabic_reshaper-2.1.3.tar.gz", hash = "sha256:a236fc6e9dde2a61cc6a5ca962b522e42694e1bb2a2d86894ed7a4eba4ce1890"},
 ]
 asgiref = [
-    {file = "asgiref-3.3.4-py3-none-any.whl", hash = "sha256:92906c611ce6c967347bbfea733f13d6313901d54dcca88195eaeb52b2a8e8ee"},
-    {file = "asgiref-3.3.4.tar.gz", hash = "sha256:d1216dfbdfb63826470995d31caed36225dcaf34f182e0fa257a4dd9e86f1b78"},
+    {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},
+    {file = "asgiref-3.4.1.tar.gz", hash = "sha256:4ef1ab46b484e3c706329cedeff284a5d40824200638503f5768edb6de7d58e9"},
 ]
 astroid = [
     {file = "astroid-2.6.5-py3-none-any.whl", hash = "sha256:7b963d1c590d490f60d2973e57437115978d3a2529843f160b5003b721e1e925"},
@@ -3790,8 +3790,8 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.7.1-py3-none-any.whl", hash = "sha256:2558a8b2cf12677ceb99f8b611d914af5b9a2fd7ff3c0578e8299b4224e10071"},
-    {file = "sendgrid-6.7.1.tar.gz", hash = "sha256:1c1cca97ab968f81af43ddbbe44aade5a689da27e3e4975dc366042499620abe"},
+    {file = "sendgrid-6.8.0-py3-none-any.whl", hash = "sha256:a991ec89e619fce9f89fa28d0e13d1673f336ff1e6333a4df591242f3134fe63"},
+    {file = "sendgrid-6.8.0.tar.gz", hash = "sha256:0c500d53b2e7a4734bd978ebafcb43bc8be1b0cace5690a2324d6fab1806926a"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-1.3.1.tar.gz", hash = "sha256:ebe99144fa9618d4b0e7617e7929b75acd905d258c3c779edcd34c0adfffe26c"},
@@ -3988,8 +3988,8 @@ urllib3 = [
     {file = "urllib3-1.26.5.tar.gz", hash = "sha256:a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"},
 ]
 uvicorn = [
-    {file = "uvicorn-0.14.0-py3-none-any.whl", hash = "sha256:2a76bb359171a504b3d1c853409af3adbfa5cef374a4a59e5881945a97a93eae"},
-    {file = "uvicorn-0.14.0.tar.gz", hash = "sha256:45ad7dfaaa7d55cab4cd1e85e03f27e9d60bc067ddc59db52a2b0aeca8870292"},
+    {file = "uvicorn-0.15.0-py3-none-any.whl", hash = "sha256:17f898c64c71a2640514d4089da2689e5db1ce5d4086c2d53699bf99513421c1"},
+    {file = "uvicorn-0.15.0.tar.gz", hash = "sha256:d9a3c0dd1ca86728d3e235182683b4cf94cd53a867c288eaeca80ee781b2caff"},
 ]
 uvloop = [
     {file = "uvloop-0.15.2-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:19fa1d56c91341318ac5d417e7b61c56e9a41183946cc70c411341173de02c69"},
