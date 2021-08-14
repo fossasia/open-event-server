@@ -1,6 +1,6 @@
 {{ _('Hello') }},
 <br/><br/>{{ _('Thank you for signing up for') }} &quot;<a href={{ order.event.site_link }}>{{ order.event.name }}</a>&quot;.
-<br/><br/>{{ _('This is your confirmation. You can download your') }}: <a href={{ order_view_url }}>{{ _('tickets or registration information here') }}</a>.
+<br/><br/>{{ _('This is your confirmation. You can download your') }} <a href={{ order_view_url }}>{{ _('tickets or registration information here') }}</a>.
 <br/><br/>{{ _('Order Summary') }}:
 <br/>{{ _('Name') }}: {{ order.user.full_name }}
 {% for i, attendee in attendees | groupby('ticket_id') %}
@@ -11,7 +11,7 @@
 <br/>
 <br/>{{ _('About this event') }}:
 <br/>{{ _('Date') }}: {{ order.event.starts_at | datetime(order.event.timezone) }} - {{ order.event.ends_at | datetime(order.event.timezone) }}
-<br/>{{ _(Location) }}: {{ order.event_location_status }}
+<br/>{{ _('Location') }}: {{ order.event.event_location_status }}
 <br/>{{ _('URL') }}: {{ order.event.site_link }}
 <br/>
 {% if order.event.after_order_message %}
