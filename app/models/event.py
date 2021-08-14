@@ -2,8 +2,6 @@ import re
 from argparse import Namespace
 from datetime import datetime
 
-from sqlalchemy.sql.expression import true
-
 import flask_login as login
 import pytz
 from flask import current_app
