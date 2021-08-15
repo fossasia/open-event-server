@@ -97,7 +97,9 @@ class UserFollowGroupDetail(ResourceDetail):
 
     def before_delete_object(self, follower, view_kwargs):
         if not follower:
-            raise NotFoundError({'source': ''}, 'Group Not Found')
+            raise NotFoundError({'source': ''}, 'Group Follower Not Found')
+        if current_user.id != follower.user_id:
+            raise ForbiddenError({'source': ''}, 'User have no permission to delete follower')
 
     view_kwargs = True
     methods = ['GET', 'DELETE']

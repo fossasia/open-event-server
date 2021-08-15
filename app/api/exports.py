@@ -12,7 +12,7 @@ from flask import (
 from flask_jwt_extended import current_user
 
 from app.api.helpers.export_helpers import create_export_job, export_event_json
-from app.api.helpers.permissions import is_coorganizer, to_event_id
+from app.api.helpers.permissions import is_admin, is_coorganizer, to_event_id
 from app.api.helpers.utilities import TASK_RESULTS
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
@@ -213,6 +213,25 @@ def export_sessions_csv(event_id):
 
 
 @export_routes.route(
+    '/admin/export/sales/csv',
+    methods=['POST'],
+    endpoint='export_sales_csv',
+)
+@is_admin
+def export_sales_csv():
+    from .helpers.tasks import export_admin_sales_csv_task
+
+    status = request.json.get('status')
+    task = export_admin_sales_csv_task.delay(status)
+
+    # here using event_id zero for admin export tasks
+    event_id = 0
+    create_export_job(task.id, event_id)
+
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
+
+
+@export_routes.route(
     '/events/<string:event_identifier>/export/speakers/csv',
     methods=['POST'],
     endpoint='export_speakers_csv',
@@ -227,6 +246,19 @@ def export_speakers_csv(event_id):
     task = export_speakers_csv_task.delay(event_id, status)
 
     create_export_job(task.id, event_id)
+
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
+
+
+@export_routes.route(
+    '/group/<int:group_id>/export/followers/csv',
+    methods=['POST'],
+    endpoint='export_group_followers_csv',
+)
+def export_group_followers_csv(group_id):
+    from .helpers.tasks import export_group_followers_csv_task
+
+    task = export_group_followers_csv_task.delay(group_id)
 
     return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
 
