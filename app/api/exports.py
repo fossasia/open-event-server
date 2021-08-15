@@ -251,6 +251,19 @@ def export_speakers_csv(event_id):
 
 
 @export_routes.route(
+    '/group/<int:group_id>/export/followers/csv',
+    methods=['POST'],
+    endpoint='export_group_followers_csv',
+)
+def export_group_followers_csv(group_id):
+    from .helpers.tasks import export_group_followers_csv_task
+
+    task = export_group_followers_csv_task.delay(group_id)
+
+    return jsonify(task_url=url_for('tasks.celery_task', task_id=task.id))
+
+
+@export_routes.route(
     '/events/<string:event_identifier>/export/sessions/pdf',
     methods=['GET'],
     endpoint='export_sessions_pdf',
