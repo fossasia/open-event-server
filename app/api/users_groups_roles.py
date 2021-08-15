@@ -23,7 +23,6 @@ class UsersGroupsRolesList(ResourceList):
         query_ = UsersGroupsRoles.query
         if view_kwargs.get('group_id'):
             group = safe_query_kwargs(Group, view_kwargs, 'group_id')
-            print(group)
             query_ = query_.filter_by(group_id=group.id)
         return query_
 
