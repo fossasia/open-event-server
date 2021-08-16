@@ -172,7 +172,7 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': 'Your order invoice and tickets for {event_name} ({invoice_id}) ',
+        'subject': 'See you at {event_name} ({invoice_id}) ',
         'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
