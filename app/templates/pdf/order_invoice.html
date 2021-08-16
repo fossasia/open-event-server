@@ -261,7 +261,7 @@
             <td></td>
             <td class="grand total"><b>{{ _('Grand Total') }}</b></td>
             <td class="grand total"> 
-              {% if order.amount %}
+              {% if order.amount != 0.0 %}
                 {{ event.payment_currency }}&nbsp;
               {% endif %}
               {{ order.amount | money }}
