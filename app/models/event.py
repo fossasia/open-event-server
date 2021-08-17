@@ -454,6 +454,15 @@ class Event(SoftDeletionModel):
         return 'Location Not Announced'
 
     @property
+    def event_location_status(self):
+        if self.online:
+            return 'Online (Please login to the platform to access the video room on the event page)'
+        elif self.location_name:
+            return self.location_name
+        else:
+            return 'Location Not Announced'
+
+    @property
     def has_coordinates(self):
         return self.latitude and self.longitude
 
