@@ -1,0 +1,28 @@
+image: gitpod/workspace-postgres
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+    - name: Dependencies # runs during prebuild
+      init: |
+          virtualenv venv && . ./venv/bin/activate
+          export PIP_USER=false
+          pip install poetry && poetry install
+          gp sync-done packages
+
+    - name: Database
+      init: |
+          gp sync-await packages
+          psql -c "CREATE USER open_event_user WITH PASSWORD 'opev_pass';"
+          psql -c "CREATE DATABASE oevent WITH OWNER open_event_user;"
+          cp .env.example .env
+          gp sync-done db
+
+    - name: Server
+      init: |
+          gp sync-await db
+          source ./venv/bin/activate
+      command: ./venv/bin/python3 manage.py runserver
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+    - port: 5000
+      onOpen: open-browser
