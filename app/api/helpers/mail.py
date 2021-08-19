@@ -373,29 +373,39 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
+    event_name=event.name
+    group_name=group.name
+    event_date=event.starts_at.strftime('%d %B %Y')
+    event_description=event.description
+    event_url=event.site_link
+    event_location=event.normalized_location
+    event_time=event.starts_at.strftime("%H:%M (%Z)")
+    group_url=group.view_page_link
+    app_name=get_settings()['app_name']
+
     if len(emails) > 0:
-        send_email(
-            to=emails[0],
-            action=action,
-            subject=mail['subject'].format(
-                event_name=event.name,
-                group_name=group.name,
-                event_date=event.starts_at.strftime('%d %B %Y'),
-            ),
-            html=render_template(
-                mail['template'],
-                event_name=event.name,
-                event_description=event.description,
-                event_url=event.site_link,
-                event_location=event.normalized_location,
-                event_date=event.starts_at.strftime('%d %B %Y'),
-                event_time=event.starts_at.strftime("%H:%M (%Z)"),
-                group_name=group.name,
-                group_url=group.view_page_link,
-                app_name=get_settings()['app_name'],
-            ),
-            bcc=emails[1:],
-        )
+        for email in emails:
+            send_email(
+                to=email,
+                action=action,
+                subject=mail['subject'].format(
+                    event_name=event_name,
+                    group_name=group_name,
+                    event_date=event_date,
+                ),
+                html=render_template(
+                    mail['template'],
+                    event_name=event_name,
+                    event_description=event_description,
+                    event_url=event_url,
+                    event_location=event_location,
+                    event_date=event_date,
+                    event_time=event_time,
+                    group_name=group_name,
+                    group_url=group_url,
+                    app_name=app_name,
+                ),
+            )
 
 
 def send_email_for_monthly_fee_payment(
