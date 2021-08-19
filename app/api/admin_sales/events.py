@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
-from app.api.admin_sales.utils import event_type, summary
+from app.api.admin_sales.utils import summary
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
 from app.api.helpers.utilities import dasherize
