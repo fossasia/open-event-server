@@ -41,14 +41,7 @@ A demo version is automatically deployed from our repositories:
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
 
-**NOTE:** If you are heading towards `Local Installation`, be sure to use one of the following operating systems:
-
-
-* Debian based Linux Distros (like Ubuntu)
-* MacOS
-
-1. [Generic Installation Instructions](/docs/installation/basic.md)
-1. [Local Installation](/docs/installation/local.md)
+1. [Installation Instructions](/docs/installation/basic.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
 1. [Deployment on Google Compute Engine](/docs/installation/google.md)
 1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
@@ -250,6 +243,20 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 ```
 * Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` respectively in your root directory.
 
+### Pre-commits guide
+
+Git hook scripts are useful for identifying simple issues before submission to code review.
+
+#### Install the git hook scripts:
+* run pre-commit install to set up the git hook scripts
+```sh
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+```
+* now pre-commit will run automatically on git commit!
+
+#### For configuration, [Click Here](https://pre-commit.com/)
+
 ## Logging
 
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/general/logs.md).
@@ -263,7 +270,6 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 If you would like to contribute to the translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
 Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
-
 
 ## Contributions, Bug Reports, Feature Requests
 

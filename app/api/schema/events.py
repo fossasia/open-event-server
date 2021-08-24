@@ -66,6 +66,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     show_remaining_tickets = fields.Bool(allow_none=False, default=False)
     owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
+    is_oneclick_signup_enabled = fields.Bool(default=False)
     has_owner_info = fields.Bool(default=False)
     owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
@@ -81,7 +82,9 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_featured = fields.Bool(default=False)
     is_promoted = fields.Bool(default=False)
     is_demoted = fields.Bool(default=False)
+    is_announced = fields.Bool(default=False)
     is_ticket_form_enabled = fields.Bool(default=True)
+    is_cfs_enabled = fields.Bool(default=False)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     paypal_email = TrimmedEmail(allow_none=True)
@@ -89,6 +92,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     is_billing_info_mandatory = fields.Bool(default=False)
     is_donation_enabled = fields.Bool(default=False)
     is_chat_enabled = fields.Bool(default=False)
+    is_videoroom_enabled = fields.Bool(default=False)
     is_document_enabled = fields.Boolean(default=False)
     document_links = fields.Nested(DocumentLinkSchema, many=True, allow_none=True)
     chat_room_name = fields.Str(dump_only=True)
@@ -108,8 +112,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
-    live_stream_url = fields.Url(allow_none=True)
-    webinar_url = fields.Url(allow_none=True)
     refund_policy = fields.String(allow_none=True)
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
 
@@ -368,6 +370,15 @@ class EventSchemaPublic(SoftDeletionSchema):
         type_='user-favourite-session',
         many=True,
     )
+    speaker_invites = Relationship(
+        self_view='v1.event_speaker_invites',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_invite_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='SpeakerInviteSchema',
+        type_='speaker-invite',
+        many=True,
+    )
 
 
 class EventSchema(EventSchemaPublic):
@@ -378,6 +389,12 @@ class EventSchema(EventSchemaPublic):
         self_view_many = 'v1.event_list'
         inflect = dasherize
 
+    completed_order_sales = fields.Integer(dump_only=True)
+    placed_order_sales = fields.Integer(dump_only=True)
+    pending_order_sales = fields.Integer(dump_only=True)
+    completed_order_tickets = fields.Integer(dump_only=True)
+    placed_order_tickets = fields.Integer(dump_only=True)
+    pending_order_tickets = fields.Integer(dump_only=True)
     event_invoices = Relationship(
         attribute='invoices',
         self_view='v1.event_event_invoice',

@@ -13,6 +13,7 @@ class MailType:
     PASSWORD_CHANGE = 'password_change'
     PASSWORD_RESET_AND_VERIFY = 'password_reset_verify'
     EVENT_ROLE = 'event_role'
+    SPEAKER_INVITE = 'speaker_invite'
     GROUP_ROLE = 'group_role'
     SESSION_STATE_CHANGE = 'session_state_change'
     TICKET_PURCHASED = 'ticket_purchased'
@@ -31,7 +32,12 @@ class MailType:
     MONTHLY_PAYMENT_POST_DUE = 'monthly_payment_post_due'
     TEST_MAIL = 'test_mail'
     CONTACT_ORGANIZERS = 'contact_organizers'
+    CONTACT_GROUP_ORGANIZERS = 'contact_group_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
+    TICKET_SALES_END = 'ticket_sales_end'
+    TICKET_SALES_END_TOMORROW = 'ticket_sales_end_tomorrow'
+    TICKET_SALES_END_NEXT_WEEK = 'ticket_sales_end_next_week'
+    ANNOUNCE_EVENT = "announce_event"
 
     @staticmethod
     def entries():
@@ -117,6 +123,21 @@ MAILS = {
             "{frontend_link}",
         },
     },
+    MailType.TICKET_SALES_END: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ended',
+        'template': 'email/ticket_sales_end.html',
+    },
+    MailType.TICKET_SALES_END_TOMORROW: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ending in 24 Hours',
+        'template': 'email/ticket_sales_end_tomorrow.html',
+    },
+    MailType.TICKET_SALES_END_NEXT_WEEK: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period fors One or Several Tickets for {event_name} Ending in 7 Days',
+        'template': 'email/ticket_sales_end_next_week.html',
+    },
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
         'subject': 'New session proposal for {session.event.name} titled {session.title}',
@@ -157,6 +178,11 @@ MAILS = {
         'subject': 'Invitation to be {role} at Event: {event}',
         'template': 'email/event_role.html',
     },
+    MailType.SPEAKER_INVITE: {
+        'recipient': 'User',
+        'subject': 'Invitation to be speaker at Session: {session}',
+        'template': 'email/speaker_invite.html',
+    },
     MailType.GROUP_ROLE: {
         'recipient': 'User',
         'subject': 'Invitation to be {role} at Group: {group}',
@@ -164,7 +190,7 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': 'Your order invoice and tickets for {event_name} ({invoice_id}) ',
+        'subject': 'See you at {event_name} ({invoice_id}) ',
         'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
@@ -230,6 +256,10 @@ MAILS = {
         'recipient': 'Owner, Organizer',
         'template': 'email/organizer_contact_attendee.html',
     },
+    MailType.CONTACT_GROUP_ORGANIZERS: {
+        'recipient': 'Owner, Organizer',
+        'template': 'email/group_contact_user.html',
+    },
     MailType.TEST_MAIL: {
         'recipient': 'User',
         'subject': 'Test Mail Subject',
@@ -239,5 +269,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Video Moderator of video {video_name} at event {event_name}',
         'template': 'email/video_stream_moderator.html',
+    },
+    MailType.ANNOUNCE_EVENT: {
+        'recipient': 'User',
+        'subject': 'Join {event_name} from {group_name} on {event_date}',
+        'template': 'email/announce_event.html',
     },
 }

@@ -19,11 +19,11 @@ class TestJWTHelperValidation(OpenEventTestCase):
 
             # Valid Authentication
             authenticated_user = jwt_authenticate(user.email, 'password')
-            self.assertEqual(authenticated_user.email, user.email)
+            assert authenticated_user.email == user.email
 
             # Invalid Authentication
             wrong_credential_user = jwt_authenticate(user.email, 'wrong_password')
-            self.assertIsNone(wrong_credential_user)
+            assert wrong_credential_user is None
 
     def test_get_identity(self):
         """Method to test identity of authenticated user"""
@@ -42,7 +42,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
             }
 
         with self.app.test_request_context(headers=self.auth):
-            self.assertEquals(get_identity().id, user.id)
+            assert get_identity().id == user.id
 
 
 if __name__ == '__main__':
