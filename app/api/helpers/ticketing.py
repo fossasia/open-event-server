@@ -298,6 +298,34 @@ class TicketingManager:
         return False, charge.failure_message
 
     @staticmethod
+    def create_stripe_payment_session(order):
+        try:
+            session = StripePaymentsManager.create_session(order)
+        except ConflictError as e:
+            # payment failed hence expire the order
+            order.status = 'expired'
+            save_to_db(order)
+
+            # delete related attendees to unlock the tickets
+            delete_related_attendees_for_order(order)
+
+            return False, 'Something went wrong', None
+        
+        order.stripe_session_id = session.id
+        save_to_db(order)
+        return True, 'Session Created', session.id
+
+    @staticmethod
+    def check_stripe_payment_status(order, stripe_session_id):
+        try:
+            session = StripePaymentsManager.retrive_session(order, stripe_session_id)
+        except:
+            return False, 'Failed', None
+        
+        print(session)
+        return session
+
+    @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
         """
         Charge the user through paypal.

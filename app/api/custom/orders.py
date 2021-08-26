@@ -4,13 +4,17 @@ from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+import datetime
 
+from app.api.helpers.db import save_to_db
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
+from app.api.helpers.order import on_order_completed
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.ticketing import TicketingManager
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
@@ -171,3 +175,21 @@ def ticket_attendee_pdf(attendee_id):
     if not os.path.isfile(file_path):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
+
+@order_blueprint.route('/<string:order_identifier>/complete-order', methods=['POST'])
+def complete_amount(order_identifier):
+    # update the order in the db.
+        order = Order.query.filter_by(identifier=order_identifier).first()
+
+        session = TicketingManager.check_stripe_payment_status(order)
+        if session['payment_status'] == 'paid':
+            order.status = 'completed'
+            order.completed_at = datetime.utcnow()
+            save_to_db(order)
+
+            on_order_completed(order)
+            
+        return jsonify({
+            'payment_status': session['payment_status']
+        })
+

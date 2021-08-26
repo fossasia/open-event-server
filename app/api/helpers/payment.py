@@ -91,6 +91,80 @@ class StripePaymentsManager:
         return json.loads(response.text)
 
     @staticmethod
+    def create_session(order_invoice):
+        stripe.api_key = order_invoice.event.stripe_authorization.stripe_publishable_key
+
+        product = stripe.Product.create(
+            name=order_invoice.event.name + '  Tickets',
+            metadata={
+                'order_id': order_invoice.id,
+                'event': order_invoice.event.name,
+                'user_id': order_invoice.user_id,
+                'event_id': order_invoice.event_id,
+            },
+            description=order_invoice.event.name,
+        )
+
+        price = stripe.Price.create(
+            product=product.id,
+            unit_amount=order_invoice.amount * 100,
+            currency=order_invoice.event.payment_currency,
+            metadata={
+                'order_id': order_invoice.id,
+                'event': order_invoice.event.name,
+                'user_id': order_invoice.user_id,
+                'event_id': order_invoice.event_id,
+            },
+        )
+
+        customer = stripe.Customer.create(
+            email=order_invoice.user.email,
+            metadata={
+                'order_id': order_invoice.id,
+                'event': order_invoice.event.name,
+                'user_id': order_invoice.user_id,
+                'event_id': order_invoice.event_id,
+            },
+        )
+
+        frontend_url = get_settings()['frontend_url']
+
+        session = stripe.checkout.Session.create(
+            customer=customer.id,
+            customer_email=order_invoice.user.email,
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                'product': product.id,
+                'unit_amount': order_invoice.amount * 100,
+                'currency': order_invoice.event.payment_currency,
+                },
+                'quantity': 1,
+            }],
+            metadata={
+                'order_id': order_invoice.id,
+                'event': order_invoice.event.name,
+                'user_id': order_invoice.user_id,
+                'event_id': order_invoice.event_id,
+            },
+            mode='payment',
+            currency= order_invoice.event.payment_currency,
+            success_url=f"{frontend_url}/orders/{order_invoice.identifier}",
+            cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}",
+        )
+
+        return session
+
+    @staticmethod
+    def retrive_session(order_invoice):
+        stripe.api_key = order_invoice.event.stripe_authorization.stripe_publishable_key
+
+        session = stripe.checkout.Session.retrieve(order_invoice.stripe_session_id)
+
+        return session
+
+
+    @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):
         """
         Capture payments through stripe.
