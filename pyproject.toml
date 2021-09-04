@@ -140,7 +140,7 @@ pyupgrade = "2.23.3"
 # For testing
 coverage = "5.5"
 dredd_hooks = "0.2"
-pytest = "6.2.4"
+pytest = "6.2.5"
 pytest-cov = "2.12.1"
 objproxies = "0.9.4"
 
