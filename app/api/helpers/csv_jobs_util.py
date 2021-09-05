@@ -1,5 +1,7 @@
 import pytz
 
+from app.api.admin_sales.utils import event_type, summary
+from app.api.helpers.group_user_role import get_user_group_role
 from app.models.helpers.versioning import strip_tags
 
 
@@ -82,7 +84,7 @@ def export_attendees_csv(attendees, custom_forms):
     for attendee in attendees:
         column = [
             str(attendee.order.get_invoice_number()) if attendee.order else '-',
-            str(attendee.order.created_at)
+            str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
             if attendee.order and attendee.order.created_at
             else '-',
             str(attendee.order.status)
@@ -152,12 +154,16 @@ def export_sessions_csv(sessions):
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
             column.append(
-                session.starts_at.astimezone(pytz.timezone(session.event.timezone))
+                session.starts_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.starts_at
                 else ''
             )
             column.append(
-                session.ends_at.astimezone(pytz.timezone(session.event.timezone))
+                session.ends_at.astimezone(
+                    pytz.timezone(session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z')
                 if session.ends_at
                 else ''
             )
@@ -181,7 +187,11 @@ def export_sessions_csv(sessions):
                 strip_tags(session.long_abstract) if session.long_abstract else ''
             )
             column.append(strip_tags(session.comments) if session.comments else '')
-            column.append(session.created_at if session.created_at else '')
+            column.append(
+                session.created_at.strftime('%B %-d, %Y %H:%M %z')
+                if session.created_at
+                else ''
+            )
             column.append('Yes' if session.is_mail_sent else 'No')
             column.append(session.level)
             column.append(session.state)
@@ -201,6 +211,45 @@ def export_sessions_csv(sessions):
             column.append(session.video_url if session.video_url else '')
             column.append(session.average_rating)
             column.append(session.rating_count)
+            rows.append(column)
+
+    return rows
+
+
+def export_sales_csv(sales):
+    headers = [
+        'Event Name',
+        'Owner Name',
+        'Owner Email',
+        'Event Type',
+        'Event Date',
+        'Ticket (Completed)',
+        'Sales (Completed)',
+        'Ticket (Placed)',
+        'Sales (Placed)',
+        'Ticket (Pending)',
+        'Sales (Pending)',
+    ]
+    rows = [headers]
+    for sale in sales:
+        if not sale.deleted_at:
+            column = [sale.name]
+            column.append(sale.owner.first_name if sale.owner.first_name else '')
+            column.append(sale.owner.email)
+            column.append(event_type(sale))
+            column.append(
+                sale.starts_at.astimezone(pytz.timezone(sale.timezone)).strftime(
+                    '%B %-d, %Y %H:%M %z'
+                )
+                if sale.starts_at
+                else ''
+            )
+            column.append(summary(sale)['completed']['ticket_count'])
+            column.append(summary(sale)['completed']['sales_total'])
+            column.append(summary(sale)['placed']['ticket_count'])
+            column.append(summary(sale)['placed']['sales_total'])
+            column.append(summary(sale)['pending']['ticket_count'])
+            column.append(summary(sale)['pending']['sales_total'])
             rows.append(column)
 
     return rows
@@ -254,6 +303,28 @@ def export_speakers_csv(speakers):
         column.append(speaker.facebook if speaker.facebook else '')
         column.append(speaker.github if speaker.github else '')
         column.append(speaker.linkedin if speaker.linkedin else '')
+        rows.append(column)
+
+    return rows
+
+
+def export_group_followers_csv(followers):
+    headers = [
+        'Public Profile Name',
+        'Email',
+        'Group Join Date',
+        'Role (Owner, Organizer, Follower)',
+    ]
+    rows = [headers]
+    for follower in followers:
+        column = [follower.user.public_name if follower.user.public_name else '']
+        column.append(follower.user._email if follower.user._email else '')
+        column.append(
+            follower.created_at.strftime('%B %-d, %Y %H:%M %z')
+            if follower.created_at
+            else ''
+        )
+        column.append(get_user_group_role(follower.user_id, follower.group_id))
         rows.append(column)
 
     return rows

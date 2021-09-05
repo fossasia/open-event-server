@@ -13,6 +13,7 @@ from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.event import EventFactoryBasic
 from tests.factories.user import UserFactory
 from tests.factories.users_events_roles import UsersEventsRolesSubFactory
+import pytest
 
 
 class TestPermissionManager(OpenEventLegacyTestCase):
@@ -35,9 +36,9 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         """Method to test whether user has access to different roles"""
 
         with self.app.test_request_context(headers=self.auth):
-            self.assertTrue(has_access('is_admin'))
-            self.assertFalse(has_access('is_super_admin'))
-            self.assertTrue(has_access('is_organizer', event_id=1))
+            assert has_access('is_admin')
+            assert not has_access('is_super_admin')
+            assert has_access('is_organizer', event_id=1)
 
     def test_accessible_role_based_events(self):
         """Method to test accessible role of a user based on an event"""
@@ -56,7 +57,7 @@ class TestPermissionManager(OpenEventLegacyTestCase):
                 user_id=1, event_id=1, role__name='organizer'
             )
             save_to_db(uer)
-            self.assertTrue(has_access('is_organizer', event_id=1))
+            assert has_access('is_organizer', event_id=1)
 
     def test_is_coorganizer(self):
         """Method to test whether a user is coorganizer of an event or not"""
@@ -66,7 +67,7 @@ class TestPermissionManager(OpenEventLegacyTestCase):
                 user_id=1, event_id=1, role__name='coorganizer'
             )
             save_to_db(uer)
-            self.assertTrue(has_access('is_coorganizer', event_id=1))
+            assert has_access('is_coorganizer', event_id=1)
 
     def test_is_moderator(self):
         """Method to test whether a user is moderator of an event or not"""
@@ -76,7 +77,7 @@ class TestPermissionManager(OpenEventLegacyTestCase):
                 user_id=1, event_id=1, role__name='moderator'
             )
             save_to_db(uer)
-            self.assertTrue(has_access('is_moderator', event_id=1))
+            assert has_access('is_moderator', event_id=1)
 
     def test_is_track_organizer(self):
         """Method to test whether a user is track organizer of an event or not"""
@@ -86,7 +87,7 @@ class TestPermissionManager(OpenEventLegacyTestCase):
                 user_id=1, event_id=1, role__name='track_organizer'
             )
             save_to_db(uer)
-            self.assertTrue(has_access('is_track_organizer', event_id=1))
+            assert has_access('is_track_organizer', event_id=1)
 
     def test_is_registrar(self):
         """Method to test whether a user is registrar of an event or not"""
@@ -96,7 +97,7 @@ class TestPermissionManager(OpenEventLegacyTestCase):
                 user_id=1, event_id=1, role__name='registrar'
             )
             save_to_db(uer)
-            self.assertTrue(has_access('is_registrar', event_id=1))
+            assert has_access('is_registrar', event_id=1)
 
     def test_permission_manager_attributes(self):
         """Method to test attributes of permission manager"""
@@ -104,10 +105,10 @@ class TestPermissionManager(OpenEventLegacyTestCase):
         with self.app.test_request_context():
             kwargs = {'leave_if': lambda a: True}
             perm = permission_manager(lambda *a, **b: True, [], {}, 'is_admin', **kwargs)
-            self.assertTrue(perm)
+            assert perm
 
             kwargs = {'check': lambda a: False}
-            with self.assertRaises(ForbiddenError):
+            with pytest.raises(ForbiddenError):
                 permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
 
 
