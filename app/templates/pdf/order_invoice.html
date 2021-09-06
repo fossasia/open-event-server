@@ -144,8 +144,14 @@
     </style>
   </head>
   <body>
+    <div id="logo">
+      {% if admin_info.admin_billing_logo %}  
+        <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"  /><br>
+      {% endif %}
+      {{ admin_info.app_name }}
+    </div>
     <header class="clearfix">
-      <h1>{{ _('INVOICE') }}</h1>
+      <h1>{{ _('INVOICE') }} {{ order.get_invoice_number() }}</h1>
       {% if order.status != "deleted" %}
           {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
