@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-04-01 22:43+0530\n"
-"PO-Revision-Date: 2021-05-22 03:33+0000\n"
+"PO-Revision-Date: 2021-09-05 10:31+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 "Generated-By: Babel 2.9.0\n"
 
 #: app/templates/email/organizer_contact_attendee.html:1
@@ -30,24 +30,27 @@ msgstr "Hallo"
 
 #: app/templates/email/organizer_contact_attendee.html:2
 msgid "You have contacted the organizers of the event"
-msgstr ""
+msgstr "Die Organisatoren der Veranstaltung wurden kontaktiert."
 
 #: app/templates/email/organizer_contact_attendee.html:3
 msgid "Below you find a copy of your email"
-msgstr ""
+msgstr "Folgend eine Kopie der Email."
 
 #: app/templates/email/organizer_contact_attendee.html:7
 msgid "Organizers have received your message and will follow up with you"
 msgstr ""
+"Die Veranstalter haben die Nachricht erhalten und werden sich in Verbindung "
+"setzen."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid ""
 "This is a system message. Please do not reply to this message. Replies "
 "are not monitored"
 msgstr ""
+"Dies ist eine Systemmeldung. Bitte nicht auf diese Nachricht antworten. "
+"Emails werden nicht gelesen."
 
 #: app/templates/email/organizer_contact_attendee.html:9
-#, fuzzy
 msgid "Thank you"
 msgstr "Vielen Dank"
 
@@ -176,21 +179,19 @@ msgstr "Vielen Dank"
 
 #: app/templates/pdf/order_invoice.html:148
 msgid "INVOICE"
-msgstr ""
+msgstr "Rechnung"
 
 #: app/templates/pdf/order_invoice.html:162
-#, fuzzy
 msgid "Order Number"
-msgstr "Bestellübersicht"
+msgstr "Bestellnummer"
 
 #: app/templates/pdf/order_invoice.html:163
-#, fuzzy
 msgid "Order By"
 msgstr "Bestellung"
 
 #: app/templates/pdf/order_invoice.html:169
 msgid "Information unavailable"
-msgstr ""
+msgstr "Informationen nicht verfügbar"
 
 #: app/templates/pdf/order_invoice.html:172
 msgid "Order Status"
@@ -202,7 +203,7 @@ msgstr "Ausstehend"
 
 #: app/templates/pdf/order_invoice.html:186
 msgid "Total Amount"
-msgstr ""
+msgstr "Gesamtbetrag"
 
 #: app/templates/pdf/order_invoice.html:187
 msgid "Payment Mode"
@@ -210,7 +211,7 @@ msgstr "Zahlungsart"
 
 #: app/templates/pdf/order_invoice.html:191
 msgid "Payment pending"
-msgstr ""
+msgstr "Zahlung ausstehend"
 
 #: app/templates/pdf/order_invoice.html:194
 msgid "Discount Code"
@@ -218,7 +219,7 @@ msgstr "Rabattcode"
 
 #: app/templates/pdf/order_invoice.html:198
 msgid "NA"
-msgstr ""
+msgstr "Nicht zutreffend"
 
 #: app/templates/pdf/order_invoice.html:209
 msgid "Price"
@@ -226,15 +227,15 @@ msgstr "Preis"
 
 #: app/templates/pdf/order_invoice.html:211
 msgid "Sub-Total(net)"
-msgstr ""
+msgstr "Zwischensumme (netto)"
 
 #: app/templates/pdf/order_invoice.html:212
 msgid "VAT"
-msgstr ""
+msgstr "MwSt."
 
 #: app/templates/pdf/order_invoice.html:213
 msgid "Tax Amount"
-msgstr ""
+msgstr "Steuerbetrag"
 
 #: app/templates/pdf/order_invoice.html:242
 msgid "Grand Total"

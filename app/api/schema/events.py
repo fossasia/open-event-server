@@ -389,6 +389,12 @@ class EventSchema(EventSchemaPublic):
         self_view_many = 'v1.event_list'
         inflect = dasherize
 
+    completed_order_sales = fields.Integer(dump_only=True)
+    placed_order_sales = fields.Integer(dump_only=True)
+    pending_order_sales = fields.Integer(dump_only=True)
+    completed_order_tickets = fields.Integer(dump_only=True)
+    placed_order_tickets = fields.Integer(dump_only=True)
+    pending_order_tickets = fields.Integer(dump_only=True)
     event_invoices = Relationship(
         attribute='invoices',
         self_view='v1.event_event_invoice',

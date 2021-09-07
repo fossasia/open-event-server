@@ -45,4 +45,4 @@ class Group(SoftDeletionModel):
     @property
     def view_page_link(self):
         frontend_url = get_settings()['frontend_url']
-        return f"{frontend_url}/groups/{self.id}"
+        return f"{frontend_url}/g/{self.id}"

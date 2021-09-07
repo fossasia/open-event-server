@@ -19,7 +19,7 @@ class Tax(SoftDeletionModel):
     address = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
-    zip = db.Column(db.Integer)
+    zip = db.Column(db.String)
     invoice_footer = db.Column(db.String)
     is_tax_included_in_price = db.Column(db.Boolean, default=False)
     is_invoice_sent = db.Column(db.Boolean, default=False)
