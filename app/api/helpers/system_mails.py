@@ -200,7 +200,7 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer, Coorganizer',
-        'subject': 'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'subject': 'New order for {event_name} on {event_date} by {buyer_name}, {buyer_email} ({invoice_id}) ',
         'template': 'email/ticket_purchased_organizer.html',
     },
     MailType.TICKET_CANCELLED: {

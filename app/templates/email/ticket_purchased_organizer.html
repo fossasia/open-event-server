@@ -1,4 +1,37 @@
-{{ _('Hi') }}, {{ buyer_email }} {{ _('just bought tickets for the event') }} {{ event_name }}.
-<br/> {{ _('The order has been processed successfully') }}.
-<br/> <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
-<br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>.
+<!-- <br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>. -->
+
+{{ _('Congratulations!') }}
+<br/>
+{{ _('You have a new order for your event') }} <a href={{site_link}}>{{ event_name }}</a> {{ _('starting at') }} {{ event_time }} {{ _('on') }} {{ event_date }}.
+<br/>
+<br/>
+{{ _('The order has been processed successfully on') }} <a href={{frontend_url}}>{{ app_name }}</a>. <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
+<br/>
+<br/>
+{{ _('The details of order are:') }}
+<br/>
+
+{{ _('Order Number') }}: {{ invoice_id }} <br/>
+{{ _('Name') }}: {{ buyer_name }} <br/>
+{{ _('Email') }}: {{ buyer_email }} <br/>
+<br/>
+{% if purchase_time and purchase_time %}
+  {{ _('Purchase Time and Date') }}: {{ purchase_time }} {{ purchase_date }}<br/>
+{% endif %}
+{% if payment_mode %}
+  {{ _('Payment Mode') }}: {{ payment_mode }} <br/>
+{% endif %}
+{% if payment_status %}
+  {{ _('Payment Status') }}: {{ payment_status }} <br/>
+{% endif %}
+{% if tickets_count %}
+  {{ _('Tickets') }}: {{ tickets_count }} <br/>
+{% endif %}
+{{ _('Amount') }}:
+{% if order_amount != 0.0 %}
+  {{ payment_currency }}&nbsp;
+{% endif %}
+{{ order_amount | money }} <br/>
+
+--
+<br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>

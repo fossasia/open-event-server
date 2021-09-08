@@ -583,10 +583,22 @@ def send_email_to_attendees(order):
 def send_order_purchase_organizer_email(order, recipients):
     context = dict(
         buyer_email=order.user.email,
+        buyer_name=order.user.full_name,
         event_name=order.event.name,
         invoice_id=order.invoice_number,
         frontend_url=get_settings()['frontend_url'],
+        site_link=order.event.site_link,
         order_url=order.site_view_link,
+        purchase_date=order.completed_at.strftime('%d %B %Y'),
+        purchase_time=order.completed_at.strftime("%H:%M %Z"),
+        event_date=order.event.starts_at.strftime('%d %B %Y'),
+        event_time=order.event.starts_at.strftime("%H:%M (%Z)"),
+        payment_mode=order.payment_mode,
+        payment_status=order.status,
+        order_amount=order.amount,
+        payment_currency=order.event.payment_currency,
+        tickets_count = order.tickets_count,
+        app_name = get_settings()['app_name'],
     )
     emails = list({organizer.email for organizer in recipients})
     if emails:
