@@ -34,7 +34,7 @@ class TestEventUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             save_to_db(event)
             create_custom_forms_for_sessions(event)
-            self.assertEqual(get_count(CustomForms.query), 20)
+            self.assertEqual(get_count(CustomForms.query), 21)
 
 
 if __name__ == '__main__':

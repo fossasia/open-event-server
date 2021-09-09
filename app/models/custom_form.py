@@ -16,6 +16,7 @@ SESSION_FORM = {
     "session_type": {"include": 0, "require": 0},
     "language": {"include": 0, "require": 0},
     "slides": {"include": 1, "require": 0},
+    "slides_url": {"include": 0, "require": 0},  # needs to be removed
     "video_url": {"include": 0, "require": 0},
     "audio_url": {"include": 0, "require": 0},
     "level": {"include": 0, "require": 0},
@@ -101,6 +102,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "sessionType": "Session Type",
         "level": "Level",
         "language": "Language",
+        "slidesUrl": "Slide",  # needs to be removed
         "slides": "Slides",
         "videoUrl": "Video",
         "audioUrl": "Audio",
