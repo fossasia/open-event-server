@@ -581,6 +581,13 @@ def send_email_to_attendees(order):
 
 
 def send_order_purchase_organizer_email(order, recipients):
+    attendee = (
+        TicketHolder.query.options(
+            joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
+        )
+        .filter_by(order_id=order.id)
+        .first()
+    )
     context = dict(
         buyer_email=order.user.email,
         buyer_name=order.user.full_name,
@@ -598,7 +605,10 @@ def send_order_purchase_organizer_email(order, recipients):
         order_amount=order.amount,
         payment_currency=order.event.payment_currency,
         tickets_count = order.tickets_count,
-        app_name = get_settings()['app_name'],
+        attendee_org=attendee.company,
+        attendee_address=attendee.billing_address,
+        attendee_tax_id=attendee.tax_business_info,
+        app_name=get_settings()['app_name'],
     )
     emails = list({organizer.email for organizer in recipients})
     if emails:

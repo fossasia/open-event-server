@@ -32,6 +32,20 @@
   {{ payment_currency }}&nbsp;
 {% endif %}
 {{ order_amount | money }} <br/>
+<br/>
 
+{% if attendee_org %}
+  {{ _('Organisation') }}: {{ attendee_org }}
+  <br/>
+{% endif %}
+{% if attendee_address %}
+  {{ _('Address') }}: {{ attendee_address }}
+  <br/>
+{% endif %}
+{% if attendee_tax_id %}
+  {{ _('Tax ID') }}:{{ attendee_tax_id }}
+  <br/>
+{% endif %}
+<br/>
 --
 <br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>
