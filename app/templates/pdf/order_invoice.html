@@ -151,7 +151,7 @@
       {{ admin_info.app_name }}
     </div>
     <header class="clearfix">
-      <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' | format(order.id)}}</h1>
+      <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' | format(event.tickets_sold)}}</h1>
       {% if order.status != "deleted" %}
           {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
