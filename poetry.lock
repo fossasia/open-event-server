@@ -1945,7 +1945,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.23.3"
+version = "2.25.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -2578,7 +2578,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "c0c0dbe0f32cb4fce0f24c295da8405e305887c23842b75d1a99941755ba51e4"
+content-hash = "365460481bf7e62ddc42d3911ef9b912325773705b9d2290ea1055ed1c720fd5"
 
 [metadata.files]
 aiohttp = [
@@ -3641,8 +3641,8 @@ pytz = [
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.23.3-py2.py3-none-any.whl", hash = "sha256:ee2355a5f4bf8541eed3687545c59640e50789268cf1802cf214540e5bcc860a"},
-    {file = "pyupgrade-2.23.3.tar.gz", hash = "sha256:c5262dcfea5b464bd0e4eb9c3b402bee604b9414885df11cf44ed1eca3037dc4"},
+    {file = "pyupgrade-2.25.1-py2.py3-none-any.whl", hash = "sha256:6e23f9c3c196b8e120a39d3fbad09265c3e2413a65e085b690606a45e59e8140"},
+    {file = "pyupgrade-2.25.1.tar.gz", hash = "sha256:2b541340157fc9dba0c4cac4f28804aa11fbf2aa2cad83ec05e64abec38f1fea"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
