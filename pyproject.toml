@@ -118,7 +118,7 @@ xmltodict = "0.12.0"
 graphene-sqlalchemy = "2.3.0"
 flask-graphql = "2.0.1"
 graphene-sqlalchemy-filter = "1.12.2"
-fastapi = "^0.68.0"
+fastapi = "^0.68.1"
 uvicorn = {extras = ["standard"], version = "^0.15.0"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
