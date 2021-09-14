@@ -182,13 +182,31 @@
                   {{ order.status | capitalize }}
               {% endif %}
             </div>
-            <div><span>{{ _('Quantity') }}</span> {{ order.tickets_count }}</div>
-            <div><span>{{ _('Total Amount') }}</span> 
+            {% if attendee.company %}
+              <div><span> {{ _('Organisation') }}</span>
+                {{ attendee.company }}
+              </div>
+            {% endif %}
+            {% if attendee.billing_address %}
+              <div><span> {{ _('Address') }}</span>
+                {{ attendee.billing_address }}
+              </div>
+            {% endif %}
+            {% if attendee.tax_business_info %}
+              <div><span> {{ _('Tax ID') }}</span>
+                {{ attendee.tax_business_info }}
+              </div>
+            {% endif %}
+            <div><span> {{ _('Date') }}</span>
+              {{ order.created_at }}
+            </div>
+            <!-- <div><span>{{ _('Quantity') }}</span> {{ order.tickets_count }}</div> -->
+            <!-- <div><span>{{ _('Total Amount') }}</span> 
               {% if order.amount != 0.0 %}
                 {{ event.payment_currency }}
               {% endif %}
               {{ order.amount | money }}
-          </div>
+          </div> -->
             <div><span>{{ _('Payment Mode') }}</span>
               {% if order.status == 'completed' %}
                   {{ order.paid_via | capitalize }}
@@ -196,13 +214,13 @@
                   {{ _('Payment pending') }}
               {% endif %}
             </div>
-            <div><span>{{ _('Discount Code') }}</span>
+            <!-- <div><span>{{ _('Discount Code') }}</span>
               {% if order.discount_code %}
                   {{ order.discount_code.code }}<br>
               {% else %}
                   {{ _('NA') }}
               {% endif %}
-            </div>
+            </div> -->
           </div>
         {% endif %}
     </header>
@@ -210,18 +228,23 @@
       <table>
         <thead>
           <tr>
-            <th>{{ _('Name') }}</th>
+            <th>{{ _('Description') }}</th>
             <th>{{ _('Price') }}</th>
             <th>{{ _('Quantity') }}</th>
-            <th>{{ _('Sub-Total(net)') }}</th>
             <th>{{ _('VAT') }}</th>
             <th>{{ _('Tax Amount') }}</th>
+            <th>{{ _('Sub-Total(net)') }}</th>
           </tr>
         </thead>
         <tbody>
           {% for order_ticket in order_tickets %}
           <tr>
-            <td class="service">{{ order_ticket.ticket.name }}</td>
+            <td class="service">{{ order_ticket.ticket.name }} at {{ event.starts_at_tz }}
+              <br/>
+              {% if order.discount_code %}
+                {{ _('Discount Code') }}: {{ order.discount_code.code }}<br/>
+              {% endif %}
+            </td>
             <td class="total">
               {% if order_ticket.ticket.price %}
                 {{ event.payment_currency }}&nbsp;
@@ -229,12 +252,6 @@
               {{ "%.2f" | format(order_ticket.ticket.price) }}
             </td>
             <td>{{ order_ticket.quantity }}</td>
-            <td class="total">
-              {% if order_ticket.ticket.price %}
-                {{ event.payment_currency }}&nbsp;
-              {% endif %}
-              {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket.price) }}
-          </td>
             {% if tax %}
                 <td>{{ tax.rate }}%</td>
             {% else %}
@@ -252,6 +269,12 @@
                   0.00
                 </td>
             {% endif %}
+            <td class="total">
+              {% if order_ticket.ticket.price %}
+                {{ event.payment_currency }}&nbsp;
+              {% endif %}
+              {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket.price) }}
+          </td>
         </tr>
         {% endfor %}
         <tr>
