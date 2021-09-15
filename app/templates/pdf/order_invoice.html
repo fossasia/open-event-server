@@ -147,17 +147,14 @@
     <header class="clearfix">
       <h1>{{ _('INVOICE') }}</h1>
       {% if order.status != "deleted" %}
-          {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
-            <div>{{ order.Company or '' }}</div>
-            <div class="preserve-newline">{{ order.address or '' }}</div>
-            <div>{{ order.tax_business_info or '' }}</div>
-            <div>{{ order.city or '' }}</div>
-            <div>{{ order.state or '' }}</div>
-            <div>{{ order.zipcode or '' }}</div>
-            <div>{{ order.country or '' }}</div>
+            <div>{{ event.owner.company or '' }}</div>
+            <div>{{ event.owner.full_name or '' }}</div>
+            <div class="preserve-newline">{{ event.owner.billing_address or '' }}</div>
+            <div>{{ event.owner.billing_tax_info or '' }}</div>
+            <div>{{ event.owner.billing_phone or '' }}</div>
+            <div>{{ event.owner.email or '' }}</div>
           </div>
-          {% endif %}
           <div id="project">
             <div><span>{{ _('Order Number') }} </span> {{ order.get_invoice_number() }}</div>
             <div><span>{{ _('Order By') }}</span>
@@ -198,7 +195,7 @@
               </div>
             {% endif %}
             <div><span> {{ _('Date') }}</span>
-              {{ order.created_at }}
+              {{ created_at }}
             </div>
             <!-- <div><span>{{ _('Quantity') }}</span> {{ order.tickets_count }}</div> -->
             <!-- <div><span>{{ _('Total Amount') }}</span> 
@@ -239,7 +236,7 @@
         <tbody>
           {% for order_ticket in order_tickets %}
           <tr>
-            <td class="service">{{ order_ticket.ticket.name }} at {{ event.starts_at_tz }}
+            <td class="service">{{ order_ticket.ticket.name }} at {{ event_starts_at }}
               <br/>
               {% if order.discount_code %}
                 {{ _('Discount Code') }}: {{ order.discount_code.code }}<br/>

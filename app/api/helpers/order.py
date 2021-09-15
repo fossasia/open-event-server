@@ -120,6 +120,8 @@ def create_pdf_tickets_for_holder(order):
                 tax=order.event.tax,
                 order_tickets=order_tickets,
                 attendee=attendee,
+                event_starts_at=order.event.starts_at_tz.strftime('%d-%m-%Y'),
+                created_at=order.created_at.strftime('%d-%m-%Y'),
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
