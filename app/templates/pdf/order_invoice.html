@@ -236,7 +236,7 @@
         <tbody>
           {% for order_ticket in order_tickets %}
           <tr>
-            <td class="service">{{ order_ticket.ticket.name }} at {{ event_starts_at }}
+            <td class="service">{{ _('Ticket') }}: {{ order_ticket.ticket.name }} {{ _('for') }} {{ event.name }}, {{ event_starts_at }}
               <br/>
               {% if order.discount_code %}
                 {{ _('Discount Code') }}: {{ order.discount_code.code }}<br/>
