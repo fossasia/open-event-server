@@ -144,8 +144,14 @@
     </style>
   </head>
   <body>
+    <div id="logo">
+      {% if admin_info.admin_billing_logo %}  
+        <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"  /><br>
+      {% endif %}
+      {{ admin_info.app_name }}
+    </div>
     <header class="clearfix">
-      <h1>{{ _('INVOICE') }}</h1>
+      <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' | format(event.tickets_sold)}}</h1>
       {% if order.status != "deleted" %}
           <div id="company" class="clearfix">
             <div>{{ event.owner.company or '' }}</div>
@@ -228,8 +234,7 @@
             <th>{{ _('Description') }}</th>
             <th>{{ _('Price') }}</th>
             <th>{{ _('Quantity') }}</th>
-            <th>{{ _('VAT') }}</th>
-            <th>{{ _('Tax Amount') }}</th>
+            <th>{{ _('Tax') }}</th>
             <th>{{ _('Sub-Total(net)') }}</th>
           </tr>
         </thead>
@@ -250,21 +255,20 @@
             </td>
             <td>{{ order_ticket.quantity }}</td>
             {% if tax %}
-                <td>{{ tax.rate }}%</td>
+            <td>
+              {% if tax.is_tax_included_in_price %}
+                {{ _('incl.') }}
+              {% else %}
+                {{ _('plus') }}
+              {% endif %}
+              {% if order_ticket.ticket.price %}
+                {{ event.payment_currency }}&nbsp;
+              {% endif %}
+              {{ tax.rate*order_ticket.ticket.price/100 }}
+              ({{ tax.rate }}%)
+            </td>
             {% else %}
-                <td>{{ ("0%") }}</td>
-            {% endif %}
-            {% if tax %}
-                <td class="total">
-                  {% if order_ticket.ticket.price %}
-                    {{ event.payment_currency }}&nbsp;
-                  {% endif %}
-                  {{ tax.rate*order_ticket.ticket.price/100 }}
-                </td>
-            {% else %}
-                <td class="total">
-                  0.00
-                </td>
+                <td>0.0{{ ("0%") }}</td>
             {% endif %}
             <td class="total">
               {% if order_ticket.ticket.price %}
