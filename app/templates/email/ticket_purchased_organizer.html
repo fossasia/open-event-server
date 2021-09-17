@@ -16,7 +16,7 @@
 {{ _('Email') }}: {{ buyer_email }} <br/>
 <br/>
 {% if purchase_time and purchase_time %}
-  {{ _('Purchase Time and Date') }}: {{ purchase_time }} {{ purchase_date }}<br/>
+  {{ _('Purchase Time and Date') }}: {{ purchase_time }}{{timezone}}, {{ purchase_date }}<br/>
 {% endif %}
 {% if payment_mode %}
   {{ _('Payment Mode') }}: {{ payment_mode }} <br/>
