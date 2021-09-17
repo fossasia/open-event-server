@@ -25,6 +25,7 @@ from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
+from app.models.setting import Setting
 from app.settings import get_settings
 
 
@@ -99,6 +100,8 @@ def create_pdf_tickets_for_holder(order):
             )
             holder.pdf_url = pdf
             save_to_db(holder)
+        
+        admin_info = Setting.query.first()
 
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
@@ -110,6 +113,7 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
+                admin_info=admin_info,
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
