@@ -8,7 +8,7 @@
 {{ _('The order has been processed successfully on') }} <a href={{frontend_url}}>{{ app_name }}</a>. <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
 <br/>
 <br/>
-{{ _('The details of order are:') }}
+{{ _('The details of the order are:') }}
 <br/>
 
 {{ _('Order Number') }}: {{ invoice_id }} <br/>
@@ -19,13 +19,22 @@
   {{ _('Purchase Time and Date') }}: {{ purchase_time }}{{timezone}}, {{ purchase_date }}<br/>
 {% endif %}
 {% if payment_mode %}
-  {{ _('Payment Mode') }}: {{ payment_mode }} <br/>
+  {{ _('Payment Mode') }}:
+  {% if payment_mode == 'free' %}
+    {{ _('None') }}
+  {% else %}
+    {{ payment_mode }}
+  {% endif %}<br/>
 {% endif %}
 {% if payment_status %}
   {{ _('Payment Status') }}: {{ payment_status }} <br/>
 {% endif %}
 {% if tickets_count %}
-  {{ _('Tickets') }}: {{ tickets_count }} <br/>
+  {{ _('Tickets/Registration') }}:
+  {% for order_ticket in order_tickets %}
+    {{ order_ticket.quantity }}x {{ order_ticket.ticket.name }} 
+  {% endfor %}
+  <br/>
 {% endif %}
 {{ _('Amount') }}:
 {% if order_amount != 0.0 %}
@@ -34,16 +43,16 @@
 {{ order_amount | money }} <br/>
 <br/>
 
-{% if attendee_org %}
-  {{ _('Organisation') }}: {{ attendee_org }}
+{% if buyer_org %}
+  {{ _('Organisation') }}: {{ buyer_org }}
   <br/>
 {% endif %}
-{% if attendee_address %}
-  {{ _('Address') }}: {{ attendee_address }}
+{% if buyer_address %}
+  {{ _('Address') }}: {{ buyer_address }}
   <br/>
 {% endif %}
-{% if attendee_tax_id %}
-  {{ _('Tax ID') }}: {{ attendee_tax_id }}
+{% if buyer_tax_id %}
+  {{ _('Tax ID') }}: {{ buyer_tax_id }}
   <br/>
 {% endif %}
 <br/>

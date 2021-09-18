@@ -19,6 +19,7 @@ from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
+from app.models.order import OrderTicket
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -582,12 +583,13 @@ def send_email_to_attendees(order):
 
 def send_order_purchase_organizer_email(order, recipients):
     attendee = (
-        TicketHolder.query.options(
-            joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
-        )
+        TicketHolder.query
         .filter_by(order_id=order.id)
         .first()
     )
+
+    order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
+
     context = dict(
         buyer_email=order.user.email,
         buyer_name=order.user.full_name,
@@ -605,10 +607,11 @@ def send_order_purchase_organizer_email(order, recipients):
         payment_status=order.status,
         order_amount=order.amount,
         payment_currency=order.event.payment_currency,
-        tickets_count = order.tickets_count,
-        attendee_org=attendee.company,
-        attendee_address=attendee.billing_address,
-        attendee_tax_id=attendee.tax_business_info,
+        tickets_count=order.tickets_count,
+        order_tickets=order_tickets,
+        buyer_org=order.company,
+        buyer_address=order.address,
+        buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
     emails = list({organizer.email for organizer in recipients})
