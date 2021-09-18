@@ -582,11 +582,6 @@ def send_email_to_attendees(order):
 
 
 def send_order_purchase_organizer_email(order, recipients):
-    attendee = (
-        TicketHolder.query
-        .filter_by(order_id=order.id)
-        .first()
-    )
 
     order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
