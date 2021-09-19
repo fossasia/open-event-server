@@ -17,7 +17,6 @@ brew install postgresql
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib libssl-dev
 
-```sh
 xargs -a deb-packages.txt sudo apt install
 ```
 
