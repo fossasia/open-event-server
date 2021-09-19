@@ -13,9 +13,7 @@
 {{ _('Name') }}: {{ buyer_name }} <br/>
 {{ _('Email') }}: {{ buyer_email }} <br/>
 <br/>
-{% if purchase_time and purchase_time %}
-  {{ _('Purchase Time and Date') }}: {{ purchase_time }}{{timezone}}, {{ purchase_date }}<br/>
-{% endif %}
+{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }} UTC<br/>
 {% if payment_mode %}
   {{ _('Payment Mode') }}:
   {% if payment_mode == 'free' %}
@@ -36,7 +34,7 @@
 {% endif %}
 {{ _('Amount') }}:
 {% if order_amount != 0.0 %}
-  {{ payment_currency }}&nbsp;
+  {{ payment_currency }}
 {% endif %}
 {{ order_amount | money }} <br/>
 <br/>
