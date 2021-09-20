@@ -117,14 +117,19 @@ def create_order():
     try:
         attendees = []
         for ticket in tickets:
-            if "donation" in ticket.type and (
-                data['tickets'][0]['price'] < ticket.min_price
-                or data['tickets'][0]['price'] > ticket.max_price
-            ):
-                raise UnprocessableEntityError(
-                    {'source': 'tickets'},
-                    f"Donation ticket price should be between {ticket.min_price} and {ticket.max_price}",
-                )
+            if 'price' in data['tickets'][0]:
+                if (
+                    'price' in data['tickets'][0]
+                    and "donation" in ticket.type
+                    and (
+                        data['tickets'][0]['price'] < ticket.min_price
+                        or data['tickets'][0]['price'] > ticket.max_price
+                    )
+                ):
+                    raise UnprocessableEntityError(
+                        {'source': 'tickets'},
+                        f"Donation ticket price should be between {ticket.min_price} and {ticket.max_price}",
+                    )
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
                 attendees.append(
