@@ -43,5 +43,5 @@ class TaxSchema(TaxSchemaPublic):
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
-    zip = fields.Integer(allow_none=True)
+    zip = fields.Str(allow_none=True)
     invoice_footer = fields.Str(allow_none=True)
