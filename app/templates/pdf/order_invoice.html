@@ -144,8 +144,14 @@
     </style>
   </head>
   <body>
+    <div id="logo">
+      {% if admin_info.admin_billing_logo %}  
+        <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"  /><br>
+      {% endif %}
+      {{ admin_info.app_name }}
+    </div>
     <header class="clearfix">
-      <h1>{{ _('INVOICE') }}</h1>
+      <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' | format(event.tickets_sold)}}</h1>
       {% if order.status != "deleted" %}
           {% if order.is_billing_enabled %}
           <div id="company" class="clearfix">
@@ -183,7 +189,12 @@
               {% endif %}
             </div>
             <div><span>{{ _('Quantity') }}</span> {{ order.tickets_count }}</div>
-            <div><span>{{ _('Total Amount') }}</span> {{ event.payment_currency }}{{ order.amount | money }}</div>
+            <div><span>{{ _('Total Amount') }}</span> 
+              {% if order.amount != 0.0 %}
+                {{ event.payment_currency }}
+              {% endif %}
+              {{ order.amount | money }}
+          </div>
             <div><span>{{ _('Payment Mode') }}</span>
               {% if order.status == 'completed' %}
                   {{ order.paid_via | capitalize }}
@@ -218,19 +229,34 @@
           <tr>
             <td class="service">{{ order_ticket.ticket.name }}</td>
             <td class="total">
-                {{ event.payment_currency }}{{ order_ticket.ticket.price }}
+              {% if order_ticket.ticket.price %}
+                {{ event.payment_currency }}&nbsp;
+              {% endif %}
+              {{ "%.2f" | format(order_ticket.ticket.price) }}
             </td>
             <td>{{ order_ticket.quantity }}</td>
-            <td class="total">{{ event.payment_currency }}{{ order_ticket.quantity*order_ticket.ticket.price }}</td>
+            <td class="total">
+              {% if order_ticket.ticket.price %}
+                {{ event.payment_currency }}&nbsp;
+              {% endif %}
+              {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket.price) }}
+          </td>
             {% if tax %}
                 <td>{{ tax.rate }}%</td>
             {% else %}
                 <td>{{ ("0%") }}</td>
             {% endif %}
             {% if tax %}
-                <td class="total">{{ event.payment_currency }}{{ tax.rate*order_ticket.ticket.price/100 }}</td>
+                <td class="total">
+                  {% if order_ticket.ticket.price %}
+                    {{ event.payment_currency }}&nbsp;
+                  {% endif %}
+                  {{ tax.rate*order_ticket.ticket.price/100 }}
+                </td>
             {% else %}
-                <td class="total">{{ event.payment_currency }}0</td>
+                <td class="total">
+                  0.00
+                </td>
             {% endif %}
         </tr>
         {% endfor %}
@@ -240,7 +266,12 @@
             <td></td>
             <td></td>
             <td class="grand total"><b>{{ _('Grand Total') }}</b></td>
-            <td class="grand total"> {{ event.payment_currency }}{{ order.amount | money }}</td>
+            <td class="grand total"> 
+              {% if order.amount != 0.0 %}
+                {{ event.payment_currency }}&nbsp;
+              {% endif %}
+              {{ order.amount | money }}
+          </td>
         </tr>
         </tbody>
       </table>
