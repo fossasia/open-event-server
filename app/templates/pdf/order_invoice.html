@@ -155,11 +155,11 @@
       {% if order.status != "deleted" %}
           <div id="company" class="clearfix">
             <div>{{ event.owner.company or '' }}</div>
-            <div>{{ event.owner.full_name or '' }}</div>
-            <div class="preserve-newline">{{ event.owner.billing_address or '' }}</div>
-            <div>{{ event.owner.billing_tax_info or '' }}</div>
+            <div>{{ event.owner.billing_contact_name or '' }}</div>
+            <div class="preserve-newline">{{ event.owner.full_billing_address or '' }}</div>
             <div>{{ event.owner.billing_phone or '' }}</div>
             <div>{{ event.owner.email or '' }}</div>
+            <div>{{ event.owner.billing_tax_info or '' }}</div>
           </div>
           <div id="project">
             <div><span>{{ _('Order Number') }} </span> {{ order.get_invoice_number() }}</div>
@@ -172,7 +172,7 @@
                   {{ _('Information unavailable') }}
               {% endif %}
             </div>
-            <div><span> {{ _('Order Status') }}</span>
+            <div><span> {{ _('Payment Status') }}</span>
               {% if order.status == 'completed' %}
                   {{ order.status | capitalize }}
               {% elif order.status == 'pending' or order.status == 'initialized' %}
@@ -190,9 +190,9 @@
                 {{ attendee.company }}
               </div>
             {% endif %}
-            {% if attendee.billing_address %}
+            {% if attendee.address %}
               <div><span> {{ _('Address') }}</span>
-                {{ attendee.billing_address }}
+                {{ attendee.address }}
               </div>
             {% endif %}
             {% if attendee.tax_business_info %}
@@ -203,27 +203,17 @@
             <div><span> {{ _('Date') }}</span>
               {{ created_at }}
             </div>
-            <!-- <div><span>{{ _('Quantity') }}</span> {{ order.tickets_count }}</div> -->
-            <!-- <div><span>{{ _('Total Amount') }}</span> 
-              {% if order.amount != 0.0 %}
-                {{ event.payment_currency }}
-              {% endif %}
-              {{ order.amount | money }}
-          </div> -->
             <div><span>{{ _('Payment Mode') }}</span>
               {% if order.status == 'completed' %}
-                  {{ order.paid_via | capitalize }}
+                {% if order.payment_mode == 'free' %}
+                  {{ _('None') }}
+                {% else %}
+                  {{ order.payment_mode | capitalize }}
+                {% endif %}
               {% else %}
                   {{ _('Payment pending') }}
               {% endif %}
             </div>
-            <!-- <div><span>{{ _('Discount Code') }}</span>
-              {% if order.discount_code %}
-                  {{ order.discount_code.code }}<br>
-              {% else %}
-                  {{ _('NA') }}
-              {% endif %}
-            </div> -->
           </div>
         {% endif %}
     </header>
@@ -279,7 +269,6 @@
         </tr>
         {% endfor %}
         <tr>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>

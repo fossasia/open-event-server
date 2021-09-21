@@ -107,13 +107,7 @@ def create_pdf_tickets_for_holder(order):
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
-        attendee = (
-            TicketHolder.query.options(
-                joinedload(TicketHolder.ticket), joinedload(TicketHolder.user)
-            )
-            .filter_by(order_id=order.id)
-            .first()
-        )
+        attendee = TicketHolder.query.filter_by(order_id=order.id).first()
 
         create_save_pdf(
             render_template(
