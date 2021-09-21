@@ -75,11 +75,11 @@ This project uses [Poetry](https://python-poetry.org/docs) to handle Python depe
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 source ~/.profile
 
-# Install Python dependencies
-poetry install
-
 # Activate virtual environment
 poetry shell
+
+# Install Python dependencies
+poetry install
 ```
 
 # System Wide Installation
