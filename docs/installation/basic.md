@@ -3,7 +3,7 @@
 ## Dependencies required to run Orga Server
 
 
-* Python 3.7
+* Python 3.8
 * Postgres
 * OpenSSL
 
@@ -16,8 +16,6 @@ brew install postgresql
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib libssl-dev
-
-```sh
 xargs -a deb-packages.txt sudo apt install
 ```
 
@@ -76,11 +74,11 @@ This project uses [Poetry](https://python-poetry.org/docs) to handle Python depe
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 source ~/.profile
 
-# Install Python dependencies
-poetry install
-
 # Activate virtual environment
 poetry shell
+
+# Install Python dependencies
+poetry install
 ```
 
 # System Wide Installation
