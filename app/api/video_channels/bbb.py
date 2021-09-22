@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from hashlib import sha1
-from typing import Any, Dict, Union
+from typing import Any, Dict, Union, Optional
 
 import requests
 import xmltodict
@@ -29,7 +29,7 @@ class BigBlueButton:
     api_url: str
     secret: str
 
-    def build_url(self, action: str, params: Dict[str, str] = None) -> str:
+    def build_url(self, action: str, params: Optional[Dict[str, str]] = None) -> str:
         url = self.api_url + '/' + action + '?'
 
         params = params or {}
@@ -44,5 +44,5 @@ class BigBlueButton:
         key = action + query + self.secret
         return sha1(key.encode('utf-8')).hexdigest()
 
-    def request(self, action: str, params: Dict[str, str] = None) -> Result:
+    def request(self, action: str, params: Optional[Dict[str, str]] = None) -> Result:
         return Result.create(requests.get(self.build_url(action, params)))
