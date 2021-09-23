@@ -374,15 +374,15 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
-    event_name=event.name
-    group_name=group.name
-    event_date=event.starts_at.strftime('%d %B %Y')
-    event_description=event.description
-    event_url=event.site_link
-    event_location=event.normalized_location
-    event_time=event.starts_at.strftime("%H:%M (%Z)")
-    group_url=group.view_page_link
-    app_name=get_settings()['app_name']
+    event_name = event.name
+    group_name = group.name
+    event_date = event.starts_at.strftime('%d %B %Y')
+    event_description = event.description
+    event_url = event.site_link
+    event_location = event.normalized_location
+    event_time = event.starts_at.strftime("%H:%M (%Z)")
+    group_url = group.view_page_link
+    app_name = get_settings()['app_name']
 
     if len(emails) > 0:
         for email in emails:
@@ -723,5 +723,47 @@ def send_email_to_moderator(video_stream_moderator):
             video_stream_name=video_stream_moderator.video_stream.name,
             user=video_stream_moderator.user,
             settings=get_settings(),
+        ),
+    )
+
+
+def send_email_after_event(email, event):
+    action = MailType.AFTER_EVENT
+    mail = MAILS[action]
+    organizers_email = list(
+        map(
+            lambda x: x.email,
+            event.organizers + event.coorganizers + [event.owner],
+        )
+    )
+    bcc = list(set(organizers_email + mail.get('bcc', [])))
+
+    if email in bcc:
+        bcc.remove(email)
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event.name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            eventname=event.name,
+        ),
+        bcc=bcc,
+    )
+
+
+def send_email_after_event_speaker(email, event):
+    action = MailType.AFTER_EVENT_SPEAKER
+    mail = MAILS[action]
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event.name),
+        html=render_template(
+            mail['template'],
+            eventname=event.name,
+            email=email,
         ),
     )
