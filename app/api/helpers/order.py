@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from flask import render_template
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import (
     get_count,
@@ -106,6 +107,8 @@ def create_pdf_tickets_for_holder(order):
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
+        attendee = TicketHolder.query.filter_by(order_id=order.id).first()
+
         create_save_pdf(
             render_template(
                 'pdf/order_invoice.html',
@@ -113,6 +116,9 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
+                attendee=attendee,
+                event_starts_at=order.event.starts_at_tz.strftime('%d-%m-%Y'),
+                created_at=order.created_at.strftime('%d-%m-%Y'),
                 admin_info=admin_info,
             ),
             UPLOAD_PATHS['pdf']['order'],
