@@ -60,7 +60,7 @@ python-versions = "*"
 
 [[package]]
 name = "apscheduler"
-version = "3.7.0"
+version = "3.8.0"
 description = "In-process task scheduler with Cron-like capabilities"
 category = "main"
 optional = false
@@ -2593,7 +2593,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "2722f3af16a31abf1d070a78a93e7998c8a1f966a2550edcf53933aeb4dca224"
+content-hash = "81aa1df4f35925af2a6aeebb85f01129b6b25b2f8ee7e8d55af958ca2d5132c1"
 
 [metadata.files]
 aiohttp = [
@@ -2652,8 +2652,8 @@ appdirs = [
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
 ]
 apscheduler = [
-    {file = "APScheduler-3.7.0-py2.py3-none-any.whl", hash = "sha256:c06cc796d5bb9eb3c4f77727f6223476eb67749e7eea074d1587550702a7fbe3"},
-    {file = "APScheduler-3.7.0.tar.gz", hash = "sha256:1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a"},
+    {file = "APScheduler-3.8.0-py2.py3-none-any.whl", hash = "sha256:82d6d21b2f0343510d07bb35618333a794653439a265635555b12935647b460a"},
+    {file = "APScheduler-3.8.0.tar.gz", hash = "sha256:793b2d37c52ece53e34626619e6142e99b20b59a12155f39e1e6932e324f079d"},
 ]
 arabic-reshaper = [
     {file = "arabic_reshaper-2.1.3-py2-none-any.whl", hash = "sha256:43f58136dbbfecab54ce0434e556c75689e46b0f11010578b893f72c504cd27b"},
