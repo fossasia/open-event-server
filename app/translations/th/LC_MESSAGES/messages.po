@@ -6,17 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-04-01 22:43+0530\n"
-"PO-Revision-Date: 2016-12-08 11:31+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2021-09-20 04:38+0000\n"
+"Last-Translator: PPNplus <ppnplus@protonmail.com>\n"
+"Language-Team: Thai <https://hosted.weblate.org/projects/open-event/server/"
+"th/>\n"
 "Language: th\n"
-"Language-Team: th <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.9-dev\n"
 "Generated-By: Babel 2.9.0\n"
 
 #: app/templates/email/organizer_contact_attendee.html:1
@@ -90,7 +92,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_attendee.html:4
 #: app/templates/pdf/order_invoice.html:208
 msgid "Name"
-msgstr ""
+msgstr "ชื่อ"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:7
@@ -239,4 +241,3 @@ msgstr ""
 #: app/templates/pdf/ticket_purchaser.html:80
 msgid "Organizer Message"
 msgstr ""
-

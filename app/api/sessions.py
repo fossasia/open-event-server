@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pytz
 from flask import Blueprint, g, jsonify, request
@@ -382,7 +382,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session, mail_override: Dict[str, str] = None):
+def notify_for_session(session, mail_override: Optional[Dict[str, str]] = None):
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:

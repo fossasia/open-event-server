@@ -34,6 +34,10 @@ class MailType:
     CONTACT_ORGANIZERS = 'contact_organizers'
     CONTACT_GROUP_ORGANIZERS = 'contact_group_organizers'
     VIDEO_MODERATOR_INVITE = "video_moderator_invite"
+    TICKET_SALES_END = 'ticket_sales_end'
+    TICKET_SALES_END_TOMORROW = 'ticket_sales_end_tomorrow'
+    TICKET_SALES_END_NEXT_WEEK = 'ticket_sales_end_next_week'
+    ANNOUNCE_EVENT = "announce_event"
 
     @staticmethod
     def entries():
@@ -119,6 +123,21 @@ MAILS = {
             "{frontend_link}",
         },
     },
+    MailType.TICKET_SALES_END: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ended',
+        'template': 'email/ticket_sales_end.html',
+    },
+    MailType.TICKET_SALES_END_TOMORROW: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period for One or Several Tickets for {event_name} Ending in 24 Hours',
+        'template': 'email/ticket_sales_end_tomorrow.html',
+    },
+    MailType.TICKET_SALES_END_NEXT_WEEK: {
+        'recipient': 'Owner, Organizer',
+        'subject': 'Ticket Sales Period fors One or Several Tickets for {event_name} Ending in 7 Days',
+        'template': 'email/ticket_sales_end_next_week.html',
+    },
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
         'subject': 'New session proposal for {session.event.name} titled {session.title}',
@@ -171,7 +190,7 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': 'Your order invoice and tickets for {event_name} ({invoice_id}) ',
+        'subject': 'See you at {event_name} ({invoice_id}) ',
         'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
@@ -181,7 +200,7 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer, Coorganizer',
-        'subject': 'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'subject': 'New order for {event_name} on {event_date} by {buyer_name}, {buyer_email} ({invoice_id}) ',
         'template': 'email/ticket_purchased_organizer.html',
     },
     MailType.TICKET_CANCELLED: {
@@ -250,5 +269,10 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Video Moderator of video {video_name} at event {event_name}',
         'template': 'email/video_stream_moderator.html',
+    },
+    MailType.ANNOUNCE_EVENT: {
+        'recipient': 'User',
+        'subject': 'Join {event_name} from {group_name} on {event_date}',
+        'template': 'email/announce_event.html',
     },
 }

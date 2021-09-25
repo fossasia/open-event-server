@@ -1,8 +1,9 @@
 import base64
+import datetime
 import logging
 import os
 from itertools import groupby
-from typing import Dict
+from typing import Dict, Optional
 
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
@@ -18,6 +19,7 @@ from app.models.message_setting import MessageSettings
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
+from app.models.order import OrderTicket
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -162,7 +164,103 @@ def send_email_new_session(email, session):
     )
 
 
-def send_email_session_state_change(email, session, mail_override: Dict[str, str] = None):
+def send_email_ticket_sales_end(event, emails):
+    """email for ticket sales end"""
+    action = MailType.TICKET_SALES_END
+    mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=1)
+        ):
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
+
+
+def send_email_ticket_sales_end_tomorrow(event, emails):
+    """email for ticket sales end"""
+    action = MailType.TICKET_SALES_END_TOMORROW
+    mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=-1)
+        ):
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
+
+
+def send_email_ticket_sales_end_next_week(event, emails):
+    """email for ticket sales end"""
+    action = MailType.TICKET_SALES_END_NEXT_WEEK
+    mail = MAILS[action]
+    settings = get_settings()
+    tickets = []
+    for ticket in event.tickets:
+        if ticket.sales_ends_at.date() == (
+            datetime.date.today() - datetime.timedelta(days=-7)
+        ):
+            tickets.append(ticket.name)
+
+    ticket_names = ", ".join(tickets)
+
+    event_dashboard = settings['frontend_url'] + '/events/' + event.identifier
+    if len(emails) > 0:
+        send_email(
+            to=emails[0],
+            action=action,
+            subject=mail['subject'].format(event_name=event.name),
+            html=render_template(
+                mail['template'],
+                settings=settings,
+                event_dashboard=event_dashboard,
+                event_name=event.name,
+                ticket_names=ticket_names,
+            ),
+            bcc=emails[1:],
+            reply_to=emails[-1],
+        )
+
+
+def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
     """email for new session"""
     event = session.event
 
@@ -268,6 +366,47 @@ def send_email_group_role_invite(email, role_name, group_name, link):
             link=link,
         ),
     )
+
+
+def send_email_announce_event(event, group, emails):
+    """email for announce event"""
+
+    action = MailType.ANNOUNCE_EVENT
+    mail = MAILS[action]
+
+    event_name=event.name
+    group_name=group.name
+    event_date=event.starts_at.strftime('%d %B %Y')
+    event_description=event.description
+    event_url=event.site_link
+    event_location=event.normalized_location
+    event_time=event.starts_at.strftime("%H:%M (%Z)")
+    group_url=group.view_page_link
+    app_name=get_settings()['app_name']
+
+    if len(emails) > 0:
+        for email in emails:
+            send_email(
+                to=email,
+                action=action,
+                subject=mail['subject'].format(
+                    event_name=event_name,
+                    group_name=group_name,
+                    event_date=event_date,
+                ),
+                html=render_template(
+                    mail['template'],
+                    event_name=event_name,
+                    event_description=event_description,
+                    event_url=event_url,
+                    event_location=event_location,
+                    event_date=event_date,
+                    event_time=event_time,
+                    group_name=group_name,
+                    group_url=group_url,
+                    app_name=app_name,
+                ),
+            )
 
 
 def send_email_for_monthly_fee_payment(
@@ -443,12 +582,31 @@ def send_email_to_attendees(order):
 
 
 def send_order_purchase_organizer_email(order, recipients):
+
+    order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
+
     context = dict(
         buyer_email=order.user.email,
+        buyer_name=order.user.full_name,
         event_name=order.event.name,
         invoice_id=order.invoice_number,
         frontend_url=get_settings()['frontend_url'],
+        site_link=order.event.site_link,
         order_url=order.site_view_link,
+        event_date=order.event.starts_at.strftime('%d %B %Y'),
+        event_time=order.event.starts_at.strftime("%H:%M %Z"),
+        purchase_time=order.completed_at,
+        timezone=order.event.timezone,
+        payment_mode=order.payment_mode,
+        payment_status=order.status,
+        order_amount=order.amount,
+        payment_currency=order.event.payment_currency,
+        tickets_count=order.tickets_count,
+        order_tickets=order_tickets,
+        buyer_org=order.company,
+        buyer_address=order.address,
+        buyer_tax_id=order.tax_business_info,
+        app_name=get_settings()['app_name'],
     )
     emails = list({organizer.email for organizer in recipients})
     if emails:
