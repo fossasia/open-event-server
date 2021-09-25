@@ -272,11 +272,10 @@ class SessionDetail(ResourceDetail):
         is_speaker_or_admin = is_logged_in() and has_access(
             'is_speaker_for_session', id=session.id
         )
-        if not current_user:
-            raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
-        speaker_invite = SpeakerInvite.query.filter_by(
-            email=current_user.email, session_id=session.id, status='pending'
-        ).first()
+        if current_user:
+            speaker_invite = SpeakerInvite.query.filter_by(
+                email=current_user.email, session_id=session.id, status='pending'
+            ).first()
         if (
             session.state not in ['accepted', 'confirmed']
             and not is_speaker_or_admin
