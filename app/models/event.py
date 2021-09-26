@@ -343,6 +343,7 @@ class Event(SoftDeletionModel):
             or self.can_pay_by_bank
             or self.can_pay_onsite
             or self.can_pay_by_paytm
+            or self.can_pay_by_invoice
         )
 
     @property
