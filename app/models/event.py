@@ -136,6 +136,9 @@ class Event(SoftDeletionModel):
     can_pay_by_bank = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
+    can_pay_by_invoice = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     can_pay_onsite = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
@@ -151,6 +154,7 @@ class Event(SoftDeletionModel):
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
+    invoice_details = db.Column(db.String)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     pentabarf_url = db.Column(db.String)
     ical_url = db.Column(db.String)
@@ -339,6 +343,7 @@ class Event(SoftDeletionModel):
             or self.can_pay_by_bank
             or self.can_pay_onsite
             or self.can_pay_by_paytm
+            or self.can_pay_by_invoice
         )
 
     @property
