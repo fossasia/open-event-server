@@ -295,15 +295,19 @@
             {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket.price) }}
             <br>
             <div id="tax">
-              {% if tax.is_tax_included_in_price %}
-              {{ _('incl.') }}
+              {% if tax %}
+                {% if tax.is_tax_included_in_price %}
+                {{ _('incl.') }}
+                {% else %}
+                +
+                {% endif %}
+                {% if order_ticket.ticket.price %}
+                {{ event.payment_currency }}&nbsp;
+                {% endif %}
+                {{ "%.2f" | format(order_ticket.quantity*tax.rate*order_ticket.ticket.price/100) }}({{ tax.name }})
               {% else %}
-              +
+                +0.00
               {% endif %}
-              {% if order_ticket.ticket.price %}
-              {{ event.payment_currency }}&nbsp;
-              {% endif %}
-              {{ "%.2f" | format(order_ticket.quantity*tax.rate*order_ticket.ticket.price/100) }}({{ tax.name }})
             </div>
           </td>
         </tr>

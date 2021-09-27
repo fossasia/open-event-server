@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 
 from flask import render_template
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import (
     get_count,
