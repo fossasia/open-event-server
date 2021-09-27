@@ -19,6 +19,7 @@ tasks:
     - name: Server
       init: |
           gp sync-await db
+          ./venv/bin/python3 create_db.py admin@admin.com admin123
           source ./venv/bin/activate
       command: ./venv/bin/python3 manage.py runserver
 
