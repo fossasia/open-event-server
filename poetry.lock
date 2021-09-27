@@ -60,7 +60,7 @@ python-versions = "*"
 
 [[package]]
 name = "apscheduler"
-version = "3.7.0"
+version = "3.8.0"
 description = "In-process task scheduler with Cron-like capabilities"
 category = "main"
 optional = false
@@ -938,7 +938,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "geoip2"
-version = "4.2.0"
+version = "4.4.0"
 description = "MaxMind GeoIP2 API"
 category = "main"
 optional = false
@@ -946,7 +946,7 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 aiohttp = ">=3.6.2,<4.0.0"
-maxminddb = ">=2.0.0,<3.0.0"
+maxminddb = ">=2.2.0,<3.0.0"
 requests = ">=2.24.0,<3.0.0"
 urllib3 = ">=1.25.2,<2.0.0"
 
@@ -1412,7 +1412,7 @@ tests = ["pytest", "mock", "faker (==4.1.1)", "Flask (==1.1.2)"]
 
 [[package]]
 name = "maxminddb"
-version = "2.0.3"
+version = "2.2.0"
 description = "Reader for the MaxMind DB format"
 category = "main"
 optional = false
@@ -1694,7 +1694,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pycryptodome"
-version = "3.10.1"
+version = "3.10.4"
 description = "Cryptographic library for Python"
 category = "main"
 optional = false
@@ -1922,7 +1922,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2021.6.17"
+version = "2021.9.9"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -1931,9 +1931,11 @@ python-versions = "<3.10,>=3.6"
 [package.dependencies]
 attrs = ">=21.2.0"
 importlab = ">=0.6.1"
+libcst = "*"
 ninja = ">=1.10.0.post2"
 pyyaml = ">=3.11"
 six = "*"
+tabulate = "*"
 toml = "*"
 typed_ast = ">=1.4.3"
 
@@ -1947,7 +1949,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.26.0.post1"
+version = "2.27.0"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -2066,7 +2068,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.8.1"
+version = "6.8.2"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2078,7 +2080,7 @@ starkbank-ecdsa = ">=1.0.0"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.3.1"
+version = "1.4.1"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -2246,6 +2248,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.dependencies]
 requests = {version = ">=2.20", markers = "python_version >= \"3.0\""}
+
+[[package]]
+name = "tabulate"
+version = "0.8.9"
+description = "Pretty-print tabular data"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+widechars = ["wcwidth"]
 
 [[package]]
 name = "text-unidecode"
@@ -2580,7 +2593,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "576db21a9d4e555d5438fc5d2e3cc79a717fc5f6f77da7be4211cd5d66e7c394"
+content-hash = "b6e1f93e650929cef36e66725aeea9badef3d3d78d225a138eedba9f50bf1838"
 
 [metadata.files]
 aiohttp = [
@@ -2639,8 +2652,8 @@ appdirs = [
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
 ]
 apscheduler = [
-    {file = "APScheduler-3.7.0-py2.py3-none-any.whl", hash = "sha256:c06cc796d5bb9eb3c4f77727f6223476eb67749e7eea074d1587550702a7fbe3"},
-    {file = "APScheduler-3.7.0.tar.gz", hash = "sha256:1cab7f2521e107d07127b042155b632b7a1cd5e02c34be5a28ff62f77c900c6a"},
+    {file = "APScheduler-3.8.0-py2.py3-none-any.whl", hash = "sha256:82d6d21b2f0343510d07bb35618333a794653439a265635555b12935647b460a"},
+    {file = "APScheduler-3.8.0.tar.gz", hash = "sha256:793b2d37c52ece53e34626619e6142e99b20b59a12155f39e1e6932e324f079d"},
 ]
 arabic-reshaper = [
     {file = "arabic_reshaper-2.1.3-py2-none-any.whl", hash = "sha256:43f58136dbbfecab54ce0434e556c75689e46b0f11010578b893f72c504cd27b"},
@@ -3003,8 +3016,8 @@ future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
 ]
 geoip2 = [
-    {file = "geoip2-4.2.0-py2.py3-none-any.whl", hash = "sha256:b97b44031fdc463e84eb1316b4f19edd978cb1d78703465fcb1e36dc5a822ba6"},
-    {file = "geoip2-4.2.0.tar.gz", hash = "sha256:906a1dbf15a179a1af3522970e8420ab15bb3e0afc526942cc179e12146d9c1d"},
+    {file = "geoip2-4.4.0-py2.py3-none-any.whl", hash = "sha256:f9172cdfb2a5f9225ace5e30dd7426413ad28798a5f474cd1538780686bd6a87"},
+    {file = "geoip2-4.4.0.tar.gz", hash = "sha256:f150bed3190d543712a17467208388d31bd8ddb49b2226fba53db8aaedb8ba89"},
 ]
 gevent = [
     {file = "gevent-21.8.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:e91632fdcf1c9a33e97e35f96edcbdf0b10e36cf53b58caa946dca4836bb688c"},
@@ -3288,7 +3301,7 @@ marshmallow-jsonapi = [
     {file = "marshmallow_jsonapi-0.23.2-py2.py3-none-any.whl", hash = "sha256:2bbb5b8413eca253dbe02f04a51aaa406c718661210d86594acfe7152e4e8199"},
 ]
 maxminddb = [
-    {file = "maxminddb-2.0.3.tar.gz", hash = "sha256:47e86a084dd814fac88c99ea34ba3278a74bc9de5a25f4b815b608798747c7dc"},
+    {file = "maxminddb-2.2.0.tar.gz", hash = "sha256:e37707ec4fab115804670e0fb7aedb4b57075a8b6f80052bdc648d3c005184e5"},
 ]
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
@@ -3514,36 +3527,33 @@ pycparser = [
     {file = "pycparser-2.20.tar.gz", hash = "sha256:2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0"},
 ]
 pycryptodome = [
-    {file = "pycryptodome-3.10.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:1c5e1ca507de2ad93474be5cfe2bfa76b7cf039a1a32fc196f40935944871a06"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:6260e24d41149268122dd39d4ebd5941e9d107f49463f7e071fd397e29923b0c"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:3f840c49d38986f6e17dbc0673d37947c88bc9d2d9dba1c01b979b36f8447db1"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:2dea65df54349cdfa43d6b2e8edb83f5f8d6861e5cf7b1fbc3e34c5694c85e27"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:e61e363d9a5d7916f3a4ce984a929514c0df3daf3b1b2eb5e6edbb131ee771cf"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-manylinux2014_aarch64.whl", hash = "sha256:2603c98ae04aac675fefcf71a6c87dc4bb74a75e9071ae3923bbc91a59f08d35"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-win32.whl", hash = "sha256:38661348ecb71476037f1e1f553159b80d256c00f6c0b00502acac891f7116d9"},
-    {file = "pycryptodome-3.10.1-cp27-cp27m-win_amd64.whl", hash = "sha256:1723ebee5561628ce96748501cdaa7afaa67329d753933296321f0be55358dce"},
-    {file = "pycryptodome-3.10.1-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:77997519d8eb8a4adcd9a47b9cec18f9b323e296986528186c0e9a7a15d6a07e"},
-    {file = "pycryptodome-3.10.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:99b2f3fc51d308286071d0953f92055504a6ffe829a832a9fc7a04318a7683dd"},
-    {file = "pycryptodome-3.10.1-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:e0a4d5933a88a2c98bbe19c0c722f5483dc628d7a38338ac2cb64a7dbd34064b"},
-    {file = "pycryptodome-3.10.1-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:d3d6958d53ad307df5e8469cc44474a75393a434addf20ecd451f38a72fe29b8"},
-    {file = "pycryptodome-3.10.1-cp27-cp27mu-manylinux2014_aarch64.whl", hash = "sha256:a8eb8b6ea09ec1c2535bf39914377bc8abcab2c7d30fa9225eb4fe412024e427"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:31c1df17b3dc5f39600a4057d7db53ac372f492c955b9b75dd439f5d8b460129"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-manylinux1_i686.whl", hash = "sha256:a3105a0eb63eacf98c2ecb0eb4aa03f77f40fbac2bdde22020bb8a536b226bb8"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-manylinux1_x86_64.whl", hash = "sha256:a92d5c414e8ee1249e850789052608f582416e82422502dc0ac8c577808a9067"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-manylinux2010_i686.whl", hash = "sha256:60386d1d4cfaad299803b45a5bc2089696eaf6cdd56f9fc17479a6f89595cfc8"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-manylinux2010_x86_64.whl", hash = "sha256:501ab36aae360e31d0ec370cf5ce8ace6cb4112060d099b993bc02b36ac83fb6"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-manylinux2014_aarch64.whl", hash = "sha256:fc7489a50323a0df02378bc2fff86eb69d94cc5639914346c736be981c6a02e7"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-win32.whl", hash = "sha256:9b6f711b25e01931f1c61ce0115245a23cdc8b80bf8539ac0363bdcf27d649b6"},
-    {file = "pycryptodome-3.10.1-cp35-abi3-win_amd64.whl", hash = "sha256:7fd519b89585abf57bf47d90166903ec7b43af4fe23c92273ea09e6336af5c07"},
-    {file = "pycryptodome-3.10.1-pp27-pypy_73-macosx_10_9_x86_64.whl", hash = "sha256:09c1555a3fa450e7eaca41ea11cd00afe7c91fef52353488e65663777d8524e0"},
-    {file = "pycryptodome-3.10.1-pp27-pypy_73-manylinux1_x86_64.whl", hash = "sha256:758949ca62690b1540dfb24ad773c6da9cd0e425189e83e39c038bbd52b8e438"},
-    {file = "pycryptodome-3.10.1-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:e3bf558c6aeb49afa9f0c06cee7fb5947ee5a1ff3bd794b653d39926b49077fa"},
-    {file = "pycryptodome-3.10.1-pp27-pypy_73-win32.whl", hash = "sha256:f977cdf725b20f6b8229b0c87acb98c7717e742ef9f46b113985303ae12a99da"},
-    {file = "pycryptodome-3.10.1-pp36-pypy36_pp73-macosx_10_9_x86_64.whl", hash = "sha256:6d2df5223b12437e644ce0a3be7809471ffa71de44ccd28b02180401982594a6"},
-    {file = "pycryptodome-3.10.1-pp36-pypy36_pp73-manylinux1_x86_64.whl", hash = "sha256:98213ac2b18dc1969a47bc65a79a8fca02a414249d0c8635abb081c7f38c91b6"},
-    {file = "pycryptodome-3.10.1-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:12222a5edc9ca4a29de15fbd5339099c4c26c56e13c2ceddf0b920794f26165d"},
-    {file = "pycryptodome-3.10.1-pp36-pypy36_pp73-win32.whl", hash = "sha256:6bbf7fee7b7948b29d7e71fcacf48bac0c57fb41332007061a933f2d996f9713"},
-    {file = "pycryptodome-3.10.1.tar.gz", hash = "sha256:3e2e3a06580c5f190df843cdb90ea28d61099cf4924334d5297a995de68e4673"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:91ba4215a1f37d0f371fe43bc88c5ff49c274849f3868321c889313787de7672"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:66301e4c42dee43ee2da256625d3fe81ef98cc9924c2bd535008cc3ad8ded77b"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:8ec154ec445412df31acf0096e7f715e30e167c8f2318b8f5b1ab7c28f4c82f7"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:8e82524e7c354033508891405574d12e612cc4fdd3b55d2c238fc1a3e300b606"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:b217b4525e60e1af552d62bec01b4685095436d4de5ecde0f05d75b2f95ba6d4"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-win32.whl", hash = "sha256:c6469d1453f5864e3321a172b0aa671b938d753cbf2376b99fa2ab8841539bb8"},
+    {file = "pycryptodome-3.10.4-cp27-cp27m-win_amd64.whl", hash = "sha256:6b45fcace5a5d9c57ba87cf804b161adc62aa826295ce7f7acbcbdc0df74ed37"},
+    {file = "pycryptodome-3.10.4-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:b1daf251395af7336ddde6a0015ba5e632c18fe646ba930ef87402537358e3b4"},
+    {file = "pycryptodome-3.10.4-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:9a2312440057bf29b9582f72f14d79692044e63bfbc4b4bbea8559355f44f3dd"},
+    {file = "pycryptodome-3.10.4-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:54d4e4d45f349d8c4e2f31c2734637ff62a844af391b833f789da88e43a8f338"},
+    {file = "pycryptodome-3.10.4-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:97e7df67a4da2e3f60612bbfd6c3f243a63a15d8f4797dd275e1d7b44a65cb12"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:217dcc0c92503f7dd4b3d3b7d974331a4419f97f555c99a845c3b366fed7056b"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-manylinux1_i686.whl", hash = "sha256:a7471646d8cd1a58bb696d667dcb3853e5c9b341b68dcf3c3cc0893d0f98ca5f"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-manylinux1_x86_64.whl", hash = "sha256:d713dc0910e5ded07852a05e9b75f1dd9d3a31895eebee0668f612779b2a748c"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-manylinux2010_i686.whl", hash = "sha256:ac3012c36633564b2b5539bb7c6d9175f31d2ce74844e9abe654c428f02d0fd8"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-manylinux2010_x86_64.whl", hash = "sha256:3f9fb499e267039262569d08658132c9cd8b136bf1d8c56b72f70ed05551e526"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-win32.whl", hash = "sha256:7efec2418e9746ec48e264eea431f8e422d931f71c57b1c96ee202b117f58fa9"},
+    {file = "pycryptodome-3.10.4-cp35-abi3-win_amd64.whl", hash = "sha256:49e54f2245befb0193848c8c8031d8d1358ed4af5a1ae8d0a3ba669a5cdd3a72"},
+    {file = "pycryptodome-3.10.4-pp27-pypy_73-macosx_10_9_x86_64.whl", hash = "sha256:4e8fc4c48365ce8a542fe48bf1360da05bb2851df12f64fc94d751705e7cdbe7"},
+    {file = "pycryptodome-3.10.4-pp27-pypy_73-manylinux1_x86_64.whl", hash = "sha256:851e6d4930b160417235955322db44adbdb19589918670d63f4acd5d92959ac0"},
+    {file = "pycryptodome-3.10.4-pp27-pypy_73-manylinux2010_x86_64.whl", hash = "sha256:04e14c732c3693d2830839feed5129286ce47ffa8bfe90e4ae042c773e51c677"},
+    {file = "pycryptodome-3.10.4-pp27-pypy_73-win32.whl", hash = "sha256:cefe6b267b8e5c3c72e11adec35a9c7285b62e8ea141b63e87055e9a9e5f2f8c"},
+    {file = "pycryptodome-3.10.4-pp36-pypy36_pp73-macosx_10_9_x86_64.whl", hash = "sha256:24c1b7705d19d8ae3e7255431efd2e526006855df62620118dd7b5374c6372f6"},
+    {file = "pycryptodome-3.10.4-pp36-pypy36_pp73-manylinux1_x86_64.whl", hash = "sha256:c61ea053bd5d4c12a063d7e704fbe1c45abb5d2510dab55bd95d166ba661604f"},
+    {file = "pycryptodome-3.10.4-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:11d3164fb49fdee000fde05baecce103c0c698168ef1a18d9c7429dd66f0f5bb"},
+    {file = "pycryptodome-3.10.4-pp36-pypy36_pp73-win32.whl", hash = "sha256:3faa6ebd35c61718f3f8862569c1f38450c24f3ededb213e1a64806f02f584bc"},
+    {file = "pycryptodome-3.10.4.tar.gz", hash = "sha256:40083b0d7f277452c7f2dd4841801f058cc12a74c219ee4110d65774c6a58bef"},
 ]
 pydantic = [
     {file = "pydantic-1.8.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:05ddfd37c1720c392f4e0d43c484217b7521558302e7069ce8d318438d297739"},
@@ -3642,23 +3652,23 @@ python-slugify = [
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
 ]
 pytype = [
-    {file = "pytype-2021.6.17-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:11cb61517d697dcf4ecbbc4d0d8a1b8fd0b41d7587e60a4cd6f23eee5bea6c85"},
-    {file = "pytype-2021.6.17-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:17106c7785a798150d5e5718632377992733f5157973a813b6b7ac2777bcb92d"},
-    {file = "pytype-2021.6.17-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:eed85e69c84d89743d5ba6524b2f234da1ee52eb190dcf8ea87c6b85859dbcc7"},
-    {file = "pytype-2021.6.17-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dded86d62225c0b1274054bc96e080e4162651226e3810633344f432c160aed1"},
-    {file = "pytype-2021.6.17-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:c8eeedc0f776f263bd02934ee0d5555f4fa3447d41378e98a5c8051287da8872"},
-    {file = "pytype-2021.6.17-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:acc234baf1d2b9b47018a01fbb1be3d632fa7a0e7cfe10f3dc18b1f3a7fdb188"},
-    {file = "pytype-2021.6.17-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:8f2886525c49f512a066ea25fecc260f46ae2e5021806fec3816c1a2ef2550cb"},
-    {file = "pytype-2021.6.17-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:388a279eb1683739dab0f3c47564779396413f856a931422e4db05bd49b1a1a6"},
-    {file = "pytype-2021.6.17.tar.gz", hash = "sha256:8f11a4b93fb807ff849a0cbff926c17ef6147f5f5bb8a28875e8fbea91b853f5"},
+    {file = "pytype-2021.9.9-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:0bc149f60be39632e913ca11dd553a8b73a9699c60d52f105200379ade430dbb"},
+    {file = "pytype-2021.9.9-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:df325e76b919d8101b7fc4c624dc4aa974f8acd0758e4e6248c54f73e9e1dbc2"},
+    {file = "pytype-2021.9.9-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:e2cc2ca6b8dc775c25e50afecefa1c36f164bb6833ae34e73acbb9a7ba4ec4f6"},
+    {file = "pytype-2021.9.9-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cb0f3048284cdd68a83852e85662c55408bba1df0fd19bcc4aea3b24efb248c0"},
+    {file = "pytype-2021.9.9-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:34fffaafdf4a106b48458398745047b4f114d1b8db3f2ac2f8d4a2268b4576d8"},
+    {file = "pytype-2021.9.9-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:809a20782138cff68067a4d94f8a5d89139142ec0e37b0f41bdb715db694ad1c"},
+    {file = "pytype-2021.9.9-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:5ead3277d9bdbd324c9765e769c4511d871667ceb439efb456a6ff1b39746362"},
+    {file = "pytype-2021.9.9-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e0c1ffe99cb33ce5a8f7ddd405c1e6b46237c30ea9f3b2c55c643f4360443f15"},
+    {file = "pytype-2021.9.9.tar.gz", hash = "sha256:4d63d3e84d9a0a979025724aa948a4309981389e4cefd6234578470708558d74"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
     {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.26.0.post1-py2.py3-none-any.whl", hash = "sha256:9b1898d6f250b9acf1d3737dd7c5c3e2dcbf947d707bd6be807f4c68abd87558"},
-    {file = "pyupgrade-2.26.0.post1.tar.gz", hash = "sha256:799a6cdeb37004d6e705df2df6a4981d01177dd7061301eb572149b9587d8f63"},
+    {file = "pyupgrade-2.27.0-py2.py3-none-any.whl", hash = "sha256:14e3b282f1239dd458044c286d0dc2e425536a3b3789146fdd7dd34aff7cb7d5"},
+    {file = "pyupgrade-2.27.0.tar.gz", hash = "sha256:73737d3563374c034ea2912f90f7d5b7792e189583f6353518d71f67e616cd8a"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
@@ -3822,12 +3832,12 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.8.1-py3-none-any.whl", hash = "sha256:4ae65a2657e7b2ff01a3c67c4fcfe6ecd579783870ab09d39291ed133a69299c"},
-    {file = "sendgrid-6.8.1.tar.gz", hash = "sha256:75fa5094afb216bf11c60e9147c604889fa4012a3fc6ab7715fdc12e03ac488d"},
+    {file = "sendgrid-6.8.2-py3-none-any.whl", hash = "sha256:bb67bc0c429d1a5d1fcf1c03de179411405270d8ebc07809d0cb8b8c94d673f6"},
+    {file = "sendgrid-6.8.2.tar.gz", hash = "sha256:ae777ec4a4db32b986b8bfbb9e379c454424a62aa50460fa2d153f46b1549582"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.3.1.tar.gz", hash = "sha256:ebe99144fa9618d4b0e7617e7929b75acd905d258c3c779edcd34c0adfffe26c"},
-    {file = "sentry_sdk-1.3.1-py2.py3-none-any.whl", hash = "sha256:f33d34c886d0ba24c75ea8885a8b3a172358853c7cbde05979fc99c29ef7bc52"},
+    {file = "sentry-sdk-1.4.1.tar.gz", hash = "sha256:4297555ddc37c7136740e6b547b7d68f5bca0b4832f94ac097e5d531a4c77528"},
+    {file = "sentry_sdk-1.4.1-py2.py3-none-any.whl", hash = "sha256:ea04bc3be6eb082f34ff3f8f6380ea9c691766592298f3f975a435dafac6bf6a"},
 ]
 simplejson = [
     {file = "simplejson-3.17.2-cp27-cp27m-macosx_10_13_x86_64.whl", hash = "sha256:2d3eab2c3fe52007d703a26f71cf649a8c771fcdd949a3ae73041ba6797cfcf8"},
@@ -3944,6 +3954,10 @@ starlette = [
 stripe = [
     {file = "stripe-2.60.0-py2.py3-none-any.whl", hash = "sha256:0050763cb67df6745973bd9757f7a765bed1b82b5d5261fb8908cfc6ec9e5200"},
     {file = "stripe-2.60.0.tar.gz", hash = "sha256:8966b7793014380f60c6f121ba333d6f333a55818edaf79c8d70464ce0a7a808"},
+]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},

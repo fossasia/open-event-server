@@ -3,7 +3,7 @@ import datetime
 import logging
 import os
 from itertools import groupby
-from typing import Dict
+from typing import Dict, Optional
 
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
@@ -260,7 +260,7 @@ def send_email_ticket_sales_end_next_week(event, emails):
         )
 
 
-def send_email_session_state_change(email, session, mail_override: Dict[str, str] = None):
+def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
     """email for new session"""
     event = session.event
 

@@ -9,7 +9,6 @@ from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
@@ -242,11 +241,7 @@ class OrdersList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
-            query_ = (
-                query_.join(TicketHolder)
-                .join(User, User.id == Order.user_id)
-                .filter(or_(User.id == user.id, TicketHolder.user == user))
-            )
+            query_ = query_.filter(Order.user_id == user.id)
         else:
             # orders under an event
             query_ = event_query(query_, view_kwargs, restrict=True)
@@ -657,7 +652,7 @@ def omise_checkout(order_identifier):
         logging.exception(
             f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors"""
         )
-        return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
+        return jsonify(status=False, error=f"Omise Failure Message: {str(e)}")
     except Exception:
         logging.exception('Error while charging omise')
     if charge.failure_code is not None:
