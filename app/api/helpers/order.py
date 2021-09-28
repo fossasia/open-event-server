@@ -108,7 +108,7 @@ def create_pdf_tickets_for_holder(order):
 
         attendee = TicketHolder.query.filter_by(order_id=order.id).first()
 
-        order_amount = calculate_order_amount(tickets)
+        order_amount = calculate_order_amount(order_tickets)
 
         create_save_pdf(
             render_template(
@@ -120,6 +120,7 @@ def create_pdf_tickets_for_holder(order):
                 attendee=attendee,
                 event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
                 created_at=order.created_at.strftime('%d %B %Y'),
+                order_amount=order_amount,
                 admin_info=admin_info,
             ),
             UPLOAD_PATHS['pdf']['order'],
