@@ -312,7 +312,7 @@
           <td class="grand total"><b>{{ _('Total') }}</b></td>
           <td class="grand total">
             {% if order.amount != 0.0 %}
-            {{ event.payment_currency }}&nbsp;
+            {{ event.payment_currency }}
             {% endif %}
             {{ order_amount.sub_total | money }}
           </td>
@@ -331,7 +331,7 @@
           </b></td>
           <td class="grand total">
             {% if order.amount != 0.0 %}
-            {{ event.payment_currency }}&nbsp;
+            {{ event.payment_currency }}
             {% endif %}
             {{ order_amount.tax.amount | money }}
           </td>
@@ -343,7 +343,7 @@
           <td class="grand total"><b>{{ _('Grand Total') }}</b></td>
           <td class="grand total">
             {% if order.amount != 0.0 %}
-            {{ event.payment_currency }}&nbsp;
+            {{ event.payment_currency }}
             {% endif %}
             {{ order.amount | money }}
           </td>
