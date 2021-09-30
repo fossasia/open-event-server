@@ -2,6 +2,7 @@ import base64
 import datetime
 import logging
 import os
+import pytz
 from itertools import groupby
 from typing import Dict, Optional
 
@@ -260,7 +261,9 @@ def send_email_ticket_sales_end_next_week(event, emails):
         )
 
 
-def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
+def send_email_session_state_change(
+    email, session, mail_override: Optional[Dict[str, str]] = None
+):
     """email for new session"""
     event = session.event
 
@@ -374,15 +377,15 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
-    event_name=event.name
-    group_name=group.name
-    event_date=event.starts_at.strftime('%d %B %Y')
-    event_description=event.description
-    event_url=event.site_link
-    event_location=event.normalized_location
-    event_time=event.starts_at.strftime("%H:%M (%Z)")
-    group_url=group.view_page_link
-    app_name=get_settings()['app_name']
+    event_name = event.name
+    group_name = group.name
+    event_date = event.starts_at.strftime('%d %B %Y')
+    event_description = event.description
+    event_url = event.site_link
+    event_location = event.normalized_location
+    event_time = event.starts_at.strftime("%H:%M (%Z)")
+    group_url = group.view_page_link
+    app_name = get_settings()['app_name']
 
     if len(emails) > 0:
         for email in emails:
@@ -594,9 +597,11 @@ def send_order_purchase_organizer_email(order, recipients):
         site_link=order.event.site_link,
         order_url=order.site_view_link,
         event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.strftime("%H:%M %Z"),
-        purchase_time=order.completed_at,
+        event_time=order.event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
+        .astimezone(pytz.timezone(order.event.timezone))
+        .strftime('%H:%M (%Z%z)'),
         timezone=order.event.timezone,
+        purchase_time=order.completed_at,
         payment_mode=order.payment_mode,
         payment_status=order.status,
         order_amount=order.amount,
