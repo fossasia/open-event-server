@@ -137,10 +137,11 @@ def validate_discount_code(
         raise UnprocessableEntityError(
             {'pointer': 'discount_code_id'}, "Invalid Discount Code"
         )
-    if not discount_code.is_available(tickets, ticket_holders):
-        raise UnprocessableEntityError(
-            {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
-        )
+    # TODO: Need to check it correctly
+    # if not discount_code.is_available(tickets, ticket_holders):
+    #     raise UnprocessableEntityError(
+    #         {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
+    #     )
 
     return discount_code
 
