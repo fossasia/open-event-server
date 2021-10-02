@@ -124,7 +124,7 @@ broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
 python-slugify = "^5.0.2"
-cryptography = "3.3.2" # Downgraded to avoid alpine build error
+cryptography = "35.0.0" # Downgraded to avoid alpine build error
 Flask-Migrate = "2.7.0"
 
 [tool.poetry.dev-dependencies]
