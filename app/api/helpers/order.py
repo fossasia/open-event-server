@@ -108,6 +108,18 @@ def create_pdf_tickets_for_holder(order):
 
         attendee = TicketHolder.query.filter_by(order_id=order.id).first()
 
+        tickets = []
+        for order_ticket in order_tickets:
+            ticket = dict(
+                id=order_ticket.ticket.id,
+                price=order_ticket.ticket.price,
+                quantity=order_ticket.quantity
+            )
+            tickets.append(ticket)
+        
+        # calculate order amount using helper function
+        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)            
+
         create_save_pdf(
             render_template(
                 'pdf/order_invoice.html',
@@ -116,9 +128,10 @@ def create_pdf_tickets_for_holder(order):
                 tax=order.event.tax,
                 order_tickets=order_tickets,
                 attendee=attendee,
-                event_starts_at=order.event.starts_at_tz.strftime('%d-%m-%Y'),
-                created_at=order.created_at.strftime('%d-%m-%Y'),
+                event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
+                created_at=order.created_at.strftime('%d %B %Y'),
                 admin_info=admin_info,
+                order_amount=order_amount
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
