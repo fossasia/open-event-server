@@ -222,6 +222,7 @@ def calculate_order_amount(tickets, discount_code=None):
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
     for ticket in fetched_tickets:
+        ticket_tax = discounted_tax = 0.0
         ticket_info = ticket_map[ticket.id]
         discount_amount = 0.0
         discount_data = None
@@ -253,6 +254,12 @@ def calculate_order_amount(tickets, discount_code=None):
         else:
             price = ticket.price if ticket.type != 'free' else 0.0
 
+        if tax:
+            if tax_included:
+                ticket_tax = price - price / (1 + tax.rate / 100)
+            else:
+                ticket_tax = price * tax.rate / 100
+
         if discount_code and ticket.type != 'free':
             code = (
                 DiscountCode.query.with_parent(ticket)
@@ -266,6 +273,8 @@ def calculate_order_amount(tickets, discount_code=None):
                         discount_percent = (discount_amount / price) * 100
                     else:
                         discount_amount = (price * code.value) / 100
+                        if tax:
+                            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
                         discount_percent = code.value
                     discount_data = {
                         'code': discount_code.code,
@@ -290,6 +299,8 @@ def calculate_order_amount(tickets, discount_code=None):
                 'discount': discount_data,
                 'ticket_fee': round(ticket_fee, 2),
                 'sub_total': round(sub_total, 2),
+                'ticket_tax': round(ticket_tax, 2),
+                'discounted_tax': round(discounted_tax, 2)
             }
         )
 
