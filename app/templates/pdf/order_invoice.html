@@ -174,20 +174,20 @@
       format(event.tickets_sold)}}</h1>
     {% if order.status != "deleted" %}
     <div id="company" class="clearfix">
-      {% if event.owner.company %}
-      <div><span>{{ _('Organisation') }}</span>{{ event.owner.company or '' }}</div>
+      {% if event.tax.registered_company %}
+      <div><span>{{ _('Organisation') }}</span>{{ event.tax.registered_company or '' }}</div>
       {% endif %}
       {% if event.owner.billing_contact_name %}
       <div><span>{{ _('Organiser') }}</span>{{ event.owner.billing_contact_name }}</div>
       {% endif %}
-      {% if event.owner.billing_address %}
-      <div><span>{{ _('Address') }}</span>{{ event.owner.billing_address }}</div>
+      {% if event.tax.address %}
+      <div><span>{{ _('Address') }}</span>{{ event.tax.address }}</div>
       {% endif %}
-      {% if event.owner.billing_city %}
-      <div><span>{{ _('City') }}</span>{{ event.owner.billing_city }}</div>
+      {% if event.tax.city %}
+      <div><span>{{ _('City') }}</span>{{ event.tax.city }}</div>
       {% endif %}
-      {% if event.owner.billing_zip_code %}
-      <div><span>{{ _('ZIP') }}</span>{{ event.owner.billing_zip_code }}</div>
+      {% if event.tax.zip %}
+      <div><span>{{ _('ZIP') }}</span>{{ event.tax.zip }}</div>
       {% endif %}
       {% if event.owner.billing_phone %}
       <div><span>{{ _('Phone') }}</span>{{ event.owner.billing_phone }}</div>
@@ -195,8 +195,8 @@
       {% if event.owner.email %}
       <div><span>{{ _('Email') }}</span>{{ event.owner.email }}</div>
       {% endif %}
-      {% if event.owner.billing_tax_info %}
-      <div><span>{{ _('Tax ID') }}</span>{{ event.owner.billing_tax_info }}</div>
+      {% if event.tax.tax_id %}
+      <div><span>{{ _('Tax ID') }}</span>{{ event.tax.tax_id }}</div>
       {% endif %}
     </div>
     <div id="project">
@@ -244,6 +244,8 @@
       <div><span>{{ _('Payment Mode') }}</span>
         {% if order.payment_mode == 'free' %}
         {{ _('None') }}
+        {% elif order.payment_mode == 'invoice' %}
+        Purchase on Invoice
         {% else %}
         {{ order.payment_mode | capitalize }}
         {% endif %}
