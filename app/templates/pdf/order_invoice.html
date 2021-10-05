@@ -245,7 +245,7 @@
         {% if order.payment_mode == 'free' %}
         {{ _('None') }}
         {% elif order.payment_mode == 'invoice' %}
-        Purchase on Invoice
+        {{ _('Purchase on Invoice') }}
         {% else %}
         {{ order.payment_mode | capitalize }}
         {% endif %}

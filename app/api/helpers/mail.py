@@ -260,7 +260,9 @@ def send_email_ticket_sales_end_next_week(event, emails):
         )
 
 
-def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
+def send_email_session_state_change(
+    email, session, mail_override: Optional[Dict[str, str]] = None
+):
     """email for new session"""
     event = session.event
 
@@ -374,15 +376,15 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
-    event_name=event.name
-    group_name=group.name
-    event_date=event.starts_at.strftime('%d %B %Y')
-    event_description=event.description
-    event_url=event.site_link
-    event_location=event.normalized_location
-    event_time=event.starts_at.strftime("%H:%M (%Z)")
-    group_url=group.view_page_link
-    app_name=get_settings()['app_name']
+    event_name = event.name
+    group_name = group.name
+    event_date = event.starts_at.strftime('%d %B %Y')
+    event_description = event.description
+    event_url = event.site_link
+    event_location = event.normalized_location
+    event_time = event.starts_at.strftime("%H:%M (%Z)")
+    group_url = group.view_page_link
+    app_name = get_settings()['app_name']
 
     if len(emails) > 0:
         for email in emails:
@@ -605,6 +607,10 @@ def send_order_purchase_organizer_email(order, recipients):
         order_tickets=order_tickets,
         buyer_org=order.company,
         buyer_address=order.address,
+        buyer_zipcode=order.zipcode,
+        buyer_city=order.city,
+        buyer_state=order.state,
+        buyer_country=order.country,
         buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
