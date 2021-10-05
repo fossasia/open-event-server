@@ -141,7 +141,7 @@ pyupgrade = "2.29.0"
 coverage = "6.0"
 dredd_hooks = "0.2"
 pytest = "6.2.5"
-pytest-cov = "2.12.1"
+pytest-cov = "3.0.0"
 objproxies = "0.9.4"
 
 [build-system]
