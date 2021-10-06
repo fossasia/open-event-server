@@ -2,6 +2,7 @@ import base64
 import datetime
 import logging
 import os
+import pytz
 from itertools import groupby
 from typing import Dict, Optional
 
@@ -545,6 +546,13 @@ def send_email_to_attendees(order):
         order_view_url=order.site_view_link,
     )
 
+    event_date = event.starts_at.strftime('%d %B %Y')
+    event_time = (
+        event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
+        .astimezone(pytz.timezone(event.timezone))
+        .strftime('%H:%M (%Z%z)')
+    )
+
     buyer_email = order.user.email
     action = MailType.TICKET_PURCHASED
     mail = MAILS[action]
@@ -554,6 +562,8 @@ def send_email_to_attendees(order):
         subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
+            event_date=event_date,
+            event_time=event_time,
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
