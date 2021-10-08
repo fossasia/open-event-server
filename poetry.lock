@@ -794,20 +794,19 @@ graphql-server-core = ">=1.1,<2"
 
 [[package]]
 name = "flask-jwt-extended"
-version = "3.25.0"
+version = "4.3.1"
 description = "Extended JWT integration with Flask"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6,<4"
 
 [package.dependencies]
-Flask = ">=1.0,<2.0"
-PyJWT = ">=1.6.4,<2.0"
-six = "*"
+Flask = ">=1.0,<3.0"
+PyJWT = ">=2.0,<3.0"
 Werkzeug = ">=0.14"
 
 [package.extras]
-asymmetric_crypto = ["cryptography (>=2.3)"]
+asymmetric_crypto = ["cryptography (>=35.0.0)"]
 
 [[package]]
 name = "flask-limiter"
@@ -1720,16 +1719,17 @@ email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pyjwt"
-version = "1.7.1"
+version = "2.2.0"
 description = "JSON Web Token implementation in Python"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.extras]
-crypto = ["cryptography (>=1.4)"]
-flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
-test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
+crypto = ["cryptography (>=3.3.1)"]
+dev = ["sphinx", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.3.1)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "mypy", "pre-commit"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
 
 [[package]]
 name = "pylint"
@@ -2595,7 +2595,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "5f1f8e96e7c7c0181b4c73bb7e2b6a16877063ec1bf48ce3074fb703a0866c3c"
+content-hash = "b44c04a08d9b11d78b10a09ef5045357a8dce661ef1fe3aef5c10b94fb1f64fc"
 
 [metadata.files]
 aiohttp = [
@@ -2961,7 +2961,8 @@ flask-graphql = [
     {file = "Flask-GraphQL-2.0.1.tar.gz", hash = "sha256:825578c044df436cd74503a38bbd31c919a90acda5e9b6e0e45736964bc5235d"},
 ]
 flask-jwt-extended = [
-    {file = "Flask-JWT-Extended-3.25.0.tar.gz", hash = "sha256:b2e4dba91661e4697b30269106386c2b29e416a00d9ff66b26c462edddc10078"},
+    {file = "Flask-JWT-Extended-4.3.1.tar.gz", hash = "sha256:ad6977b07c54e51c13b5981afc246868b9901a46715d9b9827898bfd916aae88"},
+    {file = "Flask_JWT_Extended-4.3.1-py2.py3-none-any.whl", hash = "sha256:c82c9e505bc96f4a5186de31c05262dbcde6fa10581e9aa46df8f99ca04be2c3"},
 ]
 flask-limiter = [
     {file = "Flask-Limiter-1.4.tar.gz", hash = "sha256:021279c905a1e24f181377ab3be711be7541734b494f4e6db2b8edeba7601e48"},
@@ -3566,8 +3567,8 @@ pydantic = [
     {file = "pydantic-1.8.2.tar.gz", hash = "sha256:26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b"},
 ]
 pyjwt = [
-    {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
-    {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
+    {file = "PyJWT-2.2.0-py3-none-any.whl", hash = "sha256:b0ed5824c8ecc5362e540c65dc6247567db130c4226670bf7699aec92fb4dae1"},
+    {file = "PyJWT-2.2.0.tar.gz", hash = "sha256:a0b9a3b4e5ca5517cac9f1a6e9cd30bf1aa80be74fcdf4e28eded582ecfcfbae"},
 ]
 pylint = [
     {file = "pylint-2.11.1-py3-none-any.whl", hash = "sha256:0f358e221c45cbd4dad2a1e4b883e75d28acdcccd29d40c76eb72b307269b126"},
