@@ -2,7 +2,6 @@ from datetime import datetime
 
 import humanize
 import pytz
-from flask_babel import format_datetime
 from forex_python.converter import CurrencyCodes
 
 from app.api.helpers.utilities import strip_tags
@@ -27,12 +26,12 @@ def init_filters(app):
         return '{:20,.2f}'.format(float(string))
 
     @app.template_filter('datetime')
-    def simple_datetime_display(date, timezone=None, format='MMMM d, yyyy hh:mm a'):
+    def simple_datetime_display(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):
         if not date:
             return ''
         if timezone:
-            date = date.astimezone(pytz.timezone(timezone))
-        return format_datetime(date, format, rebase=False)
+            date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(pytz.timezone(timezone))
+        return date.strftime(format)
 
     @app.template_filter('date')
     def simple_date_display(date, timezone=None):

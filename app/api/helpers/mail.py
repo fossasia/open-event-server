@@ -606,9 +606,11 @@ def send_order_purchase_organizer_email(order, recipients):
         site_link=order.event.site_link,
         order_url=order.site_view_link,
         event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.strftime("%H:%M %Z"),
-        purchase_time=order.completed_at,
+        event_time=order.event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
+        .astimezone(pytz.timezone(order.event.timezone))
+        .strftime('%H:%M (%Z%z)'),
         timezone=order.event.timezone,
+        purchase_time=order.completed_at,
         payment_mode=order.payment_mode,
         payment_status=order.status,
         order_amount=order.amount,

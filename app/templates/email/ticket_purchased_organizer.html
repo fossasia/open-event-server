@@ -13,7 +13,7 @@
 {{ _('Name') }}: {{ buyer_name }} <br/>
 {{ _('Email') }}: {{ buyer_email }} <br/>
 <br/>
-{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }} UTC<br/>
+{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }}<br/>
 {% if payment_mode %}
   {{ _('Payment Mode') }}:
   {% if payment_mode == 'free' %}
