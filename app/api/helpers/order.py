@@ -271,6 +271,11 @@ def calculate_order_amount(tickets, discount_code=None):
                     if code.type == 'amount':
                         discount_amount = min(code.value, price)
                         discount_percent = (discount_amount / price) * 100
+                        if tax:
+                            if tax_included:
+                                discounted_tax = (price - discount_amount) - (price - discount_amount) / (1 + tax.rate / 100)
+                            else:
+                                discounted_tax = (price - discount_amount) * tax.rate / 100
                     else:
                         discount_amount = (price * code.value) / 100
                         if tax:
