@@ -1164,7 +1164,7 @@ test = ["Cython (==0.29.22)"]
 
 [[package]]
 name = "humanize"
-version = "3.11.0"
+version = "3.12.0"
 description = "Python humanize utilities"
 category = "main"
 optional = false
@@ -2595,7 +2595,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "5f1f8e96e7c7c0181b4c73bb7e2b6a16877063ec1bf48ce3074fb703a0866c3c"
+content-hash = "b2cc8db5da516039918684d9343600133a292395ab60bad20219d6b39de6f671"
 
 [metadata.files]
 aiohttp = [
@@ -3145,8 +3145,8 @@ httptools = [
     {file = "httptools-0.2.0.tar.gz", hash = "sha256:94505026be56652d7a530ab03d89474dc6021019d6b8682281977163b3471ea0"},
 ]
 humanize = [
-    {file = "humanize-3.11.0-py3-none-any.whl", hash = "sha256:06c79af7873473c47477840010ccb9b11b0d431f37f4a81b71edd653211936be"},
-    {file = "humanize-3.11.0.tar.gz", hash = "sha256:4160cdc63fcd0daac27d2e1e218a31bb396fc3fe5712d153675d89432a03778f"},
+    {file = "humanize-3.12.0-py3-none-any.whl", hash = "sha256:4c71c4381f0209715cd993058e717c1b74d58ae2f8c6da7bdb59ab66473b9ab0"},
+    {file = "humanize-3.12.0.tar.gz", hash = "sha256:5ec1a66e230a3e31fb3f184aab9436ea13d4e37c168e0ffc345ae5bb57e58be6"},
 ]
 icalendar = [
     {file = "icalendar-4.0.7-py2.py3-none-any.whl", hash = "sha256:8c35be16c1d0581a276002af883297aeffa8116e366fdce4d5318e1424aa1903"},
