@@ -546,11 +546,11 @@ def send_email_to_attendees(order):
         order_view_url=order.site_view_link,
     )
 
-    event_date = event.starts_at.strftime('%d %B %Y')
-    event_time = (
-        event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
-        .astimezone(pytz.timezone(event.timezone))
-        .strftime('%H:%M (%Z%z)')
+    event_date = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%d %B %Y'
+    )
+    event_time = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
     )
 
     buyer_email = order.user.email
@@ -605,10 +605,12 @@ def send_order_purchase_organizer_email(order, recipients):
         frontend_url=get_settings()['frontend_url'],
         site_link=order.event.site_link,
         order_url=order.site_view_link,
-        event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
-        .astimezone(pytz.timezone(order.event.timezone))
-        .strftime('%H:%M (%Z%z)'),
+        event_date=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%d %B %Y'
+        ),
+        event_time=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
+        ),
         timezone=order.event.timezone,
         purchase_time=order.completed_at,
         payment_mode=order.payment_mode,
@@ -743,3 +745,13 @@ def send_email_to_moderator(video_stream_moderator):
             settings=get_settings(),
         ),
     )
+
+
+def convert_to_event_timezone(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):
+    if not date:
+        return None
+    if timezone:
+        date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
+            pytz.timezone(timezone)
+        )
+    return date.strftime(format)
