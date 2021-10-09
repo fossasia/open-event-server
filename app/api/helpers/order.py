@@ -106,8 +106,6 @@ def create_pdf_tickets_for_holder(order):
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
-        attendee = TicketHolder.query.filter_by(order_id=order.id).first()
-
         tickets = []
         for order_ticket in order_tickets:
             ticket = dict(
@@ -127,7 +125,6 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
-                attendee=attendee,
                 event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
                 created_at=order.created_at.strftime('%d %B %Y'),
                 admin_info=admin_info,
