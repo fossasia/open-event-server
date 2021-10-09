@@ -130,6 +130,12 @@ class GroupDetail(ResourceDetail):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
 
+        if (
+            data.get('banner_url')
+        ):
+            start_image_resizing_tasks(group, data['banner_url'])
+        
+
     decorators = (
         api.has_permission(
             'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
@@ -165,8 +171,8 @@ class GroupRelationship(ResourceRelationship):
     }
 
 
-def start_image_resizing_tasks(group, original_image_url):
+def start_image_resizing_tasks(group, banner_url):
     group_id = str(group.id)
     from .helpers.tasks import resize_group_images_task
 
-    resize_group_images_task.delay(group_id, original_image_url)
+    resize_group_images_task.delay(group_id, banner_url)
