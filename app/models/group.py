@@ -21,6 +21,7 @@ class Group(SoftDeletionModel):
     social_links = db.Column(db.JSON)
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
+    thumbnail_image_url = db.Column(db.String)
     about = db.Column(db.Text)
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     modified_at: datetime = db.Column(

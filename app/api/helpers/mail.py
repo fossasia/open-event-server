@@ -747,6 +747,38 @@ def send_email_to_moderator(video_stream_moderator):
     )
 
 
+def send_email_after_event(email, event_name):
+    action = MailType.AFTER_EVENT
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            eventname=event_name,
+        ),
+    )
+
+
+def send_email_after_event_speaker(email, event_name):
+    action = MailType.AFTER_EVENT_SPEAKER
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name),
+        html=render_template(
+            mail['template'],
+            eventname=event_name,
+            email=email,
+        ),
+    )
+
+
 def convert_to_event_timezone(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):
     if not date:
         return None
