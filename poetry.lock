@@ -1175,7 +1175,7 @@ tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "icalendar"
-version = "4.0.7"
+version = "4.0.8"
 description = "iCalendar parser/generator"
 category = "main"
 optional = false
@@ -2595,7 +2595,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "b2cc8db5da516039918684d9343600133a292395ab60bad20219d6b39de6f671"
+content-hash = "e8af5a84f6236df49cdd1671372c05adb2fc20014879cbccfde169e75d59d636"
 
 [metadata.files]
 aiohttp = [
@@ -3149,8 +3149,8 @@ humanize = [
     {file = "humanize-3.12.0.tar.gz", hash = "sha256:5ec1a66e230a3e31fb3f184aab9436ea13d4e37c168e0ffc345ae5bb57e58be6"},
 ]
 icalendar = [
-    {file = "icalendar-4.0.7-py2.py3-none-any.whl", hash = "sha256:8c35be16c1d0581a276002af883297aeffa8116e366fdce4d5318e1424aa1903"},
-    {file = "icalendar-4.0.7.tar.gz", hash = "sha256:0fc18d87f66e0b5da84fa731389496cfe18e4c21304e8f6713556b2e8724a7a4"},
+    {file = "icalendar-4.0.8-py2.py3-none-any.whl", hash = "sha256:825209edeb8f3067cf31f0712b0fc9507b1ded270165f98f3176d6b50e8c7b78"},
+    {file = "icalendar-4.0.8.tar.gz", hash = "sha256:7508a92b4e36049777640b0ae393e7219a16488d852841a0e57b44fe51d9f848"},
 ]
 identify = [
     {file = "identify-2.2.3-py2.py3-none-any.whl", hash = "sha256:398cb92a7599da0b433c65301a1b62b9b1f4bb8248719b84736af6c0b22289d6"},
