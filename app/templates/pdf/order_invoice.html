@@ -171,7 +171,7 @@
   </div>
   <header class="clearfix">
     <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
-      format(event.tickets_sold)}}</h1>
+      format(event.tickets_placed_or_completed_count)}}</h1>
     {% if order.status != "deleted" %}
     <div id="company" class="clearfix">
       {% if event.tax.registered_company %}
@@ -186,8 +186,14 @@
       {% if event.tax.city %}
       <div><span>{{ _('City') }}</span>{{ event.tax.city }}</div>
       {% endif %}
+      {% if event.tax.state %}
+      <div><span>{{ _('State') }}</span>{{ event.tax.state }}</div>
+      {% endif %}
       {% if event.tax.zip %}
       <div><span>{{ _('ZIP') }}</span>{{ event.tax.zip }}</div>
+      {% endif %}
+      {% if event.tax.country %}
+      <div><span>{{ _('Country') }}</span>{{ event.tax.country }}</div>
       {% endif %}
       {% if event.owner.billing_phone %}
       <div><span>{{ _('Phone') }}</span>{{ event.owner.billing_phone }}</div>
@@ -223,19 +229,39 @@
         {{ order.status | capitalize }}
         {% endif %}
       </div>
-      {% if attendee.company %}
+      {% if order.company %}
       <div><span> {{ _('Organisation') }}</span>
-        {{ attendee.company }}
+        {{ order.company }}
       </div>
       {% endif %}
-      {% if attendee.address %}
+      {% if order.address %}
       <div><span> {{ _('Address') }}</span>
-        {{ attendee.address }}
+        {{ order.address }}
       </div>
       {% endif %}
-      {% if attendee.tax_business_info %}
+      {% if order.city %}
+      <div><span> {{ _('City') }}</span>
+        {{ order.city }}
+      </div>
+      {% endif %}
+      {% if order.state %}
+      <div><span> {{ _('State') }}</span>
+        {{ order.state }}
+      </div>
+      {% endif %}
+      {% if order.zipcode %}
+      <div><span> {{ _('ZIP') }}</span>
+        {{ order.zipcode }}
+      </div>
+      {% endif %}
+      {% if order.country %}
+      <div><span> {{ _('Country') }}</span>
+        {{ order.country }}
+      </div>
+      {% endif %}
+      {% if order.tax_business_info %}
       <div><span> {{ _('Tax ID') }}</span>
-        {{ attendee.tax_business_info }}
+        {{ order.tax_business_info }}
       </div>
       {% endif %}
       <div><span> {{ _('Date') }}</span>
@@ -366,7 +392,6 @@
     <br />
     {% if tax.invoice_footer %}
     <div id="notices">
-      <div>{{ _('Invoice Footer') }}:</div>
       <div class="notice">{{ tax.invoice_footer }}</div>
     </div>
     {% endif %}
