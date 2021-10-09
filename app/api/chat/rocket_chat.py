@@ -10,6 +10,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.user import User
 from app.settings import get_settings
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class RocketChat:
     def login_url(self) -> str:
         return self.api_url + '/api/v1/login'
 
-    def login(self, user: User, event: Event = None, method: str = 'login'):
+    def login(self, user: User, event: Optional[Event] = None, method: str = 'login'):
         def save_token(token):
             user.rocket_chat_token = token
             db.session.add(user)
@@ -61,7 +62,7 @@ class RocketChat:
     def register(
         self,
         user: User,
-        event: Event = None,
+        event: Optional[Event] = None,
         username_suffix='',
     ):
         settings = get_settings()
@@ -95,7 +96,7 @@ class RocketChat:
             )
             raise RocketChatException('Error while registration', response=res)
 
-    def get_token(self, user: User, event: Event = None, retried=False):
+    def get_token(self, user: User, event: Optional[Event] = None, retried=False):
         if user.rocket_chat_token:
             res = requests.post(self.login_url, json=dict(resume=user.rocket_chat_token))
 
@@ -197,7 +198,7 @@ def generate_pass(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def get_rocket_chat_token(user: User, event: Event = None):
+def get_rocket_chat_token(user: User, event: Optional[Event] = None):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(

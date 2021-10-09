@@ -106,6 +106,20 @@ def create_pdf_tickets_for_holder(order):
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
 
+        attendee = TicketHolder.query.filter_by(order_id=order.id).first()
+
+        tickets = []
+        for order_ticket in order_tickets:
+            ticket = dict(
+                id=order_ticket.ticket.id,
+                price=order_ticket.ticket.price,
+                quantity=order_ticket.quantity
+            )
+            tickets.append(ticket)
+        
+        # calculate order amount using helper function
+        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)            
+
         create_save_pdf(
             render_template(
                 'pdf/order_invoice.html',
@@ -113,7 +127,11 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
+                attendee=attendee,
+                event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
+                created_at=order.created_at.strftime('%d %B %Y'),
                 admin_info=admin_info,
+                order_amount=order_amount
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
@@ -204,6 +222,7 @@ def calculate_order_amount(tickets, discount_code=None):
     total_amount = total_tax = total_discount = 0.0
     ticket_list = []
     for ticket in fetched_tickets:
+        ticket_tax = discounted_tax = 0.0
         ticket_info = ticket_map[ticket.id]
         discount_amount = 0.0
         discount_data = None
@@ -235,6 +254,12 @@ def calculate_order_amount(tickets, discount_code=None):
         else:
             price = ticket.price if ticket.type != 'free' else 0.0
 
+        if tax:
+            if tax_included:
+                ticket_tax = price - price / (1 + tax.rate / 100)
+            else:
+                ticket_tax = price * tax.rate / 100
+
         if discount_code and ticket.type != 'free':
             code = (
                 DiscountCode.query.with_parent(ticket)
@@ -246,8 +271,15 @@ def calculate_order_amount(tickets, discount_code=None):
                     if code.type == 'amount':
                         discount_amount = min(code.value, price)
                         discount_percent = (discount_amount / price) * 100
+                        if tax:
+                            if tax_included:
+                                discounted_tax = (price - discount_amount) - (price - discount_amount) / (1 + tax.rate / 100)
+                            else:
+                                discounted_tax = (price - discount_amount) * tax.rate / 100
                     else:
                         discount_amount = (price * code.value) / 100
+                        if tax:
+                            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
                         discount_percent = code.value
                     discount_data = {
                         'code': discount_code.code,
@@ -272,6 +304,8 @@ def calculate_order_amount(tickets, discount_code=None):
                 'discount': discount_data,
                 'ticket_fee': round(ticket_fee, 2),
                 'sub_total': round(sub_total, 2),
+                'ticket_tax': round(ticket_tax, 2),
+                'discounted_tax': round(discounted_tax, 2)
             }
         )
 
