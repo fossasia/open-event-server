@@ -546,6 +546,13 @@ def send_email_to_attendees(order):
         order_view_url=order.site_view_link,
     )
 
+    event_date = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%d %B %Y'
+    )
+    event_time = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
+    )
+
     buyer_email = order.user.email
     action = MailType.TICKET_PURCHASED
     mail = MAILS[action]
@@ -555,6 +562,8 @@ def send_email_to_attendees(order):
         subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
+            event_date=event_date,
+            event_time=event_time,
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
@@ -596,10 +605,12 @@ def send_order_purchase_organizer_email(order, recipients):
         frontend_url=get_settings()['frontend_url'],
         site_link=order.event.site_link,
         order_url=order.site_view_link,
-        event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.replace(tzinfo=pytz.timezone('UTC'))
-        .astimezone(pytz.timezone(order.event.timezone))
-        .strftime('%H:%M (%Z%z)'),
+        event_date=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%d %B %Y'
+        ),
+        event_time=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
+        ),
         timezone=order.event.timezone,
         purchase_time=order.completed_at,
         payment_mode=order.payment_mode,
@@ -610,6 +621,10 @@ def send_order_purchase_organizer_email(order, recipients):
         order_tickets=order_tickets,
         buyer_org=order.company,
         buyer_address=order.address,
+        buyer_zipcode=order.zipcode,
+        buyer_city=order.city,
+        buyer_state=order.state,
+        buyer_country=order.country,
         buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
@@ -762,3 +777,13 @@ def send_email_after_event_speaker(email, event_name):
             email=email,
         ),
     )
+
+
+def convert_to_event_timezone(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):
+    if not date:
+        return None
+    if timezone:
+        date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
+            pytz.timezone(timezone)
+        )
+    return date.strftime(format)
