@@ -216,6 +216,11 @@
         {{ _('Information unavailable') }}
         {% endif %}
       </div>
+      {% if order.user.email %}
+      <div><span> {{ _('Email') }}</span>
+        {{ order.user.email }}
+      </div>
+      {% endif %}
       <div><span> {{ _('Payment Status') }}</span>
         {% if order.status == 'completed' %}
         {{ order.status | capitalize }}
