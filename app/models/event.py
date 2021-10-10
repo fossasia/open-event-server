@@ -2,6 +2,8 @@ import re
 from argparse import Namespace
 from datetime import datetime
 
+from sqlalchemy.sql.expression import or_, and_
+
 import flask_login as login
 import pytz
 from flask import current_app
@@ -489,6 +491,15 @@ class Event(SoftDeletionModel):
     def notify_staff(self):
         """Who receive notifications about event"""
         return self.organizers + [self.owner]
+
+    @property
+    def tickets_placed_or_completed_count(self):
+        obj = (
+            db.session.query(Order.event_id)
+            .filter(and_(Order.event_id==self.id, or_(Order.status=='completed', Order.status=='placed')))
+            .join(TicketHolder)
+        )
+        return obj.count()
 
 
 @event.listens_for(Event, 'after_update')
