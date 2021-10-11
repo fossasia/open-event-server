@@ -43,6 +43,7 @@ from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
+from app.models.group import Group
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -214,7 +215,6 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
             photo_url, 'event-image', exhibitor_id, folder='exhibitors'
         )
         exhibitor.thumbnail_image_url = uploaded_images['thumbnail_image_url']
-        exhibitor.banner_url = uploaded_images['large_image_url']
         save_to_db(exhibitor)
         logging.info(
             f'Resized images saved successfully for exhibitor with id: {exhibitor_id}'
@@ -223,6 +223,30 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
         logging.exception(
             'Error encountered while generating resized images for exhibitor with id: {}'.format(
                 exhibitor_id
+            )
+        )
+
+
+@celery.task(base=RequestContextTask, name='resize.group.images', bind=True)
+def resize_group_images_task(self, group_id, banner_url):
+    group = Group.query.get(group_id)
+    try:
+        logging.info(
+            'Group image resizing tasks started for group with id {}: {}'.format(
+                group_id, banner_url
+            )
+        )
+        uploaded_images = create_save_image_sizes(
+            banner_url, 'event-image', group.id
+        )
+
+        group.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        save_to_db(group)
+        logging.info(f'Resized images saved successfully for group with id: {group_id}')
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL, OSError):
+        logging.exception(
+            'Error encountered while generating resized images for group with id: {}'.format(
+                group_id
             )
         )
 

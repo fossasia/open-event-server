@@ -13,22 +13,24 @@
 {{ _('Name') }}: {{ buyer_name }} <br/>
 {{ _('Email') }}: {{ buyer_email }} <br/>
 <br/>
-{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }} UTC<br/>
+{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }}<br/>
 {% if payment_mode %}
   {{ _('Payment Mode') }}:
   {% if payment_mode == 'free' %}
     {{ _('None') }}
+  {% elif payment_mode == 'invoice' %}
+    {{ _('Purchase on Invoice') }}
   {% else %}
-    {{ payment_mode }}
+    {{ payment_mode | capitalize }}
   {% endif %}<br/>
 {% endif %}
 {% if payment_status %}
-  {{ _('Payment Status') }}: {{ payment_status }} <br/>
+  {{ _('Payment Status') }}: {{ payment_status | capitalize }} <br/>
 {% endif %}
 {% if tickets_count %}
   {{ _('Tickets/Registration') }}:
   {% for order_ticket in order_tickets %}
-    {{ order_ticket.quantity }}x {{ order_ticket.ticket.name }} 
+    {{ order_ticket.quantity }}x {{ order_ticket.ticket.name }}
   {% endfor %}
   <br/>
 {% endif %}
@@ -40,12 +42,28 @@
 <br/>
 
 {% if buyer_org %}
-  {{ _('Organisation') }}: {{ buyer_org }}
+  {{ _('Organisation') }}: {{ buyer_org | capitalize }}
   <br/>
 {% endif %}
 {% if buyer_address %}
   {{ _('Address') }}: {{ buyer_address }}
   <br/>
+{% endif %}
+{% if buyer_city %}
+  {{ _('City') }}: {{ buyer_city | capitalize }}
+  <br />
+{% endif %}
+{% if buyer_state %}
+  {{ _('State') }}: {{ buyer_state | capitalize }}
+  <br />
+{% endif %}
+{% if buyer_zipcode %}
+  {{ _('Zip') }}: {{ buyer_zipcode }}
+  <br />
+{% endif %}
+{% if buyer_country %}
+  {{ _('Country') }}: {{ buyer_country | capitalize }}
+  <br />
 {% endif %}
 {% if buyer_tax_id %}
   {{ _('Tax ID') }}: {{ buyer_tax_id }}

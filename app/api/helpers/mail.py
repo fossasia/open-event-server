@@ -2,6 +2,7 @@ import base64
 import datetime
 import logging
 import os
+import pytz
 from itertools import groupby
 from typing import Dict, Optional
 
@@ -260,7 +261,9 @@ def send_email_ticket_sales_end_next_week(event, emails):
         )
 
 
-def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
+def send_email_session_state_change(
+    email, session, mail_override: Optional[Dict[str, str]] = None
+):
     """email for new session"""
     event = session.event
 
@@ -374,15 +377,15 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
-    event_name=event.name
-    group_name=group.name
-    event_date=event.starts_at.strftime('%d %B %Y')
-    event_description=event.description
-    event_url=event.site_link
-    event_location=event.normalized_location
-    event_time=event.starts_at.strftime("%H:%M (%Z)")
-    group_url=group.view_page_link
-    app_name=get_settings()['app_name']
+    event_name = event.name
+    group_name = group.name
+    event_date = event.starts_at.strftime('%d %B %Y')
+    event_description = event.description
+    event_url = event.site_link
+    event_location = event.normalized_location
+    event_time = event.starts_at.strftime("%H:%M (%Z)")
+    group_url = group.view_page_link
+    app_name = get_settings()['app_name']
 
     if len(emails) > 0:
         for email in emails:
@@ -543,6 +546,13 @@ def send_email_to_attendees(order):
         order_view_url=order.site_view_link,
     )
 
+    event_date = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%d %B %Y'
+    )
+    event_time = convert_to_event_timezone(
+        order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
+    )
+
     buyer_email = order.user.email
     action = MailType.TICKET_PURCHASED
     mail = MAILS[action]
@@ -552,6 +562,8 @@ def send_email_to_attendees(order):
         subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
+            event_date=event_date,
+            event_time=event_time,
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
@@ -571,6 +583,8 @@ def send_email_to_attendees(order):
             subject=mail['subject'].format(
                 event_name=event.name,
                 invoice_id=order.invoice_number,
+                event_date=event_date,
+                event_time=event_time,
             ),
             html=render_template(
                 mail['template'],
@@ -593,10 +607,14 @@ def send_order_purchase_organizer_email(order, recipients):
         frontend_url=get_settings()['frontend_url'],
         site_link=order.event.site_link,
         order_url=order.site_view_link,
-        event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.strftime("%H:%M %Z"),
-        purchase_time=order.completed_at,
+        event_date=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%d %B %Y'
+        ),
+        event_time=convert_to_event_timezone(
+            order.event.starts_at, order.event.timezone, format='%H:%M (%Z%z)'
+        ),
         timezone=order.event.timezone,
+        purchase_time=order.completed_at,
         payment_mode=order.payment_mode,
         payment_status=order.status,
         order_amount=order.amount,
@@ -605,6 +623,10 @@ def send_order_purchase_organizer_email(order, recipients):
         order_tickets=order_tickets,
         buyer_org=order.company,
         buyer_address=order.address,
+        buyer_zipcode=order.zipcode,
+        buyer_city=order.city,
+        buyer_state=order.state,
+        buyer_country=order.country,
         buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
@@ -725,3 +747,45 @@ def send_email_to_moderator(video_stream_moderator):
             settings=get_settings(),
         ),
     )
+
+
+def send_email_after_event(email, event_name):
+    action = MailType.AFTER_EVENT
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name),
+        html=render_template(
+            mail['template'],
+            email=email,
+            eventname=event_name,
+        ),
+    )
+
+
+def send_email_after_event_speaker(email, event_name):
+    action = MailType.AFTER_EVENT_SPEAKER
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name),
+        html=render_template(
+            mail['template'],
+            eventname=event_name,
+            email=email,
+        ),
+    )
+
+
+def convert_to_event_timezone(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):
+    if not date:
+        return None
+    if timezone:
+        date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
+            pytz.timezone(timezone)
+        )
+    return date.strftime(format)

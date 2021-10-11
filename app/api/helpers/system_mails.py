@@ -27,6 +27,8 @@ class MailType:
     EVENT_IMPORTED = 'event_imported'
     EVENT_IMPORT_FAIL = 'event_import_fail'
     MONTHLY_PAYMENT = 'monthly_payment'
+    AFTER_EVENT = 'after_event'
+    AFTER_EVENT_SPEAKER = 'after_event_speaker'
     MONTHLY_PAYMENT_FOLLOWUP = 'monthly_payment_follow_up'
     MONTHLY_PAYMENT_PRE_DUE = 'monthly_payment_pre_due'
     MONTHLY_PAYMENT_POST_DUE = 'monthly_payment_post_due'
@@ -190,12 +192,12 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': 'See you at {event_name} ({invoice_id}) ',
+        'subject': 'See you at {event_name} on {event_date} at {event_time} ({invoice_id}) ',
         'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'Attendee',
-        'subject': 'Your tickets for {event_name} ({invoice_id}) ',
+        'subject': 'Your tickets for {event_name} on {event_date} at {event_time} ({invoice_id}) ',
         'template': 'email/ticket_purchased_attendee.html',
     },
     MailType.TICKET_PURCHASED_ORGANIZER: {
@@ -274,5 +276,15 @@ MAILS = {
         'recipient': 'User',
         'subject': 'Join {event_name} from {group_name} on {event_date}',
         'template': 'email/announce_event.html',
+    },
+    MailType.AFTER_EVENT: {
+        'recipient': 'Owner, Organizer, Coorganizer',
+        'subject': '{event_name} is over. Thank you for using eventyay!',
+        'template': 'email/after_event.html',
+    },
+    MailType.AFTER_EVENT_SPEAKER: {
+        'recipient': 'User',
+        'subject': '{event_name} is over. Thank you for participating!',
+        'template': 'email/after_event_speaker.html',
     },
 }
