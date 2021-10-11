@@ -583,6 +583,8 @@ def send_email_to_attendees(order):
             subject=mail['subject'].format(
                 event_name=event.name,
                 invoice_id=order.invoice_number,
+                event_date=event_date,
+                event_time=event_time,
             ),
             html=render_template(
                 mail['template'],
