@@ -309,7 +309,13 @@
             event_starts_at }}
             <br />
             {% if order_ticket.discount %}
-            {{ _('Discount Code') }}: {{ order_ticket.discount.code }}<br />
+              {{ _('Discount Code') }}: {{ order_ticket.discount.code }}
+              {% if order_ticket.discount.type=='amount' %}
+                ({{ event.payment_currency }} {{ order_ticket.discount.amount }})
+              {% else %}
+                ({{ order_ticket.discount.percent }}%)
+              {% endif %}
+              <br />
             {% endif %}
           </td>
           <td class="total">
@@ -365,10 +371,18 @@
             {% if order_amount.tax %}
               <div class="tax">
                 {% if order_ticket.price %}
-                  {% if tax.included %}
-                    {{ _('incl.') }} {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket_tax) }} ({{ order_amount.tax.name }})
+                  {% if order_ticket.discount %}
+                    {% if tax.included %}
+                      {{ _('incl.') }} {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                    {% else %}
+                      + {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                    {% endif %}
                   {% else %}
-                    + {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket_tax) }} ({{ order_amount.tax.name }})
+                    {% if tax.included %}
+                      {{ _('incl.') }} {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket_tax) }} ({{ order_amount.tax.name }})
+                    {% else %}
+                      + {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.quantity*order_ticket.ticket_tax) }} ({{ order_amount.tax.name }})
+                    {% endif %}
                   {% endif %}
                 {% else %}
                 0.00

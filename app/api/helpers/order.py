@@ -283,6 +283,7 @@ def calculate_order_amount(tickets, discount_code=None):
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
                         'total': round(discount_amount * quantity, 2),
+                        'type': code.type
                     }
 
         total_discount += round(discount_amount * quantity, 2)
