@@ -311,11 +311,14 @@
             {% if order_ticket.discount %}
               {{ _('Discount Code') }}: {{ order_ticket.discount.code }}
               {% if order_ticket.discount.type=='amount' %}
-                ({{ event.payment_currency }} {{ order_ticket.discount.amount }})
+                ({{ event.payment_currency }} {{ "%.2f" | format(order_ticket.discount.amount) }})
               {% else %}
-                ({{ order_ticket.discount.percent }}%)
+                {% if order_ticket.discount.percent.is_integer %}
+                  ({{ "%.0f" | format(order_ticket.discount.percent) }}%)
+                {% else %}
+                  ({{ "%.1f" | format(order_ticket.discount.percent) }}%)
+                {% endif %}
               {% endif %}
-              <br />
             {% endif %}
           </td>
           <td class="total">
@@ -407,7 +410,13 @@
         <tr>
           <td></td>
           <td></td>
-          <td class="grand total"><b>{{ _('Tax') }} ({{ order_amount.tax.percent }}% {{ order_amount.tax.name }})
+          <td class="grand total"><b>{{ _('Tax') }}
+            {% if order_amount.tax.percent.is_integer %}
+              ({{ "%.0f" | format(order_amount.tax.percent) }}%
+            {% else %}
+              ({{ "%.2f" | format(order_amount.tax.percent) }}
+            {% endif %}
+            {{ order_amount.tax.name }})
             {% if order_amount.tax.included %}
               <br/>
               <div class="tax">
