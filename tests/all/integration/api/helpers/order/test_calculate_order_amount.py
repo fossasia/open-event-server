@@ -331,6 +331,7 @@ def _assert_tax_data_discount(amount_data):
         'percent': 10.0,
         'amount': 45.63,
         'total': 182.52,
+        'type': 'percent',
     }
     assert amount_data['tickets'][1]['sub_total'] == 1642.68
     assert amount_data['tickets'][2]['discount'] == {
@@ -338,6 +339,7 @@ def _assert_tax_data_discount(amount_data):
         'percent': 10.0,
         'amount': 78.97,
         'total': 236.91,
+        'type': 'percent',
     }
     assert amount_data['tickets'][2]['sub_total'] == 2132.19
     assert amount_data['tickets'][3]['discount'] is None
