@@ -22,6 +22,7 @@ class Group(SoftDeletionModel):
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
+    is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     about = db.Column(db.Text)
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     modified_at: datetime = db.Column(
