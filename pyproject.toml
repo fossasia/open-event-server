@@ -60,7 +60,7 @@ requests-oauthlib = "1.3"
 icalendar = "4.0.9"
 requests = {version = "2.26.0", extras = ["security"]}
 psycopg2-binary = "2.9.1"
-SQLAlchemy-Utils = "0.37.8"
+SQLAlchemy-Utils = "0.37.9"
 itsdangerous = "2.0.1"
 humanize = "3.12.0"
 celery = "5.1.2"
