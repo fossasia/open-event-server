@@ -42,8 +42,6 @@ cd open-event-server
 
 *Note:* This is recommended over the system wide installation.
 
-You can use **pip** to install Open Event Server in a virtual environment.
-
 Firstly, open a terminal and enter
 
 ```sh
@@ -61,10 +59,6 @@ brew install libmagic
 
 Open a terminal and enter the following commands to setup a virtual environment
 
-```sh
-. venv/bin/activate
-```
-
 * **Step 1** - Install Poetry and Python 3 requirements.
 
 This project uses [Poetry](https://python-poetry.org/docs) to handle Python dependencies.
@@ -80,15 +74,6 @@ poetry shell
 # Install Python dependencies
 poetry install
 ```
-
-# System Wide Installation
-
-```sh
-sudo -H pip3 install -r requirements.txt
-```
-hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
-
-**Note:** For Mac OS Sierra users, if you get an error that 'openssl/aes.h' could not be found when installing requirements.txt using pip, try the steps shown here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
 
 
 
@@ -143,9 +128,25 @@ python3 create_db.py
 # enter email and password
 python3 manage.py db stamp head
 ```
-**Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
-**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+**Note 1:** For  Mac OS, in case you encounter `Library not loaded: /usr/local/opt/libffi/lib/libffi.6.dylib` , run
+```commandline
+brew install libffi
+For compilers to find libffi you may need to set:
+export LDFLAGS="-L/usr/local/opt/libffi/lib"
+export CPPFLAGS="-I/usr/local/opt/libffi/include"
+export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
+```
+**OR**
+
+you encounter `OSError: cannot load library 'pango-1.0': dlopen(pango-1.0, 2): image not found.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'pango-1.0'`
+```commandline
+brew install pango
+```
+
+**Note 2:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
+
+**Note 3:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
 
