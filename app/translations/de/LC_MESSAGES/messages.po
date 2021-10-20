@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-19 12:15+0530\n"
 "PO-Revision-Date: 2021-10-21 11:29+0000\n"
-"Last-Translator: progmatic99 <uprt.am54@gmail.com>\n"
+"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
 "Language: de\n"
@@ -650,7 +650,7 @@ msgstr ""
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:247
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: app/templates/email/ticket_purchased_organizer.html:53
 #: app/templates/pdf/order_invoice.html:191
