@@ -124,7 +124,7 @@ msgstr "Mit freundlichen Grüßen"
 #: app/templates/email/user_register.html:6
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr "Mannschaft"
+msgstr "Team"
 
 #: app/templates/email/announce_event.html:21
 msgid "You’re getting this message because you are a group member of"
