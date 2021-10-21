@@ -16,6 +16,8 @@ class Tax(SoftDeletionModel):
     tax_id = db.Column(db.String, nullable=False)
     should_send_invoice = db.Column(db.Boolean, default=False)
     registered_company = db.Column(db.String)
+    phone = db.Column(db.String)
+    email = db.Column(db.String)
     address = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
