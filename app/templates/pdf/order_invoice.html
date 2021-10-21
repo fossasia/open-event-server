@@ -181,6 +181,12 @@
       {% if event.tax.registered_company %}
       <div><span>{{ _('Organisation') }}</span>{{ event.tax.registered_company or '' }}</div>
       {% endif %}
+      {% if event.tax.phone %}
+      <div><span>{{ _('Organisation') }}</span>{{ event.tax.phone or '' }}</div>
+      {% endif %}
+      {% if event.tax.email %}
+      <div><span>{{ _('Organisation') }}</span>{{ event.tax.email or '' }}</div>
+      {% endif %}
       {% if event.owner.billing_contact_name %}
       <div><span>{{ _('Organiser') }}</span>{{ event.owner.billing_contact_name }}</div>
       {% endif %}
