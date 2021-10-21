@@ -16,6 +16,8 @@ class TaxFactoryBase(BaseFactory):
     tax_id = "123456789"
     should_send_invoice = False
     registered_company = common.string_
+    phone = common.string_
+    email = common.string_
     address = common.string_
     city = common.string_
     state = common.string_
