@@ -40,6 +40,8 @@ class TaxSchema(TaxSchemaPublic):
     should_send_invoice = fields.Boolean(default=False)
     is_invoice_sent = fields.Boolean(default=False)
     registered_company = fields.Str(allow_none=True)
+    phone = fields.Str(allow_none=True)
+    email = fields.Str(allow_none=True)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
