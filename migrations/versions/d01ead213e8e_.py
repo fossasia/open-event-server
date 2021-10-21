@@ -25,6 +25,8 @@ def upgrade():
     sa.Column('tax_id', sa.String(), nullable=False),
     sa.Column('send_invoice', sa.Boolean(), nullable=True),
     sa.Column('registered_company', sa.String(), nullable=True),
+    sa.Column('phone', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
     sa.Column('address', sa.String(), nullable=True),
     sa.Column('city', sa.String(), nullable=True),
     sa.Column('state', sa.String(), nullable=True),
