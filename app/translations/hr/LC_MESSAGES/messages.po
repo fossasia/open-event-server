@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-10-19 12:15+0530\n"
+"POT-Creation-Date: 2021-10-21 16:55+0530\n"
 "PO-Revision-Date: 2021-06-18 13:39+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language: hr\n"
@@ -54,10 +54,8 @@ msgstr ""
 msgid "Thank you for using the Eventyay platform for your event"
 msgstr ""
 
-#: app/templates/email/after_event.html:4
-msgid ""
-"We\n"
-"hope you enjoyed it"
+#: app/templates/email/after_event.html:5
+msgid "We hope you enjoyed it"
 msgstr ""
 
 #: app/templates/email/after_event_speaker.html:2
@@ -73,7 +71,7 @@ msgid "Your group"
 msgstr ""
 
 #: app/templates/email/announce_event.html:3
-msgid "has just scheduled "
+msgid "has just scheduled"
 msgstr ""
 
 #: app/templates/email/announce_event.html:3
@@ -154,7 +152,7 @@ msgstr ""
 
 #: app/templates/email/event_imported.html:1
 #, fuzzy
-msgid "Click on the following link to manage your event"
+msgid "Click on the following link to manage your event:"
 msgstr "Pritisni sljedeću poveznicu za potvrđivanje tvoje email adrese:"
 
 #: app/templates/email/event_role.html:3 app/templates/email/group_role.html:3
@@ -782,12 +780,12 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:19
 #: app/templates/email/ticket_sales_end_tomorrow.html:19
 #, fuzzy
-msgid "You can access the dashboard of the event here "
+msgid "You can access the dashboard of the event here"
 msgstr "Kontaktirao/la si organizatore događaja"
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
-msgid " If you would like to extend the period of your ticket sales"
+msgid "If you would like to extend the period of your ticket sales"
 msgstr ""
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
@@ -951,4 +949,15 @@ msgstr "Poruka organizatora"
 
 #~ msgid "Invoice Footer"
 #~ msgstr "Podnožje računa"
+
+#~ msgid ""
+#~ "We\n"
+#~ "hope you enjoyed it"
+#~ msgstr ""
+
+#~ msgid "has just scheduled "
+#~ msgstr ""
+
+#~ msgid " If you would like to extend the period of your ticket sales"
+#~ msgstr ""
 

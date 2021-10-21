@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-10-19 12:15+0530\n"
+"POT-Creation-Date: 2021-10-21 16:55+0530\n"
 "PO-Revision-Date: 2021-05-14 04:32+0000\n"
 "Last-Translator: Youngbin Han <sukso96100@gmail.com>\n"
 "Language: ko\n"
@@ -54,10 +54,8 @@ msgstr ""
 msgid "Thank you for using the Eventyay platform for your event"
 msgstr ""
 
-#: app/templates/email/after_event.html:4
-msgid ""
-"We\n"
-"hope you enjoyed it"
+#: app/templates/email/after_event.html:5
+msgid "We hope you enjoyed it"
 msgstr ""
 
 #: app/templates/email/after_event_speaker.html:2
@@ -73,7 +71,7 @@ msgid "Your group"
 msgstr ""
 
 #: app/templates/email/announce_event.html:3
-msgid "has just scheduled "
+msgid "has just scheduled"
 msgstr ""
 
 #: app/templates/email/announce_event.html:3
@@ -154,7 +152,7 @@ msgstr ""
 
 #: app/templates/email/event_imported.html:1
 #, fuzzy
-msgid "Click on the following link to manage your event"
+msgid "Click on the following link to manage your event:"
 msgstr "아래 링크를 방문하여 이메일을 인증하세요:"
 
 #: app/templates/email/event_role.html:3 app/templates/email/group_role.html:3
@@ -778,12 +776,12 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:19
 #: app/templates/email/ticket_sales_end_next_week.html:19
 #: app/templates/email/ticket_sales_end_tomorrow.html:19
-msgid "You can access the dashboard of the event here "
+msgid "You can access the dashboard of the event here"
 msgstr ""
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
-msgid " If you would like to extend the period of your ticket sales"
+msgid "If you would like to extend the period of your ticket sales"
 msgstr ""
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
@@ -951,5 +949,19 @@ msgstr "주최자 메시지"
 #~ msgstr ""
 
 #~ msgid "Invoice Footer"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "We\n"
+#~ "hope you enjoyed it"
+#~ msgstr ""
+
+#~ msgid "has just scheduled "
+#~ msgstr ""
+
+#~ msgid "You can access the dashboard of the event here "
+#~ msgstr ""
+
+#~ msgid " If you would like to extend the period of your ticket sales"
 #~ msgstr ""
 
