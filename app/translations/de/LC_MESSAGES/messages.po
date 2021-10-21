@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-19 12:15+0530\n"
-"PO-Revision-Date: 2021-10-21 11:29+0000\n"
+"PO-Revision-Date: 2021-10-21 12:54+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -124,7 +124,7 @@ msgstr "Mit freundlichen Grüßen"
 #: app/templates/email/user_register.html:6
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr "Mannschaft"
+msgstr "Team"
 
 #: app/templates/email/announce_event.html:21
 msgid "You’re getting this message because you are a group member of"
