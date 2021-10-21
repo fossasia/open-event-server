@@ -124,7 +124,7 @@ msgstr "Mit freundlichen Grüßen"
 #: app/templates/email/user_register.html:6
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr "Team"
+msgstr "Mannschaft"
 
 #: app/templates/email/announce_event.html:21
 msgid "You’re getting this message because you are a group member of"
@@ -137,7 +137,8 @@ msgid "on"
 msgstr ""
 
 #: app/templates/email/announce_event.html:21
-msgid "You can unsubscribe from emails from this group by unfollowing the group"
+msgid ""
+"You can unsubscribe from emails from this group by unfollowing the group"
 msgstr ""
 
 #: app/templates/email/announce_event.html:21
@@ -193,14 +194,14 @@ msgstr "Folgend eine Kopie der Email."
 #: app/templates/email/organizer_contact_attendee.html:7
 msgid "Organizers have received your message and will follow up with you"
 msgstr ""
-"Die Veranstalter haben die Nachricht erhalten und werden sich in "
-"Verbindung setzen."
+"Die Veranstalter haben die Nachricht erhalten und werden sich in Verbindung "
+"setzen."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid ""
-"This is a system message. Please do not reply to this message. Replies "
-"are not monitored"
+"This is a system message. Please do not reply to this message. Replies are "
+"not monitored"
 msgstr ""
 "Dies ist eine Systemmeldung. Bitte nicht auf diese Nachricht antworten. "
 "Emails werden nicht gelesen."
@@ -322,7 +323,8 @@ msgid "Your payment is now past due"
 msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
-msgid "Please pay this invoice immediately to avoid your account being suspended"
+msgid ""
+"Please pay this invoice immediately to avoid your account being suspended"
 msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:7
@@ -341,14 +343,13 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:14
 msgid ""
-"If you feel this invoice is incorrect or have any questions, you can "
-"contact our support team for assistance"
+"If you feel this invoice is incorrect or have any questions, you can contact "
+"our support team for assistance"
 msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid ""
-"This is a reminder that we haven't received your payment for your invoice"
-" for"
+"This is a reminder that we haven't received your payment for your invoice for"
 msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
@@ -386,8 +387,8 @@ msgstr ""
 
 #: app/templates/email/new_session.html:12
 msgid ""
-"You can view all speaker details on the speaker profile page and the "
-"session proposal on the"
+"You can view all speaker details on the speaker profile page and the session "
+"proposal on the"
 msgstr ""
 
 #: app/templates/email/new_session.html:12
@@ -428,11 +429,10 @@ msgstr "Oder den Token einfügen in"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
-"Please use the following link to reset your password and verify your "
-"account."
+"Please use the following link to reset your password and verify your account."
 msgstr ""
-"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das"
-" Konto zu verifizieren."
+"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das "
+"Konto zu verifizieren."
 
 #: app/templates/email/speaker_invite.html:3
 msgid "You have been invited as a speaker for the session submission"
@@ -457,8 +457,8 @@ msgstr ""
 
 #: app/templates/email/speaker_invite.html:7
 msgid ""
-"If you do not have an account yet you need to register before you can "
-"accept the invite"
+"If you do not have an account yet you need to register before you can accept "
+"the invite"
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:2
@@ -479,14 +479,14 @@ msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:4
 msgid ""
-"please check with the owner of the order or the organizer of the event "
-"for more information about the cancellation"
+"please check with the owner of the order or the organizer of the event for "
+"more information about the cancellation"
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
-"To contact event organizers please use the contact form on the event page"
-" here"
+"To contact event organizers please use the contact form on the event page "
+"here"
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:6
@@ -501,8 +501,7 @@ msgstr ""
 #, fuzzy
 msgid "This is your confirmation. You can download your"
 msgstr ""
-"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen "
-"unter"
+"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "tickets or registration information here"
@@ -755,8 +754,8 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid ""
-"Scroll down to the tickets section, choose the ticket you want to edit "
-"and click on the “Settings Symbol” of the ticket"
+"Scroll down to the tickets section, choose the ticket you want to edit and "
+"click on the “Settings Symbol” of the ticket"
 msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:16
@@ -781,8 +780,7 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:18
 #: app/templates/email/ticket_sales_end_tomorrow.html:18
 msgid ""
-"Scroll to the bottom of the page and save the changes by clicking "
-"“Publish”"
+"Scroll to the bottom of the page and save the changes by clicking “Publish”"
 msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:19
