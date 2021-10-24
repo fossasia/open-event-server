@@ -181,8 +181,8 @@
       {% if event.tax.registered_company %}
       <div><span>{{ _('Organisation') }}</span>{{ event.tax.registered_company or '' }}</div>
       {% endif %}
-      {% if event.owner.billing_contact_name %}
-      <div><span>{{ _('Organiser') }}</span>{{ event.owner.billing_contact_name }}</div>
+      {% if event.tax.contact_name %}
+      <div><span>{{ _('Contact Name') }}</span>{{ event.tax.contact_name }}</div>
       {% endif %}
       {% if event.tax.address %}
       <div><span>{{ _('Address') }}</span>{{ event.tax.address }}</div>
@@ -199,11 +199,11 @@
       {% if event.tax.country %}
       <div><span>{{ _('Country') }}</span>{{ event.tax.country }}</div>
       {% endif %}
-      {% if event.owner.billing_phone %}
-      <div><span>{{ _('Phone') }}</span>{{ event.owner.billing_phone }}</div>
+      {% if event.tax.phone %}
+      <div><span>{{ _('Phone') }}</span>{{ event.tax.phone }}</div>
       {% endif %}
-      {% if event.owner.email %}
-      <div><span>{{ _('Email') }}</span>{{ event.owner.email }}</div>
+      {% if event.tax.email %}
+      <div><span>{{ _('Email') }}</span>{{ event.tax.email }}</div>
       {% endif %}
       {% if event.tax.tax_id %}
       <div><span>{{ _('Tax ID') }}</span>{{ event.tax.tax_id }}</div>
