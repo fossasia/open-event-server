@@ -2,8 +2,8 @@ import logging
 from datetime import datetime
 
 from flask import Blueprint, abort, jsonify, make_response, request
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 

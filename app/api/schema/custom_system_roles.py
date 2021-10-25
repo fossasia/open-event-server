@@ -19,7 +19,7 @@ class CustomSystemRoleSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     panel_permissions = Relationship(
         self_view='v1.custom_system_roles_panel_permissions',

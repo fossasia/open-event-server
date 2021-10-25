@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import pytz
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import get_count, safe_query_by_id, save_to_db
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
@@ -31,7 +31,7 @@ def validate_ticket_holders(ticket_holder_ids):
         )
         raise ObjectNotFound(
             {'pointer': '/data/relationships/attendees'},
-            "Some attendee among ids {} do not exist".format(str(ticket_holder_ids)),
+            f"Some attendee among ids {str(ticket_holder_ids)} do not exist",
         )
 
     for ticket_holder in ticket_holders:

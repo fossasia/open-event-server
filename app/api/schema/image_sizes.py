@@ -21,7 +21,7 @@ class EventImageSizeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     type = fields.Str(allow_none=True)
     full_width = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     full_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
@@ -55,7 +55,7 @@ class SpeakerImageSizeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     type = fields.Str(allow_none=True)
     small_size_width_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     small_size_quality = fields.Integer(validate=lambda n: 0 <= n <= 100, allow_none=True)

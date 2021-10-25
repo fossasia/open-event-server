@@ -20,7 +20,7 @@ class EventTypeSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     slug = fields.Str(dump_only=True)
     events = Relationship(

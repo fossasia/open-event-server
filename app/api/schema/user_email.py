@@ -21,7 +21,7 @@ class UserEmailSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     email_address = TrimmedEmail(allow_none=False)
     type = fields.Str(
         allow_none=False,

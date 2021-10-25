@@ -1,4 +1,4 @@
-from flask_rest_jsonapi.data_layers.alchemy import SqlalchemyDataLayer
+from flask_combo_jsonapi.data_layers.alchemy import SqlalchemyDataLayer
 
 
 class SearchFilterLayer(SqlalchemyDataLayer):

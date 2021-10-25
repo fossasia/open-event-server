@@ -25,7 +25,7 @@ class SessionTypeSchema(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema
-    def validate_length(self, data):
+    def validate_length(self, data, **kwargs):
         try:
             datetime.strptime(data['length'], '%H:%M')
         except ValueError:
@@ -34,7 +34,7 @@ class SessionTypeSchema(SoftDeletionSchema):
                 "Length should be in the format %H:%M",
             )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     length = fields.Str(required=True)
     event = Relationship(

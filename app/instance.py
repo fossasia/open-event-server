@@ -141,13 +141,13 @@ def create_app():
         from app.api.admin_statistics_api.events import event_statistics
         from app.api.auth import auth_routes
         from app.api.custom.attendees import attendee_blueprint
-        from app.api.bootstrap import api_v1
         from app.api.celery_tasks import celery_routes
         from app.api.event_copy import event_copy
         from app.api.exports import export_routes
         from app.api.imports import import_routes
         from app.api.uploads import upload_routes
         from app.api.users import user_misc_routes
+        from app.api.bootstrap import api_v1
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
         from app.api.speaker_invites import speaker_invites_misc_routes

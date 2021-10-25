@@ -20,7 +20,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
+    def validate_date(self, data, original_data, **kwargs):
         if 'id' in original_data['data']:
             ticket = Ticket.query.filter_by(id=original_data['data']['id']).one()
 
@@ -84,7 +84,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
             )
 
     @validates_schema
-    def validate_price(self, data):
+    def validate_price(self, data, **kwargs):
         if 'type' not in data:
             return
         if data['type'] == 'paid' and ('price' not in data or data['price'] <= 0):
@@ -94,7 +94,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
             )
 
     @validates_schema(pass_original=True)
-    def validate_discount_code(self, data, original_data):
+    def validate_discount_code(self, data, original_data, **kwargs):
         if (
             'relationships' in original_data
             and 'discount-codes' in original_data['data']['relationships']
@@ -109,7 +109,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
                         "Discount code does not exist",
                     )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     type = fields.Str(required=True)

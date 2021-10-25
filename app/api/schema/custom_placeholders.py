@@ -12,7 +12,7 @@ class CustomPlaceholderSchema(Schema):
         self_view_many = 'v1.custom_placeholder_list'
         inflect = dasherize
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     name = fields.String(required=True)
     original_image_url = fields.Url(required=True)
     thumbnail_image_url = fields.Url(dump_only=True)

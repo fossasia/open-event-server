@@ -12,6 +12,6 @@ class NotificationSettingSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     type = fields.Str(dump_only=True)
     enabled = fields.Boolean(default=True)

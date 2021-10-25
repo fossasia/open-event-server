@@ -20,7 +20,7 @@ class FaqSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     question = fields.Str(required=True)
     answer = fields.Str(required=True)
     event = Relationship(

@@ -22,7 +22,7 @@ class CustomFormSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Integer(dump_only=True)
+    id = fields.Integer()
     field_identifier = fields.Str(required=True)
     form = fields.Str(
         required=True,

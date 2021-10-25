@@ -3,10 +3,10 @@ from uuid import uuid4
 
 from flask import jsonify
 from flask.blueprints import Blueprint
+from flask_combo_jsonapi import ResourceDetail, ResourceList
+from flask_combo_jsonapi.exceptions import ObjectNotFound
+from flask_combo_jsonapi.resource import ResourceRelationship
 from flask_jwt_extended import current_user, jwt_optional
-from flask_rest_jsonapi import ResourceDetail, ResourceList
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_rest_jsonapi.resource import ResourceRelationship
 
 from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
 from app.api.helpers.db import safe_query_kwargs

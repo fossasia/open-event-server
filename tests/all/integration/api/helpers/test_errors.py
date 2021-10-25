@@ -2,7 +2,7 @@ import json
 import unittest
 
 from flask import make_response
-from flask_rest_jsonapi.errors import jsonapi_errors
+from flask_combo_jsonapi.errors import jsonapi_errors
 
 from app.api.helpers.errors import ErrorResponse
 from tests.all.integration.utils import OpenEventTestCase

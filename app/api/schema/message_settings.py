@@ -23,7 +23,7 @@ class MessageSettingSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     action = fields.Str(
         allow_none=True,
         dump_only=True,

@@ -434,7 +434,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 identifier=view_kwargs['event_invoice_identifier']
             ).one()
         except NoResultFound:
-            NotFoundError(
+            raise NotFoundError(
                 {'parameter': 'event_invoice_identifier'}, 'Event Invoice not found'
             )
         view_kwargs['id'] = event_invoice.id

@@ -19,6 +19,6 @@ class RoleSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     title_name = fields.Str(allow_none=True)

@@ -1,5 +1,5 @@
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_jwt_extended import current_user, jwt_required
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError

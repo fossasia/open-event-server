@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
+from flask_combo_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_combo_jsonapi.exceptions import ObjectNotFound
 from flask_jwt_extended import current_user, verify_jwt_in_request
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.attendees import get_sold_and_reserved_tickets_count

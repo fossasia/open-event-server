@@ -32,7 +32,7 @@ class TrackSchema(SoftDeletionSchema):
                 "Color should be proper HEX color code",
             )
 
-    id = fields.Str(dump_only=True)
+    id = fields.Str()
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     color = fields.Str(required=True)

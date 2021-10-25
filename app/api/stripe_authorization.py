@@ -1,5 +1,5 @@
 from flask.globals import g
-from flask_rest_jsonapi import ResourceDetail, ResourceList
+from flask_combo_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import get_count, safe_query_kwargs, save_to_db
