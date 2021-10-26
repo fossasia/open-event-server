@@ -106,7 +106,7 @@ class StripePaymentsManager:
             raise ConflictError(
                 {'pointer': ''}, 'Stripe credentials not found for the event.'
             )
-        stripe.api_key = credentials['SECRET_KEY']
+        stripe.api_key = 'sk_test_51JkNFWSEz988J3ILTalS1RRlC9sKglFwEiESNPRZExy6hwYdsefgHqBAx8GPahYO7apWZeZp4812EyQX7g3H9vhu006H65v5aG'
 
         if not currency:
             currency = order_invoice.event.payment_currency
@@ -115,23 +115,41 @@ class StripePaymentsManager:
             currency = "USD"
 
         try:
-            customer = stripe.Customer.create(
-                email=order_invoice.user.email, source=order_invoice.stripe_token
-            )
+            # customer = stripe.Customer.create(
+            #     email=order_invoice.user.email, source=order_invoice.stripe_token
+            # )
 
-            charge = stripe.Charge.create(
-                customer=customer.id,
-                amount=int(order_invoice.amount * 100),
-                currency=currency.lower(),
-                metadata={
-                    'order_id': order_invoice.id,
-                    'event': order_invoice.event.name,
-                    'user_id': order_invoice.user_id,
-                    'event_id': order_invoice.event_id,
-                },
-                description=order_invoice.event.name,
+            # charge = stripe.Charge.create(
+            #     customer=customer.id,
+            #     amount=int(order_invoice.amount * 100),
+            #     currency=currency.lower(),
+            #     metadata={
+            #         'order_id': order_invoice.id,
+            #         'event': order_invoice.event.name,
+            #         'user_id': order_invoice.user_id,
+            #         'event_id': order_invoice.event_id,
+            #     },
+            #     description=order_invoice.event.name,
+            # )
+            # return charge
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                    'currency': currency.lower(),
+                    'product_data': {
+                            'name': 'T-shirt',
+                        },
+                    'unit_amount': 2000,
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url='https://eventyay.com/',
+                cancel_url='https://eventyay.com/e/6b901f56',
             )
-            return charge
+            print(session)
+            return session
         except Exception as e:
             raise ConflictError({'pointer': ''}, str(e))
 
