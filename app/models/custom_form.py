@@ -81,6 +81,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "level": "Level",
         "language": "Language",
         "slidesUrl": "Slide",
+        "slides": "Slides",
         "videoUrl": "Video",
         "audioUrl": "Audio",
         "website": "Website",

@@ -2,6 +2,8 @@ import re
 from argparse import Namespace
 from datetime import datetime
 
+from sqlalchemy.sql.expression import or_, and_
+
 import flask_login as login
 import pytz
 from flask import current_app
@@ -63,6 +65,7 @@ class Event(SoftDeletionModel):
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
     is_chat_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    is_videoroom_enabled = db.Column(db.Boolean, default=False, nullable=False)
     is_document_enabled = db.Column(db.Boolean, default=False, nullable=False)
     document_links = db.Column(JSONB)
     chat_room_id = db.Column(db.String)
@@ -75,9 +78,13 @@ class Event(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    is_oneclick_signup_enabled = db.Column(db.Boolean)
     has_owner_info = db.Column(db.Boolean)
     owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
+    is_cfs_enabled = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
@@ -104,6 +111,9 @@ class Event(SoftDeletionModel):
         db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE')
     )
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id', ondelete='SET NULL'))
+    is_announced = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -128,6 +138,9 @@ class Event(SoftDeletionModel):
     can_pay_by_bank = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
+    can_pay_by_invoice = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     can_pay_onsite = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
@@ -143,6 +156,7 @@ class Event(SoftDeletionModel):
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
+    invoice_details = db.Column(db.String)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     pentabarf_url = db.Column(db.String)
     ical_url = db.Column(db.String)
@@ -150,8 +164,12 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String)
     is_stripe_linked = db.Column(db.Boolean, default=False)
-    live_stream_url = db.Column(db.String)
-    webinar_url = db.Column(db.String)
+    completed_order_sales = db.Column(db.Integer)
+    placed_order_sales = db.Column(db.Integer)
+    pending_order_sales = db.Column(db.Integer)
+    completed_order_tickets = db.Column(db.Integer)
+    placed_order_tickets = db.Column(db.Integer)
+    pending_order_tickets = db.Column(db.Integer)
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE')
     )
@@ -327,6 +345,7 @@ class Event(SoftDeletionModel):
             or self.can_pay_by_bank
             or self.can_pay_onsite
             or self.can_pay_by_paytm
+            or self.can_pay_by_invoice
         )
 
     @property
@@ -448,6 +467,15 @@ class Event(SoftDeletionModel):
         return 'Location Not Announced'
 
     @property
+    def event_location_status(self):
+        if self.online:
+            return 'Online (Please login to the platform to access the video room on the event page)'
+        elif self.location_name:
+            return self.location_name
+        else:
+            return 'Location Not Announced'
+
+    @property
     def has_coordinates(self):
         return self.latitude and self.longitude
 
@@ -463,6 +491,15 @@ class Event(SoftDeletionModel):
     def notify_staff(self):
         """Who receive notifications about event"""
         return self.organizers + [self.owner]
+
+    @property
+    def tickets_placed_or_completed_count(self):
+        obj = (
+            db.session.query(Order.event_id)
+            .filter(and_(Order.event_id==self.id, or_(Order.status=='completed', Order.status=='placed')))
+            .join(TicketHolder)
+        )
+        return obj.count()
 
 
 @event.listens_for(Event, 'after_update')

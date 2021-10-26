@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pytz
 from flask import Blueprint, g, jsonify, request
@@ -21,6 +21,7 @@ from app.api.helpers.query import event_query
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionNotifySchema, SessionSchema
+from app.api.speaker_invites import SpeakerInvite
 from app.models import db
 from app.models.exhibitor import Exhibitor
 from app.models.microlocation import Microlocation
@@ -259,13 +260,27 @@ class SessionDetail(ResourceDetail):
             )
             view_kwargs['event_id'] = event.id
 
+        if view_kwargs.get('speaker_invite_id'):
+            speaker_invite = safe_query_kwargs(
+                SpeakerInvite, view_kwargs, 'speaker_invite_id'
+            )
+            view_kwargs['id'] = speaker_invite.session_id
+
     def after_get_object(self, session, view_kwargs):
         if not session:
             return
         is_speaker_or_admin = is_logged_in() and has_access(
             'is_speaker_for_session', id=session.id
         )
-        if session.state not in ['accepted', 'confirmed'] and not is_speaker_or_admin:
+        if current_user:
+            speaker_invite = SpeakerInvite.query.filter_by(
+                email=current_user.email, session_id=session.id, status='pending'
+            ).first()
+        if (
+            session.state not in ['accepted', 'confirmed']
+            and not is_speaker_or_admin
+            and not speaker_invite
+        ):
             raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
 
     def before_update_object(self, session, data, view_kwargs):
@@ -366,7 +381,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session, mail_override: Dict[str, str] = None):
+def notify_for_session(session, mail_override: Optional[Dict[str, str]] = None):
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:

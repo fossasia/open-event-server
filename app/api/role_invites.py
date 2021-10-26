@@ -7,7 +7,7 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ConflictError, ForbiddenError, NotFoundError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
-from app.api.helpers.role_invite import delete_previous_uer
+from app.api.helpers.role_invite import delete_pending_owner, delete_previous_uer
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.role_invites import RoleInviteSchema
 from app.models import db
@@ -56,6 +56,8 @@ class RoleInviteListPost(ResourceList):
             'is_owner', event_id=data['event']
         ):
             raise ForbiddenError({'source': ''}, 'Owner access is required.')
+        if data['role_name'] == 'owner':
+             delete_pending_owner(data['event'])
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
@@ -179,8 +181,12 @@ def accept_invite():
                 past_owner = UsersEventsRoles.query.filter_by(
                     event=event, role=role
                 ).first()
+                oldrole = Role.query.filter_by(name='organizer').first()
+                prevuser = User.query.filter_by(id=past_owner.user_id).first()
                 if past_owner:
                     delete_previous_uer(past_owner)
+                    puer = UsersEventsRoles(user=prevuser, event=event, role=oldrole)
+                    save_to_db(puer, 'User Event Role changed')
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
             # reset the group of event

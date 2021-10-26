@@ -1,4 +1,74 @@
-{{ _('Hi') }}, {{ buyer_email }} {{ _('just bought tickets for the event') }} {{ event_name }}.
-<br/> {{ _('The order has been processed successfully') }}.
-<br/> <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
-<br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>.
+{{ _('Congratulations!') }}
+<br/>
+{{ _('You have a new order for your event') }} <a href={{site_link}}>{{ event_name }}</a> {{ _('starting at') }} {{ event_time }} {{ _('on') }} {{ event_date }}.
+<br/>
+<br/>
+{{ _('The order has been processed successfully on') }} <a href={{frontend_url}}>{{ app_name }}</a>. <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
+<br/>
+<br/>
+{{ _('The details of the order are:') }}
+<br/>
+
+{{ _('Order Number') }}: {{ invoice_id }} <br/>
+{{ _('Name') }}: {{ buyer_name }} <br/>
+{{ _('Email') }}: {{ buyer_email }} <br/>
+<br/>
+{{ _('Purchase Date and Time') }}: {{ purchase_time | datetime(timezone) }}<br/>
+{% if payment_mode %}
+  {{ _('Payment Mode') }}:
+  {% if payment_mode == 'free' %}
+    {{ _('None') }}
+  {% elif payment_mode == 'invoice' %}
+    {{ _('Purchase on Invoice') }}
+  {% else %}
+    {{ payment_mode | capitalize }}
+  {% endif %}<br/>
+{% endif %}
+{% if payment_status %}
+  {{ _('Payment Status') }}: {{ payment_status | capitalize }} <br/>
+{% endif %}
+{% if tickets_count %}
+  {{ _('Tickets/Registration') }}:
+  {% for order_ticket in order_tickets %}
+    {{ order_ticket.quantity }}x {{ order_ticket.ticket.name }}
+  {% endfor %}
+  <br/>
+{% endif %}
+{{ _('Amount') }}:
+{% if order_amount != 0.0 %}
+  {{ payment_currency }}
+{% endif %}
+{{ order_amount | money }} <br/>
+<br/>
+
+{% if buyer_org %}
+  {{ _('Organisation') }}: {{ buyer_org | capitalize }}
+  <br/>
+{% endif %}
+{% if buyer_address %}
+  {{ _('Address') }}: {{ buyer_address }}
+  <br/>
+{% endif %}
+{% if buyer_city %}
+  {{ _('City') }}: {{ buyer_city | capitalize }}
+  <br />
+{% endif %}
+{% if buyer_state %}
+  {{ _('State') }}: {{ buyer_state | capitalize }}
+  <br />
+{% endif %}
+{% if buyer_zipcode %}
+  {{ _('Zip') }}: {{ buyer_zipcode }}
+  <br />
+{% endif %}
+{% if buyer_country %}
+  {{ _('Country') }}: {{ buyer_country | capitalize }}
+  <br />
+{% endif %}
+{% if buyer_tax_id %}
+  {{ _('Tax ID') }}: {{ buyer_tax_id }}
+  <br/>
+{% endif %}
+<br/>
+--
+<br/> {{ _('Login to manage the orders at') }} <a href={{ frontend_url }}>{{ frontend_url }}</a>

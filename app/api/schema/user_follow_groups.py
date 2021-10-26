@@ -17,6 +17,7 @@ class UserFollowGroupSchema(JSONAPISchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
+    created_at = fields.DateTime(dump_only=True, timezone=True)
 
     group = Relationship(
         attribute='group',
