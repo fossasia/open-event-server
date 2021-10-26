@@ -273,22 +273,22 @@ class TicketingManager:
             raise e
 
         # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
-        if charge.paid:
-            # update the order in the db.
-            order.paid_via = charge.source.object
-            order.brand = charge.source.brand
-            order.exp_month = charge.source.exp_month
-            order.exp_year = charge.source.exp_year
-            order.last4 = charge.source.last4
-            order.transaction_id = charge.id
-            order.status = 'completed'
-            order.completed_at = datetime.utcnow()
-            save_to_db(order)
+        # if charge.paid:
+        #     # update the order in the db.
+        #     order.paid_via = charge.source.object
+        #     order.brand = charge.source.brand
+        #     order.exp_month = charge.source.exp_month
+        #     order.exp_year = charge.source.exp_year
+        #     order.last4 = charge.source.last4
+        #     order.transaction_id = charge.id
+        #     order.status = 'completed'
+        #     order.completed_at = datetime.utcnow()
+        #     save_to_db(order)
 
-            on_order_completed(order)
+        #     on_order_completed(order)
 
-            return True, 'Charge successful'
-        # payment failed hence expire the order
+        #     return True, 'Charge successful'
+        # # payment failed hence expire the order
         order.status = 'expired'
         save_to_db(order)
 
@@ -296,7 +296,7 @@ class TicketingManager:
         delete_related_attendees_for_order(order)
 
         # return the failure message from stripe.
-        return False, charge.failure_message
+        return False, charge
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
