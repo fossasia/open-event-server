@@ -1,9 +1,9 @@
 {{ _('Congratulations!') }}
 <br/>
-{{ _('You have a new order for your event') }} <a href={{site_link}}>{{ event_name }}</a> {{ _('starting at') }} {{ event_time }} {{ _('on') }} {{ event_date }}.
+{{ _('You have a new order for your event') }} <a href={{site_link}}>{{ event_name }}</a> {{ _('starting at %(event_time)s on %(event_date)s.', event_time=event_time, event_date=event_date) }}
 <br/>
 <br/>
-{{ _('The order has been processed successfully on') }} <a href={{frontend_url}}>{{ app_name }}</a>. <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view') }}/{{ _('download the invoice') }}.
+{{ _('The order has been processed successfully on') }} <a href={{frontend_url}}>{{ app_name }}</a>. <a href={{ order_url }}>{{ _('Click here') }}</a> {{ _('to view/download the invoice.') }}
 <br/>
 <br/>
 {{ _('The details of the order are:') }}
