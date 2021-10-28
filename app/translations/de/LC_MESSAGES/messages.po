@@ -122,7 +122,8 @@ msgid "on %(app_name)s."
 msgstr ""
 
 #: app/templates/email/announce_event.html:21
-msgid "You can unsubscribe from emails from this group by unfollowing the group"
+msgid ""
+"You can unsubscribe from emails from this group by unfollowing the group"
 msgstr ""
 
 #: app/templates/email/announce_event.html:21
@@ -181,8 +182,8 @@ msgstr "Folgend eine Kopie der Email."
 #, fuzzy
 msgid "Organizers have received your message and will follow up with you."
 msgstr ""
-"Die Veranstalter haben die Nachricht erhalten und werden sich in "
-"Verbindung setzen."
+"Die Veranstalter haben die Nachricht erhalten und werden sich in Verbindung "
+"setzen."
 
 #: app/templates/email/group_contact_user.html:8
 #, fuzzy
@@ -372,8 +373,8 @@ msgstr ""
 
 #: app/templates/email/new_session.html:12
 msgid ""
-"You can view all speaker details on the speaker profile page and the "
-"session proposal on the"
+"You can view all speaker details on the speaker profile page and the session "
+"proposal on the"
 msgstr ""
 
 #: app/templates/email/new_session.html:12
@@ -427,11 +428,10 @@ msgstr ""
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
-"Please use the following link to reset your password and verify your "
-"account."
+"Please use the following link to reset your password and verify your account."
 msgstr ""
-"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das"
-" Konto zu verifizieren."
+"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das "
+"Konto zu verifizieren."
 
 #: app/templates/email/speaker_invite.html:3
 #, python-format
@@ -481,8 +481,8 @@ msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
-"To contact event organizers please use the contact form on the event page"
-" here"
+"To contact event organizers please use the contact form on the event page "
+"here"
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:6
@@ -497,8 +497,12 @@ msgstr ""
 #, fuzzy
 msgid "This is your confirmation."
 msgstr ""
-"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen "
-"unter"
+"Dies ist die Auftragsbestätigung. Sie können die Tickets herunterladen unter"
+
+#: app/templates/email/ticket_purchased.html:3
+#, fuzzy
+msgid "You can download your"
+msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
 #, fuzzy
