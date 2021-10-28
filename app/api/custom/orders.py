@@ -1,5 +1,7 @@
 import os
 
+from datetime import datetime
+
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
@@ -9,7 +11,7 @@ from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
+from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
@@ -184,3 +186,27 @@ def ticket_attendee_pdf(attendee_id):
     if not os.path.isfile(file_path):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
+
+@order_blueprint.route('/<string:order_identifier>/verify')
+@jwt_required
+def verify_order_payment(order_identifier):
+    order = Order.query.filter_by(order_identifier = order_identifier)
+    if order is None:
+        raise NotFoundError({'source':''},'No available order with this identifier')
+
+    if (
+        has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=order.event_id,
+            user_id=order.user_id,
+        )
+        or order.is_attendee(current_user)
+    ):
+        order.status = 'completed'
+        order.completed_at = datetime.utcnow()
+        on_order_completed(order)
+        db.session.commit()
+
+    else:
+        raise ForbiddenError({'source': ''}, 'Unauthorized Access')
+
