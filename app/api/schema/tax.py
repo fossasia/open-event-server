@@ -15,8 +15,8 @@ class TaxSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    name = fields.Str(required=True)
-    rate = fields.Float(validate=lambda n: 0 <= n <= 100, required=True)
+    name = fields.Str(allow_none=True, default='')
+    rate = fields.Float(validate=lambda n: 0 <= n <= 100, allow_none=True, default=0)
     is_tax_included_in_price = fields.Boolean(default=False)
     event = Relationship(
         self_view='v1.tax_event',
@@ -36,7 +36,7 @@ class TaxSchema(TaxSchemaPublic):
         inflect = dasherize
 
     country = fields.Str(allow_none=True)
-    tax_id = fields.Str(required=True)
+    tax_id = fields.Str(allow_none=True, default='')
     should_send_invoice = fields.Boolean(default=False)
     is_invoice_sent = fields.Boolean(default=False)
     registered_company = fields.Str(allow_none=True)

@@ -327,7 +327,7 @@
               {{ event.payment_currency }}
               {% endif %}
               {{ "%.2f" | format(order_ticket.price) }}
-              {% if order_amount.tax %}
+              {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                 <div class="{{'strikethrough' if order_ticket.discount}} tax">
                   {% if order_ticket.ticket_tax %}
                     {% if order_amount.tax.included %}
@@ -348,7 +348,7 @@
                 {{ event.payment_currency }}
                 {% endif %}
                 {{ "%.2f" | format(order_ticket.price - order_ticket.discount.amount) }}
-                {% if order_amount.tax %}
+                {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                   <div class="tax">
                     {% if order_ticket.ticket_tax %}
                       {% if order_amount.tax.included %}
@@ -371,7 +371,7 @@
             {% endif %}
             {{ "%.2f" | format(order_ticket.sub_total) }}
             <br>
-            {% if order_amount.tax %}
+            {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
               <div class="tax">
                 {% if order_ticket.price %}
                   {% if order_ticket.discount %}
@@ -406,7 +406,7 @@
             {{ order_amount.sub_total | money }}
           </td>
         </tr>
-        {% if order_amount.tax %}
+        {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
         <tr>
           <td></td>
           <td></td>
