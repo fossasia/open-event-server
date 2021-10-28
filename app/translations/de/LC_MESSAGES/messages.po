@@ -505,6 +505,11 @@ msgid "You can download your"
 msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
+#, fuzzy
+msgid "You can download your"
+msgstr "Jetzt die Tickets herunterladen unter"
+
+#: app/templates/email/ticket_purchased.html:3
 msgid "tickets or registration information here"
 msgstr ""
 
