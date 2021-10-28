@@ -263,6 +263,7 @@ class TicketingManager:
         try:
             charge = StripePaymentsManager.capture_payment(order)
             logging.error('%s ticketing', charge)
+            return True, charge
         except ConflictError as e:
             # payment failed hence expire the order
             logging.error('%s ticketing - error', e)
