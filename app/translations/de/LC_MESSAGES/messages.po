@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-28 15:30+0000\n"
+"PO-Revision-Date: 2021-10-28 15:40+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -24,15 +24,16 @@ msgstr ""
 #: app/templates/email/after_event.html:1
 #, python-format
 msgid "Hello %(email)s, your %(eventname)s is over."
-msgstr ""
+msgstr "Hallo %(email)s, Ihr %(eventname)s ist vorbei."
 
 #: app/templates/email/after_event.html:3
 msgid "Thank you for using the Eventyay platform for your event."
 msgstr ""
+"Vielen Dank, dass Sie die Eventyay-Plattform für Ihre Veranstaltung nutzen."
 
 #: app/templates/email/after_event.html:4
 msgid "We hope you enjoyed it."
-msgstr ""
+msgstr "Wir hoffen, es hat Ihnen gefallen."
 
 #: app/templates/email/after_event_speaker.html:1
 #, python-format
@@ -448,7 +449,7 @@ msgstr "Oder den Token einfügen in"
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "App:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
@@ -468,7 +469,7 @@ msgstr ""
 
 #: app/templates/email/speaker_invite.html:3
 msgid "on"
-msgstr ""
+msgstr "am"
 
 #: app/templates/email/speaker_invite.html:3
 #, python-format
