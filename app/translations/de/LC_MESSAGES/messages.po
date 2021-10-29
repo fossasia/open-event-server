@@ -837,7 +837,7 @@ msgstr "Fälligkeitsdatum"
 
 #: app/templates/pdf/order_invoice.html:290
 msgid "Upon Invoice"
-msgstr "Auf Rechnung"
+msgstr "Nach Rechnungseingang"
 
 #: app/templates/pdf/order_invoice.html:299
 msgid "Description"
