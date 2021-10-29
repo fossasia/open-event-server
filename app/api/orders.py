@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from app.api.helpers import payment
 
 import omise
 import stripe
@@ -890,15 +891,17 @@ def stripe_webhook():
             payment_intent_id = payment_event['data']['object']['id']
             order = Order.query.filter_by(stripe_payment_intent_id=payment_intent_id).first()
             order.status = 'completed'
-            order.paid_via = payment_event['data']['object']['payment_method_details']
+            # print(payment_event['data']['object'])
+            order.paid_via = payment_event['data']['object']['charges']['data'][0]['payment_method_details']['type']
             # order.brand = charge.source.brand
             # order.exp_month = charge.source.exp_month
             # order.exp_year = charge.source.exp_year
-            # order.last4 = charge.source.last4
-            order.transaction_id = payment_event['data']['object']['balance_transaction']
+            # order.last4 = charge.source.last
+            # order.transaction_id = payment_event['data']['object']['balance_transaction']
             order.status = 'completed'
             order.completed_at = datetime.utcnow()
             db.session.commit()
+            on_order_completed(order)
         elif payment_event and payment_event['type'] == 'charge.succeeded':
             print(payment_event['data']['object']['id'])
         else:
