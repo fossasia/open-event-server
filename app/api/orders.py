@@ -3,7 +3,9 @@ import logging
 import time
 
 import omise
+import stripe
 import requests
+from datetime import datetime
 from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -49,6 +51,7 @@ from app.settings import get_settings
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
+stripe_blueprint = Blueprint('stripe_blueprint', __name__, url_prefix='/v1/stripe')
 
 
 def check_event_user_ticket_holders(order, data, element):
@@ -870,3 +873,44 @@ def get_transaction_status(order_identifier):
         url, data=post_data, headers={"Content-type": "application/json"}
     ).json()
     return response
+
+@stripe_blueprint.route('/stripe-webhook', methods=['POST'])
+def stripe_webhook():
+    payment_event = None
+    payload = request.data
+    sig_header = request.headers['STRIPE_SIGNATURE']
+    endpoint_secret = 'whsec_HD2aBeRcsedwAaUeeYDvETqUdJDO4zGI'
+
+    try:
+        payment_event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+
+        if payment_event and payment_event['type'] == 'payment_intent.succeeded':
+            payment_intent_id = payment_event['data']['object']['id']
+            order = Order.query.filter_by(stripe_payment_intent_id=payment_intent_id).first()
+            order.status = 'completed'
+            order.paid_via = payment_event['data']['object']['payment_method_details']
+            # order.brand = charge.source.brand
+            # order.exp_month = charge.source.exp_month
+            # order.exp_year = charge.source.exp_year
+            # order.last4 = charge.source.last4
+            order.transaction_id = payment_event['data']['object']['balance_transaction']
+            order.status = 'completed'
+            order.completed_at = datetime.utcnow()
+            db.session.commit()
+        elif payment_event and payment_event['type'] == 'charge.succeeded':
+            print(payment_event['data']['object']['id'])
+        else:
+            print('Unhandled event type {}'.format(payment_event['type']))
+    except ValueError as e:
+        # Invalid payload
+        raise e
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        raise e
+
+    # Handle the event
+    print('Unhandled event type {}'.format(payment_event['type']))
+
+    return jsonify(success=True)

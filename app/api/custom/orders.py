@@ -2,7 +2,6 @@ import os
 
 from datetime import datetime
 
-import json
 
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
@@ -10,7 +9,7 @@ from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed
@@ -211,33 +210,4 @@ def verify_order_payment(order_identifier):
 
     else:
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
-
-@order_blueprint.route('/webhook', methods=['POST'])
-def webhook():
-    event = None
-    payload = request.data
-
-    try:
-        event = json.loads(payload)
-    except ValueError as e:
-        # Invalid payload
-        raise e
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        raise e
-    except:
-        return jsonify(success=False)
-
-    # Handle the event
-    if event and event['type'] == 'payment_intent.succeeded':
-        payment_intent_id = event['data']['object']['id']
-        order = Order.query.filter_by(stripe_payment_intent_id = payment_intent_id).first()
-        order.status = 'completed'
-        db.session.commit()
-    elif event and event['type'] == 'charge.succeeded':
-        print(event['data']['object']['id'])
-    else:
-        print('Unhandled event type {}'.format(event['type']))
-
-    return jsonify(success=True)
 
