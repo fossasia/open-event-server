@@ -32,6 +32,7 @@ class GroupSchema(SoftDeletionSchema):
     created_at = fields.DateTime(dump_only=True, timezone=True)
     social_links = fields.Nested(GroupSocialLinkSchema, many=True)
     logo_url = fields.Url(allow_none=True)
+    is_promoted = fields.Bool(default=False)
     banner_url = fields.Url(allow_none=True)
     thumbnail_image_url = fields.Url(dump_only=True)
     follower_count = fields.Integer(dump_only=True)
