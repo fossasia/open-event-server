@@ -81,6 +81,7 @@ class Order(db.Model):
     exp_year = db.Column(db.Integer)
     last4 = db.Column(db.String)
     stripe_token = db.Column(db.String)
+    stripe_payment_intent_id = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String, default='initializing')
     cancel_note = db.Column(db.String, nullable=True)

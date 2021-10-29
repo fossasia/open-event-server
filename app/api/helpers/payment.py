@@ -137,7 +137,7 @@ class StripePaymentsManager:
                     'quantity': 1,
                 }],
                 mode='payment',
-                success_url=f"{frontend_url}/orders/{order_invoice.identifier}",
+                success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
                 cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}",
             )
             logging.error('%s',session)

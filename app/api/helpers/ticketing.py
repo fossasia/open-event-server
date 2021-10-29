@@ -262,6 +262,8 @@ class TicketingManager:
         # charge the user
         try:
             charge = StripePaymentsManager.capture_payment(order)
+            order.stripe_payment_intent_id = charge['payment_intent']
+            db.session.commit()
             logging.error('%s ticketing', charge)
             return True, charge
         except ConflictError as e:
