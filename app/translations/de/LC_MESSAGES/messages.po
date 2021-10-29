@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-29 03:01+0000\n"
+"PO-Revision-Date: 2021-10-29 07:47+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -219,7 +219,7 @@ msgstr "Sie wurden eingeladen, ein %(role)s in der %(group)s-Gruppe zu sein."
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr "Hallo %(email)s,"
+msgstr "Hallo %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -529,8 +529,9 @@ msgid "You can download your"
 msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
+#, fuzzy
 msgid "You can download your"
-msgstr "Jetzt herunterladen unter"
+msgstr "Sie können herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "tickets or registration information here"
