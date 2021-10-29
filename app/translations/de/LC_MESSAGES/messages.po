@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-29 09:47+0000\n"
+"PO-Revision-Date: 2021-10-29 12:37+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -530,7 +530,7 @@ msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "You can download your"
-msgstr "Sie können die Daten herunterladen"
+msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "tickets or registration information here"
