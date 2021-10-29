@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-29 07:47+0000\n"
+"PO-Revision-Date: 2021-10-29 09:47+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -529,9 +529,8 @@ msgid "You can download your"
 msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
-#, fuzzy
 msgid "You can download your"
-msgstr "Sie können herunterladen unter"
+msgstr "Sie können die Daten herunterladen"
 
 #: app/templates/email/ticket_purchased.html:3
 msgid "tickets or registration information here"
@@ -611,11 +610,11 @@ msgstr "Sie haben eine neue Bestellung für Ihre Veranstaltung"
 #: app/templates/email/ticket_purchased_organizer.html:3
 #, python-format
 msgid "starting at %(event_time)s on %(event_date)s."
-msgstr "beginnt um %(event_time)s am %(event_date)s."
+msgstr ", die um %(event_time)s am %(event_date)s beginnt."
 
 #: app/templates/email/ticket_purchased_organizer.html:6
 msgid "The order has been processed successfully on"
-msgstr "Die Bestellung wurde ausgeführt am"
+msgstr "Die Bestellung wurde ausgeführt auf"
 
 #: app/templates/email/ticket_purchased_organizer.html:6
 msgid "Click here"
@@ -946,7 +945,7 @@ msgstr "Fälligkeitsdatum"
 
 #: app/templates/pdf/order_invoice.html:290
 msgid "Upon Invoice"
-msgstr "Auf Rechnung"
+msgstr "Nach Rechnungseingang"
 
 #: app/templates/pdf/order_invoice.html:299
 msgid "Description"
