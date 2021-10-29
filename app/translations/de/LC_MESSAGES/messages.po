@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-29 02:46+0000\n"
+"PO-Revision-Date: 2021-10-29 03:01+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -174,7 +174,7 @@ msgstr "Link"
 #: app/templates/email/group_contact_user.html:2
 #, python-format
 msgid "You have contacted the organizers of the group %(group_name)s."
-msgstr "Die Organisatoren der Veranstaltung wurden kontaktiert."
+msgstr "Die Organisatoren der Gruppe %(group_name)s wurden kontaktiert."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
@@ -760,7 +760,7 @@ msgstr "Melde Sie sich in Ihrem Konto an."
 #: app/templates/email/ticket_sales_end_next_week.html:13
 #: app/templates/email/ticket_sales_end_tomorrow.html:13
 msgid "On the top right click “Manage Events”."
-msgstr "Bitte besuchen Sie den folgenden Link, um Ihre E-Mail zu verifizieren:"
+msgstr "Klicken Sie oben rechts auf \"Veranstaltungen verwalten\"."
 
 #: app/templates/email/ticket_sales_end.html:14
 #: app/templates/email/ticket_sales_end_next_week.html:14
