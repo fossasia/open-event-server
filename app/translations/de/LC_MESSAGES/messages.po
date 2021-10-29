@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-10-27 12:28+0530\n"
-"PO-Revision-Date: 2021-10-28 15:40+0000\n"
+"PO-Revision-Date: 2021-10-29 02:46+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -146,7 +146,6 @@ msgstr ""
 "Klicken Sie auf den folgenden Link, um die Veranstaltung herunterzuladen:"
 
 #: app/templates/email/event_imported.html:1
-#, fuzzy
 msgid "Click on the following link to manage your event"
 msgstr "Klicken Sie auf den folgenden Link, um Ihre Veranstaltung zu verwalten"
 
@@ -331,13 +330,11 @@ msgstr "Bitte zahlen Sie sofort bei"
 
 #: app/templates/email/monthly_payment_post_due_email.html:9
 #: app/templates/email/monthly_payment_pre_due_email.html:11
-#, fuzzy
 msgid "Late payments can be subject to a"
 msgstr "Verspätete Zahlungen können mit einem"
 
 #: app/templates/email/monthly_payment_post_due_email.html:9
 #: app/templates/email/monthly_payment_pre_due_email.html:11
-#, fuzzy
 msgid "finance fee."
 msgstr "Finanzierungsgebühr."
 
@@ -363,13 +360,12 @@ msgid "Please pay within 2 days."
 msgstr "Bitte zahlen Sie innerhalb von 2 Tagen."
 
 #: app/templates/email/new_session.html:2
-#, fuzzy, python-format
+#, python-format
 msgid "This is an automatic email from %(app_name)s for organizers of the"
 msgstr ""
 "Dies ist eine automatische E-Mail von %(app_name)s für die Organisatoren der"
 
 #: app/templates/email/new_session.html:4
-#, fuzzy
 msgid "Your"
 msgstr "Ihr"
 
@@ -379,7 +375,6 @@ msgid "Call for Speakers"
 msgstr "Call for Speakers"
 
 #: app/templates/email/new_session.html:4
-#, fuzzy
 msgid "has received a new session proposal with the following details"
 msgstr "hat einen neuen Sitzungsvorschlag mit den folgenden Angaben erhalten"
 
@@ -392,20 +387,18 @@ msgid "Abstract"
 msgstr "Abstrakt"
 
 #: app/templates/email/new_session.html:12
-#, fuzzy
 msgid ""
 "You can view all speaker details on the speaker profile page and the session "
 "proposal on the"
 msgstr ""
 "Sie können alle Details zu den Rednern auf der Seite mit dem Rednerprofil "
-"und den Sitzungsvorschlag auf der Seite"
+"oder der Sitzungsseite sehen"
 
 #: app/templates/email/new_session.html:12
 msgid "session page"
 msgstr "Sitzungsseite"
 
 #: app/templates/email/new_session.html:13
-#, fuzzy
 msgid "To change the status of sessions please go to the"
 msgstr "Um den Status von Sitzungen zu ändern, gehen Sie bitte auf die Seite"
 
@@ -414,7 +407,6 @@ msgid "sessions overview page"
 msgstr "Übersichtsseite für Sitzungen"
 
 #: app/templates/email/new_session.html:13
-#, fuzzy
 msgid "and click on the status badge of the session."
 msgstr "und klicken Sie auf das Statusabzeichen der Sitzung."
 
@@ -477,9 +469,8 @@ msgid "by %(inviter_name)s %(inviter_email)s."
 msgstr "von %(inviter_name)s %(inviter_email)s."
 
 #: app/templates/email/speaker_invite.html:5
-#, fuzzy
 msgid "You can accept or reject this invitation from"
-msgstr "Sie können diese Einladung annehmen oder ablehnen von"
+msgstr "Sie können diese Einladung annehmen oder ablehnen gesendet von"
 
 #: app/templates/email/speaker_invite.html:5
 msgid "page"
@@ -538,12 +529,10 @@ msgid "You can download your"
 msgstr "Jetzt die Tickets herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
-#, fuzzy
 msgid "You can download your"
 msgstr "Jetzt herunterladen unter"
 
 #: app/templates/email/ticket_purchased.html:3
-#, fuzzy
 msgid "tickets or registration information here"
 msgstr "Tickets oder Informationen zur Anmeldung hier"
 
@@ -793,7 +782,6 @@ msgstr "Sie bearbeiten jetzt die „Basisdetails“ Ihres Events."
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
-#, fuzzy
 msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
@@ -805,22 +793,19 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
 #: app/templates/email/ticket_sales_end_tomorrow.html:16
-#, fuzzy
 msgid "In the ticket settings adjust the sales period for the ticket."
 msgstr ""
-"Passen Sie in den Ticketeinstellungen den Verkaufszeitraum für das Ticket an."
+"Passen Sie in den Verkaufszeitraum in den Einstellungen für das Ticket an."
 
 #: app/templates/email/ticket_sales_end.html:17
 #: app/templates/email/ticket_sales_end_next_week.html:17
 #: app/templates/email/ticket_sales_end_tomorrow.html:17
-#, fuzzy
 msgid "Repeat the steps for other tickets, if any."
 msgstr "Wiederholen Sie ggf. die Schritte für andere Tickets."
 
 #: app/templates/email/ticket_sales_end.html:18
 #: app/templates/email/ticket_sales_end_next_week.html:18
 #: app/templates/email/ticket_sales_end_tomorrow.html:18
-#, fuzzy
 msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
@@ -831,7 +816,6 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:19
 #: app/templates/email/ticket_sales_end_next_week.html:19
 #: app/templates/email/ticket_sales_end_tomorrow.html:19
-#, fuzzy
 msgid "You can access the dashboard of the event here"
 msgstr "Das Dashboard der Veranstaltung finden Sie hier"
 
@@ -891,7 +875,6 @@ msgid "Please visit this link to confirm your email"
 msgstr "Bitte besuchen Sie den folgenden Link, um Ihre E-Mail zu verifizieren:"
 
 #: app/templates/email/user_event_role.html:5
-#, fuzzy
 msgid "To accept the role please sign up using the following link"
 msgstr "Um die Rolle anzunehmen, melden Sie sich bitte unter folgendem Link an"
 
