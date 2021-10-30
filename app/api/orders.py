@@ -886,9 +886,10 @@ def stripe_webhook():
         payment_event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
-
+        import logging
         if payment_event and payment_event['type'] == 'payment_intent.succeeded':
             payment_intent_id = payment_event['data']['object']['id']
+            logging.error('%s',payment_event)
             order = Order.query.filter_by(stripe_payment_intent_id=payment_intent_id).first()
             order.status = 'completed'
             # print(payment_event['data']['object'])
@@ -904,6 +905,15 @@ def stripe_webhook():
             on_order_completed(order)
         elif payment_event and payment_event['type'] == 'charge.succeeded':
             print(payment_event['data']['object']['id'])
+        elif payment_event and payment_event['type'] == 'payment_intent.payment_failed':
+            print(payment_event['type'])
+            payment_intent_id = payment_event['data']['object']['id']
+            order = Order.query.filter_by(stripe_payment_intent_id=payment_intent_id).first()
+            order.status = 'expired'
+            db.session.commit()
+            # delete related attendees to unlock the tickets
+            delete_related_attendees_for_order(order)
+
         else:
             print('Unhandled event type {}'.format(payment_event['type']))
     except ValueError as e:

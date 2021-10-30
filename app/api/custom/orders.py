@@ -188,26 +188,3 @@ def ticket_attendee_pdf(attendee_id):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
 
-@order_blueprint.route('/<string:order_identifier>/verify')
-@jwt_required
-def verify_order_payment(order_identifier):
-    order = Order.query.filter_by(order_identifier = order_identifier)
-    if order is None:
-        raise NotFoundError({'source':''},'No available order with this identifier')
-
-    if (
-        has_access(
-            'is_coorganizer_or_user_itself',
-            event_id=order.event_id,
-            user_id=order.user_id,
-        )
-        or order.is_attendee(current_user)
-    ):
-        order.status = 'completed'
-        order.completed_at = datetime.utcnow()
-        on_order_completed(order)
-        db.session.commit()
-
-    else:
-        raise ForbiddenError({'source': ''}, 'Unauthorized Access')
-

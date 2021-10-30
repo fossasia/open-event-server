@@ -120,7 +120,7 @@ class StripePaymentsManager:
         logging.error('%s %s', credentials['SECRET_KEY'], currency)
 
         try:
-            payment_method_types = ['card', 'klarna', 'sofort']
+            payment_method_types = ['card', 'klarna']
             if currency.lower() == 'eur':
                 payment_method_types.append('sepa_debit')
 
