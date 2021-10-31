@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-10-29 15:18+0530\n"
+"POT-Creation-Date: 2021-10-31 11:37+0530\n"
 "PO-Revision-Date: 2021-10-21 11:29+0000\n"
 "Last-Translator: progmatic99 <uprt.am54@gmail.com>\n"
 "Language: hi\n"
@@ -411,13 +411,13 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:7
-#: app/templates/pdf/order_invoice.html:308
+#: app/templates/pdf/order_invoice.html:326
 msgid "Ticket"
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:8
 #: app/templates/email/ticket_purchased_attendee.html:8
-#: app/templates/pdf/order_invoice.html:301
+#: app/templates/pdf/order_invoice.html:319
 msgid "Quantity"
 msgstr ""
 
@@ -434,7 +434,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:13
 #: app/templates/email/ticket_purchased_attendee.html:12
-#: app/templates/pdf/order_invoice.html:276
+#: app/templates/pdf/order_invoice.html:278
 msgid "Date"
 msgstr "तारीख"
 
@@ -509,17 +509,17 @@ msgid "Purchase Date and Time"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:18
-#: app/templates/pdf/order_invoice.html:279
+#: app/templates/pdf/order_invoice.html:281
 msgid "Payment Mode"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:20
-#: app/templates/pdf/order_invoice.html:281
+#: app/templates/pdf/order_invoice.html:283
 msgid "None"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:22
-#: app/templates/pdf/order_invoice.html:283
+#: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
 msgstr ""
 
@@ -538,25 +538,25 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:45
 #: app/templates/pdf/order_invoice.html:182
-#: app/templates/pdf/order_invoice.html:242
+#: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:49
 #: app/templates/pdf/order_invoice.html:188
-#: app/templates/pdf/order_invoice.html:247
+#: app/templates/pdf/order_invoice.html:249
 msgid "Address"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:53
 #: app/templates/pdf/order_invoice.html:191
-#: app/templates/pdf/order_invoice.html:252
+#: app/templates/pdf/order_invoice.html:254
 msgid "City"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:57
 #: app/templates/pdf/order_invoice.html:194
-#: app/templates/pdf/order_invoice.html:257
+#: app/templates/pdf/order_invoice.html:259
 #, fuzzy
 msgid "State"
 msgstr "तारीख"
@@ -567,13 +567,13 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:65
 #: app/templates/pdf/order_invoice.html:200
-#: app/templates/pdf/order_invoice.html:267
+#: app/templates/pdf/order_invoice.html:269
 msgid "Country"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:69
 #: app/templates/pdf/order_invoice.html:209
-#: app/templates/pdf/order_invoice.html:272
+#: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
 msgstr ""
 
@@ -759,7 +759,7 @@ msgid "Contact Name"
 msgstr ""
 
 #: app/templates/pdf/order_invoice.html:197
-#: app/templates/pdf/order_invoice.html:262
+#: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
 msgstr ""
 
@@ -775,58 +775,106 @@ msgstr ""
 msgid "Information unavailable"
 msgstr ""
 
+#: app/templates/pdf/order_invoice.html:230
+msgid "Completed"
+msgstr ""
+
 #: app/templates/pdf/order_invoice.html:232
 msgid "Pending"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:289
-msgid "Due Date"
+#: app/templates/pdf/order_invoice.html:234
+msgid "Placed"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:290
-msgid "Upon Invoice"
+#: app/templates/pdf/order_invoice.html:236
+msgid "Cancelled"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:238
+msgid "Expired"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:285
+msgid "Stripe"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:287
+msgid "Paypal"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:289
+msgid "Bank"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:291
+msgid "Cheque"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:293
+msgid "Onsite"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:295
+msgid "Omise"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:297
+msgid "Alipay"
 msgstr ""
 
 #: app/templates/pdf/order_invoice.html:299
-msgid "Description"
+msgid "Paytm"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:300
-msgid "Price"
-msgstr ""
-
-#: app/templates/pdf/order_invoice.html:302
-msgid "Sub-Total"
+#: app/templates/pdf/order_invoice.html:307
+msgid "Due Date"
 msgstr ""
 
 #: app/templates/pdf/order_invoice.html:308
+msgid "Upon Invoice"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:317
+msgid "Description"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:318
+msgid "Price"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:320
+msgid "Sub-Total"
+msgstr ""
+
+#: app/templates/pdf/order_invoice.html:326
 msgid "for"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:312
+#: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:334
-#: app/templates/pdf/order_invoice.html:355
-#: app/templates/pdf/order_invoice.html:379
-#: app/templates/pdf/order_invoice.html:385
+#: app/templates/pdf/order_invoice.html:352
+#: app/templates/pdf/order_invoice.html:373
+#: app/templates/pdf/order_invoice.html:397
+#: app/templates/pdf/order_invoice.html:403
 msgid "incl."
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:401
+#: app/templates/pdf/order_invoice.html:419
 msgid "Total"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:413
+#: app/templates/pdf/order_invoice.html:431
 msgid "Tax"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:423
+#: app/templates/pdf/order_invoice.html:441
 msgid "Included in Total"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:438
+#: app/templates/pdf/order_invoice.html:456
 msgid "Grand Total"
 msgstr ""
 

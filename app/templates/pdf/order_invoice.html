@@ -227,13 +227,15 @@
       {% endif %}
       <div><span> {{ _('Payment Status') }}</span>
         {% if order.status == 'completed' %}
-        {{ order.status | capitalize }}
+        {{ _('Completed') }}
         {% elif order.status == 'pending' or order.status == 'initialized' %}
         {{ _('Pending') }}
         {% elif order.status == 'placed' %}
-        {{ order.status | capitalize }}
+        {{ _('Placed') }}
         {% elif order.status == 'cancelled' %}
-        {{ order.status | capitalize }}
+        {{ _('Cancelled') }}
+        {% elif order.status == 'expired' %}
+        {{ _('Expired') }}
         {% else %}
         {{ order.status | capitalize }}
         {% endif %}
@@ -279,6 +281,22 @@
       <div><span>{{ _('Payment Mode') }}</span>
         {% if order.payment_mode == 'free' %}
         {{ _('None') }}
+        {% elif order.payment_mode == 'stripe' %}
+        {{ _('Stripe') }}
+        {% elif order.payment_mode == 'paypal' %}
+        {{ _('Paypal') }}
+        {% elif order.payment_mode == 'bank' %}
+        {{ _('Bank') }}
+        {% elif order.payment_mode == 'cheque' %}
+        {{ _('Cheque') }}
+        {% elif order.payment_mode == 'onsite' %}
+        {{ _('Onsite') }}
+        {% elif order.payment_mode == 'omise' %}
+        {{ _('Omise') }}
+        {% elif order.payment_mode == 'alipay' %}
+        {{ _('Alipay') }}
+        {% elif order.payment_mode == 'paytm' %}
+        {{ _('Paytm') }}
         {% elif order.payment_mode == 'invoice' %}
         {{ _('Purchase on Invoice') }}
         {% else %}
