@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-10-31 12:09+0530\n"
+"POT-Creation-Date: 2021-11-01 12:32+0530\n"
 "PO-Revision-Date: 2017-03-18 02:52+0000\n"
 "Last-Translator: 17Y5C35 NG XING YU <ng.xingyu@dhs.sg>\n"
 "Language: zh_Hans\n"
@@ -27,7 +27,8 @@ msgid "Hello %(email)s, your %(eventname)s is over."
 msgstr ""
 
 #: app/templates/email/after_event.html:3
-msgid "Thank you for using the Eventyay platform for your event."
+#, python-format
+msgid "Thank you for using the %(app_name)s platform for your event."
 msgstr ""
 
 #: app/templates/email/after_event.html:4
@@ -256,7 +257,7 @@ msgstr ""
 #, python-format
 msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
-"%(session_event_name)s."
+"%(session_name)s."
 msgstr ""
 
 #: app/templates/email/new_session.html:4
@@ -1454,5 +1455,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Organiser"
+#~ msgstr ""
+
+#~ msgid "Thank you for using the Eventyay platform for your event."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This is an automatic email from "
+#~ "%(app_name)s for organizers of the "
+#~ "%(session_event_name)s."
 #~ msgstr ""
 

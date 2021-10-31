@@ -6,19 +6,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-10-31 12:09+0530\n"
+"POT-Creation-Date: 2021-11-01 12:32+0530\n"
 "PO-Revision-Date: 2021-10-31 08:05+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
-"de/>\n"
 "Language: de\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-"
+"event/server/de/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
 "Generated-By: Babel 2.9.0\n"
 
 #: app/templates/email/after_event.html:1
@@ -27,7 +26,8 @@ msgid "Hello %(email)s, your %(eventname)s is over."
 msgstr "Hallo %(email)s, Ihr %(eventname)s ist vorbei."
 
 #: app/templates/email/after_event.html:3
-msgid "Thank you for using the Eventyay platform for your event."
+#, fuzzy, python-format
+msgid "Thank you for using the %(app_name)s platform for your event."
 msgstr ""
 "Vielen Dank, dass Sie die Eventyay-Plattform für Ihre Veranstaltung "
 "nutzen."
@@ -78,8 +78,8 @@ msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
-"Um die Einladung anzunehmen, melden Sie sich bitte über den folgenden Link "
-"an: %(open_link)sLink%(close_link)s."
+"Um die Einladung anzunehmen, melden Sie sich bitte über den folgenden "
+"Link an: %(open_link)sLink%(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -254,8 +254,8 @@ msgstr ""
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
 msgstr ""
-"Bei Zahlungsverzug kann eine Finanzierungsgebühr in Höhe von %(percentage)s "
-"erhoben werden."
+"Bei Zahlungsverzug kann eine Finanzierungsgebühr in Höhe von "
+"%(percentage)s erhoben werden."
 
 #: app/templates/email/monthly_payment_post_due_email.html:14
 msgid ""
@@ -279,13 +279,13 @@ msgid "Please pay within 2 days."
 msgstr "Bitte zahlen Sie innerhalb von 2 Tagen."
 
 #: app/templates/email/new_session.html:2
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
-"%(session_event_name)s."
+"%(session_name)s."
 msgstr ""
-"Dies ist eine automatische E-Mail von %(app_name)s für die Organisatoren der "
-"Sitzungen %(session_event_name)s."
+"Dies ist eine automatische E-Mail von %(app_name)s für die Organisatoren "
+"der Sitzungen %(session_event_name)s."
 
 #: app/templates/email/new_session.html:4
 #, python-format
@@ -311,7 +311,8 @@ msgid ""
 "session proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
 "Sie können alle Rednerdetails auf der Seite mit dem Rednerprofil und den "
-"Sitzungsvorschlag auf der %(open_link)sSitzungsseite%(close_link)s einsehen."
+"Sitzungsvorschlag auf der %(open_link)sSitzungsseite%(close_link)s "
+"einsehen."
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -320,8 +321,8 @@ msgid ""
 "overview page%(close_link)s and click on the status badge of the session."
 msgstr ""
 "Um den Status von Sitzungen zu ändern, gehen Sie bitte zur "
-"%(open_link)sSitzungsübersichtsseite%(close_link)s und klicken Sie auf die "
-"Statusanzeige der Sitzung."
+"%(open_link)sSitzungsübersichtsseite%(close_link)s und klicken Sie auf "
+"die Statusanzeige der Sitzung."
 
 #: app/templates/email/organizer_contact_attendee.html:2
 #, python-format
@@ -373,8 +374,8 @@ msgid ""
 "%(inviter_name)s %(inviter_email)s."
 msgstr ""
 "Sie wurden von %(inviter_name)s %(inviter_email)s als Referent für die "
-"Session-Einreichung \"%(session_title)s\" für die Veranstaltung %(event_name)"
-"s auf %(app_name)s eingeladen."
+"Session-Einreichung \"%(session_title)s\" für die Veranstaltung "
+"%(event_name)s auf %(app_name)s eingeladen."
 
 #: app/templates/email/speaker_invite.html:5
 #, python-format
@@ -551,8 +552,8 @@ msgstr "Die Bestellung wurde auf %(app_name)s erfolgreich ausgeführt."
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
 msgstr ""
-"%(open_link)sKlicken Sie hier%(close_link)s, um die Rechnung anzusehen/"
-"herunterzuladen."
+"%(open_link)sKlicken Sie hier%(close_link)s, um die Rechnung "
+"anzusehen/herunterzuladen."
 
 #: app/templates/email/ticket_purchased_organizer.html:9
 msgid "The details of the order are:"
@@ -745,7 +746,8 @@ msgstr ""
 #, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
 msgstr ""
-"Sie können das Dashboard der Veranstaltung hier %(dashboard_link)s aufrufen."
+"Sie können das Dashboard der Veranstaltung hier %(dashboard_link)s "
+"aufrufen."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #, python-format
@@ -991,8 +993,7 @@ msgstr "%(location_name)s"
 #: app/templates/pdf/ticket_attendee.html:65
 #: app/templates/pdf/ticket_purchaser.html:66
 msgid "Location or online event details to be announced"
-msgstr ""
-"Details zur Location oder Online-Veranstaltung werden noch bekannt gegeben"
+msgstr "Details zur Location oder Online-Veranstaltung werden noch bekannt gegeben"
 
 #: app/templates/pdf/ticket_attendee.html:68
 #: app/templates/pdf/ticket_purchaser.html:69
@@ -1458,3 +1459,4 @@ msgstr "Nachricht des Veranstalters"
 
 #~ msgid "Organiser"
 #~ msgstr "Veranstalter"
+
