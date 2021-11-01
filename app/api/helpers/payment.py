@@ -108,8 +108,8 @@ class StripePaymentsManager:
             )
         import logging
         logging.error('%s', credentials['SECRET_KEY'])
-        # stripe.api_key = credentials['SECRET_KEY']
-        stripe.api_key = 'sk_test_51JkNFWSEz988J3ILTalS1RRlC9sKglFwEiESNPRZExy6hwYdsefgHqBAx8GPahYO7apWZeZp4812EyQX7g3H9vhu006H65v5aG'
+        stripe.api_key = credentials['SECRET_KEY']
+        # stripe.api_key = 'sk_test_51JkNFWSEz988J3ILTalS1RRlC9sKglFwEiESNPRZExy6hwYdsefgHqBAx8GPahYO7apWZeZp4812EyQX7g3H9vhu006H65v5aG'
         if not currency:
             currency = order_invoice.event.payment_currency
 
@@ -128,7 +128,7 @@ class StripePaymentsManager:
                 payment_method_types= ['card'],
                 line_items=[{
                     'price_data': {
-                        'currency': 'inr',
+                        'currency': currency.lower(),
                         'product_data': {
                             'name': order_invoice.event.name,
                         },
@@ -138,7 +138,7 @@ class StripePaymentsManager:
                 }],
                 mode='payment',
                 success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
-                cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}",
+                cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
             )
             logging.error('%s',session)
 
@@ -147,6 +147,31 @@ class StripePaymentsManager:
         except Exception as e:
             logging.error('%s exception capture payment',e)
             raise ConflictError({'pointer': ''}, str(e))
+    
+    @staticmethod
+    def retrieve_session(event_id, stripe_session_id):
+        credentials = StripePaymentsManager.get_credentials(event_id)
+
+        if not credentials:
+            raise ConflictError(
+                {'pointer': ''}, 'Stripe credentials not found for the event.'
+            )
+        stripe.api_key = credentials['SECRET_KEY']
+        session = stripe.checkout.Session.retrieve(stripe_session_id)
+
+        return session
+    
+    def retrieve_payment_intent(event_id, payment_intent_id):
+        credentials = StripePaymentsManager.get_credentials(event_id)
+
+        if not credentials:
+            raise ConflictError(
+                {'pointer': ''}, 'Stripe credentials not found for the event.'
+            )
+        stripe.api_key = credentials['SECRET_KEY']
+        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+        return payment_intent
 
 
 class PayPalPaymentsManager:
