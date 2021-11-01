@@ -1,5 +1,5 @@
 {{ _('Hello') }},
-<br/><br/>{{ _('This is an automatic email from %(app_name)s for organizers of the %(session_event_name)s.', app_name=app_name, session_event_name = '<a href="%s" target="_blank">%s</a>' % (session.event.site_link, session.event.name)) | safe }}
+<br/><br/>{{ _('This is an automatic email from %(app_name)s for organizers of the %(session_name)s.', app_name=app_name, session_name = '<a href="%s" target="_blank">%s</a>' % (session.event.site_link, session.event.name)) | safe }}
 <br/><br/>
 {{ _('Your %(open_link)sCall For Speakers%(close_link)s has received a new session proposal with the following details:', open_link = '<a href="%s" target="_blank">' % (session.site_cfs_link), close_link = '</a>') | safe }}
 <br/><br/>
