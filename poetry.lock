@@ -1043,7 +1043,7 @@ test = ["pytest (==4.3.1)", "mock (==2.0.0)", "pytest-cov (==2.6.1)", "sqlalchem
 
 [[package]]
 name = "graphene-sqlalchemy-filter"
-version = "1.12.2"
+version = "1.13.0"
 description = "Filters for Graphene SQLAlchemy integration"
 category = "main"
 optional = false
@@ -2620,7 +2620,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "95cbb85180e1aab4bdaa9ac36e2b7f459319e630b1912217cee310fd9f838f88"
+content-hash = "f72cc55ebd23d14cb829dea25215ea6af31202590a8cebc9a53a9c9276d0f873"
 
 [metadata.files]
 aiohttp = [
@@ -2884,9 +2884,6 @@ coverage = [
     {file = "coverage-6.1.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e14bceb1f3ae8a14374be2b2d7bc12a59226872285f91d66d301e5f41705d4d6"},
     {file = "coverage-6.1.1-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:0147f7833c41927d84f5af9219d9b32f875c0689e5e74ac8ca3cb61e73a698f9"},
     {file = "coverage-6.1.1-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:b1d0a1bce919de0dd8da5cff4e616b2d9e6ebf3bd1410ff645318c3dd615010a"},
-    {file = "coverage-6.1.1-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:ae6de0e41f44794e68d23644636544ed8003ce24845f213b24de097cbf44997f"},
-    {file = "coverage-6.1.1-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:db2797ed7a7e883b9ab76e8e778bb4c859fc2037d6fd0644d8675e64d58d1653"},
-    {file = "coverage-6.1.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:c40966b683d92869b72ea3c11fd6b99a091fd30e12652727eca117273fc97366"},
     {file = "coverage-6.1.1-cp39-cp39-win32.whl", hash = "sha256:a11a2c019324fc111485e79d55907e7289e53d0031275a6c8daed30690bc50c0"},
     {file = "coverage-6.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:4d8b453764b9b26b0dd2afb83086a7c3f9379134e340288d2a52f8a91592394b"},
     {file = "coverage-6.1.1-pp36-none-any.whl", hash = "sha256:3b270c6b48d3ff5a35deb3648028ba2643ad8434b07836782b1139cf9c66313f"},
@@ -3087,8 +3084,8 @@ graphene-sqlalchemy = [
     {file = "graphene_sqlalchemy-2.3.0-py2.py3-none-any.whl", hash = "sha256:97ed52bc0d01d757df50d25b5bdd490a2327778d41223d4e084d38a239925e8e"},
 ]
 graphene-sqlalchemy-filter = [
-    {file = "graphene-sqlalchemy-filter-1.12.2.tar.gz", hash = "sha256:92057bc7bbb06a4c7351c89c267d3696e620189877e40d66f3857637caa6423a"},
-    {file = "graphene_sqlalchemy_filter-1.12.2-py3-none-any.whl", hash = "sha256:c71ea3a4bb5941d82e5d1eaf50a525d796fd39fe106b0023157821e2d3339a7e"},
+    {file = "graphene-sqlalchemy-filter-1.13.0.tar.gz", hash = "sha256:bc139827b06769cfef48dd59baa07125084e41825cf50f2e4dd595b82545a90c"},
+    {file = "graphene_sqlalchemy_filter-1.13.0-py3-none-any.whl", hash = "sha256:c86f4d4822c4d2d488b50de44d173c2117ecc81f0fbe6e245969ce4a23e1c806"},
 ]
 graphql-core = [
     {file = "graphql-core-2.3.2.tar.gz", hash = "sha256:aac46a9ac524c9855910c14c48fc5d60474def7f99fd10245e76608eba7af746"},

@@ -117,7 +117,7 @@ xmltodict = "0.12.0"
 # GraphQL support
 graphene-sqlalchemy = "2.3.0"
 flask-graphql = "2.0.1"
-graphene-sqlalchemy-filter = "1.12.2"
+graphene-sqlalchemy-filter = "1.13.0"
 fastapi = "^0.70.0"
 uvicorn = {extras = ["standard"], version = "^0.15.0"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
