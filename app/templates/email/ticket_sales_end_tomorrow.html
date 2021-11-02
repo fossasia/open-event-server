@@ -1,6 +1,6 @@
 {{ _('Hello,') }}
 <br/><br/>
-{{ _('This is an automatic message from') }} {{ settings.frontend_url }}.
+{{ _('This is an automatic message from %(url)s.', url=settings.frontend_url) }}
 <br/><br/>
 {{ _('The ticket sales period for one or several of your tickets for %(event_name)s will end in 24 hours.', event_name=event_name) }} {{ _('If you would like to extend the period of your ticket sales, please login to your account and edit the sales period for your tickets.') }}
 <br/><br/>
@@ -16,7 +16,7 @@
 5. {{ _('In the ticket settings adjust the sales period for the ticket.') }}<br/>
 6. {{ _('Repeat the steps for other tickets, if any.') }}<br/>
 7. {{ _('Scroll to the bottom of the page and save the changes by clicking “Publish”.') }}<br/>
-{{ _('You can access the dashboard of the event here') }} <a href={{ event_dashboard }}>{{event_dashboard}} </a><br/>
+{{ _('You can access the dashboard of the event here %(dashboard_link)s.', dashboard_link = '<a href="%s">"%s"</a>' % (event_dashboard, event_dashboard)) | safe }}<br/>
 <br/><br/>
 {{ _('Thank you.') }}
 <br/><br/>

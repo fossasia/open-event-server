@@ -130,7 +130,7 @@ def send_email_task_sendgrid(payload):
             attachment.disposition = Disposition('attachment')
             if filename.endswith('.pdf'):
                 attachment.file_type = FileType('application/pdf')
-                attachment.file_name = FileName(payload['to'])
+                attachment.file_name = FileName(filename)
             elif filename.endswith('.ics'):
                 attachment.file_type = FileType('text/calendar')
                 attachment.file_name = FileName('ical.ics')

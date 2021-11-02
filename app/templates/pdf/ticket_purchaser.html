@@ -49,29 +49,29 @@
 </html>
 {% for holder in order.ticket_holders %}
         <div id="main_content">
-            <span class="label">Event</span><br>
+            <span class="label">{{ _('Event') }}</span><br>
             <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
 
             {% if order.event.online %}
                 {% if order.event.location_name %}
-                    <span class="label">Event taking place online and at</span></br>
+                    <span class="label">{{ _('Event taking place online and at %(event_location)s', event_location='') }}</span></br>
                     <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
                 {% else %}
-                    <span class="label">Online Event</span><br><br>
+                    <span class="label">{{ _('Online Event') }}</span><br><br>
                 {% endif %}
             {% elif order.event.location_name %}
-                <span class="label">At</span></br>
+                <span class="label">{{ _('At %(location_name)s') }}</span></br>
                 <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
             {% else %}
-                <span class="label">Location or online event details to be announced</span><br><br>
+                <span class="label">{{ _('Location or online event details to be announced') }}</span><br><br>
             {% endif %}
 
-            <span class="label">Date and Time</span><br>
-            <span style="font-size: 15px;">From: {{ order.event.starts_at | datetime(order.event.timezone) }}</span><br>
-            <span style="font-size: 15px;">To: {{ order.event.ends_at | datetime(order.event.timezone) }}</span>
+            <span class="label">{{ _('Date and Time') }}</span><br>
+            <span style="font-size: 15px;">{{ _('From: %(start_time)s') }} {{ order.event.starts_at | datetime(order.event.timezone) }}</span><br>
+            <span style="font-size: 15px;">{{ _('To: %(end_time)s') }} {{ order.event.ends_at | datetime(order.event.timezone) }}</span>
             <br><br>
 
-            <span class="label">Type</span><br>
+            <span class="label">{{ _('Type') }}</span><br>
             <span style="font-size: 20px;">{{ holder.ticket.name }}</span>
             <br><br>
 

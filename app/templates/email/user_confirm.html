@@ -1,2 +1,2 @@
-{{ _('Hi') }} {{ email }},
-<br/> {{ _('Please visit this link to confirm your email') }}:  <a href={{ link }} target='_blank'>{{ link }}</a>
+{{ _('Hello %(email)s,', email=email) }}
+<br/> {{ _('Please visit this link to confirm your email: %(url)s.', url = '<a href="%s" target="_blank">%s</a>' % (link, link)) | safe }}
