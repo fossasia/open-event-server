@@ -106,10 +106,7 @@ class StripePaymentsManager:
             raise ConflictError(
                 {'pointer': ''}, 'Stripe credentials not found for the event.'
             )
-        import logging
-        logging.error('%s', credentials['SECRET_KEY'])
         stripe.api_key = credentials['SECRET_KEY']
-        # stripe.api_key = 'sk_test_51JkNFWSEz988J3ILTalS1RRlC9sKglFwEiESNPRZExy6hwYdsefgHqBAx8GPahYO7apWZeZp4812EyQX7g3H9vhu006H65v5aG'
         if not currency:
             currency = order_invoice.event.payment_currency
 
@@ -117,15 +114,15 @@ class StripePaymentsManager:
             currency = "USD"
 
         frontend_url = get_settings()['frontend_url']
-        logging.error('%s %s', credentials['SECRET_KEY'], currency)
 
         try:
-            payment_method_types = ['card', 'klarna']
-            if currency.lower() == 'eur':
-                payment_method_types.append('sepa_debit')
+            # payment_method_types = ['card', 'klarna']
+            payment_method_types = ['card']
+            # if currency.lower() == 'eur':
+            #     payment_method_types.append('sepa_debit')
 
             session = stripe.checkout.Session.create(
-                payment_method_types= ['card'],
+                payment_method_types= payment_method_types,
                 line_items=[{
                     'price_data': {
                         'currency': currency.lower(),
@@ -140,14 +137,12 @@ class StripePaymentsManager:
                 success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
                 cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
             )
-            logging.error('%s',session)
 
             return session
 
         except Exception as e:
-            logging.error('%s exception capture payment',e)
             raise ConflictError({'pointer': ''}, str(e))
-    
+
     @staticmethod
     def retrieve_session(event_id, stripe_session_id):
         credentials = StripePaymentsManager.get_credentials(event_id)
@@ -160,7 +155,7 @@ class StripePaymentsManager:
         session = stripe.checkout.Session.retrieve(stripe_session_id)
 
         return session
-    
+
     def retrieve_payment_intent(event_id, payment_intent_id):
         credentials = StripePaymentsManager.get_credentials(event_id)
 

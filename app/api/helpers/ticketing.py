@@ -248,26 +248,20 @@ class TicketingManager:
         return order
 
     @staticmethod
-    def charge_stripe_order_payment(order, token_id):
+    def charge_stripe_order_payment(order):
         """
-        Charge the user through Stripe
+        Create session for order
         :param order: Order for which to charge for
-        :param token_id: Stripe token
         :return:
         """
-        # save the stripe token with the order
-        order.stripe_token = token_id
-        save_to_db(order)
-
-        # charge the user
+        # create session for the user
         try:
-            charge = StripePaymentsManager.capture_payment(order)
-            order.stripe_session_id = charge['id']
+            session = StripePaymentsManager.capture_payment(order)
+            order.stripe_session_id = session['id']
             db.session.commit()
-            logging.error('%s ticketing', charge)
-            return True, charge
+            return True, session
         except ConflictError as e:
-            # payment failed hence expire the order
+            # session creation failed hence expire the order
             logging.error('%s ticketing - error', e)
             order.status = 'expired'
             save_to_db(order)
@@ -275,33 +269,9 @@ class TicketingManager:
             # delete related attendees to unlock the tickets
             delete_related_attendees_for_order(order)
 
-            raise e
+            # return the failure message from stripe.
+            return False, e
 
-        # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
-        if charge.paid:
-            # update the order in the db.
-            order.paid_via = charge.source.object
-            order.brand = charge.source.brand
-            order.exp_month = charge.source.exp_month
-            order.exp_year = charge.source.exp_year
-            order.last4 = charge.source.last4
-            order.transaction_id = charge.id
-            order.status = 'completed'
-            order.completed_at = datetime.utcnow()
-            save_to_db(order)
-
-            on_order_completed(order)
-
-            return True, 'Charge successful'
-        # payment failed hence expire the order
-        order.status = 'expired'
-        save_to_db(order)
-
-        # delete related attendees to unlock the tickets
-        delete_related_attendees_for_order(order)
-
-        # return the failure message from stripe.
-        return False, charge.failure_message
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
