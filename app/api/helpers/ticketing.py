@@ -262,8 +262,13 @@ class TicketingManager:
         # charge the user
         try:
             charge = StripePaymentsManager.capture_payment(order)
+            order.stripe_session_id = charge['id']
+            db.session.commit()
+            logging.error('%s ticketing', charge)
+            return True, charge
         except ConflictError as e:
             # payment failed hence expire the order
+            logging.error('%s ticketing - error', e)
             order.status = 'expired'
             save_to_db(order)
 

@@ -1,15 +1,19 @@
 import os
 
+from datetime import datetime
+
+
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
+from app.api.helpers import payment
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
+from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed, delete_related_attendees_for_order
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
@@ -18,6 +22,8 @@ from app.models import db
 from app.models.order import Order
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
+from app.api.helpers.payment import StripePaymentsManager
+
 
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')
@@ -184,3 +190,35 @@ def ticket_attendee_pdf(attendee_id):
     if not os.path.isfile(file_path):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
+
+@order_blueprint.route('/<string:order_identifier>/verify', methods=['POST'])
+def verify_order_payment(order_identifier):
+
+    order = Order.query.filter_by(identifier=order_identifier).first()
+    
+    try:
+        session = StripePaymentsManager.retrieve_session(order.event, order.stripe_session_id)
+        print(session)
+        payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, session.payment_intent)
+        print(payment_intent)
+    except Exception as e:
+        raise e
+
+    if session['payment_status'] == 'paid':
+        order.status = 'completed'
+        order.completed_at = datetime.utcnow()
+        order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
+        order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
+        save_to_db(order)
+
+        on_order_completed(order)
+    
+    if session['payment_status'] == 'unpaid' and payment_intent['status'] is not 'succeeded':
+        order.status = 'expired'
+
+        db.session.commit()
+        # delete related attendees to unlock the tickets
+        delete_related_attendees_for_order(order)
+
+
+    return jsonify({ 'payment_status': session['payment_status']})
