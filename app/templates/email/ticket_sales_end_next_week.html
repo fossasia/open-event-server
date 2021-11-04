@@ -16,7 +16,9 @@
 5. {{ _('In the ticket settings adjust the sales period for the ticket.') }}<br/>
 6. {{ _('Repeat the steps for other tickets, if any.') }}<br/>
 7. {{ _('Scroll to the bottom of the page and save the changes by clicking “Publish”.') }}<br/>
+{% autoescape false %}
 {{ _('You can access the dashboard of the event here %(dashboard_link)s.', dashboard_link = '<a href="%s">"%s"</a>' % (event_dashboard, event_dashboard)) | safe }}<br/>
+{% endautoescape %}
 <br/><br/>
 {{ _('Thank you.') }}
 <br/><br/>
