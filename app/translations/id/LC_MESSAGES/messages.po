@@ -12,8 +12,8 @@ msgstr ""
 "PO-Revision-Date: 2021-04-07 02:26+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language: id\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-"
-"event/server/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-event/"
+"server/id/>\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -73,10 +73,12 @@ msgstr ""
 
 #: app/templates/email/event_role.html:6 app/templates/email/group_role.html:6
 #: app/templates/email/user_event_role.html:6
+#: app/templates/email/event_role.html:5 app/templates/email/group_role.html:5
+#: app/templates/email/user_event_role.html:5
 #, python-format
 msgid ""
-"To accept the role please sign up using the following link: "
-"%(open_link)sLink%(close_link)s."
+"To accept the role please sign up using the following link: %(open_link)sLink"
+"%(close_link)s."
 msgstr ""
 
 #: app/templates/email/group_contact_user.html:1
@@ -111,7 +113,8 @@ msgstr "Penyelenggara telah menerima pesan Anda dan akan menindaklanjutinya"
 #: app/templates/email/group_contact_user.html:8
 #, fuzzy
 msgid "This is a system message. Please do not reply to this message."
-msgstr "Ini adalah pesan sistem. Jangan membalas pesan ini. Balasan tidak dipantau"
+msgstr ""
+"Ini adalah pesan sistem. Jangan membalas pesan ini. Balasan tidak dipantau"
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
@@ -124,6 +127,10 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
+#: app/templates/email/new_session.html:15
+#: app/templates/email/ticket_sales_end.html:21
+#: app/templates/email/ticket_sales_end_next_week.html:21
+#: app/templates/email/ticket_sales_end_tomorrow.html:21
 #, fuzzy
 msgid "Thank you."
 msgstr "Terima kasih"
@@ -144,8 +151,8 @@ msgstr ""
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
 msgid ""
-"The invoice for your event %(event_name)s on %(app_name)s for %(date)s is"
-" now available."
+"The invoice for your event %(event_name)s on %(app_name)s for %(date)s is "
+"now available."
 msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:4
@@ -168,6 +175,10 @@ msgstr ""
 #: app/templates/email/monthly_payment_followup_email.html:10
 #: app/templates/email/monthly_payment_post_due_email.html:8
 #: app/templates/email/monthly_payment_pre_due_email.html:10
+#: app/templates/email/monthly_payment_email.html:10
+#: app/templates/email/monthly_payment_followup_email.html:9
+#: app/templates/email/monthly_payment_post_due_email.html:7
+#: app/templates/email/monthly_payment_pre_due_email.html:9
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
 msgstr ""
@@ -176,26 +187,38 @@ msgstr ""
 #: app/templates/email/monthly_payment_followup_email.html:12
 #: app/templates/email/monthly_payment_post_due_email.html:14
 #: app/templates/email/monthly_payment_pre_due_email.html:16
+#: app/templates/email/monthly_payment_email.html:12
+#: app/templates/email/monthly_payment_followup_email.html:11
+#: app/templates/email/monthly_payment_post_due_email.html:11
+#: app/templates/email/monthly_payment_pre_due_email.html:13
 #, python-format
 msgid ""
-"A detailed invoice is available in %(open_link)sthe billing "
-"area%(close_link)s of your account."
+"A detailed invoice is available in %(open_link)sthe billing area"
+"%(close_link)s of your account."
 msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
 #: app/templates/email/monthly_payment_post_due_email.html:15
 #: app/templates/email/monthly_payment_pre_due_email.html:17
+#: app/templates/email/monthly_payment_email.html:13
+#: app/templates/email/monthly_payment_followup_email.html:12
+#: app/templates/email/monthly_payment_post_due_email.html:12
+#: app/templates/email/monthly_payment_pre_due_email.html:14
 #, python-format
 msgid ""
-"If you have any questions about invoices, please find more information on"
-" our FAQ at %(faq_url)s."
+"If you have any questions about invoices, please find more information on "
+"our FAQ at %(faq_url)s."
 msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
 #: app/templates/email/monthly_payment_post_due_email.html:20
 #: app/templates/email/monthly_payment_pre_due_email.html:20
+#: app/templates/email/monthly_payment_email.html:15
+#: app/templates/email/monthly_payment_followup_email.html:14
+#: app/templates/email/monthly_payment_post_due_email.html:16
+#: app/templates/email/monthly_payment_pre_due_email.html:16
 #, python-format
 msgid "Thank you for using %(app_name)s!"
 msgstr ""
@@ -209,6 +232,14 @@ msgstr ""
 #: app/templates/email/ticket_purchased_attendee.html:17
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
+#: app/templates/email/monthly_payment_email.html:17
+#: app/templates/email/monthly_payment_followup_email.html:16
+#: app/templates/email/monthly_payment_post_due_email.html:18
+#: app/templates/email/monthly_payment_pre_due_email.html:18
+#: app/templates/email/ticket_cancelled.html:8
+#: app/templates/email/ticket_purchased.html:29
+#: app/templates/email/ticket_purchased_attendee.html:15
+#: app/templates/email/user_register.html:6
 msgid "Team"
 msgstr "Tim"
 
@@ -233,26 +264,30 @@ msgid "Your payment is now past due."
 msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
-msgid "Please pay this invoice immediately to avoid your account being suspended."
+msgid ""
+"Please pay this invoice immediately to avoid your account being suspended."
 msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
+#: app/templates/email/monthly_payment_post_due_email.html:9
+#: app/templates/email/monthly_payment_pre_due_email.html:11
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
 msgstr ""
 
 #: app/templates/email/monthly_payment_post_due_email.html:18
+#: app/templates/email/monthly_payment_post_due_email.html:14
 msgid ""
-"If you feel this invoice is incorrect or have any questions, you can "
-"contact our support team for assistance."
+"If you feel this invoice is incorrect or have any questions, you can contact "
+"our support team for assistance."
 msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
 msgid ""
-"This is a reminder that we haven't received your payment for your invoice"
-" for %(event_name)s for %(date)s."
+"This is a reminder that we haven't received your payment for your invoice "
+"for %(event_name)s for %(date)s."
 msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
@@ -260,6 +295,7 @@ msgid "Please pay within 2 days."
 msgstr ""
 
 #: app/templates/email/new_session.html:3
+#: app/templates/email/new_session.html:2
 #, python-format
 msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
@@ -267,28 +303,33 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/new_session.html:5
+#: app/templates/email/new_session.html:4
 #, python-format
 msgid ""
-"Your %(open_link)sCall For Speakers%(close_link)s has received a new "
-"session proposal with the following details:"
+"Your %(open_link)sCall For Speakers%(close_link)s has received a new session "
+"proposal with the following details:"
 msgstr ""
 
 #: app/templates/email/new_session.html:8
+#: app/templates/email/new_session.html:6
 msgid "Session"
 msgstr ""
 
 #: app/templates/email/new_session.html:10
+#: app/templates/email/new_session.html:8
 msgid "Abstract"
 msgstr ""
 
 #: app/templates/email/new_session.html:15
+#: app/templates/email/new_session.html:12
 #, python-format
 msgid ""
-"You can view all speaker details on the speaker profile page and the "
-"session proposal on the %(open_link)ssession page%(close_link)s."
+"You can view all speaker details on the speaker profile page and the session "
+"proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
 
 #: app/templates/email/new_session.html:16
+#: app/templates/email/new_session.html:13
 #, python-format
 msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
@@ -331,13 +372,13 @@ msgstr ""
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
-"Please use the following link to reset your password and verify your "
-"account."
+"Please use the following link to reset your password and verify your account."
 msgstr ""
 "Silakan gunakan tautan berikut untuk mengatur ulang kata sandi dan "
 "memverifikasi akun Anda."
 
 #: app/templates/email/speaker_invite.html:4
+#: app/templates/email/speaker_invite.html:3
 #, python-format
 msgid ""
 "You have been invited as a speaker for the session submission "
@@ -346,22 +387,28 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/speaker_invite.html:6
+#: app/templates/email/speaker_invite.html:5
 #, python-format
 msgid ""
-"You can accept or reject this invitation from %(open_link)sCall for "
-"Speakers%(close_link)s page."
+"You can accept or reject this invitation from %(open_link)sCall for Speakers"
+"%(close_link)s page."
 msgstr ""
 
 #: app/templates/email/speaker_invite.html:9
+#: app/templates/email/speaker_invite.html:7
 msgid ""
-"If you do not have an account yet you need to register before you can "
-"accept the invite."
+"If you do not have an account yet you need to register before you can accept "
+"the invite."
 msgstr ""
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
 #: app/templates/email/ticket_purchased.html:30
 #: app/templates/email/ticket_purchased_attendee.html:16
+#: app/templates/email/speaker_invite.html:8
+#: app/templates/email/ticket_cancelled.html:7
+#: app/templates/email/ticket_purchased.html:28
+#: app/templates/email/ticket_purchased_attendee.html:14
 msgid "Best regards"
 msgstr "Dengan hormat"
 
@@ -371,115 +418,147 @@ msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:4
+#: app/templates/email/ticket_cancelled.html:3
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:5
+#: app/templates/email/ticket_cancelled.html:4
 msgid ""
-"If you have not done this cancellation by yourself, please check with the"
-" owner of the order or the organizer of the event for more information "
-"about the cancellation."
+"If you have not done this cancellation by yourself, please check with the "
+"owner of the order or the organizer of the event for more information about "
+"the cancellation."
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:6
+#: app/templates/email/ticket_cancelled.html:5
 #, fuzzy, python-format
 msgid ""
-"To contact event organizers please use the contact form on the event page"
-" here: %(event_url)s."
+"To contact event organizers please use the contact form on the event page "
+"here: %(event_url)s."
 msgstr "Anda telah menghubungi penyelenggara acara"
 
 #: app/templates/email/ticket_cancelled.html:8
+#: app/templates/email/ticket_cancelled.html:6
 msgid "You need to login to access the form."
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:3
+#: app/templates/email/ticket_purchased.html:2
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:4
+#: app/templates/email/ticket_purchased.html:3
 #, fuzzy
 msgid "This is your confirmation."
 msgstr "Ini adalah konfirmasi pesanan Anda. Tiket dapat diunduh di"
 
 #: app/templates/email/ticket_purchased.html:4
+#: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid ""
-"You can download your %(open_link)stickets or registration information "
-"here%(close_link)s."
+"You can download your %(open_link)stickets or registration information here"
+"%(close_link)s."
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:6
+#: app/templates/email/ticket_purchased.html:4
 msgid "Order Summary"
 msgstr "Ringkasan Pesanan"
 
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
 #: app/templates/email/ticket_purchased_organizer.html:15
+#: app/templates/email/ticket_purchased.html:5
+#: app/templates/email/ticket_purchased_attendee.html:4
+#: app/templates/email/ticket_purchased_organizer.html:13
 msgid "Name"
 msgstr "Nama"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
+#: app/templates/email/ticket_purchased.html:7
+#: app/templates/email/ticket_purchased_attendee.html:7
 msgid "Ticket"
 msgstr "Tiket"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
 #: app/templates/pdf/order_invoice.html:319
+#: app/templates/email/ticket_purchased.html:8
+#: app/templates/email/ticket_purchased_attendee.html:8
 msgid "Quantity"
 msgstr "Jumlah"
 
 #: app/templates/email/ticket_purchased.html:12
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
+#: app/templates/email/ticket_purchased.html:10
+#: app/templates/email/ticket_purchased_organizer.html:12
 msgid "Order Number"
 msgstr "Nomor Pesanan"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
+#: app/templates/email/ticket_purchased.html:12
+#: app/templates/email/ticket_purchased_attendee.html:11
 msgid "About this event"
 msgstr "Tentang acara ini"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
+#: app/templates/email/ticket_purchased.html:13
+#: app/templates/email/ticket_purchased_attendee.html:12
 msgid "Date"
 msgstr "Tanggal"
 
 #: app/templates/email/ticket_purchased.html:16
+#: app/templates/email/ticket_purchased.html:14
 msgid "Location"
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:17
+#: app/templates/email/ticket_purchased.html:15
 msgid "URL"
 msgstr ""
 
 #: app/templates/email/ticket_purchased.html:20
 #: app/templates/email/ticket_purchased_attendee.html:19
+#: app/templates/email/ticket_purchased.html:18
+#: app/templates/email/ticket_purchased_attendee.html:17
 msgid "Below you find a message from the organizer"
 msgstr "Di bawah ini Anda menemukan pesan dari penyelenggara"
 
 #: app/templates/email/ticket_purchased.html:34
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:106
+#: app/templates/email/ticket_purchased.html:31
+#: app/templates/email/ticket_purchased_attendee.html:26
+#: app/templates/email/ticket_purchased_organizer.html:74
 #, fuzzy, python-format
 msgid "Login to manage your orders at %(url)s."
 msgstr "Masuk untuk mengelola pesanan Anda di"
 
 #: app/templates/email/ticket_purchased_attendee.html:3
+#: app/templates/email/ticket_purchased_attendee.html:2
 #, fuzzy, python-format
-msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
+msgid ""
+"This is a confirmation mail of your tickets for the event %(eventname)s."
 msgstr "Ini adalah email konfirmasi tiket Anda untuk acara tersebut"
 
 #: app/templates/email/ticket_purchased_attendee.html:3
+#: app/templates/email/ticket_purchased_attendee.html:2
 #, fuzzy, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
 msgstr "Anda dapat mengunduh tiket di"
 
 #: app/templates/email/ticket_purchased_attendee.html:5
+#: app/templates/email/ticket_purchased_attendee.html:3
 msgid "Ticket Summary"
 msgstr "Ringkasan Tiket"
 
@@ -489,6 +568,7 @@ msgid "Congratulations!"
 msgstr "Selamat!"
 
 #: app/templates/email/ticket_purchased_organizer.html:4
+#: app/templates/email/ticket_purchased_organizer.html:3
 #, python-format
 msgid ""
 "You have a new order for your event %(event_name)s starting at "
@@ -496,36 +576,43 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:7
+#: app/templates/email/ticket_purchased_organizer.html:6
 #, fuzzy, python-format
 msgid "The order has been processed successfully on %(app_name)s."
 msgstr "Kata sandi Anda berhasil diubah."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
+#: app/templates/email/ticket_purchased_organizer.html:6
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:11
+#: app/templates/email/ticket_purchased_organizer.html:9
 msgid "The details of the order are:"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
 #: app/templates/pdf/order_invoice.html:224
+#: app/templates/email/ticket_purchased_organizer.html:14
 msgid "Email"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:18
+#: app/templates/email/ticket_purchased_organizer.html:16
 msgid "Purchase Date and Time"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
+#: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Payment Mode"
 msgstr "Mode Pembayaran"
 
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
+#: app/templates/email/ticket_purchased_organizer.html:20
 msgid "None"
 msgstr ""
 
@@ -571,11 +658,13 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
+#: app/templates/email/ticket_purchased_organizer.html:22
 msgid "Purchase on Invoice"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
+#: app/templates/email/ticket_purchased_organizer.html:28
 msgid "Payment Status"
 msgstr ""
 
@@ -605,10 +694,12 @@ msgid "Expired"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:62
+#: app/templates/email/ticket_purchased_organizer.html:31
 msgid "Tickets/Registration"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:68
+#: app/templates/email/ticket_purchased_organizer.html:37
 #, fuzzy
 msgid "Amount"
 msgstr "Jumlah Pajak"
@@ -616,41 +707,48 @@ msgstr "Jumlah Pajak"
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
+#: app/templates/email/ticket_purchased_organizer.html:45
 msgid "Organisation"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
+#: app/templates/email/ticket_purchased_organizer.html:49
 msgid "Address"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
+#: app/templates/email/ticket_purchased_organizer.html:53
 msgid "City"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
+#: app/templates/email/ticket_purchased_organizer.html:57
 #, fuzzy
 msgid "State"
 msgstr "Tanggal"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
+#: app/templates/email/ticket_purchased_organizer.html:61
 msgid "Zip"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
+#: app/templates/email/ticket_purchased_organizer.html:65
 msgid "Country"
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:100
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
+#: app/templates/email/ticket_purchased_organizer.html:69
 msgid "Tax ID"
 msgstr ""
 
@@ -677,8 +775,8 @@ msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:5
 msgid ""
-"If you would like to reactivate ticket sales for these tickets, please "
-"login to your account and edit the sales period for your tickets."
+"If you would like to reactivate ticket sales for these tickets, please login "
+"to your account and edit the sales period for your tickets."
 msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:7
@@ -722,8 +820,8 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid ""
-"Scroll down to the tickets section, choose the ticket you want to edit "
-"and click on the “Settings Symbol” of the ticket."
+"Scroll down to the tickets section, choose the ticket you want to edit and "
+"click on the “Settings Symbol” of the ticket."
 msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:16
@@ -742,13 +840,15 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:18
 #: app/templates/email/ticket_sales_end_tomorrow.html:18
 msgid ""
-"Scroll to the bottom of the page and save the changes by clicking "
-"“Publish”."
+"Scroll to the bottom of the page and save the changes by clicking “Publish”."
 msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
 #: app/templates/email/ticket_sales_end_tomorrow.html:20
+#: app/templates/email/ticket_sales_end.html:19
+#: app/templates/email/ticket_sales_end_next_week.html:19
+#: app/templates/email/ticket_sales_end_tomorrow.html:19
 #, fuzzy, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
 msgstr "Anda telah menghubungi penyelenggara acara"
@@ -763,8 +863,8 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
 msgid ""
-"If you would like to extend the period of your ticket sales, please login"
-" to your account and edit the sales period for your tickets."
+"If you would like to extend the period of your ticket sales, please login to "
+"your account and edit the sales period for your tickets."
 msgstr ""
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
@@ -794,6 +894,7 @@ msgid "You should verify your new email."
 msgstr ""
 
 #: app/templates/email/user_confirm.html:3
+#: app/templates/email/user_confirm.html:2
 #, fuzzy, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
 msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
@@ -808,13 +909,15 @@ msgstr "Akun Anda telah dibuat pada"
 msgid "Your login is: %(email)s"
 msgstr "Login Anda adalah"
 
-#: app/templates/email/user_register.html:5
-#, fuzzy, python-format
+#: app/templates/email/user_register.html:4
+#, python-format
 msgid "Please visit the following link to verify your email: %(url)s"
-msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
+msgstr ""
+"Silakan kunjungi tautan berikut untuk memverifikasi email Anda: %(url)s"
 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
+#: app/templates/email/user_register.html:5
 msgid "Thank You"
 msgstr "Terima kasih"
 
@@ -984,426 +1087,17 @@ msgstr "Pesan Penyelenggara"
 #~ msgid "Invoice Footer"
 #~ msgstr "Footer Faktur"
 
-#~ msgid ""
-#~ "We\n"
-#~ "hope you enjoyed it"
-#~ msgstr ""
-
-#~ msgid " If you would like to extend the period of your ticket sales"
-#~ msgstr ""
-
-#~ msgid "has just scheduled "
-#~ msgstr ""
-
-#~ msgid "is over"
-#~ msgstr ""
-
-#~ msgid "Thank you for using the Eventyay platform for your event"
-#~ msgstr ""
-
-#~ msgid "We hope you enjoyed it"
-#~ msgstr ""
-
-#~ msgid "We hope you enjoyed it and keep in touch"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot"
-#~ msgstr ""
-
-#~ msgid "Click on the following link to download the event"
-#~ msgstr ""
-
-#~ msgid "Your invoice payment is due within 30 days"
-#~ msgstr ""
-
-#~ msgid "Please pay within 30 days"
-#~ msgstr ""
-
-#~ msgid "If you have any questions about invoices"
-#~ msgstr ""
-
-#~ msgid "please find more information on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "Payment is fast and simple using your credit card or PayPal account"
-#~ msgstr ""
-
-#~ msgid "Your payment is now past due"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Please pay this invoice immediately to"
-#~ " avoid your account being suspended"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you feel this invoice is "
-#~ "incorrect or have any questions, you "
-#~ "can contact our support team for "
-#~ "assistance"
-#~ msgstr ""
-
-#~ msgid "Please pay within 2 days"
-#~ msgstr ""
-
-#~ msgid "and click on the status badge of the session"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you do not have an account "
-#~ "yet you need to register before "
-#~ "you can accept the invite"
-#~ msgstr ""
-
-#~ msgid "has been cancelled"
-#~ msgstr ""
-
-#~ msgid "If you have not done this cancellation by yourself"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please check with the owner of the"
-#~ " order or the organizer of the "
-#~ "event for more information about the "
-#~ "cancellation"
-#~ msgstr ""
-
-#~ msgid "You need to login to access the form"
-#~ msgstr ""
-
-#~ msgid "Login to your account"
-#~ msgstr ""
-
-#~ msgid "On the top right click “Manage Events”"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "On the Events Dashboard choose the "
-#~ "event you want to edit and click"
-#~ " the “Edit Symbol” of the event"
-#~ msgstr ""
-
-#~ msgid "You are now editing the “Basic Details” of your event"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll down to the tickets section, "
-#~ "choose the ticket you want to edit"
-#~ " and click on the “Settings Symbol”"
-#~ " of the ticket"
-#~ msgstr ""
-
-#~ msgid "In the ticket settings adjust the sales period for the ticket"
-#~ msgstr ""
-
-#~ msgid "Repeat the steps for other tickets"
-#~ msgstr ""
-
-#~ msgid "if any"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll to the bottom of the page"
-#~ " and save the changes by clicking "
-#~ "“Publish”"
-#~ msgstr ""
-
-#~ msgid "You should verify your new email"
-#~ msgstr ""
-
-#~ msgid "If you would like to reactivate ticket sales for these tickets"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please login to your account and "
-#~ "edit the sales period for your "
-#~ "tickets."
-#~ msgstr ""
-
-#~ msgid "If you would like to extend the period of your ticket sales"
-#~ msgstr ""
-
-#~ msgid "please login to your account and edit the sales period for your tickets"
-#~ msgstr ""
-
-#~ msgid "your"
-#~ msgstr ""
-
-#~ msgid "is over."
-#~ msgstr ""
-
-#~ msgid "thank you for participating in our"
-#~ msgstr ""
-
-#~ msgid "You have been invited to be a"
-#~ msgstr ""
-
 #~ msgid "at"
 #~ msgstr "Tanggal"
-
-#~ msgid "group"
-#~ msgstr ""
-
-#~ msgid "The invoice for your event"
-#~ msgstr ""
-
-#~ msgid "on eventyay.com for"
-#~ msgstr ""
 
 #~ msgid "is now available."
 #~ msgstr "Informasi tidak tersedia"
 
-#~ msgid "Thank you for using"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Just a friendly reminder that we "
-#~ "haven't received your payment for your"
-#~ " invoice for"
-#~ msgstr ""
-
-#~ msgid "Please pay within 15 days"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is a reminder that we haven't"
-#~ " received your payment for your "
-#~ "invoice for"
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from"
-#~ msgstr ""
-
-#~ msgid "for organizers of the"
-#~ msgstr ""
-
-#~ msgid "You have been invited as a speaker for the session submission"
-#~ msgstr ""
-
 #~ msgid "for the event"
 #~ msgstr "Tentang acara ini"
-
-#~ msgid "Your order"
-#~ msgstr ""
-
-#~ msgid "has been cancelled."
-#~ msgstr ""
-
-#~ msgid "starting at"
-#~ msgstr ""
-
-#~ msgid "to view"
-#~ msgstr ""
-
-#~ msgid "download the invoice"
-#~ msgstr ""
-
-#~ msgid "The ticket sales period for one or several of your tickets for"
-#~ msgstr ""
-
-#~ msgid "to"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s"
-#~ msgstr ""
-
-#~ msgid "Hello %(name)s"
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5% finance fee."
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a"
-#~ msgstr ""
-
-#~ msgid "finance fee"
-#~ msgstr ""
-
-#~ msgid "by"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s, your %(eventname) is over."
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5%% finance fee."
-#~ msgstr ""
-
-#~ msgid "Hi %(email),"
-#~ msgstr ""
-
-#~ msgid "Your group"
-#~ msgstr ""
-
-#~ msgid "has just scheduled"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it."
-#~ msgstr ""
-
-#~ msgid "Time"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot!"
-#~ msgstr ""
-
-#~ msgid "Event description"
-#~ msgstr ""
-
-#~ msgid "You’re getting this message because you are a group member of"
-#~ msgstr ""
-
-#~ msgid "on %(app_name)s."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can unsubscribe from emails from "
-#~ "this group by unfollowing the group"
-#~ msgstr ""
-
-#~ msgid "here"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link:"
-#~ msgstr ""
-
-#~ msgid "Link"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The invoice for your event "
-#~ "%(event_name)s on eventyay.com for %(date)s"
-#~ " is now available."
-#~ msgstr ""
-
-#~ msgid "Pay Now at"
-#~ msgstr ""
-
-#~ msgid "A detailed invoice is available in"
-#~ msgstr ""
-
-#~ msgid "the billing area"
-#~ msgstr ""
-
-#~ msgid "of your account"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you have any questions about "
-#~ "invoices, please find more information "
-#~ "on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "of your account."
-#~ msgstr ""
-
-#~ msgid "Please pay immediately at"
-#~ msgstr ""
-
-#~ msgid "finance fee."
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from %(app_name)s for organizers of the"
-#~ msgstr ""
-
-#~ msgid "Your"
-#~ msgstr ""
-
-#~ msgid "Call for Speakers"
-#~ msgstr ""
-
-#~ msgid "has received a new session proposal with the following details"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can view all speaker details "
-#~ "on the speaker profile page and "
-#~ "the session proposal on the"
-#~ msgstr ""
-
-#~ msgid "session page"
-#~ msgstr ""
-
-#~ msgid "To change the status of sessions please go to the"
-#~ msgstr ""
-
-#~ msgid "sessions overview page"
-#~ msgstr ""
-
-#~ msgid "and click on the status badge of the session."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You have been invited as a speaker"
-#~ " for the session submission "
-#~ "\"%(session_title)s\" for the event"
-#~ msgstr ""
-
-#~ msgid "on"
-#~ msgstr ""
-
-#~ msgid "by %(inviter_name)s %(inviter_email)s."
-#~ msgstr ""
-
-#~ msgid "You can accept or reject this invitation from"
-#~ msgstr ""
-
-#~ msgid "page"
-#~ msgstr ""
-
-#~ msgid "The information about your cancelled order is here"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "To contact event organizers please use"
-#~ " the contact form on the event "
-#~ "page here"
-#~ msgstr ""
-
-#~ msgid "Thank you for signing up for"
-#~ msgstr ""
 
 #~ msgid "You can download your"
 #~ msgstr "Anda dapat mengunduh tiket di"
 
-#~ msgid "tickets or registration information here"
-#~ msgstr ""
-
-#~ msgid "You have a new order for your event"
-#~ msgstr ""
-
-#~ msgid "starting at %(event_time)s on %(event_date)s."
-#~ msgstr ""
-
-#~ msgid "Click here"
-#~ msgstr ""
-
-#~ msgid "to view/download the invoice."
-#~ msgstr ""
-
 #~ msgid "Login to manage the orders at"
 #~ msgstr "Masuk untuk mengelola pesanan Anda di"
-
-#~ msgid "This is an automatic message from"
-#~ msgstr ""
-
-#~ msgid "Hi"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link"
-#~ msgstr ""
-
-#~ msgid "Organiser"
-#~ msgstr ""
-
-#~ msgid "Thank you for using the Eventyay platform for your event."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is an automatic email from "
-#~ "%(app_name)s for organizers of the "
-#~ "%(session_event_name)s."
-#~ msgstr ""
-
