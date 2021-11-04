@@ -2085,7 +2085,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.8.3"
+version = "6.9.0"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2620,7 +2620,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "7c7f30843de39ec5b0a7beddd2d1e03983af1ba321c7ddf02dc76fcc4b5acfd8"
+content-hash = "1e2272a9e57664e087aef78837c92910e5cb5ff55c9c5631d808be20e1833286"
 
 [metadata.files]
 aiohttp = [
@@ -3855,8 +3855,8 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.8.3-py3-none-any.whl", hash = "sha256:1c4c8937359cdb46c6fa4775d4066a80576fd777347eea14f8a6ee60b77ed235"},
-    {file = "sendgrid-6.8.3.tar.gz", hash = "sha256:1a85cf0a52e8d6284cbe4b25e97b22bdfe94b1c205aef5dacfca9cff9d5d147d"},
+    {file = "sendgrid-6.9.0-py3-none-any.whl", hash = "sha256:0e5da37bd85ba8d2e84d7597adc493bccf8637b0cdb8ca79e8719456615316c4"},
+    {file = "sendgrid-6.9.0.tar.gz", hash = "sha256:eafad9aa4cf4ccca539a22e6a844538fdceba25f53a51de26458ccf8a0632e9a"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-1.4.3.tar.gz", hash = "sha256:b9844751e40710e84a457c5bc29b21c383ccb2b63d76eeaad72f7f1c808c8828"},
