@@ -19,15 +19,44 @@
 {% if payment_mode %}
   {{ _('Payment Mode') }}:
   {% if payment_mode == 'free' %}
-    {{ _('None') }}
+  {{ _('None') }}
+  {% elif payment_mode == 'stripe' %}
+  {{ _('Stripe') }}
+  {% elif payment_mode == 'paypal' %}
+  {{ _('Paypal') }}
+  {% elif payment_mode == 'bank' %}
+  {{ _('Bank') }}
+  {% elif payment_mode == 'cheque' %}
+  {{ _('Cheque') }}
+  {% elif payment_mode == 'onsite' %}
+  {{ _('Onsite') }}
+  {% elif payment_mode == 'omise' %}
+  {{ _('Omise') }}
+  {% elif payment_mode == 'alipay' %}
+  {{ _('Alipay') }}
+  {% elif payment_mode == 'paytm' %}
+  {{ _('Paytm') }}
   {% elif payment_mode == 'invoice' %}
-    {{ _('Purchase on Invoice') }}
+  {{ _('Purchase on Invoice') }}
   {% else %}
-    {{ payment_mode | capitalize }}
+  {{ payment_mode | capitalize }}
   {% endif %}<br/>
 {% endif %}
 {% if payment_status %}
-  {{ _('Payment Status') }}: {{ payment_status | capitalize }} <br/>
+  {{ _('Payment Status') }}:
+  {% if payment_status == 'completed' %}
+  {{ _('Completed') }}
+  {% elif payment_status == 'pending' or payment_status == 'initialized' %}
+  {{ _('Pending') }}
+  {% elif payment_status == 'placed' %}
+  {{ _('Placed') }}
+  {% elif payment_status == 'cancelled' %}
+  {{ _('Cancelled') }}
+  {% elif payment_status == 'expired' %}
+  {{ _('Expired') }}
+  {% else %}
+  {{ payment_status | capitalize }}
+  {% endif %}<br/>
 {% endif %}
 {% if tickets_count %}
   {{ _('Tickets/Registration') }}:
