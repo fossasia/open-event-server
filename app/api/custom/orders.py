@@ -5,7 +5,6 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
-from app.api.helpers import payment
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -198,9 +197,7 @@ def verify_order_payment(order_identifier):
     
     try:
         session = StripePaymentsManager.retrieve_session(order.event, order.stripe_session_id)
-        print(session)
         payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, session.payment_intent)
-        print(payment_intent)
     except Exception as e:
         raise e
 
@@ -213,7 +210,7 @@ def verify_order_payment(order_identifier):
 
         on_order_completed(order)
     
-    if session['payment_status'] == 'unpaid' and payment_intent['status'] is not 'succeeded':
+    if session['payment_status'] == 'unpaid' and payment_intent['status'] != 'succeeded':
         order.status = 'expired'
 
         db.session.commit()

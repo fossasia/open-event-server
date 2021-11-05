@@ -1,12 +1,9 @@
 import json
 import logging
 import time
-from app.api.helpers import payment
 
 import omise
-import stripe
 import requests
-from datetime import datetime
 from flask import Blueprint, current_app, jsonify, redirect, request, url_for
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
