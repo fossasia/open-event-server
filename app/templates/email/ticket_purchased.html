@@ -1,6 +1,8 @@
 {{ _('Hello') }},
+{% autoescape false %}
 <br/><br/>{{ _('Thank you for signing up for %(event_name)s.', event_name = '<a href="%s">"%s"</a>' % (order.event.site_link, order.event.name)) | safe }}
 <br/><br/>{{ _('This is your confirmation.') }} {{ _('You can download your %(open_link)stickets or registration information here%(close_link)s.', open_link = '<a href="%s">' % (order_view_url), close_link = '</a>') | safe }}
+{% endautoescape %}
 <br/><br/>{{ _('Order Summary') }}:
 <br/>{{ _('Name') }}: {{ order.user.full_name }}
 {% for i, attendee in attendees | groupby('ticket_id') %}
@@ -28,4 +30,6 @@
 <br/>{{ _('Best regards') }},
 <br/>{{ settings.app_name }} {{ _('Team') }}
 <br/>--
+{% autoescape false %}
 <br/>{{ _('Login to manage your orders at %(url)s.', url = '<a href="%s">%s</a>' % (settings.frontend_url, settings.frontend_url)) | safe }}
+{% endautoescape %}
