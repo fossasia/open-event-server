@@ -750,6 +750,7 @@ def send_email_to_moderator(video_stream_moderator):
 
 
 def send_email_after_event(email, event_name):
+    app_name = get_settings()['app_name']
     action = MailType.AFTER_EVENT
     mail = MAILS[action]
 
@@ -759,6 +760,7 @@ def send_email_after_event(email, event_name):
         subject=mail['subject'].format(event_name=event_name),
         html=render_template(
             mail['template'],
+            app_name=app_name,
             email=email,
             eventname=event_name,
         ),

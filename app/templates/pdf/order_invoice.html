@@ -181,8 +181,8 @@
       {% if event.tax.registered_company %}
       <div><span>{{ _('Organisation') }}</span>{{ event.tax.registered_company or '' }}</div>
       {% endif %}
-      {% if event.owner.billing_contact_name %}
-      <div><span>{{ _('Organiser') }}</span>{{ event.owner.billing_contact_name }}</div>
+      {% if event.tax.contact_name %}
+      <div><span>{{ _('Contact Name') }}</span>{{ event.tax.contact_name }}</div>
       {% endif %}
       {% if event.tax.address %}
       <div><span>{{ _('Address') }}</span>{{ event.tax.address }}</div>
@@ -199,11 +199,11 @@
       {% if event.tax.country %}
       <div><span>{{ _('Country') }}</span>{{ event.tax.country }}</div>
       {% endif %}
-      {% if event.owner.billing_phone %}
-      <div><span>{{ _('Phone') }}</span>{{ event.owner.billing_phone }}</div>
+      {% if event.tax.phone %}
+      <div><span>{{ _('Phone') }}</span>{{ event.tax.phone }}</div>
       {% endif %}
-      {% if event.owner.email %}
-      <div><span>{{ _('Email') }}</span>{{ event.owner.email }}</div>
+      {% if event.tax.email %}
+      <div><span>{{ _('Email') }}</span>{{ event.tax.email }}</div>
       {% endif %}
       {% if event.tax.tax_id %}
       <div><span>{{ _('Tax ID') }}</span>{{ event.tax.tax_id }}</div>
@@ -227,13 +227,15 @@
       {% endif %}
       <div><span> {{ _('Payment Status') }}</span>
         {% if order.status == 'completed' %}
-        {{ order.status | capitalize }}
+        {{ _('Completed') }}
         {% elif order.status == 'pending' or order.status == 'initialized' %}
         {{ _('Pending') }}
         {% elif order.status == 'placed' %}
-        {{ order.status | capitalize }}
+        {{ _('Placed') }}
         {% elif order.status == 'cancelled' %}
-        {{ order.status | capitalize }}
+        {{ _('Cancelled') }}
+        {% elif order.status == 'expired' %}
+        {{ _('Expired') }}
         {% else %}
         {{ order.status | capitalize }}
         {% endif %}
@@ -279,6 +281,22 @@
       <div><span>{{ _('Payment Mode') }}</span>
         {% if order.payment_mode == 'free' %}
         {{ _('None') }}
+        {% elif order.payment_mode == 'stripe' %}
+        {{ _('Stripe') }}
+        {% elif order.payment_mode == 'paypal' %}
+        {{ _('Paypal') }}
+        {% elif order.payment_mode == 'bank' %}
+        {{ _('Bank') }}
+        {% elif order.payment_mode == 'cheque' %}
+        {{ _('Cheque') }}
+        {% elif order.payment_mode == 'onsite' %}
+        {{ _('Onsite') }}
+        {% elif order.payment_mode == 'omise' %}
+        {{ _('Omise') }}
+        {% elif order.payment_mode == 'alipay' %}
+        {{ _('Alipay') }}
+        {% elif order.payment_mode == 'paytm' %}
+        {{ _('Paytm') }}
         {% elif order.payment_mode == 'invoice' %}
         {{ _('Purchase on Invoice') }}
         {% else %}
@@ -327,7 +345,7 @@
               {{ event.payment_currency }}
               {% endif %}
               {{ "%.2f" | format(order_ticket.price) }}
-              {% if order_amount.tax %}
+              {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                 <div class="{{'strikethrough' if order_ticket.discount}} tax">
                   {% if order_ticket.ticket_tax %}
                     {% if order_amount.tax.included %}
@@ -348,7 +366,7 @@
                 {{ event.payment_currency }}
                 {% endif %}
                 {{ "%.2f" | format(order_ticket.price - order_ticket.discount.amount) }}
-                {% if order_amount.tax %}
+                {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                   <div class="tax">
                     {% if order_ticket.ticket_tax %}
                       {% if order_amount.tax.included %}
@@ -371,7 +389,7 @@
             {% endif %}
             {{ "%.2f" | format(order_ticket.sub_total) }}
             <br>
-            {% if order_amount.tax %}
+            {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
               <div class="tax">
                 {% if order_ticket.price %}
                   {% if order_ticket.discount %}
@@ -406,7 +424,7 @@
             {{ order_amount.sub_total | money }}
           </td>
         </tr>
-        {% if order_amount.tax %}
+        {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
         <tr>
           <td></td>
           <td></td>

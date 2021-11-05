@@ -1,9 +1,11 @@
 {{ _('Hello') }},
 <br><br>
-{{ _('You have been invited as a speaker for the session submission') }} "{{ session_title }}" {{ _('for the event') }} <a href={{ event_link }} target='_blank'>{{ event_name }}</a> {{ _('on') }} <a href={{ frontend_url }} target='_blank'>{{ app_name }}</a>  {{ _('by') }} {{ inviter_name }} {{ inviter_email }}.
+{% autoescape false %}
+{{ _('You have been invited as a speaker for the session submission "%(session_title)s" for the event %(event_name)s on %(app_name)s by %(inviter_name)s %(inviter_email)s.', session_title=session_title, event_name = '<a href="%s" target="_blank">"%s</a>' % (event_link, event_name), app_name = '<a href="%s" target="_blank">%s</a>' % (frontend_url, app_name), inviter_name=inviter_name, inviter_email=inviter_email) | safe }}
 <br><br>
-{{ _('You can accept or reject this invitation from') }}  <a href={{ cfs_link }} target='_blank'>{{ _('Call for Speakers') }}</a> {{ _('page') }}.
+{{ _('You can accept or reject this invitation from %(open_link)sCall for Speakers%(close_link)s page.', open_link = '<a href="%s" target="_blank">' % (cfs_link), close_link = '</a>') | safe }}
+{% endautoescape %}
 <br><br>
-{{ _('If you do not have an account yet you need to register before you can accept the invite') }}.
+{{ _('If you do not have an account yet you need to register before you can accept the invite.') }}
 <br/><br/> {{ _('Best regards') }},
 <br/>{{ app_name }}
