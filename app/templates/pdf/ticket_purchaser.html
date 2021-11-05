@@ -60,7 +60,7 @@
                     <span class="label">{{ _('Online Event') }}</span><br><br>
                 {% endif %}
             {% elif order.event.location_name %}
-                <span class="label">{{ _('At %(location_name)s') }}</span></br>
+                <span class="label">{{ _('At %(location_name)s', location_name='') }}</span></br>
                 <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
             {% else %}
                 <span class="label">{{ _('Location or online event details to be announced') }}</span><br><br>
