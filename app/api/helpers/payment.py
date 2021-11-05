@@ -156,6 +156,7 @@ class StripePaymentsManager:
 
         return session
 
+    @staticmethod
     def retrieve_payment_intent(event_id, payment_intent_id):
         credentials = StripePaymentsManager.get_credentials(event_id)
 
