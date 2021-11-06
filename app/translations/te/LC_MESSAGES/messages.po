@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-11-04 18:34+0530\n"
-"PO-Revision-Date: 2021-11-06 08:42+0000\n"
+"PO-Revision-Date: 2021-11-07 15:50+0000\n"
 "Last-Translator: K Sree Vamsi <ksreevamsi32@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/open-event/server/"
 "te/>\n"
@@ -549,8 +549,9 @@ msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:11
+#, fuzzy
 msgid "The details of the order are:"
-msgstr ""
+msgstr "ఆర్డర్ యొక్క వివరాలు:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
