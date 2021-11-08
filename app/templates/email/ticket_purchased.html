@@ -16,7 +16,7 @@
 <br/>{{ _('Location') }}: {{ order.event.event_location_status }}
 <br/>{{ _('URL') }}: {{ order.event.site_link }}
 <br/>
-<br/>{{ _('Add to calender') }}:    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates={{ order.event.starts_at.strftime('%Y%m%dT%H%M%') }}/{{ order.event.ends_at.strftime('%Y%m%dT%H%M%') }}&text={{ order.event.name }}&location={{ order.event.normalized_location }}&ctz={{ order.event.timezone }}&details={{ order.event.description }}">Google Calender</a>&bullet;
+<br/>{{ _('Add to calendar') }}:    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates={{ order.event.starts_at.strftime('%Y%m%dT%H%M%') }}/{{ order.event.ends_at.strftime('%Y%m%dT%H%M%') }}&text={{ order.event.name }}&location={{ order.event.normalized_location }}&ctz={{ order.event.timezone }}&details={{ order.event.description }}">Google Calendar</a>&bullet;
                                     <a href="{{ settings.static_domain }}/v1/events/{{ order.event.identifier }}.ics?download">iCal</a>&bullet;
                                     <a href="https://calendar.yahoo.com/?v=60&title={{ order.event.name }}&st={{ order.event.starts_at.strftime('%Y%m%dT%H%M%') }}&et={{ order.event.ends_at.strftime('%Y%m%dT%H%M%') }}&desc={{ order.event.description }}&in_loc={{ order.event.normalized_location }}">Yahoo</a>&bullet;
                                     <a href="https://outlook.live.com/calendar/0/deeplink/compose?subject={{ order.event.name}}&startdt={{ order.event.starts_at.strftime('%Y-%m-%dT%H:%M%') }}&enddt={{ order.event.ends_at.strftime('%Y-%m-%dT%H:%M%') }}&body={{ order.event.description }}&location={{ order.event.normalized_location }}">Outlook</a>
