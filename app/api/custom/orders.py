@@ -210,7 +210,7 @@ def verify_order_payment(order_identifier):
 
         on_order_completed(order)
     
-    if session['payment_status'] == 'unpaid' and payment_intent['status'] != 'succeeded':
+    else:
         order.status = 'expired'
 
         db.session.commit()
