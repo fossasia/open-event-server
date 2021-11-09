@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 
 import pytz
@@ -13,7 +12,6 @@ from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 
-logger = logging.getLogger(__name__)
 
 
 def validate_ticket_holders(ticket_holder_ids):
@@ -262,7 +260,6 @@ class TicketingManager:
             return True, session
         except ConflictError as e:
             # session creation failed hence expire the order
-            logging.error('%s ticketing - error', e)
             order.status = 'expired'
             save_to_db(order)
 

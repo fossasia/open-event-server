@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b47c127f6c65
-Revises: bf42a2f36c31
-Create Date: 2021-11-01 13:52:35.671200
+Revision ID: d0b8204bb208
+Revises: b3cf88a46150
+Create Date: 2021-11-09 20:38:00.667031
 
 """
 
@@ -12,8 +12,8 @@ import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = 'b47c127f6c65'
-down_revision = 'bf42a2f36c31'
+revision = 'd0b8204bb208'
+down_revision = 'b3cf88a46150'
 
 
 def upgrade():
