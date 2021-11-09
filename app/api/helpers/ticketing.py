@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 import pytz
@@ -12,6 +13,7 @@ from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 
+logger = logging.getLogger(__name__)
 
 
 def validate_ticket_holders(ticket_holder_ids):
