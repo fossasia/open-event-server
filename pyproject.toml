@@ -45,7 +45,7 @@ authors = ["Fossasia: https://fossasia.org"]
 
 [tool.poetry.dependencies]
 python = "3.8.6"
-pycparser = "2.20"
+pycparser = "2.21"
 Flask = "1.1.2"
 Flask-Limiter = "1.4"
 Flask-Script = "2.0.6"
