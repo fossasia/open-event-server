@@ -107,33 +107,70 @@ class StripePaymentsManager:
                 {'pointer': ''}, 'Stripe credentials not found for the event.'
             )
         stripe.api_key = credentials['SECRET_KEY']
-
         if not currency:
             currency = order_invoice.event.payment_currency
 
         if not currency or currency == "":
             currency = "USD"
 
+        frontend_url = get_settings()['frontend_url']
+
         try:
-            customer = stripe.Customer.create(
-                email=order_invoice.user.email, source=order_invoice.stripe_token
+            # payment_method_types = ['card', 'klarna']
+            payment_method_types = ['card']
+            # if currency.lower() == 'eur':
+            #     payment_method_types.append('sepa_debit')
+
+            session = stripe.checkout.Session.create(
+                customer_email=order_invoice.user.email,
+                payment_method_types=payment_method_types,
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': currency.lower(),
+                            'product_data': {
+                                'name': order_invoice.event.name,
+                            },
+                            'unit_amount': int(order_invoice.amount * 100),
+                        },
+                        'quantity': 1,
+                    }
+                ],
+                mode='payment',
+                success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
+                cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
             )
 
-            charge = stripe.Charge.create(
-                customer=customer.id,
-                amount=int(order_invoice.amount * 100),
-                currency=currency.lower(),
-                metadata={
-                    'order_id': order_invoice.id,
-                    'event': order_invoice.event.name,
-                    'user_id': order_invoice.user_id,
-                    'event_id': order_invoice.event_id,
-                },
-                description=order_invoice.event.name,
-            )
-            return charge
+            return session
+
         except Exception as e:
             raise ConflictError({'pointer': ''}, str(e))
+
+    @staticmethod
+    def retrieve_session(event_id, stripe_session_id):
+        credentials = StripePaymentsManager.get_credentials(event_id)
+
+        if not credentials:
+            raise ConflictError(
+                {'pointer': ''}, 'Stripe credentials not found for the event.'
+            )
+        stripe.api_key = credentials['SECRET_KEY']
+        session = stripe.checkout.Session.retrieve(stripe_session_id)
+
+        return session
+
+    @staticmethod
+    def retrieve_payment_intent(event_id, payment_intent_id):
+        credentials = StripePaymentsManager.get_credentials(event_id)
+
+        if not credentials:
+            raise ConflictError(
+                {'pointer': ''}, 'Stripe credentials not found for the event.'
+            )
+        stripe.api_key = credentials['SECRET_KEY']
+        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+        return payment_intent
 
 
 class PayPalPaymentsManager:
