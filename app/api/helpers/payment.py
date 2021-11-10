@@ -122,17 +122,20 @@ class StripePaymentsManager:
             #     payment_method_types.append('sepa_debit')
 
             session = stripe.checkout.Session.create(
-                payment_method_types= payment_method_types,
-                line_items=[{
-                    'price_data': {
-                        'currency': currency.lower(),
-                        'product_data': {
-                            'name': order_invoice.event.name,
+                customer_email=order_invoice.user.email,
+                payment_method_types=payment_method_types,
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': currency.lower(),
+                            'product_data': {
+                                'name': order_invoice.event.name,
+                            },
+                            'unit_amount': int(order_invoice.amount * 100),
                         },
-                        'unit_amount': int(order_invoice.amount * 100),
-                    },
-                    'quantity': 1,
-                }],
+                        'quantity': 1,
+                    }
+                ],
                 mode='payment',
                 success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
                 cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
