@@ -153,7 +153,7 @@ def create_app():
         from app.api.speaker_invites import speaker_invites_misc_routes
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
-        from app.api.orders import alipay_blueprint
+        from app.api.orders import alipay_blueprint, stripe_blueprint
         from app.api.sessions import sessions_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
@@ -186,6 +186,7 @@ def create_app():
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
+        app.register_blueprint(stripe_blueprint)
         app.register_blueprint(admin_misc_routes)
         app.register_blueprint(info_route)
         app.register_blueprint(ticket_blueprint)
