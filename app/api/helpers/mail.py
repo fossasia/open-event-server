@@ -425,6 +425,7 @@ def send_email_for_monthly_fee_payment(
     key = options[follow_up]
     mail = MAILS[key]
     email = user.email
+    invoice_url = make_frontend_url('/account/billing/invoices')
     send_email(
         to=email,
         action=key,
@@ -436,6 +437,7 @@ def send_email_for_monthly_fee_payment(
             name=user.full_name,
             email=email,
             event_name=event_name,
+            invoice_url=invoice_url,
             date=previous_month,
             amount=amount,
             app_name=app_name,
