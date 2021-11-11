@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-11-11 18:59+0530\n"
+"POT-Creation-Date: 2021-11-12 00:49+0530\n"
 "PO-Revision-Date: 2021-04-07 02:26+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language: id\n"
@@ -79,11 +79,11 @@ msgid "Welcome to {app_name}. Please verify your account"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:156
-msgid "Email Confirmation to Create Account for Open-Event"
+msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:161
-#, fuzzy, python-format
+#, fuzzy
 msgid "Your email has been already changed"
 msgstr "Akun Anda telah dibuat pada"
 
@@ -177,7 +177,7 @@ msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:283
-msgid "{event_name} is over. Thank you for using eventyay!"
+msgid "{event_name} is over. Thank you for using {app_name}!"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:288
@@ -1184,5 +1184,11 @@ msgstr "Pesan Penyelenggara"
 #~ "incorrect or have any questions, you "
 #~ "can contact our support team for "
 #~ "assistance."
+#~ msgstr ""
+
+#~ msgid "Email Confirmation to Create Account for Open-Event"
+#~ msgstr ""
+
+#~ msgid "{event_name} is over. Thank you for using eventyay!"
 #~ msgstr ""
 
