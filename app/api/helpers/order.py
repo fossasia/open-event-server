@@ -19,6 +19,7 @@ from app.api.helpers.notification import (
     notify_ticket_purchase_attendee,
     notify_ticket_purchase_organizer,
 )
+from app.api.helpers.mail import convert_to_event_timezone
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
@@ -76,9 +77,18 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
+
+    starts_at = convert_to_event_timezone(order.event.starts_at, order.user.email, order.event.timezone)
+    ends_at = convert_to_event_timezone(order.event.ends_at, order.user.email, order.event.timezone)
+
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
-            render_template('pdf/ticket_purchaser.html', order=order),
+            render_template(
+                'pdf/ticket_purchaser.html',
+                order=order,
+                starts_at=starts_at,
+                ends_at=ends_at
+            ),
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
@@ -89,9 +99,17 @@ def create_pdf_tickets_for_holder(order):
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
+            starts_at = convert_to_event_timezone(order.event.starts_at, holder.email, order.event.timezone)
+            ends_at = convert_to_event_timezone(order.event.ends_at, holder.email, order.event.timezone)
+
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
-                render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                render_template(
+                    'pdf/ticket_attendee.html', 
+                    order=order,
+                    starts_at=starts_at,
+                    ends_at=ends_at,
+                    holder=holder),
                 UPLOAD_PATHS['pdf']['tickets_all'],
                 dir_path='/static/uploads/pdf/tickets/',
                 identifier=order.identifier,
@@ -125,8 +143,18 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
-                event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
-                created_at=order.created_at.strftime('%d %B %Y'),
+                event_starts_at=convert_to_event_timezone(
+                    order.event.starts_at_tz,
+                    order.user.email,
+                    order.event.timezone,
+                    'd MMMM Y'
+                ),
+                created_at=convert_to_event_timezone(
+                    order.created_at,
+                    order.user.email,
+                    order.event.timezone,
+                    'd MMMM Y'
+                ),
                 admin_info=admin_info,
                 order_amount=order_amount
             ),

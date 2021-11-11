@@ -13,7 +13,6 @@ from sqlalchemy.orm import joinedload
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import generate_ics_file, make_frontend_url
 from app.api.helpers.log import record_activity
-from app.api.helpers.locales import LOCALES
 from app.api.helpers.system_mails import MAILS, MailType
 from app.api.helpers.utilities import get_serializer, str_generator, string_empty
 from app.models.event import Event
@@ -566,10 +565,16 @@ def send_email_to_attendees(order):
             event_name=event.name,
             invoice_id=order.invoice_number,
             event_date=convert_to_event_timezone(
-                order.event.starts_at, buyer_email, order.event.timezone, format='d MMMM Y'
+                order.event.starts_at,
+                buyer_email,
+                order.event.timezone,
+                format='d MMMM Y'
             ),
             event_time=convert_to_event_timezone(
-                order.event.starts_at, buyer_email, order.event.timezone, format='H:mm (ZZZZ)'
+                order.event.starts_at,
+                buyer_email,
+                order.event.timezone,
+                format='H:mm (ZZZZ)'
             ),
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
@@ -591,10 +596,16 @@ def send_email_to_attendees(order):
                 event_name=event.name,
                 invoice_id=order.invoice_number,
                 event_date=convert_to_event_timezone(
-                    order.event.starts_at, email, order.event.timezone, format='d MMMM Y'
+                    order.event.starts_at,
+                    email,
+                    order.event.timezone,
+                    format='d MMMM Y'
                 ),
                 event_time=convert_to_event_timezone(
-                    order.event.starts_at, email, order.event.timezone, format='H:mm (ZZZZ)'
+                    order.event.starts_at,
+                    email,
+                    order.event.timezone,
+                    format='H:mm (ZZZZ)'
                 ),
             ),
             html=render_template(
@@ -619,10 +630,16 @@ def send_order_purchase_organizer_email(order, recipients):
         site_link=order.event.site_link,
         order_url=order.site_view_link,
         event_date=convert_to_event_timezone(
-            order.event.starts_at, order.user.email, order.event.timezone, format='d MMMM Y'
+            order.event.starts_at,
+            order.user.email,
+            order.event.timezone,
+            format='d MMMM Y'
         ),
         event_time=convert_to_event_timezone(
-            order.event.starts_at, order.user.email, order.event.timezone, format='H:mm (ZZZZ)'
+            order.event.starts_at,
+            order.user.email,
+            order.event.timezone,
+            format='H:mm (ZZZZ)'
         ),
         timezone=order.event.timezone,
         purchase_time=convert_to_event_timezone(
@@ -799,20 +816,23 @@ def send_email_after_event_speaker(email, event_name):
 def convert_to_event_timezone(date, email, timezone=None, format='MMMM d, Y H:mm (ZZZZ)'):
     if not date:
         return None
+
     if timezone:
         date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
             pytz.timezone(timezone)
         )
-    return convert_to_user_locale(email, date, format)
+
+    return convert_to_user_locale(email, date, timezone, format)
 
 
-def convert_to_user_locale(email, date, format='MMMM d, Y H:mm (ZZZZ)'):
-    user = User.query.filter(User.email==email).first()
+def convert_to_user_locale(email, date, format, tz=None):
+    """Convert datetime to user selected language"""
+
+    user = User.query.filter(User.email == email).first()
     user_locale = 'en'
 
-    if user:
-        if user.language_prefrence:
-            user_locale = LOCALES[user.language_prefrence]
-            return format_datetime(date, format=format, locale=user_locale)
+    if user and user.language_prefrence:
+        user_locale = user.language_prefrence
+        return format_datetime(date, format=format, tzinfo=tz, locale=user_locale)
 
-    return format_datetime(date, format=format, locale=user_locale)
+    return format_datetime(date, format=format, tzinfo=tz, locale=user_locale)
