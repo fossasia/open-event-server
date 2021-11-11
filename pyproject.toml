@@ -80,7 +80,7 @@ pycryptodome = "3.11.0"
 oauth2 = "~1.9.0"
 qrcode = "7.3.1"
 python-magic = "0.4.24"
-python-dotenv = "0.19.1"
+python-dotenv = "0.19.2"
 python-geoip = "1.2"
 "marrow.mailer" = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "6933606"}
 "marrow.util" = {git = "https://github.com/LexMachinaInc/util.git", rev = "d820293"}
