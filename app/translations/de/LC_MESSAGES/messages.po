@@ -6,99 +6,116 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-11-11 18:59+0530\n"
-"PO-Revision-Date: 2021-11-07 16:39+0000\n"
+"PO-Revision-Date: 2021-11-11 15:56+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
+"de/>\n"
 "Language: de\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-"
-"event/server/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:63
+#, fuzzy
 msgid "Your speaker submission for {event_name} titled {session_name}"
 msgstr ""
+"Ihr Referentenbeitrag für die Veranstaltung {event_name} mit dem Titel "
+"{session_name}"
 
 #: app/api/helpers/system_mails.py:74
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
+"Angenommen! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit dem "
+"Titel {session_name} wurde angenommen"
 
 #: app/api/helpers/system_mails.py:85
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
+"Bestätigt! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit dem "
+"Titel {session_name} wurde bestätigt"
 
 #: app/api/helpers/system_mails.py:96
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
+"Nicht angenommen. Ihre Anmeldung für {event_name} mit dem Titel "
+"{session_name} wurde nicht akzeptiert"
 
 #: app/api/helpers/system_mails.py:107
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
+"Abgesagt! Ihre Einreichung für {event_name} mit dem Titel {session_name} "
+"wurde abgesagt"
 
 #: app/api/helpers/system_mails.py:118
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
+"Zurückgezogen! Ihre Einreichung für {event_name} mit dem Titel {session_name}"
+" wurde zurückgezogen"
 
 #: app/api/helpers/system_mails.py:131
-#, fuzzy, python-format
+#, python-format
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
 "Der Ticketverkaufszeitraum für eines oder mehrere Ihrer Tickets für "
-"%(event_name)s ist beendet."
+"{event_name} ist beendet."
 
 #: app/api/helpers/system_mails.py:136
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
 msgstr ""
 "Der Ticketverkaufszeitraum für eines oder mehrere Ihrer Tickets für "
-"%(event_name)s endet in 24 Stunden."
+"{event_name} endet in 24 Stunden."
 
 #: app/api/helpers/system_mails.py:141
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
 msgstr ""
 "Der Ticketverkaufszeitraum für eines oder mehrere Ihrer Tickets für "
-"%(event_name)s endet in 7 Tagen."
+"{event_name} endet in 7 Tagen."
 
 #: app/api/helpers/system_mails.py:146
 msgid "New session proposal for {session.event.name} titled {session.title}"
 msgstr ""
+"Neuer Sitzungsvorschlag für {session.event.name} mit dem Titel {session."
+"title}"
 
 #: app/api/helpers/system_mails.py:151
 msgid "Welcome to {app_name}. Please verify your account"
-msgstr ""
+msgstr "Willkommen bei {app_name}. Bitte verifizieren Sie Ihr Konto"
 
 #: app/api/helpers/system_mails.py:156
+#, fuzzy
 msgid "Email Confirmation to Create Account for Open-Event"
-msgstr ""
+msgstr "E-Mail-Bestätigung zum Erstellen eines Kontos für Open-Event"
 
 #: app/api/helpers/system_mails.py:161
-#, fuzzy, python-format
+#, python-format
 msgid "Your email has been already changed"
-msgstr "Ihre E-Mail wurde von %(email)s auf %(new_email)s geändert."
+msgstr "Ihre E-Mail-Adresse wurde bereits geändert"
 
 #: app/api/helpers/system_mails.py:166
 msgid "{app_name}: Password Reset"
-msgstr ""
+msgstr "{app_name}: Passwort zurücksetzen"
 
 #: app/api/helpers/system_mails.py:171
 #, fuzzy
@@ -109,93 +126,100 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:176
 msgid "{app_name}: Password Change"
-msgstr ""
+msgstr "{app_name}: Passwort ändern"
 
 #: app/api/helpers/system_mails.py:181
 msgid "Invitation to be {role} at Event: {event}"
-msgstr ""
+msgstr "Einladung als {role} bei Event: {event}"
 
 #: app/api/helpers/system_mails.py:186
 msgid "Invitation to be speaker at Session: {session}"
-msgstr ""
+msgstr "Einladung als Redner bei der Sitzung: {session}"
 
 #: app/api/helpers/system_mails.py:191
 msgid "Invitation to be {role} at Group: {group}"
-msgstr ""
+msgstr "Einladung {role} bei der Gruppe zu sein: {group}"
 
 #: app/api/helpers/system_mails.py:196
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
-msgstr ""
+msgstr "Teilnahme {event_name} am {event_date}, {event_time} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:201
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
+"Tickets für {event_name} am {event_date} um {event_time} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:206
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
+"Neue Bestellung für {event_name} am {event_date} von {buyer_name}, "
+"{buyer_email} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:211
-#, fuzzy, python-format
+#, python-format
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
-msgstr "Ihre Bestellung %(order_id)s für %(event_name)s wurde storniert."
+msgstr "Ihre Bestellung für {event_name} wurde storniert ({invoice_id})"
 
 #: app/api/helpers/system_mails.py:216
 msgid "Event {event_name} has been exported"
-msgstr ""
+msgstr "Veranstaltung {event_name} wurde exportiert"
 
 #: app/api/helpers/system_mails.py:221
 msgid "Export of event {event_name} failed"
-msgstr ""
+msgstr "Export der Veranstaltung {event_name} fehlgeschlagen"
 
 #: app/api/helpers/system_mails.py:226
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
-msgstr ""
+msgstr "Ihre Rechnung für {event_name} für {date} ist verfügbar auf {app_name}"
 
 #: app/api/helpers/system_mails.py:232 app/api/helpers/system_mails.py:238
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
+"Erinnerung: Ihre Rechnung für {event_name} für {date} ist auf {app_name} "
+"verfügbar"
 
 #: app/api/helpers/system_mails.py:244
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
+"Bitte bezahlen Sie Ihre überfällige Rechnung für {event_name} am {date} auf "
+"{app_name}"
 
 #: app/api/helpers/system_mails.py:250
 msgid "Event {event_name} has been imported"
-msgstr ""
+msgstr "Veranstaltung {event_name} wurde importiert"
 
 #: app/api/helpers/system_mails.py:255
 msgid "Import of event failed"
-msgstr ""
+msgstr "Import der Veranstaltung fehlgeschlagen"
 
 #: app/api/helpers/system_mails.py:268
 msgid "Test Mail Subject"
-msgstr ""
+msgstr "Betreff der Test-E-Mail"
 
 #: app/api/helpers/system_mails.py:273
-#, fuzzy, python-format
+#, python-format
 msgid "Video Moderator of video {video_name} at event {event_name}"
 msgstr ""
-"Sie wurden als Videomoderator für %(video)s bei der Veranstaltung "
-"%(event)s hinzugefügt."
+"Sie wurden als Videomoderator für {video_name} bei der Veranstaltung "
+"{event_name} hinzugefügt."
 
 #: app/api/helpers/system_mails.py:278
 msgid "Join {event_name} from {group_name} on {event_date}"
-msgstr ""
+msgstr "Jetzt teilnehmen! {event_name} von {group_name} am {event_date}"
 
 #: app/api/helpers/system_mails.py:283
 msgid "{event_name} is over. Thank you for using eventyay!"
-msgstr ""
+msgstr "{event_name} ist vorbei. Danke, dass Sie {app_name} nutzen!"
 
 #: app/api/helpers/system_mails.py:288
 msgid "{event_name} is over. Thank you for participating!"
-msgstr ""
+msgstr "{event_name} ist vorbei. Vielen Dank für die Teilnahme!"
 
 #: app/models/event.py:468 app/models/event.py:477
 msgid "Location Not Announced"
@@ -666,11 +690,11 @@ msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "Zum Kalender hinzufügen"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
-msgstr ""
+msgstr "Google-Kalender"
 
 #: app/templates/email/ticket_purchased.html:20
 #, fuzzy
@@ -679,11 +703,11 @@ msgstr "inkl."
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "Outlook"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
@@ -1678,4 +1702,3 @@ msgstr "Nachricht des Veranstalters"
 #~ "diese Rechnung falsch ist oder Fragen"
 #~ " haben, können Sie sich an unser "
 #~ "Support-Team wenden."
-
