@@ -78,7 +78,7 @@ def create_pdf_tickets_for_holder(order):
     """
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
-            render_template('pdf/ticket_purchaser.html', order=order),
+            render_template('pdf/ticket_purchaser.html', order=order,app_name=get_settings()['app_name']),
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
@@ -91,7 +91,7 @@ def create_pdf_tickets_for_holder(order):
         for holder in order.ticket_holders:
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
-                render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                render_template('pdf/ticket_attendee.html', order=order, holder=holder,app_name=get_settings()['app_name']),
                 UPLOAD_PATHS['pdf']['tickets_all'],
                 dir_path='/static/uploads/pdf/tickets/',
                 identifier=order.identifier,

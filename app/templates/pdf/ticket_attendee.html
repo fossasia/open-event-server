@@ -1,96 +1,164 @@
 <!--suppress ALL -->
 <html xmlns:pdf="https://github.com/xhtml2pdf/xhtml2pdf/blob/master/doc/usage.rst">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style>
-        @page {
-            size: a4 portrait;
-            background-image: url('{{ base_dir }}/static/data/ticket-trans-notext.png');
-            margin: 0;
-
-            @frame col1_frame {             /* Content frame 1 */
-                left: 80pt;  top: 30pt;
-                height: 250pt; width: 300pt;
-            }
-
-            @frame qrcode {
-                left: 455pt;  top: 50pt;
-                width: 100pt; height: 120pt;
-            }
-            @frame number_frame {
-                 left: 455pt;  top: 25pt;
-                width: 100pt; height: 30pt;
-                -pdf-frame-content: number_content;
-            }
-
-
-             @frame col2_frame {
-                left: 440pt; top: 170pt;
-            }
+        #qrcode img {
+            width: 70px;
+            height: 70px;
+            padding-top: 20px;
         }
 
-        #qrcode {
-            -pdf-frame-break: true;
+        #app_name {
+            font-size: 32px;
+            font-weight: bold;
+            color: orangered;
         }
 
-        .label {
-            color: #858585;
+        #order_id {
+            font-weight: bold;
+            color: #808080;
+            font-size: 11px;
         }
 
-        #notices .notice {
-          color: #5D6975;
-          font-size: 1.2em;
+        #location,
+        #role,
+        #event_message {
+            font-size: 15px;
+            color: #303130;
+            font-weight: bold;
         }
 
+        .custom_label {
+            font-size: 10px;
+            color: #808080;
+            padding-left: 10px;
+        }
+
+        .main_content {
+            border: 1px solid #181818;
+            border-radius: 30px;
+            padding: 25px 10px 25px 35px;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+
+        #event_name {
+            padding: 10px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #808080;
+        }
+
+        tr,
+        td {
+            border: 1px solid white;
+        }
+
+        .data {
+            font-size: 10px;
+            color: #181818;
+        }
+
+        #order_details {
+            padding: -1px;
+            margin: 10px;
+        }
+
+        .time {
+            font-size: 10px;
+            color: #333333;
+        }
+
+        #event-logo {
+            width: 150px;
+            height: 75px;
+            padding-top: 20px;
+        }
     </style>
 </head>
+
 <body>
+    <table id="header">
+        <tr>
+            <td><span id="app_name">{{app_name}}</span></td>
+            <td align="right" style="vertical-align: bottom;"><span id="order_id">{{_('Order
+                    #%(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</span></td>
+        </tr>
+    </table>
+    <div class="main_content">
+        <table>
+            <tr>
+                <td id="event_name" colspan=2>
+                    <span>{{order.event.name}}</span><br>
+                    <span id="role">{{_('Guest')}}</span><br>
+                    <span id="location">
+                        {% if order.event.online %}
+                        {% if order.event.location_name %}
+                        <span>{{_('Event taking place online and at
+                            %(location)s',location="")}}{{order.event.location_name}}</span>
+                        {% else %}
+                        <span>{{_('Event taking place online')}}</span>
+                        {% endif %}
+                        {% elif order.event.location_name %}
+                        <span>{{_('Event taking place at
+                            %(location)s',location="")}}{{order.event.location_name}}</span>
+                        {% else %}
+                        <span>{{_('Location or online event details to be announced')}}</span>
+                        {% endif %}
+                    </span>
+                    <br>
+                    <span>
+                        {% if order.event.starts_at %}
+                        <span class="time">{{_('From: %(start_date)s',start_date="")}}{{order.event.starts_at |
+                            datetime(order.event.timezone)}}</span>
+                        {% endif %}
+                        <br>
+                        {% if order.event.ends_at %}
+                        <span class="time">{{_('To: %(end_date)s',end_date="")}}{{order.event.ends_at |
+                            datetime(order.event.timezone)}}</span>
+                        {% endif %}
+                    </span>
+                    <span>
+                        <table id="order_details">
+                            <tr>
+                                <td>
+                                    <span class="custom_label">{{_('Order Information')}}</span>
+                                    <p class="data">{{_('Order
+                                        %(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</p>
+                                </td>
+                                <td>
+                                    <span class="custom_label">{{_('Name')}}</span>
+                                    <p class="data">{{holder.name}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </span>
+                </td>
+                <td align="center">
+                    <!-- <img src="{{order.event.original_image_url}}" alt="" id="event-logo"><br><br><br> -->
+                    <img src="https://miun.imagevault.media/publishedmedia/co81r635gbhgo2ahfuci/Yran-4start.webp" alt=""
+                        id="event-logo"><br><br><br>
+
+                    <div id="qrcode">
+                        <img src="data:image/png;base64,{{ holder.qr_code }}" />
+                        <br>
+                        <span>#{{order.get_invoice_number()}}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% if order.event.after_order_message %}
+    <div class="main_content">
+        <span id="event_message">{% autoescape false %}{{ order.event.after_order_message | strip_tags | nl2br }}{%
+            endautoescape %}</span>
+    </div>
+    {% endif %}
 </body>
+
 </html>
-        <div id="main_content">
-            <span class="label">{{ _('Event') }}</span><br>
-            <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
 
-            {% if order.event.online %}
-                {% if order.event.location_name %}
-                    <span class="label">{{ _('Event taking place online and at %(event_location)s', event_location='') }}</span></br>
-                    <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
-                {% else %}
-                    <span class="label">{{ _('Online Event') }}</span><br><br>
-                {% endif %}
-            {% elif order.event.location_name %}
-                <span class="label">{{ _('At %(location_name)s', location_name='') }}</span></br>
-                <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
-            {% else %}
-                <span class="label">{{ _('Location or online event details to be announced') }}</span><br><br>
-            {% endif %}
 
-            <span class="label">{{ _('Date and Time') }}</span><br>
-            <span style="font-size: 15px;">{{ _('From: %(start_time)s', start_time='') }} {{ order.event.starts_at | datetime(order.event.timezone) }}</span><br>
-            <span style="font-size: 15px;">{{ _('To: %(end_time)s', end_time='') }} {{ order.event.ends_at | datetime(order.event.timezone) }}</span>
-            <br><br>
-
-            <span class="label">{{ _('Type') }}</span><br>
-            <span style="font-size: 20px;">{{ holder.ticket.name }}</span>
-            <br><br>
-
-            {% if order.event.after_order_message %}
-                <div id="notices">
-                    <div>{{ _('Organizer Message') }}:</div>
-                    <div class="notice">{% autoescape false %}{{ order.event.after_order_message | strip_tags | nl2br }}{% endautoescape %}</div>
-                </div>
-                <br><br>
-            {% endif %}
-        </div>
-
-        <div id="qrcode">
-            <img src="data:image/png;base64,{{ holder.qr_code }}" />
-        </div>
-        <strong id="number_content" style="color: #000; text-align: center">#{{ order.get_invoice_number() }}/{{ holder.id }}</strong>
-
-        <div id="personal_content_{{ holder.id }}">
-            <span>{{ holder.name }}</span><br>
-            <span>{{ holder.email }}</span>
-        </div>
-
-    <pdf:nextpage />
+<pdf:nextpage />
