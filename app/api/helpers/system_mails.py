@@ -153,7 +153,7 @@ MAILS = {
     },
     MailType.USER_CONFIRM: {
         'recipient': 'User',
-        'subject': _('Email Confirmation to Create Account for Open-Event'),
+        'subject': _('Email Confirmation to Create Account for {app_name}'),
         'template': 'email/user_confirm.html',
     },
     MailType.USER_CHANGE_EMAIL: {
@@ -280,7 +280,7 @@ MAILS = {
     },
     MailType.AFTER_EVENT: {
         'recipient': 'Owner, Organizer, Coorganizer',
-        'subject': _('{event_name} is over. Thank you for using eventyay!'),
+        'subject': _('{event_name} is over. Thank you for using {app_name}!'),
         'template': 'email/after_event.html',
     },
     MailType.AFTER_EVENT_SPEAKER: {
