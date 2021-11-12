@@ -77,9 +77,16 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
-
-    starts_at = convert_to_event_timezone(order.event.starts_at, order.user.email, order.event.timezone)
-    ends_at = convert_to_event_timezone(order.event.ends_at, order.user.email, order.event.timezone)
+    starts_at = convert_to_event_timezone(
+        order.event.starts_at,
+        order.user.email,
+        order.event.timezone
+    )
+    ends_at = convert_to_event_timezone(
+        order.event.ends_at,
+        order.user.email,
+        order.event.timezone
+    )
 
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
@@ -99,13 +106,21 @@ def create_pdf_tickets_for_holder(order):
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
-            starts_at = convert_to_event_timezone(order.event.starts_at, holder.email, order.event.timezone)
-            ends_at = convert_to_event_timezone(order.event.ends_at, holder.email, order.event.timezone)
+            starts_at = convert_to_event_timezone(
+                order.event.starts_at,
+                holder.email,
+                order.event.timezone
+            )
+            ends_at = convert_to_event_timezone(
+                order.event.ends_at,
+                holder.email,
+                order.event.timezone
+            )
 
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
                 render_template(
-                    'pdf/ticket_attendee.html', 
+                    'pdf/ticket_attendee.html',
                     order=order,
                     starts_at=starts_at,
                     ends_at=ends_at,

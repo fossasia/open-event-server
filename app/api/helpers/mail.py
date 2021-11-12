@@ -410,7 +410,7 @@ def send_email_announce_event(event, group, emails):
                         event_date, email, 'd MMMM Y'
                     ),
                     event_time=convert_to_user_locale(
-                        event_time, email, 'H:mm (zzzz)'
+                        event_time, email, 'HH:mm (zzzz)'
                     ),
                     group_name=group_name,
                     group_url=group_url,
@@ -574,13 +574,13 @@ def send_email_to_attendees(order):
                 order.event.starts_at,
                 buyer_email,
                 order.event.timezone,
-                format='d MMMM Y'
+                fmt='d MMMM Y'
             ),
             event_time=convert_to_event_timezone(
                 order.event.starts_at,
                 buyer_email,
                 order.event.timezone,
-                format='H:mm (ZZZZ)'
+                fmt='HH:mm (zzzz)'
             ),
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
@@ -605,13 +605,13 @@ def send_email_to_attendees(order):
                     order.event.starts_at,
                     email,
                     order.event.timezone,
-                    format='d MMMM Y'
+                    fmt='d MMMM Y'
                 ),
                 event_time=convert_to_event_timezone(
                     order.event.starts_at,
                     email,
                     order.event.timezone,
-                    format='H:mm (ZZZZ)'
+                    fmt='H:mm (zzzz)'
                 ),
             ),
             html=render_template(
@@ -639,13 +639,13 @@ def send_order_purchase_organizer_email(order, recipients):
             order.event.starts_at,
             order.user.email,
             order.event.timezone,
-            format='d MMMM Y'
+            fmt='d MMMM Y'
         ),
         event_time=convert_to_event_timezone(
             order.event.starts_at,
             order.user.email,
             order.event.timezone,
-            format='H:mm (ZZZZ)'
+            fmt='H:mm (zzzz)'
         ),
         timezone=order.event.timezone,
         purchase_time=convert_to_event_timezone(
@@ -822,26 +822,23 @@ def send_email_after_event_speaker(email, event_name):
     )
 
 
-def convert_to_event_timezone(date, email, timezone=None, format='MMMM d, Y H:mm (ZZZZ)'):
-    if not date:
+def convert_to_event_timezone(date, email, timezone=None, fmt='full'):
+    if not date or not email:
         return None
 
     if timezone:
-        date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
-            pytz.timezone(timezone)
-        )
+        date = date.astimezone(pytz.timezone(timezone))
 
-    return convert_to_user_locale(email, date, timezone, format)
+    return convert_to_user_locale(email, date, fmt)
 
 
-def convert_to_user_locale(email, date, format, tz=None):
+def convert_to_user_locale(email, date, fmt):
     """Convert datetime to user selected language"""
-
     user = User.query.filter(User.email == email).first()
     user_locale = 'en'
 
     if user and user.language_prefrence:
         user_locale = user.language_prefrence
-        return format_datetime(date, format=format, tzinfo=tz, locale=user_locale)
+        return format_datetime(date, format=fmt, locale=user_locale)
 
-    return format_datetime(date, format=format, tzinfo=tz, locale=user_locale)
+    return format_datetime(date, format=fmt, locale=user_locale)
