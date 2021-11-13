@@ -6,19 +6,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-11-11 18:59+0530\n"
+"POT-Creation-Date: 2021-11-12 00:49+0530\n"
 "PO-Revision-Date: 2021-11-11 15:56+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
-"de/>\n"
 "Language: de\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-"
+"event/server/de/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:63
@@ -33,16 +32,16 @@ msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
-"Angenommen! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit dem "
-"Titel {session_name} wurde angenommen"
+"Angenommen! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit "
+"dem Titel {session_name} wurde angenommen"
 
 #: app/api/helpers/system_mails.py:85
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
-"Bestätigt! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit dem "
-"Titel {session_name} wurde bestätigt"
+"Bestätigt! Herzlichen Glückwunsch Ihre Einreichung für {event_name} mit "
+"dem Titel {session_name} wurde bestätigt"
 
 #: app/api/helpers/system_mails.py:96
 msgid ""
@@ -65,18 +64,16 @@ msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
-"Zurückgezogen! Ihre Einreichung für {event_name} mit dem Titel {session_name}"
-" wurde zurückgezogen"
+"Zurückgezogen! Ihre Einreichung für {event_name} mit dem Titel "
+"{session_name} wurde zurückgezogen"
 
 #: app/api/helpers/system_mails.py:131
-#, python-format
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
 "Der Ticketverkaufszeitraum für eines oder mehrere Ihrer Tickets für "
 "{event_name} ist beendet."
 
 #: app/api/helpers/system_mails.py:136
-#, python-format
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
@@ -85,7 +82,6 @@ msgstr ""
 "{event_name} endet in 24 Stunden."
 
 #: app/api/helpers/system_mails.py:141
-#, python-format
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
@@ -96,8 +92,8 @@ msgstr ""
 #: app/api/helpers/system_mails.py:146
 msgid "New session proposal for {session.event.name} titled {session.title}"
 msgstr ""
-"Neuer Sitzungsvorschlag für {session.event.name} mit dem Titel {session."
-"title}"
+"Neuer Sitzungsvorschlag für {session.event.name} mit dem Titel "
+"{session.title}"
 
 #: app/api/helpers/system_mails.py:151
 msgid "Welcome to {app_name}. Please verify your account"
@@ -105,11 +101,10 @@ msgstr "Willkommen bei {app_name}. Bitte verifizieren Sie Ihr Konto"
 
 #: app/api/helpers/system_mails.py:156
 #, fuzzy
-msgid "Email Confirmation to Create Account for Open-Event"
+msgid "Email Confirmation to Create Account for {app_name}"
 msgstr "E-Mail-Bestätigung zum Erstellen eines Kontos für Open-Event"
 
 #: app/api/helpers/system_mails.py:161
-#, python-format
 msgid "Your email has been already changed"
 msgstr "Ihre E-Mail-Adresse wurde bereits geändert"
 
@@ -148,8 +143,7 @@ msgstr "Teilnahme {event_name} am {event_date}, {event_time} ({invoice_id}) "
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
-msgstr ""
-"Tickets für {event_name} am {event_date} um {event_time} ({invoice_id}) "
+msgstr "Tickets für {event_name} am {event_date} um {event_time} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:206
 msgid ""
@@ -160,7 +154,6 @@ msgstr ""
 "{buyer_email} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:211
-#, python-format
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
 msgstr "Ihre Bestellung für {event_name} wurde storniert ({invoice_id})"
 
@@ -187,8 +180,8 @@ msgstr ""
 #: app/api/helpers/system_mails.py:244
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
-"Bitte bezahlen Sie Ihre überfällige Rechnung für {event_name} am {date} auf "
-"{app_name}"
+"Bitte bezahlen Sie Ihre überfällige Rechnung für {event_name} am {date} "
+"auf {app_name}"
 
 #: app/api/helpers/system_mails.py:250
 msgid "Event {event_name} has been imported"
@@ -203,7 +196,6 @@ msgid "Test Mail Subject"
 msgstr "Betreff der Test-E-Mail"
 
 #: app/api/helpers/system_mails.py:273
-#, python-format
 msgid "Video Moderator of video {video_name} at event {event_name}"
 msgstr ""
 "Sie wurden als Videomoderator für {video_name} bei der Veranstaltung "
@@ -214,7 +206,8 @@ msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr "Jetzt teilnehmen! {event_name} von {group_name} am {event_date}"
 
 #: app/api/helpers/system_mails.py:283
-msgid "{event_name} is over. Thank you for using eventyay!"
+#, fuzzy
+msgid "{event_name} is over. Thank you for using {app_name}!"
 msgstr "{event_name} ist vorbei. Danke, dass Sie {app_name} nutzen!"
 
 #: app/api/helpers/system_mails.py:288
@@ -1702,3 +1695,4 @@ msgstr "Nachricht des Veranstalters"
 #~ "diese Rechnung falsch ist oder Fragen"
 #~ " haben, können Sie sich an unser "
 #~ "Support-Team wenden."
+
