@@ -6,18 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-11-12 00:49+0530\n"
-"PO-Revision-Date: 2021-11-11 15:56+0000\n"
+"PO-Revision-Date: 2021-11-13 18:19+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
+"de/>\n"
 "Language: de\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-"
-"event/server/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:63
@@ -100,9 +101,8 @@ msgid "Welcome to {app_name}. Please verify your account"
 msgstr "Willkommen bei {app_name}. Bitte verifizieren Sie Ihr Konto"
 
 #: app/api/helpers/system_mails.py:156
-#, fuzzy
 msgid "Email Confirmation to Create Account for {app_name}"
-msgstr "E-Mail-Bestätigung zum Erstellen eines Kontos für Open-Event"
+msgstr "E-Mail-Bestätigung zum Erstellen eines Kontos für {app_name}"
 
 #: app/api/helpers/system_mails.py:161
 msgid "Your email has been already changed"
@@ -113,11 +113,10 @@ msgid "{app_name}: Password Reset"
 msgstr "{app_name}: Passwort zurücksetzen"
 
 #: app/api/helpers/system_mails.py:171
-#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
 msgstr ""
-"Bitte den folgenden Link benutzen, um das Passwort zurückzusetzen und das"
-" Konto zu verifizieren."
+"{app_name}: Bitte den folgenden Link benutzen, um das Passwort "
+"zurückzusetzen und das Konto zu verifizieren."
 
 #: app/api/helpers/system_mails.py:176
 msgid "{app_name}: Password Change"
@@ -206,7 +205,6 @@ msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr "Jetzt teilnehmen! {event_name} von {group_name} am {event_date}"
 
 #: app/api/helpers/system_mails.py:283
-#, fuzzy
 msgid "{event_name} is over. Thank you for using {app_name}!"
 msgstr "{event_name} ist vorbei. Danke, dass Sie {app_name} nutzen!"
 
@@ -690,9 +688,8 @@ msgid "Google Calendar"
 msgstr "Google-Kalender"
 
 #: app/templates/email/ticket_purchased.html:20
-#, fuzzy
 msgid "iCal"
-msgstr "inkl."
+msgstr "iCal"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
@@ -1695,4 +1692,3 @@ msgstr "Nachricht des Veranstalters"
 #~ "diese Rechnung falsch ist oder Fragen"
 #~ " haben, können Sie sich an unser "
 #~ "Support-Team wenden."
-
