@@ -76,9 +76,10 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
+    admin_info = Setting.query.first()
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
-            render_template('pdf/ticket_purchaser.html', order=order,app_name=get_settings()['app_name']),
+            render_template('pdf/ticket_purchaser.html', order=order,app_name=get_settings()['app_name'],admin_info=admin_info),
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
@@ -91,7 +92,7 @@ def create_pdf_tickets_for_holder(order):
         for holder in order.ticket_holders:
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
-                render_template('pdf/ticket_attendee.html', order=order, holder=holder,app_name=get_settings()['app_name']),
+                render_template('pdf/ticket_attendee.html', order=order, holder=holder,app_name=get_settings()['app_name'],admin_info=admin_info),
                 UPLOAD_PATHS['pdf']['tickets_all'],
                 dir_path='/static/uploads/pdf/tickets/',
                 identifier=order.identifier,
@@ -101,7 +102,6 @@ def create_pdf_tickets_for_holder(order):
             holder.pdf_url = pdf
             save_to_db(holder)
         
-        admin_info = Setting.query.first()
 
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()

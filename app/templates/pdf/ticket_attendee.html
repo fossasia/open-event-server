@@ -4,16 +4,22 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style>
+        #billing_logo {
+            font-size: 1.5rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
         #qrcode img {
-            width: 70px;
-            height: 70px;
+            width: 100px;
+            height: 100px;
             padding-top: 20px;
         }
 
         #app_name {
-            font-size: 32px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: orangered;
+            color: #555;
         }
 
         #order_id {
@@ -82,7 +88,15 @@
 <body>
     <table id="header">
         <tr>
-            <td><span id="app_name">{{app_name}}</span></td>
+            <td>
+                <div id="billing_logo">
+                    {% if admin_info.admin_billing_logo %}
+                    <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"/><br>
+                    {% endif %}
+                    <span id="app_name">{{app_name}}</span>
+                </div>
+            </td>
+
             <td align="right" style="vertical-align: bottom;"><span id="order_id">{{_('Order
                     #%(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</span></td>
         </tr>

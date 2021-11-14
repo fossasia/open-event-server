@@ -5,15 +5,15 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style>
         #qrcode img {
-            width: 70px;
-            height: 70px;
+            width: 100px;
+            height: 100px;
             padding-top: 20px;
         }
 
         #app_name {
             font-size: 32px;
             font-weight: bold;
-            color: orangered;
+            color: #555;
         }
 
         #order_id {
@@ -23,7 +23,12 @@
         }
 
         #location,
-        #role,
+        #role {
+            font-size: 15px;
+            color: #303130;
+            font-weight: bold;
+        }
+
         #event_message {
             font-size: 15px;
             color: #303130;
@@ -83,6 +88,10 @@
     {% for holder in order.ticket_holders %}
     <table id="header">
         <tr>
+
+            {% if admin_info.admin_billing_logo %}
+            <img src="{{admin_info.admin_billing_logo}}" alt="organization logo" /><br>
+            {% endif %}
             <td><span id="app_name">{{app_name}}</span></td>
             <td align="right" style="vertical-align: bottom;"><span id="order_id">{{_('Order
                     #%(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</span></td>
