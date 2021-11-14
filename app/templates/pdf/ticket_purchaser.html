@@ -4,6 +4,12 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style>
+        #billing_logo {
+            font-size: 1.5rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
         #qrcode img {
             width: 100px;
             height: 100px;
@@ -11,7 +17,7 @@
         }
 
         #app_name {
-            font-size: 32px;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #555;
         }
@@ -23,12 +29,7 @@
         }
 
         #location,
-        #role {
-            font-size: 15px;
-            color: #303130;
-            font-weight: bold;
-        }
-
+        #role,
         #event_message {
             font-size: 15px;
             color: #303130;
@@ -88,11 +89,15 @@
     {% for holder in order.ticket_holders %}
     <table id="header">
         <tr>
+            <td>
+                <div id="billing_logo">
+                    {% if admin_info.admin_billing_logo %}
+                    <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"/><br>
+                    {% endif %}
+                    <span id="app_name">{{app_name}}</span>
+                </div>
+            </td>
 
-            {% if admin_info.admin_billing_logo %}
-            <img src="{{admin_info.admin_billing_logo}}" alt="organization logo" /><br>
-            {% endif %}
-            <td><span id="app_name">{{app_name}}</span></td>
             <td align="right" style="vertical-align: bottom;"><span id="order_id">{{_('Order
                     #%(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</span></td>
         </tr>
@@ -147,8 +152,8 @@
                     </span>
                 </td>
                 <td align="center">
-                    <!-- <img src="{{order.event.original_image_url}}" alt=""><br><br><br> -->
-                    <img src="https://miun.imagevault.media/publishedmedia/co81r635gbhgo2ahfuci/Yran-4start.webp" alt=""
+                    <!-- <img src="{{order.event.original_image_url}}" alt="" id="event-logo"><br><br><br> -->
+                    <img src="{{order.event.original_image_url}}" alt=""
                         id="event-logo"><br><br><br>
 
                     <div id="qrcode">
