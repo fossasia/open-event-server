@@ -425,6 +425,7 @@ def send_email_for_monthly_fee_payment(
     key = options[follow_up]
     mail = MAILS[key]
     email = user.email
+    invoice_url = make_frontend_url('/account/billing/invoices')
     send_email(
         to=email,
         action=key,
@@ -436,6 +437,7 @@ def send_email_for_monthly_fee_payment(
             name=user.full_name,
             email=email,
             event_name=event_name,
+            invoice_url=invoice_url,
             date=previous_month,
             amount=amount,
             app_name=app_name,
@@ -504,9 +506,15 @@ def send_email_change_user_email(user, email):
         base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')),
         'utf-8',
     )
+    app_name=get_settings()['app_name']
     link = make_frontend_url('/email/verify', {'token': hash_})
     send_email_with_action(
-        user.email, MailType.USER_CONFIRM, 'user_confirm', email=user.email, link=link
+        user.email,
+        MailType.USER_CONFIRM,
+        'user_confirm',
+        email=user.email,
+        link=link,
+        app_name=app_name
     )
     send_email_with_action(
         email,
@@ -757,7 +765,10 @@ def send_email_after_event(email, event_name):
     send_email(
         to=email,
         action=action,
-        subject=mail['subject'].format(event_name=event_name),
+        subject=mail['subject'].format(
+            event_name=event_name,
+            app_name=app_name
+        ),
         html=render_template(
             mail['template'],
             app_name=app_name,

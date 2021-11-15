@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-11-04 18:34+0530\n"
+"POT-Creation-Date: 2021-11-12 00:49+0530\n"
 "PO-Revision-Date: 2021-06-18 13:39+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language: hr\n"
@@ -18,7 +18,181 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: app/api/helpers/system_mails.py:63
+msgid "Your speaker submission for {event_name} titled {session_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:74
+msgid ""
+"Accepted! Congratulations Your submission for {event_name} titled "
+"{session_name} has been Accepted"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:85
+msgid ""
+"Confirmed! Congratulations Your submission for {event_name} titled "
+"{session_name} has been Confirmed"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:96
+msgid ""
+"Not Accepted. Your submission for {event_name} titled {session_name} was "
+"not accepted"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:107
+msgid ""
+"Canceled! Your submission for {event_name} titled {session_name} has been"
+" Canceled"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:118
+msgid ""
+"Withdrawn! Your submission for {event_name} titled {session_name} has "
+"been Withdrawn"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:131
+msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:136
+msgid ""
+"Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
+" 24 Hours"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:141
+msgid ""
+"Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
+"in 7 Days"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:146
+msgid "New session proposal for {session.event.name} titled {session.title}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:151
+msgid "Welcome to {app_name}. Please verify your account"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:156
+msgid "Email Confirmation to Create Account for {app_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:161
+#, fuzzy
+msgid "Your email has been already changed"
+msgstr "Tvoj račun je svtoren"
+
+#: app/api/helpers/system_mails.py:166
+msgid "{app_name}: Password Reset"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:171
+#, fuzzy
+msgid "{app_name}: Reset your password and verify your account"
+msgstr ""
+"Koristi sljedeću poveznicu za poništavanje tvoje lozinke i potvrđivanje "
+"tvog računa."
+
+#: app/api/helpers/system_mails.py:176
+msgid "{app_name}: Password Change"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:181
+msgid "Invitation to be {role} at Event: {event}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:186
+msgid "Invitation to be speaker at Session: {session}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:191
+msgid "Invitation to be {role} at Group: {group}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:196
+msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
+msgstr ""
+
+#: app/api/helpers/system_mails.py:201
+msgid ""
+"Your tickets for {event_name} on {event_date} at {event_time} "
+"({invoice_id}) "
+msgstr ""
+
+#: app/api/helpers/system_mails.py:206
+msgid ""
+"New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
+" ({invoice_id}) "
+msgstr ""
+
+#: app/api/helpers/system_mails.py:211
+msgid "Your order for {event_name} has been cancelled ({invoice_id})"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:216
+msgid "Event {event_name} has been exported"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:221
+msgid "Export of event {event_name} failed"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:226
+msgid "Your invoice for {event_name} for {date} is available on {app_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:232 app/api/helpers/system_mails.py:238
+msgid ""
+"Reminder: Your invoice for {event_name} for {date} is available on "
+"{app_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:244
+msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:250
+msgid "Event {event_name} has been imported"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:255
+msgid "Import of event failed"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:268
+msgid "Test Mail Subject"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:273
+msgid "Video Moderator of video {video_name} at event {event_name}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:278
+msgid "Join {event_name} from {group_name} on {event_date}"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:283
+msgid "{event_name} is over. Thank you for using {app_name}!"
+msgstr ""
+
+#: app/api/helpers/system_mails.py:288
+msgid "{event_name} is over. Thank you for participating!"
+msgstr ""
+
+#: app/models/event.py:468 app/models/event.py:477
+msgid "Location Not Announced"
+msgstr ""
+
+#: app/models/event.py:473
+msgid ""
+"Online (Please login to the platform to access the video room on the "
+"event page)"
+msgstr ""
 
 #: app/templates/email/after_event.html:1
 #, python-format
@@ -135,7 +309,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
-#: app/templates/email/monthly_payment_post_due_email.html:1
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
@@ -154,7 +327,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
-#: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
 #, fuzzy
 msgid "Amount Due"
@@ -166,7 +338,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
-#: app/templates/email/monthly_payment_post_due_email.html:8
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
@@ -174,7 +345,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
-#: app/templates/email/monthly_payment_post_due_email.html:14
 #: app/templates/email/monthly_payment_pre_due_email.html:16
 #, python-format
 msgid ""
@@ -184,7 +354,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
-#: app/templates/email/monthly_payment_post_due_email.html:15
 #: app/templates/email/monthly_payment_pre_due_email.html:17
 #, python-format
 msgid ""
@@ -194,7 +363,6 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
-#: app/templates/email/monthly_payment_post_due_email.html:20
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
@@ -202,10 +370,9 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
-#: app/templates/email/monthly_payment_post_due_email.html:22
 #: app/templates/email/monthly_payment_pre_due_email.html:22
 #: app/templates/email/ticket_cancelled.html:10
-#: app/templates/email/ticket_purchased.html:31
+#: app/templates/email/ticket_purchased.html:35
 #: app/templates/email/ticket_purchased_attendee.html:17
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
@@ -228,26 +395,6 @@ msgstr ""
 msgid "Please pay within 15 days."
 msgstr ""
 
-#: app/templates/email/monthly_payment_post_due_email.html:3
-msgid "Your payment is now past due."
-msgstr ""
-
-#: app/templates/email/monthly_payment_post_due_email.html:3
-msgid "Please pay this invoice immediately to avoid your account being suspended."
-msgstr ""
-
-#: app/templates/email/monthly_payment_post_due_email.html:11
-#: app/templates/email/monthly_payment_pre_due_email.html:13
-#, python-format
-msgid "Late payments can be subject to a %(percentage)s finance fee."
-msgstr ""
-
-#: app/templates/email/monthly_payment_post_due_email.html:18
-msgid ""
-"If you feel this invoice is incorrect or have any questions, you can "
-"contact our support team for assistance."
-msgstr ""
-
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
 msgid ""
@@ -257,6 +404,11 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
+msgstr ""
+
+#: app/templates/email/monthly_payment_pre_due_email.html:13
+#, python-format
+msgid "Late payments can be subject to a %(percentage)s finance fee."
 msgstr ""
 
 #: app/templates/email/new_session.html:3
@@ -360,7 +512,7 @@ msgstr ""
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
-#: app/templates/email/ticket_purchased.html:30
+#: app/templates/email/ticket_purchased.html:34
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
 msgstr "Puno pozdrava"
@@ -457,12 +609,32 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#: app/templates/email/ticket_purchased.html:19
+msgid "Add to calendar"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:19
+msgid "Google Calendar"
+msgstr ""
+
 #: app/templates/email/ticket_purchased.html:20
+msgid "iCal"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:21
+msgid "Yahoo"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:22
+msgid "Outlook"
+msgstr ""
+
+#: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
 msgid "Below you find a message from the organizer"
 msgstr "Ispod se nalazi poruka organizatora"
 
-#: app/templates/email/ticket_purchased.html:34
+#: app/templates/email/ticket_purchased.html:38
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:106
 #, fuzzy, python-format
@@ -809,9 +981,9 @@ msgid "Your login is: %(email)s"
 msgstr "Tvoj prijava je"
 
 #: app/templates/email/user_register.html:5
-#, fuzzy, python-format
+#, python-format
 msgid "Please visit the following link to verify your email: %(url)s"
-msgstr "Pritisni sljedeću poveznicu za potvrđivanje tvoje email adrese:"
+msgstr "Pritisni sljedeću poveznicu za potvrđivanje tvoje email adrese: %(url)s"
 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
@@ -984,426 +1156,39 @@ msgstr "Poruka organizatora"
 #~ msgid "Invoice Footer"
 #~ msgstr "Podnožje računa"
 
-#~ msgid ""
-#~ "We\n"
-#~ "hope you enjoyed it"
-#~ msgstr ""
+#~ msgid "at"
+#~ msgstr "Datum"
 
-#~ msgid " If you would like to extend the period of your ticket sales"
-#~ msgstr ""
+#~ msgid "is now available."
+#~ msgstr "Informacija nije dostupna"
 
-#~ msgid "has just scheduled "
-#~ msgstr ""
+#~ msgid "for the event"
+#~ msgstr "O ovom događaju"
 
-#~ msgid "is over"
-#~ msgstr ""
+#~ msgid "You can download your"
+#~ msgstr "Tvoje ulaznice možeš preuzeti na"
 
-#~ msgid "Thank you for using the Eventyay platform for your event"
-#~ msgstr ""
+#~ msgid "Login to manage the orders at"
+#~ msgstr "Za upravljanje tvojim nalozima, prijavi se"
 
-#~ msgid "We hope you enjoyed it"
-#~ msgstr ""
-
-#~ msgid "We hope you enjoyed it and keep in touch"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot"
-#~ msgstr ""
-
-#~ msgid "Click on the following link to download the event"
-#~ msgstr ""
-
-#~ msgid "Your invoice payment is due within 30 days"
-#~ msgstr ""
-
-#~ msgid "Please pay within 30 days"
-#~ msgstr ""
-
-#~ msgid "If you have any questions about invoices"
-#~ msgstr ""
-
-#~ msgid "please find more information on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "Payment is fast and simple using your credit card or PayPal account"
-#~ msgstr ""
-
-#~ msgid "Your payment is now past due"
+#~ msgid "Your payment is now past due."
 #~ msgstr ""
 
 #~ msgid ""
 #~ "Please pay this invoice immediately to"
-#~ " avoid your account being suspended"
+#~ " avoid your account being suspended."
 #~ msgstr ""
 
 #~ msgid ""
 #~ "If you feel this invoice is "
 #~ "incorrect or have any questions, you "
 #~ "can contact our support team for "
-#~ "assistance"
+#~ "assistance."
 #~ msgstr ""
 
-#~ msgid "Please pay within 2 days"
+#~ msgid "Email Confirmation to Create Account for Open-Event"
 #~ msgstr ""
 
-#~ msgid "and click on the status badge of the session"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you do not have an account "
-#~ "yet you need to register before "
-#~ "you can accept the invite"
-#~ msgstr ""
-
-#~ msgid "has been cancelled"
-#~ msgstr ""
-
-#~ msgid "If you have not done this cancellation by yourself"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please check with the owner of the"
-#~ " order or the organizer of the "
-#~ "event for more information about the "
-#~ "cancellation"
-#~ msgstr ""
-
-#~ msgid "You need to login to access the form"
-#~ msgstr ""
-
-#~ msgid "Login to your account"
-#~ msgstr ""
-
-#~ msgid "On the top right click “Manage Events”"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "On the Events Dashboard choose the "
-#~ "event you want to edit and click"
-#~ " the “Edit Symbol” of the event"
-#~ msgstr ""
-
-#~ msgid "You are now editing the “Basic Details” of your event"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll down to the tickets section, "
-#~ "choose the ticket you want to edit"
-#~ " and click on the “Settings Symbol”"
-#~ " of the ticket"
-#~ msgstr ""
-
-#~ msgid "In the ticket settings adjust the sales period for the ticket"
-#~ msgstr ""
-
-#~ msgid "Repeat the steps for other tickets"
-#~ msgstr ""
-
-#~ msgid "if any"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll to the bottom of the page"
-#~ " and save the changes by clicking "
-#~ "“Publish”"
-#~ msgstr ""
-
-#~ msgid "You should verify your new email"
-#~ msgstr ""
-
-#~ msgid "If you would like to reactivate ticket sales for these tickets"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please login to your account and "
-#~ "edit the sales period for your "
-#~ "tickets."
-#~ msgstr ""
-
-#~ msgid "If you would like to extend the period of your ticket sales"
-#~ msgstr ""
-
-#~ msgid "please login to your account and edit the sales period for your tickets"
-#~ msgstr ""
-
-#~ msgid "your"
-#~ msgstr ""
-
-#~ msgid "is over."
-#~ msgstr ""
-
-#~ msgid "thank you for participating in our"
-#~ msgstr ""
-
-#~ msgid "You have been invited to be a"
-#~ msgstr ""
-
-#~ msgid "at"
-#~ msgstr "Datum"
-
-#~ msgid "group"
-#~ msgstr ""
-
-#~ msgid "The invoice for your event"
-#~ msgstr ""
-
-#~ msgid "on eventyay.com for"
-#~ msgstr ""
-
-#~ msgid "is now available."
-#~ msgstr "Informacija nije dostupna"
-
-#~ msgid "Thank you for using"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Just a friendly reminder that we "
-#~ "haven't received your payment for your"
-#~ " invoice for"
-#~ msgstr ""
-
-#~ msgid "Please pay within 15 days"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is a reminder that we haven't"
-#~ " received your payment for your "
-#~ "invoice for"
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from"
-#~ msgstr ""
-
-#~ msgid "for organizers of the"
-#~ msgstr ""
-
-#~ msgid "You have been invited as a speaker for the session submission"
-#~ msgstr ""
-
-#~ msgid "for the event"
-#~ msgstr "O ovom događaju"
-
-#~ msgid "Your order"
-#~ msgstr ""
-
-#~ msgid "has been cancelled."
-#~ msgstr ""
-
-#~ msgid "starting at"
-#~ msgstr ""
-
-#~ msgid "to view"
-#~ msgstr ""
-
-#~ msgid "download the invoice"
-#~ msgstr ""
-
-#~ msgid "The ticket sales period for one or several of your tickets for"
-#~ msgstr ""
-
-#~ msgid "to"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s"
-#~ msgstr ""
-
-#~ msgid "Hello %(name)s"
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5% finance fee."
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a"
-#~ msgstr ""
-
-#~ msgid "finance fee"
-#~ msgstr ""
-
-#~ msgid "by"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s, your %(eventname) is over."
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5%% finance fee."
-#~ msgstr ""
-
-#~ msgid "Hi %(email),"
-#~ msgstr ""
-
-#~ msgid "Your group"
-#~ msgstr ""
-
-#~ msgid "has just scheduled"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it."
-#~ msgstr ""
-
-#~ msgid "Time"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot!"
-#~ msgstr ""
-
-#~ msgid "Event description"
-#~ msgstr ""
-
-#~ msgid "You’re getting this message because you are a group member of"
-#~ msgstr ""
-
-#~ msgid "on %(app_name)s."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can unsubscribe from emails from "
-#~ "this group by unfollowing the group"
-#~ msgstr ""
-
-#~ msgid "here"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link:"
-#~ msgstr ""
-
-#~ msgid "Link"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The invoice for your event "
-#~ "%(event_name)s on eventyay.com for %(date)s"
-#~ " is now available."
-#~ msgstr ""
-
-#~ msgid "Pay Now at"
-#~ msgstr ""
-
-#~ msgid "A detailed invoice is available in"
-#~ msgstr ""
-
-#~ msgid "the billing area"
-#~ msgstr ""
-
-#~ msgid "of your account"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you have any questions about "
-#~ "invoices, please find more information "
-#~ "on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "of your account."
-#~ msgstr ""
-
-#~ msgid "Please pay immediately at"
-#~ msgstr ""
-
-#~ msgid "finance fee."
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from %(app_name)s for organizers of the"
-#~ msgstr ""
-
-#~ msgid "Your"
-#~ msgstr ""
-
-#~ msgid "Call for Speakers"
-#~ msgstr ""
-
-#~ msgid "has received a new session proposal with the following details"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can view all speaker details "
-#~ "on the speaker profile page and "
-#~ "the session proposal on the"
-#~ msgstr ""
-
-#~ msgid "session page"
-#~ msgstr ""
-
-#~ msgid "To change the status of sessions please go to the"
-#~ msgstr ""
-
-#~ msgid "sessions overview page"
-#~ msgstr ""
-
-#~ msgid "and click on the status badge of the session."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You have been invited as a speaker"
-#~ " for the session submission "
-#~ "\"%(session_title)s\" for the event"
-#~ msgstr ""
-
-#~ msgid "on"
-#~ msgstr ""
-
-#~ msgid "by %(inviter_name)s %(inviter_email)s."
-#~ msgstr ""
-
-#~ msgid "You can accept or reject this invitation from"
-#~ msgstr ""
-
-#~ msgid "page"
-#~ msgstr ""
-
-#~ msgid "The information about your cancelled order is here"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "To contact event organizers please use"
-#~ " the contact form on the event "
-#~ "page here"
-#~ msgstr ""
-
-#~ msgid "Thank you for signing up for"
-#~ msgstr ""
-
-#~ msgid "You can download your"
-#~ msgstr "Tvoje ulaznice možeš preuzeti na"
-
-#~ msgid "tickets or registration information here"
-#~ msgstr ""
-
-#~ msgid "You have a new order for your event"
-#~ msgstr ""
-
-#~ msgid "starting at %(event_time)s on %(event_date)s."
-#~ msgstr ""
-
-#~ msgid "Click here"
-#~ msgstr ""
-
-#~ msgid "to view/download the invoice."
-#~ msgstr ""
-
-#~ msgid "Login to manage the orders at"
-#~ msgstr "Za upravljanje tvojim nalozima, prijavi se"
-
-#~ msgid "This is an automatic message from"
-#~ msgstr ""
-
-#~ msgid "Hi"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link"
-#~ msgstr ""
-
-#~ msgid "Organiser"
-#~ msgstr ""
-
-#~ msgid "Thank you for using the Eventyay platform for your event."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is an automatic email from "
-#~ "%(app_name)s for organizers of the "
-#~ "%(session_event_name)s."
+#~ msgid "{event_name} is over. Thank you for using eventyay!"
 #~ msgstr ""
 

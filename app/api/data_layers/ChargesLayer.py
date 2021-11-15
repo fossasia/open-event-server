@@ -50,15 +50,13 @@ class ChargesLayer(BaseDataLayer):
 
         # charge through stripe
         if order.payment_mode == 'stripe':
-            if not data.get('stripe'):
-                raise UnprocessableEntityError({'source': ''}, "stripe token is missing")
             if not order.event.can_pay_by_stripe:
                 raise ConflictError(
                     {'': ''}, "This event doesn't accept payments by Stripe"
                 )
 
             success, response = TicketingManager.charge_stripe_order_payment(
-                order, data['stripe']
+                order
             )
             data['status'] = success
             data['message'] = response
