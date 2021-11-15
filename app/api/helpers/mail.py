@@ -823,22 +823,25 @@ def send_email_after_event_speaker(email, event_name):
 
 
 def convert_to_event_timezone(date, email, timezone=None, fmt='full'):
-    if not date or not email:
-        return None
+    if date and email:
+        if timezone:
+            date = date.astimezone(pytz.timezone(timezone))
 
-    if timezone:
-        date = date.astimezone(pytz.timezone(timezone))
-
-    return convert_to_user_locale(email, date, fmt)
+        return convert_to_user_locale(email, date, fmt)
+    
+    return None
 
 
 def convert_to_user_locale(email, date, fmt):
     """Convert datetime to user selected language"""
-    user = User.query.filter(User.email == email).first()
-    user_locale = 'en'
+    if date and email:
+        user = User.query.filter(User.email == email).first()
+        user_locale = 'en'
 
-    if user and user.language_prefrence:
-        user_locale = user.language_prefrence
+        if user and user.language_prefrence:
+            user_locale = user.language_prefrence
+            return format_datetime(date, format=fmt, locale=user_locale)
+
         return format_datetime(date, format=fmt, locale=user_locale)
 
-    return format_datetime(date, format=fmt, locale=user_locale)
+    return None
