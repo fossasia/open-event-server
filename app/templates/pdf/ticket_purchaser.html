@@ -141,7 +141,7 @@
                                 <td>
                                     <span class="custom_label">{{_('Order Information')}}</span>
                                     <p class="data">{{_('Order
-                                        %(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</p>
+                                        #%(invoice_number)s',invoice_number="")}}{{order.get_invoice_number()}}</p>
                                 </td>
                                 <td>
                                     <span class="custom_label">{{_('Name')}}</span>
@@ -167,8 +167,7 @@
     </div>
     {% if order.event.after_order_message %}
     <div class="main_content">
-        <span id="event_message">{% autoescape false %}{{ order.event.after_order_message | strip_tags | nl2br }}{%
-            endautoescape %}</span>
+        <span id="event_message">{{ order.event.after_order_message | replace("\n","<br>") | safe}}</span>
     </div>
     {% endif %}
     <pdf:nextpage />
