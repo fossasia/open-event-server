@@ -7,6 +7,7 @@ from sqlalchemy.sql.expression import or_, and_
 import flask_login as login
 import pytz
 from flask import current_app
+from flask_babel import _
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
@@ -464,16 +465,16 @@ class Event(SoftDeletionModel):
             return self.location_name
         elif self.online:
             return self.site_link
-        return 'Location Not Announced'
+        return _('Location Not Announced')
 
     @property
     def event_location_status(self):
         if self.online:
-            return 'Online (Please login to the platform to access the video room on the event page)'
+            return _('Online (Please login to the platform to access the video room on the event page)')
         elif self.location_name:
             return self.location_name
         else:
-            return 'Location Not Announced'
+            return _('Location Not Announced')
 
     @property
     def has_coordinates(self):
