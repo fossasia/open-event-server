@@ -2107,7 +2107,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.9.0"
+version = "6.9.1"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2115,7 +2115,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
 python-http-client = ">=3.2.1"
-starkbank-ecdsa = ">=1.0.0,<2.0.0"
+starkbank-ecdsa = ">=2.0.1"
 
 [[package]]
 name = "sentry-sdk"
@@ -2267,7 +2267,7 @@ url = ["furl (>=0.4.1)"]
 
 [[package]]
 name = "starkbank-ecdsa"
-version = "1.1.0"
+version = "2.0.2"
 description = "A lightweight and fast pure python ECDSA library"
 category = "main"
 optional = false
@@ -2642,7 +2642,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "ecc13e169c7d2d09e2d776d0c026529878cf17be64d09453e494f17095d4acdc"
+content-hash = "a6dad1944ee28ed2a9202454eb06d62d6161df6c8210888c59578e0328f07230"
 
 [metadata.files]
 aiohttp = [
@@ -3886,8 +3886,8 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.9.0-py3-none-any.whl", hash = "sha256:0e5da37bd85ba8d2e84d7597adc493bccf8637b0cdb8ca79e8719456615316c4"},
-    {file = "sendgrid-6.9.0.tar.gz", hash = "sha256:eafad9aa4cf4ccca539a22e6a844538fdceba25f53a51de26458ccf8a0632e9a"},
+    {file = "sendgrid-6.9.1-py3-none-any.whl", hash = "sha256:0997006befd4ac27ac1982f8d398e1c1fd83ada6afe151159aad361ed4f334a7"},
+    {file = "sendgrid-6.9.1.tar.gz", hash = "sha256:00f1a2b411ed58fb72834c9a94480f4f9e2b87803808b6a480b476b62538444e"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-1.4.3.tar.gz", hash = "sha256:b9844751e40710e84a457c5bc29b21c383ccb2b63d76eeaad72f7f1c808c8828"},
@@ -4003,7 +4003,7 @@ sqlalchemy-utils = [
     {file = "SQLAlchemy_Utils-0.37.9-py3-none-any.whl", hash = "sha256:bb6f4da8ac044cb0dd4d0278b1fb434141a5ee9d1881c757a076830ddbb04160"},
 ]
 starkbank-ecdsa = [
-    {file = "starkbank-ecdsa-1.1.0.tar.gz", hash = "sha256:423f81bb55c896a3c85ee98ac7da98826721eaee918f5c0c1dfff99e1972da0c"},
+    {file = "starkbank-ecdsa-2.0.2.tar.gz", hash = "sha256:4b60ebc493f024f2891516a6c140fcc711c16999468c8594bc1097ca5aed759f"},
 ]
 starlette = [
     {file = "starlette-0.16.0-py3-none-any.whl", hash = "sha256:38eb24bf705a2c317e15868e384c1b8a12ca396e5a3c3a003db7e667c43f939f"},
