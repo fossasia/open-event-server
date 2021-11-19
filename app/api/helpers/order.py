@@ -79,12 +79,12 @@ def create_pdf_tickets_for_holder(order):
     """
     starts_at = convert_to_user_locale(
         order.user.email,
-        datetime=order.event.starts_at,
+        date_time=order.event.starts_at,
         tz=order.event.timezone
     )
     ends_at = convert_to_user_locale(
         order.user.email,
-        datetime=order.event.ends_at,
+        date_time=order.event.ends_at,
         tz=order.event.timezone
     )
 
@@ -108,12 +108,12 @@ def create_pdf_tickets_for_holder(order):
         for holder in order.ticket_holders:
             starts_at = convert_to_user_locale(
                 holder.email,
-                datetime=order.event.starts_at,
+                date_time=order.event.starts_at,
                 tz=order.event.timezone
             )
             ends_at = convert_to_user_locale(
                 holder.email,
-                datetime=order.event.ends_at,
+                date_time=order.event.ends_at,
                 tz=order.event.timezone
             )
 

@@ -3,7 +3,6 @@ import datetime
 import logging
 import os
 import pytz
-from babel.dates import format_datetime
 from itertools import groupby
 from typing import Dict, Optional
 
@@ -410,7 +409,11 @@ def send_email_announce_event(event, group, emails):
                     event_url=event_url,
                     event_location=event_location,
                     event_date=convert_to_user_locale(email, date=event_date),
-                    event_time=convert_to_user_locale(email, time=event_time, tz=event.timezone),
+                    event_time=convert_to_user_locale(
+                        email,
+                        time=event_time,
+                        tz=event.timezone
+                    ),
                     group_name=group_name,
                     group_url=group_url,
                     app_name=app_name,
@@ -444,11 +447,7 @@ def send_email_for_monthly_fee_payment(
             email=email,
             event_name=event_name,
             invoice_url=invoice_url,
-            date=format_date(
-                previous_month,
-                'MMMM',
-                locale=user.language_prefrence
-            ),
+            date=previous_month,
             amount=amount,
             app_name=app_name,
             payment_url=link,
@@ -565,7 +564,7 @@ def send_email_to_attendees(order):
     )
     event_end_date = convert_to_user_locale(
         buyer_email,
-        datetime=order.event.ends_at,
+        date_time=order.event.ends_at,
         tz=order.event.timezone,
     )
     event_time = convert_to_user_locale(
@@ -578,7 +577,7 @@ def send_email_to_attendees(order):
         order=order,
         starts_at=convert_to_user_locale(
             buyer_email,
-            datetime=order.event.starts_at,
+            date_time=order.event.starts_at,
             tz=order.event.timezone,
         ),
         ends_at=event_end_date,
@@ -654,7 +653,7 @@ def send_order_purchase_organizer_email(order, recipients):
         timezone=order.event.timezone,
         purchase_time=convert_to_user_locale(
             emails[0],
-            datetime=order.completed_at,
+            date_time=order.completed_at,
             tz=order.event.timezone
         ),
         payment_mode=order.payment_mode,
@@ -824,14 +823,9 @@ def send_email_after_event_speaker(email, event_name):
     )
 
 
-def convert_to_user_locale(email, datetime=None, date=None, time=None, tz=None):
+def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None):
     """
-    Convert datetime to user selected language
-    :param email   : Email of the user
-    :param datetime: datetime object (timezone also required)
-    :param date    : date part of the datetime object
-    :param time    : time part of the datetime object
-    :param tz      : timezone of the event
+    Convert date and time to user selected language
     :return        : datetime/date/time translated to user locale
     """
     if email:
@@ -841,11 +835,23 @@ def convert_to_user_locale(email, datetime=None, date=None, time=None, tz=None):
         if user and user.language_prefrence:
             user_locale = user.language_prefrence
 
-        if datetime and tz:
-            return format_datetime(datetime, 'full', tzinfo=pytz.timezone(tz), locale=user_locale)
-        elif date:
+        if date_time and tz:
+            return format_datetime(
+                date_time,
+                'full',
+                tzinfo=pytz.timezone(tz),
+                locale=user_locale
+            )
+        
+        if date:
             return format_date(date, 'd MMMM Y', locale=user_locale)
-        elif time:
-            return format_time(time, 'HH:mm (zzzz)', tzinfo=pytz.timezone(tz), locale=user_locale)
+        
+        if time and tz:
+            return format_time(
+                time,
+                'HH:mm (zzzz)',
+                tzinfo=pytz.timezone(tz),
+                locale=user_locale
+            )
 
     return None
