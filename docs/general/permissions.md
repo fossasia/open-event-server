@@ -5,7 +5,7 @@ Simply checking for the permission for each method. Instead of making decorators
 
 ### **How it is implemented?**
 
-1. Separating the ```api``` intialization  to `app\api\bootstrap.py` so that it can be used in routes files  (like events.py, users.py, etc)
+1. Separating the ```api``` initialization  to `app\api\bootstrap.py` so that it can be used in routes files  (like events.py, users.py, etc)
 2. In this basic implementation, please see `tickets.py`.
 3. As an example use, a decorator added to tickets.py as`api.has_permission('is_organizer', fetch='event_id', model=Ticket),`
 4. Created a permission manager `app\api\helpers\permission_manager.py` which will do the whole work.
@@ -31,7 +31,7 @@ Using permission manager is basically understanding the different options you ca
 
 - **method (string)**: You can provide a string containing the methods where permission needs to be checked as comma separated values of different methods in a string.
 For example: method=”GET,POST”
-- ** leave_if (lambda)**: This receives a lambda function which should return boolean values. Based on returned value if is true then it will skip the permission check. The provided lambda function receives only parameter, “view_kwargs”
+- **leave_if (lambda)**: This receives a lambda function which should return boolean values. Based on returned value if is true then it will skip the permission check. The provided lambda function receives only parameter, “view_kwargs”
 Example use case can be the situation where you can leave the permission for any specific related endpoint to some resource and would like to do a manual check in the method itself.
 - **check (lambda)**: Opposite to leave_if. It receives a lambda function that will return boolean values. Based on returned value, If it is true then only it will go further and check the request for permissions else will throw forbidden error.
 - **fetch (string)**: This is the string containing the name of the key which has to be fetched for fetch_as key (described below). Permission manager will first look for this value in view_kwargs dict object. If it is not there then it will make the query to get one(described below at model )
