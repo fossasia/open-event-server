@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style>
-@page {
+        @page {
             size: a4 portrait;
             margin-left: 40px;
             margin-top: 50px;
@@ -19,8 +19,8 @@
                 position: absolute;
             }
 
-            @frame main_content{
-                margin-top:8px;
+            @frame main_content {
+                margin-top: 8px;
                 -pdf-frame-content: mainContent;
                 -pdf-frame-max-width: 100%;
                 width: 100%;
@@ -112,10 +112,16 @@
             color: #333333;
         }
 
-        #event-logo {
+        #event-image {
             width: 150px;
             height: 75px;
             padding-top: 20px;
+        }
+
+        #event-logo{
+            width:100px;
+            height:100px;
+            padding-top:20px;
         }
     </style>
 </head>
@@ -126,7 +132,7 @@
             <td>
                 <div id="billing_logo">
                     {% if admin_info.admin_billing_logo %}
-                    <img src="{{admin_info.admin_billing_logo}}" alt="organization logo"/><br>
+                    <img src="{{admin_info.admin_billing_logo}}" alt="organization logo" /><br>
                     {% endif %}
                     <span id="app_name">{{app_name}}</span>
                 </div>
@@ -146,15 +152,15 @@
                         {% if order.event.online %}
                         {% if order.event.location_name %}
                         <span>{{_('Event taking place online and at
-                            %(location)s',location="")}}{{order.event.location_name}}</span>
+                            %(location)s.',location="")}}{{order.event.location_name}}</span>
                         {% else %}
-                        <span>{{_('Event taking place online')}}</span>
+                        <span>{{_('Event taking place online.')}}</span>
                         {% endif %}
                         {% elif order.event.location_name %}
                         <span>{{_('Event taking place at
-                            %(location)s',location="")}}{{order.event.location_name}}</span>
+                            %(location)s.',location="")}}{{order.event.location_name}}</span>
                         {% else %}
-                        <span>{{_('Location or online event details to be announced')}}</span>
+                        <span>{{_('Location or online event details to be announced.')}}</span>
                         {% endif %}
                     </span>
                     <br>
@@ -181,15 +187,21 @@
                                     <span class="custom_label">{{_('Name')}}</span>
                                     <p class="data">{{holder.name}}</p>
                                 </td>
+                                <td>
+                                    <span class="custom_label">{{_('Email')}}</span>
+                                    <p class="data">{{holder.email}}</p>
+                                </td>
                             </tr>
                         </table>
                     </span>
                 </td>
                 <td align="center">
-                    <!-- <img src="{{order.event.original_image_url}}" alt="" id="event-logo"><br><br><br> -->
-                    <img src="{{order.event.original_image_url}}" alt=""
-                        id="event-logo"><br><br><br>
-
+                    {% if order.event.original_image_url %}
+                    <img src="{{order.event.original_image_url}}" alt="" id="event-image">
+                    {% elif order.event.logo_url %}
+                    <img src="{{order.event.logo_url}}" alt="" id="event-logo">
+                    {% endif %}
+                    <br><br><br>
                     <div id="qrcode">
                         <img src="data:image/png;base64,{{ holder.qr_code }}" />
                         <br>
