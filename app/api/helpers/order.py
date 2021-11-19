@@ -19,7 +19,7 @@ from app.api.helpers.notification import (
     notify_ticket_purchase_attendee,
     notify_ticket_purchase_organizer,
 )
-from app.api.helpers.mail import convert_to_event_timezone
+from app.api.helpers.mail import convert_to_user_locale
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
@@ -77,15 +77,15 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
-    starts_at = convert_to_event_timezone(
-        order.event.starts_at,
+    starts_at = convert_to_user_locale(
         order.user.email,
-        order.event.timezone
+        datetime=order.event.starts_at,
+        tz=order.event.timezone
     )
-    ends_at = convert_to_event_timezone(
-        order.event.ends_at,
+    ends_at = convert_to_user_locale(
         order.user.email,
-        order.event.timezone
+        datetime=order.event.ends_at,
+        tz=order.event.timezone
     )
 
     if order.status == 'completed' or order.status == 'placed':
@@ -106,15 +106,15 @@ def create_pdf_tickets_for_holder(order):
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
-            starts_at = convert_to_event_timezone(
-                order.event.starts_at,
+            starts_at = convert_to_user_locale(
                 holder.email,
-                order.event.timezone
+                datetime=order.event.starts_at,
+                tz=order.event.timezone
             )
-            ends_at = convert_to_event_timezone(
-                order.event.ends_at,
+            ends_at = convert_to_user_locale(
                 holder.email,
-                order.event.timezone
+                datetime=order.event.ends_at,
+                tz=order.event.timezone
             )
 
             # create attendee pdf for every ticket holder
@@ -158,17 +158,13 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
-                event_starts_at=convert_to_event_timezone(
-                    order.event.starts_at_tz,
+                event_starts_at=convert_to_user_locale(
                     order.user.email,
-                    order.event.timezone,
-                    'd MMMM Y'
+                    date=order.event.starts_at_tz,
                 ),
-                created_at=convert_to_event_timezone(
-                    order.created_at,
+                created_at=convert_to_user_locale(
                     order.user.email,
-                    order.event.timezone,
-                    'd MMMM Y'
+                    date=order.created_at,
                 ),
                 admin_info=admin_info,
                 order_amount=order_amount

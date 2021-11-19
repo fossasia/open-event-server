@@ -12,7 +12,7 @@
 <br/>{{ _('Order Number') }}: {{ order.invoice_number }}
 <br/>
 <br/>{{ _('About this event') }}:
-<br/>{{ _('Date') }}: {{ order.event.starts_at | datetime(order.event.timezone) }} - {{ order.event.ends_at | datetime(order.event.timezone) }}
+<br/>{{ _('Date') }}: {{ starts_at }} - {{ ends_at }}
 <br/>{{ _('Location') }}: {{ order.event.event_location_status }}
 <br/>{{ _('URL') }}: {{ order.event.site_link }}
 <br/>
