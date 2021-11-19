@@ -26,4 +26,4 @@ The Library used for signals is [blinker](https://github.com/jek/blinker), docs 
 - **Design principles for signals**:
   - signals/signal handler should be independent of the function they reside in.
   - When sending the signal, if the code in the function after sending the signal depends on successful execution of the signal, use a function call instead.
-  - Please provide seperate unit tests for signals handlers, none of the signal handlers will be called via the signal in testing mode.
+  - Please provide separate unit tests for signals handlers, none of the signal handlers will be called via the signal in testing mode.
