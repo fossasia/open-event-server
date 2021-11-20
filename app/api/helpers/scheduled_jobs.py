@@ -8,6 +8,8 @@ from sqlalchemy import and_, distinct, func, or_
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.mail import (
+    send_email_after_event,
+    send_email_after_event_speaker,
     send_email_ticket_sales_end,
     send_email_ticket_sales_end_next_week,
     send_email_ticket_sales_end_tomorrow,
@@ -118,23 +120,22 @@ def send_after_event_mail():
         speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
         owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
         unique_emails = set()
-        user_objects = []
+        unique_emails_speakers = set()
         for speaker in speakers:
             if not speaker.is_email_overridden:
-                unique_emails.add(speaker.user.email)
-                user_objects.append(speaker.user)
+                unique_emails_speakers.add(speaker.user.email)
+
         for organizer in organizers:
             unique_emails.add(organizer.user.email)
-            user_objects.append(organizer.user)
+
         if owner:
             unique_emails.add(owner.user.email)
-            user_objects.append(owner.user)
-        # for email in unique_emails:
-        #     send_email_after_event(email, event.name, frontend_url)
-        #  Unique user's dict based on their id.
-        # unique_users_dict = make_dict(user_objects, "id")
-        # for user in unique_users_dict.values():
-        #     send_notif_after_event(user, event.name)
+
+        for email in unique_emails:
+            send_email_after_event(email, event.name)
+
+        for email in unique_emails_speakers:
+            send_email_after_event_speaker(email, event.name)
 
 
 @celery.task(base=RequestContextTask, name='change.session.state.on.event.completion')
@@ -209,7 +210,11 @@ def send_event_fee_notification_followup(follow_up=True):
         logger.warning('Not valid follow up request: %s', follow_up)
         return
     query = EventInvoice.query.filter(
-        EventInvoice.amount > 0, EventInvoice.status != 'paid', EventInvoice.status != 'resolved', EventInvoice.status != 'refunded', EventInvoice.status != 'refunding'
+        EventInvoice.amount > 0,
+        EventInvoice.status != 'paid',
+        EventInvoice.status != 'resolved',
+        EventInvoice.status != 'refunded',
+        EventInvoice.status != 'refunding',
     )
     this_month = this_month_date()
     if follow_up != 'post_due':

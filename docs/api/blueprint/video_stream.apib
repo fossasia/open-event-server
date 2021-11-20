@@ -1,0 +1,46 @@
+# Group Video Streams
+Data related to video streams table
+
+| Parameter | Description | Type | Required | Public |
+|:----------|-------------|------|----------|--------|
+| `name` | Name of Video Stream | string | **yes** | **yes** |
+| `url` | URL of Video Stream | Url | **yes** | **yes** |
+| `password` | Password of video stream | string | - | - |
+| `additional_information` | Addition Description about Video Stream | string | - | - |
+| `extra` | Extra options on video streams like autoplay, loop or bbb_options | - | - | - |
+
+## Video streams [/v1/video-streams{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `url`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+
+### List all Video Streams [GET]
+Get a list of all Video Streams
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [],
+            "links": {
+                "self": "/v1/video-streams?page%5Bsize%5D=10&page%5Bnumber%5D=2&sort=url&filter=%5B%5D"
+            },
+            "meta": {
+                "count": 0
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

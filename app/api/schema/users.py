@@ -92,6 +92,7 @@ class UserSchema(UserSchemaPublic):
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
     details = fields.Str(allow_none=True)
+    language_prefrence = fields.Str(allow_none=True)
     contact = fields.Str(allow_none=True)
     billing_contact_name = fields.Str(allow_none=True)
     billing_phone = fields.Str(allow_none=True)

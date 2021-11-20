@@ -37,6 +37,10 @@ class GroupListPost(ResourceList):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
 
+    def after_create_object(self, group, data, view_kwargs):
+        if data.get('banner_url'):
+            start_image_resizing_tasks(group, data['banner_url'])
+
     schema = GroupSchema
     decorators = (jwt_required,)
     methods = [
@@ -47,6 +51,7 @@ class GroupListPost(ResourceList):
         'model': Group,
         'methods': {
             'before_create_object': before_create_object,
+            'after_create_object': after_create_object,
         },
     }
 
@@ -125,6 +130,12 @@ class GroupDetail(ResourceDetail):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
 
+        if (
+            data.get('banner_url')
+        ):
+            start_image_resizing_tasks(group, data['banner_url'])
+        
+
     decorators = (
         api.has_permission(
             'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
@@ -158,3 +169,10 @@ class GroupRelationship(ResourceRelationship):
         'session': db.session,
         'model': Group,
     }
+
+
+def start_image_resizing_tasks(group, banner_url):
+    group_id = str(group.id)
+    from .helpers.tasks import resize_group_images_task
+
+    resize_group_images_task.delay(group_id, banner_url)
