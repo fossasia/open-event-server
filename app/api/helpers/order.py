@@ -143,7 +143,7 @@ def create_pdf_tickets_for_holder(order):
         for order_ticket in order_tickets:
             ticket = dict(
                 id=order_ticket.ticket.id,
-                price=order_ticket.ticket.price,
+                price=order_ticket.price,
                 quantity=order_ticket.quantity
             )
             tickets.append(ticket)
