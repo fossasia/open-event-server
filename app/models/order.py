@@ -44,6 +44,7 @@ class OrderTicket(db.Model):
         db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True
     )
     quantity = db.Column(db.Integer)
+    price = db.Column(db.Float, default=0)
 
 
 class Order(db.Model):
