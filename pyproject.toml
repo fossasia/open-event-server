@@ -64,7 +64,7 @@ SQLAlchemy-Utils = "0.37.9"
 itsdangerous = "2.0.1"
 humanize = "3.12.0"
 celery = "5.2.1"
-redis = "4.0.1"
+redis = "4.0.2"
 apscheduler = "3.8.1"
 pillow = "8.4.0"
 gunicorn = "20.1.0"
@@ -124,7 +124,7 @@ broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
 python-slugify = "^5.0.2"
-cryptography = "3.3.2" # Downgraded to avoid alpine build error
+cryptography = "36.0.0" # Downgraded to avoid alpine build error
 Flask-Migrate = "2.7.0"
 
 [tool.poetry.dev-dependencies]
