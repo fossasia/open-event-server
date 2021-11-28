@@ -67,8 +67,8 @@
             {% endif %}
 
             <span class="label">{{ _('Date and Time') }}</span><br>
-            <span style="font-size: 15px;">{{ _('From: %(start_time)s', start_time='') }} {{ order.event.starts_at | datetime(order.event.timezone) }}</span><br>
-            <span style="font-size: 15px;">{{ _('To: %(end_time)s', end_time='') }} {{ order.event.ends_at | datetime(order.event.timezone) }}</span>
+            <span style="font-size: 15px;">{{ _('From: %(start_time)s', start_time=starts_at) }}</span><br>
+            <span style="font-size: 15px;">{{ _('To: %(end_time)s', end_time=ends_at) }}</span>
             <br><br>
 
             <span class="label">{{ _('Type') }}</span><br>
