@@ -1200,7 +1200,7 @@ test = ["Cython (==0.29.22)"]
 
 [[package]]
 name = "humanize"
-version = "3.12.0"
+version = "3.13.0"
 description = "Python humanize utilities"
 category = "main"
 optional = false
@@ -2633,7 +2633,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "195536324176e34c045c253114ab0886fec9d38fa8be21d5a550f6f25772e7db"
+content-hash = "5aeec6d7e408eeb359ee147c649693cd5c6d89a86f4b3cb119cdbda1b0ca20b4"
 
 [metadata.files]
 aiohttp = [
@@ -3061,6 +3061,7 @@ flask-sqlalchemy = [
 forex-python = [
     {file = "forex-python-1.6.tar.gz", hash = "sha256:b402f7bae4909bd3f6cc0579cf6236a37b4e8e3043775bb741da7bb6c7f99604"},
     {file = "forex_python-1.6-py3-none-any.whl", hash = "sha256:e50c5f952c489885236ce229217bdd489f2722428d4b103973c413244ba21af5"},
+    {file = "forex_python-1.6-py3.7.egg", hash = "sha256:4a21a104edcb89fbbd30156995a4c945b37387224c0cb61d9399e3a944fe28b5"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
@@ -3212,8 +3213,8 @@ httptools = [
     {file = "httptools-0.2.0.tar.gz", hash = "sha256:94505026be56652d7a530ab03d89474dc6021019d6b8682281977163b3471ea0"},
 ]
 humanize = [
-    {file = "humanize-3.12.0-py3-none-any.whl", hash = "sha256:4c71c4381f0209715cd993058e717c1b74d58ae2f8c6da7bdb59ab66473b9ab0"},
-    {file = "humanize-3.12.0.tar.gz", hash = "sha256:5ec1a66e230a3e31fb3f184aab9436ea13d4e37c168e0ffc345ae5bb57e58be6"},
+    {file = "humanize-3.13.0-py3-none-any.whl", hash = "sha256:577047f95ac86445a98df030e807011a9a4283eb6e06bdc5edc9fde0358336fa"},
+    {file = "humanize-3.13.0.tar.gz", hash = "sha256:46ffbe63f71eeeb8f475c7f420f7f61bd53534a3c38eda0d7f7fdba53ca39af2"},
 ]
 icalendar = [
     {file = "icalendar-4.0.9-py2.py3-none-any.whl", hash = "sha256:cf1446ffdf1b6ad469451a8966cfa7694f5fac796ac6fc7cd93e28c51a637d2c"},
