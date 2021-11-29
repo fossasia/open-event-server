@@ -19,6 +19,7 @@ from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
 from app.models.order import Order
+from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.payment import StripePaymentsManager
@@ -122,19 +123,6 @@ def create_order():
     try:
         attendees = []
         for ticket in tickets:
-            if 'price' in data['tickets'][0]:
-                if (
-                    'price' in data['tickets'][0]
-                    and "donation" in ticket.type
-                    and (
-                        data['tickets'][0]['price'] < ticket.min_price
-                        or data['tickets'][0]['price'] > ticket.max_price
-                    )
-                ):
-                    raise UnprocessableEntityError(
-                        {'source': 'tickets'},
-                        f"Donation ticket price should be between {ticket.min_price} and {ticket.max_price}",
-                    )
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
                 attendees.append(
@@ -162,6 +150,12 @@ def create_order():
     db.session.commit()
     order.populate_and_save()
 
+    order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
+    for order_ticket in order_tickets:
+        ticket_info = ticket_map[order_ticket.ticket.id]
+        order_ticket.price = ticket_info.get('price')
+        save_to_db(order_ticket)
+    
     return OrderSchema().dump(order)
 
 

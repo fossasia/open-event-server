@@ -166,13 +166,11 @@
                     <br>
                     <span>
                         {% if order.event.starts_at %}
-                        <span class="time">{{_('From: %(start_date)s',start_date="")}}{{order.event.starts_at |
-                            datetime(order.event.timezone)}}</span>
+                        <span class="time">{{_('From: %(start_date)s',start_date=starts_at)}}</span>
                         {% endif %}
                         <br>
                         {% if order.event.ends_at %}
-                        <span class="time">{{_('To: %(end_date)s',end_date="")}}{{order.event.ends_at |
-                            datetime(order.event.timezone)}}</span>
+                        <span class="time">{{_('To: %(end_date)s',end_date=ends_at)}}</span>
                         {% endif %}
                     </span>
                     <span>
