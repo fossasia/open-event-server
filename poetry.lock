@@ -847,16 +847,15 @@ asymmetric_crypto = ["cryptography (>=2.3)"]
 
 [[package]]
 name = "flask-limiter"
-version = "1.4"
+version = "2.0.1"
 description = "Rate limiting for flask applications"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-Flask = ">=0.8"
+Flask = "*"
 limits = "*"
-six = ">=1.4.1"
 
 [[package]]
 name = "flask-login"
@@ -2633,7 +2632,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "195536324176e34c045c253114ab0886fec9d38fa8be21d5a550f6f25772e7db"
+content-hash = "c3c39a32b1140d12840db7f4d753e7c6a2dcc9487138571be8c7094bef7b9472"
 
 [metadata.files]
 aiohttp = [
@@ -3031,9 +3030,9 @@ flask-jwt-extended = [
     {file = "Flask-JWT-Extended-3.25.0.tar.gz", hash = "sha256:b2e4dba91661e4697b30269106386c2b29e416a00d9ff66b26c462edddc10078"},
 ]
 flask-limiter = [
-    {file = "Flask-Limiter-1.4.tar.gz", hash = "sha256:021279c905a1e24f181377ab3be711be7541734b494f4e6db2b8edeba7601e48"},
-    {file = "Flask_Limiter-1.4-py3-none-any.whl", hash = "sha256:f8a65a7874f48ff8df2ea5e86d5b85b48fcbae065ebeb5271b317fe68fcfa979"},
-    {file = "Flask_Limiter-1.4-py3.7.egg", hash = "sha256:055a388a89f4d5768c64025443f1f41e3babcbbbf315c728413c27b4975af239"},
+    {file = "Flask-Limiter-2.0.1.tar.gz", hash = "sha256:815c877726862510547fd12c1f282c079b384b90175c3a6f40b3b92459c14694"},
+    {file = "Flask_Limiter-2.0.1-py3-none-any.whl", hash = "sha256:ea0154fe0e1ae769aae84238dad0b63afa75ec36f74645816d5e098adc74dc15"},
+    {file = "Flask_Limiter-2.0.1-py3.9.egg", hash = "sha256:26d55ad82212e5b27d9a8c0cf849e54ae199f2b8d511dea04d92b71dce5f8f4a"},
 ]
 flask-login = [
     {file = "Flask-Login-0.5.0.tar.gz", hash = "sha256:6d33aef15b5bcead780acc339464aae8a6e28f13c90d8b1cf9de8b549d1c0b4b"},
@@ -3061,6 +3060,7 @@ flask-sqlalchemy = [
 forex-python = [
     {file = "forex-python-1.6.tar.gz", hash = "sha256:b402f7bae4909bd3f6cc0579cf6236a37b4e8e3043775bb741da7bb6c7f99604"},
     {file = "forex_python-1.6-py3-none-any.whl", hash = "sha256:e50c5f952c489885236ce229217bdd489f2722428d4b103973c413244ba21af5"},
+    {file = "forex_python-1.6-py3.7.egg", hash = "sha256:4a21a104edcb89fbbd30156995a4c945b37387224c0cb61d9399e3a944fe28b5"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
