@@ -62,7 +62,7 @@ requests = {version = "2.26.0", extras = ["security"]}
 psycopg2-binary = "2.9.2"
 SQLAlchemy-Utils = "0.37.9"
 itsdangerous = "2.0.1"
-humanize = "3.12.0"
+humanize = "3.13.1"
 celery = "5.2.1"
 redis = "4.0.2"
 apscheduler = "3.8.1"
