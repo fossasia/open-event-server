@@ -116,14 +116,8 @@ class StripePaymentsManager:
         frontend_url = get_settings()['frontend_url']
 
         try:
-            # payment_method_types = ['card', 'klarna']
-            payment_method_types = ['card']
-            # if currency.lower() == 'eur':
-            #     payment_method_types.append('sepa_debit')
-
             session = stripe.checkout.Session.create(
                 customer_email=order_invoice.user.email,
-                payment_method_types=payment_method_types,
                 line_items=[
                     {
                         'price_data': {
