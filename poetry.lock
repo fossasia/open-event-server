@@ -957,7 +957,7 @@ SQLAlchemy = ">=0.8.0"
 
 [[package]]
 name = "forex-python"
-version = "1.6"
+version = "1.7"
 description = "Foreign exchange rates and currency conversion."
 category = "main"
 optional = false
@@ -1645,7 +1645,7 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "pre-commit"
-version = "2.15.0"
+version = "2.16.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -2633,7 +2633,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "2f9212eea405d7b159b10f8296101b19d4726f80162e69898d0da3194512df57"
+content-hash = "cfea97b1e4fa3d453beb7abbb2dbe635b04eb1bee3b729aed6634661204524d4"
 
 [metadata.files]
 aiohttp = [
@@ -3059,9 +3059,8 @@ flask-sqlalchemy = [
     {file = "Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl", hash = "sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390"},
 ]
 forex-python = [
-    {file = "forex-python-1.6.tar.gz", hash = "sha256:b402f7bae4909bd3f6cc0579cf6236a37b4e8e3043775bb741da7bb6c7f99604"},
-    {file = "forex_python-1.6-py3-none-any.whl", hash = "sha256:e50c5f952c489885236ce229217bdd489f2722428d4b103973c413244ba21af5"},
-    {file = "forex_python-1.6-py3.7.egg", hash = "sha256:4a21a104edcb89fbbd30156995a4c945b37387224c0cb61d9399e3a944fe28b5"},
+    {file = "forex-python-1.7.tar.gz", hash = "sha256:76dce2da85159af39a117de18304485387176a3f05e3488964058fbb8dba9b2a"},
+    {file = "forex_python-1.7-py3-none-any.whl", hash = "sha256:091105703a26e07e0e2044ab17fd82fb2a3870086e96a4e4ed2940454fac4f73"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
@@ -3509,8 +3508,8 @@ pluggy = [
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
 ]
 pre-commit = [
-    {file = "pre_commit-2.15.0-py2.py3-none-any.whl", hash = "sha256:a4ed01000afcb484d9eb8d504272e642c4c4099bbad3a6b27e519bd6a3e928a6"},
-    {file = "pre_commit-2.15.0.tar.gz", hash = "sha256:3c25add78dbdfb6a28a651780d5c311ac40dd17f160eb3954a0c59da40a505a7"},
+    {file = "pre_commit-2.16.0-py2.py3-none-any.whl", hash = "sha256:758d1dc9b62c2ed8881585c254976d66eae0889919ab9b859064fc2fe3c7743e"},
+    {file = "pre_commit-2.16.0.tar.gz", hash = "sha256:fe9897cac830aa7164dbd02a4e7b90cae49630451ce88464bca73db486ba9f65"},
 ]
 promise = [
     {file = "promise-2.3.tar.gz", hash = "sha256:dfd18337c523ba4b6a58801c164c1904a9d4d1b1747c7d5dbf45b693a49d93d0"},
