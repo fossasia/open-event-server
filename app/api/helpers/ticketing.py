@@ -31,7 +31,7 @@ def validate_ticket_holders(ticket_holder_ids):
         )
         raise ObjectNotFound(
             {'pointer': '/data/relationships/attendees'},
-            f"Some attendee among ids {str(ticket_holder_ids)} do not exist",
+            "Some attendee among ids {str(ticket_holder_ids)} do not exist",
         )
 
     for ticket_holder in ticket_holders:
