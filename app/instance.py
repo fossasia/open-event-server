@@ -130,6 +130,7 @@ def create_app():
     app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
 
     CORS(app, resources={r"/*": {"origins": "*"}})
+    logging.getLogger('flask_cors').level = logging.DEBUG
     AuthManager.init_login(app)
 
     if app.config['TESTING'] and app.config['PROFILE']:
