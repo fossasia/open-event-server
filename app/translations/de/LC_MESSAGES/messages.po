@@ -6,19 +6,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-11-12 00:49+0530\n"
+"POT-Creation-Date: 2021-12-03 20:52+0530\n"
 "PO-Revision-Date: 2021-11-13 18:19+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
-"de/>\n"
 "Language: de\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-"
+"event/server/de/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:63
@@ -326,7 +325,7 @@ msgid "Replies are not monitored."
 msgstr "Die Antworten werden nicht überwacht."
 
 #: app/templates/email/group_contact_user.html:9
-#: app/templates/email/new_session.html:19
+#: app/templates/email/new_session.html:17
 #: app/templates/email/organizer_contact_attendee.html:9
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
@@ -409,7 +408,7 @@ msgstr "Vielen Dank, dass Sie %(app_name)s verwenden!"
 #: app/templates/email/monthly_payment_followup_email.html:18
 #: app/templates/email/monthly_payment_pre_due_email.html:22
 #: app/templates/email/ticket_cancelled.html:10
-#: app/templates/email/ticket_purchased.html:35
+#: app/templates/email/ticket_purchased.html:34
 #: app/templates/email/ticket_purchased_attendee.html:17
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
@@ -474,15 +473,15 @@ msgstr ""
 "Ihr %(open_link)sCall For Speakers%(close_link)s hat einen neuen "
 "Sitzungsvorschlag mit den folgenden Details erhalten:"
 
-#: app/templates/email/new_session.html:8
+#: app/templates/email/new_session.html:7
 msgid "Session"
 msgstr "Sitzung"
 
-#: app/templates/email/new_session.html:10
+#: app/templates/email/new_session.html:9
 msgid "Abstract"
 msgstr "Abstrakt"
 
-#: app/templates/email/new_session.html:15
+#: app/templates/email/new_session.html:13
 #, python-format
 msgid ""
 "You can view all speaker details on the speaker profile page and the "
@@ -492,7 +491,7 @@ msgstr ""
 "Sitzungsvorschlag auf der %(open_link)sSitzungsseite%(close_link)s "
 "einsehen."
 
-#: app/templates/email/new_session.html:16
+#: app/templates/email/new_session.html:14
 #, python-format
 msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
@@ -574,7 +573,7 @@ msgstr ""
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
-#: app/templates/email/ticket_purchased.html:34
+#: app/templates/email/ticket_purchased.html:33
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
 msgstr "Mit freundlichen Grüßen"
@@ -704,7 +703,7 @@ msgstr "Outlook"
 msgid "Below you find a message from the organizer"
 msgstr "Unten finden Sie eine Nachricht vom Veranstalter"
 
-#: app/templates/email/ticket_purchased.html:38
+#: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:106
 #, python-format
@@ -1692,3 +1691,4 @@ msgstr "Nachricht des Veranstalters"
 #~ "diese Rechnung falsch ist oder Fragen"
 #~ " haben, können Sie sich an unser "
 #~ "Support-Team wenden."
+

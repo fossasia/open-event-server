@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-11-12 00:49+0530\n"
+"POT-Creation-Date: 2021-12-03 20:52+0530\n"
 "PO-Revision-Date: 2021-05-14 04:32+0000\n"
 "Last-Translator: Youngbin Han <sukso96100@gmail.com>\n"
 "Language: ko\n"
@@ -288,7 +288,7 @@ msgid "Replies are not monitored."
 msgstr ""
 
 #: app/templates/email/group_contact_user.html:9
-#: app/templates/email/new_session.html:19
+#: app/templates/email/new_session.html:17
 #: app/templates/email/organizer_contact_attendee.html:9
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
@@ -367,7 +367,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_followup_email.html:18
 #: app/templates/email/monthly_payment_pre_due_email.html:22
 #: app/templates/email/ticket_cancelled.html:10
-#: app/templates/email/ticket_purchased.html:35
+#: app/templates/email/ticket_purchased.html:34
 #: app/templates/email/ticket_purchased_attendee.html:17
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
@@ -420,22 +420,22 @@ msgid ""
 "session proposal with the following details:"
 msgstr ""
 
-#: app/templates/email/new_session.html:8
+#: app/templates/email/new_session.html:7
 msgid "Session"
 msgstr ""
 
-#: app/templates/email/new_session.html:10
+#: app/templates/email/new_session.html:9
 msgid "Abstract"
 msgstr ""
 
-#: app/templates/email/new_session.html:15
+#: app/templates/email/new_session.html:13
 #, python-format
 msgid ""
 "You can view all speaker details on the speaker profile page and the "
 "session proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
 
-#: app/templates/email/new_session.html:16
+#: app/templates/email/new_session.html:14
 #, python-format
 msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
@@ -505,7 +505,7 @@ msgstr ""
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
-#: app/templates/email/ticket_purchased.html:34
+#: app/templates/email/ticket_purchased.html:33
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
 msgstr "감사합니다"
@@ -628,7 +628,7 @@ msgstr ""
 msgid "Below you find a message from the organizer"
 msgstr "아래는 주최자로부터의 메시지 입니다"
 
-#: app/templates/email/ticket_purchased.html:38
+#: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:106
 #, fuzzy, python-format

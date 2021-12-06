@@ -957,7 +957,7 @@ SQLAlchemy = ">=0.8.0"
 
 [[package]]
 name = "forex-python"
-version = "1.7"
+version = "1.8"
 description = "Foreign exchange rates and currency conversion."
 category = "main"
 optional = false
@@ -1769,7 +1769,7 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.12.1"
+version = "2.12.2"
 description = "python code static checker"
 category = "dev"
 optional = false
@@ -2106,7 +2106,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.9.1"
+version = "6.9.2"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2633,7 +2633,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "cfea97b1e4fa3d453beb7abbb2dbe635b04eb1bee3b729aed6634661204524d4"
+content-hash = "35c41451b0056e1a1357e963bc16e33b72bd756352df93ac405091d5cfdf6108"
 
 [metadata.files]
 aiohttp = [
@@ -3059,8 +3059,8 @@ flask-sqlalchemy = [
     {file = "Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl", hash = "sha256:f12c3d4cc5cc7fdcc148b9527ea05671718c3ea45d50c7e732cceb33f574b390"},
 ]
 forex-python = [
-    {file = "forex-python-1.7.tar.gz", hash = "sha256:76dce2da85159af39a117de18304485387176a3f05e3488964058fbb8dba9b2a"},
-    {file = "forex_python-1.7-py3-none-any.whl", hash = "sha256:091105703a26e07e0e2044ab17fd82fb2a3870086e96a4e4ed2940454fac4f73"},
+    {file = "forex-python-1.8.tar.gz", hash = "sha256:7d4a5c36b66e7ef9ee515f607a41249a1ae1a2499a9e011702b66f784325cc76"},
+    {file = "forex_python-1.8-py3-none-any.whl", hash = "sha256:8e6b375ad1f15b90a15d95ef8156651fae8487075dd007d2b7dd8efad8f44e41"},
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
@@ -3632,8 +3632,8 @@ pyjwt = [
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
 ]
 pylint = [
-    {file = "pylint-2.12.1-py3-none-any.whl", hash = "sha256:b4b5a7b6d04e914a11c198c816042af1fb2d3cda29bb0c98a9c637010da2a5c5"},
-    {file = "pylint-2.12.1.tar.gz", hash = "sha256:4f4a52b132c05b49094b28e109febcec6bfb7bc6961c7485a5ad0a0f961df289"},
+    {file = "pylint-2.12.2-py3-none-any.whl", hash = "sha256:daabda3f7ed9d1c60f52d563b1b854632fd90035bcf01443e234d3dc794e3b74"},
+    {file = "pylint-2.12.2.tar.gz", hash = "sha256:9d945a73640e1fec07ee34b42f5669b770c759acd536ec7b16d7e4b87a9c9ff9"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
@@ -3884,8 +3884,8 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.9.1-py3-none-any.whl", hash = "sha256:0997006befd4ac27ac1982f8d398e1c1fd83ada6afe151159aad361ed4f334a7"},
-    {file = "sendgrid-6.9.1.tar.gz", hash = "sha256:00f1a2b411ed58fb72834c9a94480f4f9e2b87803808b6a480b476b62538444e"},
+    {file = "sendgrid-6.9.2-py3-none-any.whl", hash = "sha256:0adea6e0e5baf3652c1228614cc172914936eebc793e271b35b22b24c9cb097b"},
+    {file = "sendgrid-6.9.2.tar.gz", hash = "sha256:afd1c8da686d9f40a7e43300b919cfdd32b59ac113c1a3beac64fc51a0623f1e"},
 ]
 sentry-sdk = [
     {file = "sentry-sdk-1.5.0.tar.gz", hash = "sha256:789a11a87ca02491896e121efdd64e8fd93327b69e8f2f7d42f03e2569648e88"},
