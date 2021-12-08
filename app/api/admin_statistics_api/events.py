@@ -14,7 +14,7 @@ event_statistics = Blueprint(
 
 
 @event_statistics.route('/event-topics', methods=['GET'])
-@jwt_required
+@jwt_required()
 def event_topic_count():
     result_set = db.engine.execute(
         text(
@@ -29,7 +29,7 @@ def event_topic_count():
 
 
 @event_statistics.route('/event-types', methods=['GET'])
-@jwt_required
+@jwt_required()
 def event_types_count():
     result_set = db.engine.execute(
         text(

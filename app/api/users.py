@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 from flask import Blueprint, abort, jsonify, make_response, request
-from flask_jwt_extended import current_user, verify_fresh_jwt_in_request
+from flask_jwt_extended import current_user, verify_jwt_in_request
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
@@ -356,7 +356,7 @@ class UserDetail(ResourceDetail):
             try:
                 db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
-                verify_fresh_jwt_in_request()
+                verify_jwt_in_request(fresh=True)
                 view_kwargs['email_changed'] = user.email
             else:
                 logging.error("Email already exists")
@@ -416,7 +416,7 @@ class UserDetail(ResourceDetail):
                 Speaker,
                 User,
                 UserFollowGroup,
-                Group
+                Group,
             ],
             fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id, user_follow_group_id, group_id",

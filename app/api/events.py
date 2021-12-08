@@ -5,7 +5,6 @@ from flask import g, request
 from flask.blueprints import Blueprint
 from flask.json import jsonify
 from flask_jwt_extended import current_user, get_jwt_identity, verify_jwt_in_request
-from flask_jwt_extended.view_decorators import jwt_optional
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -74,8 +73,11 @@ from app.models.video_stream import VideoStream
 events_blueprint = Blueprint('events_blueprint', __name__, url_prefix='/v1/events')
 
 
+from flask_jwt_extended import jwt_required
+
+
 @events_blueprint.route('/<string:event_identifier>/has-streams')
-@jwt_optional
+@jwt_required(optional=True)
 @to_event_id
 def has_streams(event_id):
     event = Event.query.get_or_404(event_id)
@@ -165,9 +167,14 @@ def validate_date(event, data):
 
 def get_event_query():
     query_ = Event.query
-    if get_jwt_identity() is None or not current_user.is_staff:
-        # If user is not admin, we only show published events
+    try:
+        get_jwt_identity()
+        if not current_user.is_staff:
+            # If user is not admin, we only show published events
+            query_ = query_.filter_by(state=Event.State.PUBLISHED)
+    except RuntimeError:
         query_ = query_.filter_by(state=Event.State.PUBLISHED)
+
     if is_logged_in():
         # For a specific user accessing the API, we show all
         # events managed by them, even if they're not published

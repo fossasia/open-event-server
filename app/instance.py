@@ -119,8 +119,8 @@ def create_app():
     app.config['JWT_BLACKLIST_ENABLED'] = True
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
     _jwt = JWTManager(app)
-    _jwt.user_loader_callback_loader(jwt_user_loader)
-    _jwt.token_in_blacklist_loader(is_token_blacklisted)
+    _jwt.user_lookup_loader(jwt_user_loader)
+    _jwt.token_in_blocklist_loader(is_token_blacklisted)
 
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']

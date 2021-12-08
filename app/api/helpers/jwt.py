@@ -1,6 +1,6 @@
 from flask import _app_ctx_stack as ctx_stack  # pytype: disable=import-error
 from flask_jwt_extended.config import config
-from flask_jwt_extended.exceptions import JWTExtendedException, UserLoadError
+from flask_jwt_extended.exceptions import JWTExtendedException, UserLookupError
 from flask_jwt_extended.view_decorators import _decode_jwt_from_request, _load_user
 from jwt.exceptions import PyJWTError
 
@@ -42,5 +42,5 @@ def get_identity():
         try:
             _load_user(token[config.identity_claim_key])
             return getattr(ctx_stack.top, 'jwt_user', None)
-        except UserLoadError:
+        except UserLookupError:
             pass

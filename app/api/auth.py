@@ -11,9 +11,7 @@ from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
     current_user,
-    fresh_jwt_required,
     get_jwt_identity,
-    jwt_refresh_token_required,
     jwt_required,
     set_refresh_cookies,
     unset_jwt_cookies,
@@ -100,13 +98,13 @@ def login():
 
 
 @auth_routes.route('/fresh-login', methods=['POST'])
-@jwt_required
+@jwt_required()
 def fresh_login():
     return authenticate(existing_identity=current_user)
 
 
 @auth_routes.route('/token/refresh', methods=['POST'])
-@jwt_refresh_token_required
+@jwt_required(refresh=True)
 def refresh_token():
     current_user = get_jwt_identity()
     expiry_time = timedelta(minutes=90)
@@ -124,7 +122,7 @@ def logout():
 
 
 @auth_routes.route('/blacklist', methods=['POST'])
-@jwt_required
+@jwt_required()
 def blacklist_token_rquest():
     blacklist_token(current_user)
     return jsonify({'success': True})
@@ -394,7 +392,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@fresh_jwt_required
+@jwt_required(fresh=True)
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']

@@ -1,7 +1,7 @@
 from flask import request
 from flask.blueprints import Blueprint
 from flask.helpers import make_response
-from flask_jwt_extended.view_decorators import jwt_optional
+from flask_jwt_extended.view_decorators import jwt_required
 
 from app.api.helpers.calendar.ical import to_ical
 from app.api.helpers.permissions import to_event_id
@@ -14,7 +14,7 @@ calendar_routes = Blueprint('calendars', __name__, url_prefix='/v1/events')
     '/<string:event_identifier>.ics',
 )
 @to_event_id
-@jwt_optional
+@jwt_required(optional=True)
 def export_event(event_id):
     event = Event.query.get_or_404(event_id)
     include_sessions = 'include_sessions' in request.args

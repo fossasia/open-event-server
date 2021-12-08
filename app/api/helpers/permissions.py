@@ -52,6 +52,15 @@ def jwt_required(fn, realm=None):
     return decorator
 
 
+def jwt_optional(fn):
+    @wraps(fn)
+    def decorator(*args, **kwargs):
+        verify_jwt_in_request(optional=True)
+        return fn(*args, **kwargs)
+
+    return decorator
+
+
 @second_order_decorator(jwt_required)
 def is_super_admin(f):
     """

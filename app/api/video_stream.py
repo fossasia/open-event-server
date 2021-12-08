@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from flask import jsonify
 from flask.blueprints import Blueprint
-from flask_jwt_extended import current_user, jwt_optional
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_rest_jsonapi.resource import ResourceRelationship
@@ -18,7 +18,7 @@ from app.api.helpers.errors import (
     UnprocessableEntityError,
 )
 from app.api.helpers.permission_manager import has_access
-from app.api.helpers.permissions import jwt_required
+from app.api.helpers.permissions import jwt_optional, jwt_required
 from app.api.helpers.utilities import require_exclusive_relationship
 from app.api.schema.video_stream import VideoStreamSchema
 from app.api.video_channels.bbb import BigBlueButton

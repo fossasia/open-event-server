@@ -1,7 +1,5 @@
 import os
-
 from datetime import datetime
-
 
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
@@ -12,18 +10,21 @@ from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed, delete_related_attendees_for_order
+from app.api.helpers.order import (
+    calculate_order_amount,
+    create_pdf_tickets_for_holder,
+    delete_related_attendees_for_order,
+    on_order_completed,
+)
+from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.order import Order
-from app.models.order import OrderTicket
+from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.payment import StripePaymentsManager
-
 
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')
@@ -31,7 +32,7 @@ ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/ticke
 
 @ticket_blueprint.route('/<string:order_identifier>')
 @order_blueprint.route('/<string:order_identifier>/tickets-pdf')
-@jwt_required
+@jwt_required()
 def ticket_attendee_authorized(order_identifier):
     if current_user:
         try:
@@ -98,7 +99,7 @@ def calculate_amount():
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
-@jwt_required
+@jwt_required()
 def create_order():
     data, errors = OrderAmountInputSchema().load(request.get_json())
     if errors:
@@ -155,12 +156,12 @@ def create_order():
         ticket_info = ticket_map[order_ticket.ticket.id]
         order_ticket.price = ticket_info.get('price')
         save_to_db(order_ticket)
-    
+
     return OrderSchema().dump(order)
 
 
 @order_blueprint.route('/attendees/<int:attendee_id>.pdf')
-@jwt_required
+@jwt_required()
 def ticket_attendee_pdf(attendee_id):
     ticket_holder = TicketHolder.query.get(attendee_id)
     if ticket_holder is None:
@@ -184,26 +185,33 @@ def ticket_attendee_pdf(attendee_id):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
 
+
 @order_blueprint.route('/<string:order_identifier>/verify', methods=['POST'])
 def verify_order_payment(order_identifier):
 
     order = Order.query.filter_by(identifier=order_identifier).first()
-    
+
     try:
-        session = StripePaymentsManager.retrieve_session(order.event, order.stripe_session_id)
-        payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, session.payment_intent)
+        session = StripePaymentsManager.retrieve_session(
+            order.event, order.stripe_session_id
+        )
+        payment_intent = StripePaymentsManager.retrieve_payment_intent(
+            order.event, session.payment_intent
+        )
     except Exception as e:
         raise e
 
     if session['payment_status'] == 'paid':
         order.status = 'completed'
         order.completed_at = datetime.utcnow()
-        order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
+        order.paid_via = payment_intent['charges']['data'][0]['payment_method_details'][
+            'type'
+        ]
         order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
         save_to_db(order)
 
         on_order_completed(order)
-    
+
     else:
         order.status = 'expired'
 
@@ -211,5 +219,4 @@ def verify_order_payment(order_identifier):
         # delete related attendees to unlock the tickets
         delete_related_attendees_for_order(order)
 
-
-    return jsonify({ 'payment_status': session['payment_status']})
+    return jsonify({'payment_status': session['payment_status']})
