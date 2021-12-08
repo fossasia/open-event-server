@@ -87,15 +87,10 @@ def create_pdf_tickets_for_holder(order):
         date_time=order.event.ends_at,
         tz=order.event.timezone
     )
-
+    admin_info = Setting.query.first()
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
-            render_template(
-                'pdf/ticket_purchaser.html',
-                order=order,
-                starts_at=starts_at,
-                ends_at=ends_at
-            ),
+            render_template('pdf/ticket_purchaser.html', order=order,app_name=get_settings()['app_name'],admin_info=admin_info,starts_at=starts_at,ends_at=ends_at),
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
@@ -119,12 +114,7 @@ def create_pdf_tickets_for_holder(order):
 
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
-                render_template(
-                    'pdf/ticket_attendee.html',
-                    order=order,
-                    starts_at=starts_at,
-                    ends_at=ends_at,
-                    holder=holder),
+                render_template('pdf/ticket_attendee.html', order=order, holder=holder,app_name=get_settings()['app_name'],admin_info=admin_info,starts_at=starts_at,ends_at=ends_at),
                 UPLOAD_PATHS['pdf']['tickets_all'],
                 dir_path='/static/uploads/pdf/tickets/',
                 identifier=order.identifier,
@@ -134,7 +124,6 @@ def create_pdf_tickets_for_holder(order):
             holder.pdf_url = pdf
             save_to_db(holder)
         
-        admin_info = Setting.query.first()
 
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()

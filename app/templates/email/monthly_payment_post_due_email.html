@@ -11,7 +11,7 @@
 {{ _('Late payments can be subject to a %(percentage)s finance fee.', percentage='5%') }}
 <br><br>
 {% autoescape false %}
-{{ _('A detailed invoice is available in %(open_link)sthe billing area%(close_link)s of your account.', open_link = '<a href="%s">' % (invoice_url, close_link = '</a>') | safe }}
+{{ _('A detailed invoice is available in %(open_link)sthe billing area%(close_link)s of your account.', open_link = '<a href="%s">' % (invoice_url), close_link = '</a>') | safe }}
 {{ _('If you have any questions about invoices, please find more information on our FAQ at %(faq_url)s.', faq_url = '<a href="https://support.eventyay.com">https://support.eventyay.com</a>') | safe }}
 {% endautoescape %}
 <br><br>
@@ -19,4 +19,4 @@
 <br><br>
 <em>{{ _('Thank you for using %(app_name)s!', app_name=app_name) }}</em>
 <br><br>
-{{ app_name }} {{ _('Team') }} 
+{{ app_name }} {{ _('Team') }}
