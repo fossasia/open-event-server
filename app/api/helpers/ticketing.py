@@ -250,18 +250,18 @@ class TicketingManager:
     @staticmethod
     def create_payment_intent_for_order_stripe(order):
         """
-        Create session for order
+        Create payment intent for order
         :param order: Order for which to charge for
         :return:
         """
-        # create session for the user
+        # create payment intent for the user
         try:
-            session = StripePaymentsManager.get_payment_intent_stripe(order)
-            order.stripe_session_id = session['id']
+            payment_intent = StripePaymentsManager.get_payment_intent_stripe(order)
+            order.stripe_payment_intent_id = payment_intent['id']
             db.session.commit()
-            return True, session
+            return True, payment_intent
         except ConflictError as e:
-            # session creation failed hence expire the order
+            # payment intent creation failed hence expire the order
             order.status = 'expired'
             save_to_db(order)
 
