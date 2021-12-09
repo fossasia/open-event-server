@@ -418,10 +418,7 @@
           <td></td>
           <td class="grand total"><b>{{ _('Total') }}</b></td>
           <td class="grand total">
-            {% if order_amount.sub_total != 0.0 %}
-            {{ event.payment_currency }}
-            {% endif %}
-            {{ order_amount.sub_total | money }}
+            {{ order_amount.sub_total | money(order.user.email, event.payment_currency) }}
           </td>
         </tr>
         {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
@@ -443,10 +440,7 @@
             {% endif %}
           </b></td>
           <td class="grand total">
-            {% if order.amount != 0.0 %}
-            {{ event.payment_currency }}
-            {% endif %}
-            {{ order_amount.tax.amount | money }}
+            {{ order_amount.tax.amount | money(order.user.email, event.payment_currency) }}
           </td>
         </tr>
         {% endif %}
@@ -455,10 +449,7 @@
           <td></td>
           <td class="grand total"><b>{{ _('Grand Total') }}</b></td>
           <td class="grand total">
-            {% if order_amount.total != 0.0 %}
-            {{ event.payment_currency }}
-            {% endif %}
-            {{ order_amount.total | money }}
+            {{ order_amount.total | money(order.user.email, event.payment_currency) }}
           </td>
         </tr>
       </tbody>

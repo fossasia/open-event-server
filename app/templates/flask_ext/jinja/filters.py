@@ -5,6 +5,7 @@ import pytz
 from forex_python.converter import CurrencyCodes
 
 from app.api.helpers.utilities import strip_tags
+from app.api.helpers.mail import convert_to_user_locale
 
 
 def humanize_helper(time):
@@ -22,8 +23,8 @@ def init_filters(app):
         return symbol if symbol else currency_code
 
     @app.template_filter('money')
-    def money_filter(string):
-        return '{:20,.2f}'.format(float(string))
+    def money_filter(amount, email, currency):
+        return convert_to_user_locale(email, amount=amount, currency=currency)
 
     @app.template_filter('datetime')
     def simple_datetime_display(date, timezone=None, format='%B %d, %Y %H:%M (%Z%z)'):

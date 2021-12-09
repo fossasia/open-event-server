@@ -26,6 +26,7 @@ from babel.dates import (
     format_time,
     format_datetime
 )
+from babel.numbers import format_currency
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -658,8 +659,11 @@ def send_order_purchase_organizer_email(order, recipients):
         ),
         payment_mode=order.payment_mode,
         payment_status=order.status,
-        order_amount=order.amount,
-        payment_currency=order.event.payment_currency,
+        order_amount=convert_to_user_locale(
+            emails[0],
+            amount=order.amount,
+            currency=order.event.payment_currency
+        ),
         tickets_count=order.tickets_count,
         order_tickets=order_tickets,
         buyer_org=order.company,
@@ -823,9 +827,9 @@ def send_email_after_event_speaker(email, event_name):
     )
 
 
-def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None):
+def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None, amount=None, currency=None):
     """
-    Convert date and time to user selected language
+    Convert date and time and amount to user selected language
     :return        : datetime/date/time translated to user locale
     """
     if email:
@@ -834,6 +838,9 @@ def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None)
 
         if user and user.language_prefrence:
             user_locale = user.language_prefrence
+
+        if amount and currency:
+            return format_currency(amount, currency, locale=user_locale)
 
         if date_time and tz:
             return format_datetime(
