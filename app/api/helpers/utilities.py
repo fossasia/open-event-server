@@ -73,6 +73,10 @@ def require_exclusive_relationship(resource_list, data, optional=False):
         )
 
 
+def remove_html_tags(raw_html):
+    return re.sub('<.*?>', '', raw_html)
+
+
 def string_empty(value):
     return isinstance(value, str) and not value.strip()
 
