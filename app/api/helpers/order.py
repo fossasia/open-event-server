@@ -162,22 +162,7 @@ def create_pdf_tickets_for_holder(order):
                     date=order.created_at,
                 ),
                 admin_info=admin_info,
-                order_amount=order_amount,
-                sub_total=convert_to_user_locale(
-                    order.user.email,
-                    amount=order_amount.sub_total,
-                    currency=order.event.payment_currency,
-                ),
-                tax_amount=convert_to_user_locale(
-                    order.user.email,
-                    amount=order_amount.tax.amount,
-                    currency=order.event.payment_currency,
-                ),
-                grand_total=convert_to_user_locale(
-                    order.user.email,
-                    amount=order_amount.total,
-                    currency=order.event.payment_currency,
-                )
+                order_amount=order_amount
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
