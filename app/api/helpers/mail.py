@@ -21,11 +21,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
 from app.models.order import OrderTicket
-from babel.dates import (
-    format_date,
-    format_time,
-    format_datetime
-)
+from babel.dates import format_date, format_time, format_datetime
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -50,6 +46,9 @@ def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=N
     if not MessageSettings.is_enabled(action):
         logger.info("Mail of type %s is not enabled. Hence, skipping...", action)
         return
+
+    # changing to user(receiver of the mail) locale
+    set_locale(to)
 
     if isinstance(to, User):
         logger.warning('to argument should be an email string, not a User object')
@@ -125,6 +124,9 @@ def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
 
     if isinstance(user, User):
         user = user.email
+
+    # changing to user(receiver of the mail) locale
+    set_locale(user)
 
     template_path = 'email/' + template_name.lower() + '.html'
 
@@ -410,9 +412,7 @@ def send_email_announce_event(event, group, emails):
                     event_location=event_location,
                     event_date=convert_to_user_locale(email, date=event_date),
                     event_time=convert_to_user_locale(
-                        email,
-                        time=event_time,
-                        tz=event.timezone
+                        email, time=event_time, tz=event.timezone
                     ),
                     group_name=group_name,
                     group_url=group_url,
@@ -652,9 +652,7 @@ def send_order_purchase_organizer_email(order, recipients):
         ),
         timezone=order.event.timezone,
         purchase_time=convert_to_user_locale(
-            emails[0],
-            date_time=order.completed_at,
-            tz=order.event.timezone
+            emails[0], date_time=order.completed_at, tz=order.event.timezone
         ),
         payment_mode=order.payment_mode,
         payment_status=order.status,
@@ -837,21 +835,36 @@ def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None)
 
         if date_time and tz:
             return format_datetime(
-                date_time,
-                'full',
-                tzinfo=pytz.timezone(tz),
-                locale=user_locale
+                date_time, 'full', tzinfo=pytz.timezone(tz), locale=user_locale
             )
-        
+
         if date:
             return format_date(date, 'd MMMM Y', locale=user_locale)
-        
+
         if time and tz:
             return format_time(
-                time,
-                'HH:mm (zzzz)',
-                tzinfo=pytz.timezone(tz),
-                locale=user_locale
+                time, 'HH:mm (zzzz)', tzinfo=pytz.timezone(tz), locale=user_locale
             )
 
     return None
+
+
+def set_locale(email):
+    # Setup dummy request context by Tamm https://stackoverflow.com/a/35938557/5655293
+    # For changing babel locale to user language prefrence
+    with current_app.request_context(
+        {
+            'wsgi.url_scheme': "",
+            'SERVER_PORT': "",
+            'SERVER_NAME': "",
+            'REQUEST_METHOD': "",
+        }
+    ):
+        from flask import g
+        from flask_babel import refresh
+
+        user = User.query.filter(User.email == email).first()
+        # set your user class with locale info to Flask proxy
+        g.user = user
+        # refreshing the locale and timezeone
+        refresh()

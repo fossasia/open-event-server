@@ -2,7 +2,7 @@
 
 if [ $1 = "extract" ]
 then
-    pybabel extract -F babel.cfg -k _l -o app/translations/messages.pot .
+    pybabel extract -F babel.cfg -k lazy_gettext -o app/translations/messages.pot .
 fi
 
 if [ $1 = "update" ]
