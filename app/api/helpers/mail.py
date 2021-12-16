@@ -47,9 +47,6 @@ def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=N
         logger.info("Mail of type %s is not enabled. Hence, skipping...", action)
         return
 
-    # changing to user(receiver of the mail) locale
-    set_locale(to)
-
     if isinstance(to, User):
         logger.warning('to argument should be an email string, not a User object')
         to = to.email
@@ -124,9 +121,6 @@ def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
 
     if isinstance(user, User):
         user = user.email
-
-    # changing to user(receiver of the mail) locale
-    set_locale(user)
 
     template_path = 'email/' + template_name.lower() + '.html'
 
@@ -669,14 +663,23 @@ def send_order_purchase_organizer_email(order, recipients):
         buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
-    if emails:
-        send_email_with_action(
-            emails[0],
-            MailType.TICKET_PURCHASED_ORGANIZER,
-            'ticket_purchased_organizer',
-            bcc=emails[1:],
-            **context,
-        )
+
+    with current_app.test_request_context():
+        # set_locale(emails[0])
+        # force_locale(order.user.language_prefrence)
+        from flask import g
+        from flask_babel import refresh
+        user = User.query.filter(User.email == emails[0]).first()
+        g.user = user
+        refresh()
+        if emails:
+            send_email_with_action(
+                emails[0],
+                MailType.TICKET_PURCHASED_ORGANIZER,
+                'ticket_purchased_organizer',
+                bcc=emails[1:],
+                **context,
+            )
 
 
 def send_order_cancel_email(order):
@@ -847,24 +850,3 @@ def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None)
             )
 
     return None
-
-
-def set_locale(email):
-    # Setup dummy request context by Tamm https://stackoverflow.com/a/35938557/5655293
-    # For changing babel locale to user language prefrence
-    with current_app.request_context(
-        {
-            'wsgi.url_scheme': "",
-            'SERVER_PORT': "",
-            'SERVER_NAME': "",
-            'REQUEST_METHOD': "",
-        }
-    ):
-        from flask import g
-        from flask_babel import refresh
-
-        user = User.query.filter(User.email == email).first()
-        # set your user class with locale info to Flask proxy
-        g.user = user
-        # refreshing the locale and timezeone
-        refresh()
