@@ -12,7 +12,7 @@ from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed, delete_related_attendees_for_order
+from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
