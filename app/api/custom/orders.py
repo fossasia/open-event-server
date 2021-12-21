@@ -12,7 +12,7 @@ from app.api.custom.schema.order_amount import OrderAmountInputSchema
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed, delete_related_attendees_for_order
+from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
@@ -189,27 +189,20 @@ def verify_order_payment(order_identifier):
 
     order = Order.query.filter_by(identifier=order_identifier).first()
     
-    try:
-        session = StripePaymentsManager.retrieve_session(order.event, order.stripe_session_id)
-        payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, session.payment_intent)
-    except Exception as e:
-        raise e
+    if order.payment_mode == 'stripe':
+        try:
+            payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, order.stripe_payment_intent_id)
+        except Exception as e:
+            raise e
 
-    if session['payment_status'] == 'paid':
-        order.status = 'completed'
-        order.completed_at = datetime.utcnow()
-        order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
-        order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
-        save_to_db(order)
+        if payment_intent['status'] == 'succeeded':
+            order.status = 'completed'
+            order.completed_at = datetime.utcnow()
+            order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
+            order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
+            save_to_db(order)
 
-        on_order_completed(order)
-    
-    else:
-        order.status = 'expired'
-
-        db.session.commit()
-        # delete related attendees to unlock the tickets
-        delete_related_attendees_for_order(order)
+            on_order_completed(order)
 
 
-    return jsonify({ 'payment_status': session['payment_status']})
+    return jsonify({ 'payment_status': order.status})
