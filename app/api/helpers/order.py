@@ -99,7 +99,6 @@ def create_pdf_tickets_for_holder(order):
         )
 
         order.tickets_pdf_url = pdf
-
         for holder in order.ticket_holders:
             starts_at = convert_to_user_locale(
                 holder.email,

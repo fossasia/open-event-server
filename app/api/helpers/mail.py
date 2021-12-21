@@ -7,6 +7,7 @@ from itertools import groupby
 from typing import Dict, Optional
 
 from flask import current_app, render_template
+from flask_babel import force_locale
 from sqlalchemy.orm import joinedload
 
 from app.api.helpers.db import save_to_db
@@ -664,14 +665,8 @@ def send_order_purchase_organizer_email(order, recipients):
         app_name=get_settings()['app_name'],
     )
 
-    with current_app.test_request_context():
-        # set_locale(emails[0])
-        # force_locale(order.user.language_prefrence)
-        from flask import g
-        from flask_babel import refresh
-        user = User.query.filter(User.email == emails[0]).first()
-        g.user = user
-        refresh()
+    user = User.query.filter(User.email == emails[0]).first()
+    with force_locale(user.language_prefrence):
         if emails:
             send_email_with_action(
                 emails[0],

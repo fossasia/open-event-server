@@ -22,6 +22,7 @@ from sentry_sdk.integrations.redis import RedisIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
+from app.models.user import User
 from app.api import routes  # noqa: Used for registering routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
@@ -255,12 +256,10 @@ def get_locale():
     # header the browser transmits. We support de/fr/en in this
     # example. The best match wins.
     # pytype: disable=mro-error
-    # return request.accept_languages.best_match(current_app.config['ACCEPTED_LANGUAGES'])
+    return request.accept_languages.best_match(
+        current_app.config['ACCEPTED_LANGUAGES']
+    )
     # pytype: enable=mro-error
-    user = getattr(g, 'user', None)
-    if user is not None and user.language_prefrence:
-        return user.language_prefrence
-    return 'en_US'
 
 
 # http://stackoverflow.com/questions/26724623/
