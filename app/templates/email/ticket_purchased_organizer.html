@@ -65,11 +65,7 @@
   {% endfor %}
   <br/>
 {% endif %}
-{{ _('Amount') }}:
-{% if order_amount != 0.0 %}
-  {{ payment_currency }}
-{% endif %}
-{{ order_amount | money }} <br/>
+{{ _('Amount') }}: {{ order_amount }} <br/>
 <br/>
 
 {% if buyer_org %}
