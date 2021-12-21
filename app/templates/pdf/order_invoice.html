@@ -363,16 +363,15 @@
               <br/>
               <div>
                 {% if order_ticket.price %}
-                {{ event.payment_currency }}
+                {{ (order_ticket.price - order_ticket.discount.amount) | money(order.user.email, event.payment_currency) }}
                 {% endif %}
-                {{ "%.2f" | format(order_ticket.price - order_ticket.discount.amount) }}
                 {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                   <div class="tax">
                     {% if order_ticket.ticket_tax %}
                       {% if order_amount.tax.included %}
-                        {{ _('incl.') }} {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                        {{ _('incl.') }} {{ order_ticket.discounted_tax | money(order.user.email, event.payment_currency) }} ({{ order_amount.tax.name }})
                       {% else %}
-                        + {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                        + {{ order_ticket.discounted_tax | money(order.user.email, event.payment_currency) }} ({{ order_amount.tax.name }})
                       {% endif %}
                     {% else %}
                     0.00
@@ -385,9 +384,8 @@
           <td>{{ order_ticket.quantity }}</td>
           <td class="total">
             {% if order_ticket.price %}
-            {{ event.payment_currency }}
+              {{ order_ticket.sub_total | money(order.user.email, event.payment_currency) }}
             {% endif %}
-            {{ "%.2f" | format(order_ticket.sub_total) }}
             <br>
             {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
               <div class="tax">
