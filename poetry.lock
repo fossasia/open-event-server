@@ -2236,7 +2236,7 @@ test = ["pytest (>=2.3.5)", "flexmock (>=0.9.7)", "psycopg2 (>=2.4.6)", "PyMySQL
 
 [[package]]
 name = "sqlalchemy-utils"
-version = "0.37.9"
+version = "0.38.1"
 description = "Various utility functions for SQLAlchemy."
 category = "main"
 optional = false
@@ -2629,7 +2629,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "b68962595c4de395a234e9a1cef6deaea005ff258a7ca9bf62cf0921ff8f1f7c"
+content-hash = "51b8446bd824cfc145337752b53c47598a234809f35f2806084acbaad57905c1"
 
 [metadata.files]
 aiohttp = [
@@ -3942,8 +3942,8 @@ sqlalchemy-continuum = [
     {file = "SQLAlchemy-Continuum-1.3.11.tar.gz", hash = "sha256:bc13b0a96110129fd2c2b4c9e5b2f40f320bb26854b09c867e383394746a3eb1"},
 ]
 sqlalchemy-utils = [
-    {file = "SQLAlchemy-Utils-0.37.9.tar.gz", hash = "sha256:4667edbdcb1ece011076b69772ef524bfbb17cc97e03f11ee6b85d98e7741d61"},
-    {file = "SQLAlchemy_Utils-0.37.9-py3-none-any.whl", hash = "sha256:bb6f4da8ac044cb0dd4d0278b1fb434141a5ee9d1881c757a076830ddbb04160"},
+    {file = "SQLAlchemy-Utils-0.38.1.tar.gz", hash = "sha256:7bed3396f4103dc8663f05751065284c2e3d529f20ebd4a80847e1281fccb1fe"},
+    {file = "SQLAlchemy_Utils-0.38.1-py3-none-any.whl", hash = "sha256:a484ccfdc7f9298df49d2558a5309691e5e3e51c815a23a33b3355989176cb3e"},
 ]
 starkbank-ecdsa = [
     {file = "starkbank-ecdsa-2.0.2.tar.gz", hash = "sha256:4b60ebc493f024f2891516a6c140fcc711c16999468c8594bc1097ca5aed759f"},
