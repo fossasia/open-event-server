@@ -43,6 +43,10 @@ version = "1.19.1"
 description = "Open Event APIs Server"
 authors = ["Fossasia: https://fossasia.org"]
 
+[[tool.poetry.source]]
+url = "https://pypi.fury.io/fossasia/"
+name = "fossasia"
+
 [tool.poetry.dependencies]
 python = "3.8.6"
 pycparser = "2.21"
@@ -124,7 +128,7 @@ broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
 python-slugify = "^5.0.2"
-cryptography = "36.0.1" # Downgraded to avoid alpine build error
+cryptography = { version = "*", source = "fossasia" }
 Flask-Migrate = "2.7.0"
 
 [tool.poetry.dev-dependencies]
