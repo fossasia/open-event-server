@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-12-03 20:52+0530\n"
+"POT-Creation-Date: 2021-12-24 14:10+0530\n"
 "PO-Revision-Date: 2021-11-07 15:50+0000\n"
 "Last-Translator: K Sree Vamsi <ksreevamsi32@gmail.com>\n"
 "Language: te\n"
@@ -19,169 +19,169 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: app/api/helpers/system_mails.py:63
+#: app/api/helpers/system_mails.py:64
 msgid "Your speaker submission for {event_name} titled {session_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:74
+#: app/api/helpers/system_mails.py:77
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:85
+#: app/api/helpers/system_mails.py:90
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:96
+#: app/api/helpers/system_mails.py:103
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:107
+#: app/api/helpers/system_mails.py:116
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:118
+#: app/api/helpers/system_mails.py:129
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:131
+#: app/api/helpers/system_mails.py:144
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:136
+#: app/api/helpers/system_mails.py:151
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:141
+#: app/api/helpers/system_mails.py:158
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:146
+#: app/api/helpers/system_mails.py:165
 msgid "New session proposal for {session.event.name} titled {session.title}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:151
+#: app/api/helpers/system_mails.py:172
 msgid "Welcome to {app_name}. Please verify your account"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:156
+#: app/api/helpers/system_mails.py:177
 msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:161
+#: app/api/helpers/system_mails.py:182
 #, fuzzy
 msgid "Your email has been already changed"
 msgstr "మీ పాస్ వర్డ్ విజయవంతముగా మార్చబడినది."
 
-#: app/api/helpers/system_mails.py:166
+#: app/api/helpers/system_mails.py:187
 msgid "{app_name}: Password Reset"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:171
+#: app/api/helpers/system_mails.py:192
 #, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
 msgstr ""
 "మీ పాస్ వర్డ్ రీసెట్ చేయడానికి మరియు మీ ఖాతాను ధృవీకరించడానికి దయచేసి ఈ "
 "క్రింది లింక్ ను ఉపయోగించండి."
 
-#: app/api/helpers/system_mails.py:176
+#: app/api/helpers/system_mails.py:197
 msgid "{app_name}: Password Change"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:181
+#: app/api/helpers/system_mails.py:202
 msgid "Invitation to be {role} at Event: {event}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:186
+#: app/api/helpers/system_mails.py:207
 msgid "Invitation to be speaker at Session: {session}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:191
+#: app/api/helpers/system_mails.py:212
 msgid "Invitation to be {role} at Group: {group}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:196
+#: app/api/helpers/system_mails.py:217
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:201
+#: app/api/helpers/system_mails.py:224
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:206
+#: app/api/helpers/system_mails.py:231
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:211
+#: app/api/helpers/system_mails.py:238
 #, fuzzy
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
 msgstr "%(event_name)s కోసం మీ ఆర్డర్ %(order_id)s రద్దు చేయబడింది."
 
-#: app/api/helpers/system_mails.py:216
+#: app/api/helpers/system_mails.py:243
 msgid "Event {event_name} has been exported"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:221
+#: app/api/helpers/system_mails.py:248
 msgid "Export of event {event_name} failed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:226
+#: app/api/helpers/system_mails.py:253
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:232 app/api/helpers/system_mails.py:238
+#: app/api/helpers/system_mails.py:261 app/api/helpers/system_mails.py:269
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:244
+#: app/api/helpers/system_mails.py:277
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:250
+#: app/api/helpers/system_mails.py:285
 msgid "Event {event_name} has been imported"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:255
+#: app/api/helpers/system_mails.py:290
 msgid "Import of event failed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:268
+#: app/api/helpers/system_mails.py:303
 msgid "Test Mail Subject"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:273
+#: app/api/helpers/system_mails.py:308
 msgid "Video Moderator of video {video_name} at event {event_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:278
+#: app/api/helpers/system_mails.py:313
 msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:283
+#: app/api/helpers/system_mails.py:318
 #, fuzzy
 msgid "{event_name} is over. Thank you for using {app_name}!"
 msgstr "%(app_name)sని ఉపయోగించినందుకు ధన్యవాదాలు"
 
-#: app/api/helpers/system_mails.py:288
+#: app/api/helpers/system_mails.py:323
 msgid "{event_name} is over. Thank you for participating!"
 msgstr ""
 
@@ -316,6 +316,7 @@ msgstr "మీరు %(group)s గ్రూపులో %(role)sగా ఉండ
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
+#: app/templates/email/monthly_payment_post_due_email.html:1
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
@@ -334,6 +335,7 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
+#: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
 msgid "Amount Due"
 msgstr ""
@@ -345,6 +347,7 @@ msgstr "దయచేసి 30 రోజుల్లోగా చెల్లి�
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
+#: app/templates/email/monthly_payment_post_due_email.html:8
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, fuzzy, python-format
 msgid "Pay Now at: %(payment_url)s"
@@ -352,6 +355,7 @@ msgstr "ఇప్పుడు ఇక్కడ చెల్లించండి:
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
+#: app/templates/email/monthly_payment_post_due_email.html:14
 #: app/templates/email/monthly_payment_pre_due_email.html:16
 #, python-format
 msgid ""
@@ -363,6 +367,7 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
+#: app/templates/email/monthly_payment_post_due_email.html:15
 #: app/templates/email/monthly_payment_pre_due_email.html:17
 #, python-format
 msgid ""
@@ -372,6 +377,7 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
+#: app/templates/email/monthly_payment_post_due_email.html:20
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
@@ -379,6 +385,7 @@ msgstr "%(app_name)sని ఉపయోగించినందుకు ధన�
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
+#: app/templates/email/monthly_payment_post_due_email.html:22
 #: app/templates/email/monthly_payment_pre_due_email.html:22
 #: app/templates/email/ticket_cancelled.html:10
 #: app/templates/email/ticket_purchased.html:34
@@ -407,6 +414,26 @@ msgstr ""
 msgid "Please pay within 15 days."
 msgstr "దయచేసి 15 రోజులలోపు చెల్లించండి."
 
+#: app/templates/email/monthly_payment_post_due_email.html:3
+msgid "Your payment is now past due."
+msgstr ""
+
+#: app/templates/email/monthly_payment_post_due_email.html:3
+msgid "Please pay this invoice immediately to avoid your account being suspended."
+msgstr ""
+
+#: app/templates/email/monthly_payment_post_due_email.html:11
+#: app/templates/email/monthly_payment_pre_due_email.html:13
+#, python-format
+msgid "Late payments can be subject to a %(percentage)s finance fee."
+msgstr ""
+
+#: app/templates/email/monthly_payment_post_due_email.html:18
+msgid ""
+"If you feel this invoice is incorrect or have any questions, you can "
+"contact our support team for assistance."
+msgstr ""
+
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
 msgid ""
@@ -418,11 +445,6 @@ msgstr ""
 #, fuzzy
 msgid "Please pay within 2 days."
 msgstr "దయచేసి 2 రోజుల్లోగా చెల్లించండి."
-
-#: app/templates/email/monthly_payment_pre_due_email.html:13
-#, python-format
-msgid "Late payments can be subject to a %(percentage)s finance fee."
-msgstr ""
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -601,6 +623,8 @@ msgstr "ఆర్డర్ సారాంశం"
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
 #: app/templates/email/ticket_purchased_organizer.html:15
+#: app/templates/pdf/ticket_attendee.html:185
+#: app/templates/pdf/ticket_purchaser.html:181
 #, fuzzy
 msgid "Name"
 msgstr "పేరు"
@@ -674,7 +698,7 @@ msgstr "కింద మీరు ఆర్గనైజర్ నుంచి �
 
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
-#: app/templates/email/ticket_purchased_organizer.html:106
+#: app/templates/email/ticket_purchased_organizer.html:102
 #, fuzzy, python-format
 msgid "Login to manage your orders at %(url)s."
 msgstr "%(url)s వద్ద మీ ఆర్డర్‌లను నిర్వహించడానికి లాగిన్ చేయండి."
@@ -723,6 +747,8 @@ msgstr "ఆర్డర్ యొక్క వివరాలు:"
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
 #: app/templates/pdf/order_invoice.html:224
+#: app/templates/pdf/ticket_attendee.html:189
+#: app/templates/pdf/ticket_purchaser.html:185
 msgid "Email"
 msgstr ""
 
@@ -823,41 +849,41 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:76
+#: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:80
+#: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:84
+#: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:88
+#: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
 msgid "State"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:92
+#: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:96
+#: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
 msgstr ""
 
-#: app/templates/email/ticket_purchased_organizer.html:100
+#: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
@@ -1090,85 +1116,88 @@ msgid "Discount Code"
 msgstr ""
 
 #: app/templates/pdf/order_invoice.html:352
-#: app/templates/pdf/order_invoice.html:373
-#: app/templates/pdf/order_invoice.html:397
-#: app/templates/pdf/order_invoice.html:403
+#: app/templates/pdf/order_invoice.html:372
+#: app/templates/pdf/order_invoice.html:395
+#: app/templates/pdf/order_invoice.html:401
 msgid "incl."
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:419
+#: app/templates/pdf/order_invoice.html:417
 msgid "Total"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:431
+#: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:441
+#: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
 msgstr ""
 
-#: app/templates/pdf/order_invoice.html:456
+#: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:51
-#: app/templates/pdf/ticket_purchaser.html:52
-msgid "Event"
+#: app/templates/pdf/ticket_attendee.html:141
+#: app/templates/pdf/ticket_purchaser.html:137
+#, python-format
+msgid ""
+"Order\n"
+"                    #%(invoice_number)s"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:56
-#: app/templates/pdf/ticket_purchaser.html:57
-#, python-format
-msgid "Event taking place online and at %(event_location)s"
+#: app/templates/pdf/ticket_attendee.html:154
+#: app/templates/pdf/ticket_purchaser.html:150
+#, fuzzy, python-format
+msgid ""
+"Event taking place online and at\n"
+"                            %(location)s."
 msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
-#: app/templates/pdf/ticket_attendee.html:59
-#: app/templates/pdf/ticket_purchaser.html:60
-#, fuzzy
-msgid "Online Event"
-msgstr "ఆన్‌లైన్ ఈవెంట్"
-
-#: app/templates/pdf/ticket_attendee.html:62
-#: app/templates/pdf/ticket_purchaser.html:63
+#: app/templates/pdf/ticket_attendee.html:157
+#: app/templates/pdf/ticket_purchaser.html:153
 #, fuzzy, python-format
-msgid "At %(location_name)s"
-msgstr "%(location_name)s వద్ద"
+msgid "Event taking place online."
+msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
-#: app/templates/pdf/ticket_attendee.html:65
-#: app/templates/pdf/ticket_purchaser.html:66
-msgid "Location or online event details to be announced"
+#: app/templates/pdf/ticket_attendee.html:160
+#: app/templates/pdf/ticket_purchaser.html:156
+#, python-format
+msgid ""
+"Event taking place at\n"
+"                            %(location)s."
+msgstr ""
+
+#: app/templates/pdf/ticket_attendee.html:163
+#: app/templates/pdf/ticket_purchaser.html:159
+#, fuzzy
+msgid "Location or online event details to be announced."
 msgstr "ఆన్‌లైన్ ఈవెంట్ లేడ లొకేషన్ యోక వివరాలు మీకు తొందరలో ప్రకటన ఇస్తాము"
 
-#: app/templates/pdf/ticket_attendee.html:68
-#: app/templates/pdf/ticket_purchaser.html:69
-#, fuzzy
-msgid "Date and Time"
-msgstr "తేదీ మరియు సమయం"
-
-#: app/templates/pdf/ticket_attendee.html:69
-#: app/templates/pdf/ticket_purchaser.html:70
+#: app/templates/pdf/ticket_attendee.html:169
+#: app/templates/pdf/ticket_purchaser.html:165
 #, python-format
-msgid "From: %(start_time)s"
+msgid "From: %(start_date)s"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:70
-#: app/templates/pdf/ticket_purchaser.html:71
+#: app/templates/pdf/ticket_attendee.html:173
+#: app/templates/pdf/ticket_purchaser.html:169
 #, python-format
-msgid "To: %(end_time)s"
+msgid "To: %(end_date)s"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:73
-#: app/templates/pdf/ticket_purchaser.html:74
-#, fuzzy
-msgid "Type"
-msgstr "రకం"
+#: app/templates/pdf/ticket_attendee.html:180
+#: app/templates/pdf/ticket_purchaser.html:176
+msgid "Order Information"
+msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:79
-#: app/templates/pdf/ticket_purchaser.html:80
-#, fuzzy
-msgid "Organizer Message"
-msgstr "నిర్వాహక సందేశం"
+#: app/templates/pdf/ticket_attendee.html:181
+#: app/templates/pdf/ticket_purchaser.html:177
+#, python-format
+msgid ""
+"Order\n"
+"                                        #%(invoice_number)s"
+msgstr ""
 
 #~ msgid "Your payment is now past due."
 #~ msgstr ""
@@ -1196,4 +1225,28 @@ msgstr "నిర్వాహక సందేశం"
 
 #~ msgid "{event_name} is over. Thank you for using eventyay!"
 #~ msgstr ""
+
+#~ msgid "Event"
+#~ msgstr ""
+
+#~ msgid "Online Event"
+#~ msgstr "ఆన్‌లైన్ ఈవెంట్"
+
+#~ msgid "At %(location_name)s"
+#~ msgstr "%(location_name)s వద్ద"
+
+#~ msgid "Date and Time"
+#~ msgstr "తేదీ మరియు సమయం"
+
+#~ msgid "From: %(start_time)s"
+#~ msgstr ""
+
+#~ msgid "To: %(end_time)s"
+#~ msgstr ""
+
+#~ msgid "Type"
+#~ msgstr "రకం"
+
+#~ msgid "Organizer Message"
+#~ msgstr "నిర్వాహక సందేశం"
 
