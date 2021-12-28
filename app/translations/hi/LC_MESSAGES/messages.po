@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2021-12-24 14:10+0530\n"
+"POT-Creation-Date: 2021-12-28 21:33+0530\n"
 "PO-Revision-Date: 2021-10-21 11:29+0000\n"
 "Last-Translator: progmatic99 <uprt.am54@gmail.com>\n"
 "Language: hi\n"
@@ -24,159 +24,159 @@ msgstr ""
 msgid "Your speaker submission for {event_name} titled {session_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:77
+#: app/api/helpers/system_mails.py:75
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:90
+#: app/api/helpers/system_mails.py:86
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:103
+#: app/api/helpers/system_mails.py:97
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:116
+#: app/api/helpers/system_mails.py:108
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:129
+#: app/api/helpers/system_mails.py:119
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:144
+#: app/api/helpers/system_mails.py:132
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:151
+#: app/api/helpers/system_mails.py:137
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:158
+#: app/api/helpers/system_mails.py:142
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:165
+#: app/api/helpers/system_mails.py:147
 msgid "New session proposal for {session.event.name} titled {session.title}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:172
+#: app/api/helpers/system_mails.py:152
 msgid "Welcome to {app_name}. Please verify your account"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:177
+#: app/api/helpers/system_mails.py:157
 msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:182
+#: app/api/helpers/system_mails.py:162
 msgid "Your email has been already changed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:187
+#: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:192
+#: app/api/helpers/system_mails.py:172
 msgid "{app_name}: Reset your password and verify your account"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:197
+#: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:202
+#: app/api/helpers/system_mails.py:182
 msgid "Invitation to be {role} at Event: {event}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:207
+#: app/api/helpers/system_mails.py:187
 msgid "Invitation to be speaker at Session: {session}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:212
+#: app/api/helpers/system_mails.py:192
 msgid "Invitation to be {role} at Group: {group}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:217
+#: app/api/helpers/system_mails.py:197
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:224
+#: app/api/helpers/system_mails.py:202
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:231
+#: app/api/helpers/system_mails.py:207
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
 
-#: app/api/helpers/system_mails.py:238
+#: app/api/helpers/system_mails.py:212
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:243
+#: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:248
+#: app/api/helpers/system_mails.py:222
 msgid "Export of event {event_name} failed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:253
+#: app/api/helpers/system_mails.py:227
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:261 app/api/helpers/system_mails.py:269
+#: app/api/helpers/system_mails.py:233 app/api/helpers/system_mails.py:239
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:277
+#: app/api/helpers/system_mails.py:245
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:285
+#: app/api/helpers/system_mails.py:251
 msgid "Event {event_name} has been imported"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:290
+#: app/api/helpers/system_mails.py:256
 msgid "Import of event failed"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:303
+#: app/api/helpers/system_mails.py:269
 msgid "Test Mail Subject"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:308
+#: app/api/helpers/system_mails.py:274
 msgid "Video Moderator of video {video_name} at event {event_name}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:313
+#: app/api/helpers/system_mails.py:279
 msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:318
+#: app/api/helpers/system_mails.py:284
 msgid "{event_name} is over. Thank you for using {app_name}!"
 msgstr ""
 
-#: app/api/helpers/system_mails.py:323
+#: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
 msgstr ""
 
@@ -577,8 +577,8 @@ msgstr ""
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
 #: app/templates/email/ticket_purchased_organizer.html:15
-#: app/templates/pdf/ticket_attendee.html:185
-#: app/templates/pdf/ticket_purchaser.html:181
+#: app/templates/pdf/ticket_attendee.html:183
+#: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
 msgstr ""
 
@@ -694,8 +694,8 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
 #: app/templates/pdf/order_invoice.html:224
-#: app/templates/pdf/ticket_attendee.html:189
-#: app/templates/pdf/ticket_purchaser.html:185
+#: app/templates/pdf/ticket_attendee.html:187
+#: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
 msgstr ""
 
@@ -1097,48 +1097,44 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
 #, python-format
-msgid ""
-"Event taking place online and at\n"
-"                            %(location)s."
+msgid "Event taking place online and at %(event_location)s."
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:157
-#: app/templates/pdf/ticket_purchaser.html:153
+#: app/templates/pdf/ticket_attendee.html:156
+#: app/templates/pdf/ticket_purchaser.html:152
 msgid "Event taking place online."
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:160
-#: app/templates/pdf/ticket_purchaser.html:156
+#: app/templates/pdf/ticket_attendee.html:159
+#: app/templates/pdf/ticket_purchaser.html:155
 #, python-format
-msgid ""
-"Event taking place at\n"
-"                            %(location)s."
+msgid "Event taking place at %(event_location)s."
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:163
-#: app/templates/pdf/ticket_purchaser.html:159
+#: app/templates/pdf/ticket_attendee.html:161
+#: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:169
-#: app/templates/pdf/ticket_purchaser.html:165
+#: app/templates/pdf/ticket_attendee.html:167
+#: app/templates/pdf/ticket_purchaser.html:163
 #, python-format
-msgid "From: %(start_date)s"
+msgid "From: %(start_time)s"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:173
-#: app/templates/pdf/ticket_purchaser.html:169
+#: app/templates/pdf/ticket_attendee.html:171
+#: app/templates/pdf/ticket_purchaser.html:167
 #, python-format
-msgid "To: %(end_date)s"
+msgid "To: %(end_time)s"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:180
-#: app/templates/pdf/ticket_purchaser.html:176
+#: app/templates/pdf/ticket_attendee.html:178
+#: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
 msgstr ""
 
-#: app/templates/pdf/ticket_attendee.html:181
-#: app/templates/pdf/ticket_purchaser.html:177
+#: app/templates/pdf/ticket_attendee.html:179
+#: app/templates/pdf/ticket_purchaser.html:175
 #, python-format
 msgid ""
 "Order\n"
@@ -1722,5 +1718,27 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Organizer Message"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Event taking place online and at\n"
+#~ "                            %(location)s."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Event taking place at\n"
+#~ "                            %(location)s."
+#~ msgstr ""
+
+#~ msgid "From: %(start_date)s"
+#~ msgstr ""
+
+#~ msgid "To: %(end_date)s"
+#~ msgstr ""
+
+#~ msgid "Event taking place online and at %(location)s."
+#~ msgstr ""
+
+#~ msgid "Event taking place at %(location)s."
 #~ msgstr ""
 
