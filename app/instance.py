@@ -123,9 +123,9 @@ def create_app():
     _jwt.token_in_blacklist_loader(is_token_blacklisted)
 
     # setup celery
-    app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
-    app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
-    app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
+    app.config['broker_url'] = app.config['REDIS_URL']
+    app.config['result_backend'] = app.config['broker_url']
+    app.config['accept_content'] = ['json', 'application/text']
 
     app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
 
