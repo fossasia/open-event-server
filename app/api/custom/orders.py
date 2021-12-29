@@ -200,6 +200,11 @@ def verify_order_payment(order_identifier):
             order.completed_at = datetime.utcnow()
             order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
             order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
+            if payment_intent['charges']['data'][0]['payment_method_details']['type'] == 'card' :
+                order.brand = payment_intent['charges']['data'][0]['payment_method_details']['card']['brand']
+                order.exp_month = payment_intent['charges']['data'][0]['payment_method_details']['card']['exp_month']
+                order.exp_year = payment_intent['charges']['data'][0]['payment_method_details']['card']['exp_year']
+                order.last4 = payment_intent['charges']['data'][0]['payment_method_details']['card']['last4']
             save_to_db(order)
 
             on_order_completed(order)
