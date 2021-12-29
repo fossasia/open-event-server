@@ -146,15 +146,13 @@
                     <span id="role">{{holder.ticket.name}}</span><br>
                     <span id="location">
                         {% if order.event.online %}
-                        {% if order.event.location_name %}
-                        <span>{{_('Event taking place online and at
-                            %(location)s.',location="")}}{{order.event.location_name}}</span>
-                        {% else %}
-                        <span>{{_('Event taking place online.')}}</span>
+                            {% if order.event.location_name %}
+                                <span>{{ _('Event taking place online and at %(event_location)s.', event_location=order.event.location_name) }}</span>
+                            {% else %}
+                            <span>{{_('Event taking place online.')}}</span>
                         {% endif %}
                         {% elif order.event.location_name %}
-                        <span>{{_('Event taking place at
-                            %(location)s.',location="")}}{{order.event.location_name}}</span>
+                        <span>{{ _('Event taking place at %(event_location)s.', event_location=order.event.location_name) }}</span>
                         {% else %}
                         <span>{{_('Location or online event details to be announced.')}}</span>
                         {% endif %}
@@ -162,11 +160,11 @@
                     <br>
                     <span>
                         {% if order.event.starts_at %}
-                        <span class="time">{{_('From: %(start_date)s',start_date=starts_at)}}</span>
+                        <span class="time">{{_('From: %(start_time)s',start_time=starts_at)}}</span>
                         {% endif %}
                         <br>
                         {% if order.event.ends_at %}
-                        <span class="time">{{_('To: %(end_date)s',end_date=ends_at)}}</span>
+                        <span class="time">{{_('To: %(end_time)s',end_time=ends_at)}}</span>
                         {% endif %}
                     </span>
                     <span>
