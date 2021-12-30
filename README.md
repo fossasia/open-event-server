@@ -199,7 +199,7 @@ Clone the repo and set up the server according to the steps listed. Make sure yo
 
 ```
 # Install Poetry
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python -
 source ~/.profile
 
 # Install Python dependencies
