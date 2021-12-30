@@ -13,10 +13,10 @@ RUN apk add --virtual gdk-pixbuf-dev
 ENV POETRY_HOME=/opt/poetry \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_NO_INTERACTION=1
-    
+
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN set -eo pipefail; wget -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN set -eo pipefail; curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /opt/pysetup
 
