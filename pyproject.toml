@@ -46,6 +46,13 @@ authors = ["Fossasia: https://fossasia.org"]
 [[tool.poetry.source]]
 url = "https://pypi.fury.io/fossasia/"
 name = "fossasia"
+secondary=true
+default=false
+
+[[tool.poetry.source]]
+name = "official_pypi"
+url = "https://pypi.org/simple"
+default = true
 
 [tool.poetry.dependencies]
 python = "3.8.6"
