@@ -16,7 +16,7 @@ ENV POETRY_HOME=/opt/poetry \
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN set -eo pipefail; curl -sSL https://install.python-poetry.org | python3 -
+RUN set -eo pipefail; wget -O - https://install.python-poetry.org | python -
 
 WORKDIR /opt/pysetup
 
