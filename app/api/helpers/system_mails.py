@@ -3,7 +3,8 @@ All the System mails
 Register a mail here before using it
 """
 
-from flask_babel import _
+from flask_babel import lazy_gettext as _
+
 
 class MailType:
     USER_REGISTER = 'user_registration'

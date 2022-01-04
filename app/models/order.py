@@ -44,6 +44,7 @@ class OrderTicket(db.Model):
         db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True
     )
     quantity = db.Column(db.Integer)
+    price = db.Column(db.Float, default=0)
 
 
 class Order(db.Model):
@@ -81,7 +82,7 @@ class Order(db.Model):
     exp_year = db.Column(db.Integer)
     last4 = db.Column(db.String)
     stripe_token = db.Column(db.String)
-    stripe_session_id = db.Column(db.String)
+    stripe_payment_intent_id = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String, default='initializing')
     cancel_note = db.Column(db.String, nullable=True)

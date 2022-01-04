@@ -55,7 +55,7 @@ class ChargesLayer(BaseDataLayer):
                     {'': ''}, "This event doesn't accept payments by Stripe"
                 )
 
-            success, response = TicketingManager.charge_stripe_order_payment(
+            success, response = TicketingManager.create_payment_intent_for_order_stripe(
                 order
             )
             data['status'] = success
