@@ -61,6 +61,8 @@ class SpeakerSchema(SoftDeletionSchema):
     heard_from = fields.Str(allow_none=True)
     sponsorship_required = fields.Str(allow_none=True)
     complex_field_values = CustomFormValueField(allow_none=True)
+    speaker_positions = CustomFormValueField(allow_none=True)
+
     event = Relationship(
         self_view='v1.speaker_event',
         self_view_kwargs={'id': '<id>'},

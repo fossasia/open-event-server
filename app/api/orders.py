@@ -49,6 +49,7 @@ from app.settings import get_settings
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
+stripe_blueprint = Blueprint('stripe_blueprint', __name__, url_prefix='/v1/stripe')
 
 
 def check_event_user_ticket_holders(order, data, element):

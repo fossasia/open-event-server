@@ -48,6 +48,7 @@ class Speaker(SoftDeletionModel, Timestamp):
     heard_from = db.Column(db.String)
     sponsorship_required = db.Column(db.Text)
     complex_field_values = db.Column(db.JSON)
+    speaker_positions = db.Column(db.JSON)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
 

@@ -1,23 +1,29 @@
 import os
 
+from datetime import datetime
+
+
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
 from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder
+from app.api.helpers.order import calculate_order_amount, create_pdf_tickets_for_holder, on_order_completed
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
 from app.models.order import Order
+from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
+from app.api.helpers.payment import StripePaymentsManager
+
 
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')
@@ -117,19 +123,6 @@ def create_order():
     try:
         attendees = []
         for ticket in tickets:
-            if 'price' in data['tickets'][0]:
-                if (
-                    'price' in data['tickets'][0]
-                    and "donation" in ticket.type
-                    and (
-                        data['tickets'][0]['price'] < ticket.min_price
-                        or data['tickets'][0]['price'] > ticket.max_price
-                    )
-                ):
-                    raise UnprocessableEntityError(
-                        {'source': 'tickets'},
-                        f"Donation ticket price should be between {ticket.min_price} and {ticket.max_price}",
-                    )
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
                 attendees.append(
@@ -157,6 +150,12 @@ def create_order():
     db.session.commit()
     order.populate_and_save()
 
+    order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
+    for order_ticket in order_tickets:
+        ticket_info = ticket_map[order_ticket.ticket.id]
+        order_ticket.price = ticket_info.get('price')
+        save_to_db(order_ticket)
+    
     return OrderSchema().dump(order)
 
 
@@ -184,3 +183,31 @@ def ticket_attendee_pdf(attendee_id):
     if not os.path.isfile(file_path):
         create_pdf_tickets_for_holder(ticket_holder.order)
     return send_from_directory('../', file_path, as_attachment=True)
+
+@order_blueprint.route('/<string:order_identifier>/verify', methods=['POST'])
+def verify_order_payment(order_identifier):
+
+    order = Order.query.filter_by(identifier=order_identifier).first()
+    
+    if order.payment_mode == 'stripe':
+        try:
+            payment_intent = StripePaymentsManager.retrieve_payment_intent(order.event, order.stripe_payment_intent_id)
+        except Exception as e:
+            raise e
+
+        if payment_intent['status'] == 'succeeded':
+            order.status = 'completed'
+            order.completed_at = datetime.utcnow()
+            order.paid_via = payment_intent['charges']['data'][0]['payment_method_details']['type']
+            order.transaction_id = payment_intent['charges']['data'][0]['balance_transaction']
+            if payment_intent['charges']['data'][0]['payment_method_details']['type'] == 'card' :
+                order.brand = payment_intent['charges']['data'][0]['payment_method_details']['card']['brand']
+                order.exp_month = payment_intent['charges']['data'][0]['payment_method_details']['card']['exp_month']
+                order.exp_year = payment_intent['charges']['data'][0]['payment_method_details']['card']['exp_year']
+                order.last4 = payment_intent['charges']['data'][0]['payment_method_details']['card']['last4']
+            save_to_db(order)
+
+            on_order_completed(order)
+
+
+    return jsonify({ 'payment_status': order.status})

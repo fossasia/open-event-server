@@ -1,21 +1,19 @@
-# Chinese (Simplified) translations for
-# fossasia/open-event-server.
-# Copyright (C) 2016 fossasia
-# This file is distributed under the same license as the
-# fossasia/open-event-server project.
-# FOSSASIA <open-event@googlegroups.com>, 2016.
+# Telugu translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
-"Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2017-03-18 02:52+0000\n"
-"Last-Translator: 17Y5C35 NG XING YU <ng.xingyu@dhs.sg>\n"
-"Language: zh_Hans\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects"
-"/open-event/organizer-server/zh_Hans/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2021-11-07 15:50+0000\n"
+"Last-Translator: K Sree Vamsi <ksreevamsi32@gmail.com>\n"
+"Language: te\n"
+"Language-Team: Telugu <https://hosted.weblate.org/projects/open-"
+"event/server/te/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,16 +82,20 @@ msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:162
+#, fuzzy
 msgid "Your email has been already changed"
-msgstr ""
+msgstr "మీ పాస్ వర్డ్ విజయవంతముగా మార్చబడినది."
 
 #: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:172
+#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
 msgstr ""
+"మీ పాస్ వర్డ్ రీసెట్ చేయడానికి మరియు మీ ఖాతాను ధృవీకరించడానికి దయచేసి ఈ "
+"క్రింది లింక్ ను ఉపయోగించండి."
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
@@ -128,8 +130,9 @@ msgid ""
 msgstr ""
 
 #: app/api/helpers/system_mails.py:212
+#, fuzzy
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
-msgstr ""
+msgstr "%(event_name)s కోసం మీ ఆర్డర్ %(order_id)s రద్దు చేయబడింది."
 
 #: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
@@ -174,8 +177,9 @@ msgid "Join {event_name} from {group_name} on {event_date}"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:284
+#, fuzzy
 msgid "{event_name} is over. Thank you for using {app_name}!"
-msgstr ""
+msgstr "%(app_name)sని ఉపయోగించినందుకు ధన్యవాదాలు"
 
 #: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
@@ -192,61 +196,68 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/after_event.html:1
-#, python-format
+#, fuzzy, python-format
 msgid "Hello %(email)s, your %(eventname)s is over."
-msgstr ""
+msgstr "హలో %(email)s, మీ %(eventname)s ముగిసింది."
 
 #: app/templates/email/after_event.html:3
 #, python-format
 msgid "Thank you for using the %(app_name)s platform for your event."
-msgstr ""
+msgstr "మీ ఈవెంట్ కోసం %(app_name)s ప్లాట్‌ఫారమ్‌ని ఉపయోగించినందుకు ధన్యవాదాలు."
 
 #: app/templates/email/after_event.html:4
+#, fuzzy
 msgid "We hope you enjoyed it."
-msgstr ""
+msgstr "మీరు దీన్ని ఆస్వాదించారని మేము ఆశిస్తున్నాము."
 
 #: app/templates/email/after_event_speaker.html:1
-#, python-format
+#, fuzzy, python-format
 msgid "Hello %(email)s, thank you for participating in our %(eventname)s."
-msgstr ""
+msgstr "హలో %(email)s, మా %(eventname)sలో పాల్గొన్నందుకు ధన్యవాదాలు."
 
 #: app/templates/email/after_event_speaker.html:3
+#, fuzzy
 msgid "We hope you enjoyed it and keep in touch."
-msgstr ""
+msgstr "మీరు దీన్ని ఆస్వాదించారని మరియు సన్నిహితంగా ఉంటారని మేము ఆశిస్తున్నాము."
 
 #: app/templates/email/event_export_fail.html:1
 #: app/templates/email/event_import_fail.html:1
+#, fuzzy
 msgid "The error was as follows"
-msgstr ""
+msgstr "లోపం క్రింది విధంగా ఉంది"
 
 #: app/templates/email/event_exported.html:1
+#, fuzzy
 msgid "Click on the following link to download the event:"
-msgstr ""
+msgstr "ఈవెంట్‌ను డౌన్‌లోడ్ చేయడానికి క్రింది లింక్‌పై క్లిక్ చేయండి:"
 
 #: app/templates/email/event_imported.html:1
+#, fuzzy
 msgid "Click on the following link to manage your event"
-msgstr ""
+msgstr "మీ ఈవెంట్‌ని నిర్వహించడానికి క్రింది లింక్‌పై క్లిక్ చేయండి"
 
 #: app/templates/email/event_role.html:1 app/templates/email/group_role.html:1
 #: app/templates/email/user_confirm.html:1
 #: app/templates/email/user_event_role.html:1
-#, python-format
+#, fuzzy, python-format
 msgid "Hello %(email)s,"
-msgstr ""
+msgstr "హలో %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "You have been invited to be a %(role)s at %(event)s."
-msgstr ""
+msgstr "మీరు %(event)sలో %(role)sగా ఉండటానికి ఆహ్వానించబడ్డారు."
 
 #: app/templates/email/event_role.html:6 app/templates/email/group_role.html:6
 #: app/templates/email/user_event_role.html:6
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
+"పాత్రను అంగీకరించడానికి దయచేసి క్రింది లింక్‌ని ఉపయోగించి సైన్ అప్ "
+"చేయండి: %(open_link)sలింక్%(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -257,32 +268,36 @@ msgstr ""
 #: app/templates/email/ticket_purchased_attendee.html:1
 #: app/templates/email/user_register.html:1
 #: app/templates/email/video_stream_moderator.html:1
+#, fuzzy
 msgid "Hello"
-msgstr ""
+msgstr "హలో"
 
 #: app/templates/email/group_contact_user.html:2
 #, python-format
 msgid "You have contacted the organizers of the group %(group_name)s."
-msgstr ""
+msgstr "మీరు గ్రూపు %(group_name)s యొక్క నిర్వాహకులను సంప్రదించారు."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
 msgid "Below you find a copy of your email."
-msgstr ""
+msgstr "క్రింద మీరు మీ ఇమెయిల్ కాపీని చూడగలరు."
 
 #: app/templates/email/group_contact_user.html:7
 #: app/templates/email/organizer_contact_attendee.html:7
+#, fuzzy
 msgid "Organizers have received your message and will follow up with you."
-msgstr ""
+msgstr "నిర్వాహకులు మీ సందేశాన్ని అందుకున్నారు మరియు మీతో ఫాలోప్ చేస్తారు."
 
 #: app/templates/email/group_contact_user.html:8
+#, fuzzy
 msgid "This is a system message. Please do not reply to this message."
-msgstr ""
+msgstr "ఇది సిస్టమ్ సందేశం. దయచేసి ఈ సందేశానికి ప్రత్యుత్తరం ఇవ్వవద్దు."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
+#, fuzzy
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "ప్రత్యుత్తరాలు పర్యవేక్షించబడవు."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -290,13 +305,14 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
+#, fuzzy
 msgid "Thank you."
-msgstr ""
+msgstr "ధన్యవాదాలు."
 
 #: app/templates/email/group_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(group)s group."
-msgstr ""
+msgstr "మీరు %(group)s గ్రూపులో %(role)sగా ఉండటానికి ఆహ్వానించబడ్డారు."
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
@@ -304,7 +320,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "హలో %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -325,16 +341,17 @@ msgid "Amount Due"
 msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:8
+#, fuzzy
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "దయచేసి 30 రోజుల్లోగా చెల్లించండి."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
 #: app/templates/email/monthly_payment_post_due_email.html:8
 #: app/templates/email/monthly_payment_pre_due_email.html:10
-#, python-format
+#, fuzzy, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "ఇప్పుడు ఇక్కడ చెల్లించండి: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -345,6 +362,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"మీ ఖాతాలోని %(open_link)sబిల్లింగ్ ఏరియా%(close_link)sలో పూర్తి వివరాలతో "
+"కుడిన ఇన్‌వాయిస్ అందుబాటులో ఉంది."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -362,7 +381,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "%(app_name)sని ఉపయోగించినందుకు ధన్యవాదాలు"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -387,10 +406,13 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"మీ క్రెడిట్ కార్డ్ లేదా PayPal ఖాతాను ఉపయోగిస్తే వేగంగా మరియు సులభంగా "
+"చెల్లించగలరు."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
+#, fuzzy
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "దయచేసి 15 రోజులలోపు చెల్లించండి."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
@@ -420,8 +442,9 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
+#, fuzzy
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "దయచేసి 2 రోజుల్లోగా చెల్లించండి."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -462,42 +485,51 @@ msgstr ""
 #: app/templates/email/organizer_contact_attendee.html:2
 #, python-format
 msgid "You have contacted the organizers of the event %(event_name)s."
-msgstr ""
+msgstr "మీరు ఈవెంట్ %(event_name)s నిర్వాహకులను సంప్రదించారు ."
 
 #: app/templates/email/organizer_contact_attendee.html:8
+#, fuzzy
 msgid "This is a system message."
-msgstr ""
+msgstr "ఇది సిస్టమ్ సందేశం."
 
 #: app/templates/email/organizer_contact_attendee.html:8
+#, fuzzy
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "దయచేసి ఈ సందేశానికి ప్రత్యుత్తరం ఇవ్వవద్దు."
 
 #: app/templates/email/password_change.html:1
+#, fuzzy
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "మీ పాస్ వర్డ్ విజయవంతముగా మార్చబడినది."
 
 #: app/templates/email/password_change.html:2
+#, fuzzy
 msgid "Please login with your new password."
-msgstr ""
+msgstr "దయచేసి మీ కొత్త పాస్‌వర్డ్‌తో లాగిన్ చేయండి."
 
 #: app/templates/email/password_reset.html:1
+#, fuzzy
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "మీ పాస్ వర్డ్ రీసెట్ చేయడానికి దయచేసి ఈ క్రింది లింక్ ను ఉపయోగించండి."
 
 #: app/templates/email/password_reset.html:3
 #, python-format
 msgid "Or paste this token in your %(app_name)s"
-msgstr ""
+msgstr "లేదా ఈ టోకెన్‌ని మీ %(app_name)sలో పేస్ట్ చేయండి"
 
 #: app/templates/email/password_reset.html:4
+#, fuzzy
 msgid "App:"
-msgstr ""
+msgstr "యాప్:"
 
 #: app/templates/email/password_reset_and_verify.html:1
+#, fuzzy
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
+"మీ పాస్ వర్డ్ రీసెట్ చేయడానికి మరియు మీ ఖాతాను ధృవీకరించడానికి దయచేసి ఈ "
+"క్రింది లింక్ ను ఉపయోగించండి."
 
 #: app/templates/email/speaker_invite.html:4
 #, python-format
@@ -508,17 +540,22 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/speaker_invite.html:6
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "You can accept or reject this invitation from %(open_link)sCall for "
 "Speakers%(close_link)s page."
 msgstr ""
+"మీరు %(open_link)sకాల్ ఫర్ స్పీకర్స్%(close_link)s పేజీ నుండి ఈ "
+"ఆహ్వానాన్ని అంగీకరించవచ్చు లేదా తిరస్కరించవచ్చు."
 
 #: app/templates/email/speaker_invite.html:9
+#, fuzzy
 msgid ""
 "If you do not have an account yet you need to register before you can "
 "accept the invite."
 msgstr ""
+"ఒకవేళ మీకు ఇంకా ఖాతా లేనట్లయితే, ఆహ్వానాన్ని ఆమోదించడానికి ముందు మీరు "
+"రిజిస్టర్ చేసుకోవాల్సి ఉంటుంది."
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
@@ -528,14 +565,14 @@ msgid "Best regards"
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:2
-#, python-format
+#, fuzzy, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "%(event_name)s కోసం మీ ఆర్డర్ %(order_id)s రద్దు చేయబడింది."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
-msgstr ""
+msgstr "మీరు రద్దు చేసిన ఆర్డర్ యొక సమాచారము ఇక్కడ లభించును: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -543,6 +580,9 @@ msgid ""
 " owner of the order or the organizer of the event for more information "
 "about the cancellation."
 msgstr ""
+"ఒకవేళ మీరు ఈ క్యాన్సిలేషన్ ని చేయనట్లయితే, క్యాన్సిలేషన్ గురించి మరింత "
+"సమాచారం కొరకు ఆర్డర్ యజమాని లేదా ఈవెంట్ యొక్క ఆర్గనైజర్ ని దయచేసి "
+"సంప్రదించండి."
 
 #: app/templates/email/ticket_cancelled.html:6
 #, python-format
@@ -550,15 +590,17 @@ msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
 msgstr ""
+"ఈవెంట్ నిర్వాహకులను సంప్రదించడానికి దయచేసి ఈవెంట్ పేజీలోని కాంటాక్ట్ "
+"ఫారమ్‌ను ఉపయోగించండి: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "ఫారమ్‌ను యాక్సెస్ చేయడానికి మీరు లాగిన్ చేయాల్సి ఉంటుంది."
 
 #: app/templates/email/ticket_purchased.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "%(event_name)s కోసం సైన్ అప్ చేసినందుకు ధన్యవాదాలు."
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "This is your confirmation."
@@ -570,48 +612,56 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"మీరు మీ %(open_link)sటికెట్లు లేదా రిజిస్ట్రేషన్ "
+"సమాచారాన్ని%(close_link)s ఇక్కడ డౌన్‌లోడ్ చేసుకోవచ్చు."
 
 #: app/templates/email/ticket_purchased.html:6
+#, fuzzy
 msgid "Order Summary"
-msgstr "总订单"
+msgstr "ఆర్డర్ సారాంశం"
 
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
 #: app/templates/email/ticket_purchased_organizer.html:15
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
+#, fuzzy
 msgid "Name"
-msgstr ""
+msgstr "పేరు"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
+#, fuzzy
 msgid "Ticket"
-msgstr ""
+msgstr "టిక్కెట్టు"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
 #: app/templates/pdf/order_invoice.html:319
+#, fuzzy
 msgid "Quantity"
-msgstr "数量"
+msgstr "పరిమాణం"
 
 #: app/templates/email/ticket_purchased.html:12
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
 #, fuzzy
 msgid "Order Number"
-msgstr "总订单"
+msgstr "ఆర్డర్ నంబర్"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
+#, fuzzy
 msgid "About this event"
-msgstr ""
+msgstr "ఈ ఈవెంట్ గురించి"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
+#, fuzzy
 msgid "Date"
-msgstr "日期"
+msgstr "తేదీ"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
@@ -644,14 +694,14 @@ msgstr ""
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "కింద మీరు ఆర్గనైజర్ నుంచి వచ్చిన సమాచారము చూడగలరు"
 
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:102
-#, python-format
+#, fuzzy, python-format
 msgid "Login to manage your orders at %(url)s."
-msgstr ""
+msgstr "%(url)s వద్ద మీ ఆర్డర్‌లను నిర్వహించడానికి లాగిన్ చేయండి."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
@@ -690,8 +740,9 @@ msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
 msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:11
+#, fuzzy
 msgid "The details of the order are:"
-msgstr ""
+msgstr "ఆర్డర్ యొక్క వివరాలు:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -819,9 +870,8 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
-#, fuzzy
 msgid "State"
-msgstr "日期"
+msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
@@ -1098,25 +1148,27 @@ msgstr ""
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
-#, python-format
+#, fuzzy, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
+#, fuzzy
 msgid "Event taking place online."
-msgstr ""
+msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
-#, python-format
+#, fuzzy, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
+#, fuzzy
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "ఆన్‌లైన్ ఈవెంట్ లేడ లొకేషన్ యోక వివరాలు మీకు తొందరలో ప్రకటన ఇస్తాము"
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
@@ -1143,537 +1195,6 @@ msgid ""
 "                                        #%(invoice_number)s"
 msgstr ""
 
-#~ msgid "Thank you for your ticket order for"
-#~ msgstr ""
-
-#~ msgid "This is your order confirmation. You can download your tickets at"
-#~ msgstr ""
-
-#~ msgid "Order"
-#~ msgstr ""
-
-#~ msgid "Order Status"
-#~ msgstr ""
-
-#~ msgid "Total Amount"
-#~ msgstr ""
-
-#~ msgid "Payment pending"
-#~ msgstr ""
-
-#~ msgid "NA"
-#~ msgstr ""
-
-#~ msgid "Sub-Total(net)"
-#~ msgstr ""
-
-#~ msgid "VAT"
-#~ msgstr ""
-
-#~ msgid "Tax Amount"
-#~ msgstr ""
-
-#~ msgid "Invoice Footer"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "We\n"
-#~ "hope you enjoyed it"
-#~ msgstr ""
-
-#~ msgid "Click on the following link to manage your event"
-#~ msgstr ""
-
-#~ msgid "You can access the dashboard of the event here "
-#~ msgstr ""
-
-#~ msgid " If you would like to extend the period of your ticket sales"
-#~ msgstr ""
-
-#~ msgid "has just scheduled "
-#~ msgstr ""
-
-#~ msgid "is over"
-#~ msgstr ""
-
-#~ msgid "Thank you for using the Eventyay platform for your event"
-#~ msgstr ""
-
-#~ msgid "We hope you enjoyed it"
-#~ msgstr ""
-
-#~ msgid "We hope you enjoyed it and keep in touch"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot"
-#~ msgstr ""
-
-#~ msgid "Click on the following link to download the event"
-#~ msgstr ""
-
-#~ msgid "Below you find a copy of your email"
-#~ msgstr ""
-
-#~ msgid "Organizers have received your message and will follow up with you"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is a system message. Please "
-#~ "do not reply to this message. "
-#~ "Replies are not monitored"
-#~ msgstr ""
-
-#~ msgid "Thank you"
-#~ msgstr ""
-
-#~ msgid "Your invoice payment is due within 30 days"
-#~ msgstr ""
-
-#~ msgid "Please pay within 30 days"
-#~ msgstr ""
-
-#~ msgid "If you have any questions about invoices"
-#~ msgstr ""
-
-#~ msgid "please find more information on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "Payment is fast and simple using your credit card or PayPal account"
-#~ msgstr ""
-
-#~ msgid "Your payment is now past due"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Please pay this invoice immediately to"
-#~ " avoid your account being suspended"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you feel this invoice is "
-#~ "incorrect or have any questions, you "
-#~ "can contact our support team for "
-#~ "assistance"
-#~ msgstr ""
-
-#~ msgid "Please pay within 2 days"
-#~ msgstr ""
-
-#~ msgid "and click on the status badge of the session"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you do not have an account "
-#~ "yet you need to register before "
-#~ "you can accept the invite"
-#~ msgstr ""
-
-#~ msgid "has been cancelled"
-#~ msgstr ""
-
-#~ msgid "If you have not done this cancellation by yourself"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please check with the owner of the"
-#~ " order or the organizer of the "
-#~ "event for more information about the "
-#~ "cancellation"
-#~ msgstr ""
-
-#~ msgid "You need to login to access the form"
-#~ msgstr ""
-
-#~ msgid "This is your confirmation. You can download your"
-#~ msgstr ""
-
-#~ msgid "Login to your account"
-#~ msgstr ""
-
-#~ msgid "On the top right click “Manage Events”"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "On the Events Dashboard choose the "
-#~ "event you want to edit and click"
-#~ " the “Edit Symbol” of the event"
-#~ msgstr ""
-
-#~ msgid "You are now editing the “Basic Details” of your event"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll down to the tickets section, "
-#~ "choose the ticket you want to edit"
-#~ " and click on the “Settings Symbol”"
-#~ " of the ticket"
-#~ msgstr ""
-
-#~ msgid "In the ticket settings adjust the sales period for the ticket"
-#~ msgstr ""
-
-#~ msgid "Repeat the steps for other tickets"
-#~ msgstr ""
-
-#~ msgid "if any"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Scroll to the bottom of the page"
-#~ " and save the changes by clicking "
-#~ "“Publish”"
-#~ msgstr ""
-
-#~ msgid "You should verify your new email"
-#~ msgstr ""
-
-#~ msgid "is now available"
-#~ msgstr ""
-
-#~ msgid "If you would like to reactivate ticket sales for these tickets"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "please login to your account and "
-#~ "edit the sales period for your "
-#~ "tickets."
-#~ msgstr ""
-
-#~ msgid "If you would like to extend the period of your ticket sales"
-#~ msgstr ""
-
-#~ msgid "please login to your account and edit the sales period for your tickets"
-#~ msgstr ""
-
-#~ msgid "your"
-#~ msgstr ""
-
-#~ msgid "is over."
-#~ msgstr ""
-
-#~ msgid "thank you for participating in our"
-#~ msgstr ""
-
-#~ msgid "This is a confirmation mail of your tickets for the event"
-#~ msgstr ""
-
-#~ msgid "You have been invited to be a"
-#~ msgstr ""
-
-#~ msgid "at"
-#~ msgstr "日期"
-
-#~ msgid "You have contacted the organizers of the group"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is a system message. Please "
-#~ "do not reply to this message. "
-#~ "Replies are not monitored."
-#~ msgstr ""
-
-#~ msgid "group"
-#~ msgstr ""
-
-#~ msgid "The invoice for your event"
-#~ msgstr ""
-
-#~ msgid "on eventyay.com for"
-#~ msgstr ""
-
-#~ msgid "is now available."
-#~ msgstr ""
-
-#~ msgid "Thank you for using"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Just a friendly reminder that we "
-#~ "haven't received your payment for your"
-#~ " invoice for"
-#~ msgstr ""
-
-#~ msgid "Please pay within 15 days"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is a reminder that we haven't"
-#~ " received your payment for your "
-#~ "invoice for"
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from"
-#~ msgstr ""
-
-#~ msgid "for organizers of the"
-#~ msgstr ""
-
-#~ msgid "You have contacted the organizers of the event"
-#~ msgstr ""
-
-#~ msgid "You have been invited as a speaker for the session submission"
-#~ msgstr ""
-
-#~ msgid "for the event"
-#~ msgstr ""
-
-#~ msgid "Your order"
-#~ msgstr ""
-
-#~ msgid "has been cancelled."
-#~ msgstr ""
-
-#~ msgid "starting at"
-#~ msgstr ""
-
-#~ msgid "to view"
-#~ msgstr ""
-
-#~ msgid "download the invoice"
-#~ msgstr ""
-
-#~ msgid "The ticket sales period for one or several of your tickets for"
-#~ msgstr ""
-
-#~ msgid "Your email has been already changed from"
-#~ msgstr ""
-
-#~ msgid "to"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s"
-#~ msgstr ""
-
-#~ msgid "Hello %(name)s"
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5% finance fee."
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a"
-#~ msgstr ""
-
-#~ msgid "finance fee"
-#~ msgstr ""
-
-#~ msgid "by"
-#~ msgstr ""
-
-#~ msgid "Hello %(email)s, your %(eventname) is over."
-#~ msgstr ""
-
-#~ msgid "Click on the following link to manage your event:"
-#~ msgstr ""
-
-#~ msgid "Late payments can be subject to a 5%% finance fee."
-#~ msgstr ""
-
-#~ msgid "Hi %(email),"
-#~ msgstr ""
-
-#~ msgid "Your group"
-#~ msgstr ""
-
-#~ msgid "has just scheduled"
-#~ msgstr ""
-
-#~ msgid "We’re pretty confident that you’re going to love it."
-#~ msgstr ""
-
-#~ msgid "Time"
-#~ msgstr ""
-
-#~ msgid "Reserve your spot!"
-#~ msgstr ""
-
-#~ msgid "Event description"
-#~ msgstr ""
-
-#~ msgid "You’re getting this message because you are a group member of"
-#~ msgstr ""
-
-#~ msgid "on %(app_name)s."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can unsubscribe from emails from "
-#~ "this group by unfollowing the group"
-#~ msgstr ""
-
-#~ msgid "here"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link:"
-#~ msgstr ""
-
-#~ msgid "Link"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The invoice for your event "
-#~ "%(event_name)s on eventyay.com for %(date)s"
-#~ " is now available."
-#~ msgstr ""
-
-#~ msgid "Pay Now at"
-#~ msgstr ""
-
-#~ msgid "A detailed invoice is available in"
-#~ msgstr ""
-
-#~ msgid "the billing area"
-#~ msgstr ""
-
-#~ msgid "of your account"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you have any questions about "
-#~ "invoices, please find more information "
-#~ "on our FAQ at"
-#~ msgstr ""
-
-#~ msgid "of your account."
-#~ msgstr ""
-
-#~ msgid "Please pay immediately at"
-#~ msgstr ""
-
-#~ msgid "finance fee."
-#~ msgstr ""
-
-#~ msgid "This is an automatic email from %(app_name)s for organizers of the"
-#~ msgstr ""
-
-#~ msgid "Your"
-#~ msgstr ""
-
-#~ msgid "Call for Speakers"
-#~ msgstr ""
-
-#~ msgid "has received a new session proposal with the following details"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You can view all speaker details "
-#~ "on the speaker profile page and "
-#~ "the session proposal on the"
-#~ msgstr ""
-
-#~ msgid "session page"
-#~ msgstr ""
-
-#~ msgid "To change the status of sessions please go to the"
-#~ msgstr ""
-
-#~ msgid "sessions overview page"
-#~ msgstr ""
-
-#~ msgid "and click on the status badge of the session."
-#~ msgstr ""
-
-#~ msgid "Or paste this token in your"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You have been invited as a speaker"
-#~ " for the session submission "
-#~ "\"%(session_title)s\" for the event"
-#~ msgstr ""
-
-#~ msgid "on"
-#~ msgstr ""
-
-#~ msgid "by %(inviter_name)s %(inviter_email)s."
-#~ msgstr ""
-
-#~ msgid "You can accept or reject this invitation from"
-#~ msgstr ""
-
-#~ msgid "page"
-#~ msgstr ""
-
-#~ msgid "The information about your cancelled order is here"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "To contact event organizers please use"
-#~ " the contact form on the event "
-#~ "page here"
-#~ msgstr ""
-
-#~ msgid "Thank you for signing up for"
-#~ msgstr ""
-
-#~ msgid "You can download your"
-#~ msgstr ""
-
-#~ msgid "tickets or registration information here"
-#~ msgstr ""
-
-#~ msgid "Login to manage your orders at"
-#~ msgstr ""
-
-#~ msgid "You can download your tickets at"
-#~ msgstr ""
-
-#~ msgid "You have a new order for your event"
-#~ msgstr ""
-
-#~ msgid "starting at %(event_time)s on %(event_date)s."
-#~ msgstr ""
-
-#~ msgid "The order has been processed successfully on"
-#~ msgstr ""
-
-#~ msgid "Click here"
-#~ msgstr ""
-
-#~ msgid "to view/download the invoice."
-#~ msgstr ""
-
-#~ msgid "Login to manage the orders at"
-#~ msgstr ""
-
-#~ msgid "This is an automatic message from"
-#~ msgstr ""
-
-#~ msgid "You can access the dashboard of the event here"
-#~ msgstr ""
-
-#~ msgid "Hi"
-#~ msgstr ""
-
-#~ msgid "Please visit this link to confirm your email"
-#~ msgstr ""
-
-#~ msgid "To accept the role please sign up using the following link"
-#~ msgstr ""
-
-#~ msgid "Your account has been created on"
-#~ msgstr ""
-
-#~ msgid "Your login is"
-#~ msgstr ""
-
-#~ msgid "Please visit the following link to verify your email:"
-#~ msgstr ""
-
-#~ msgid "Organiser"
-#~ msgstr ""
-
-#~ msgid "Thank you for using the Eventyay platform for your event."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This is an automatic email from "
-#~ "%(app_name)s for organizers of the "
-#~ "%(session_event_name)s."
-#~ msgstr ""
-
 #~ msgid "Your payment is now past due."
 #~ msgstr ""
 
@@ -1681,6 +1202,8 @@ msgstr ""
 #~ "Please pay this invoice immediately to"
 #~ " avoid your account being suspended."
 #~ msgstr ""
+#~ "మీ ఖాతా సస్పెండ్ చేయబడకుండా ఉండేందుకు "
+#~ "దయచేసి ఈ ఇన్‌వాయిస్‌ని వెంటనే చెల్లించండి."
 
 #~ msgid ""
 #~ "If you feel this invoice is "
@@ -1688,6 +1211,10 @@ msgstr ""
 #~ "can contact our support team for "
 #~ "assistance."
 #~ msgstr ""
+#~ "ఈ ఇన్ వాయిస్ తప్పు అని మీరు "
+#~ "భావించినట్లయితే లేదా ఏవైనా ప్రశ్నలు "
+#~ "ఉన్నట్లయితే, సాయం కొరకు మీరు మా సపోర్ట్"
+#~ " టీమ్ ని సంప్రదించవచ్చు."
 
 #~ msgid "Email Confirmation to Create Account for Open-Event"
 #~ msgstr ""
@@ -1698,20 +1225,14 @@ msgstr ""
 #~ msgid "Event"
 #~ msgstr ""
 
-#~ msgid "Event taking place online and at %(event_location)s"
-#~ msgstr ""
-
 #~ msgid "Online Event"
-#~ msgstr ""
+#~ msgstr "ఆన్‌లైన్ ఈవెంట్"
 
 #~ msgid "At %(location_name)s"
-#~ msgstr ""
-
-#~ msgid "Location or online event details to be announced"
-#~ msgstr ""
+#~ msgstr "%(location_name)s వద్ద"
 
 #~ msgid "Date and Time"
-#~ msgstr ""
+#~ msgstr "తేదీ మరియు సమయం"
 
 #~ msgid "From: %(start_time)s"
 #~ msgstr ""
@@ -1720,15 +1241,15 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Type"
-#~ msgstr ""
+#~ msgstr "రకం"
 
 #~ msgid "Organizer Message"
-#~ msgstr ""
+#~ msgstr "నిర్వాహక సందేశం"
 
 #~ msgid ""
 #~ "Event taking place online and at\n"
 #~ "                            %(location)s."
-#~ msgstr ""
+#~ msgstr "ఈవెంట్ ఆన్‌లైన్‌లో ఈ %(event_location)sలో జరుగుతోంది"
 
 #~ msgid ""
 #~ "Event taking place at\n"
@@ -1739,11 +1260,5 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "To: %(end_date)s"
-#~ msgstr ""
-
-#~ msgid "Event taking place online and at %(location)s."
-#~ msgstr ""
-
-#~ msgid "Event taking place at %(location)s."
 #~ msgstr ""
 

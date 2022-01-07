@@ -12,9 +12,11 @@ from app.api.helpers.tasks import (
     resize_event_images_task,
     resize_speaker_images_task,
     resize_exhibitor_images_task,
+    resize_group_images_task,
 )
 from app.models import db
 from app.models.event import Event, get_new_event_identifier
+from app.models.group import Group
 from app.models.speaker import Speaker
 from app.models.exhibitor import Exhibitor
 from populate_db import populate
@@ -57,6 +59,17 @@ def fix_exhibitor_images():
     for exhibitor in exhibitors:
         print(f'Resizing Exhibitor { exhibitor.id }')
         resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
+
+
+@manager.command
+def fix_group_images():
+    groups = Group.query.filter(
+        Group.banner_url.isnot(None), Group.thumbnail_image_url == None
+    ).all()
+    print(f'Resizing images of { len(groups) } groups...')
+    for group in groups:
+        print(f'Resizing image of Group { group.id } ')
+        resize_group_images_task.delay(group.id, group.banner_url)
 
 
 @manager.command
