@@ -76,7 +76,11 @@ class SessionListPost(ResourceList):
         if session.event.get_owner():
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
+            speakers = Speaker.query.filter_by(
+                event_id=session.event_id, deleted_at=None
+            ).all()
+
+            send_email_new_session(owner_email, session, speakers)  # TODO: Send to all organizers
             notify_new_session(session)
 
         for speaker in session.speakers:
