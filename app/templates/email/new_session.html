@@ -7,7 +7,7 @@
 {% for speaker in speakers %}
     {{ _('Speaker') }}: {{ speaker.name }} <br/>
     {{ _('Email') }}: {{ speaker.email }} <br/>
-    {% if speaker_bio %}
+    {% if speaker.short_biography %}
         {{ _('Bio') }}: {{ speaker.short_biography }} <br />
     {% endif %}
 {% endfor %}
