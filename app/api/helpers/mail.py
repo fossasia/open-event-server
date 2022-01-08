@@ -150,13 +150,14 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, session):
+def send_email_new_session(email, session, speakers):
     """email for new session"""
     app_name = get_settings()['app_name']
     front_page = get_settings()['frontend_url']
     session_overview_link = session.event.organizer_site_link + "/sessions/pending"
     action = MailType.NEW_SESSION
     mail = MAILS[action]
+
     send_email(
         to=email,
         action=action,
@@ -164,6 +165,7 @@ def send_email_new_session(email, session):
         html=render_template(
             mail['template'],
             session=session,
+            speakers=speakers,
             session_overview_link=session_overview_link,
             app_name=app_name,
             front_page=front_page,
