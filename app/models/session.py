@@ -129,7 +129,7 @@ class Session(SoftDeletionModel):
 
     @property
     def site_cfs_link(self):
-        return self.event.site_link + f"/cfs/session/{self.id}"
+        return self.event.site_link + f"/cfs"
 
     def __repr__(self):
         return '<Session %r>' % self.title

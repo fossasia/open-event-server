@@ -8,7 +8,7 @@
     {{ _('Speaker') }}: {{ speaker.name }} <br/>
     {{ _('Email') }}: {{ speaker.email }} <br/>
     {% if speaker.short_biography %}
-        {{ _('Bio') }}: {{ speaker.short_biography }} <br />
+        {{ _('Bio') }}: {{ speaker.short_biography | strip_tags }} <br />
     {% endif %}
 {% endfor %}
 {{ _('Session') }}: {{ session.title}} <br/>
