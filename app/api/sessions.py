@@ -76,7 +76,12 @@ class SessionListPost(ResourceList):
         if session.event.get_owner():
             owner = session.event.get_owner()
             owner_email = owner.email
-            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
+            speakers = Speaker.query.filter_by(
+                event_id=session.event_id, deleted_at=None
+            ).all()
+
+            # TODO: Send to all organizers
+            send_email_new_session(owner_email, session, speakers)
             notify_new_session(session)
 
         for speaker in session.speakers:
@@ -345,7 +350,7 @@ class SessionDetail(ResourceDetail):
             )
 
     def after_update_object(self, session, data, view_kwargs):
-        """ Send email if session accepted or rejected """
+        """Send email if session accepted or rejected"""
 
         if data.get('send_email', None) and g.get('send_email'):
             notify_for_session(session)
