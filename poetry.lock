@@ -2116,7 +2116,7 @@ starkbank-ecdsa = ">=2.0.1"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.5.1"
+version = "1.5.2"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -2140,6 +2140,7 @@ flask = ["flask (>=0.11)", "blinker (>=1.1)"]
 httpx = ["httpx (>=0.16.0)"]
 pure_eval = ["pure-eval", "executing", "asttokens"]
 pyspark = ["pyspark (>=2.4.4)"]
+quart = ["quart (>=0.16.1)", "blinker (>=1.1)"]
 rq = ["rq (>=0.6)"]
 sanic = ["sanic (>=0.8)"]
 sqlalchemy = ["sqlalchemy (>=1.2)"]
@@ -2631,7 +2632,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "8c504abb858e5a66f8f4fd18a3cd9bbb2818b3d3c3d1e1c76bfd9358b9ddf711"
+content-hash = "6c12e484d999a9c7e918d76bd7cd10d3f846ef36f6a5e86db31bbef43b109eb7"
 
 [metadata.files]
 aiohttp = [
@@ -3843,8 +3844,8 @@ sendgrid = [
     {file = "sendgrid-6.9.3.tar.gz", hash = "sha256:561bd742728631d194398d856ec8c28ba2a024e7c9e5750561f529202aa1d24a"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.5.1.tar.gz", hash = "sha256:2a1757d6611e4bec7d672c2b7ef45afef79fed201d064f53994753303944f5a8"},
-    {file = "sentry_sdk-1.5.1-py2.py3-none-any.whl", hash = "sha256:e4cb107e305b2c1b919414775fa73a9997f996447417d22b98e7610ded1e9eb5"},
+    {file = "sentry-sdk-1.5.2.tar.gz", hash = "sha256:7bbaa32bba806ec629962f207b597e86831c7ee2c1f287c21ba7de7fea9a9c46"},
+    {file = "sentry_sdk-1.5.2-py2.py3-none-any.whl", hash = "sha256:2cec50166bcb67e1965f8073541b2321e3864cd6fd42a526bcde9f0c4e4cc3f8"},
 ]
 simplejson = [
     {file = "simplejson-3.17.2-cp27-cp27m-macosx_10_13_x86_64.whl", hash = "sha256:2d3eab2c3fe52007d703a26f71cf649a8c771fcdd949a3ae73041ba6797cfcf8"},
