@@ -24,7 +24,7 @@ cd open-event-server
 
 - Tip:
 
-  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatedly. In case of SSH, the command above will be:
+  + Setup SSH key in your profile, and use SSH method to clone the source code, so that you don't have to type password repeatedly. In the case of SSH, the command above will be:
 
   ```
   git clone -b development git@github.com:USERNAME/open-event-server.git
@@ -39,7 +39,7 @@ cd open-event-server
 
 ## Install system dependencies
 
-These are softwares on which our Open Event server depends, and C-based libraries on which our Python packages depend.
+These are softwares on which our Open Event server depends and C-based libraries on which our Python packages depend.
 
 ### For Mac OS
 
@@ -60,7 +60,7 @@ The dependencies are listed in *deb-packages.txt* file. You can install them all
 xargs -a deb-packages.txt sudo apt install
 ```
 
-In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo, you can use [pyenv](https://github.com/pyenv/pyenv) to install Python 3.8 (Open Event Server is not compatible with Python 3.9+ yet).
+In case you use Ubuntu 20.04+, where Python 3.8 is not provided in the official repo, you can use [pyenv](https://github.com/pyenv/pyenv) to install Python 3.8 (Open Event Server is not compatible with Python 3.9+ yet).
 
 ## Install Poetry and Python packages
 
@@ -131,7 +131,7 @@ Once the databases are created, exit the psql shell with `\q` followed by ENTER.
 cp .env.example .env
 ```
 
-Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that server will not run in production mode if you don't supply a secret.
+Add `SECRET_KEY={{something random}}` in .env file for cryptographic usage. Note that the server will not run in production mode if you don't supply a secret.
 To get a good secret value, run `python -c 'import secrets;print(secrets.token_hex())'` in a terminal and replace `{{something random}}` with its output in the line above and paste it in `.env` file.
 
 If you created a dedicated PostgreSQL user and password, you should update the *.env* file content.
