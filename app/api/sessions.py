@@ -73,11 +73,6 @@ class SessionListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if session.event.get_owner():
-            owner = session.event.get_owner()
-            owner_email = owner.email
-            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
-            notify_new_session(session)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
@@ -86,6 +81,14 @@ class SessionListPost(ResourceList):
                 speaker_id=speaker.id,
             )
             save_to_db(session_speaker_link, "Session Speaker Link Saved")
+        
+        if session.event.get_owner():
+            owner = session.event.get_owner()
+            owner_email = owner.email
+            if session.speakers:
+                print("yes")
+                send_email_new_session(owner_email, session, session.speakers)  # TODO: Send to all organizers
+            notify_new_session(session)
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -366,6 +369,10 @@ class SessionDetail(ResourceDetail):
                         speaker_id=speaker.id,
                     )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
+                if current_session.event.get_owner():
+                    owner = session.event.get_owner()
+                    owner_email = owner.email
+                    send_email_new_session(owner_email, session, current_session.speakers)  # TODO: Send to all organizers
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

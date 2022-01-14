@@ -5,6 +5,7 @@ import os
 import pytz
 from itertools import groupby
 from typing import Dict, Optional
+from app.models import speaker
 
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
@@ -27,6 +28,7 @@ from babel.dates import (
     format_datetime
 )
 from babel.numbers import format_currency
+from app.models.speaker import Speaker
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -150,7 +152,7 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, session):
+def send_email_new_session(email, session, speakers):
     """email for new session"""
     app_name = get_settings()['app_name']
     front_page = get_settings()['frontend_url']
@@ -164,6 +166,7 @@ def send_email_new_session(email, session):
         html=render_template(
             mail['template'],
             session=session,
+            speakers=speakers,
             session_overview_link=session_overview_link,
             app_name=app_name,
             front_page=front_page,
