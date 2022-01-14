@@ -1721,11 +1721,11 @@ typer = ">=0.4.0,<0.5.0"
 
 [[package]]
 name = "pycountry"
-version = "20.7.3"
+version = "22.1.10"
 description = "ISO country, subdivision, language, currency and script definitions and their translations"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.5, <4"
 
 [[package]]
 name = "pycparser"
@@ -1964,11 +1964,11 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2022.1.5"
+version = "2022.1.7"
 description = "Python type inferencer"
 category = "dev"
 optional = false
-python-versions = "<3.10,>=3.6"
+python-versions = "<3.10,>=3.7"
 
 [package.dependencies]
 attrs = ">=21.2.0"
@@ -2104,7 +2104,7 @@ python-versions = "*"
 
 [[package]]
 name = "sendgrid"
-version = "6.9.3"
+version = "6.9.4"
 description = "Twilio SendGrid library for Python"
 category = "main"
 optional = false
@@ -2116,7 +2116,7 @@ starkbank-ecdsa = ">=2.0.1"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.5.1"
+version = "1.5.2"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -2140,6 +2140,7 @@ flask = ["flask (>=0.11)", "blinker (>=1.1)"]
 httpx = ["httpx (>=0.16.0)"]
 pure_eval = ["pure-eval", "executing", "asttokens"]
 pyspark = ["pyspark (>=2.4.4)"]
+quart = ["quart (>=0.16.1)", "blinker (>=1.1)"]
 rq = ["rq (>=0.6)"]
 sanic = ["sanic (>=0.8)"]
 sqlalchemy = ["sqlalchemy (>=1.2)"]
@@ -2631,7 +2632,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "8f946cb1ffc218c5ff09ac455accdb4150a92caf6906e5dd552a81cb86167f99"
+content-hash = "6c68fbf7933bdb2589b3e39d431bf3c2c9482317b5cb501aec40500d68d765ae"
 
 [metadata.files]
 aiohttp = [
@@ -3566,7 +3567,7 @@ pycln = [
     {file = "pycln-1.1.0.tar.gz", hash = "sha256:b14e610524400e5fdfc3891a2880606866281eb233f940aa5c08e1657bd76bea"},
 ]
 pycountry = [
-    {file = "pycountry-20.7.3.tar.gz", hash = "sha256:81084a53d3454344c0292deebc20fcd0a1488c136d4900312cbd465cf552cb42"},
+    {file = "pycountry-22.1.10.tar.gz", hash = "sha256:b9a6d9cdbf53f81ccdf73f6f5de01b0d8493cab2213a230af3e34458de85ea32"},
 ]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
@@ -3701,19 +3702,16 @@ python-slugify = [
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
 ]
 pytype = [
-    {file = "pytype-2022.1.5-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:af7430c301631481dc62bbbbb838cac5dfe27e91a9858eed2e3c31176405a710"},
-    {file = "pytype-2022.1.5-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bb4322f41dd0ecfda576b749c0ade4221c99482f55c1e5808b6db896aba353f8"},
-    {file = "pytype-2022.1.5-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b3374adc4330aec87c178f62b3fa1ccfa4cb8287e010233cb9a3b7411a79abf0"},
-    {file = "pytype-2022.1.5-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:282706850467c3bb1637d7db9280c02cc493464e6776a9a6c7f60ec043a25521"},
-    {file = "pytype-2022.1.5-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1d6806ae3e28167bcbbae425ffa0a360375d9b5bbacfa7d99d1b87bc98dc62cf"},
-    {file = "pytype-2022.1.5-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5009033db2cbbf30647e994bfda2dc6b45a6832fd9777ce66d0338372c12a832"},
-    {file = "pytype-2022.1.5-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:0fcc97024a166b9f4d7dba7491fa51d3f5d366db85d884a9c669a39f98be6ce4"},
-    {file = "pytype-2022.1.5-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5dd484ac8824a5e4e2d7217f9d72af76f9b8b4040bdd0f6199b26900bf2cb13e"},
-    {file = "pytype-2022.1.5-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e290e5281f0484c67564e89f15a13f2e62be6a420996d2dd602907cb24208649"},
-    {file = "pytype-2022.1.5-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:f109d976eb0e40fc2a9534b4e50f26f8a3d276609208818a3543d5527114a31a"},
-    {file = "pytype-2022.1.5-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:73ef89f3c295bcd996db773fb4892de81fe21fed390c7772cfa21f04d5282b5b"},
-    {file = "pytype-2022.1.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4b0a7db8933c1476049052b4465be86169cba9ae09d2193fc88dc2611649c485"},
-    {file = "pytype-2022.1.5.tar.gz", hash = "sha256:ccc67aa32f204805362cffe5d82cdcee7cab54e6e077c3358063713ce0244c38"},
+    {file = "pytype-2022.1.7-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:e513fde976c07c08807d5532435352678ba0e084a65697c64bd6b6d875aea648"},
+    {file = "pytype-2022.1.7-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a6051920b6941b894c6c0d9d6ea5a96669513f3d364a545bbcf204d5e7fd018f"},
+    {file = "pytype-2022.1.7-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:18f730940c7178d4e9ce02e6c2f3f85f0cabad6016a093c23c982b5a6752c022"},
+    {file = "pytype-2022.1.7-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:b87ef88dc1d76feac42c85d40a3c7eda33fdf561bae2e25faa74016bf3d72776"},
+    {file = "pytype-2022.1.7-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f152d42d6077fccb4a8a2d2b19b6a9222a9cab5a33213e519021b1bfa86c5953"},
+    {file = "pytype-2022.1.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2103c84d9f313217f36630f7d130bf774c1f41444b8c49aca807c36a5f177431"},
+    {file = "pytype-2022.1.7-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:6f988f54b9e1df95f9ff5e4eb008cd6bce93473eafc0ead282975cedbc8be9e4"},
+    {file = "pytype-2022.1.7-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:cd01e0d00716098fc5a6c74ecaa94652524ae746bc6a14323f8b57368bd8cf27"},
+    {file = "pytype-2022.1.7-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fd279ed6cf0a8ad0748efde1c02918dd02752c3dd93d144d3f2e6519617d3796"},
+    {file = "pytype-2022.1.7.tar.gz", hash = "sha256:c824d09dd463165ee47dd78f7ca30941353c2095361aadb57165c4211c148901"},
 ]
 pytz = [
     {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
@@ -3842,12 +3840,12 @@ scrypt = [
     {file = "scrypt-0.8.17.tar.gz", hash = "sha256:25b5075f2238be93af1cd574540a5ea01b8547f9b678aa72d22fce22577475ec"},
 ]
 sendgrid = [
-    {file = "sendgrid-6.9.3-py3-none-any.whl", hash = "sha256:dfe281d60dedcd6386f715662c5c0e95cab539e15fddd17b4909d08b8065fc88"},
-    {file = "sendgrid-6.9.3.tar.gz", hash = "sha256:561bd742728631d194398d856ec8c28ba2a024e7c9e5750561f529202aa1d24a"},
+    {file = "sendgrid-6.9.4-py3-none-any.whl", hash = "sha256:f0faa12189e85962651ec1062f6a53e7b0272c452e721a8f4d6847cddad9cfa8"},
+    {file = "sendgrid-6.9.4.tar.gz", hash = "sha256:40653ec7a1ca889398ed6aadba480ae6ab73b9f4329ad841ef4d2bd81848cf62"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.5.1.tar.gz", hash = "sha256:2a1757d6611e4bec7d672c2b7ef45afef79fed201d064f53994753303944f5a8"},
-    {file = "sentry_sdk-1.5.1-py2.py3-none-any.whl", hash = "sha256:e4cb107e305b2c1b919414775fa73a9997f996447417d22b98e7610ded1e9eb5"},
+    {file = "sentry-sdk-1.5.2.tar.gz", hash = "sha256:7bbaa32bba806ec629962f207b597e86831c7ee2c1f287c21ba7de7fea9a9c46"},
+    {file = "sentry_sdk-1.5.2-py2.py3-none-any.whl", hash = "sha256:2cec50166bcb67e1965f8073541b2321e3864cd6fd42a526bcde9f0c4e4cc3f8"},
 ]
 simplejson = [
     {file = "simplejson-3.17.2-cp27-cp27m-macosx_10_13_x86_64.whl", hash = "sha256:2d3eab2c3fe52007d703a26f71cf649a8c771fcdd949a3ae73041ba6797cfcf8"},
