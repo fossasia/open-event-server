@@ -5,7 +5,6 @@ import os
 import pytz
 from itertools import groupby
 from typing import Dict, Optional
-from app.models import speaker
 
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
@@ -28,7 +27,6 @@ from babel.dates import (
     format_datetime
 )
 from babel.numbers import format_currency
-from app.models.speaker import Speaker
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
