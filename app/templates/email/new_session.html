@@ -4,13 +4,6 @@
 <br/><br/>
 {{ _('Your %(open_link)sCall For Speakers%(close_link)s has received a new session proposal with the following details:', open_link = '<a href="%s" target="_blank">' % (session.site_cfs_link), close_link = '</a>') | safe }}
 <br/><br/>
-{% for speaker in speakers %}
-    {{ _('Speaker') }}: {{ speaker.name }} <br/>
-    {{ _('Email') }}: {{ speaker.email }} <br/>
-    {% if speaker.short_biography %}
-        {{ _('Bio') }}: {{ speaker.short_biography | strip_tags }} <br />
-    {% endif %}
-{% endfor %}
 {{ _('Session') }}: {{ session.title}} <br/>
 {% if session.short_abstract %}
     {{ _('Abstract') }}: {{ session.short_abstract }} <br/>
