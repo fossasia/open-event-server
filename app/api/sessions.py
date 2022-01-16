@@ -86,7 +86,6 @@ class SessionListPost(ResourceList):
             owner = session.event.get_owner()
             owner_email = owner.email
             if session.speakers:
-                print("yes")
                 send_email_new_session(owner_email, session, session.speakers)  # TODO: Send to all organizers
             notify_new_session(session)
 
@@ -369,7 +368,7 @@ class SessionDetail(ResourceDetail):
                         speaker_id=speaker.id,
                     )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
-                if current_session.event.get_owner():
+                if current_session.event.get_owner() and current_session.speakers:
                     owner = session.event.get_owner()
                     owner_email = owner.email
                     send_email_new_session(owner_email, session, current_session.speakers)  # TODO: Send to all organizers
