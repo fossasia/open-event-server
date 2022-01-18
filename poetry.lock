@@ -691,7 +691,7 @@ text-unidecode = "1.3"
 
 [[package]]
 name = "fastapi"
-version = "0.71.0"
+version = "0.72.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -1246,7 +1246,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "importlab"
-version = "0.6.1"
+version = "0.7"
 description = "A library to calculate python dependency graphs."
 category = "dev"
 optional = false
@@ -1964,7 +1964,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2022.1.7"
+version = "2022.1.13"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -1972,7 +1972,7 @@ python-versions = "<3.10,>=3.7"
 
 [package.dependencies]
 attrs = ">=21.2.0"
-importlab = ">=0.6.1"
+importlab = ">=0.7"
 libcst = "*"
 ninja = ">=1.10.0.post2"
 tabulate = "*"
@@ -2025,7 +2025,7 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "redis"
-version = "4.1.0"
+version = "4.1.1"
 description = "Python client for Redis database and key-value store"
 category = "main"
 optional = false
@@ -2033,11 +2033,11 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 deprecated = ">=1.2.3"
-packaging = ">=21.3"
+packaging = ">=20.4"
 
 [package.extras]
-cryptography = ["cryptography (>=36.0.1)", "requests (>=2.26.0)"]
 hiredis = ["hiredis (>=1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
 
 [[package]]
 name = "reportlab"
@@ -2417,7 +2417,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "uvicorn"
-version = "0.16.0"
+version = "0.17.0"
 description = "The lightning-fast ASGI server."
 category = "main"
 optional = false
@@ -2433,10 +2433,10 @@ python-dotenv = {version = ">=0.13", optional = true, markers = "extra == \"stan
 PyYAML = {version = ">=5.1", optional = true, markers = "extra == \"standard\""}
 uvloop = {version = ">=0.14.0,<0.15.0 || >0.15.0,<0.15.1 || >0.15.1", optional = true, markers = "sys_platform != \"win32\" and sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\" and extra == \"standard\""}
 watchgod = {version = ">=0.6", optional = true, markers = "extra == \"standard\""}
-websockets = {version = ">=10.0", optional = true, markers = "python_version >= \"3.7\" and extra == \"standard\""}
+websockets = {version = ">=10.0", optional = true, markers = "extra == \"standard\""}
 
 [package.extras]
-standard = ["httptools (>=0.2.0,<0.4.0)", "watchgod (>=0.6)", "python-dotenv (>=0.13)", "PyYAML (>=5.1)", "websockets (>=9.1)", "websockets (>=10.0)", "uvloop (>=0.14.0,!=0.15.0,!=0.15.1)", "colorama (>=0.4)"]
+standard = ["websockets (>=10.0)", "httptools (>=0.2.0,<0.4.0)", "watchgod (>=0.6)", "python-dotenv (>=0.13)", "PyYAML (>=5.1)", "uvloop (>=0.14.0,!=0.15.0,!=0.15.1)", "colorama (>=0.4)"]
 
 [[package]]
 name = "uvloop"
@@ -2632,7 +2632,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "6c68fbf7933bdb2589b3e39d431bf3c2c9482317b5cb501aec40500d68d765ae"
+content-hash = "85eb5bce71df7528513fd1152c55eb3e793a41c2180c593a43940e38118ce51c"
 
 [metadata.files]
 aiohttp = [
@@ -2970,8 +2970,8 @@ faker = [
     {file = "Faker-8.1.0.tar.gz", hash = "sha256:26c7c3df8d46f1db595a34962f8967021dd90bbd38cc6e27461a3fb16cd413ae"},
 ]
 fastapi = [
-    {file = "fastapi-0.71.0-py3-none-any.whl", hash = "sha256:a78eca6b084de9667f2d5f37e2ae297270e5a119cd01c2f04815795da92fc87f"},
-    {file = "fastapi-0.71.0.tar.gz", hash = "sha256:2b5ac0ae89c80b40d1dd4b2ea0bb1f78d7c4affd3644d080bf050f084759fff2"},
+    {file = "fastapi-0.72.0-py3-none-any.whl", hash = "sha256:7421a2f30e9ed1866874cff089733d4f9a0cd4f49b6ea3995c0de75e32bbb52f"},
+    {file = "fastapi-0.72.0.tar.gz", hash = "sha256:019ec52c00581bc055e6dfb621aaa9c2a56007c283839305412e1073a777eaf1"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
@@ -3219,7 +3219,7 @@ idna = [
     {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
 ]
 importlab = [
-    {file = "importlab-0.6.1.tar.gz", hash = "sha256:056503329df1ba8f6291a4b548042aa18620ad91d39388ba58044f0fd44ff83e"},
+    {file = "importlab-0.7.tar.gz", hash = "sha256:744bd75d4410744962d203bd1eb71a950b19e8fb8eb5f0b805461dc0a2da329b"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
@@ -3702,16 +3702,16 @@ python-slugify = [
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
 ]
 pytype = [
-    {file = "pytype-2022.1.7-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:e513fde976c07c08807d5532435352678ba0e084a65697c64bd6b6d875aea648"},
-    {file = "pytype-2022.1.7-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a6051920b6941b894c6c0d9d6ea5a96669513f3d364a545bbcf204d5e7fd018f"},
-    {file = "pytype-2022.1.7-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:18f730940c7178d4e9ce02e6c2f3f85f0cabad6016a093c23c982b5a6752c022"},
-    {file = "pytype-2022.1.7-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:b87ef88dc1d76feac42c85d40a3c7eda33fdf561bae2e25faa74016bf3d72776"},
-    {file = "pytype-2022.1.7-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f152d42d6077fccb4a8a2d2b19b6a9222a9cab5a33213e519021b1bfa86c5953"},
-    {file = "pytype-2022.1.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2103c84d9f313217f36630f7d130bf774c1f41444b8c49aca807c36a5f177431"},
-    {file = "pytype-2022.1.7-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:6f988f54b9e1df95f9ff5e4eb008cd6bce93473eafc0ead282975cedbc8be9e4"},
-    {file = "pytype-2022.1.7-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:cd01e0d00716098fc5a6c74ecaa94652524ae746bc6a14323f8b57368bd8cf27"},
-    {file = "pytype-2022.1.7-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fd279ed6cf0a8ad0748efde1c02918dd02752c3dd93d144d3f2e6519617d3796"},
-    {file = "pytype-2022.1.7.tar.gz", hash = "sha256:c824d09dd463165ee47dd78f7ca30941353c2095361aadb57165c4211c148901"},
+    {file = "pytype-2022.1.13-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:0d11bc4e609ed8309c09fc67f3ba08bc109f0b9d4995c69d45e25068f2bdda2e"},
+    {file = "pytype-2022.1.13-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fc8e5b6830eba2849b3032d3b817e79d56f6865ee562c64c705a91e1d44a2ac2"},
+    {file = "pytype-2022.1.13-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:07bc897c79cb6a93411f392812c64ed9e2ba1d6093e46950b6f3c19c88f38265"},
+    {file = "pytype-2022.1.13-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:d3a1ee9b6ae0e65f779ba498eaa4d6bb83cf8bfac733003623a9b031cbab289f"},
+    {file = "pytype-2022.1.13-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:aadd325aa3926135e242c4e75dee4beb8e56f9d6c7d382f904201360bbb0e39d"},
+    {file = "pytype-2022.1.13-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b796e75c8421218ed90864829831d637a0c03668b61edb74e3f11b6746596b66"},
+    {file = "pytype-2022.1.13-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:a017e5d6ac24986c0e0b6ac91b3c3bff50cee08e46b9acc15e528bfadae708d3"},
+    {file = "pytype-2022.1.13-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5d814e56ed3fb05db735b0179d7354a501e7884d170d75afc180284c1d1dde91"},
+    {file = "pytype-2022.1.13-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a14aaa3bc58b29d27582ef9f2484569ea04b25363325762c4c741a2c3ddf95c3"},
+    {file = "pytype-2022.1.13.tar.gz", hash = "sha256:0ab5295f83f762eec02acd5b38b7a4e333f1d4d8dc30ecde319f137c1f0ce3b3"},
 ]
 pytz = [
     {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
@@ -3756,8 +3756,8 @@ qrcode = [
     {file = "qrcode-7.3.1.tar.gz", hash = "sha256:375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578"},
 ]
 redis = [
-    {file = "redis-4.1.0-py3-none-any.whl", hash = "sha256:e13fad67c098a33141bacde872786960e86a5c97a4255009bcd43c795fa1cc77"},
-    {file = "redis-4.1.0.tar.gz", hash = "sha256:21f0a23bce707909076e6ba2ce076cba59bff60d2ab22972e0647fdf620ffe47"},
+    {file = "redis-4.1.1-py3-none-any.whl", hash = "sha256:bc97d18938ca18d66737d0ef88584a2073069589e4026813cfba9ad6df9a9f40"},
+    {file = "redis-4.1.1.tar.gz", hash = "sha256:07420a3fbedd8e012c31d4fadac943fb81568946da202c5a5bc237774e5280a0"},
 ]
 reportlab = [
     {file = "reportlab-3.5.67-cp36-cp36m-macosx_10_10_x86_64.whl", hash = "sha256:51a2d5de2c605117cd25dfb3f51d1d14caf1cbed4ef6db582f085eeb0a0c922f"},
@@ -4014,8 +4014,8 @@ urllib3 = [
     {file = "urllib3-1.26.5.tar.gz", hash = "sha256:a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"},
 ]
 uvicorn = [
-    {file = "uvicorn-0.16.0-py3-none-any.whl", hash = "sha256:d8c839231f270adaa6d338d525e2652a0b4a5f4c2430b5c4ef6ae4d11776b0d2"},
-    {file = "uvicorn-0.16.0.tar.gz", hash = "sha256:eacb66afa65e0648fcbce5e746b135d09722231ffffc61883d4fac2b62fbea8d"},
+    {file = "uvicorn-0.17.0-py3-none-any.whl", hash = "sha256:0b89c91bb8fe84c4bded9996af13c4b8c0de799d29bffeaa0c8ad298f2be0934"},
+    {file = "uvicorn-0.17.0.tar.gz", hash = "sha256:192c2422b056a3beb512c6c260bf77a7a884204a4ae41856719c1913ead63bbb"},
 ]
 uvloop = [
     {file = "uvloop-0.15.2-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:19fa1d56c91341318ac5d417e7b61c56e9a41183946cc70c411341173de02c69"},
