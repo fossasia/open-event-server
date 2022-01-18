@@ -123,7 +123,7 @@ graphene-sqlalchemy = "2.3.0"
 flask-graphql = "2.0.1"
 graphene-sqlalchemy-filter = "1.13.0"
 fastapi = "^0.71.0"
-uvicorn = {extras = ["standard"], version = "^0.16.0"}
+uvicorn = {extras = ["standard"], version = "^0.17.0"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
