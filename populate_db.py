@@ -417,6 +417,12 @@ def populate():
         name='3CX',
         defaults={'url': 'https://www.3cx.com/'},
     )
+    get_or_create(
+        VideoChannel,
+        provider='chatmosphere',
+        name='Chatmosphere',
+        defaults={'url': 'https://www.app.chatmosphere.cc/session/'},
+    )
 
     db.session.commit()
 
