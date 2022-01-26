@@ -274,7 +274,7 @@ def calculate_order_amount(tickets, discount_code=None):
             tax = event.tax
             tax_included = tax.is_tax_included_in_price
 
-        if ticket.type == 'donation':
+        if ticket.type == 'donation' or ticket.type == 'donationRegistration':
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
                 raise UnprocessableEntityError(
@@ -283,7 +283,7 @@ def calculate_order_amount(tickets, discount_code=None):
                     f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price if ticket.type != 'free' else 0.0
+            price = ticket.price if (ticket.type != 'free' or ticket.type != 'freeRegistration') else 0.0
 
         if tax:
             if tax_included:
