@@ -421,7 +421,7 @@ def populate():
         VideoChannel,
         provider='chatmosphere',
         name='Chatmosphere',
-        defaults={'url': 'https://www.app.chatmosphere.cc/session/'},
+        defaults={'url': 'https://www.app.chatmosphere.cc/'},
     )
 
     db.session.commit()
