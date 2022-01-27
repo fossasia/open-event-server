@@ -283,7 +283,7 @@ def calculate_order_amount(tickets, discount_code=None):
                     f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price if (ticket.type != 'free' or ticket.type != 'freeRegistration') else 0.0
+            price = ticket.price if ticket.type != 'free' else 0.0
 
         if tax:
             if tax_included:
