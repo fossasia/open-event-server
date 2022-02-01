@@ -68,7 +68,7 @@ SQLAlchemy-Utils = "0.38.2"
 itsdangerous = "2.0.1"
 humanize = "3.13.1"
 celery = "5.2.3"
-redis = "4.1.1"
+redis = "4.1.2"
 apscheduler = "3.8.1"
 pillow = "9.0.0"
 gunicorn = "20.1.0"
@@ -123,7 +123,7 @@ graphene-sqlalchemy = "2.3.0"
 flask-graphql = "2.0.1"
 graphene-sqlalchemy-filter = "1.13.0"
 fastapi = "^0.73.0"
-uvicorn = {extras = ["standard"], version = "^0.17.0"}
+uvicorn = {extras = ["standard"], version = "^0.17.1"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
