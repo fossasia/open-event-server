@@ -162,7 +162,7 @@ def create_pdf_tickets_for_holder(order):
                     date=order.created_at,
                 ),
                 admin_info=admin_info,
-                order_amount=order_amount
+                order_amount=order_amount,
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
@@ -274,7 +274,7 @@ def calculate_order_amount(tickets, discount_code=None):
             tax = event.tax
             tax_included = tax.is_tax_included_in_price
 
-        if ticket.type == 'donation' or ticket.type == 'donationRegistration':
+        if ticket.type in ['donation', 'donationRegistration']:
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
                 raise UnprocessableEntityError(
