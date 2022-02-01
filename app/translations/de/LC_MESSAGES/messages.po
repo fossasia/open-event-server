@@ -6,18 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2021-11-13 18:19+0000\n"
+"PO-Revision-Date: 2022-01-11 17:33+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
+"de/>\n"
 "Language: de\n"
-"Language-Team: German <https://hosted.weblate.org/projects/open-"
-"event/server/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.10.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -444,11 +445,13 @@ msgstr "Bitte zahlen Sie innerhalb von 15 Tagen."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "Ihre Zahlung ist überfällig."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
 msgstr ""
+"Bitte bezahlen Sie diese Rechnung sofort, um eine Sperrung Ihres Kontos zu "
+"vermeiden."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
@@ -463,6 +466,9 @@ msgid ""
 "If you feel this invoice is incorrect or have any questions, you can "
 "contact our support team for assistance."
 msgstr ""
+"Wenn Sie der Meinung sind, dass diese Rechnung nicht korrekt ist, oder wenn "
+"Sie Fragen haben, können Sie sich an unser Support-Team wenden, um Hilfe zu "
+"erhalten."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
@@ -1211,6 +1217,8 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"Bestellung\n"
+"                    #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
@@ -1251,7 +1259,7 @@ msgstr "Bis: %(end_time)s"
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "Bestellinformationen"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
@@ -1260,6 +1268,8 @@ msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"Bestellung\n"
+"                                        #%(invoice_number)s"
 
 #~ msgid "Thank you for your ticket order for"
 #~ msgstr "Vielen Dank für die Ticketbestellung für"
@@ -1748,4 +1758,3 @@ msgstr ""
 #~ "Event taking place at\n"
 #~ "                            %(location)s."
 #~ msgstr ""
-
