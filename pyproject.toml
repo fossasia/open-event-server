@@ -142,7 +142,7 @@ pytype = "2022.1.31"
 pycln = "1.1.0"
 pyupgrade = "2.31.0"
 # For testing
-coverage = "6.3"
+coverage = "6.3.1"
 dredd_hooks = "0.2"
 pytest = "6.2.5"
 pytest-cov = "3.0.0"
