@@ -214,6 +214,7 @@ from app.api.stripe_authorization import (
 )
 from app.api.tax import TaxDetail, TaxList, TaxRelationship
 from app.api.ticket_fees import TicketFeeDetail, TicketFeeList
+from app.api.ticket_holders import TicketHolderList
 from app.api.ticket_tags import (
     TicketTagDetail,
     TicketTagList,
@@ -1026,6 +1027,14 @@ api.route(
     '/events/<int:id>/relationships/speaker-invites',
     '/events/<identifier>/relationships/speaker-invites',
 )
+
+# ticket holder
+
+api.route(
+    TicketHolderList,
+    'ticket_holder_list',
+    '/ticket-holder-list'
+    )
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
