@@ -1,11 +1,14 @@
+from app.models.role import Role
+from app.models.user import User
 from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.groups import GroupSchema
 
@@ -117,6 +120,16 @@ class GroupDetail(ResourceDetail):
             )
             view_kwargs['id'] = user_follow_group.group_id
 
+    def after_get_object(self, group, view_kwargs):
+        user = User.query.filter_by(id=current_user.id).one()
+        organizer_role = Role.query.filter_by(name='owner').first()
+        group_roles = UsersGroupsRoles.query.filter_by(
+        group_id=group.id, role_id=organizer_role.id, accepted=True
+        ).all()
+        print(group_roles)
+        if not is_logged_in():
+            raise ObjectNotFound({'parameter': '{id}'}, "Group: not found")
+
     def before_update_object(self, group, data, view_kwargs):
         """
         before update object method of group details
@@ -140,6 +153,7 @@ class GroupDetail(ResourceDetail):
         api.has_permission(
             'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
         ),
+        jwt_required,
     )
     schema = GroupSchema
     methods = ["GET", "PATCH", "DELETE"]
@@ -149,6 +163,7 @@ class GroupDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'before_update_object': before_update_object,
+            'after_get_object': after_get_object,
         },
     }
 
