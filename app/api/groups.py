@@ -20,6 +20,13 @@ from app.models.user_follow_group import UserFollowGroup
 from app.models.users_groups_role import UsersGroupsRoles
 
 
+def is_owner_or_organizer(group, user):
+    organizer_role = Role.query.filter_by(name='organizer').first()
+    group_roles = UsersGroupsRoles.query.filter_by(
+    group_id=group.id, role_id=organizer_role.id, accepted=True
+    ).all()
+    return user.is_staff or group.user == user or group_roles
+
 class GroupListPost(ResourceList):
     """
     Create and List Groups
@@ -122,12 +129,7 @@ class GroupDetail(ResourceDetail):
 
     def after_get_object(self, group, view_kwargs):
         user = User.query.filter_by(id=current_user.id).one()
-        organizer_role = Role.query.filter_by(name='owner').first()
-        group_roles = UsersGroupsRoles.query.filter_by(
-        group_id=group.id, role_id=organizer_role.id, accepted=True
-        ).all()
-        print(group_roles)
-        if not is_logged_in():
+        if not is_logged_in() or not is_owner_or_organizer(group, user):
             raise ObjectNotFound({'parameter': '{id}'}, "Group: not found")
 
     def before_update_object(self, group, data, view_kwargs):
