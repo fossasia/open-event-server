@@ -21,11 +21,18 @@ from app.models.users_groups_role import UsersGroupsRoles
 
 
 def is_owner_or_organizer(group, user):
+    """
+    Checks if the user is admin, owner or organizer of group
+    """
+    is_admin = user.is_staff
+    is_owner = group.user == user
+    is_organizer = False
     organizer_role = Role.query.filter_by(name='organizer').first()
-    group_roles = UsersGroupsRoles.query.filter_by(
-    group_id=group.id, role_id=organizer_role.id, accepted=True
-    ).all()
-    return user.is_staff or group.user == user or group_roles
+    if organizer_role:
+        is_organizer = bool(UsersGroupsRoles.query.filter_by(
+            group_id=group.id, role_id=organizer_role.id, accepted=True
+        ).all())
+    return is_admin or is_owner or is_organizer
 
 class GroupListPost(ResourceList):
     """
@@ -141,6 +148,10 @@ class GroupDetail(ResourceDetail):
         :return:
         """
 
+        user = User.query.filter_by(id=current_user.id).one()
+        if not is_logged_in() or not is_owner_or_organizer(group, user):
+            raise ForbiddenError({'source': 'user_id'}, "Group owner or organizer access required")
+
         for event in data.get('events', []):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
@@ -152,9 +163,6 @@ class GroupDetail(ResourceDetail):
         
 
     decorators = (
-        api.has_permission(
-            'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
-        ),
         jwt_required,
     )
     schema = GroupSchema
