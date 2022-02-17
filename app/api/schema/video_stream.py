@@ -38,6 +38,7 @@ class VideoStreamSchema(Schema):
     name = fields.Str(required=True)
     url = fields.Url(required=True)
     password = fields.Str(required=False, allow_none=True)
+    bg_img_url = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
     extra = fields.Nested(VideoStreamExtraSchema, allow_none=True)
     rooms = Relationship(

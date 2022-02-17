@@ -51,7 +51,7 @@ class Ticket(SoftDeletionModel):
     type = db.Column(db.String, nullable=False)
     quantity = db.Column(db.Integer, default=100)
     position = db.Column(db.Integer, default=1)
-    price = db.Column(db.Float, default=0)
+    price = db.Column(db.Float)
     min_price = db.Column(db.Float, default=0, nullable=False)
     max_price = db.Column(db.Float, default=0)
     is_fee_absorbed = db.Column(db.Boolean, default=False)
