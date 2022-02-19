@@ -57,7 +57,7 @@ from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
 from tests.factories.role import RoleFactory
 from tests.factories.ticket_fee import TicketFeesFactory
-from tests.factories.role_invite import RoleInviteFactory, RoleInviteFactoryBase
+from tests.factories.role_invite import RoleInviteFactory
 from tests.factories.users_events_roles import (
     UsersEventsRolesFactory,
     UsersEventsRolesSubFactory,
@@ -3492,11 +3492,7 @@ def accept_role_invite_token(transaction):
     """
     POST /role_invites/accept-invite
     """
-    with stash['app'].app_context():
-        role_invite = RoleInviteFactory()
-        db.session.add(role_invite)
-        db.session.commit()
-
+    transaction["skip"] = True
 
 @hooks.before("Role Invites > Role Invite Details > Delete Role Invite")
 def role_invite_delete(transaction):
