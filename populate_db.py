@@ -423,6 +423,12 @@ def populate():
         name='Chatmosphere',
         defaults={'url': 'https://app.chatmosphere.cc/'},
     )
+    get_or_create(
+        VideoChannel,
+        provider='libre',
+        name='Libre Work',
+        defaults={'url': 'https://2d.freiland-potsdam.de/'},
+    )
 
     db.session.commit()
 
