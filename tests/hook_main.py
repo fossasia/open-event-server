@@ -4807,7 +4807,7 @@ def follow_groupss_list_get(transaction):
         db.session.commit()
 
 
-@hooks.before("Follow Groups > Follow Groups Collection > Create a Followed Groups")
+@hooks.before("Followed Groups > Follow Groups Collection > Create a Followed Groups")
 def followed_groups_list_post(transaction):
     """
     POST /user-follow-groups
@@ -4820,10 +4820,22 @@ def followed_groups_list_post(transaction):
         db.session.commit()
 
 
-@hooks.before("Follow Groups > Followed Groups Detail > Get Details")
+@hooks.before("Followed Groups > Followed Groups Detail > Get Details")
 def follow_group_details_get(transaction):
     """
     GET /user-follow-groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_follow_group = UserFollowGroupFactory()
+        db.session.add(user_follow_group)
+        db.session.commit()
+
+@hooks.before("Followed Groups > Followed Users Collection List > Followed Users Collection List")
+def list_group_followers(transaction):
+    """
+    GET /groups/1/followers
     :param transaction:
     :return:
     """
