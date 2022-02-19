@@ -3492,7 +3492,7 @@ def accept_role_invite_token(transaction):
     """
     POST /role_invites/accept-invite
     """
-    transaction["skip"] = True
+    transaction['skip'] = True
 
 @hooks.before("Role Invites > Role Invite Details > Delete Role Invite")
 def role_invite_delete(transaction):
