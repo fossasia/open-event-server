@@ -29,10 +29,13 @@ def is_owner_or_organizer(group, user):
     is_organizer = False
     organizer_role = Role.query.filter_by(name='organizer').first()
     if organizer_role:
-        is_organizer = bool(UsersGroupsRoles.query.filter_by(
-            group_id=group.id, role_id=organizer_role.id, accepted=True
-        ).all())
+        is_organizer = bool(
+            UsersGroupsRoles.query.filter_by(
+                group_id=group.id, role_id=organizer_role.id, accepted=True
+            ).all()
+        )
     return is_admin or is_owner or is_organizer
+
 
 class GroupListPost(ResourceList):
     """
@@ -150,20 +153,18 @@ class GroupDetail(ResourceDetail):
 
         user = User.query.filter_by(id=current_user.id).one()
         if not is_logged_in() or not is_owner_or_organizer(group, user):
-            raise ForbiddenError({'source': 'user_id'}, "Group owner or organizer access required")
+            raise ForbiddenError(
+                {'source': 'user_id'}, "Group owner or organizer access required"
+            )
 
         for event in data.get('events', []):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
 
-        if (
-            data.get('banner_url')
-        ):
+        if data.get('banner_url'):
             start_image_resizing_tasks(group, data['banner_url'])
-        
-    decorators = (
-        jwt_required,
-    )
+
+    decorators = (jwt_required,)
     schema = GroupSchema
     methods = ["GET", "PATCH", "DELETE"]
     data_layer = {
