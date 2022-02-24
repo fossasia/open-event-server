@@ -161,7 +161,6 @@ class GroupDetail(ResourceDetail):
         ):
             start_image_resizing_tasks(group, data['banner_url'])
         
-
     decorators = (
         jwt_required,
     )
