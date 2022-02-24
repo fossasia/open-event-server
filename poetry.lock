@@ -1705,7 +1705,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pycln"
-version = "1.2.0"
+version = "1.2.1"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
@@ -2631,7 +2631,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "8d59be13742a02fa75f060851989ac60f9882619c528d17a40bf6caccc77b21b"
+content-hash = "c04116805f7fa6894e28c4e2511d5e67412d39a26f0fe789ab95162844d46081"
 
 [metadata.files]
 aiohttp = [
@@ -3580,8 +3580,8 @@ py = [
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
 ]
 pycln = [
-    {file = "pycln-1.2.0-py3-none-any.whl", hash = "sha256:250b37ef9fbe11a72dc6f1ba861cbddae53478763ad0406e3c28ab3e7eecfec3"},
-    {file = "pycln-1.2.0.tar.gz", hash = "sha256:c66feb73647a09adbbdd93cf1c94e88c15871c593921d8513120d6b694621d25"},
+    {file = "pycln-1.2.1-py3-none-any.whl", hash = "sha256:695fb1747242e7a4963bbdce2abb99fce1f6f87d79d045b741d28d5cf4e1a86d"},
+    {file = "pycln-1.2.1.tar.gz", hash = "sha256:a58676037148cd16ce2be4e457d85b7821d313c9c886e6ef9369f690214c91cd"},
 ]
 pycountry = [
     {file = "pycountry-22.1.10.tar.gz", hash = "sha256:b9a6d9cdbf53f81ccdf73f6f5de01b0d8493cab2213a230af3e34458de85ea32"},
