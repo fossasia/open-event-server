@@ -77,7 +77,7 @@ python-versions = "*"
 
 [[package]]
 name = "apscheduler"
-version = "3.8.1"
+version = "3.9.0.post1"
 description = "In-process task scheduler with Cron-like capabilities"
 category = "main"
 optional = false
@@ -96,7 +96,7 @@ mongodb = ["pymongo (>=3.0)"]
 redis = ["redis (>=3.0)"]
 rethinkdb = ["rethinkdb (>=2.4.0)"]
 sqlalchemy = ["sqlalchemy (>=0.8)"]
-testing = ["pytest (<6)", "pytest-cov", "pytest-tornado5", "mock", "pytest-asyncio (<0.6)", "pytest-asyncio"]
+testing = ["pytest", "pytest-cov", "pytest-tornado5", "mock", "pytest-asyncio (<0.6)", "pytest-asyncio"]
 tornado = ["tornado (>=4.3)"]
 twisted = ["twisted"]
 zookeeper = ["kazoo"]
@@ -2631,7 +2631,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "c04116805f7fa6894e28c4e2511d5e67412d39a26f0fe789ab95162844d46081"
+content-hash = "7b255d83639cad45b52c51c7ea268e7b28220b96933103e145df6a9bbee959d9"
 
 [metadata.files]
 aiohttp = [
@@ -2694,8 +2694,8 @@ appdirs = [
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
 ]
 apscheduler = [
-    {file = "APScheduler-3.8.1-py2.py3-none-any.whl", hash = "sha256:c22cb14b411a31435eb2c530dfbbec948ac63015b517087c7978adb61b574865"},
-    {file = "APScheduler-3.8.1.tar.gz", hash = "sha256:5cf344ebcfbdaa48ae178c029c055cec7bc7a4a47c21e315e4d1f08bd35f2355"},
+    {file = "APScheduler-3.9.0.post1-py2.py3-none-any.whl", hash = "sha256:f8a3e6e4d178de40fdbd5a3eefcc217588fc7f42f443e2335bb2dc29daf99357"},
+    {file = "APScheduler-3.9.0.post1.tar.gz", hash = "sha256:236dbf7244200ffc79c6c0b9ff7d2ed10e7e985f37f48d4a23f4142f4967dcb5"},
 ]
 arabic-reshaper = [
     {file = "arabic_reshaper-2.1.3-py2-none-any.whl", hash = "sha256:43f58136dbbfecab54ce0434e556c75689e46b0f11010578b893f72c504cd27b"},
