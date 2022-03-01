@@ -127,7 +127,7 @@ uvicorn = {extras = ["standard"], version = "^0.17.5"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
-python-slugify = "^6.1.0"
+python-slugify = "^6.1.1"
 cryptography = { version = "*", source = "fossasia" }
 Flask-Migrate = "2.7.0"
 
