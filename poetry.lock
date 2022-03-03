@@ -2286,7 +2286,7 @@ full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 
 [[package]]
 name = "stripe"
-version = "2.66.0"
+version = "2.67.0"
 description = "Python bindings for the Stripe API"
 category = "main"
 optional = false
@@ -2631,7 +2631,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "f4c4f3e473eabf594095ab70a7134ec425ff3ddaa34a141b9fcab747ecdc4852"
+content-hash = "31edc6017cb039cb86db0c0d4be947d8b2faf1b67c67d03fc729845ea184d4a0"
 
 [metadata.files]
 aiohttp = [
@@ -3981,8 +3981,8 @@ starlette = [
     {file = "starlette-0.17.1.tar.gz", hash = "sha256:57eab3cc975a28af62f6faec94d355a410634940f10b30d68d31cb5ec1b44ae8"},
 ]
 stripe = [
-    {file = "stripe-2.66.0-py2.py3-none-any.whl", hash = "sha256:283f6f80d16cc5b473116697e0f4569df46b44826d1c78197880bce6dc066d0d"},
-    {file = "stripe-2.66.0.tar.gz", hash = "sha256:77c6032230f7714b1a1b459074f08c60d60c229b9c3beac372719063e3d1409c"},
+    {file = "stripe-2.67.0-py2.py3-none-any.whl", hash = "sha256:7efaee187a0615ce9361b6009122f89488a874c3175b5262dd9741a49088db18"},
+    {file = "stripe-2.67.0.tar.gz", hash = "sha256:718b93d6a18105243bce0c9b48e518f72f1f083d27f07e07b8bdb3a541fe3835"},
 ]
 tabulate = [
     {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
