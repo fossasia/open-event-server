@@ -1,11 +1,14 @@
+from app.models.role import Role
+from app.models.user import User
 from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ForbiddenError
-from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permission_manager import has_access, is_logged_in
 from app.api.helpers.permissions import jwt_required
 from app.api.schema.groups import GroupSchema
 
@@ -15,6 +18,23 @@ from app.models.event import Event
 from app.models.group import Group
 from app.models.user_follow_group import UserFollowGroup
 from app.models.users_groups_role import UsersGroupsRoles
+
+
+def is_owner_or_organizer(group, user):
+    """
+    Checks if the user is admin, owner or organizer of group
+    """
+    is_admin = user.is_staff
+    is_owner = group.user == user
+    is_organizer = False
+    organizer_role = Role.query.filter_by(name='organizer').first()
+    if organizer_role:
+        is_organizer = bool(
+            UsersGroupsRoles.query.filter_by(
+                group_id=group.id, role_id=organizer_role.id, accepted=True
+            ).all()
+        )
+    return is_admin or is_owner or is_organizer
 
 
 class GroupListPost(ResourceList):
@@ -117,6 +137,11 @@ class GroupDetail(ResourceDetail):
             )
             view_kwargs['id'] = user_follow_group.group_id
 
+    def after_get_object(self, group, view_kwargs):
+        user = User.query.filter_by(id=current_user.id).one()
+        if not is_logged_in() or not is_owner_or_organizer(group, user):
+            raise ObjectNotFound({'parameter': '{id}'}, "Group: not found")
+
     def before_update_object(self, group, data, view_kwargs):
         """
         before update object method of group details
@@ -126,21 +151,20 @@ class GroupDetail(ResourceDetail):
         :return:
         """
 
+        user = User.query.filter_by(id=current_user.id).one()
+        if not is_logged_in() or not is_owner_or_organizer(group, user):
+            raise ForbiddenError(
+                {'source': 'user_id'}, "Group owner or organizer access required"
+            )
+
         for event in data.get('events', []):
             if not has_access('is_owner', event_id=event):
                 raise ForbiddenError({'source': ''}, "Event owner access required")
 
-        if (
-            data.get('banner_url')
-        ):
+        if data.get('banner_url'):
             start_image_resizing_tasks(group, data['banner_url'])
-        
 
-    decorators = (
-        api.has_permission(
-            'is_user_itself', methods="PATCH,DELETE", fetch="user_id", model=Group
-        ),
-    )
+    decorators = (jwt_required,)
     schema = GroupSchema
     methods = ["GET", "PATCH", "DELETE"]
     data_layer = {
@@ -149,6 +173,7 @@ class GroupDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'before_update_object': before_update_object,
+            'after_get_object': after_get_object,
         },
     }
 
