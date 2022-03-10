@@ -242,7 +242,7 @@ class OrdersList(ResourceList):
             user = safe_query_kwargs(User, view_kwargs, 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenError({'source': ''}, 'Access Forbidden')
-            query_ = query_.join(TicketHolder).filter(TicketHolder.email == user.email)
+            query_ = query_.filter(Order.user_id == user.id)
         else:
             # orders under an event
             query_ = event_query(query_, view_kwargs, restrict=True)
