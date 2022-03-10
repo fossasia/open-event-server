@@ -3,7 +3,7 @@ All the System mails
 Register a mail here before using it
 """
 
-from flask_babel import lazy_gettext as _
+from flask_babel import _
 
 
 class MailType:
