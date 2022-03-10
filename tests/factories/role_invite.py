@@ -12,7 +12,7 @@ class RoleInviteFactoryBase(BaseFactory):
         model = RoleInvite
 
     email = common.email_
-    hash = common.secret_
+    hash = common.string_
     status = common.string_
     role_name = common.string_
 
