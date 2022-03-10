@@ -417,18 +417,6 @@ def populate():
         name='3CX',
         defaults={'url': 'https://www.3cx.com/'},
     )
-    get_or_create(
-        VideoChannel,
-        provider='chatmosphere',
-        name='Chatmosphere',
-        defaults={'url': 'https://app.chatmosphere.cc/'},
-    )
-    get_or_create(
-        VideoChannel,
-        provider='libre',
-        name='Libre Work',
-        defaults={'url': 'https://2d.freiland-potsdam.de/'},
-    )
 
     db.session.commit()
 
