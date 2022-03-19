@@ -4,7 +4,7 @@ import pytz
 from app.api.helpers.utilities import remove_html_tags
 from flask import jsonify
 from flask_jwt_extended import current_user
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, Timezone
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
@@ -32,6 +32,11 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
         event_component.add('organizer', remove_html_tags(event.owner_description))
 
     cal.add_component(event_component)
+
+    timezone = Timezone()
+    timezone.add('TZID', event.timezone)
+
+    cal.add_component(timezone)
 
     if include_sessions:
         sessions_query = (
