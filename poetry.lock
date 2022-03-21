@@ -779,20 +779,18 @@ Flask = "*"
 
 [[package]]
 name = "flask-celeryext"
-version = "0.3.4"
-description = "Flask-CeleryExt is a simple integration layer between Celery and Flask."
+version = "0.4.1"
+description = "\"Flask-CeleryExt is a simple integration layer between Celery and Flask.\""
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
-celery = {version = ">=4.3", markers = "python_version >= \"3.7\""}
-Flask = ">=0.10"
+celery = ">=5.1.0"
+Flask = ">=1.1"
 
 [package.extras]
-all = ["Sphinx (>=1.4.2)", "check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.3.4)", "pydocstyle (>=1.0.0)", "pytest-cache (>=1.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)", "pytest-mock (>=1.6.0)"]
-docs = ["Sphinx (>=1.4.2)"]
-tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.3.4)", "pydocstyle (>=1.0.0)", "pytest-cache (>=1.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest (>=2.8.0)", "pytest-mock (>=1.6.0)"]
+tests = ["check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-pycodestyle (>=2.2.0)", "pytest-pydocstyle (>=2.2.0)", "pytest (>=6,<7)", "redis (>=4.1.4)", "Sphinx (>=4.2.0)"]
 
 [[package]]
 name = "flask-cors"
@@ -2678,7 +2676,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "71ceffde3b9bae8d804777e8759fed39c230d0fdf0e0cf69c408bb75019d3f61"
+content-hash = "2401dd7401f3ef49b00a3bd8c94eb3b0b10044ae36df61c94cd290a305197109"
 
 [metadata.files]
 aiohttp = [
@@ -3054,8 +3052,8 @@ flask-caching = [
     {file = "Flask_Caching-1.10.1-py3-none-any.whl", hash = "sha256:bcda8acbc7508e31e50f63e9b1ab83185b446f6b6318bd9dd1d45626fba2e903"},
 ]
 flask-celeryext = [
-    {file = "Flask-CeleryExt-0.3.4.tar.gz", hash = "sha256:47d5d18daebad300b215faca0d1c6da24625f333020482e27591634c05792c98"},
-    {file = "Flask_CeleryExt-0.3.4-py2.py3-none-any.whl", hash = "sha256:1c84b35462d41d1317800d256b2ce30031b7d3d20dd8dc680ce4f4cc88029867"},
+    {file = "Flask-CeleryExt-0.4.1.tar.gz", hash = "sha256:8f37c5b7afdbc3f4135c41d4b3dac3498faf4dbd681b19ffd91bc2f0a63d1d2b"},
+    {file = "Flask_CeleryExt-0.4.1-py2.py3-none-any.whl", hash = "sha256:aaa95aa4a2e5686a8eca2b53e5bbdff454613990574bcd98892e9a908d5adee6"},
 ]
 flask-cors = [
     {file = "Flask-Cors-3.0.10.tar.gz", hash = "sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de"},
