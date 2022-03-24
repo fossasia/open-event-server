@@ -65,7 +65,7 @@ icalendar = "4.0.9"
 requests = {version = "2.27.1", extras = ["security"]}
 psycopg2-binary = "2.9.3"
 SQLAlchemy-Utils = "0.38.2"
-itsdangerous = "2.0.1"
+itsdangerous = "2.1.2"
 humanize = "4.0.0"
 celery = "5.2.3"
 redis = "4.1.4"
