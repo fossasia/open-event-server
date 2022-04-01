@@ -62,6 +62,7 @@ class Event(SoftDeletionModel):
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
+    public_stream_link = db.Column(db.String)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
