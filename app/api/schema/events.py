@@ -57,6 +57,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     logo_url = fields.Url(allow_none=True)
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
+    public_stream_link = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
     after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
