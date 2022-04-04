@@ -1,3 +1,4 @@
+from email.policy import default
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
@@ -58,6 +59,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
     public_stream_link = fields.Str(allow_none=True)
+    stream_loop = fields.Boolean(default=False)
+    stream_autoplay = fields.Boolean(default=False)
     description = fields.Str(allow_none=True)
     after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
