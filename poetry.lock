@@ -2010,7 +2010,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2022.2.8"
+version = "2022.4.6"
 description = "Python type inferencer"
 category = "dev"
 optional = false
@@ -2709,7 +2709,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "694d0e12a5c4b960e0ecde1bc8f79cae6edb9baecd20eeb7081be740295ec1fe"
+content-hash = "ff22d005208eaa58efeaff8b9e6164f5baf2416d3eed2460d7e332b951e64a68"
 
 [metadata.files]
 aiohttp = [
@@ -3982,16 +3982,16 @@ python-slugify = [
     {file = "python_slugify-6.1.1-py2.py3-none-any.whl", hash = "sha256:8c0016b2d74503eb64761821612d58fcfc729493634b1eb0575d8f5b4aa1fbcf"},
 ]
 pytype = [
-    {file = "pytype-2022.2.8-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:42c29d26dd445ef6cf6cec5cd826c8de597cade383e8cd9714ddbea2a37a6bca"},
-    {file = "pytype-2022.2.8-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0e8fd518c3438d6f3b0c5593a9b9832918987758491d217d0d195cdc033efb6c"},
-    {file = "pytype-2022.2.8-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3d7380e9cc566fdeed804435cb0eceac08f63a75268a4d8fbfeef2090824923e"},
-    {file = "pytype-2022.2.8-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:e25b6114d616edd5b9033f5a04e22b5a1ded881fc3b0995071199db6a869a2c5"},
-    {file = "pytype-2022.2.8-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e5de734792c1b2a57a38a158044f6c48ce3288d6ff722f0033939058d8eecba0"},
-    {file = "pytype-2022.2.8-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dedc2f7288732d0186ccf52cae4b6a992d03e6ff79d8f592d10705cf715d7d5d"},
-    {file = "pytype-2022.2.8-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:af788724101945b3256f6fa344acaffdf63172a52c88acfcef850b06b68881a4"},
-    {file = "pytype-2022.2.8-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:484332c17634385a24397bc86927ab57196ce52b6f6ff287250be19bcde4ac1a"},
-    {file = "pytype-2022.2.8-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e65659d00e7e10b1aec729f916e85898dd7e57e2e8d311c7ad093676c8b596f1"},
-    {file = "pytype-2022.2.8.tar.gz", hash = "sha256:14b864a6a08565db8e90476a8e05ae18c61121c8064a623e27c713c272faae54"},
+    {file = "pytype-2022.4.6-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:616ad4c574c9764a29eb5ac479cc2f6b32b54220a0b48464c624e2843edf823d"},
+    {file = "pytype-2022.4.6-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:641e8e18981df3ef004599be74e3e7fe4973aa134511f5041ac0715074bb0efd"},
+    {file = "pytype-2022.4.6-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:398f5b93ffbfdef816dd0bf5d574d48d01251d3194d01cb880c8683ca9e017f9"},
+    {file = "pytype-2022.4.6-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:055922903c96257cda7b939f69969838dd179a703cec34b0fc3ae8d64a8e9ab4"},
+    {file = "pytype-2022.4.6-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0a714202c7f10e521ed8f4408813a8720463efc160df7957e3937dc599f7a2a3"},
+    {file = "pytype-2022.4.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3c32f2b01cbb5f3e9f2577785dbfa8195a11d23eadacf218e3530ee8321b38a5"},
+    {file = "pytype-2022.4.6-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:a995072e32aa8c905fc5d84a26c863ff486db7ec82d9a1e8e0db882cef9055a0"},
+    {file = "pytype-2022.4.6-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:74c56d0b10dcf1ecfcf30312fcb2baf1fa19b5d4aed6de71c65042a4b7bbbb0b"},
+    {file = "pytype-2022.4.6-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:51e2a316dc2aa767af370d8e21ae7ca34fa12cd55c58a54c1b2d64877cef5d80"},
+    {file = "pytype-2022.4.6.tar.gz", hash = "sha256:00dd7be3b67a6e04b99189c2f32d0e2eb24549f7b5ab251003b4e9f0a56a5725"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
