@@ -377,8 +377,9 @@ def on_order_completed(order):
     create_pdf_tickets_for_holder(order)
 
     # send email and notifications.
-    send_email_to_attendees(order)
-    notify_ticket_purchase_attendee(order)
+    if not order.isScript:
+        send_email_to_attendees(order)
+        notify_ticket_purchase_attendee(order)
 
     if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
         order.completed_at = datetime.utcnow()

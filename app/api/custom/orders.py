@@ -105,6 +105,8 @@ def create_order():
         return make_response(jsonify(errors), 422)
 
     tickets_dict = data['tickets']
+
+    isScript = request.get_json()['script']
     order_amount = calculate_order_amount(tickets_dict, data.get('discount_code'))
     ticket_ids = {ticket['id'] for ticket in tickets_dict}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets_dict}
@@ -146,6 +148,7 @@ def create_order():
         event=event,
         discount_code_id=data.get('discount_code'),
         ticket_holders=attendees,
+        isScript=isScript,
     )
     db.session.commit()
     order.populate_and_save()

@@ -88,6 +88,7 @@ class Order(db.Model):
     cancel_note = db.Column(db.String, nullable=True)
     order_notes = db.Column(db.String)
     tickets_pdf_url = db.Column(db.String)
+    isScript = db.Column(db.String, nullable=True)
 
     discount_code_id = db.Column(
         db.Integer,

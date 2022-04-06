@@ -87,8 +87,8 @@ class UserList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
-        send_user_register_email(user)
+        print(data)
+        # send_user_register_email(user)
         # TODO Handle in a celery task
         # if data.get('original_image_url'):
         #     try:

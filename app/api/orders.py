@@ -456,7 +456,7 @@ class OrderDetail(ResourceDetail):
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif order.status == 'completed' or order.status == 'placed':
+        elif not order.isScript and order.status == 'completed' or order.status == 'placed':
             on_order_completed(order)
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
