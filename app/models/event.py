@@ -1,3 +1,4 @@
+from email.policy import default
 import re
 from argparse import Namespace
 from datetime import datetime
@@ -63,6 +64,8 @@ class Event(SoftDeletionModel):
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
     public_stream_link = db.Column(db.String)
+    stream_loop = db.Column(db.Boolean, default = False)
+    stream_autoplay = db.Column(db.Boolean, default=False)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)

@@ -137,11 +137,6 @@ class GroupDetail(ResourceDetail):
             )
             view_kwargs['id'] = user_follow_group.group_id
 
-    def after_get_object(self, group, view_kwargs):
-        user = User.query.filter_by(id=current_user.id).one()
-        if not is_logged_in() or not is_owner_or_organizer(group, user):
-            raise ObjectNotFound({'parameter': '{id}'}, "Group: not found")
-
     def before_update_object(self, group, data, view_kwargs):
         """
         before update object method of group details
@@ -173,7 +168,6 @@ class GroupDetail(ResourceDetail):
         'methods': {
             'before_get_object': before_get_object,
             'before_update_object': before_update_object,
-            'after_get_object': after_get_object,
         },
     }
 
