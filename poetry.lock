@@ -2071,7 +2071,7 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "redis"
-version = "4.2.1"
+version = "4.2.2"
 description = "Python client for Redis database and key-value store"
 category = "main"
 optional = false
@@ -2709,7 +2709,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "53d4e4eac27ca17727ee52d1a385347e37f480f069f2473c1d7bf0be1fd74860"
+content-hash = "c136dc43c2875f9e495a06792542dcb93cc23007097173a41742d8e6e8c8be25"
 
 [metadata.files]
 aiohttp = [
@@ -4036,8 +4036,8 @@ qrcode = [
     {file = "qrcode-7.3.1.tar.gz", hash = "sha256:375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578"},
 ]
 redis = [
-    {file = "redis-4.2.1-py3-none-any.whl", hash = "sha256:69d05fac17bf3f43937afbb775c536eb516bd21355a4f17d59a966f4a531ce71"},
-    {file = "redis-4.2.1.tar.gz", hash = "sha256:fe45513881229dbee610620b9e0817b1f48c47ba635870320fd44a712204bbdd"},
+    {file = "redis-4.2.2-py3-none-any.whl", hash = "sha256:4e95f4ec5f49e636efcf20061a5a9110c20852f607cfca6865c07aaa8a739ee2"},
+    {file = "redis-4.2.2.tar.gz", hash = "sha256:0107dc8e98a4f1d1d4aa00100e044287f77121a1e6d2085545c4b7fa94a7a27f"},
 ]
 reportlab = [
     {file = "reportlab-3.5.67-cp36-cp36m-macosx_10_10_x86_64.whl", hash = "sha256:51a2d5de2c605117cd25dfb3f51d1d14caf1cbed4ef6db582f085eeb0a0c922f"},
