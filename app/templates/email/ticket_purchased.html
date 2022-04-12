@@ -21,7 +21,7 @@
                                     <a href="https://calendar.yahoo.com/?v=60&title={{ order.event.name }}&st={{ order.event.starts_at.strftime('%Y%m%dT%H%M') }}&et={{ order.event.ends_at.strftime('%Y%m%dT%H%M') }}&desc={{ order.event.description }}&in_loc={{ order.event.normalized_location }}">{{ _('Yahoo') }}</a> &bull;
                                     <a href="https://outlook.live.com/calendar/0/deeplink/compose?subject={{ order.event.name }}&startdt={{ order.event.starts_at.strftime('%Y-%m-%dT%H:%M') }}&enddt={{ order.event.ends_at.strftime('%Y-%m-%dT%H:%M') }}&body={{ order.event.description }}&location={{ order.event.normalized_location }}">{{ _('Outlook') }}</a>
 <br/>
-{% if order.event.after_order_message %}
+{% if order.event.after_order_message | strip_tags != '' %}
     <br/>{{ _('Below you find a message from the organizer') }}:
     <br/>
     <div style="white-space: pre-line;">
