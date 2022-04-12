@@ -283,7 +283,7 @@ def calculate_order_amount(tickets, discount_code=None):
                     f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price if ticket.type != 'free' else 0.0
+            price = ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
 
         if tax:
             if tax_included:
@@ -291,7 +291,7 @@ def calculate_order_amount(tickets, discount_code=None):
             else:
                 ticket_tax = price * tax.rate / 100
 
-        if discount_code and ticket.type != 'free':
+        if discount_code and ticket.type not in ['free', 'freeRegistration']:
             code = (
                 DiscountCode.query.with_parent(ticket)
                 .filter_by(id=discount_code.id)
