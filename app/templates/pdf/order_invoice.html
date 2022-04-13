@@ -170,8 +170,9 @@
   <div id="logo">
     {% if admin_info.admin_billing_logo %}
     <img src="{{admin_info.admin_billing_logo}}" alt="organization logo" /><br>
-    {% endif %}
+    {% else %}
     {{ admin_info.app_name }}
+    {% endif %}
   </div>
   <header class="clearfix">
     <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
