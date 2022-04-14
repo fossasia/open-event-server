@@ -72,7 +72,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
                 else ""
             )
             session_link_heading = (
-                " Join using link: " + session_video_url + "<br/>"
+                " Join using link: " + session_video_url + " "
                 if session_video_url
                 else ""
             )
@@ -80,9 +80,9 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
                 " "
                 + "Room: "
                 + session.microlocation.name
-                + "<br/>"
+                + " "
                 + session_link_heading
-                + " <br/> "
+                + " "
                 + session.short_abstract
             )
             session_component = Event()
