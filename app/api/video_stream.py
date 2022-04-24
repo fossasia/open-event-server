@@ -79,7 +79,7 @@ def join_stream(stream_id: int):
             'Join action is not applicable on this stream provider',
         )
 
-    options = stream.extra.get('bbb_options') or default_options
+    options = stream.extra.get('bbb_options') or stream.extra.get('jitsi_options') or default_options
 
     params = dict(
         name=stream.name,
