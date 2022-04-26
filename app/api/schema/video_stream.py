@@ -21,10 +21,16 @@ class VideoStreamExtraOptionsSchema(JsonSchema):
     endCurrentMeeting = fields.Boolean(default=False)
 
 
+class VideoStreamJitsiOptionsSchema(JsonSchema):
+    muteOnStart = fields.Boolean(default=False)
+    hideCamOnStart = fields.Boolean(default=False)
+
+
 class VideoStreamExtraSchema(JsonSchema):
     autoplay = fields.Boolean(default=True)
     loop = fields.Boolean(default=False)
     bbb_options = fields.Nested(VideoStreamExtraOptionsSchema, allow_none=True)
+    jitsi_options = fields.Nested(VideoStreamJitsiOptionsSchema, allow_none=True)
 
 
 class VideoStreamSchema(Schema):

@@ -79,7 +79,11 @@ def join_stream(stream_id: int):
             'Join action is not applicable on this stream provider',
         )
 
-    options = stream.extra.get('bbb_options') or default_options
+    options = (
+        stream.extra.get('bbb_options')
+        or stream.extra.get('jitsi_options')
+        or default_options
+    )
 
     params = dict(
         name=stream.name,
@@ -287,7 +291,7 @@ class VideoStreamDetail(ResourceDetail):
         if not channel_id:
             return
         channel = VideoChannel.query.get(channel_id)
-        if channel.provider not in ['youtube', 'vimeo', 'bbb']:
+        if channel.provider not in ['youtube', 'vimeo', 'bbb', 'jitsi']:
             del data['extra']
         else:
             data['extra'] = {**(obj.extra or {}), **(data.get('extra') or {})}
