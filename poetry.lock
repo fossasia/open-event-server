@@ -1996,7 +1996,7 @@ python-versions = "*"
 
 [[package]]
 name = "python-slugify"
-version = "6.1.1"
+version = "6.1.2"
 description = "A Python slugify application that also handles Unicode"
 category = "main"
 optional = false
@@ -2709,7 +2709,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "5ce1b2e2e15331864bcec438d69ab9d861ece196553386df52078ac7919a46e5"
+content-hash = "b29bf5af63eb3240086a5f196eb5923a0c504ee6ccfa721dde0653b107161f50"
 
 [metadata.files]
 aiohttp = [
@@ -3978,8 +3978,8 @@ python-pentabarf-xml = [
     {file = "python-pentabarf-xml-0.20.tar.gz", hash = "sha256:32f415ea60aed49c0ff541482e17d7b9e995cce8d42050b3dfe69d22cd59810d"},
 ]
 python-slugify = [
-    {file = "python-slugify-6.1.1.tar.gz", hash = "sha256:00003397f4e31414e922ce567b3a4da28cf1436a53d332c9aeeb51c7d8c469fd"},
-    {file = "python_slugify-6.1.1-py2.py3-none-any.whl", hash = "sha256:8c0016b2d74503eb64761821612d58fcfc729493634b1eb0575d8f5b4aa1fbcf"},
+    {file = "python-slugify-6.1.2.tar.gz", hash = "sha256:272d106cb31ab99b3496ba085e3fea0e9e76dcde967b5e9992500d1f785ce4e1"},
+    {file = "python_slugify-6.1.2-py2.py3-none-any.whl", hash = "sha256:7b2c274c308b62f4269a9ba701aa69a797e9bca41aeee5b3a9e79e36b6656927"},
 ]
 pytype = [
     {file = "pytype-2022.2.8-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:42c29d26dd445ef6cf6cec5cd826c8de597cade383e8cd9714ddbea2a37a6bca"},
