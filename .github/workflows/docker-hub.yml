@@ -7,6 +7,9 @@ on:
       - development
       - master
 
+permissions:
+  contents: read
+
 jobs:
   docker:
     if: ${{ github.repository_owner == 'fossasia' }}
