@@ -384,13 +384,13 @@ class ChatmosphereDetail(ResourceDetail):
                 VideoStream, view_kwargs, 'event_id', 'event_id'
             )
             view_kwargs['id'] = video_stream.id
-    
+
     def after_get_object(self, stream, view_kwargs):
         if stream and stream.channel.provider != 'chatmosphere':
             raise ObjectNotFound(
                 {'parameter': 'id'}, "Chatmosphere stream not created."
             )
-    
+
     schema = ChatmosphereSchema
     data_layer = {
         'session': db.session,
