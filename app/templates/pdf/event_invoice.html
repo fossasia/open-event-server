@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Invoice {{ invoice.identifier }} for Event {{ event.identifier }}</title>
+    <title>Order Confirmation {{ invoice.identifier }} for Event {{ event.identifier }}</title>
     <style type="text/css">
         .clearfix:after {
           content: "";
@@ -151,7 +151,7 @@
       {% endif %}
     </div>
     <header class="clearfix">
-      <h1>INVOICE {{ invoice.identifier }}</h1>
+      <h1>Order Confirmation {{ invoice.identifier }}</h1>
       <div id="company" class="clearfix">
         <div>{{ admin_info.admin_company or '' }}</div>
         <div>{{ admin_info.admin_billing_contact_name or '' }}</div>
