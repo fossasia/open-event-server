@@ -876,7 +876,7 @@ six = ">=1.4.1"
 
 [[package]]
 name = "flask-login"
-version = "0.6.0"
+version = "0.6.1"
 description = "User authentication and session management for Flask."
 category = "main"
 optional = false
@@ -2709,7 +2709,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "9d307ff764f9435beaa8345aa43024131b607b22e94adb0ab2ec40b6a12dc2da"
+content-hash = "76145cc2499a5647148e584f35a48b979e2628973ae436eb2975e27ce56d51d6"
 
 [metadata.files]
 aiohttp = [
@@ -3146,8 +3146,8 @@ flask-limiter = [
     {file = "Flask_Limiter-1.4-py3.7.egg", hash = "sha256:055a388a89f4d5768c64025443f1f41e3babcbbbf315c728413c27b4975af239"},
 ]
 flask-login = [
-    {file = "Flask-Login-0.6.0.tar.gz", hash = "sha256:aa84fcfb4c3cf09ca58c08e816b7bce73f1349ba1cf13d00d8dffc5872d5fcf6"},
-    {file = "Flask_Login-0.6.0-py3-none-any.whl", hash = "sha256:5cb01ce4dc253967b6ac722a11e46de83b6272ef7a19cc7b5725ae636916d04d"},
+    {file = "Flask-Login-0.6.1.tar.gz", hash = "sha256:1306d474a270a036d6fd14f45640c4d77355e4f1c67ca4331b372d3448997b8c"},
+    {file = "Flask_Login-0.6.1-py3-none-any.whl", hash = "sha256:b9a4287a2d0067a7a482a23e40075e0d670f371974633fe890222dece4e02a74"},
 ]
 flask-migrate = [
     {file = "Flask-Migrate-2.7.0.tar.gz", hash = "sha256:ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38"},
