@@ -876,7 +876,7 @@ six = ">=1.4.1"
 
 [[package]]
 name = "flask-login"
-version = "0.6.0"
+version = "0.6.1"
 description = "User authentication and session management for Flask."
 category = "main"
 optional = false
@@ -1745,16 +1745,16 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pycln"
-version = "1.3.1"
+version = "1.3.2"
 description = "A formatter for finding and removing unused import statements."
 category = "dev"
 optional = false
 python-versions = ">=3.6.2,<4"
 
 [package.dependencies]
-libcst = ">=0.3.10,<0.4.0"
+libcst = ">=0.3.10,<0.5.0"
 pathspec = ">=0.9.0,<0.10.0"
-pyyaml = ">=5.3.1,<6.0.0"
+pyyaml = ">=5.3.1,<7.0.0"
 toml = ">=0.10.1,<0.11.0"
 typer = ">=0.4.1,<0.5.0"
 
@@ -2334,7 +2334,7 @@ full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 
 [[package]]
 name = "stripe"
-version = "2.74.0"
+version = "2.75.0"
 description = "Python bindings for the Stripe API"
 category = "main"
 optional = false
@@ -2709,7 +2709,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "b29bf5af63eb3240086a5f196eb5923a0c504ee6ccfa721dde0653b107161f50"
+content-hash = "76145cc2499a5647148e584f35a48b979e2628973ae436eb2975e27ce56d51d6"
 
 [metadata.files]
 aiohttp = [
@@ -3146,8 +3146,8 @@ flask-limiter = [
     {file = "Flask_Limiter-1.4-py3.7.egg", hash = "sha256:055a388a89f4d5768c64025443f1f41e3babcbbbf315c728413c27b4975af239"},
 ]
 flask-login = [
-    {file = "Flask-Login-0.6.0.tar.gz", hash = "sha256:aa84fcfb4c3cf09ca58c08e816b7bce73f1349ba1cf13d00d8dffc5872d5fcf6"},
-    {file = "Flask_Login-0.6.0-py3-none-any.whl", hash = "sha256:5cb01ce4dc253967b6ac722a11e46de83b6272ef7a19cc7b5725ae636916d04d"},
+    {file = "Flask-Login-0.6.1.tar.gz", hash = "sha256:1306d474a270a036d6fd14f45640c4d77355e4f1c67ca4331b372d3448997b8c"},
+    {file = "Flask_Login-0.6.1-py3-none-any.whl", hash = "sha256:b9a4287a2d0067a7a482a23e40075e0d670f371974633fe890222dece4e02a74"},
 ]
 flask-migrate = [
     {file = "Flask-Migrate-2.7.0.tar.gz", hash = "sha256:ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38"},
@@ -3843,8 +3843,8 @@ py = [
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
 ]
 pycln = [
-    {file = "pycln-1.3.1-py3-none-any.whl", hash = "sha256:4ebefa28b01cf9f9c82e2799adf984a09cfb5aa065b56671ee6899379af71f00"},
-    {file = "pycln-1.3.1.tar.gz", hash = "sha256:84654556591c73c972bbca306520fe4ab454edae1123deccb39da4bf705d5a68"},
+    {file = "pycln-1.3.2-py3-none-any.whl", hash = "sha256:eaee54af2e682809e459ad49e0b01e5ff2244943bcefd130887cc8ac859ea755"},
+    {file = "pycln-1.3.2.tar.gz", hash = "sha256:53bb187b2285a1dddcc5dee8ace41c98d9e7db9d5d8e642a075dff1927aa3add"},
 ]
 pycountry = [
     {file = "pycountry-22.3.5.tar.gz", hash = "sha256:b2163a246c585894d808f18783e19137cb70a0c18fb36748dc01fc6f109c1646"},
@@ -4244,8 +4244,8 @@ starlette = [
     {file = "starlette-0.17.1.tar.gz", hash = "sha256:57eab3cc975a28af62f6faec94d355a410634940f10b30d68d31cb5ec1b44ae8"},
 ]
 stripe = [
-    {file = "stripe-2.74.0-py2.py3-none-any.whl", hash = "sha256:f16e577a3f8b25ac912ba9f1c0f84490d37ff01e7749a168deafc7708ce7a866"},
-    {file = "stripe-2.74.0.tar.gz", hash = "sha256:fa8ed2b5c241bfda5e8984d606721f9c352aa1d886dec5502416ca04e00b92d0"},
+    {file = "stripe-2.75.0-py2.py3-none-any.whl", hash = "sha256:60a9192087ed8349ab1cd22b3b37aaaddb15f6240d7fbcbd4dbe6a06a6acf418"},
+    {file = "stripe-2.75.0.tar.gz", hash = "sha256:8808d7b1b797faf656f05b5a251201e65477104903514fdd3e92e97474b12cc1"},
 ]
 svglib = [
     {file = "svglib-1.2.1.tar.gz", hash = "sha256:c77a0702fafd367c0fdca08ca1b7e1ee10058bde3bae252f49a3836e51e54519"},
