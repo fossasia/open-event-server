@@ -117,7 +117,7 @@ marshmallow = "2.21.0"
 marshmallow-jsonapi = "0.23.2"
 WeasyPrint = "52.5"
 Flask-Babel = "2.0.0"
-xmltodict = "0.12.0"
+xmltodict = "0.13.0"
 # GraphQL support
 graphene-sqlalchemy = "2.3.0"
 flask-graphql = "2.0.1"
