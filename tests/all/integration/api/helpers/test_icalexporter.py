@@ -13,6 +13,7 @@ def test_export_basic(db):
         identifier='asdfgh',
         name='Hoopa Loopa',
         location_name='Narnia',
+        timezone='Asia/Kolkata'
     )
     test_microlocation = MicrolocationSubFactory(
         name='online',
@@ -32,7 +33,10 @@ def test_export_basic(db):
     assert event['url'] == 'http://eventyay.com/e/asdfgh'
     assert event['location'] == 'Narnia'
 
-    session = test_cal.subcomponents[1]
+    timezone = test_cal.subcomponents[1]
+    assert timezone['TZID'] == 'Asia/Kolkata'
+
+    session = test_cal.subcomponents[2]
     assert session['summary'] == 'Gooseberry Muffin'
     assert session['url'] == f'http://eventyay.com/e/asdfgh/session/{test_session.id}'
     assert (

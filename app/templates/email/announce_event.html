@@ -1,12 +1,15 @@
 {{ _('Hello') }},<br/><br/>
 
-{{ _('Your group') }} <a href={{ group_url }} target='_blank'>{{ group_name }}</a> {{ _('has just scheduled ') }} "<a href={{ event_url }} target='_blank'>{{ event_name }}</a>"! {{ _('We’re pretty confident that you’re going to love it') }}.
+{% autoescape false %}
+{{ _('Your group %(group_name)s has just scheduled "%(event_name)s"!', group_name = '<a href="%s" target="_blank">%s</a>' % (group_url, group_name), event_name = '<a href="%s" target="_blank">%s</a>' % (event_url, event_name)) | safe }}
+{% endautoescape %}
+{{ _('We’re pretty confident that you’re going to love it.') }}
 <br/><br/>
 {{ _('Date') }}: {{ event_date }}<br/>
 {{ _('Time') }}: {{ event_time }}<br/>
 {{ _('Location') }}: {{ event_location }}<br/>
 <br/><br/> 
-<a href={{ event_url }} target='_blank'>{{ _('Reserve your spot') }}</a>!
+<a href={{ event_url }} target='_blank'>{{ _('Reserve your spot!') }}</a>
 <br/><br/> 
 {{ _('Event description') }}: 
     {% autoescape false %}
@@ -18,4 +21,6 @@
 {{ app_name }} {{ _('Team') }}.
 <br/><br/> 
 
-{{ _('You’re getting this message because you are a group member of') }} <a href={{ group_url }} target='_blank'>{{ group_name }}</a> {{ _('on') }} {{ app_name }}. {{ _('You can unsubscribe from emails from this group by unfollowing the group') }} <a href={{ group_url }} target='_blank'>{{ _('here') }}</a>.
+{% autoescape false %}
+{{ _('You’re getting this message because you are a group member of %(group_name)s on %(app_name)s.', group_name = '<a href="%s" target='_blank'>%s</a>' % (group_url, group_name), app_name=app_name) | safe }} {{ _('You can unsubscribe from emails from this group by unfollowing the group %(open_link)shere%(close_link)s.', open_link = '<a href="%s" target="_blank">' % (group_url), close_link = '</a>') | safe }}
+{% endautoescape %}

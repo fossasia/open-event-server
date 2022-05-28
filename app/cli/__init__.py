@@ -14,9 +14,11 @@ from ..api.helpers.tasks import (
     resize_event_images_task,
     resize_speaker_images_task,
     resize_exhibitor_images_task,
+    resize_group_images_task,
 )
 from ..models import db
 from ..models.event import Event, get_new_event_identifier
+from ..models.group import Group
 from ..models.speaker import Speaker
 from ..models.exhibitor import Exhibitor
 from tests.all.integration.auth_helper import create_super_admin
@@ -59,6 +61,17 @@ def fix_exhibitor_images():
     for exhibitor in exhibitors:
         print(f'Resizing Exhibitor { exhibitor.id }')
         resize_exhibitor_images_task.delay(exhibitor.id, exhibitor.banner_url)
+
+
+@app.cli.command('fix_group_images')
+def fix_group_images():
+    groups = Group.query.filter(
+        Group.banner_url.isnot(None), Group.thumbnail_image_url == None
+    ).all()
+    print(f'Resizing images of { len(groups) } groups...')
+    for group in groups:
+        print(f'Resizing image of Group { group.id } ')
+        resize_group_images_task.delay(group.id, group.banner_url)
 
 
 @app.cli.command('fix_event_and_speaker_images')

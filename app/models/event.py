@@ -1,10 +1,14 @@
+from email.policy import default
 import re
 from argparse import Namespace
 from datetime import datetime
 
+from sqlalchemy.sql.expression import or_, and_
+
 import flask_login as login
 import pytz
 from flask import current_app
+from flask_babel import _
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
@@ -59,6 +63,9 @@ class Event(SoftDeletionModel):
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
+    public_stream_link = db.Column(db.String)
+    stream_loop = db.Column(db.Boolean, default = False)
+    stream_autoplay = db.Column(db.Boolean, default=False)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     is_demoted = db.Column(db.Boolean, default=False, nullable=False)
@@ -136,6 +143,9 @@ class Event(SoftDeletionModel):
     can_pay_by_bank = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
+    can_pay_by_invoice = db.Column(
+        db.Boolean, default=False, nullable=False, server_default='False'
+    )
     can_pay_onsite = db.Column(
         db.Boolean, default=False, nullable=False, server_default='False'
     )
@@ -151,6 +161,7 @@ class Event(SoftDeletionModel):
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
+    invoice_details = db.Column(db.String)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     pentabarf_url = db.Column(db.String)
     ical_url = db.Column(db.String)
@@ -339,6 +350,7 @@ class Event(SoftDeletionModel):
             or self.can_pay_by_bank
             or self.can_pay_onsite
             or self.can_pay_by_paytm
+            or self.can_pay_by_invoice
         )
 
     @property
@@ -457,16 +469,16 @@ class Event(SoftDeletionModel):
             return self.location_name
         elif self.online:
             return self.site_link
-        return 'Location Not Announced'
+        return _('Location Not Announced')
 
     @property
     def event_location_status(self):
         if self.online:
-            return 'Online (Please login to the platform to access the video room on the event page)'
+            return _('Online (Please login to the platform to access the video room on the event page)')
         elif self.location_name:
             return self.location_name
         else:
-            return 'Location Not Announced'
+            return _('Location Not Announced')
 
     @property
     def has_coordinates(self):
@@ -484,6 +496,15 @@ class Event(SoftDeletionModel):
     def notify_staff(self):
         """Who receive notifications about event"""
         return self.organizers + [self.owner]
+
+    @property
+    def tickets_placed_or_completed_count(self):
+        obj = (
+            db.session.query(Order.event_id)
+            .filter(and_(Order.event_id==self.id, or_(Order.status=='completed', Order.status=='placed')))
+            .join(TicketHolder)
+        )
+        return obj.count()
 
 
 @event.listens_for(Event, 'after_update')

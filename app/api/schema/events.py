@@ -1,3 +1,4 @@
+from email.policy import default
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema
@@ -57,6 +58,9 @@ class EventSchemaPublic(SoftDeletionSchema):
     logo_url = fields.Url(allow_none=True)
     location_name = fields.Str(allow_none=True)
     searchable_location_name = fields.Str(allow_none=True)
+    public_stream_link = fields.Str(allow_none=True)
+    stream_loop = fields.Boolean(default=False)
+    stream_autoplay = fields.Boolean(default=False)
     description = fields.Str(allow_none=True)
     after_order_message = fields.Str(allow_none=True)
     original_image_url = fields.Url(allow_none=True)
@@ -100,11 +104,13 @@ class EventSchemaPublic(SoftDeletionSchema):
     can_pay_by_stripe = fields.Bool(default=False)
     can_pay_by_cheque = fields.Bool(default=False)
     can_pay_by_bank = fields.Bool(default=False)
+    can_pay_by_invoice = fields.Bool(default=False)
     can_pay_onsite = fields.Bool(default=False)
     can_pay_by_omise = fields.Bool(default=False)
     can_pay_by_alipay = fields.Bool(default=False)
     can_pay_by_paytm = fields.Bool(default=False)
     cheque_details = fields.Str(allow_none=True)
+    invoice_details = fields.Str(allow_none=True)
     bank_details = fields.Str(allow_none=True)
     onsite_details = fields.Str(allow_none=True)
     is_sponsors_enabled = fields.Bool(default=False)

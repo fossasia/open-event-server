@@ -2,6 +2,7 @@ import base64
 import datetime
 import logging
 import os
+import pytz
 from itertools import groupby
 from typing import Dict, Optional
 
@@ -20,6 +21,12 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
 from app.models.order import OrderTicket
+from babel.dates import (
+    format_date,
+    format_time,
+    format_datetime
+)
+from babel.numbers import format_currency
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error
@@ -143,7 +150,7 @@ def send_email_confirmation(email, link):
     )
 
 
-def send_email_new_session(email, session):
+def send_email_new_session(email, session, speakers):
     """email for new session"""
     app_name = get_settings()['app_name']
     front_page = get_settings()['frontend_url']
@@ -157,6 +164,7 @@ def send_email_new_session(email, session):
         html=render_template(
             mail['template'],
             session=session,
+            speakers=speakers,
             session_overview_link=session_overview_link,
             app_name=app_name,
             front_page=front_page,
@@ -260,7 +268,9 @@ def send_email_ticket_sales_end_next_week(event, emails):
         )
 
 
-def send_email_session_state_change(email, session, mail_override: Optional[Dict[str, str]] = None):
+def send_email_session_state_change(
+    email, session, mail_override: Optional[Dict[str, str]] = None
+):
     """email for new session"""
     event = session.event
 
@@ -374,15 +384,15 @@ def send_email_announce_event(event, group, emails):
     action = MailType.ANNOUNCE_EVENT
     mail = MAILS[action]
 
-    event_name=event.name
-    group_name=group.name
-    event_date=event.starts_at.strftime('%d %B %Y')
-    event_description=event.description
-    event_url=event.site_link
-    event_location=event.normalized_location
-    event_time=event.starts_at.strftime("%H:%M (%Z)")
-    group_url=group.view_page_link
-    app_name=get_settings()['app_name']
+    event_name = event.name
+    group_name = group.name
+    event_date = event.starts_at
+    event_description = event.description
+    event_url = event.site_link
+    event_location = event.normalized_location
+    event_time = event.starts_at
+    group_url = group.view_page_link
+    app_name = get_settings()['app_name']
 
     if len(emails) > 0:
         for email in emails:
@@ -392,7 +402,7 @@ def send_email_announce_event(event, group, emails):
                 subject=mail['subject'].format(
                     event_name=event_name,
                     group_name=group_name,
-                    event_date=event_date,
+                    event_date=convert_to_user_locale(email, date=event_date),
                 ),
                 html=render_template(
                     mail['template'],
@@ -400,8 +410,12 @@ def send_email_announce_event(event, group, emails):
                     event_description=event_description,
                     event_url=event_url,
                     event_location=event_location,
-                    event_date=event_date,
-                    event_time=event_time,
+                    event_date=convert_to_user_locale(email, date=event_date),
+                    event_time=convert_to_user_locale(
+                        email,
+                        time=event_time,
+                        tz=event.timezone
+                    ),
                     group_name=group_name,
                     group_url=group_url,
                     app_name=app_name,
@@ -422,6 +436,7 @@ def send_email_for_monthly_fee_payment(
     key = options[follow_up]
     mail = MAILS[key]
     email = user.email
+    invoice_url = make_frontend_url('/account/billing/invoices')
     send_email(
         to=email,
         action=key,
@@ -433,6 +448,7 @@ def send_email_for_monthly_fee_payment(
             name=user.full_name,
             email=email,
             event_name=event_name,
+            invoice_url=invoice_url,
             date=previous_month,
             amount=amount,
             app_name=app_name,
@@ -501,9 +517,15 @@ def send_email_change_user_email(user, email):
         base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')),
         'utf-8',
     )
+    app_name = get_settings()['app_name']
     link = make_frontend_url('/email/verify', {'token': hash_})
     send_email_with_action(
-        user.email, MailType.USER_CONFIRM, 'user_confirm', email=user.email, link=link
+        user.email,
+        MailType.USER_CONFIRM,
+        'user_confirm',
+        email=user.email,
+        link=link,
+        app_name=app_name,
     )
     send_email_with_action(
         email,
@@ -537,13 +559,35 @@ def send_email_to_attendees(order):
     )
     email_group = groupby(attendees, lambda a: a.email)
 
+    buyer_email = order.user.email
+    event_date = convert_to_user_locale(
+        buyer_email,
+        date=order.event.starts_at,
+    )
+    event_end_date = convert_to_user_locale(
+        buyer_email,
+        date_time=order.event.ends_at,
+        tz=order.event.timezone,
+    )
+    event_time = convert_to_user_locale(
+        buyer_email,
+        time=order.event.starts_at,
+        tz=order.event.timezone,
+    )
+
     context = dict(
         order=order,
+        starts_at=convert_to_user_locale(
+            buyer_email,
+            date_time=order.event.starts_at,
+            tz=order.event.timezone,
+        ),
+        ends_at=event_end_date,
+        event_time=event_time,
         settings=get_settings(),
         order_view_url=order.site_view_link,
     )
 
-    buyer_email = order.user.email
     action = MailType.TICKET_PURCHASED
     mail = MAILS[action]
     send_email(
@@ -552,6 +596,8 @@ def send_email_to_attendees(order):
         subject=mail['subject'].format(
             event_name=event.name,
             invoice_id=order.invoice_number,
+            event_date=event_date,
+            event_time=event_time,
         ),
         html=render_template(mail['template'], attendees=attendees, **context),
         attachments=attachments,
@@ -571,6 +617,8 @@ def send_email_to_attendees(order):
             subject=mail['subject'].format(
                 event_name=event.name,
                 invoice_id=order.invoice_number,
+                event_date=event_date,
+                event_time=event_time,
             ),
             html=render_template(
                 mail['template'],
@@ -584,6 +632,8 @@ def send_email_to_attendees(order):
 def send_order_purchase_organizer_email(order, recipients):
 
     order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
+    emails = list({organizer.email for organizer in recipients})
+    print(emails[0])
 
     context = dict(
         buyer_email=order.user.email,
@@ -593,22 +643,39 @@ def send_order_purchase_organizer_email(order, recipients):
         frontend_url=get_settings()['frontend_url'],
         site_link=order.event.site_link,
         order_url=order.site_view_link,
-        event_date=order.event.starts_at.strftime('%d %B %Y'),
-        event_time=order.event.starts_at.strftime("%H:%M %Z"),
-        purchase_time=order.completed_at,
+        event_date=convert_to_user_locale(
+            order.user.email,
+            date=order.event.starts_at,
+        ),
+        event_time=convert_to_user_locale(
+            order.user.email,
+            time=order.event.starts_at,
+            tz=order.event.timezone,
+        ),
         timezone=order.event.timezone,
+        purchase_time=convert_to_user_locale(
+            emails[0],
+            date_time=order.completed_at,
+            tz=order.event.timezone
+        ),
         payment_mode=order.payment_mode,
         payment_status=order.status,
-        order_amount=order.amount,
-        payment_currency=order.event.payment_currency,
+        order_amount=convert_to_user_locale(
+            emails[0],
+            amount=order.amount,
+            currency=order.event.payment_currency
+        ),
         tickets_count=order.tickets_count,
         order_tickets=order_tickets,
         buyer_org=order.company,
         buyer_address=order.address,
+        buyer_zipcode=order.zipcode,
+        buyer_city=order.city,
+        buyer_state=order.state,
+        buyer_country=order.country,
         buyer_tax_id=order.tax_business_info,
         app_name=get_settings()['app_name'],
     )
-    emails = list({organizer.email for organizer in recipients})
     if emails:
         send_email_with_action(
             emails[0],
@@ -725,3 +792,74 @@ def send_email_to_moderator(video_stream_moderator):
             settings=get_settings(),
         ),
     )
+
+
+def send_email_after_event(email, event_name):
+    app_name = get_settings()['app_name']
+    action = MailType.AFTER_EVENT
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name, app_name=app_name),
+        html=render_template(
+            mail['template'],
+            app_name=app_name,
+            email=email,
+            eventname=event_name,
+        ),
+    )
+
+
+def send_email_after_event_speaker(email, event_name):
+    action = MailType.AFTER_EVENT_SPEAKER
+    mail = MAILS[action]
+
+    send_email(
+        to=email,
+        action=action,
+        subject=mail['subject'].format(event_name=event_name),
+        html=render_template(
+            mail['template'],
+            eventname=event_name,
+            email=email,
+        ),
+    )
+
+
+def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None, amount=None, currency=None):
+    """
+    Convert date and time and amount to user selected language
+    :return        : datetime/date/time translated to user locale
+    """
+    if email:
+        user = User.query.filter(User.email == email).first()
+        user_locale = 'en'
+
+        if user and user.language_prefrence:
+            user_locale = user.language_prefrence
+
+        if amount and currency:
+            return format_currency(amount, currency, locale=user_locale)
+
+        if date_time and tz:
+            return format_datetime(
+                date_time,
+                'full',
+                tzinfo=pytz.timezone(tz),
+                locale=user_locale
+            )
+        
+        if date:
+            return format_date(date, 'd MMMM Y', locale=user_locale)
+        
+        if time and tz:
+            return format_time(
+                time,
+                'HH:mm (zzzz)',
+                tzinfo=pytz.timezone(tz),
+                locale=user_locale
+            )
+
+    return None

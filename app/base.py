@@ -31,9 +31,9 @@ app.config['JWT_SESSION_COOKIE'] = False
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
 # setup celery
-app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
-app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
-app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
+app.config['broker_url'] = app.config['REDIS_URL']
+app.config['result_backend'] = app.config['result_backend']
+app.config['accept_content'] = ['json', 'application/text']
 
 app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
 
