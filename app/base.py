@@ -32,7 +32,7 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['refresh']
 # setup celery
 app.config['broker_url'] = app.config['REDIS_URL']
-app.config['result_backend'] = app.config['result_backend']
+app.config['result_backend'] = app.config['broker_url']
 app.config['accept_content'] = ['json', 'application/text']
 
 app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
