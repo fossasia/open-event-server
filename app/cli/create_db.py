@@ -4,8 +4,8 @@ import re
 
 from flask_migrate import stamp
 
-from app.instance import current_app
-from app.models import db
+from ..base import app
+from ..models import db
 from tests.all.integration.auth_helper import create_super_admin
 from .populate_db import populate
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         "password", nargs='?', help="The password for super_admin.", default=''
     )
     parsed = parser.parse_args()
-    with current_app.app_context():
+    with app.app_context():
         db.engine.execute('create extension if not exists citext')
         db.create_all()
         stamp()

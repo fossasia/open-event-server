@@ -15,6 +15,7 @@ from tests.factories.user import UserFactory
 
 @pytest.fixture(scope='module')
 def app():
+    print('Create app in fixture')
     app = create_app()
     with app.test_request_context():
         yield app

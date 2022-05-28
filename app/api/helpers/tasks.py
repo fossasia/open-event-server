@@ -22,6 +22,7 @@ from sendgrid.helpers.mail import (
     Mail,
 )
 
+from app.base import app
 from app.api.chat.rocket_chat import rename_rocketchat_room
 from app.api.exports import event_export_task_base
 from app.api.helpers.db import safe_query, save_to_db
@@ -37,7 +38,6 @@ from app.api.helpers.storage import UPLOAD_PATHS, UploadedFile, upload
 from app.api.helpers.utilities import strip_tags
 from app.api.helpers.xcal import XCalExporter
 from app.api.imports import import_event_task_base
-from app.instance import create_app
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
@@ -63,8 +63,7 @@ This is done to resolve circular imports
 logger = logging.getLogger(__name__)
 
 
-def make_celery(app=None):
-    app = app or create_app()
+def make_celery():
     ext = FlaskCeleryExt(app)
     return ext.celery
 
@@ -195,9 +194,8 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.info(f'Resized images saved successfully for event with id: {event_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
-            'Error encountered while generating resized images for event with id: {}'.format(
-                event_id
-            )
+            'Error encountered while generating resized images for event with id: %d',
+            event_id
         )
 
 
@@ -221,9 +219,8 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
         )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL, OSError):
         logging.exception(
-            'Error encountered while generating resized images for exhibitor with id: {}'.format(
-                exhibitor_id
-            )
+            'Error encountered while generating resized images for exhibitor with id: %d',
+            exhibitor_id
         )
 
 
@@ -244,9 +241,8 @@ def resize_user_images_task(self, user_id, original_image_url):
         logging.info(f'Resized images saved successfully for user with id: {user_id}')
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
-            'Error encountered while generating resized images for user with id: {}'.format(
-                user_id
-            )
+            'Error encountered while generating resized images for user with id: %d',
+            user_id
         )
 
 
@@ -285,9 +281,8 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
         )
     except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL):
         logging.exception(
-            'Error encountered while generating resized images for event with id: {}'.format(
-                speaker_id
-            )
+            'Error encountered while generating resized images for event with id: %d',
+            speaker_id
         )
 
 
@@ -762,7 +757,7 @@ def export_speakers_pdf_task(self, event_id):
 def delete_translations(self, zip_file_path):
     try:
         os.remove(zip_file_path)
-    except:
+    except OSError:
         logger.exception('Error while deleting translations zip file')
 
 

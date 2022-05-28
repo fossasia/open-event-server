@@ -3,21 +3,22 @@ import logging
 import os
 
 import click
+from flask.cli import with_appcontext
 from flask_migrate import stamp
 from sqlalchemy import or_
 from sqlalchemy.engine import reflection
 
-from app.api.helpers.db import save_to_db
-from app.instance import current_app as app
-from app.api.helpers.tasks import (
+from ..api.helpers.db import save_to_db
+from ..base import app
+from ..api.helpers.tasks import (
     resize_event_images_task,
     resize_speaker_images_task,
     resize_exhibitor_images_task,
 )
-from app.models import db
-from app.models.event import Event, get_new_event_identifier
-from app.models.speaker import Speaker
-from app.models.exhibitor import Exhibitor
+from ..models import db
+from ..models.event import Event, get_new_event_identifier
+from ..models.speaker import Speaker
+from ..models.exhibitor import Exhibitor
 from tests.all.integration.auth_helper import create_super_admin
 
 from .populate_db import populate
@@ -51,7 +52,8 @@ def add_event_identifier():
 @app.cli.command('fix_exhibitor_images')
 def fix_exhibitor_images():
     exhibitors = Exhibitor.query.filter(
-        Exhibitor.banner_url.isnot(None), Exhibitor.thumbnail_image_url == None
+        Exhibitor.banner_url.isnot(None),
+        Exhibitor.thumbnail_image_url == None  # noqa: E711
     ).all()
     print(f'Resizing images of { len(exhibitors) } exhibitors...')
     for exhibitor in exhibitors:
@@ -64,7 +66,7 @@ def fix_event_and_speaker_images():
     events = Event.query.filter(
         Event.original_image_url.isnot(None),
         or_(
-            Event.thumbnail_image_url == None,
+            Event.thumbnail_image_url == None,  # noqa: E711
             Event.large_image_url == None,
             Event.icon_image_url == None,
         ),
@@ -77,7 +79,7 @@ def fix_event_and_speaker_images():
     speakers = Speaker.query.filter(
         Speaker.photo_url.isnot(None),
         or_(
-            Speaker.icon_image_url == None,
+            Speaker.icon_image_url == None,  # noqa: E711
             Speaker.small_image_url == None,
             Speaker.thumbnail_image_url == None,
         ),
@@ -119,7 +121,8 @@ def initialize_db(credentials):
             except Exception:
                 populate_data = False
                 print(
-                    "[LOG] Could not create tables. Either database does not exist or tables already created"
+                    "[LOG] Could not create tables. "
+                    "Either database does not exist or tables already created"
                 )
             if populate_data:
                 credentials = credentials.split(":")
@@ -133,6 +136,7 @@ def initialize_db(credentials):
 
 @app.cli.command('prepare_db')
 @click.pass_context
+@with_appcontext
 def prepare_db(ctx, credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
         ctx.invoke(initialize_db, credentials=credentials)
