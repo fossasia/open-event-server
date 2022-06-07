@@ -1798,6 +1798,17 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pydot"
+version = "1.4.2"
+description = "Python interface to Graphviz's Dot"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.dependencies]
+pyparsing = ">=2.1.4"
+
+[[package]]
 name = "pyjwt"
 version = "1.7.1"
 description = "JSON Web Token implementation in Python"
@@ -2010,17 +2021,18 @@ unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytype"
-version = "2022.2.8"
+version = "2022.6.6"
 description = "Python type inferencer"
 category = "dev"
 optional = false
-python-versions = "<3.10,>=3.7"
+python-versions = "<3.11,>=3.7"
 
 [package.dependencies]
 attrs = ">=21.2.0"
 importlab = ">=0.7"
 libcst = "*"
 ninja = ">=1.10.0.post2"
+pydot = "*"
 tabulate = "*"
 toml = "*"
 
@@ -2710,7 +2722,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "a2b68afafc36e37ab3f8b2026aaa7ee4da103c6d460958103bd891d3c61db771"
+content-hash = "4c7226f708624ceb272c370c6f6cee726eeca1ff6e001d1afa661f15288f325c"
 
 [metadata.files]
 aiohttp = [
@@ -3910,6 +3922,10 @@ pydantic = [
     {file = "pydantic-1.8.2-py3-none-any.whl", hash = "sha256:fec866a0b59f372b7e776f2d7308511784dace622e0992a0b59ea3ccee0ae833"},
     {file = "pydantic-1.8.2.tar.gz", hash = "sha256:26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b"},
 ]
+pydot = [
+    {file = "pydot-1.4.2-py2.py3-none-any.whl", hash = "sha256:66c98190c65b8d2e2382a441b4c0edfdb4f4c025ef9cb9874de478fb0793a451"},
+    {file = "pydot-1.4.2.tar.gz", hash = "sha256:248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d"},
+]
 pyjwt = [
     {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
@@ -3983,16 +3999,19 @@ python-slugify = [
     {file = "python_slugify-6.1.2-py2.py3-none-any.whl", hash = "sha256:7b2c274c308b62f4269a9ba701aa69a797e9bca41aeee5b3a9e79e36b6656927"},
 ]
 pytype = [
-    {file = "pytype-2022.2.8-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:42c29d26dd445ef6cf6cec5cd826c8de597cade383e8cd9714ddbea2a37a6bca"},
-    {file = "pytype-2022.2.8-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0e8fd518c3438d6f3b0c5593a9b9832918987758491d217d0d195cdc033efb6c"},
-    {file = "pytype-2022.2.8-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3d7380e9cc566fdeed804435cb0eceac08f63a75268a4d8fbfeef2090824923e"},
-    {file = "pytype-2022.2.8-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:e25b6114d616edd5b9033f5a04e22b5a1ded881fc3b0995071199db6a869a2c5"},
-    {file = "pytype-2022.2.8-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e5de734792c1b2a57a38a158044f6c48ce3288d6ff722f0033939058d8eecba0"},
-    {file = "pytype-2022.2.8-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dedc2f7288732d0186ccf52cae4b6a992d03e6ff79d8f592d10705cf715d7d5d"},
-    {file = "pytype-2022.2.8-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:af788724101945b3256f6fa344acaffdf63172a52c88acfcef850b06b68881a4"},
-    {file = "pytype-2022.2.8-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:484332c17634385a24397bc86927ab57196ce52b6f6ff287250be19bcde4ac1a"},
-    {file = "pytype-2022.2.8-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e65659d00e7e10b1aec729f916e85898dd7e57e2e8d311c7ad093676c8b596f1"},
-    {file = "pytype-2022.2.8.tar.gz", hash = "sha256:14b864a6a08565db8e90476a8e05ae18c61121c8064a623e27c713c272faae54"},
+    {file = "pytype-2022.6.6-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:a4078e3f190f0c815e9d3fbfedc114dc68685e5f5e3d100c6e30d0e61e3dd6f7"},
+    {file = "pytype-2022.6.6-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c619b693815e3e90085c2e40cb4af2f47dd4dc196b4cf6113bf372806f953c9a"},
+    {file = "pytype-2022.6.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ae9635715b9cd9e54f7874c6b851a22c1600b0e2c74239fde57ee3683683c6d"},
+    {file = "pytype-2022.6.6-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:93d1d9b25f8eaad4accb29c0161c518041739f7269ef23e8af868b79d0a50838"},
+    {file = "pytype-2022.6.6-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1733a59d8056f6ffd0fca4d3f2fa200f856f8cb7afd939f4c9cbf97ee172d0e1"},
+    {file = "pytype-2022.6.6-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a3635b2ba405ee8a04e95e862ca7fd2e63fc5e5e324e76566c2c233eb5e69467"},
+    {file = "pytype-2022.6.6-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:5856c8f47fc468172505bceffe655cc9391585effd0b7f07722d88e0d335532b"},
+    {file = "pytype-2022.6.6-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e9c8c95b9f17e00efaa77a9e2b5e02bc2c0c5d49eb8ed1135a2003e5bcdbf5b9"},
+    {file = "pytype-2022.6.6-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d1611ec0816798075f96b7d9775d71c16b1e14af78ad6f63d0657832c3bded79"},
+    {file = "pytype-2022.6.6-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:1031bd3a946aefadcd635fedfd6c4fea7416409732b15a125f22cb4cbb7c0203"},
+    {file = "pytype-2022.6.6-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:acee5003cc91a87dc0a296bb712532964f267c6e3905ed9dbe8d2577a677e9d8"},
+    {file = "pytype-2022.6.6-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:589778b507caa48d4d74b9f3c0708ee21177a8cef71a3659cfe1bb7048df0b1e"},
+    {file = "pytype-2022.6.6.tar.gz", hash = "sha256:a4f3c197a08ba932b3272774e77c246990704a28ee294f29ae2f7ef95ee28544"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
