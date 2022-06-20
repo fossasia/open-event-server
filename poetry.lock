@@ -811,7 +811,7 @@ Flask = "*"
 
 [[package]]
 name = "flask-celeryext"
-version = "0.4.1"
+version = "0.4.3"
 description = "\"Flask-CeleryExt is a simple integration layer between Celery and Flask.\""
 category = "main"
 optional = false
@@ -822,7 +822,7 @@ celery = ">=5.1.0"
 Flask = ">=1.1"
 
 [package.extras]
-tests = ["check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-pycodestyle (>=2.2.0)", "pytest-pydocstyle (>=2.2.0)", "pytest (>=6,<7)", "redis (>=4.1.4)", "Sphinx (>=4.2.0)"]
+tests = ["check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-black (>=0.3.12)", "pytest-pydocstyle (>=2.2.0)", "pytest (>=6,<7)", "redis (>=4.1.4)", "Sphinx (>=4.2.0)"]
 
 [[package]]
 name = "flask-cors"
@@ -2803,7 +2803,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "db5679327ad9e73d52573f8980a29d3c42da605ef2fdfe995acbf2b57405f6e4"
+content-hash = "a107e043e4acf2ec3cd570275cbc6bdff9312bb664eeacffbd463dbc6956c844"
 
 [metadata.files]
 aiohttp = [
@@ -3226,8 +3226,8 @@ flask-caching = [
     {file = "Flask_Caching-1.11.1-py3-none-any.whl", hash = "sha256:36592812eec6cba86eca48bcda74eff24bfd6c8eaf6056ca0184474bb78c0dc4"},
 ]
 flask-celeryext = [
-    {file = "Flask-CeleryExt-0.4.1.tar.gz", hash = "sha256:8f37c5b7afdbc3f4135c41d4b3dac3498faf4dbd681b19ffd91bc2f0a63d1d2b"},
-    {file = "Flask_CeleryExt-0.4.1-py2.py3-none-any.whl", hash = "sha256:aaa95aa4a2e5686a8eca2b53e5bbdff454613990574bcd98892e9a908d5adee6"},
+    {file = "Flask-CeleryExt-0.4.3.tar.gz", hash = "sha256:1ad8e84cabffef8d38461e700d8fd1e8389367e6eec532a024d3c294f5097766"},
+    {file = "Flask_CeleryExt-0.4.3-py2.py3-none-any.whl", hash = "sha256:aa05cc9d061ce0abe1f2000ab1e430f25a8bd2cc7d5e6ff35cb74063914cc88c"},
 ]
 flask-cors = [
     {file = "Flask-Cors-3.0.10.tar.gz", hash = "sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de"},
