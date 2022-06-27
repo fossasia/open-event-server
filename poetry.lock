@@ -288,7 +288,7 @@ redis = ["asyncio-redis"]
 
 [[package]]
 name = "cachelib"
-version = "0.8.0"
+version = "0.9.0"
 description = "A collection of cache libraries in the same API interface."
 category = "main"
 optional = false
@@ -799,15 +799,15 @@ dev = ["pytest", "pytest-mock", "bumpversion", "ghp-import", "sphinx", "pallets-
 
 [[package]]
 name = "flask-caching"
-version = "1.11.1"
+version = "2.0.0"
 description = "Adds caching support to Flask applications."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-cachelib = "*"
-Flask = "*"
+cachelib = ">=0.9.0"
+Flask = "<=2.1.2"
 
 [[package]]
 name = "flask-celeryext"
@@ -2802,7 +2802,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "a107e043e4acf2ec3cd570275cbc6bdff9312bb664eeacffbd463dbc6956c844"
+content-hash = "9e6e0d718c1c98b00c8aac98f695be5e4973aa72d39ce98e33c746d076b4749f"
 
 [metadata.files]
 aiohttp = [
@@ -2989,8 +2989,8 @@ broadcaster = [
     {file = "broadcaster-0.2.0.tar.gz", hash = "sha256:72056f9b77b091dd4bbad4d7484bd0e6835c3443d4564d0bbf41190c29c606c6"},
 ]
 cachelib = [
-    {file = "cachelib-0.8.0-py3-none-any.whl", hash = "sha256:efb94456a4cf91669c4b6e82833b43d20c45e3c2ba8384841854c79cc7175565"},
-    {file = "cachelib-0.8.0.tar.gz", hash = "sha256:e358f6f82cf633891f0dbd3996e300b4657716ac44b301df33b9cb2cfd6eea6d"},
+    {file = "cachelib-0.9.0-py3-none-any.whl", hash = "sha256:811ceeb1209d2fe51cd2b62810bd1eccf70feba5c52641532498be5c675493b3"},
+    {file = "cachelib-0.9.0.tar.gz", hash = "sha256:38222cc7c1b79a23606de5c2607f4925779e37cdcea1c2ad21b8bae94b5425a5"},
 ]
 cairocffi = [
     {file = "cairocffi-1.2.0.tar.gz", hash = "sha256:9a979b500c64c8179fec286f337e8fe644eca2f2cd05860ce0b62d25f22ea140"},
@@ -3221,8 +3221,8 @@ flask-babel = [
     {file = "Flask_Babel-2.0.0-py3-none-any.whl", hash = "sha256:e6820a052a8d344e178cdd36dd4bb8aea09b4bda3d5f9fa9f008df2c7f2f5468"},
 ]
 flask-caching = [
-    {file = "Flask-Caching-1.11.1.tar.gz", hash = "sha256:28af189e97defb9e39b43ebe197b54a58aaee81bdeb759f46d969c26d7aa7810"},
-    {file = "Flask_Caching-1.11.1-py3-none-any.whl", hash = "sha256:36592812eec6cba86eca48bcda74eff24bfd6c8eaf6056ca0184474bb78c0dc4"},
+    {file = "Flask-Caching-2.0.0.tar.gz", hash = "sha256:3300efccda359d69ce0e6824b90cb571ff895a3907c31266c0342cca4bc40340"},
+    {file = "Flask_Caching-2.0.0-py3-none-any.whl", hash = "sha256:e5ff99af4a0208bd93a24fe48b24e9b47a77236c38c5d6a6aa3d688334040027"},
 ]
 flask-celeryext = [
     {file = "Flask-CeleryExt-0.4.3.tar.gz", hash = "sha256:1ad8e84cabffef8d38461e700d8fd1e8389367e6eec532a024d3c294f5097766"},
