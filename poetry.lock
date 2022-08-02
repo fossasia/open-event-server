@@ -282,13 +282,13 @@ python-versions = ">=3.7"
 asyncio-redis = {version = "*", optional = true, markers = "extra == \"redis\""}
 
 [package.extras]
-kafka = ["aiokafka"]
-postgres = ["asyncpg"]
 redis = ["asyncio-redis"]
+postgres = ["asyncpg"]
+kafka = ["aiokafka"]
 
 [[package]]
 name = "cachelib"
-version = "0.8.0"
+version = "0.9.0"
 description = "A collection of cache libraries in the same API interface."
 category = "main"
 optional = false
@@ -452,7 +452,7 @@ python-versions = "*"
 click = ">=4.0"
 
 [package.extras]
-dev = ["pytest (>=3.6)", "pytest-cov", "wheel", "coveralls"]
+dev = ["coveralls", "wheel", "pytest-cov", "pytest (>=3.6)"]
 
 [[package]]
 name = "click-repl"
@@ -534,8 +534,8 @@ tinycss2 = "*"
 webencodings = "*"
 
 [package.extras]
-doc = ["sphinx", "sphinx-rtd-theme"]
-test = ["pytest", "pytest-cov", "pytest-flake8", "pytest-isort", "coverage"]
+test = ["coverage", "pytest-isort", "pytest-flake8", "pytest-cov", "pytest"]
+doc = ["sphinx-rtd-theme", "sphinx"]
 
 [[package]]
 name = "decorator"
@@ -760,9 +760,9 @@ Jinja2 = ">=2.10.1"
 Werkzeug = ">=0.15"
 
 [package.extras]
-dev = ["pytest", "coverage", "tox", "sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
-docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
 dotenv = ["python-dotenv"]
+docs = ["sphinx-issues", "sphinxcontrib-log-cabinet", "pallets-sphinx-themes", "sphinx"]
+dev = ["sphinx-issues", "sphinxcontrib-log-cabinet", "pallets-sphinx-themes", "sphinx", "tox", "coverage", "pytest"]
 
 [[package]]
 name = "flask-admin"
@@ -795,19 +795,19 @@ Jinja2 = ">=2.5"
 pytz = "*"
 
 [package.extras]
-dev = ["pytest", "pytest-mock", "bumpversion", "ghp-import", "sphinx", "pallets-sphinx-themes"]
+dev = ["pallets-sphinx-themes", "sphinx", "ghp-import", "bumpversion", "pytest-mock", "pytest"]
 
 [[package]]
 name = "flask-caching"
-version = "1.11.1"
+version = "2.0.1"
 description = "Adds caching support to Flask applications."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-cachelib = "*"
-Flask = "*"
+cachelib = ">=0.9.0"
+Flask = "<3"
 
 [[package]]
 name = "flask-celeryext"
@@ -822,7 +822,7 @@ celery = ">=5.1.0"
 Flask = ">=1.1"
 
 [package.extras]
-tests = ["check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-black (>=0.3.12)", "pytest-pydocstyle (>=2.2.0)", "pytest (>=6,<7)", "redis (>=4.1.4)", "Sphinx (>=4.2.0)"]
+tests = ["Sphinx (>=4.2.0)", "redis (>=4.1.4)", "pytest (>=6,<7)", "pytest-pydocstyle (>=2.2.0)", "pytest-black (>=0.3.12)", "pytest-mock (>=2.0.0)", "pytest-isort (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-cov (>=3.0.0)", "msgpack-python (>=0.5.6)", "docker-services-cli (>=0.4.0)", "coverage (>=5.3,<6)", "check-manifest (>=0.42)"]
 
 [[package]]
 name = "flask-cors"
@@ -929,8 +929,8 @@ Flask = ">=0.8"
 redis = ">=2.7.6"
 
 [package.extras]
-dev = ["coverage", "pytest", "pytest-mock", "pre-commit"]
-tests = ["coverage", "pytest", "pytest-mock"]
+tests = ["pytest-mock", "pytest", "coverage"]
+dev = ["pre-commit", "pytest-mock", "pytest", "coverage"]
 
 [[package]]
 name = "Flask-REST-JSONAPI"
@@ -1099,8 +1099,8 @@ six = ">=1.10.0,<2"
 SQLAlchemy = ">=1.2,<2"
 
 [package.extras]
-dev = ["tox (==3.7.0)", "coveralls (==1.10.0)", "pre-commit (==1.14.4)"]
-test = ["pytest (==4.3.1)", "mock (==2.0.0)", "pytest-cov (==2.6.1)", "sqlalchemy-utils (==0.33.9)", "pytest-benchmark (==3.2.1)"]
+test = ["pytest-benchmark (==3.2.1)", "sqlalchemy-utils (==0.33.9)", "pytest-cov (==2.6.1)", "mock (==2.0.0)", "pytest (==4.3.1)"]
+dev = ["pre-commit (==1.14.4)", "coveralls (==1.10.0)", "tox (==3.7.0)"]
 
 [[package]]
 name = "graphene-sqlalchemy-filter"
@@ -1213,10 +1213,10 @@ six = ">=1.9"
 webencodings = "*"
 
 [package.extras]
-all = ["genshi", "chardet (>=2.2)", "lxml"]
-chardet = ["chardet (>=2.2)"]
-genshi = ["genshi"]
 lxml = ["lxml"]
+genshi = ["genshi"]
+chardet = ["chardet (>=2.2)"]
+all = ["lxml", "chardet (>=2.2)", "genshi"]
 
 [[package]]
 name = "httplib2"
@@ -1700,8 +1700,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-docs = ["Sphinx (>=4)", "furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehints (>=1.12)"]
-test = ["appdirs (==1.4.4)", "pytest (>=6)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)"]
+test = ["pytest-mock (>=3.6)", "pytest-cov (>=2.7)", "pytest (>=6)", "appdirs (==1.4.4)"]
+docs = ["sphinx-autodoc-typehints (>=1.12)", "proselint (>=0.10.2)", "furo (>=2021.7.5b38)", "Sphinx (>=4)"]
 
 [[package]]
 name = "pluggy"
@@ -1982,7 +1982,7 @@ coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
+testing = ["virtualenv", "pytest-xdist", "six", "process-tests", "hunter", "fields"]
 
 [[package]]
 name = "python-bidi"
@@ -2463,8 +2463,8 @@ python-versions = ">=3.6"
 webencodings = ">=0.4"
 
 [package.extras]
-doc = ["sphinx", "sphinx-rtd-theme"]
-test = ["pytest", "pytest-cov", "pytest-flake8", "pytest-isort", "coverage"]
+test = ["coverage", "pytest-isort", "pytest-flake8", "pytest-cov", "pytest"]
+doc = ["sphinx-rtd-theme", "sphinx"]
 
 [[package]]
 name = "tokenize-rt"
@@ -2526,10 +2526,10 @@ python-versions = ">=3.6"
 click = ">=7.1.1,<9.0.0"
 
 [package.extras]
-all = ["colorama (>=0.4.3,<0.5.0)", "shellingham (>=1.3.0,<2.0.0)"]
-dev = ["autoflake (>=1.3.1,<2.0.0)", "flake8 (>=3.8.3,<4.0.0)"]
-doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mdx-include (>=1.4.1,<2.0.0)"]
-test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "coverage (>=5.2,<6.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "mypy (==0.910)", "black (>=22.3.0,<23.0.0)", "isort (>=5.0.6,<6.0.0)"]
+test = ["isort (>=5.0.6,<6.0.0)", "black (>=22.3.0,<23.0.0)", "mypy (==0.910)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "coverage (>=5.2,<6.0)", "pytest-cov (>=2.10.0,<3.0.0)", "pytest (>=4.4.0,<5.4.0)", "shellingham (>=1.3.0,<2.0.0)"]
+doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mkdocs (>=1.1.2,<2.0.0)"]
+dev = ["flake8 (>=3.8.3,<4.0.0)", "autoflake (>=1.3.1,<2.0.0)"]
+all = ["shellingham (>=1.3.0,<2.0.0)", "colorama (>=0.4.3,<0.5.0)"]
 
 [[package]]
 name = "typing-extensions"
@@ -2802,7 +2802,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "a107e043e4acf2ec3cd570275cbc6bdff9312bb664eeacffbd463dbc6956c844"
+content-hash = "521fe309383a40e8e67b44543874a73dfb558578ac1d02f8a4dd997aad603c1c"
 
 [metadata.files]
 aiohttp = [
@@ -2989,8 +2989,8 @@ broadcaster = [
     {file = "broadcaster-0.2.0.tar.gz", hash = "sha256:72056f9b77b091dd4bbad4d7484bd0e6835c3443d4564d0bbf41190c29c606c6"},
 ]
 cachelib = [
-    {file = "cachelib-0.8.0-py3-none-any.whl", hash = "sha256:efb94456a4cf91669c4b6e82833b43d20c45e3c2ba8384841854c79cc7175565"},
-    {file = "cachelib-0.8.0.tar.gz", hash = "sha256:e358f6f82cf633891f0dbd3996e300b4657716ac44b301df33b9cb2cfd6eea6d"},
+    {file = "cachelib-0.9.0-py3-none-any.whl", hash = "sha256:811ceeb1209d2fe51cd2b62810bd1eccf70feba5c52641532498be5c675493b3"},
+    {file = "cachelib-0.9.0.tar.gz", hash = "sha256:38222cc7c1b79a23606de5c2607f4925779e37cdcea1c2ad21b8bae94b5425a5"},
 ]
 cairocffi = [
     {file = "cairocffi-1.2.0.tar.gz", hash = "sha256:9a979b500c64c8179fec286f337e8fe644eca2f2cd05860ce0b62d25f22ea140"},
@@ -3221,8 +3221,8 @@ flask-babel = [
     {file = "Flask_Babel-2.0.0-py3-none-any.whl", hash = "sha256:e6820a052a8d344e178cdd36dd4bb8aea09b4bda3d5f9fa9f008df2c7f2f5468"},
 ]
 flask-caching = [
-    {file = "Flask-Caching-1.11.1.tar.gz", hash = "sha256:28af189e97defb9e39b43ebe197b54a58aaee81bdeb759f46d969c26d7aa7810"},
-    {file = "Flask_Caching-1.11.1-py3-none-any.whl", hash = "sha256:36592812eec6cba86eca48bcda74eff24bfd6c8eaf6056ca0184474bb78c0dc4"},
+    {file = "Flask-Caching-2.0.1.tar.gz", hash = "sha256:10df200a03f032af60077befe41779dd94898b67c82040d34e87210b71ba2638"},
+    {file = "Flask_Caching-2.0.1-py3-none-any.whl", hash = "sha256:703df847cbe904d8ddffd5f5fb320e236a31cb7bebac4a93d6b1701dd16dbf37"},
 ]
 flask-celeryext = [
     {file = "Flask-CeleryExt-0.4.3.tar.gz", hash = "sha256:1ad8e84cabffef8d38461e700d8fd1e8389367e6eec532a024d3c294f5097766"},
