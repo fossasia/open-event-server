@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2022-06-16 11:21+0000\n"
+"PO-Revision-Date: 2022-08-15 13:24+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/open-event/"
 "server/hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -84,20 +84,16 @@ msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:162
-#, fuzzy
 msgid "Your email has been already changed"
-msgstr "Tvoj račun je svtoren"
+msgstr "Tvoja e-mail adresa je već promijenjena"
 
 #: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
 msgstr ""
 
 #: app/api/helpers/system_mails.py:172
-#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
-msgstr ""
-"Koristi sljedeću poveznicu za poništavanje tvoje lozinke i potvrđivanje "
-"tvog računa."
+msgstr "{app_name}: Resetiraj tvoju lozinku i potvrdi tvoj račun"
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
@@ -224,9 +220,8 @@ msgid "The error was as follows"
 msgstr ""
 
 #: app/templates/email/event_exported.html:1
-#, fuzzy
 msgid "Click on the following link to download the event:"
-msgstr "Pritisni sljedeću poveznicu za potvrđivanje tvoje email adrese:"
+msgstr "Pritisni sljedeću poveznicu za preuzimanje događaja:"
 
 #: app/templates/email/event_imported.html:1
 msgid "Click on the following link to manage your event"
@@ -272,25 +267,22 @@ msgstr "Kontaktirao/la si organizatore grupe %(group_name)s."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
-#, fuzzy
 msgid "Below you find a copy of your email."
-msgstr "Ispod se nalazi kopija tvog emaila"
+msgstr "Ispod se nalazi kopija tvog e-maila."
 
 #: app/templates/email/group_contact_user.html:7
 #: app/templates/email/organizer_contact_attendee.html:7
-#, fuzzy
 msgid "Organizers have received your message and will follow up with you."
-msgstr "Organizatori su primili tvoju poruku i javit će ti se"
+msgstr "Organizatori su primili tvoju poruku i javit će ti se."
 
 #: app/templates/email/group_contact_user.html:8
-#, fuzzy
 msgid "This is a system message. Please do not reply to this message."
-msgstr "Ovo je poruka sustava. Ne odgovaraj na ovu poruku. Odgovori se ne prate"
+msgstr "Ovo je poruka sustava. Ne odgovaraj na ovu poruku."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "Odgovori se prate."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -298,14 +290,13 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
-#, fuzzy
 msgid "Thank you."
-msgstr "Hvala"
+msgstr "Hvala."
 
 #: app/templates/email/group_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(group)s group."
-msgstr ""
+msgstr "Pozvan(a) si da budeš %(role)s u grupi %(group)s."
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
@@ -313,7 +304,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "Bok %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -321,22 +312,23 @@ msgid ""
 "The invoice for your event %(event_name)s on %(app_name)s for %(date)s is"
 " now available."
 msgstr ""
+"Račun za tvoj događaj %(event_name)s na %(app_name)s za %(date)s je sada "
+"dostupan."
 
 #: app/templates/email/monthly_payment_email.html:4
 msgid "Your invoice payment is due within 30 days."
-msgstr ""
+msgstr "Rok za plaćanje računa je 30 dana."
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
 #: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
-#, fuzzy
 msgid "Amount Due"
-msgstr "Način plaćanja"
+msgstr "Iznos"
 
 #: app/templates/email/monthly_payment_email.html:8
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "Plati u roku od 30 dana."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
@@ -344,7 +336,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "Plati sada na: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -355,6 +347,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"Detaljni račun dostupan je u %(open_link)spodručju naplate%(close_link)s "
+"tvog računa."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -365,6 +359,8 @@ msgid ""
 "If you have any questions about invoices, please find more information on"
 " our FAQ at %(faq_url)s."
 msgstr ""
+"Ako imaš pitanja o računima, pogledaj informacije na našoj stranici često "
+"postavljenih pitanja %(faq_url)s."
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
@@ -372,7 +368,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "Hvala što koristiš %(app_name)s!"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -392,35 +388,42 @@ msgid ""
 "Just a friendly reminder that we haven't received your payment for your "
 "invoice for %(event_name)s for %(date)s."
 msgstr ""
+"Prijateljski podsjetnik da nismo primili tvoju uplatu za tvoj račun za "
+"događaj %(event_name)s za %(date)s."
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"Plaćanje je brzo i jednostavno pomoću kreditne kartice ili PayPal računa."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "Plati u roku od 15 dana."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "Tvoje plaćanje kasni."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
-msgstr ""
+msgstr "Plati ovaj račun odmah kako bi se izbjeglo zaključavanje tvog računa."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
 msgstr ""
+"Zakašnjela plaćanja mogu podlijegati naknadi za financiranje od "
+"%(percentage)s."
 
 #: app/templates/email/monthly_payment_post_due_email.html:18
 msgid ""
 "If you feel this invoice is incorrect or have any questions, you can "
 "contact our support team for assistance."
 msgstr ""
+"Ako smatraš da je ovaj račun netočan ili ako imaš pitanja, za pomoć se možeš "
+"obratiti našem timu za podršku."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
@@ -428,10 +431,12 @@ msgid ""
 "This is a reminder that we haven't received your payment for your invoice"
 " for %(event_name)s for %(date)s."
 msgstr ""
+"Ovo je podsjetnik da nismo primili tvoju uplatu za tvoj račun za "
+"%(event_name)s za %(date)s."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "Plati u roku od 2 dana."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -439,6 +444,8 @@ msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
 "%(session_name)s."
 msgstr ""
+"Ovo je automatski e-mail od %(app_name)s za organizatore sastanka "
+"%(session_name)s."
 
 #: app/templates/email/new_session.html:5
 #, python-format
@@ -453,7 +460,7 @@ msgstr ""
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
-msgstr ""
+msgstr "Sažetak"
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -468,6 +475,8 @@ msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
 "overview page%(close_link)s and click on the status badge of the session."
 msgstr ""
+"Za mijenjanje stanja sastanka idi na %(open_link)sstranicu pregleda "
+"sastanaka%(close_link)s i pritisni bedž stanja sastanka."
 
 #: app/templates/email/organizer_contact_attendee.html:2
 #, python-format
@@ -476,11 +485,11 @@ msgstr "Kontaktirao/la si organizatore događaja %(event_name)s."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "This is a system message."
-msgstr ""
+msgstr "Ovo je poruka sustava."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "Ne odgovaraj na ovu poruku."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
@@ -501,7 +510,7 @@ msgstr "Ili umetni ovaj token u tvoj %(app_name)s"
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "Program:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
@@ -542,12 +551,13 @@ msgstr "Puno pozdrava"
 #: app/templates/email/ticket_cancelled.html:2
 #, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "Tvoja narudžba %(order_id)s za %(event_name)s je stornirana."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
 msgstr ""
+"Informacije o tvojoj storniranoj narudžbi nalaze se ovdje: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -557,25 +567,26 @@ msgid ""
 msgstr ""
 
 #: app/templates/email/ticket_cancelled.html:6
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
-msgstr "Kontaktirao/la si organizatore događaja"
+msgstr ""
+"Za kontaktiranje organizatora događaja koristi obrazac za kontakt na "
+"stranici događaja ovdje: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "Za pristup obrascu moraš se prijaviti."
 
 #: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "Hvala ti na registriraciji za %(event_name)s."
 
 #: app/templates/email/ticket_purchased.html:4
-#, fuzzy
 msgid "This is your confirmation."
-msgstr "Ovo je potvrda za tvoju narudžbu. Ulaznice možeš preuzeti na"
+msgstr "Ovo je tvoja potvrda."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -583,6 +594,8 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"Svoje %(open_link)sulaznice ili podatke o registraciji možeš preuzeti "
+"ovdje%(close_link)s."
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
@@ -627,31 +640,31 @@ msgstr "Datum"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "Lokacija"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "Dodaj u kalendar"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
-msgstr ""
+msgstr "Google kalendar"
 
 #: app/templates/email/ticket_purchased.html:20
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "Outlook"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
@@ -666,18 +679,19 @@ msgid "Login to manage your orders at %(url)s."
 msgstr "Za upravljanje tvojim nalozima, prijavi se na %(url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
-msgstr "Ovo je potvrdna email poruka za tvoje ulaznice za događaj"
+msgstr ""
+"Ovo je potvrdna e-mail poruka za tvoje ulaznice za događaj %(eventname)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
-msgstr "Tvoje ulaznice možeš preuzeti na"
+msgstr "Tvoje ulaznice možeš preuzeti na: %(order_view_url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
-msgstr "Sažetak ulaznice"
+msgstr "Sažetak ulaznica"
 
 #: app/templates/email/ticket_purchased_organizer.html:1
 #: app/templates/email/user_register.html:2
@@ -690,20 +704,22 @@ msgid ""
 "You have a new order for your event %(event_name)s starting at "
 "%(event_time)s on %(event_date)s."
 msgstr ""
+"Imaš novu narudžbu za tvoj događaj %(event_name)s koji počinje %(event_date)"
+"s u %(event_time)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
-#, fuzzy, python-format
+#, python-format
 msgid "The order has been processed successfully on %(app_name)s."
-msgstr "Tvoja je lozinka uspješno promijenjena."
+msgstr "Narudžba je uspješno obrađena %(app_name)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
-msgstr ""
+msgstr "%(open_link)sPritisni ovdje%(close_link)s za prikaz/preuzimanje računa."
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "Detalji narudžbe su:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -711,11 +727,11 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:187
 #: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
-msgstr ""
+msgstr "Datum i vrijeme kupnje"
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
@@ -725,7 +741,7 @@ msgstr "Način plaćanja"
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
 msgid "None"
-msgstr ""
+msgstr "Ništa"
 
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
@@ -735,52 +751,52 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "Paypal"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "Banka"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
 msgid "Cheque"
-msgstr ""
+msgstr "Ček"
 
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
 msgid "Onsite"
-msgstr ""
+msgstr "Na licu mjesta"
 
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "Omise"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
-msgstr ""
+msgstr "Kupnja na račun"
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
 msgid "Payment Status"
-msgstr ""
+msgstr "Stanje plaćanja"
 
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
 msgid "Completed"
-msgstr ""
+msgstr "Gotovo"
 
 #: app/templates/email/ticket_purchased_organizer.html:50
 #: app/templates/pdf/order_invoice.html:232
@@ -790,81 +806,78 @@ msgstr "Na čekanju"
 #: app/templates/email/ticket_purchased_organizer.html:52
 #: app/templates/pdf/order_invoice.html:234
 msgid "Placed"
-msgstr ""
+msgstr "Postavljeno"
 
 #: app/templates/email/ticket_purchased_organizer.html:54
 #: app/templates/pdf/order_invoice.html:236
 msgid "Cancelled"
-msgstr ""
+msgstr "Otkazano"
 
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr ""
+msgstr "Isteklo"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
-msgstr ""
+msgstr "Ulaznice/registracija"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
-#, fuzzy
 msgid "Amount"
-msgstr "Iznos poreza"
+msgstr "Iznos"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "Organizacija"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
-msgstr ""
+msgstr "Grad"
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
-#, fuzzy
 msgid "State"
-msgstr "Datum"
+msgstr "Država"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
-msgstr ""
+msgstr "Poštanski broj"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
-msgstr ""
+msgstr "Zemlja"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr ""
+msgstr "PDV ID broj"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
-#, fuzzy
 msgid "Hello,"
-msgstr "Bok"
+msgstr "Bok,"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
 #: app/templates/email/ticket_sales_end_tomorrow.html:3
 #, python-format
 msgid "This is an automatic message from %(url)s."
-msgstr ""
+msgstr "Ovo je automatska poruka od %(url)s."
 
 #: app/templates/email/ticket_sales_end.html:5
 #, python-format
@@ -872,28 +885,32 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s has ended."
 msgstr ""
+"Razdoblje za prodaju ulaznica je završilo za jednu ili više tvojih ulaznica "
+"za događaj %(event_name)s."
 
 #: app/templates/email/ticket_sales_end.html:5
 msgid ""
 "If you would like to reactivate ticket sales for these tickets, please "
 "login to your account and edit the sales period for your tickets."
 msgstr ""
+"Ako želiš ponovo aktivirati prodaju ulaznica za ove ulaznice, prijavi se na "
+"svoj račun i uredi razdoblje za prodaju za svoje ulaznice."
 
 #: app/templates/email/ticket_sales_end.html:7
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "Prodaja ulaznica je završila za"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
 #: app/templates/email/ticket_sales_end_tomorrow.html:10
 msgid "Steps to change the ticket sales period"
-msgstr ""
+msgstr "Koraci za mijenjanje razdoblja za prodaju ulaznica"
 
 #: app/templates/email/ticket_sales_end.html:12
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
 msgid "Login to your account."
-msgstr ""
+msgstr "Prijavi se na svoj račun."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
@@ -908,12 +925,14 @@ msgid ""
 "On the Events Dashboard choose the event you want to edit and click the "
 "“Edit Symbol” of the event."
 msgstr ""
+"U nadzornoj ploči događaja odaberi događaj koji želiš urediti i pritisni "
+"gumb „Uredi simbol” događaja."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid "You are now editing the “Basic Details” of your event."
-msgstr ""
+msgstr "Sada uređuješ podatke „Osnovni detalji” tvog događaja."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
@@ -922,6 +941,8 @@ msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
+"Pomakni se na odjeljak s ulaznicama, odaberi ulaznicu koju želiš urediti i "
+"pritisni gumb „Simbol postavki” ulaznice."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
@@ -941,14 +962,14 @@ msgstr ""
 msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
-msgstr ""
+msgstr "Pomakni se na kraj stranice i spremi promjene pritsikom gumba „Objavi”."
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
 #: app/templates/email/ticket_sales_end_tomorrow.html:20
-#, fuzzy, python-format
+#, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
-msgstr "Kontaktirao/la si organizatore događaja"
+msgstr "Nadzornoj ploči događaja možeš pristupiti ovdje %(dashboard_link)s."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #, python-format
@@ -979,21 +1000,21 @@ msgstr ""
 #: app/templates/email/user_change_email.html:1
 #, python-format
 msgid "Hi %(email)s,"
-msgstr ""
+msgstr "Bok %(email)s,"
 
 #: app/templates/email/user_change_email.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Your email has been already changed from %(email)s to %(new_email)s."
-msgstr "Tvoj račun je svtoren"
+msgstr "Tvoja je e-mail adresa već promijenjena iz %(email)s u %(new_email)s."
 
 #: app/templates/email/user_change_email.html:3
 msgid "You should verify your new email."
-msgstr ""
+msgstr "Provjeri svoju e-mail adresu."
 
 #: app/templates/email/user_confirm.html:3
 #, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
-msgstr "Pritisni ovu poveznicu za potvrđivanje tvoje email adrese: %(url)s."
+msgstr "Pritisni ovu poveznicu za potvrđivanje tvoje e-mail adrese: %(url)s."
 
 #: app/templates/email/user_register.html:2
 #, python-format
@@ -1032,20 +1053,20 @@ msgstr "RAČUN"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
-msgstr ""
+msgstr "Ime kontakta"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
-msgstr ""
+msgstr "POŠTANSKI BROJ"
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: app/templates/pdf/order_invoice.html:214
 msgid "Order By"
-msgstr "Narudžba po"
+msgstr "Razvrstaj po"
 
 #: app/templates/pdf/order_invoice.html:220
 msgid "Information unavailable"
@@ -1053,28 +1074,27 @@ msgstr "Informacija nije dostupna"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
-msgstr ""
+msgstr "Datum dospijeća"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
-msgstr ""
+msgstr "Po primitku računa"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
 msgstr "Cijena"
 
 #: app/templates/pdf/order_invoice.html:320
-#, fuzzy
 msgid "Sub-Total"
-msgstr "Podzbroj (neto)"
+msgstr "Podzbroj"
 
 #: app/templates/pdf/order_invoice.html:326
 msgid "for"
-msgstr ""
+msgstr "za"
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
@@ -1085,19 +1105,19 @@ msgstr "Šifra popusta"
 #: app/templates/pdf/order_invoice.html:395
 #: app/templates/pdf/order_invoice.html:401
 msgid "incl."
-msgstr ""
+msgstr "uklj."
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
-msgstr ""
+msgstr "Ukupno"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
-msgstr ""
+msgstr "Porez"
 
 #: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
-msgstr ""
+msgstr "Uključeno u ukupnom iznosu"
 
 #: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
@@ -1110,45 +1130,47 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"Narudžba\n"
+"                    br. %(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
 #, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "Događaj se odvija online i na lokaciji %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
 msgid "Event taking place online."
-msgstr ""
+msgstr "Događaj se odvija online."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
 #, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "Događaj se odvija na lokaciji %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "Detalji lokacije ili online događaja koji će se objaviti."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
 #, python-format
 msgid "From: %(start_time)s"
-msgstr ""
+msgstr "Od: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
 #, python-format
 msgid "To: %(end_time)s"
-msgstr ""
+msgstr "Do: %(end_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "Podaci narudžbe"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
@@ -1157,6 +1179,8 @@ msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"Narudžba\n"
+"                                        br. %(invoice_number)s"
 
 #~ msgid "Thank you for your ticket order for"
 #~ msgstr "Hvala na naručivanju ulaznice za"
