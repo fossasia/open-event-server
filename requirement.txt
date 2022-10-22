@@ -1,0 +1,2 @@
+Flask-Migrate==2.6.0
+Flask-Script
