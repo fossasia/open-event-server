@@ -1840,7 +1840,8 @@ optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.dependencies]
-cryptography = ">=3.2"
+:3-36
+:= ">=3.2"
 six = ">=1.5.2"
 
 [package.extras]
@@ -3033,7 +3034,7 @@ coverage = [
     {file = "coverage-6.3.2.tar.gz", hash = "sha256:03e2a7826086b91ef345ff18742ee9fc47a6839ccd517061ef8fa1976e652ce9"},
 ]
 cryptography = [
-    {file = "cryptography-36.0.1-cp38-cp38-linux_x86_64.whl", hash = "md5:50c7a343715493fc101598a45af24942"},
+    {file = "cryptography-36.0.1-cp36-abi3-manylinux_2_24_x86_64.whl", hash = "md5:630a5f0b204233a71ad07f482aa8ba17"},
 ]
 cssselect2 = [
     {file = "cssselect2-0.4.1-py3-none-any.whl", hash = "sha256:2f4a9f20965367bae459e3bb42561f7927e0cfe5b7ea1692757cf67ef5d7dace"},
