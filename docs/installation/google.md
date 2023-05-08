@@ -146,9 +146,9 @@ sudo docker-compose run web /bin/bash
 
 * Once you are running bash in your container as root,
 ```sh
-python3 create_db.py
+flask create_db
 # The Email & Password entered here would be your Admin Email
-python3 manage.py db stamp head
+flask db stamp head
 ```
 
 * Now that db is setup, you can kill both the running containers by ^C, and then run

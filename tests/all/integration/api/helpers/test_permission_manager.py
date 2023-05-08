@@ -17,6 +17,8 @@ import pytest
 
 
 class TestPermissionManager(OpenEventLegacyTestCase):
+    app = None
+
     def setUp(self):
         super().setUp()
         with self.app.test_request_context():

@@ -79,12 +79,12 @@ export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
 * **Step 4** - Start the postgres service on the application manually.
 
 
-* **Step 5** - Create the tables. For that we will use `create_db.py`.
+* **Step 5** - Create the tables. For that we will use `flask create_db`.
 
 ```sh
-python3 create_db.py
+flask create_db
 # enter email and password
-python3 manage.py db stamp head
+flask db stamp head
 ```
 
 
@@ -110,7 +110,7 @@ celery -A app.instance.celery worker -B -l INFO -c 2 &
 unset INTEGRATE_SOCKETIO
 
 # run app
-python3 manage.py runserver
+flask run
 ```
 
 * **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.

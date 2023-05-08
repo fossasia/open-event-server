@@ -1,5 +1,5 @@
 #!/bin/bash
-lines=`python3 manage.py db heads | grep -c "head"`
+lines=`flask db heads | grep -c "head"`
 if [ $lines -ne 1 ]
 then
     echo "Error: Multiple Migration Heads"

@@ -94,7 +94,7 @@ def index():
     :return:
     """
     r = requests.get(
-        'https://raw.githubusercontent.com/fossasia/open-event-server/gh-pages/api/v1/index.html'
+        'https://raw.githubusercontent.com/fossasia/open-event-server/gh-pages/api/v1/index.html'  # noqa
     )
     response = make_response(r.content)
     response.headers["Content-Type"] = "text/html"
@@ -102,8 +102,6 @@ def index():
 
 
 class BlueprintsManager:
-    def __init__(self):
-        pass
 
     @staticmethod
     def register(app):
@@ -128,7 +126,8 @@ class BlueprintsManager:
             try:
                 table_names.append(class_.__tablename__)
                 classes.append(class_)
-            except:
+            except AttributeError:
+                # This class_ object doesn't have __tablename__
                 pass
         for table in list(db.metadata.tables.items()):
             if table[0] in table_names:

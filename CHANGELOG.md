@@ -105,7 +105,7 @@ Order API has changed and old API has been deprecated and limited to avoid data 
 - Add constraint checks on attendee custom forms and order status
 - Change custom form model schema to allow custom fields
 - Add endpoint for upcoming events (beta)
-- Various testing and maintenance improvements  
+- Various testing and maintenance improvements
 - Various dependency updates
 
 #### v1.15.0 (2020-04-15):
@@ -114,19 +114,19 @@ Order API has changed and old API has been deprecated and limited to avoid data 
 We are making two-fold change in the underlying DB, we are upgrading from postgres 10 to 12, which was a long time due. And also, we are going to use postgis in future for nearby event fetching, hence we are doing this now in order to avoid changing DB layer later again in future.
 
 These are the steps you need to take before upgrading to this release:
-1. Backup the current database  
-`docker exec -it opev-postgres pg_dump -U open_event_user -d open_event > bak.sql`  
-Note that if you changed the user and DB name using enironment variables, you have to use those values here  
-2. Shutdown the server  
+1. Backup the current database
+`docker exec -it opev-postgres pg_dump -U open_event_user -d open_event > bak.sql`
+Note that if you changed the user and DB name using enironment variables, you have to use those values here
+2. Shutdown the server
 `docker-compose down`
-3. Remove the DB volume  
+3. Remove the DB volume
 `docker volume rm server_pg`
 4. Now pull the latest changes to your local docker-compose file changing the postgres image to `postgis/postis:12-2.5-alpine`. You don't have to do this change manually if you are using the tracked version of docker-compose.yml from our git repository
-5. Start just the postgres server  
+5. Start just the postgres server
 `docker-compose up -d postgres`
-6. Restore the backup on DB  
+6. Restore the backup on DB
 `docker-compose exec -T postgres psql -U open_event_user -d open_event < bak.sql`
-7. Start the servers up  
+7. Start the servers up
 `docker-compose up -d`
 
 - GraphQL alpha trial
@@ -171,7 +171,7 @@ Note that if you changed the user and DB name using enironment variables, you ha
 
 #### v1.11.0 (2020-01-23):
 
-- **BREAKING:** Fix security issues related to secret key. You **MUST** add the current secret key set in DB as `SECRET_KEY` environment variable before upgrading. After upgrading, the column will be removed from DB 
+- **BREAKING:** Fix security issues related to secret key. You **MUST** add the current secret key set in DB as `SECRET_KEY` environment variable before upgrading. After upgrading, the column will be removed from DB
 - Fix count query of tickets used to reserve tickets
 - Support event statistics in include query
 - Restrict deletion of orders except by admin
@@ -185,8 +185,8 @@ Note that if you changed the user and DB name using enironment variables, you ha
 
 ##### v1.10.0 (2019-12-22):
 
-- Fix event and speaker image resizing, and add management command to resize event and speaker images which remained to be resized.  
-Run `python manage.py fix_event_and_speaker_images` to resize images which weren't resized due to the bug
+- Fix event and speaker image resizing, and add management command to resize event and speaker images which remained to be resized.
+Run `flask fix_event_and_speaker_images` to resize images which weren't resized due to the bug
 - Optimize link generation of relationships with up to 10X speedup
 - Add scheduled job to automatically remove orphan ticket holders with no order ID
 - Add created and modified times in ticket holder
@@ -202,7 +202,7 @@ Run `python manage.py fix_event_and_speaker_images` to resize images which weren
 
 ##### v1.8.0 (2019-11-24):
 
-- Run `python manage.py fix_digit_identifier` to correct all digit identifiers
+- Run `flask fix_digit_identifier` to correct all digit identifiers
 - Handelled invalid price value in paid tickets
 - Check if event identifier does not contain of all digits
 - Fix check for `is_email_overridden` for speaker form

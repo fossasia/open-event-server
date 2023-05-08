@@ -29,9 +29,9 @@ If they are missing, some problem has occurred in the previous steps.
 	* ```git push heroku master``` or
     * ```git push heroku yourbranch:master``` if you are in a different branch than master
 * Finally, time to create tables on the server. Run the following commands -
-    * ```heroku run python3 create_db.py``` and enter email and password when prompted.
-    * ```heroku run python3 manage.py db stamp head```
-* In case of model updates, run the following commands - 
-	* To generate a migration after doing a model update run: ```heroku run python3 manage.py db migrate```
-	* To sync Database run: ```heroku run python3 manage.py db upgrade```
-	* To rollback run: ```heroku run python3 manage.py db downgrade```
+    * ```heroku run flask create_db``` and enter email and password when prompted.
+    * ```heroku run flask db stamp head```
+* In case of model updates, run the following commands -
+	* To generate a migration after doing a model update run: ```heroku run flask db migrate```
+	* To sync Database run: ```heroku run flask db upgrade```
+	* To rollback run: ```heroku run flask db downgrade```

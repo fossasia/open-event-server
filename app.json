@@ -36,6 +36,6 @@
         }
     ],
     "scripts": {
-        "postdeploy": "python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia"
+        "postdeploy": "flask initialize_db -c open_event_test_user@fossasia.org:fossasia"
     }
 }
