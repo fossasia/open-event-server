@@ -27,7 +27,7 @@ jobs:
         id: meta
         with:
           images: |
-            kokoye2007/open-event-server
+            eventyay/open-event-server
           tags: |
             type=ref,event=branch
             type=ref,event=pr
