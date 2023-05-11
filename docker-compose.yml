@@ -8,7 +8,7 @@ x-environment-vars: &environment-vars
   ADMIN_PASSWORD: "@{ADMIN_PASSWORD}"
 
 x-defaults: &defaults
-  image: docker.io/library/openevent
+  image: eventyay/open-event-server:development
   restart: unless-stopped
   env_file:
     - .env
