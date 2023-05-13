@@ -128,7 +128,7 @@ broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
 python-slugify = "^6.1.2"
-cryptography = { version = "*", source = "fossasia" }
+cryptography = "38.0.4"
 Flask-Migrate = "2.7.0"
 
 [tool.poetry.dev-dependencies]
