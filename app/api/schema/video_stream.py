@@ -91,3 +91,16 @@ class VideoStreamSchema(Schema):
         schema='VideoStreamModeratorSchema',
         type_='video-stream-moderator',
     )
+
+
+class ChatmosphereSchema(Schema):
+    class Meta:
+        type_ = 'video-stream'
+        self_view = 'v1.video_stream_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+    name = fields.Str(required=True)
+    url = fields.Url(required=True)
+    bg_img_url = fields.Str(required=False, allow_none=True)

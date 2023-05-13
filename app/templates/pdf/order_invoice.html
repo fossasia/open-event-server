@@ -175,7 +175,7 @@
     {% endif %}
   </div>
   <header class="clearfix">
-    <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
+    <h1>{{ _('Order Confirmation') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
       format(event.tickets_placed_or_completed_count)}}</h1>
     {% if order.status != "deleted" %}
     <div id="company" class="clearfix">

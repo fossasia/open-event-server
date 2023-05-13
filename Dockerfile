@@ -23,6 +23,7 @@ WORKDIR /opt/pysetup
 COPY pyproject.toml ./
 COPY poetry.lock ./
 
+RUN poetry config experimental.new-installer false
 RUN poetry install --no-root --no-dev
 
 ####

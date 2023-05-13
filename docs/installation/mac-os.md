@@ -12,6 +12,14 @@ brew doctor
 export PATH="/usr/local/bin:$PATH"
 ```
 
+* For m1 macs its recommended to install 'Homebrew' using 'Rosetta'
+* You can also setup another terminal that runs solely on Rosetta. Follow this article to learn more https://dev.to/courier/tips-and-tricks-to-setup-your-apple-m1-for-development-547g
+```sh
+softwareupdate --install-rosetta
+arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+```
+
 * Postgres
 ```sh
 brew update
