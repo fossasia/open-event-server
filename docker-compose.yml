@@ -25,7 +25,7 @@ services:
       - redis
     restart: unless-stopped
     ports:
-      - 5002:8080
+      - 5000:8080
     environment:
       - DATABASE_URL=postgresql://open_event_user:opev_pass@postgres:5432/oevent
       - SECRET_KEY=741a6f7389de40a91b930869b5e32baaae6953170b6fc1b9856001598a5ef0b8 # random generate using secrets
