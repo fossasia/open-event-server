@@ -5,7 +5,7 @@ services:
     image: postgis/postgis:12-3.0-alpine
     restart: unless-stopped
     ports:
-      - 5430:5432
+      - 5432:5432
     volumes:
       - oe_pg_data:/var/lib/postgresql/data
     environment:
@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     command: redis-server
     ports:
-      - 6377:6379
+      - 6379:6379
     volumes:
       - oe_redis_data:/var/lib/redis/data
 
