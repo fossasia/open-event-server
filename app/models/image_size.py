@@ -29,4 +29,4 @@ class ImageSizes(db.Model):
     icon_size_quality = db.Column(db.Integer)
 
     def __repr__(self):
-        return 'Image Size: ' + self.id
+        return 'Image Size: ' + str(self.id)

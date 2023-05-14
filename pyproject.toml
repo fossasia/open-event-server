@@ -48,7 +48,7 @@ url = "https://pypi.fury.io/fossasia/"
 name = "fossasia"
 
 [tool.poetry.dependencies]
-python = "3.8.6"
+python = "3.8.16"
 pycparser = "2.21"
 Flask = "1.1.2"
 Flask-Limiter = "1.4"

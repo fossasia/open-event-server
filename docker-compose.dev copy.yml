@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgis/postgis:12-3.0-alpine
+    restart: unless-stopped
+    ports:
+      - 5430:5432
+    volumes:
+      - oe_pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: open_event_user
+      POSTGRES_PASSWORD: opev_pass
+      POSTGRES_DB: oevent
+
+  redis:
+    image: redis:5-alpine
+    restart: unless-stopped
+    command: redis-server
+    ports:
+      - 6377:6379
+    volumes:
+      - oe_redis_data:/var/lib/redis/data
+
+volumes:
+  oe_pg_data:
+  oe_redis_data:

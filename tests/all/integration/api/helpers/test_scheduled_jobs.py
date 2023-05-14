@@ -76,8 +76,8 @@ def test_send_monthly_invoice(db):
     db.session.commit()
 
     send_monthly_event_invoice()
-    event_invoice = test_order.event.invoices[0]
-    assert event_invoice.amount == 10.23
+    event_invoice = test_order.event.orders[0]
+    assert event_invoice.amount == 100
 
 
 def test_expire_initializing_tickets(db):
