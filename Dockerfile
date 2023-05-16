@@ -10,9 +10,15 @@ RUN apk update && \
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
+RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
+# PDF Generation: weasyprint
+RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
+
+# Note: The custom PyPI repo is for AlpineOS only, where Python packages are compiled with musl libc. Don't use it on glibc Linux.
 ENV POETRY_HOME=/opt/poetry \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1
+    POETRY_NO_INTERACTION=1 \
+    PIP_EXTRA_INDEX_URL=https://pypi.fury.io/fossasia/
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
@@ -23,8 +29,7 @@ WORKDIR /opt/pysetup
 COPY pyproject.toml ./
 COPY poetry.lock ./
 
-RUN poetry config experimental.new-installer false
-RUN poetry install --no-root --no-dev
+RUN poetry export -f requirements.txt --without-hashes --only main | poetry run pip install -r /dev/stdin
 
 ####
 
@@ -33,11 +38,6 @@ FROM base
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
 
 ENV PATH="/opt/pysetup/.venv/bin:$PATH"
-
-RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
-# PDF Generation: weasyprint
-RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
-RUN fc-cache -f
 
 WORKDIR /data/app
 ADD . .
