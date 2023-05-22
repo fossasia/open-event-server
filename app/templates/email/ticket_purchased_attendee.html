@@ -15,7 +15,7 @@
 <br/>{{ order.event.normalized_location }}
 <br/><br/>{{ _('Best regards') }},
 <br/>{{ settings.app_name }} {{ _('Team') }}
-{% if order.event.after_order_message %}
+{% if order.event.after_order_message | strip_tags != '' %}
     <br/><br/>{{ _('Below you find a message from the organizer') }}:
     <br/><br/>
     <div style="white-space: pre-line;">

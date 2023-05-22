@@ -23,6 +23,7 @@ class VideoStream(db.Model):
     password = db.Column(db.String)
     # Any additional information for organizer or user
     additional_information = db.Column(db.String)
+    bg_img_url = db.Column(db.String)
     # Extra info stored for server if needed for integration like settings
     extra = db.Column(db.JSON)
 

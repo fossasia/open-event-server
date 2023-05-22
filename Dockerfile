@@ -6,23 +6,24 @@ FROM base as builder
 
 RUN apk update && \
   apk add --virtual build-deps make git g++ python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
-  apk add postgresql-dev
+  apk add postgresql-dev libxml2-dev libxslt-dev
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
 ENV POETRY_HOME=/opt/poetry \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_NO_INTERACTION=1
-    
+
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN set -eo pipefail; wget -O - https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN set -eo pipefail; wget -O - https://install.python-poetry.org | python -
 
 WORKDIR /opt/pysetup
 
 COPY pyproject.toml ./
 COPY poetry.lock ./
 
+RUN poetry config experimental.new-installer false
 RUN poetry install --no-root --no-dev
 
 ####

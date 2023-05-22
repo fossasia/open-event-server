@@ -284,6 +284,7 @@ from app.api.video_recordings import (
     VideoRecordingRelationship,
 )
 from app.api.video_stream import (
+    ChatmosphereDetail,
     VideoStreamDetail,
     VideoStreamList,
     VideoStreamRelationship,
@@ -1862,6 +1863,11 @@ api.route(
     '/events/<event_identifier>/video-stream',
     '/video-stream-moderators/<int:video_stream_moderator_id>/video-stream',
     '/video-recordings/<int:video_recording_id>/video-stream',
+)
+api.route(
+    ChatmosphereDetail,
+    'chatmosphere_background',
+    '/events/<event_identifier>/chatmosphere'
 )
 api.route(
     VideoStreamRelationship,

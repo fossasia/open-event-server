@@ -91,13 +91,13 @@ class StripePaymentsManager:
         return json.loads(response.text)
 
     @staticmethod
-    def capture_payment(order_invoice, currency=None, credentials=None):
+    def get_payment_intent_stripe(order_invoice, currency=None, credentials=None):
         """
         Capture payments through stripe.
         :param order_invoice: Order to be charged for
         :param currency: Currency of the order amount.
         :param credentials: Stripe credentials.
-        :return: charge/None depending on success/failure.
+        :return: secret of payment intent
         """
         if not credentials:
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
@@ -113,29 +113,16 @@ class StripePaymentsManager:
         if not currency or currency == "":
             currency = "USD"
 
-        frontend_url = get_settings()['frontend_url']
-
         try:
-            session = stripe.checkout.Session.create(
-                customer_email=order_invoice.user.email,
-                line_items=[
-                    {
-                        'price_data': {
-                            'currency': currency.lower(),
-                            'product_data': {
-                                'name': order_invoice.event.name,
-                            },
-                            'unit_amount': int(order_invoice.amount * 100),
-                        },
-                        'quantity': 1,
-                    }
-                ],
-                mode='payment',
-                success_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
-                cancel_url=f"{frontend_url}/orders/{order_invoice.identifier}/view",
+            payment_intent = stripe.PaymentIntent.create(
+                amount=int(order_invoice.amount * 100),
+                currency=currency.lower(),
+                metadata={'order_id': order_invoice.identifier},
+                automatic_payment_methods={
+                    'enabled': True,
+                },
             )
-
-            return session
+            return payment_intent
 
         except Exception as e:
             raise ConflictError({'pointer': ''}, str(e))

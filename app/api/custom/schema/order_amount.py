@@ -4,7 +4,7 @@ from marshmallow import Schema, fields
 class TicketSchema(Schema):
     id = fields.Integer(required=True)
     quantity = fields.Integer(default=1)
-    price = fields.Float()
+    price = fields.Float(allow_none=True)
 
 
 class OrderAmountInputSchema(Schema):
