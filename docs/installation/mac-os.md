@@ -12,11 +12,10 @@ brew doctor
 export PATH="/usr/local/bin:$PATH"
 ```
 
-* For m1 macs its recommended to install 'Homebrew' using 'Rosetta'
+For Mac With Apple M1, it's recommended to install `Homebrew` using `Rosetta`
 ```sh
 softwareupdate --install-rosetta
 arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-
 ```
 
 * Postgres
