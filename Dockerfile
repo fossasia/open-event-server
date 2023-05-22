@@ -10,8 +10,9 @@ RUN apk update && \
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
-# PDF Generation: cairo-dev onwards
-RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2 cairo-dev pango-dev ttf-opensans
+RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
+# PDF Generation: weasyprint
+RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
 
 # Note: The custom PyPI repo is for AlpineOS only, where Python packages are compiled with musl libc. Don't use it on glibc Linux.
 ENV POETRY_HOME=/opt/poetry \
