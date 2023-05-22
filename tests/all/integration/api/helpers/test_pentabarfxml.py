@@ -109,7 +109,7 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             assert pentabarf_original.find('day/room/event/duration').text == '00:45'
             assert pentabarf_original.find('day/room/event/persons/person[@id="2"]').text == \
                 'Hong Phuc Dang'
-            assert len(pentabarf_original.find('day/room/event/persons').getchildren()) == 2
+            assert len(list(pentabarf_original.find('day/room/event/persons'))) == 2
 
             assert pentabarf_original.find('day/room/event[2]/title').text == 'Hot Session'
 
