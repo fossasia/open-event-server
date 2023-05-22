@@ -2,7 +2,9 @@ version: 2
 jobs:
   dependencies:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: quay.io/quan/circleci-python:py3.9
+        environment:
+          PIP_EXTRA_INDEX_URL: https://pypi.fury.io/fossasia/
 
     working_directory: ~/code
 
@@ -12,16 +14,16 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+            - v1.5.1-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.5-dependencies-
+            - v1.5.1-dependencies-
 
       - run:
           name: Install Python Dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            poetry install
+            poetry export -f requirements.txt --without-hashes --with dev | pip install -r /dev/stdin
 
       - run:
           name: Install Node Dependencies
@@ -33,11 +35,11 @@ jobs:
             - ./node_modules
             - ~/.cache/yarn
             - ~/.yarn/bin
-          key: v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+          key: v1.5.1-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
 
   dredd:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: quay.io/quan/circleci-python:py3.9
         environment:
             APP_CONFIG: config.TestingConfig
             DATABASE_URL: postgresql://postgres@localhost/test
@@ -58,9 +60,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+            - v1.5.1-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.5-dependencies-
+            - v1.5.1-dependencies-
 
       - run:
           name: Create API blueprint
@@ -80,7 +82,7 @@ jobs:
 
   pytype:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: quay.io/quan/circleci-python:py3.9
 
     working_directory: ~/code
 
@@ -90,9 +92,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+            - v1.5.1-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.5-dependencies-
+            - v1.5.1-dependencies-
 
       - restore_cache:
           keys:
@@ -100,7 +102,7 @@ jobs:
 
       - run:
           name: Test pytype
-          command: . venv/bin/activate && pytype
+          command: ./venv/bin/pytype
 
       - save_cache:
           paths:
@@ -109,7 +111,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/python:3.8.6-node
+      - image: quay.io/quan/circleci-python:py3.9
         environment:
           APP_CONFIG: config.TestingConfig
           DATABASE_URL: postgresql://postgres@localhost/test
@@ -131,9 +133,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1.5-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
+            - v1.5.1-dependencies-{{ checksum "poetry.lock" }}-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1.5-dependencies-
+            - v1.5.1-dependencies-
 
       - run:
           name: Test
@@ -147,7 +149,7 @@ jobs:
           path: test-results
 
       - store_artifacts:
-          path: test-results  
+          path: test-results
 
       - run:
           name: Upload Coverage
