@@ -257,21 +257,20 @@ tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
 name = "astroid"
-version = "2.11.7"
+version = "2.15.5"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
-python-versions = ">=3.6.2"
+python-versions = ">=3.7.2"
 files = [
-    {file = "astroid-2.11.7-py3-none-any.whl", hash = "sha256:86b0a340a512c65abf4368b80252754cda17c02cdbbd3f587dddf98112233e7b"},
-    {file = "astroid-2.11.7.tar.gz", hash = "sha256:bb24615c77f4837c707669d16907331374ae8a964650a66999da3f5ca68dc946"},
+    {file = "astroid-2.15.5-py3-none-any.whl", hash = "sha256:078e5212f9885fa85fbb0cf0101978a336190aadea6e13305409d099f71b2324"},
+    {file = "astroid-2.15.5.tar.gz", hash = "sha256:1039262575027b441137ab4a62a793a9b43defb42c32d5670f38686207cd780f"},
 ]
 
 [package.dependencies]
 lazy-object-proxy = ">=1.4.0"
-setuptools = ">=20.0"
-typing-extensions = {version = ">=3.10", markers = "python_version < \"3.10\""}
-wrapt = ">=1.11,<2"
+typing-extensions = {version = ">=4.0.0", markers = "python_version < \"3.11\""}
+wrapt = {version = ">=1.11,<2", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "async-timeout"
@@ -3342,28 +3341,30 @@ test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner
 
 [[package]]
 name = "pylint"
-version = "2.13.8"
+version = "2.17.4"
 description = "python code static checker"
 category = "dev"
 optional = false
-python-versions = ">=3.6.2"
+python-versions = ">=3.7.2"
 files = [
-    {file = "pylint-2.13.8-py3-none-any.whl", hash = "sha256:f87e863a0b08f64b5230e7e779bcb75276346995737b2c0dc2793070487b1ff6"},
-    {file = "pylint-2.13.8.tar.gz", hash = "sha256:ced8968c3b699df0615e2a709554dec3ddac2f5cd06efadb69554a69eeca364a"},
+    {file = "pylint-2.17.4-py3-none-any.whl", hash = "sha256:7a1145fb08c251bdb5cca11739722ce64a63db479283d10ce718b2460e54123c"},
+    {file = "pylint-2.17.4.tar.gz", hash = "sha256:5dcf1d9e19f41f38e4e85d10f511e5b9c35e1aa74251bf95cdd8cb23584e2db1"},
 ]
 
 [package.dependencies]
-astroid = ">=2.11.3,<=2.12.0-dev0"
-colorama = {version = "*", markers = "sys_platform == \"win32\""}
-dill = ">=0.2"
+astroid = ">=2.15.4,<=2.17.0-dev0"
+colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
+dill = {version = ">=0.2", markers = "python_version < \"3.11\""}
 isort = ">=4.2.5,<6"
 mccabe = ">=0.6,<0.8"
 platformdirs = ">=2.2.0"
 tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+tomlkit = ">=0.10.1"
 typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-testutil = ["gitpython (>3)"]
+spelling = ["pyenchant (>=3.2,<4.0)"]
+testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pyopenssl"
@@ -5058,4 +5059,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "8ed156170d63b3e588e3dacbbb2c43eb04bdc2f8ab66ab359189c8ff4af4fcf7"
+content-hash = "38407bbc30ab4f20be44297e45ffd3d6ea20deb5858a41ae5384cd49eeefd2fb"
