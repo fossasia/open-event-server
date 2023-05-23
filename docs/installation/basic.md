@@ -65,7 +65,7 @@ This project uses [Poetry](https://python-poetry.org/docs) to handle Python depe
 
 ```sh
 # Install Poetry
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python3 -
 source ~/.profile
 
 # Activate virtual environment

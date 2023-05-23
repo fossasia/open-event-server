@@ -5,6 +5,7 @@ Register a mail here before using it
 
 from flask_babel import _
 
+
 class MailType:
     USER_REGISTER = 'user_registration'
     USER_CONFIRM = 'user_confirmation'

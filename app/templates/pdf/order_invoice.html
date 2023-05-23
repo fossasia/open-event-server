@@ -170,11 +170,12 @@
   <div id="logo">
     {% if admin_info.admin_billing_logo %}
     <img src="{{admin_info.admin_billing_logo}}" alt="organization logo" /><br>
-    {% endif %}
+    {% else %}
     {{ admin_info.app_name }}
+    {% endif %}
   </div>
   <header class="clearfix">
-    <h1>{{ _('INVOICE') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
+    <h1>{{ _('Order Confirmation') }} {{order.created_at.strftime("%Y")}}E-{{ event.identifier }}{{'%06d' |
       format(event.tickets_placed_or_completed_count)}}</h1>
     {% if order.status != "deleted" %}
     <div id="company" class="clearfix">
@@ -363,16 +364,15 @@
               <br/>
               <div>
                 {% if order_ticket.price %}
-                {{ event.payment_currency }}
+                {{ (order_ticket.price - order_ticket.discount.amount) | money(order.user.email, event.payment_currency) }}
                 {% endif %}
-                {{ "%.2f" | format(order_ticket.price - order_ticket.discount.amount) }}
                 {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
                   <div class="tax">
                     {% if order_ticket.ticket_tax %}
                       {% if order_amount.tax.included %}
-                        {{ _('incl.') }} {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                        {{ _('incl.') }} {{ order_ticket.discounted_tax | money(order.user.email, event.payment_currency) }} ({{ order_amount.tax.name }})
                       {% else %}
-                        + {{ event.payment_currency }} {{ "%.2f" | format(order_ticket.discounted_tax) }} ({{ order_amount.tax.name }})
+                        + {{ order_ticket.discounted_tax | money(order.user.email, event.payment_currency) }} ({{ order_amount.tax.name }})
                       {% endif %}
                     {% else %}
                     0.00
@@ -385,9 +385,10 @@
           <td>{{ order_ticket.quantity }}</td>
           <td class="total">
             {% if order_ticket.price %}
-            {{ event.payment_currency }}
+              {{ order_ticket.sub_total | money(order.user.email, event.payment_currency) }}
+            {% else %}
+              0.0
             {% endif %}
-            {{ "%.2f" | format(order_ticket.sub_total) }}
             <br>
             {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
               <div class="tax">
@@ -418,10 +419,11 @@
           <td></td>
           <td class="grand total"><b>{{ _('Total') }}</b></td>
           <td class="grand total">
-            {% if order_amount.sub_total != 0.0 %}
-            {{ event.payment_currency }}
+            {% if order_amount.sub_total %}
+              {{ order_amount.sub_total | money(order.user.email, event.payment_currency) }}
+            {% else %}
+              0.0
             {% endif %}
-            {{ order_amount.sub_total | money }}
           </td>
         </tr>
         {% if order_amount.tax and order_amount.tax.name and order_amount.tax.percent %}
@@ -443,10 +445,7 @@
             {% endif %}
           </b></td>
           <td class="grand total">
-            {% if order.amount != 0.0 %}
-            {{ event.payment_currency }}
-            {% endif %}
-            {{ order_amount.tax.amount | money }}
+            {{ order_amount.tax.amount | money(order.user.email, event.payment_currency) }}
           </td>
         </tr>
         {% endif %}
@@ -455,10 +454,11 @@
           <td></td>
           <td class="grand total"><b>{{ _('Grand Total') }}</b></td>
           <td class="grand total">
-            {% if order_amount.total != 0.0 %}
-            {{ event.payment_currency }}
+            {% if order_amount.total %}
+              {{ order_amount.total | money(order.user.email, event.payment_currency) }}
+            {% else %}
+              0.0
             {% endif %}
-            {{ order_amount.total | money }}
           </td>
         </tr>
       </tbody>

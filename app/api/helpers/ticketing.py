@@ -31,7 +31,7 @@ def validate_ticket_holders(ticket_holder_ids):
         )
         raise ObjectNotFound(
             {'pointer': '/data/relationships/attendees'},
-            "Some attendee among ids {} do not exist".format(str(ticket_holder_ids)),
+            "Some attendee among ids {str(ticket_holder_ids)} do not exist",
         )
 
     for ticket_holder in ticket_holders:
@@ -248,20 +248,20 @@ class TicketingManager:
         return order
 
     @staticmethod
-    def charge_stripe_order_payment(order):
+    def create_payment_intent_for_order_stripe(order):
         """
-        Create session for order
+        Create payment intent for order
         :param order: Order for which to charge for
         :return:
         """
-        # create session for the user
+        # create payment intent for the user
         try:
-            session = StripePaymentsManager.capture_payment(order)
-            order.stripe_session_id = session['id']
+            payment_intent = StripePaymentsManager.get_payment_intent_stripe(order)
+            order.stripe_payment_intent_id = payment_intent['id']
             db.session.commit()
-            return True, session
+            return True, payment_intent
         except ConflictError as e:
-            # session creation failed hence expire the order
+            # payment intent creation failed hence expire the order
             order.status = 'expired'
             save_to_db(order)
 
@@ -270,7 +270,6 @@ class TicketingManager:
 
             # return the failure message from stripe.
             return False, e
-
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):

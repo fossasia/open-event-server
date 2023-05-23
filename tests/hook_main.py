@@ -3476,6 +3476,26 @@ def role_invite_get_detail(transaction):
         db.session.commit()
 
 
+@hooks.before("Role Invites > User Email Details By Role Invite > Get User Email Detail By Role Invite Token")
+def role_invite_get_email(transaction):
+    """
+    POST /role_invites/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
+
+
+@hooks.before("Role Invites > Accept Role Invite > Accept Role Invite using Token")
+def accept_role_invite_token(transaction):
+    """
+    POST /role_invites/accept-invite
+    """
+    transaction['skip'] = True
+
 @hooks.before("Role Invites > Role Invite Details > Delete Role Invite")
 def role_invite_delete(transaction):
     """

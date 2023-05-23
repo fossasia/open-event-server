@@ -19,6 +19,7 @@ from app.api.helpers.notification import (
     notify_ticket_purchase_attendee,
     notify_ticket_purchase_organizer,
 )
+from app.api.helpers.mail import convert_to_user_locale
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
@@ -76,9 +77,23 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
+    starts_at = convert_to_user_locale(
+        order.user.email, date_time=order.event.starts_at, tz=order.event.timezone
+    )
+    ends_at = convert_to_user_locale(
+        order.user.email, date_time=order.event.ends_at, tz=order.event.timezone
+    )
+    admin_info = Setting.query.first()
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(
-            render_template('pdf/ticket_purchaser.html', order=order),
+            render_template(
+                'pdf/ticket_purchaser.html',
+                order=order,
+                app_name=get_settings()['app_name'],
+                admin_info=admin_info,
+                starts_at=starts_at,
+                ends_at=ends_at,
+            ),
             UPLOAD_PATHS['pdf']['tickets_all'],
             dir_path='/static/uploads/pdf/tickets/',
             identifier=order.identifier,
@@ -89,9 +104,24 @@ def create_pdf_tickets_for_holder(order):
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
+            starts_at = convert_to_user_locale(
+                holder.email, date_time=order.event.starts_at, tz=order.event.timezone
+            )
+            ends_at = convert_to_user_locale(
+                holder.email, date_time=order.event.ends_at, tz=order.event.timezone
+            )
+
             # create attendee pdf for every ticket holder
             pdf = create_save_pdf(
-                render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                render_template(
+                    'pdf/ticket_attendee.html',
+                    order=order,
+                    holder=holder,
+                    app_name=get_settings()['app_name'],
+                    admin_info=admin_info,
+                    starts_at=starts_at,
+                    ends_at=ends_at,
+                ),
                 UPLOAD_PATHS['pdf']['tickets_all'],
                 dir_path='/static/uploads/pdf/tickets/',
                 identifier=order.identifier,
@@ -100,8 +130,6 @@ def create_pdf_tickets_for_holder(order):
             )
             holder.pdf_url = pdf
             save_to_db(holder)
-        
-        admin_info = Setting.query.first()
 
         # create order invoices pdf
         order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
@@ -110,13 +138,13 @@ def create_pdf_tickets_for_holder(order):
         for order_ticket in order_tickets:
             ticket = dict(
                 id=order_ticket.ticket.id,
-                price=order_ticket.ticket.price,
-                quantity=order_ticket.quantity
+                price=order_ticket.price,
+                quantity=order_ticket.quantity,
             )
             tickets.append(ticket)
-        
+
         # calculate order amount using helper function
-        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)            
+        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)
 
         create_save_pdf(
             render_template(
@@ -125,10 +153,16 @@ def create_pdf_tickets_for_holder(order):
                 event=order.event,
                 tax=order.event.tax,
                 order_tickets=order_tickets,
-                event_starts_at=order.event.starts_at_tz.strftime('%d %B %Y'),
-                created_at=order.created_at.strftime('%d %B %Y'),
+                event_starts_at=convert_to_user_locale(
+                    order.user.email,
+                    date=order.event.starts_at_tz,
+                ),
+                created_at=convert_to_user_locale(
+                    order.user.email,
+                    date=order.created_at,
+                ),
                 admin_info=admin_info,
-                order_amount=order_amount
+                order_amount=order_amount,
             ),
             UPLOAD_PATHS['pdf']['order'],
             dir_path='/static/uploads/pdf/tickets/',
@@ -240,7 +274,7 @@ def calculate_order_amount(tickets, discount_code=None):
             tax = event.tax
             tax_included = tax.is_tax_included_in_price
 
-        if ticket.type == 'donation':
+        if ticket.type in ['donation', 'donationRegistration']:
             price = ticket_info.get('price')
             if not price or price > ticket.max_price or price < ticket.min_price:
                 raise UnprocessableEntityError(
@@ -249,7 +283,7 @@ def calculate_order_amount(tickets, discount_code=None):
                     f"{ticket.min_price} to {ticket.max_price}",
                 )
         else:
-            price = ticket.price if ticket.type != 'free' else 0.0
+            price = ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
 
         if tax:
             if tax_included:
@@ -257,7 +291,7 @@ def calculate_order_amount(tickets, discount_code=None):
             else:
                 ticket_tax = price * tax.rate / 100
 
-        if discount_code and ticket.type != 'free':
+        if discount_code and ticket.type not in ['free', 'freeRegistration']:
             code = (
                 DiscountCode.query.with_parent(ticket)
                 .filter_by(id=discount_code.id)
@@ -270,9 +304,13 @@ def calculate_order_amount(tickets, discount_code=None):
                         discount_percent = (discount_amount / price) * 100
                         if tax:
                             if tax_included:
-                                discounted_tax = (price - discount_amount) - (price - discount_amount) / (1 + tax.rate / 100)
+                                discounted_tax = (price - discount_amount) - (
+                                    price - discount_amount
+                                ) / (1 + tax.rate / 100)
                             else:
-                                discounted_tax = (price - discount_amount) * tax.rate / 100
+                                discounted_tax = (
+                                    (price - discount_amount) * tax.rate / 100
+                                )
                     else:
                         discount_amount = (price * code.value) / 100
                         if tax:
@@ -283,7 +321,7 @@ def calculate_order_amount(tickets, discount_code=None):
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
                         'total': round(discount_amount * quantity, 2),
-                        'type': code.type
+                        'type': code.type,
                     }
 
         total_discount += round(discount_amount * quantity, 2)
@@ -303,7 +341,7 @@ def calculate_order_amount(tickets, discount_code=None):
                 'ticket_fee': round(ticket_fee, 2),
                 'sub_total': round(sub_total, 2),
                 'ticket_tax': round(ticket_tax, 2),
-                'discounted_tax': round(discounted_tax, 2)
+                'discounted_tax': round(discounted_tax, 2),
             }
         )
 

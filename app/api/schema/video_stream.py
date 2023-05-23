@@ -21,10 +21,16 @@ class VideoStreamExtraOptionsSchema(JsonSchema):
     endCurrentMeeting = fields.Boolean(default=False)
 
 
+class VideoStreamJitsiOptionsSchema(JsonSchema):
+    muteOnStart = fields.Boolean(default=False)
+    hideCamOnStart = fields.Boolean(default=False)
+
+
 class VideoStreamExtraSchema(JsonSchema):
     autoplay = fields.Boolean(default=True)
     loop = fields.Boolean(default=False)
     bbb_options = fields.Nested(VideoStreamExtraOptionsSchema, allow_none=True)
+    jitsi_options = fields.Nested(VideoStreamJitsiOptionsSchema, allow_none=True)
 
 
 class VideoStreamSchema(Schema):
@@ -38,6 +44,7 @@ class VideoStreamSchema(Schema):
     name = fields.Str(required=True)
     url = fields.Url(required=True)
     password = fields.Str(required=False, allow_none=True)
+    bg_img_url = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
     extra = fields.Nested(VideoStreamExtraSchema, allow_none=True)
     rooms = Relationship(
@@ -84,3 +91,16 @@ class VideoStreamSchema(Schema):
         schema='VideoStreamModeratorSchema',
         type_='video-stream-moderator',
     )
+
+
+class ChatmosphereSchema(Schema):
+    class Meta:
+        type_ = 'video-stream'
+        self_view = 'v1.video_stream_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+    name = fields.Str(required=True)
+    url = fields.Url(required=True)
+    bg_img_url = fields.Str(required=False, allow_none=True)
