@@ -2882,13 +2882,14 @@ files = [
 
 [[package]]
 name = "omise"
-version = "0.11.0"
+version = "0.12.0"
 description = "Omise Python client"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "omise-0.11.0.tar.gz", hash = "sha256:d4fa58da2aae4e08ece622db8b27fe24158a7ecb2d50acf90b5496d7bdd3a73f"},
+    {file = "omise-0.12.0-py3-none-any.whl", hash = "sha256:59dfee1eb9df3d5db5f941d2de4ec1a3b16f25e8a6cc4e239dcc31e9f61b411f"},
+    {file = "omise-0.12.0.tar.gz", hash = "sha256:2b1fd975f6dd2bd845e7b92dcb73277ac22bb3a6da9d99407f489f59a29520bb"},
 ]
 
 [package.dependencies]
@@ -5097,4 +5098,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "834fa3996b40f66f646f2ec2257e1251af0c0727db96c10a3b7559505c41178c"
+content-hash = "90d331728c37a0181857c1237c0432d8df6367f4ea56652f38e9c4d3e487aa17"
