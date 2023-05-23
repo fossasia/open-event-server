@@ -123,9 +123,9 @@ def create_app():
     _jwt.token_in_blacklist_loader(is_token_blacklisted)
 
     # setup celery
-    app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
-    app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
-    app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
+    app.config['broker_url'] = app.config['REDIS_URL']
+    app.config['result_backend'] = app.config['broker_url']
+    app.config['accept_content'] = ['json', 'application/text']
 
     app.config['MAIL_RECORDER'] = MailRecorder(use_env=True)
 
@@ -153,7 +153,7 @@ def create_app():
         from app.api.speaker_invites import speaker_invites_misc_routes
         from app.api.auth import authorised_blueprint
         from app.api.admin_translations import admin_blueprint
-        from app.api.orders import alipay_blueprint
+        from app.api.orders import alipay_blueprint, stripe_blueprint
         from app.api.sessions import sessions_blueprint
         from app.api.settings import admin_misc_routes
         from app.api.server_version import info_route
@@ -166,6 +166,7 @@ def create_app():
         from app.api.custom.users_groups_roles import users_groups_roles_routes
         from app.api.custom.events import events_routes
         from app.api.custom.groups import groups_routes
+        from app.api.custom.group_role_invite import group_role_invites_routes
         from app.api.video_stream import streams_routes
         from app.api.events import events_blueprint
 
@@ -185,6 +186,7 @@ def create_app():
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
+        app.register_blueprint(stripe_blueprint)
         app.register_blueprint(admin_misc_routes)
         app.register_blueprint(info_route)
         app.register_blueprint(ticket_blueprint)
@@ -199,6 +201,7 @@ def create_app():
         app.register_blueprint(groups_routes)
         app.register_blueprint(events_blueprint)
         app.register_blueprint(tickets_routes)
+        app.register_blueprint(group_role_invites_routes)
 
         add_engine_pidguard(db.engine)
 

@@ -7,6 +7,7 @@ from sqlalchemy_utils import aggregated
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.user_follow_group import UserFollowGroup
+from app.settings import get_settings
 
 
 class Group(SoftDeletionModel):
@@ -20,6 +21,8 @@ class Group(SoftDeletionModel):
     social_links = db.Column(db.JSON)
     logo_url = db.Column(db.String)
     banner_url = db.Column(db.String)
+    thumbnail_image_url = db.Column(db.String)
+    is_promoted = db.Column(db.Boolean, default=False, nullable=False)
     about = db.Column(db.Text)
     created_at: datetime = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     modified_at: datetime = db.Column(
@@ -40,3 +43,8 @@ class Group(SoftDeletionModel):
         if not current_user:
             return None
         return UserFollowGroup.query.filter_by(user=current_user, group=self).first()
+
+    @property
+    def view_page_link(self):
+        frontend_url = get_settings()['frontend_url']
+        return f"{frontend_url}/g/{self.id}"

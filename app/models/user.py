@@ -96,6 +96,7 @@ class User(SoftDeletionModel):
     company = db.Column(db.String)
     billing_address = db.Column(db.String)
     billing_city = db.Column(db.String)
+    language_prefrence = db.Column(db.String)
     billing_zip_code = db.Column(db.String)
     billing_additional_info = db.Column(db.String)
 

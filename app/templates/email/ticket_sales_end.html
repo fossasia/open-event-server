@@ -1,0 +1,26 @@
+{{ _('Hello,') }}
+<br/><br/>
+{{ _('This is an automatic message from %(url)s.', url=settings.frontend_url) }}
+<br/><br/>
+{{ _('The ticket sales period for one or several of your tickets for %(event_name)s has ended.', event_name=event_name) }} {{ _('If you would like to reactivate ticket sales for these tickets, please login to your account and edit the sales period for your tickets.') }}
+<br/><br/>
+{{ _('Ticket Sales have ended for') }}:<br/>
+{{ticket_names}}
+<br/><br/>
+{{ _('Steps to change the ticket sales period') }}:
+<br/>
+1. {{ _('Login to your account.') }}<br/>
+2. {{ _('On the top right click “Manage Events”.') }}<br/>
+3. {{ _('On the Events Dashboard choose the event you want to edit and click the “Edit Symbol” of the event.') }}<br/>
+4. {{ _('You are now editing the “Basic Details” of your event.')}} {{ _('Scroll down to the tickets section, choose the ticket you want to edit and click on the “Settings Symbol” of the ticket.') }}<br/>
+5. {{ _('In the ticket settings adjust the sales period for the ticket.') }}<br/>
+6. {{ _('Repeat the steps for other tickets, if any.') }}<br/>
+7. {{ _('Scroll to the bottom of the page and save the changes by clicking “Publish”.') }}<br/>
+{% autoescape false %}
+{{ _('You can access the dashboard of the event here %(dashboard_link)s.', dashboard_link = '<a href="%s">"%s"</a>' % (event_dashboard, event_dashboard)) | safe }}<br/>
+{% endautoescape %}
+<br/><br/>
+{{ _('Thank you.') }}
+<br/><br/>
+<a href={{ settings.frontend_url }}>{{ settings.frontend_url }}</a>
+<br/>

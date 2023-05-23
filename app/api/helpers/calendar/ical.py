@@ -1,9 +1,10 @@
 from urllib.parse import quote
 
 import pytz
+from app.api.helpers.utilities import remove_html_tags
 from flask import jsonify
 from flask_jwt_extended import current_user
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, Timezone
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
@@ -24,13 +25,18 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
     event_component.add('dtstart', event.starts_at_tz)
     event_component.add('dtend', event.ends_at_tz)
     event_component.add('location', event.normalized_location)
-    event_component.add('description', event.description)
+    event_component.add('description', remove_html_tags(event.description))
     if event.has_coordinates:
         event_component.add('geo', (event.latitude, event.longitude))
     if event.owner_description:
-        event_component.add('organizer', event.owner_description)
+        event_component.add('organizer', remove_html_tags(event.owner_description))
 
     cal.add_component(event_component)
+
+    timezone = Timezone()
+    timezone.add('TZID', event.timezone)
+
+    cal.add_component(timezone)
 
     if include_sessions:
         sessions_query = (
@@ -66,7 +72,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
                 else ""
             )
             session_link_heading = (
-                "Join using link: " + session_video_url + "<br/>"
+                " Join using link: " + session_video_url + " "
                 if session_video_url
                 else ""
             )
@@ -74,9 +80,9 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
                 " "
                 + "Room: "
                 + session.microlocation.name
-                + "<br/>"
+                + " "
                 + session_link_heading
-                + "<br/>"
+                + " "
                 + session.short_abstract
             )
             session_component = Event()
@@ -95,7 +101,7 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
             session_component.add(
                 'dtend', session.ends_at.astimezone(pytz.timezone(event.timezone))
             )
-            session_component.add('description', session_description)
+            session_component.add('description', remove_html_tags(session_description))
             session_component.add('url', event.site_link + '/session/' + str(session.id))
 
             cal.add_component(session_component)

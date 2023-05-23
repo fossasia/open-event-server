@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 import pytz
 from flask import Blueprint, g, jsonify, request
@@ -73,11 +73,6 @@ class SessionListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if session.event.get_owner():
-            owner = session.event.get_owner()
-            owner_email = owner.email
-            send_email_new_session(owner_email, session)  # TODO: Send to all organizers
-            notify_new_session(session)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(
@@ -86,6 +81,13 @@ class SessionListPost(ResourceList):
                 speaker_id=speaker.id,
             )
             save_to_db(session_speaker_link, "Session Speaker Link Saved")
+        
+        if session.event.get_owner():
+            owner = session.event.get_owner()
+            owner_email = owner.email
+            if session.speakers:
+                send_email_new_session(owner_email, session, session.speakers)  # TODO: Send to all organizers
+            notify_new_session(session)
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -272,11 +274,10 @@ class SessionDetail(ResourceDetail):
         is_speaker_or_admin = is_logged_in() and has_access(
             'is_speaker_for_session', id=session.id
         )
-        if not current_user:
-            raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
-        speaker_invite = SpeakerInvite.query.filter_by(
-            email=current_user.email, session_id=session.id, status='pending'
-        ).first()
+        if current_user:
+            speaker_invite = SpeakerInvite.query.filter_by(
+                email=current_user.email, session_id=session.id, status='pending'
+            ).first()
         if (
             session.state not in ['accepted', 'confirmed']
             and not is_speaker_or_admin
@@ -367,6 +368,10 @@ class SessionDetail(ResourceDetail):
                         speaker_id=speaker.id,
                     )
                     save_to_db(session_speaker_link, "Session Speaker Link Saved")
+                if current_session.event.get_owner() and current_session.speakers:
+                    owner = session.event.get_owner()
+                    owner_email = owner.email
+                    send_email_new_session(owner_email, session, current_session.speakers)  # TODO: Send to all organizers
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
@@ -382,7 +387,7 @@ class SessionDetail(ResourceDetail):
     }
 
 
-def notify_for_session(session, mail_override: Dict[str, str] = None):
+def notify_for_session(session, mail_override: Optional[Dict[str, str]] = None):
     # Email for speaker
     speakers = session.speakers
     for speaker in speakers:

@@ -1,11 +1,11 @@
-# Open Event Server test
+# Open Event Server
 
 ![Open Event Server](/docs/images/open-event-server.png)
 
 [![GitHub release](https://img.shields.io/github/release/fossasia/open-event-server.svg)](https://github.com/fossasia/open-event-server/releases/latest)
 [![Build Status](https://travis-ci.org/fossasia/open-event-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-server)
 [![CircleCI Build Staus Badge](https://img.shields.io/circleci/build/github/fossasia/open-event-server?label=CircleCI%20Build)](https://www.circleci.com/gh/fossasia/open-event-server)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-server)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f5036c0e23b44270ad24397e338b8412)](https://www.codacy.com/gh/fossasia/open-event-server/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fossasia/open-event-server&amp;utm_campaign=Badge_Grade)
 [![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/development/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
@@ -41,14 +41,7 @@ A demo version is automatically deployed from our repositories:
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
 
-**NOTE:** If you are heading towards `Local Installation`, be sure to use one of the following operating systems:
-
-
-* Debian based Linux Distros (like Ubuntu)
-* MacOS
-
-1. [Generic Installation Instructions](/docs/installation/basic.md)
-1. [Local Installation](/docs/installation/local.md)
+1. [Installation Instructions](/docs/installation/basic.md)
 1. [Vagrant Installation](/docs/installation/vagrant.md)
 1. [Deployment on Google Compute Engine](/docs/installation/google.md)
 1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
@@ -206,7 +199,7 @@ Clone the repo and set up the server according to the steps listed. Make sure yo
 
 ```
 # Install Poetry
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python -
 source ~/.profile
 
 # Install Python dependencies
@@ -250,6 +243,20 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 ```
 * Once the tests are completed, a report and a log would be generated at `report.html` and `log.html` respectively in your root directory.
 
+### Pre-commits guide
+
+Git hook scripts are useful for identifying simple issues before submission to code review.
+
+#### Install the git hook scripts:
+* run pre-commit install to set up the git hook scripts
+```sh
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+```
+* now pre-commit will run automatically on git commit!
+
+#### For configuration, [Click Here](https://pre-commit.com/)
+
 ## Logging
 
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/general/logs.md).
@@ -263,7 +270,6 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 If you would like to contribute to the translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
 Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
-
 
 ## Contributions, Bug Reports, Feature Requests
 

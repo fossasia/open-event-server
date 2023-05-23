@@ -67,6 +67,7 @@ class Session(SoftDeletionModel):
 
     feedbacks = db.relationship('Feedback', backref="session")
     slides_url = db.Column(db.String)
+    slides = db.Column(db.JSON)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)
@@ -128,7 +129,7 @@ class Session(SoftDeletionModel):
 
     @property
     def site_cfs_link(self):
-        return self.event.site_link + f"/cfs/session/{self.id}"
+        return self.event.site_link + "/cfs"
 
     def __repr__(self):
         return '<Session %r>' % self.title

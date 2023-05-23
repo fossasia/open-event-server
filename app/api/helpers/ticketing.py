@@ -31,7 +31,7 @@ def validate_ticket_holders(ticket_holder_ids):
         )
         raise ObjectNotFound(
             {'pointer': '/data/relationships/attendees'},
-            "Some attendee among ids {} do not exist".format(str(ticket_holder_ids)),
+            "Some attendee among ids {str(ticket_holder_ids)} do not exist",
         )
 
     for ticket_holder in ticket_holders:
@@ -137,10 +137,11 @@ def validate_discount_code(
         raise UnprocessableEntityError(
             {'pointer': 'discount_code_id'}, "Invalid Discount Code"
         )
-    if not discount_code.is_available(tickets, ticket_holders):
-        raise UnprocessableEntityError(
-            {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
-        )
+    # TODO: Need to check it correctly
+    # if not discount_code.is_available(tickets, ticket_holders):
+    #     raise UnprocessableEntityError(
+    #         {'source': 'discount_code_id'}, 'Discount Usage Exceeded'
+    #     )
 
     return discount_code
 
@@ -247,55 +248,28 @@ class TicketingManager:
         return order
 
     @staticmethod
-    def charge_stripe_order_payment(order, token_id):
+    def create_payment_intent_for_order_stripe(order):
         """
-        Charge the user through Stripe
+        Create payment intent for order
         :param order: Order for which to charge for
-        :param token_id: Stripe token
         :return:
         """
-        # save the stripe token with the order
-        order.stripe_token = token_id
-        save_to_db(order)
-
-        # charge the user
+        # create payment intent for the user
         try:
-            charge = StripePaymentsManager.capture_payment(order)
+            payment_intent = StripePaymentsManager.get_payment_intent_stripe(order)
+            order.stripe_payment_intent_id = payment_intent['id']
+            db.session.commit()
+            return True, payment_intent
         except ConflictError as e:
-            # payment failed hence expire the order
+            # payment intent creation failed hence expire the order
             order.status = 'expired'
             save_to_db(order)
 
             # delete related attendees to unlock the tickets
             delete_related_attendees_for_order(order)
 
-            raise e
-
-        # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
-        if charge.paid:
-            # update the order in the db.
-            order.paid_via = charge.source.object
-            order.brand = charge.source.brand
-            order.exp_month = charge.source.exp_month
-            order.exp_year = charge.source.exp_year
-            order.last4 = charge.source.last4
-            order.transaction_id = charge.id
-            order.status = 'completed'
-            order.completed_at = datetime.utcnow()
-            save_to_db(order)
-
-            on_order_completed(order)
-
-            return True, 'Charge successful'
-        # payment failed hence expire the order
-        order.status = 'expired'
-        save_to_db(order)
-
-        # delete related attendees to unlock the tickets
-        delete_related_attendees_for_order(order)
-
-        # return the failure message from stripe.
-        return False, charge.failure_message
+            # return the failure message from stripe.
+            return False, e
 
     @staticmethod
     def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):

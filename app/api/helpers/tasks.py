@@ -4,7 +4,9 @@ import logging
 import os
 import urllib.error
 import uuid
+from datetime import datetime
 
+import pytz
 import requests
 from flask import current_app, render_template
 from flask_celeryext import FlaskCeleryExt, RequestContextTask
@@ -41,12 +43,14 @@ from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
+from app.models.group import Group
 from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.models.user_follow_group import UserFollowGroup
 from app.settings import get_settings
 
 from .import_helpers import update_import_job
@@ -126,7 +130,7 @@ def send_email_task_sendgrid(payload):
             attachment.disposition = Disposition('attachment')
             if filename.endswith('.pdf'):
                 attachment.file_type = FileType('application/pdf')
-                attachment.file_name = FileName(payload['to'])
+                attachment.file_name = FileName(filename)
             elif filename.endswith('.ics'):
                 attachment.file_type = FileType('text/calendar')
                 attachment.file_name = FileName('ical.ics')
@@ -211,7 +215,6 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
             photo_url, 'event-image', exhibitor_id, folder='exhibitors'
         )
         exhibitor.thumbnail_image_url = uploaded_images['thumbnail_image_url']
-        exhibitor.banner_url = uploaded_images['large_image_url']
         save_to_db(exhibitor)
         logging.info(
             f'Resized images saved successfully for exhibitor with id: {exhibitor_id}'
@@ -220,6 +223,30 @@ def resize_exhibitor_images_task(self, exhibitor_id, photo_url):
         logging.exception(
             'Error encountered while generating resized images for exhibitor with id: {}'.format(
                 exhibitor_id
+            )
+        )
+
+
+@celery.task(base=RequestContextTask, name='resize.group.images', bind=True)
+def resize_group_images_task(self, group_id, banner_url):
+    group = Group.query.get(group_id)
+    try:
+        logging.info(
+            'Group image resizing tasks started for group with id {}: {}'.format(
+                group_id, banner_url
+            )
+        )
+        uploaded_images = create_save_image_sizes(
+            banner_url, 'event-image', group.id
+        )
+
+        group.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        save_to_db(group)
+        logging.info(f'Resized images saved successfully for group with id: {group_id}')
+    except (requests.exceptions.HTTPError, requests.exceptions.InvalidURL, OSError):
+        logging.exception(
+            'Error encountered while generating resized images for group with id: {}'.format(
+                group_id
             )
         )
 
@@ -615,6 +642,55 @@ def export_sessions_csv_task(self, event_id, status='all'):
     return result
 
 
+@celery.task(base=RequestContextTask, name='export.adminsales.csv', bind=True)
+def export_admin_sales_csv_task(self, status='all'):
+    current_time = datetime.now(pytz.utc)
+    if status not in [
+        'all',
+        'live',
+        'past',
+    ]:
+        status = 'all'
+
+    if status == 'all':
+        sales = Event.query.all()
+    elif status == 'live':
+        sales = Event.query.filter(
+            Event.starts_at <= current_time,
+            Event.ends_at >= current_time,
+        ).all()
+    elif status == 'past':
+        sales = Event.query.filter(
+            Event.ends_at <= current_time,
+        ).all()
+
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = f"sales-{uuid.uuid1().hex}.csv"
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_sales_csv
+
+            content = export_sales_csv(sales)
+            for row in content:
+                writer.writerow(row)
+        sales_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        sales_csv_url = upload(
+            sales_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id='admin', identifier=''),
+        )
+        result = {'download_url': sales_csv_url}
+    except Exception as e:
+        result = {'__error': True, 'result': str(e)}
+        logging.exception('Error in exporting sales as CSV')
+
+    return result
+
+
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
 def export_speakers_csv_task(self, event_id, status='all'):
 
@@ -719,3 +795,35 @@ def rename_chat_room(event_id):
     event = Event.query.get(event_id)
     rename_rocketchat_room(event)
     logging.info("Rocket chat room renamed successfully")
+
+
+@celery.task(base=RequestContextTask, name='export.group.followers.csv', bind=True)
+def export_group_followers_csv_task(self, group_id):
+
+    followers = UserFollowGroup.query.filter_by(group_id=group_id).all()
+
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = f"group-followers-{uuid.uuid1().hex}.csv"
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_group_followers_csv
+
+            content = export_group_followers_csv(followers)
+            for row in content:
+                writer.writerow(row)
+        group_followers_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        group_followers_csv_url = upload(
+            group_followers_csv_file,
+            UPLOAD_PATHS['exports-temp']['csv'].format(event_id='group', identifier=''),
+        )
+        result = {'download_url': group_followers_csv_url}
+    except Exception as e:
+        result = {'__error': True, 'result': str(e)}
+        logging.exception('Error in exporting group followers as CSV')
+
+    return result
