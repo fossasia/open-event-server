@@ -2059,17 +2059,18 @@ tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "icalendar"
-version = "4.0.9"
+version = "5.0.5"
 description = "iCalendar parser/generator"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=3.7"
 files = [
-    {file = "icalendar-4.0.9-py2.py3-none-any.whl", hash = "sha256:cf1446ffdf1b6ad469451a8966cfa7694f5fac796ac6fc7cd93e28c51a637d2c"},
-    {file = "icalendar-4.0.9.tar.gz", hash = "sha256:cc73fa9c848744843046228cb66ea86cd8c18d73a51b140f7c003f760b84a997"},
+    {file = "icalendar-5.0.5-py3-none-any.whl", hash = "sha256:022c3fa7421fe274889007c12582510ab2e4ba0ac612b73dc35982c644356540"},
+    {file = "icalendar-5.0.5.tar.gz", hash = "sha256:ee76771d4eccebae3683beeb9c24c24feb2f8cceade72b92e4437f0144f81584"},
 ]
 
 [package.dependencies]
+"backports.zoneinfo" = {version = "*", markers = "python_version == \"3.7\" or python_version == \"3.8\""}
 python-dateutil = "*"
 pytz = "*"
 
@@ -5059,4 +5060,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "38407bbc30ab4f20be44297e45ffd3d6ea20deb5858a41ae5384cd49eeefd2fb"
+content-hash = "cf32d5851c66b91cfad7b42a522b665193101492cd5b518213c22265f5a041b0"
