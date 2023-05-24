@@ -3061,14 +3061,14 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "2.19.0"
+version = "3.3.2"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pre_commit-2.19.0-py2.py3-none-any.whl", hash = "sha256:10c62741aa5704faea2ad69cb550ca78082efe5697d6f04e5710c3c229afdd10"},
-    {file = "pre_commit-2.19.0.tar.gz", hash = "sha256:4233a1e38621c87d9dda9808c6606d7e7ba0e087cd56d3fe03202a01d2919615"},
+    {file = "pre_commit-3.3.2-py2.py3-none-any.whl", hash = "sha256:8056bc52181efadf4aac792b1f4f255dfd2fb5a350ded7335d251a68561e8cb6"},
+    {file = "pre_commit-3.3.2.tar.gz", hash = "sha256:66e37bec2d882de1f17f88075047ef8962581f83c234ac08da21a0c58953d1f0"},
 ]
 
 [package.dependencies]
@@ -3076,8 +3076,7 @@ cfgv = ">=2.0.0"
 identify = ">=1.0.0"
 nodeenv = ">=0.11.1"
 pyyaml = ">=5.1"
-toml = "*"
-virtualenv = ">=20.0.8"
+virtualenv = ">=20.10.0"
 
 [[package]]
 name = "promise"
@@ -5098,4 +5097,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "252dcf44b1fde656dc76878620eb66cff01bebe7f409d7603a59b429b8a90bbb"
+content-hash = "feeb2d6fb8281c95ee9a63968d5b0856bfc4f3cba0142673e4bdc7592b1e06c5"
