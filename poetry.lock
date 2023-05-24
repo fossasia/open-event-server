@@ -1605,21 +1605,20 @@ files = [
 
 [[package]]
 name = "geoip2"
-version = "4.5.0"
+version = "4.7.0"
 description = "MaxMind GeoIP2 API"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "geoip2-4.5.0-py2.py3-none-any.whl", hash = "sha256:2aed03b45f8037b9e16f02567bcf3623801d6d20689c5fc5676d7c08ed067334"},
-    {file = "geoip2-4.5.0.tar.gz", hash = "sha256:b542252e87eb40adc3a2fc0f4e84b514c4c5e04ed46923a3a74d509f25f3103a"},
+    {file = "geoip2-4.7.0-py2.py3-none-any.whl", hash = "sha256:078fcd4cce26ea029b1e3252a0f0ec20a1f42e7ab0f19b7be3864f20f4db2b51"},
+    {file = "geoip2-4.7.0.tar.gz", hash = "sha256:3bdde4994f6bc917eafab5b51e772d737b2ae00037a5b85001fb06dc68f779df"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.6.2,<4.0.0"
-maxminddb = ">=2.2.0,<3.0.0"
+maxminddb = ">=2.3.0,<3.0.0"
 requests = ">=2.24.0,<3.0.0"
-urllib3 = ">=1.25.2,<2.0.0"
 
 [[package]]
 name = "gevent"
@@ -5101,4 +5100,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "0151b2f71cd9c0ac43fcbfeea03b76648c117564575d5731c3be5dbb8a6e5dc4"
+content-hash = "3aae2b6908e3a10d9353ae9fc749f7528fd8ec7c78d9c4b699b8fd6a535c3b72"
