@@ -1111,14 +1111,14 @@ testing = ["pytest"]
 
 [[package]]
 name = "eventlet"
-version = "0.33.0"
+version = "0.33.3"
 description = "Highly concurrent networking library"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "eventlet-0.33.0-py2.py3-none-any.whl", hash = "sha256:d10a8fcc9e33381905d9873303fde96ebe3541c03fb795055d2c7347dce0639c"},
-    {file = "eventlet-0.33.0.tar.gz", hash = "sha256:80144f489c1bb273a51b6f96ff9785a382d2866b9bab1f5bd748385019f4141f"},
+    {file = "eventlet-0.33.3-py2.py3-none-any.whl", hash = "sha256:e43b9ae05ba4bb477a10307699c9aff7ff86121b2640f9184d29059f5a687df8"},
+    {file = "eventlet-0.33.3.tar.gz", hash = "sha256:722803e7eadff295347539da363d68ae155b8b26ae6a634474d0a920be73cfda"},
 ]
 
 [package.dependencies]
@@ -5097,4 +5097,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "feeb2d6fb8281c95ee9a63968d5b0856bfc4f3cba0142673e4bdc7592b1e06c5"
+content-hash = "b587c276f4ccc08994a6d236192c00285c870e7c3a38001b84a7287660a1caf9"
