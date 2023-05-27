@@ -436,13 +436,14 @@ webencodings = "*"
 
 [[package]]
 name = "blinker"
-version = "1.4"
+version = "1.6.2"
 description = "Fast, simple object-to-object and broadcast signaling"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
+    {file = "blinker-1.6.2-py3-none-any.whl", hash = "sha256:c3d739772abb7bc2860abf5f2ec284223d9ad5c76da018234f6f50d6f31ab1f0"},
+    {file = "blinker-1.6.2.tar.gz", hash = "sha256:4afd3de66ef3a9f8067559fb7a1cbe555c17dcbe15971b05d1b625c3e7abe213"},
 ]
 
 [[package]]
@@ -5105,4 +5106,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "1765673c6e375d452d968963d85d27721c9b301bc913cb97a25caf4e2d0eda08"
+content-hash = "a0ee1ad8e14c03cca41ee4fb9c5e848b853051e539097b2e3f1c5ae3986fba0a"
