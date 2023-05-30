@@ -1205,13 +1205,14 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-admin"
-version = "1.6.0"
+version = "1.6.1"
 description = "Simple and extensible admin interface framework for Flask"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "Flask-Admin-1.6.0.tar.gz", hash = "sha256:424ffc79b7b0dfff051555686ea12e86e48dffacac14beaa319fb4502ac40988"},
+    {file = "Flask-Admin-1.6.1.tar.gz", hash = "sha256:24cae2af832b6a611a01d7dc35f42d266c1d6c75a426b869d8cb241b78233369"},
+    {file = "Flask_Admin-1.6.1-py3-none-any.whl", hash = "sha256:fd8190f1ec3355913a22739c46ed3623f1d82b8112cde324c60a6fc9b21c9406"},
 ]
 
 [package.dependencies]
@@ -5117,4 +5118,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "63181d6850ee261de2c029e93784b1c99f3e3280418956b87b4aacdecdd32d36"
+content-hash = "e50c7a9da14c38989c4beba0f8001b3b11e8a77ec6315174e606aba1a0fda74a"

@@ -92,7 +92,7 @@ blinker = "1.6.2"
 envparse = "0.2"
 flask-rest-jsonapi = {git = "https://github.com/fossasia/flask-rest-jsonapi.git", tag = "0.12.6.5"}
 wtforms = {version = "2.3.3", extras = ["email"]}
-flask-admin = "1.6.0"
+flask-admin = "1.6.1"
 google-compute-engine = "2.8.13"
 factory_boy = "3.2.1"
 sentry-sdk = {version = "1.24.0", extras = ["flask"]}
