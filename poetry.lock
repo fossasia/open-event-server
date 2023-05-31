@@ -1262,14 +1262,14 @@ Flask = "<3"
 
 [[package]]
 name = "flask-celeryext"
-version = "0.4.1"
+version = "0.4.3"
 description = "\"Flask-CeleryExt is a simple integration layer between Celery and Flask.\""
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "Flask-CeleryExt-0.4.1.tar.gz", hash = "sha256:8f37c5b7afdbc3f4135c41d4b3dac3498faf4dbd681b19ffd91bc2f0a63d1d2b"},
-    {file = "Flask_CeleryExt-0.4.1-py2.py3-none-any.whl", hash = "sha256:aaa95aa4a2e5686a8eca2b53e5bbdff454613990574bcd98892e9a908d5adee6"},
+    {file = "Flask-CeleryExt-0.4.3.tar.gz", hash = "sha256:1ad8e84cabffef8d38461e700d8fd1e8389367e6eec532a024d3c294f5097766"},
+    {file = "Flask_CeleryExt-0.4.3-py2.py3-none-any.whl", hash = "sha256:aa05cc9d061ce0abe1f2000ab1e430f25a8bd2cc7d5e6ff35cb74063914cc88c"},
 ]
 
 [package.dependencies]
@@ -1277,7 +1277,7 @@ celery = ">=5.1.0"
 Flask = ">=1.1"
 
 [package.extras]
-tests = ["Sphinx (>=4.2.0)", "check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest (>=6,<7)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-pycodestyle (>=2.2.0)", "pytest-pydocstyle (>=2.2.0)", "redis (>=4.1.4)"]
+tests = ["Sphinx (>=4.2.0)", "check-manifest (>=0.42)", "coverage (>=5.3,<6)", "docker-services-cli (>=0.4.0)", "msgpack-python (>=0.5.6)", "pytest (>=6,<7)", "pytest-black (>=0.3.12)", "pytest-cov (>=3.0.0)", "pytest-flask (>=1.2.0)", "pytest-isort (>=3.0.0)", "pytest-mock (>=2.0.0)", "pytest-pydocstyle (>=2.2.0)", "redis (>=4.1.4)"]
 
 [[package]]
 name = "flask-cors"
@@ -5117,4 +5117,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "3a21705114de773dcf6307f0396659e905d1d248ed984c4cc6fad9feeb4efe96"
+content-hash = "679efe2cec4cec68ae1c0421a2399817845b2911b298ce9cdc4b62e1b23c06cf"
