@@ -87,7 +87,7 @@ python-pentabarf-xml = "0.20"
 python-geoip-geolite2 = "2015.303"
 pycountry = "22.3.5"
 pytz = "2023.3"
-diff-match-patch = "20200713"
+diff-match-patch = "20230430"
 blinker = "1.6.2"
 envparse = "0.2"
 flask-rest-jsonapi = {git = "https://github.com/fossasia/flask-rest-jsonapi.git", tag = "0.12.6.5"}
