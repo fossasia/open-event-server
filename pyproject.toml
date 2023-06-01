@@ -123,7 +123,7 @@ sqlalchemy-citext = "^1.8.0"
 coolname = "^1.1.0"
 python-slugify = "^8.0.1"
 cryptography = "40.0.2"
-Flask-Migrate = "2.7.0"
+Flask-Migrate = "4.0.4"
 marrow-mailer = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "develop"}
 marrow-util = {git = "https://github.com/LexMachinaInc/util.git", rev = "develop"}
 jinja2 = "<3"
