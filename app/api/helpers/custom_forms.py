@@ -21,6 +21,8 @@ def get_schema(form_fields):
             field_type = TrimmedEmail
         elif field.type == 'number':
             field_type = marshmallow.fields.Float
+        elif field.type == 'boolean':
+            field_type = marshmallow.fields.boolean
         else:
             raise UnprocessableEntityError(
                 {'pointer': '/data/complex-field-values/' + field.identifier},
