@@ -10,7 +10,7 @@ RUN apk update && \
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
 
-RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2 libmagic
+RUN apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
 # PDF Generation: weasyprint
 RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
 
@@ -34,6 +34,8 @@ RUN poetry export -f requirements.txt --without-hashes --only main | poetry run 
 ####
 
 FROM base
+
+RUN apk --no-cache add libmagic
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
 
