@@ -10,6 +10,10 @@ class CustomFormTickets(db.Model):
         db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')
     )
     ticket = db.relationship('Ticket', backref='custom_form_ticket', foreign_keys=[ticket_id])
+    event_id: int = db.Column(
+        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE')
+    )
+    event = db.relationship('Event', backref='custom_form_ticket', foreign_keys=[event_id])
 
     def __repr__(self):
         return '<CustomFormTicket %r>' % self.id
