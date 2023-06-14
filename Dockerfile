@@ -35,7 +35,8 @@ RUN poetry export -f requirements.txt --without-hashes --only main | poetry run 
 
 FROM base
 
-RUN apk --no-cache add libmagic
+# these libs are necessary for operation
+RUN apk --no-cache add libmagic cairo pango ttf-opensans
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
 
