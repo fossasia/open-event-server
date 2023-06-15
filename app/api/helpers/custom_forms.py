@@ -15,14 +15,12 @@ def get_schema(form_fields):
     attrs = {}
 
     for field in form_fields:
-        if field.type in ['text', 'checkbox', 'select', 'paragraph']:
+        if field.type in ['text', 'checkbox', 'select', 'paragraph', 'year']:
             field_type = marshmallow.fields.Str
         elif field.type == 'email':
             field_type = TrimmedEmail
         elif field.type == 'number':
             field_type = marshmallow.fields.Float
-        elif field.type == 'year':
-            field_type = marshmallow.fields.number
         else:
             raise UnprocessableEntityError(
                 {'pointer': '/data/complex-field-values/' + field.identifier},
