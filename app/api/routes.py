@@ -1665,6 +1665,8 @@ api.route(
     'custom_form_list',
     '/events/<int:event_id>/custom-forms',
     '/events/<event_identifier>/custom-forms',
+    '/events/<int:event_id>/custom-forms/<string:form_id>',
+    '/events/<event_identifier>/custom-forms/<string:form_id>',
 )
 api.route(
     CustomFormDetail,
@@ -1971,23 +1973,30 @@ api.route(
 api.route(
     CustomFormTicketListPost,
     'custom_form_ticket_list_post',
-    '/custom-form-ticket'
+    '/custom-form-tickets'
 )
 api.route(
-    CustomFormTicketDetail, 'custom_form_ticket_detail', '/custom-form-ticket/<int:id>'
+    CustomFormTicketDetail, 'custom_form_ticket_detail', '/custom-form-tickets/<int:id>'
 )
 api.route(
     CustomFormTicketRelationshipRequire,
     'custom_form_ticket_ticket',
-    '/custom-form-ticket/<int:id>/relationships/ticket',
+    '/custom-form-tickets/<int:id>/relationships/ticket',
 )
 api.route(
     CustomFormTicketRelationshipRequire,
     'custom_form_ticket_event',
-    '/custom-form-ticket/<int:id>/relationships/event',
+    '/custom-form-tickets/<int:id>/relationships/event',
 )
 api.route(
     CustomFormTicketList,
     'custom_form_ticket_list',
-    '/events/<int:event_id>/custom-form-ticket'
+    '/events/<int:event_id>/custom-form-ticket',
+    '/events/<int:event_id>/custom-form-ticket/<string:form_id>',
+)
+api.route(
+    EventRelationship,
+    'event_custom_form_tickets',
+    '/events/<int:id>/relationships/custom-form-tickets',
+    '/events/<identifier>/relationships/custom-form-tickets',
 )

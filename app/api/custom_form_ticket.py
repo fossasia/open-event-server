@@ -77,6 +77,8 @@ class CustomFormTicketList(ResourceList):
         if view_kwargs.get('event_id'):
             events = safe_query_kwargs(Event, view_kwargs, 'event_id')
             query_ = self.session.query(CustomFormTickets).filter_by(event_id=events.id)
+            if view_kwargs.get('form_id'):
+                query_ = query_.filter_by(form_id=CustomFormTickets.form_id)
         query_ = event_query(query_, view_kwargs)
 
         return query_

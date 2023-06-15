@@ -385,6 +385,16 @@ class EventSchemaPublic(SoftDeletionSchema):
         type_='speaker-invite',
         many=True,
     )
+    custom_form_tickets = Relationship(
+        attribute='custom_form_ticket',
+        self_view='v1.event_custom_form_tickets',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.custom_form_ticket_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='CustomFormTicketSchema',
+        many=True,
+        type_='custom-form-ticket',
+    )
 
 
 class EventSchema(EventSchemaPublic):
