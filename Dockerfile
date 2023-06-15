@@ -35,6 +35,11 @@ RUN poetry export -f requirements.txt --without-hashes --only main | poetry run 
 
 FROM base
 
+# these libs are necessary for operation
+RUN apk --no-cache add libmagic cairo pango ttf-opensans && \
+    apk --no-cache add postgresql-libs libxslt jpeg zlib libxml2 # those *might* be useful
+RUN fc-cache -f
+
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
 
 ENV PATH="/opt/pysetup/.venv/bin:$PATH"
