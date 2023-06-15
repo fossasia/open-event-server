@@ -22,7 +22,7 @@ def get_schema(form_fields):
         elif field.type == 'number':
             field_type = marshmallow.fields.Float
         elif field.type == 'boolean':
-            field_type = marshmallow.fields.boolean
+            field_type = marshmallow.fields.Boolean
         else:
             raise UnprocessableEntityError(
                 {'pointer': '/data/complex-field-values/' + field.identifier},
