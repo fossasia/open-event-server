@@ -2,7 +2,7 @@ version: 2
 jobs:
   dependencies:
     docker:
-      - image: quay.io/quan/circleci-python:py3.9
+      - image: eventyay/circleci-python:py3.9
         environment:
           PIP_EXTRA_INDEX_URL: https://pypi.fury.io/fossasia/
 
@@ -39,7 +39,7 @@ jobs:
 
   dredd:
     docker:
-      - image: quay.io/quan/circleci-python:py3.9
+      - image: eventyay/circleci-python:py3.9
         environment:
             APP_CONFIG: config.TestingConfig
             DATABASE_URL: postgresql://postgres@localhost/test
@@ -82,7 +82,7 @@ jobs:
 
   pytype:
     docker:
-      - image: quay.io/quan/circleci-python:py3.9
+      - image: eventyay/circleci-python:py3.9
 
     working_directory: ~/code
 
@@ -111,7 +111,7 @@ jobs:
 
   test:
     docker:
-      - image: quay.io/quan/circleci-python:py3.9
+      - image: eventyay/circleci-python:py3.9
         environment:
           APP_CONFIG: config.TestingConfig
           DATABASE_URL: postgresql://postgres@localhost/test
