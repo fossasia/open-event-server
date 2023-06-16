@@ -41,6 +41,7 @@ class CustomFormSchema(Schema):
                 "number",
                 "paragraph",
                 "boolean",
+                "year",
             ]
         ),
     )
