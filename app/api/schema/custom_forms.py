@@ -40,6 +40,9 @@ class CustomFormSchema(Schema):
                 "email",
                 "number",
                 "paragraph",
+                "richtextlink",
+                "boolean",
+                "year",
             ]
         ),
     )
