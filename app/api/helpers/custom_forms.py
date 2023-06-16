@@ -21,6 +21,8 @@ def get_schema(form_fields):
             field_type = TrimmedEmail
         elif field.type == 'number':
             field_type = marshmallow.fields.Float
+        elif field.type == 'boolean':
+            field_type = marshmallow.fields.Boolean
         else:
             raise UnprocessableEntityError(
                 {'pointer': '/data/complex-field-values/' + field.identifier},
@@ -45,7 +47,10 @@ def validate_custom_form_constraints(form, obj, excluded):
             if not getattr(obj, field.identifier):
                 missing_required_fields.append(field.identifier)
         else:
-            if not (obj.complex_field_values or {}).get(field.identifier):
+            if obj.complex_field_values:
+                if obj.complex_field_values.get(field.identifier) is None:
+                    missing_required_fields.append(field.identifier)
+            else:
                 missing_required_fields.append(field.identifier)
 
     if len(missing_required_fields) > 0:
