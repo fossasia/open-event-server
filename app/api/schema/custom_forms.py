@@ -41,6 +41,8 @@ class CustomFormSchema(Schema):
                 "number",
                 "paragraph",
                 "richtextlink",
+                "boolean",
+                "year",
             ]
         ),
     )
