@@ -95,6 +95,7 @@ class SettingSchemaPublic(Schema):
     stripe_publishable_key = fields.Str(dump_only=True)
     stripe_test_client_id = fields.Str(dump_only=True)
     stripe_test_publishable_key = fields.Str(dump_only=True)
+    stripe_mode = fields.Str(dump_only=True)
 
     # PayPal Credentials
     paypal_mode = fields.Str(dump_only=True)
@@ -239,6 +240,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     stripe_test_client_id = fields.Str(allow_none=True)
     stripe_test_secret_key = fields.Str(allow_none=True)
     stripe_test_publishable_key = fields.Str(allow_none=True)
+    stripe_mode = fields.Str(allow_none=True)
 
     # PayPal Credentials
     paypal_mode = fields.Str(allow_none=True)
