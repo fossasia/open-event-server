@@ -90,6 +90,7 @@ class Setting(db.Model):
     stripe_test_client_id = db.Column(db.String)
     stripe_test_secret_key = db.Column(db.String)
     stripe_test_publishable_key = db.Column(db.String)
+    stripe_mode = db.Column(db.String)
 
     # AliPay Keys - Stripe Sources
     alipay_secret_key = db.Column(db.String)
