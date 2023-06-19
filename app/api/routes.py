@@ -688,8 +688,7 @@ api.route(
     TicketDetail,
     'ticket_detail',
     '/tickets/<int:id>',
-    '/attendees/<int:attendee_id>/ticket',
-    '/custom-form-ticket/<int:custom_form_ticket_id>/ticket'
+    '/attendees/<int:attendee_id>/ticket'
 )
 api.route(
     TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event'
@@ -797,8 +796,7 @@ api.route(
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
-    '/speaker-invites/<int:speaker_invite_id>/event',
-    '/custom-form-ticket/<int:custom_form_ticket_id>/event',
+    '/speaker-invites/<int:speaker_invite_id>/event'
 )
 api.route(
     EventRelationship,
@@ -1963,10 +1961,4 @@ api.route(
     VideoStreamModeratorRelationship,
     'video_stream_moderator_stream',
     '/video-stream-moderators/<int:id>/relationships/video-stream',
-)
-api.route(
-    EventRelationship,
-    'event_custom_form_tickets',
-    '/events/<int:id>/relationships/custom-form-tickets',
-    '/events/<identifier>/relationships/custom-form-tickets',
 )
