@@ -32,10 +32,11 @@ def get_schema(form_fields):
 
 
 def validate_custom_form_constraints(form, obj, excluded):
+    """
+        The validate custom form constraints.
+    """
     ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
-    form_id = ''
-    if ticket:
-        form_id = ticket.form_id
+    form_id = ticket.form_id if ticket else ''
     form_fields = CustomForms.query.filter_by(
         form=form,
         event_id=obj.event_id,
@@ -73,7 +74,12 @@ def validate_custom_form_constraints(form, obj, excluded):
         return data if data else None
 
 
-def validate_custom_form_constraints_request(form, schema, obj, data, excluded=[]):
+def validate_custom_form_constraints_request(form, schema, obj, data, excluded=None):
+    """
+        The validate custom form constraints request.
+    """
+    if excluded is None:
+        excluded = []
     new_obj = type(obj)(**object_as_dict(obj))
     relationship_fields = get_relationships(schema)
     for key, value in data.items():
