@@ -175,7 +175,7 @@ class CustomForms(db.Model):
     is_fixed = db.Column(db.Boolean, default=False)
     position = db.Column(db.Integer, default=0, nullable=False)
     is_public = db.Column(db.Boolean, nullable=False, default=False)
-    is_complex = db.Column(db.Boolean, nullable=False)
+    is_complex = db.Column(db.Boolean, nullable=False, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     custom_form_options = db.relationship('CustomFormOptions', backref="custom_form")
     form_id = db.Column(db.String)
