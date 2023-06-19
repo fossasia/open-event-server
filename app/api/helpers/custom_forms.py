@@ -5,6 +5,7 @@ from sqlalchemy import inspect
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.base import TrimmedEmail
 from app.models.custom_form import CustomForms
+from app.models.ticket import Ticket
 
 
 def object_as_dict(obj):
@@ -31,10 +32,15 @@ def get_schema(form_fields):
 
 
 def validate_custom_form_constraints(form, obj, excluded):
+    ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
+    form_id = ''
+    if ticket:
+        form_id = ticket.form_id
     form_fields = CustomForms.query.filter_by(
         form=form,
         event_id=obj.event_id,
         is_included=True,
+        form_id=form_id
     ).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []

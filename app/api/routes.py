@@ -294,12 +294,6 @@ from app.api.video_stream_moderators import (
     VideoStreamModeratorList,
     VideoStreamModeratorRelationship,
 )
-from app.api.custom_form_ticket import (
-    CustomFormTicketListPost,
-    CustomFormTicketDetail,
-    CustomFormTicketRelationshipRequire,
-    CustomFormTicketList
-)
 
 # users
 api.route(UserList, 'user_list', '/users', '/events/<int:event_id>/organizers')
@@ -1969,30 +1963,6 @@ api.route(
     VideoStreamModeratorRelationship,
     'video_stream_moderator_stream',
     '/video-stream-moderators/<int:id>/relationships/video-stream',
-)
-api.route(
-    CustomFormTicketListPost,
-    'custom_form_ticket_list_post',
-    '/custom-form-tickets'
-)
-api.route(
-    CustomFormTicketDetail, 'custom_form_ticket_detail', '/custom-form-tickets/<int:id>'
-)
-api.route(
-    CustomFormTicketRelationshipRequire,
-    'custom_form_ticket_ticket',
-    '/custom-form-tickets/<int:id>/relationships/ticket',
-)
-api.route(
-    CustomFormTicketRelationshipRequire,
-    'custom_form_ticket_event',
-    '/custom-form-tickets/<int:id>/relationships/event',
-)
-api.route(
-    CustomFormTicketList,
-    'custom_form_ticket_list',
-    '/events/<int:event_id>/custom-form-ticket',
-    '/events/<int:event_id>/custom-form-ticket/<string:form_id>',
 )
 api.route(
     EventRelationship,
