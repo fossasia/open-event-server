@@ -376,7 +376,6 @@ def test_custom_form_complex_fields_complete(db, client, user, jwt):
 
     assert speaker.name == 'Areeb'
     assert speaker.heard_from == 'Gypsie'
-    print(speaker)
     assert speaker.complex_field_values['best_friend'] == 'Tester'
 
 
