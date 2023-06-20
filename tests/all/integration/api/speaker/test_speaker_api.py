@@ -239,6 +239,7 @@ def get_complex_custom_form_speaker(db, user=None):
         type='text',
         is_included=True,
         is_required=True,
+        is_complex=False
     )
     CustomForms(
         event=speaker.event,
@@ -375,6 +376,7 @@ def test_custom_form_complex_fields_complete(db, client, user, jwt):
 
     assert speaker.name == 'Areeb'
     assert speaker.heard_from == 'Gypsie'
+    print(speaker)
     assert speaker.complex_field_values['best_friend'] == 'Tester'
 
 

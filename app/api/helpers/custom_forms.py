@@ -35,14 +35,20 @@ def validate_custom_form_constraints(form, obj, excluded):
     """
         The validate custom form constraints.
     """
-    ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
-    form_id = ticket.form_id if ticket else ''
-    form_fields = CustomForms.query.filter_by(
-        form=form,
-        event_id=obj.event_id,
-        is_included=True,
-        form_id=form_id
-    ).all()
+    if hasattr(obj, 'ticket_id'):
+        ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
+        form_fields = CustomForms.query.filter_by(
+            form=form,
+            event_id=obj.event_id,
+            is_included=True,
+            form_id=ticket.form_id
+        ).all()
+    else:
+        form_fields = CustomForms.query.filter_by(
+            form=form,
+            event_id=obj.event_id,
+            is_included=True
+        ).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
     for field in required_form_fields:

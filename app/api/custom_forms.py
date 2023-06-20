@@ -9,7 +9,7 @@ from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.custom_forms import CustomFormSchema
 from app.models import db
-from app.models.custom_form import CustomForms
+from app.models.custom_form import CUSTOM_FORM_IDENTIFIER_NAME_MAP, CustomForms
 from app.models.event import Event
 
 
@@ -30,6 +30,14 @@ class CustomFormListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event_id'}, "Event: {} not found".format(data['event_id'])
+            )
+
+    
+        if data['form'] != 'attendee':
+            # Assign is_complex to True if not found in identifier map of form type
+            data['is_complex'] = (
+                CUSTOM_FORM_IDENTIFIER_NAME_MAP[data['form']].get(data['field_identifier'])
+                is None
             )
 
     schema = CustomFormSchema
@@ -57,7 +65,6 @@ class CustomFormList(ResourceList):
             query_ = query_.filter_by(form_id=view_kwargs.get('form_id'))
         else:
             query_ = event_query(query_, view_kwargs)
-        print(query_)
         return query_
 
     view_kwargs = True
