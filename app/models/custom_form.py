@@ -61,6 +61,7 @@ ATTENDEE_FORM = {
     "github": {"include": 1, "require": 0},
     "gender": {"include": 0, "require": 0},
     "age_group": {"include": 0, "require": 0},
+    "home_wiki": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
 }
 
@@ -146,6 +147,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "acceptVideoRecording": "Photo & video & text consent",
         "acceptShareDetails": "Partner contact consent",
         "acceptReceiveEmails": "Email consent",
+        "home_wiki": "What is your home wiki."
     },
 }
 
