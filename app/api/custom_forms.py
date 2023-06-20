@@ -32,7 +32,6 @@ class CustomFormListPost(ResourceList):
                 {'parameter': 'event_id'}, "Event: {} not found".format(data['event_id'])
             )
 
-    
         if data['form'] != 'attendee':
             # Assign is_complex to True if not found in identifier map of form type
             data['is_complex'] = (
