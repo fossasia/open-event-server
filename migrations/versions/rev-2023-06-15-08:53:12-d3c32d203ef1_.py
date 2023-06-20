@@ -19,6 +19,8 @@ def upgrade():
     op.add_column('custom_forms', sa.Column('min', sa.Integer(), nullable=True))
     op.add_column('custom_forms', sa.Column('max', sa.Integer(), nullable=True))
     op.add_column('tickets', sa.Column('form_id', sa.String(), nullable=True))
+    op.drop_constraint('custom_form_identifier', 'custom_forms', type_='unique')
+    op.create_unique_constraint('custom_form_identifier', 'custom_forms', ['event_id', 'field_identifier', 'form', 'form_id'])
     # ### end Alembic commands ###
 
 
@@ -28,4 +30,6 @@ def downgrade():
     op.drop_column('custom_forms', 'form_id')
     op.drop_column('custom_forms', 'max')
     op.drop_column('custom_forms', 'min')
+    op.drop_constraint('custom_form_identifier', 'custom_forms', type_='unique')
+    op.create_unique_constraint('custom_form_identifier', 'custom_forms', ['event_id', 'field_identifier', 'form'])
     # ### end Alembic commands ###
