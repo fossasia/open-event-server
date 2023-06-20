@@ -56,6 +56,7 @@ def test_custom_form_create(db, client, user, jwt):
                     "name": "Vortex Tensor",
                     "is-included": True,
                     "is-required": True,
+                    "is-complex": True,
                 },
                 "relationships": {
                     "event": {"data": {"id": str(event.id), "type": "event"}}
