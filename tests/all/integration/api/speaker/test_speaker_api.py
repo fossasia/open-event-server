@@ -239,6 +239,7 @@ def get_complex_custom_form_speaker(db, user=None):
         type='text',
         is_included=True,
         is_required=True,
+        is_complex=False
     )
     CustomForms(
         event=speaker.event,

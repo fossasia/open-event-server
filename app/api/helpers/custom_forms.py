@@ -5,6 +5,7 @@ from sqlalchemy import inspect
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.base import TrimmedEmail
 from app.models.custom_form import CustomForms
+from app.models.ticket import Ticket
 
 
 def object_as_dict(obj):
@@ -33,11 +34,23 @@ def get_schema(form_fields):
 
 
 def validate_custom_form_constraints(form, obj, excluded):
-    form_fields = CustomForms.query.filter_by(
-        form=form,
-        event_id=obj.event_id,
-        is_included=True,
-    ).all()
+    """
+        The validate custom form constraints.
+    """
+    if hasattr(obj, 'ticket_id'):
+        ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
+        form_fields = CustomForms.query.filter_by(
+            form=form,
+            event_id=obj.event_id,
+            is_included=True,
+            form_id=ticket.form_id
+        ).all()
+    else:
+        form_fields = CustomForms.query.filter_by(
+            form=form,
+            event_id=obj.event_id,
+            is_included=True
+        ).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
     for field in required_form_fields:
@@ -72,7 +85,12 @@ def validate_custom_form_constraints(form, obj, excluded):
         return data if data else None
 
 
-def validate_custom_form_constraints_request(form, schema, obj, data, excluded=[]):
+def validate_custom_form_constraints_request(form, schema, obj, data, excluded=None):
+    """
+        The validate custom form constraints request.
+    """
+    if excluded is None:
+        excluded = []
     new_obj = type(obj)(**object_as_dict(obj))
     relationship_fields = get_relationships(schema)
     for key, value in data.items():
