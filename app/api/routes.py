@@ -688,7 +688,7 @@ api.route(
     TicketDetail,
     'ticket_detail',
     '/tickets/<int:id>',
-    '/attendees/<int:attendee_id>/ticket'
+    '/attendees/<int:attendee_id>/ticket',
 )
 api.route(
     TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event'
