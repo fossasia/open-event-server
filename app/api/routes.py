@@ -1657,6 +1657,8 @@ api.route(
     'custom_form_list',
     '/events/<int:event_id>/custom-forms',
     '/events/<event_identifier>/custom-forms',
+    '/events/<int:event_id>/custom-forms/<string:form_id>',
+    '/events/<event_identifier>/custom-forms/<string:form_id>',
 )
 api.route(
     CustomFormDetail,
