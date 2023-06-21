@@ -64,6 +64,8 @@ class TicketHolder(SoftDeletionModel):
         db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
     )
     complex_field_values: str = db.Column(db.JSON)
+    language_form_1: str = db.Column(db.JSON)
+    language_form_2: str = db.Column(db.JSON)
     user = db.relationship(
         'User',
         foreign_keys=[email],
