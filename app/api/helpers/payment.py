@@ -13,7 +13,7 @@ from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.utilities import represents_int, round_money
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
-from app.settings import Environment, get_settings
+from app.settings import Environment, get_settings, refresh_settings
 
 
 @cache.memoize(5)
@@ -39,7 +39,8 @@ class StripePaymentsManager:
         :return: Stripe secret and publishable keys.
         """
         if not event:
-            settings = get_settings()
+            # Perform refresh from db to make sure Stripe keys are retrieved
+            settings = refresh_settings()
             if (
                 settings['app_environment'] == 'development'
                 and settings['stripe_test_secret_key']
