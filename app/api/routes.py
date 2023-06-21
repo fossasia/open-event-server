@@ -796,7 +796,7 @@ api.route(
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
-    '/speaker-invites/<int:speaker_invite_id>/event'
+    '/speaker-invites/<int:speaker_invite_id>/event',
 )
 api.route(
     EventRelationship,
