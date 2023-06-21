@@ -45,7 +45,6 @@ def validate_custom_form_constraints(form, obj, excluded):
     if hasattr(obj, 'ticket_id'):
         ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
         conditions.update({'form_id': ticket.form_id})
-    
     form_fields = CustomForms.query.filter_by(**conditions).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
