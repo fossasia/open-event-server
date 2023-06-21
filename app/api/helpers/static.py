@@ -560,5 +560,3 @@ GENDER_CHOICES = [
 ]
 
 LEVEL_CHOICES = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
-
-HOME_WIKI_CHOICES = ['Wikipedia', 'Wiktionary', 'Wikiquote', 'Wikinews', 'Wikisource', 'Wikibooks', 'Wikiversity', 'Wikivoyage', 'Wikimedia Commons', 'Wikidata', 'Wikispecies', 'Meta-Wiki']

@@ -3,7 +3,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.fields import CustomFormValueField
-from app.api.helpers.static import AGE_GROUP_CHOICES, HOME_WIKI_CHOICES
+from app.api.helpers.static import AGE_GROUP_CHOICES
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.validations import validate_complex_fields_json
 from app.api.schema.base import SoftDeletionSchema, TrimmedEmail
@@ -59,9 +59,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
-    home_wiki = fields.Str(
-        validate=validate.OneOf(choices=HOME_WIKI_CHOICES), allow_none=True
-    )
+    home_wiki = fields.Str(allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)
