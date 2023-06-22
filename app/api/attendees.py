@@ -11,7 +11,6 @@ from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.utilities import require_relationship
 from app.api.schema.attendees import AttendeeSchema
 from app.models import db
 from app.models.order import Order
