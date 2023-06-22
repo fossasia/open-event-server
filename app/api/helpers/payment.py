@@ -13,7 +13,7 @@ from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.utilities import represents_int, round_money
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
-from app.settings import Environment, get_settings, refresh_settings
+from app.settings import Environment, get_settings
 
 
 @cache.memoize(5)
@@ -40,7 +40,7 @@ class StripePaymentsManager:
         """
         if not event:
             # Perform refresh from db to make sure Stripe keys are retrieved
-            settings = refresh_settings()
+            settings = get_settings(from_db=True)
             if (
                 settings['app_environment'] == 'development'
                 and settings['stripe_test_secret_key']

@@ -13,9 +13,10 @@ def get_settings(from_db=False):
         return current_app.config['custom_settings']
 
     app_environment = current_app.config.get('ENV', 'production')
+    app_environment = app_environment.strip()
 
     # query environment based on initial config applied at start for Flask app
-    s = Setting.query.order_by(desc(Setting.id)).filter(Setting.app_environment == app_environment).first()
+    s = Setting.query.filter(Setting.app_environment == app_environment.strip()).first()
 
     if s is None:
         set_settings(app_name='Open Event', app_environment=app_environment)
