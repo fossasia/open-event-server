@@ -21,6 +21,20 @@ exclude = '''
 )
 '''
 
+[tool.pylint.MAIN]
+load-plugins = [ "pylint_flask_sqlalchemy", "pylint_flask" ]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "invalid-name",
+]
+
+[tool.pylint.CODE_STYLE]
+max-line-length-suggestions = 90
+
 [tool.isort]
 profile = "black"
 line_length = 90
