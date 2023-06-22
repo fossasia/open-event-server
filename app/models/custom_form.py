@@ -146,6 +146,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "acceptVideoRecording": "Photo & video & text consent",
         "acceptShareDetails": "Partner contact consent",
         "acceptReceiveEmails": "Email consent",
+        "is_consent_form_field": "Consent form field"
     },
 }
 
