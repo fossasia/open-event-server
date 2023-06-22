@@ -5,7 +5,6 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import GetterRelationship
-from app.models import db
 from utils.common import use_defaults
 
 
