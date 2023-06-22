@@ -163,7 +163,7 @@ class CustomForms(db.Model):
     __tablename__ = 'custom_forms'
     __table_args__ = (
         UniqueConstraint(
-            'event_id', 'field_identifier', 'form', name='custom_form_identifier'
+            'event_id', 'field_identifier', 'form', 'form_id', name='custom_form_identifier'
         ),
     )
     id = db.Column(db.Integer, primary_key=True)
