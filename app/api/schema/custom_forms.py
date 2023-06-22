@@ -52,7 +52,7 @@ class CustomFormSchema(Schema):
     is_included = fields.Boolean(default=False)
     is_public = fields.Boolean(default=False)
     position = fields.Integer(allow_none=True, default=0)
-    is_complex = fields.Boolean(default=False)
+    is_complex = fields.Boolean(dump_only=True, default=False)
     is_fixed = fields.Boolean(default=False)
     event = Relationship(
         self_view='v1.custom_form_event',

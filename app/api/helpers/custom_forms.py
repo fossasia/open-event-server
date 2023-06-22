@@ -35,22 +35,17 @@ def get_schema(form_fields):
 
 def validate_custom_form_constraints(form, obj, excluded):
     """
-        The validate custom form constraints.
+    The validate custom form constraints.
     """
+    conditions = {
+        'form': form,
+        'event_id': obj.event_id,
+        'is_included': True,
+    }
     if hasattr(obj, 'ticket_id'):
         ticket = Ticket.query.filter_by(id=obj.ticket_id).first()
-        form_fields = CustomForms.query.filter_by(
-            form=form,
-            event_id=obj.event_id,
-            is_included=True,
-            form_id=ticket.form_id
-        ).all()
-    else:
-        form_fields = CustomForms.query.filter_by(
-            form=form,
-            event_id=obj.event_id,
-            is_included=True
-        ).all()
+        conditions.update({'form_id': ticket.form_id})
+    form_fields = CustomForms.query.filter_by(**conditions).all()
     required_form_fields = filter(lambda field: field.is_required, form_fields)
     missing_required_fields = []
     for field in required_form_fields:
@@ -87,7 +82,7 @@ def validate_custom_form_constraints(form, obj, excluded):
 
 def validate_custom_form_constraints_request(form, schema, obj, data, excluded=None):
     """
-        The validate custom form constraints request.
+    The validate custom form constraints request.
     """
     if excluded is None:
         excluded = []
