@@ -549,7 +549,8 @@ PAYMENT_CURRENCY_CHOICES = [
     'USD',
 ]
 
-AGE_GROUP_CHOICES = ['19 or less', '20 to 29', '30 to 39', '40 to 49', '50 or above']
+AGE_GROUP_CHOICES = ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85+', 'I prefer not '
+                                                                                                       'to say']
 
 GENDER_CHOICES = [
     'Male',
