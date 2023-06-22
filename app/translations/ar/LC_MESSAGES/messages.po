@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
 "PO-Revision-Date: 2023-06-26 18:42+0000\n"
-"Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
+"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/open-event/server/"
 "ar/>\n"
 "Language: ar\n"
@@ -581,7 +581,7 @@ msgstr "ملخص الطلب"
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
-msgstr ""
+msgstr "اسم"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
@@ -618,7 +618,7 @@ msgstr "موقع"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
@@ -1045,7 +1045,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "وصف"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
