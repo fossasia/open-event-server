@@ -13,7 +13,6 @@ def get_settings(from_db=False):
         return current_app.config['custom_settings']
 
     app_environment = current_app.config.get('ENV', 'production')
-    
     # query environment based on initial config applied at start for Flask app
     s = Setting.query.filter(Setting.app_environment == app_environment).first()
 
