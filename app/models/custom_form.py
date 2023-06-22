@@ -62,6 +62,7 @@ ATTENDEE_FORM = {
     "gender": {"include": 0, "require": 0},
     "age_group": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
+    "is_consent_of_refund_policy" : {"include": 0, "require": 0}
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
@@ -146,6 +147,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "acceptVideoRecording": "Photo & video & text consent",
         "acceptShareDetails": "Partner contact consent",
         "acceptReceiveEmails": "Email consent",
+        "is_consent_of_refund_policy": "Consent of refund policy"
     },
 }
 

@@ -70,6 +70,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
+    is_consent_of_refund_policy = fields.Boolean()
     event = Relationship(
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},
