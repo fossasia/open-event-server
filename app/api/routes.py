@@ -688,7 +688,7 @@ api.route(
     TicketDetail,
     'ticket_detail',
     '/tickets/<int:id>',
-    '/attendees/<int:attendee_id>/ticket'
+    '/attendees/<int:attendee_id>/ticket',
 )
 api.route(
     TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event'
@@ -796,7 +796,7 @@ api.route(
     '/video-streams/<int:video_stream_id>/event',
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
-    '/speaker-invites/<int:speaker_invite_id>/event'
+    '/speaker-invites/<int:speaker_invite_id>/event',
 )
 api.route(
     EventRelationship,
