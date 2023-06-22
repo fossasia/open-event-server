@@ -59,6 +59,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
+    home_wiki = fields.Str(allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)

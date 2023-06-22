@@ -61,6 +61,7 @@ ATTENDEE_FORM = {
     "github": {"include": 1, "require": 0},
     "gender": {"include": 0, "require": 0},
     "age_group": {"include": 0, "require": 0},
+    "home_wiki": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
@@ -149,7 +150,8 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "acceptShareDetails": "Partner contact consent",
         "acceptReceiveEmails": "Email consent",
         "language_form_1": "What is your native language, or what language are you most fluent in?",
-        "language_form_2": "Are you fluent in any other of the following languages?"
+        "language_form_2": "Are you fluent in any other of the following languages?",
+        "home_wiki": "What is your home wiki"
     },
 }
 
