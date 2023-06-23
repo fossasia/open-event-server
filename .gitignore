@@ -62,3 +62,4 @@ celerybeat-schedule*
 .pytype
 .tool-versions
 *.mo
+.python-version
