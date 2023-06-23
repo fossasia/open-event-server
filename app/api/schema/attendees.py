@@ -59,6 +59,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     age_group = fields.Str(
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
+    home_wiki = fields.Str(allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)
@@ -71,6 +72,8 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     is_consent_form_field = fields.Boolean(allow_none=True)
+    language_form_1 = fields.Str(allow_none=True)
+    language_form_2 = fields.Str(allow_none=True)
     event = Relationship(
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},

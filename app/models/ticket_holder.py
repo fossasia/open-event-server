@@ -44,6 +44,7 @@ class TicketHolder(SoftDeletionModel):
     accept_share_details: bool = db.Column(db.Boolean)
     accept_receive_emails: bool = db.Column(db.Boolean)
     age_group: str = db.Column(db.String)
+    home_wiki: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)
     ticket_id: int = db.Column(
@@ -64,6 +65,8 @@ class TicketHolder(SoftDeletionModel):
         db.DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow
     )
     complex_field_values: str = db.Column(db.JSON)
+    language_form_1: str = db.Column(db.JSON)
+    language_form_2: str = db.Column(db.JSON)
     user = db.relationship(
         'User',
         foreign_keys=[email],

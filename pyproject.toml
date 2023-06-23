@@ -21,6 +21,20 @@ exclude = '''
 )
 '''
 
+[tool.pylint.MAIN]
+load-plugins = [ "pylint_flask_sqlalchemy", "pylint_flask" ]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "invalid-name",
+]
+
+[tool.pylint.CODE_STYLE]
+max-line-length = 90
+
 [tool.isort]
 profile = "black"
 line_length = 90
@@ -146,6 +160,8 @@ dredd_hooks = "0.2"
 pytest = "7.1.2"
 pytest-cov = "4.1.0"
 objproxies = "0.9.4"
+pylint-flask-sqlalchemy = "^0.2.0"
+pylint-flask = "^0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
