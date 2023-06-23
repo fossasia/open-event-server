@@ -33,7 +33,7 @@ disable = [
 ]
 
 [tool.pylint.CODE_STYLE]
-max-line-length-suggestions = 90
+max-line-length = 90
 
 [tool.isort]
 profile = "black"
