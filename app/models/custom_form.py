@@ -63,12 +63,9 @@ ATTENDEE_FORM = {
     "age_group": {"include": 0, "require": 0},
     "home_wiki": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
-<<<<<<< HEAD
-    "is_consent_of_refund_policy" : {"include": 0, "require": 0}
-=======
+    "is_consent_of_refund_policy" : {"include": 0, "require": 0},
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
->>>>>>> development
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
