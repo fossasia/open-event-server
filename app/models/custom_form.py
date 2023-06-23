@@ -65,6 +65,7 @@ ATTENDEE_FORM = {
     "accept_video_recording": {"include": 0, "require": 0},
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
+    "is_consent_form_field": {"include": 0, "require": 0},
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
