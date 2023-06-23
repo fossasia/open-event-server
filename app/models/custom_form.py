@@ -187,6 +187,7 @@ class CustomForms(db.Model):
     form_id = db.Column(db.String)
     min = db.Column(db.Integer, default=0, nullable=True)
     max = db.Column(db.Integer, default=10, nullable=True)
+    main_language = db.Column(db.String)
 
     @property
     def identifier(self):

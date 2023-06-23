@@ -11,6 +11,8 @@ from app.api.schema.custom_forms import CustomFormSchema
 from app.models import db
 from app.models.custom_form import CUSTOM_FORM_IDENTIFIER_NAME_MAP, CustomForms
 from app.models.event import Event
+from app.models.custom_form_translate import CustomFormTranslates
+from app.api.data_layers.CustomFormTranslateLayer import CustomFormTranslateLayer
 
 
 class CustomFormListPost(ResourceList):
@@ -42,14 +44,13 @@ class CustomFormListPost(ResourceList):
     methods = [
         'POST',
     ]
-    data_layer = {'session': db.session, 'model': CustomForms}
+    data_layer = {'class': CustomFormTranslateLayer,'session': db.session, 'model': CustomForms}
 
 
 class CustomFormList(ResourceList):
     """
     Create and List Custom Forms
     """
-
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -64,6 +65,22 @@ class CustomFormList(ResourceList):
         else:
             query_ = event_query(query_, view_kwargs)
         return query_
+    
+    def after_get(self, custom_forms):
+        """
+        query method for different view_kwargs
+        :param view_kwargs:
+        :return:
+        """
+        for item in custom_forms['data']:
+            translation = []
+            if item['attributes']['is-complex']:
+                customFormTranslates = CustomFormTranslates.query.filter_by(custom_form_id=item['id']).filter_by(form_id=item['attributes']['form-id']).all()
+                for customFormTranslate in customFormTranslates:
+                    translation.append(customFormTranslate.convert_to_dict())
+                    # translation = list(customFo/rmTranslate)
+                item['attributes']['translations'] = translation
+        return custom_forms
 
     view_kwargs = True
     decorators = (jwt_required,)
@@ -74,7 +91,7 @@ class CustomFormList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': CustomForms,
-        'methods': {'query': query},
+        'methods': {'query': query, 'after_get': after_get},
     }
 
 

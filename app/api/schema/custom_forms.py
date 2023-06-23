@@ -4,7 +4,7 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
-
+from app.api.custom.schema.custom_form_translate import TranslationSchema
 
 @use_defaults()
 class CustomFormSchema(Schema):
@@ -65,3 +65,5 @@ class CustomFormSchema(Schema):
     form_id = fields.Str(allow_none=True)
     min = fields.Integer(allow_none=True, default=0)
     max = fields.Integer(allow_none=True, default=10)
+    main_language = fields.Str(allow_none=True)
+    translations = fields.Nested(TranslationSchema, many=True)
