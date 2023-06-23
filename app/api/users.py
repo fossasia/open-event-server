@@ -416,7 +416,7 @@ class UserDetail(ResourceDetail):
                 Speaker,
                 User,
                 UserFollowGroup,
-                Group
+                Group,
             ],
             fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id, user_follow_group_id, group_id",

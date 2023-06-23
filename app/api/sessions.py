@@ -81,12 +81,14 @@ class SessionListPost(ResourceList):
                 speaker_id=speaker.id,
             )
             save_to_db(session_speaker_link, "Session Speaker Link Saved")
-        
+
         if session.event.get_owner():
             owner = session.event.get_owner()
             owner_email = owner.email
             if session.speakers:
-                send_email_new_session(owner_email, session, session.speakers)  # TODO: Send to all organizers
+                send_email_new_session(
+                    owner_email, session, session.speakers
+                )  # TODO: Send to all organizers
             notify_new_session(session)
 
     decorators = (api.has_permission('create_event'),)
@@ -347,7 +349,7 @@ class SessionDetail(ResourceDetail):
             )
 
     def after_update_object(self, session, data, view_kwargs):
-        """ Send email if session accepted or rejected """
+        """Send email if session accepted or rejected"""
 
         if data.get('send_email', None) and g.get('send_email'):
             notify_for_session(session)
@@ -371,7 +373,9 @@ class SessionDetail(ResourceDetail):
                 if current_session.event.get_owner() and current_session.speakers:
                     owner = session.event.get_owner()
                     owner_email = owner.email
-                    send_email_new_session(owner_email, session, current_session.speakers)  # TODO: Send to all organizers
+                    send_email_new_session(
+                        owner_email, session, current_session.speakers
+                    )  # TODO: Send to all organizers
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

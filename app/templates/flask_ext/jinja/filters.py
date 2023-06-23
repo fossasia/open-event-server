@@ -31,7 +31,9 @@ def init_filters(app):
         if not date:
             return ''
         if timezone:
-            date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(pytz.timezone(timezone))
+            date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
+                pytz.timezone(timezone)
+            )
         return date.strftime(format)
 
     @app.template_filter('date')

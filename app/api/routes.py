@@ -1869,7 +1869,7 @@ api.route(
 api.route(
     ChatmosphereDetail,
     'chatmosphere_background',
-    '/events/<event_identifier>/chatmosphere'
+    '/events/<event_identifier>/chatmosphere',
 )
 api.route(
     VideoStreamRelationship,

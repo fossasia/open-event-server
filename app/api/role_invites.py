@@ -57,7 +57,7 @@ class RoleInviteListPost(ResourceList):
         ):
             raise ForbiddenError({'source': ''}, 'Owner access is required.')
         if data['role_name'] == 'owner':
-             delete_pending_owner(data['event'])
+            delete_pending_owner(data['event'])
 
     def after_create_object(self, role_invite, data, view_kwargs):
         """
