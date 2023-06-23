@@ -71,6 +71,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
+    is_consent_of_refund_policy = fields.Boolean()
     language_form_1 = fields.Str(allow_none=True)
     language_form_2 = fields.Str(allow_none=True)
     event = Relationship(
