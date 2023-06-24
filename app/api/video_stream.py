@@ -387,9 +387,7 @@ class ChatmosphereDetail(ResourceDetail):
 
     def after_get_object(self, stream, view_kwargs):
         if stream and stream.channel.provider != 'chatmosphere':
-            raise ObjectNotFound(
-                {'parameter': 'id'}, "Chatmosphere stream not created."
-            )
+            raise ObjectNotFound({'parameter': 'id'}, "Chatmosphere stream not created.")
 
     schema = ChatmosphereSchema
     data_layer = {

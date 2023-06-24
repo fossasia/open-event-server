@@ -21,11 +21,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
 from app.models.order import OrderTicket
-from babel.dates import (
-    format_date,
-    format_time,
-    format_datetime
-)
+from babel.dates import format_date, format_time, format_datetime
 from babel.numbers import format_currency
 
 logger = logging.getLogger(__name__)
@@ -412,9 +408,7 @@ def send_email_announce_event(event, group, emails):
                     event_location=event_location,
                     event_date=convert_to_user_locale(email, date=event_date),
                     event_time=convert_to_user_locale(
-                        email,
-                        time=event_time,
-                        tz=event.timezone
+                        email, time=event_time, tz=event.timezone
                     ),
                     group_name=group_name,
                     group_url=group_url,
@@ -654,16 +648,12 @@ def send_order_purchase_organizer_email(order, recipients):
         ),
         timezone=order.event.timezone,
         purchase_time=convert_to_user_locale(
-            emails[0],
-            date_time=order.completed_at,
-            tz=order.event.timezone
+            emails[0], date_time=order.completed_at, tz=order.event.timezone
         ),
         payment_mode=order.payment_mode,
         payment_status=order.status,
         order_amount=convert_to_user_locale(
-            emails[0],
-            amount=order.amount,
-            currency=order.event.payment_currency
+            emails[0], amount=order.amount, currency=order.event.payment_currency
         ),
         tickets_count=order.tickets_count,
         order_tickets=order_tickets,
@@ -828,7 +818,9 @@ def send_email_after_event_speaker(email, event_name):
     )
 
 
-def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None, amount=None, currency=None):
+def convert_to_user_locale(
+    email, date_time=None, date=None, time=None, tz=None, amount=None, currency=None
+):
     """
     Convert date and time and amount to user selected language
     :return        : datetime/date/time translated to user locale
@@ -845,21 +837,15 @@ def convert_to_user_locale(email, date_time=None, date=None, time=None, tz=None,
 
         if date_time and tz:
             return format_datetime(
-                date_time,
-                'full',
-                tzinfo=pytz.timezone(tz),
-                locale=user_locale
+                date_time, 'full', tzinfo=pytz.timezone(tz), locale=user_locale
             )
-        
+
         if date:
             return format_date(date, 'd MMMM Y', locale=user_locale)
-        
+
         if time and tz:
             return format_time(
-                time,
-                'HH:mm (zzzz)',
-                tzinfo=pytz.timezone(tz),
-                locale=user_locale
+                time, 'HH:mm (zzzz)', tzinfo=pytz.timezone(tz), locale=user_locale
             )
 
     return None
