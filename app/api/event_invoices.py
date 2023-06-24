@@ -76,9 +76,7 @@ class EventInvoiceDetail(ResourceDetail):
         if not current_user.is_staff and event_invoice.user_id != current_user.id:
             raise ForbiddenError({'source': ''}, 'Admin access is required')
 
-    methods = [
-        'GET','PATCH'
-    ]
+    methods = ['GET', 'PATCH']
     decorators = (jwt_required,)
     schema = EventInvoiceSchema
     data_layer = {

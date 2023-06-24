@@ -61,7 +61,9 @@ MAILS = {
     MailType.SESSION_STATE_CHANGE: {
         'recipient': 'Speaker',
         'pending': {
-            'subject': _('Your speaker submission for {event_name} titled {session_name}'),
+            'subject': _(
+                'Your speaker submission for {event_name} titled {session_name}'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "We have received your submission {session_name} for {event_name}<br/><br/>"
@@ -72,7 +74,9 @@ MAILS = {
             "{frontend_link}",
         },
         'accepted': {
-            'subject': _('Accepted! Congratulations Your submission for {event_name} titled {session_name} has been Accepted'),
+            'subject': _(
+                'Accepted! Congratulations Your submission for {event_name} titled {session_name} has been Accepted'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Accepted\". Congratulations!<br/><br/>"
@@ -83,7 +87,9 @@ MAILS = {
             "{frontend_link}",
         },
         'confirmed': {
-            'subject': _('Confirmed! Congratulations Your submission for {event_name} titled {session_name} has been Confirmed'),
+            'subject': _(
+                'Confirmed! Congratulations Your submission for {event_name} titled {session_name} has been Confirmed'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Confirmed\". Congratulations!<br/><br/>"
@@ -94,7 +100,9 @@ MAILS = {
             "{frontend_link}",
         },
         'rejected': {
-            'subject': _('Not Accepted. Your submission for {event_name} titled {session_name} was not accepted'),
+            'subject': _(
+                'Not Accepted. Your submission for {event_name} titled {session_name} was not accepted'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "Unfortunately your submission {session_name} for {event_name} was not accepted. Your session status was changed to \"Rejected\".<br/><br/>"
@@ -105,7 +113,9 @@ MAILS = {
             "{frontend_link}",
         },
         'canceled': {
-            'subject': _('Canceled! Your submission for {event_name} titled {session_name} has been Canceled'),
+            'subject': _(
+                'Canceled! Your submission for {event_name} titled {session_name} has been Canceled'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Canceled\".<br/><br/>"
@@ -116,7 +126,9 @@ MAILS = {
             "{frontend_link}",
         },
         'withdrawn': {
-            'subject': _('Withdrawn! Your submission for {event_name} titled {session_name} has been Withdrawn'),
+            'subject': _(
+                'Withdrawn! Your submission for {event_name} titled {session_name} has been Withdrawn'
+            ),
             'message': "Hello,<br/><br/>"
             "This is an automatic message from {app_name}.<br/><br/>"
             "Your session status for the submission {session_name} for {event_name} was changed to \"Withdrawn\".<br/><br/>"
@@ -129,22 +141,30 @@ MAILS = {
     },
     MailType.TICKET_SALES_END: {
         'recipient': 'Owner, Organizer',
-        'subject': _('Ticket Sales Period for One or Several Tickets for {event_name} Ended'),
+        'subject': _(
+            'Ticket Sales Period for One or Several Tickets for {event_name} Ended'
+        ),
         'template': 'email/ticket_sales_end.html',
     },
     MailType.TICKET_SALES_END_TOMORROW: {
         'recipient': 'Owner, Organizer',
-        'subject': _('Ticket Sales Period for One or Several Tickets for {event_name} Ending in 24 Hours'),
+        'subject': _(
+            'Ticket Sales Period for One or Several Tickets for {event_name} Ending in 24 Hours'
+        ),
         'template': 'email/ticket_sales_end_tomorrow.html',
     },
     MailType.TICKET_SALES_END_NEXT_WEEK: {
         'recipient': 'Owner, Organizer',
-        'subject': _('Ticket Sales Period fors One or Several Tickets for {event_name} Ending in 7 Days'),
+        'subject': _(
+            'Ticket Sales Period fors One or Several Tickets for {event_name} Ending in 7 Days'
+        ),
         'template': 'email/ticket_sales_end_next_week.html',
     },
     MailType.NEW_SESSION: {
         'recipient': 'Owner, Organizer',
-        'subject': _('New session proposal for {session.event.name} titled {session.title}'),
+        'subject': _(
+            'New session proposal for {session.event.name} titled {session.title}'
+        ),
         'template': 'email/new_session.html',
     },
     MailType.USER_REGISTER: {
@@ -194,17 +214,23 @@ MAILS = {
     },
     MailType.TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': _('See you at {event_name} on {event_date} at {event_time} ({invoice_id}) '),
+        'subject': _(
+            'See you at {event_name} on {event_date} at {event_time} ({invoice_id}) '
+        ),
         'template': 'email/ticket_purchased.html',
     },
     MailType.TICKET_PURCHASED_ATTENDEE: {
         'recipient': 'Attendee',
-        'subject': _('Your tickets for {event_name} on {event_date} at {event_time} ({invoice_id}) '),
+        'subject': _(
+            'Your tickets for {event_name} on {event_date} at {event_time} ({invoice_id}) '
+        ),
         'template': 'email/ticket_purchased_attendee.html',
     },
     MailType.TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Owner, Organizer, Coorganizer',
-        'subject': _('New order for {event_name} on {event_date} by {buyer_name}, {buyer_email} ({invoice_id}) '),
+        'subject': _(
+            'New order for {event_name} on {event_date} by {buyer_name}, {buyer_email} ({invoice_id}) '
+        ),
         'template': 'email/ticket_purchased_organizer.html',
     },
     MailType.TICKET_CANCELLED: {
@@ -224,25 +250,33 @@ MAILS = {
     },
     MailType.MONTHLY_PAYMENT: {
         'recipient': 'Owner',
-        'subject': _('Your invoice for {event_name} for {date} is available on {app_name}'),
+        'subject': _(
+            'Your invoice for {event_name} for {date} is available on {app_name}'
+        ),
         'sent_at': '1st day of the month',
         'template': 'email/monthly_payment_email.html',
     },
     MailType.MONTHLY_PAYMENT_FOLLOWUP: {
         'recipient': 'Owner',
-        'subject': _('Reminder: Your invoice for {event_name} for {date} is available on {app_name}'),
+        'subject': _(
+            'Reminder: Your invoice for {event_name} for {date} is available on {app_name}'
+        ),
         'sent_at': '15th day of the month',
         'template': 'email/monthly_payment_followup_email.html',
     },
     MailType.MONTHLY_PAYMENT_PRE_DUE: {
         'recipient': 'Owner',
-        'subject': _('Reminder: Your invoice for {event_name} for {date} is available on {app_name}'),
+        'subject': _(
+            'Reminder: Your invoice for {event_name} for {date} is available on {app_name}'
+        ),
         'sent_at': '27th day of the month',
         'template': 'email/monthly_payment_pre_due_email.html',
     },
     MailType.MONTHLY_PAYMENT_POST_DUE: {
         'recipient': 'Owner',
-        'subject': _('Please pay your overdue invoice for {event_name} for {date} on {app_name}'),
+        'subject': _(
+            'Please pay your overdue invoice for {event_name} for {date} on {app_name}'
+        ),
         'sent_at': '30th day of the month',
         'template': 'email/monthly_payment_post_due_email.html',
     },
