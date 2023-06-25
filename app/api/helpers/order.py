@@ -12,6 +12,7 @@ from app.api.helpers.db import (
 from app.api.helpers.errors import ConflictError, UnprocessableEntityError
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import (
+    convert_to_user_locale,
     send_email_to_attendees,
     send_order_purchase_organizer_email,
 )
@@ -19,14 +20,13 @@ from app.api.helpers.notification import (
     notify_ticket_purchase_attendee,
     notify_ticket_purchase_organizer,
 )
-from app.api.helpers.mail import convert_to_user_locale
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.order import OrderTicket
+from app.models.setting import Setting
 from app.models.ticket import Ticket
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
-from app.models.setting import Setting
 from app.settings import get_settings
 
 

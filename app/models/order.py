@@ -149,19 +149,13 @@ class Order(db.Model):
         key = UPLOAD_PATHS['pdf']['tickets_all'].format(
             identifier=self.identifier, extra_identifier=self.identifier
         )
-        return (
-            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
-            + self.identifier
-            + '.pdf'
-        )
+        return f'generated/tickets/{key}/{generate_hash(key)}/' + self.identifier + '.pdf'
 
     @property
     def invoice_pdf_path(self) -> str:
         key = UPLOAD_PATHS['pdf']['order'].format(identifier=self.identifier)
         return (
-            'generated/invoices/{}/{}/'.format(key, generate_hash(key))
-            + self.identifier
-            + '.pdf'
+            f'generated/invoices/{key}/{generate_hash(key)}/' + self.identifier + '.pdf'
         )
 
     @property

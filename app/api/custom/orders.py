@@ -1,7 +1,5 @@
 import os
-
 from datetime import datetime
-
 
 from flask import Blueprint, jsonify, make_response, request
 from flask.helpers import send_from_directory
@@ -17,17 +15,15 @@ from app.api.helpers.order import (
     create_pdf_tickets_for_holder,
     on_order_completed,
 )
+from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
-from app.models.order import Order
-from app.models.order import OrderTicket
+from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.payment import StripePaymentsManager
-
 
 order_blueprint = Blueprint('order_blueprint', __name__, url_prefix='/v1/orders')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1/tickets')

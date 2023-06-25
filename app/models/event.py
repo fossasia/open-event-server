@@ -1,9 +1,6 @@
-from email.policy import default
 import re
 from argparse import Namespace
 from datetime import datetime
-
-from sqlalchemy.sql.expression import or_, and_
 
 import flask_login as login
 import pytz
@@ -12,6 +9,7 @@ from flask_babel import _
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
+from sqlalchemy.sql.expression import and_, or_
 
 from app.api.helpers.db import get_new_identifier
 from app.models import db

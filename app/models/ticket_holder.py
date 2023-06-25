@@ -128,7 +128,7 @@ class TicketHolder(SoftDeletionModel):
             identifier=self.order.identifier, extra_identifier=self.id
         )
         return (
-            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            f'generated/tickets/{key}/{generate_hash(key)}/'
             + self.order.identifier
             + '.pdf'
         )

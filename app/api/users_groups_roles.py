@@ -2,8 +2,8 @@ from flask_jwt_extended import current_user
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
-from app.api.helpers.db import safe_query_kwargs
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query_kwargs
 from app.api.helpers.errors import ConflictError, ForbiddenError
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.users_groups_roles import UsersGroupsRolesSchema
