@@ -38,6 +38,6 @@ def test_export_basic(db):
     session = test_cal.subcomponents[2]
     assert session['summary'] == 'Gooseberry Muffin'
     assert session['url'] == f'http://eventyay.com/e/asdfgh/session/{test_session.id}'
-    assert session['location'] == f'online'
+    assert session['location'] == 'online'
 
     assert ICalExporter.export(test_session.event_id) == test_cal_str
