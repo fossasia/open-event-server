@@ -12,7 +12,7 @@ class GitError(Exception):
         self.errors = errors
 
     def __str__(self):
-        return '{}:\n {}'.format(self.message, self.errors)
+        return f'{self.message}:\n {self.errors}'
 
 
 def _git(cwd, *cmd):
@@ -50,7 +50,7 @@ class Git:
 
     def changed_files(self):
         self.fetch()
-        res = _git(self.cwd, 'diff', '--stat', 'origin/{}'.format(self.branch))
+        res = _git(self.cwd, 'diff', '--stat', f'origin/{self.branch}')
         lines = res.splitlines()
         if lines:
             last_line = lines[-1]

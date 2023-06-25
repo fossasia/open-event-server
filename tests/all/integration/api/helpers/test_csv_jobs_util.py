@@ -77,34 +77,33 @@ class TestExportCSV(OpenEventTestCase):
             field_data = export_sessions_csv([test_session])
             session_row = field_data[1]
 
-            assert session_row == \
-                [
-                    'example (accepted)',
-                    test_session.starts_at.astimezone(
-                        pytz.timezone(test_session.event.timezone)
-                    ).strftime('%B %-d, %Y %H:%M %z'),
-                    test_session.ends_at.astimezone(
-                        pytz.timezone(test_session.event.timezone)
-                    ).strftime('%B %-d, %Y %H:%M %z'),
-                    '',
-                    '',
-                    common.string_,
-                    'short_abstract',
-                    'long_abstract',
-                    'comment',
-                    session_row[9],
-                    'Yes',
-                    'level',
-                    'accepted',
-                    '',
-                    '',
-                    'English',
-                    common.url_,
-                    common.url_,
-                    common.url_,
-                    common.average_rating_,
-                    common.rating_count_,
-                ]
+            assert session_row == [
+                'example (accepted)',
+                test_session.starts_at.astimezone(
+                    pytz.timezone(test_session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z'),
+                test_session.ends_at.astimezone(
+                    pytz.timezone(test_session.event.timezone)
+                ).strftime('%B %-d, %Y %H:%M %z'),
+                '',
+                '',
+                common.string_,
+                'short_abstract',
+                'long_abstract',
+                'comment',
+                session_row[9],
+                'Yes',
+                'level',
+                'accepted',
+                '',
+                '',
+                'English',
+                common.url_,
+                common.url_,
+                common.url_,
+                common.average_rating_,
+                common.rating_count_,
+            ]
 
     def test_export_speakers_csv(self):
         """Method to check speakers data export"""

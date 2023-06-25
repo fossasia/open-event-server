@@ -97,7 +97,9 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             pentabarf_string = pentabarf_export.export(keynote.event.id)
             pentabarf_original = fromstring(pentabarf_string)
 
-            assert pentabarf_original.find('conference/title').text == "Awesome Conference"
+            assert (
+                pentabarf_original.find('conference/title').text == "Awesome Conference"
+            )
             assert pentabarf_original.find('conference/start').text == '2019-10-15'
             assert pentabarf_original.find('conference/end').text == '2019-10-16'
             assert pentabarf_original.find('conference/days').text == '1'
@@ -107,22 +109,40 @@ class TestPentabarfXML(OpenEventLegacyTestCase):
             assert pentabarf_original.find('day/room/event/track').text == 'Amazing Track'
             assert pentabarf_original.find('day/room/event/start').text == '10:25'
             assert pentabarf_original.find('day/room/event/duration').text == '00:45'
-            assert pentabarf_original.find('day/room/event/persons/person[@id="2"]').text == \
-                'Hong Phuc Dang'
+            assert (
+                pentabarf_original.find('day/room/event/persons/person[@id="2"]').text
+                == 'Hong Phuc Dang'
+            )
             assert len(list(pentabarf_original.find('day/room/event/persons'))) == 2
 
-            assert pentabarf_original.find('day/room/event[2]/title').text == 'Hot Session'
+            assert (
+                pentabarf_original.find('day/room/event[2]/title').text == 'Hot Session'
+            )
 
-            assert pentabarf_original.find('day[2]/room/event/title').text == 'Future Session'
-            assert pentabarf_original.find('day[2]/room/event/persons/person').text == \
-                'Pranav Mistry'
+            assert (
+                pentabarf_original.find('day[2]/room/event/title').text
+                == 'Future Session'
+            )
+            assert (
+                pentabarf_original.find('day[2]/room/event/persons/person').text
+                == 'Pranav Mistry'
+            )
 
-            assert pentabarf_original.find('day[2]/room[2]').attrib['name'] == 'Assembly Hall'
-            assert pentabarf_original.find('day[2]/room[2]/event/title').text == \
-                'Bye Bye Session'
-            assert pentabarf_original.find('day[2]/room[2]/event/duration').text == '01:30'
-            assert pentabarf_original.find('day[2]/room[2]/event/persons/person').text == \
-                'Mario Behling'
+            assert (
+                pentabarf_original.find('day[2]/room[2]').attrib['name']
+                == 'Assembly Hall'
+            )
+            assert (
+                pentabarf_original.find('day[2]/room[2]/event/title').text
+                == 'Bye Bye Session'
+            )
+            assert (
+                pentabarf_original.find('day[2]/room[2]/event/duration').text == '01:30'
+            )
+            assert (
+                pentabarf_original.find('day[2]/room[2]/event/persons/person').text
+                == 'Mario Behling'
+            )
 
 
 if __name__ == '__main__':
