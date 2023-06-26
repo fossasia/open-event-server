@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2022-01-11 17:33+0000\n"
+"PO-Revision-Date: 2023-06-27 08:39+0000\n"
 "Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/open-event/server/"
 "de/>\n"
@@ -18,11 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.18.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
-#, fuzzy
 msgid "Your speaker submission for {event_name} titled {session_name}"
 msgstr ""
 "Ihr Referentenbeitrag für die Veranstaltung {event_name} mit dem Titel "
@@ -1222,37 +1221,38 @@ msgstr ""
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
-#, fuzzy, python-format
+#, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr "Die Veranstaltung findet online und vor Ort statt: %(event_location)s"
+msgstr ""
+"Die Veranstaltung findet online und vor Ort hier statt: %(event_location)s"
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
-#, fuzzy
 msgid "Event taking place online."
-msgstr "Die Veranstaltung findet online und vor Ort statt: %(event_location)s"
+msgstr "Die Veranstaltung findet online statt."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
-#, fuzzy, python-format
+#, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr "Die Veranstaltung findet online und vor Ort statt: %(event_location)s"
+msgstr "Die Veranstaltung findet vor Ort hier statt: %(event_location)s"
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
-#, fuzzy
 msgid "Location or online event details to be announced."
-msgstr "Details zur Location oder Online-Veranstaltung werden noch bekannt gegeben"
+msgstr ""
+"Details zum Veranstaltungsort oder der Online-Veranstaltung werden noch "
+"bekannt gegeben."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
-#, fuzzy, python-format
+#, python-format
 msgid "From: %(start_time)s"
 msgstr "Von: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
-#, fuzzy, python-format
+#, python-format
 msgid "To: %(end_time)s"
 msgstr "Bis: %(end_time)s"
 
