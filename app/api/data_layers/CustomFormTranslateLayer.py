@@ -8,6 +8,7 @@ from app.models.custom_form_translate import CustomFormTranslates
 class CustomFormTranslateLayer(BaseDataLayer):
     """CustomFormTranslate Data Layer"""
 
+    @staticmethod
     def create_object(self, data):
         """
         create_object method for the Charges layer

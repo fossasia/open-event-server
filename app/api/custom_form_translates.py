@@ -52,7 +52,8 @@ class CustomFormTranslateRelationship(ResourceRelationship):
 class CustomFormTranslateListPost(ResourceList):
     """Create and List Custom Form Translates"""
 
-    def before_post(self, data):
+    @staticmethod
+    def before_post(data):
         """
         method to check for required relationship with event
         :param data:

@@ -71,7 +71,8 @@ class CustomFormList(ResourceList):
             query_ = event_query(query_, view_kwargs)
         return query_
 
-    def after_get(self, custom_forms):
+    @staticmethod
+    def after_get(custom_forms):
         """
         query method for different view_kwargs
         :param view_kwargs:
@@ -129,7 +130,8 @@ class CustomFormDetail(ResourceDetail):
             custom_form = safe_query(CustomForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = custom_form.id
 
-    def before_patch(self, kwargs, data):
+    @staticmethod
+    def before_patch(kwargs, data):
         """
         before patch method
         :param kwargs:
@@ -160,7 +162,8 @@ class CustomFormDetail(ResourceDetail):
                         customFormTranslate.language_code = translate['language_code']
                         db.session.add(customFormTranslate)
 
-    def before_delete(self, kwargs):
+    @staticmethod
+    def before_delete(kwargs):
         """
         before delete method
         :param kwargs:
@@ -172,7 +175,8 @@ class CustomFormDetail(ResourceDetail):
         for item in customFormTranslate:
             db.session.delete(item)
 
-    def after_patch(self, custom_form):
+    @staticmethod
+    def after_patch(custom_form):
         """
         after patch method
         :param custom_form:
