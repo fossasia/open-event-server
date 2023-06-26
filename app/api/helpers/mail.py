@@ -2,10 +2,12 @@ import base64
 import datetime
 import logging
 import os
-import pytz
 from itertools import groupby
 from typing import Dict, Optional
 
+import pytz
+from babel.dates import format_date, format_datetime, format_time
+from babel.numbers import format_currency
 from flask import current_app, render_template
 from sqlalchemy.orm import joinedload
 
@@ -17,12 +19,10 @@ from app.api.helpers.utilities import get_serializer, str_generator, string_empt
 from app.models.event import Event
 from app.models.mail import Mail
 from app.models.message_setting import MessageSettings
+from app.models.order import OrderTicket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.settings import get_settings
-from app.models.order import OrderTicket
-from babel.dates import format_date, format_time, format_datetime
-from babel.numbers import format_currency
 
 logger = logging.getLogger(__name__)
 # pytype: disable=attribute-error

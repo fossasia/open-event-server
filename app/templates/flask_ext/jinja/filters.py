@@ -4,8 +4,8 @@ import humanize
 import pytz
 from forex_python.converter import CurrencyCodes
 
-from app.api.helpers.utilities import strip_tags
 from app.api.helpers.mail import convert_to_user_locale
+from app.api.helpers.utilities import strip_tags
 
 
 def humanize_helper(time):

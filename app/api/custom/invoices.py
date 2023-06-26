@@ -34,9 +34,7 @@ def event_invoices(invoice_identifier):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
     file_path = (
-        '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + invoice_identifier
-        + '.pdf'
+        f'../generated/invoices/{key}/{generate_hash(key)}/{invoice_identifier}.pdf'
     )
     try:
         return return_file('event-invoice', file_path, invoice_identifier)

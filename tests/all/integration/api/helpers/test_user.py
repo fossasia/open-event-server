@@ -1,5 +1,7 @@
 import unittest
 
+import pytest
+
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
 from app.api.helpers.user import (
@@ -8,7 +10,6 @@ from app.api.helpers.user import (
 )
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
-import pytest
 
 
 class TestUserUtilitiesHelper(OpenEventTestCase):
