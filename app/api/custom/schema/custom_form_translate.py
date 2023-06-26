@@ -3,6 +3,6 @@ from marshmallow import Schema, fields
 
 class TranslationSchema(Schema):
     name = fields.String(required=True)
-    code = fields.String(required=True)
+    language_code = fields.String(required=True)
     id = fields.Integer(required=False)
-    is_delete = fields.Boolean(required=False)
+    isDeleted = fields.Boolean(required=False, default=False)

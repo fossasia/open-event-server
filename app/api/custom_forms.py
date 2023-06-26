@@ -44,7 +44,7 @@ class CustomFormListPost(ResourceList):
     methods = [
         'POST',
     ]
-    data_layer = {'class': CustomFormTranslateLayer,'session': db.session, 'model': CustomForms}
+    data_layer = {'class': CustomFormTranslateLayer, 'session': db.session, 'model': CustomForms}
 
 
 class CustomFormList(ResourceList):
@@ -78,7 +78,6 @@ class CustomFormList(ResourceList):
                 customFormTranslates = CustomFormTranslates.query.filter_by(custom_form_id=item['id']).filter_by(form_id=item['attributes']['form-id']).all()
                 for customFormTranslate in customFormTranslates:
                     translation.append(customFormTranslate.convert_to_dict())
-                    # translation = list(customFo/rmTranslate)
                 item['attributes']['translations'] = translation
         return custom_forms
 
@@ -120,6 +119,61 @@ class CustomFormDetail(ResourceDetail):
         if event:
             custom_form = safe_query(CustomForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = custom_form.id
+
+    def before_patch(self, args, kwargs, data):
+        """
+        before patch method
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        translation = data.get('translations')
+        if translation:
+            for translate in translation:
+                customFormTranslate = CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id']).filter_by(id=translate['id']).first()
+                if 'isDeleted' in translate and translate['isDeleted']:
+                    db.session.delete(customFormTranslate)
+                else:
+                    if customFormTranslate:
+                        customFormTranslate.name = translate['name']
+                        customFormTranslate.language_code = translate['language_code']
+                        customFormTranslate.form_id = data['form_id']
+                        db.session.add(customFormTranslate)
+                    else:
+                        customFormTranslate = CustomFormTranslates()
+                        customFormTranslate.form_id = data['form_id']
+                        customFormTranslate.custom_form_id = kwargs['id']
+                        customFormTranslate.name = translate['name']
+                        customFormTranslate.language_code = translate['language_code']
+                        db.session.add(customFormTranslate)
+
+    def before_delete(self, args, kwargs):
+        """
+        before delete method
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        customFormTranslate = CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id']).all()
+        for item in customFormTranslate:
+            db.session.delete(item)
+
+    def after_patch(self, custom_form):
+        """
+        after patch method
+        :param custom_form:
+        :return:
+        """
+        translation = []
+        data = custom_form['data']
+        attributes = data['attributes']
+        if attributes and attributes['is-complex']:
+            customFormTranslates = CustomFormTranslates.query.filter_by(custom_form_id=data['id']).filter_by(form_id=attributes['form-id']).all()
+            for customFormTranslate in customFormTranslates:
+                translation.append(customFormTranslate.convert_to_dict())
+            attributes['translations'] = translation
+        return custom_form
 
     decorators = (
         api.has_permission(

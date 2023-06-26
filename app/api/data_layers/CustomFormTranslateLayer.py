@@ -1,12 +1,14 @@
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 
 from app.models.custom_form import CustomForms
+from app.models.event import Event
 from app.models.custom_form_translate import CustomFormTranslates
-from app.api.helpers.db import save_to_db
+from app.api.helpers.db import save_to_db, safe_query_kwargs
+from app.api.helpers.query import event_query
 
 
 class CustomFormTranslateLayer(BaseDataLayer):
-    def create_object(self, data, view_kwargs):
+    def create_object(self, data, kwargs):
         """
         create_object method for the Charges layer
         charge the user using paypal or stripe
@@ -14,13 +16,6 @@ class CustomFormTranslateLayer(BaseDataLayer):
         :param view_kwargs:
         :return:
         """
-
-        print ("-------------------1")
-        print (data)
-        translations = data['translations']
-        if data['translations']:
-            del data['translations']
-        print (data)
 
         customForm = CustomForms()
         customForm.description = data['description']
@@ -41,11 +36,11 @@ class CustomFormTranslateLayer(BaseDataLayer):
         customForm.type = data['type']
         save_to_db(customForm)
 
-        for item in translations:
+        for item in data['translations']:
             translation = CustomFormTranslates()
             translation.form_id = data['form_id']
             translation.custom_form_id = customForm.id
             translation.name = item['name']
-            translation.language_code = item['code']
+            translation.language_code = item['language_code']
             save_to_db(translation)
         return customForm
