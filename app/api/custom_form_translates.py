@@ -17,15 +17,9 @@ class CustomFormTranslateList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(CustomFormTranslates)
         if view_kwargs.get('custom_form_id'):
-            query_ = self.session.query(CustomFormTranslates).filter(
-                getattr(CustomFormTranslates, 'custom_form_id')
-                == view_kwargs['custom_form_id']
-            )
+            query_ = query_.filter(custom_forms_id=view_kwargs['custom_form_id'])
             if view_kwargs.get('language_code'):
-                query_ = query_.filter(
-                    getattr(CustomFormTranslates, 'language_code')
-                    == view_kwargs['language_code']
-                )
+                query_ = query_.filter(language_code=view_kwargs['language_code'])
         return query_
 
     schema = CustomFormTranslateSchema
