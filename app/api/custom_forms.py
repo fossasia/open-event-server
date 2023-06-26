@@ -204,7 +204,12 @@ class CustomFormDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': CustomForms,
-        'methods': {'before_get_object': before_get_object},
+        'methods': {
+            'before_get_object': before_get_object,
+            'before_patch': before_patch,
+            'before_delete': before_delete,
+            'after_patch': after_patch,
+        },
     }
 
 
