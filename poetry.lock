@@ -748,13 +748,13 @@ files = [
 
 [[package]]
 name = "coolname"
-version = "1.1.0"
+version = "2.2.0"
 description = "Random name and slug generator"
 optional = false
 python-versions = "*"
 files = [
-    {file = "coolname-1.1.0-py2.py3-none-any.whl", hash = "sha256:e6a83a0ac88640f4f3d2070438dbe112fe80cfebc119c93bd402976ec84c0978"},
-    {file = "coolname-1.1.0.tar.gz", hash = "sha256:410fe6ea9999bf96f2856ef0c726d5f38782bbefb7bb1aca0e91e0dc98ed09e3"},
+    {file = "coolname-2.2.0-py2.py3-none-any.whl", hash = "sha256:4d1563186cfaf71b394d5df4c744f8c41303b6846413645e31d31915cdeb13e8"},
+    {file = "coolname-2.2.0.tar.gz", hash = "sha256:6c5d5731759104479e7ca195a9b64f7900ac5bead40183c09323c7d0be9e75c7"},
 ]
 
 [[package]]
@@ -4966,4 +4966,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "42092bf902bc6fb810b88a8fc2edf8811cefa2d186e9c4675bd5b4a50281d5a7"
+content-hash = "561aa00b6790f105cd91aa27be0c807166c2b8f8a5f172b20aa2fe5a71f420be"
