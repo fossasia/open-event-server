@@ -15,7 +15,6 @@ class CustomFormTranslateLayer(BaseDataLayer):
         :param data:
         :return:
         """
-
         customForm = CustomForms()
         customForm.description = data['description']
         customForm.event_id = data['event']

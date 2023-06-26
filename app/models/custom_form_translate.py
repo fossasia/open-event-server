@@ -16,7 +16,7 @@ class CustomFormTranslates(db.Model):
     form_id = db.Column(db.String, nullable=False)
 
     def __repr__(self):
-        return '<CustomFormTranslate %r>' % self.id
+        return f'<CustomFormTranslate {self.id}>'
 
     def convert_to_dict(self):
         """Convert object data to dictionary"""

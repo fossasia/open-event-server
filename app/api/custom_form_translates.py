@@ -18,7 +18,6 @@ class CustomFormTranslateList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
         query_ = self.session.query(CustomFormTranslates)
         if view_kwargs.get('custom_form_id'):
             query_ = query_.filter(custom_forms_id=view_kwargs['custom_form_id'])
@@ -63,7 +62,7 @@ class CustomFormTranslateListPost(ResourceList):
         if not has_access('is_coorganizer', custom_form=data['custom_form']):
             raise ObjectNotFound(
                 {'parameter': 'custom_form'},
-                "Custom Form: {} not found".format(data['custom_form']),
+                f"Custom Form: {data['custom_form']} not found",
             )
 
     schema = CustomFormTranslateSchema
