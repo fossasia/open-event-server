@@ -9,7 +9,7 @@ class CustomFormTranslateLayer(BaseDataLayer):
     """CustomFormTranslate Data Layer"""
 
     @staticmethod
-    def create_object(self, data):
+    def create_object(data):
         """
         create_object method for the Charges layer
         charge the user using paypal or stripe
