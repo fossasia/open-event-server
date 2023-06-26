@@ -134,7 +134,7 @@ fastapi = "^0.95.2"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
-coolname = "^1.1.0"
+coolname = "^2.2.0"
 python-slugify = "^8.0.1"
 cryptography = "40.0.2"
 Flask-Migrate = "2.7.0"
