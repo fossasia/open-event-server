@@ -2,6 +2,8 @@ from app.models import db
 
 
 class CustomFormTranslates(db.Model):
+    """Custom Form Translates database model"""
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     custom_form_id = db.Column(
@@ -17,6 +19,7 @@ class CustomFormTranslates(db.Model):
         return '<CustomFormTranslate %r>' % self.id
 
     def convert_to_dict(self):
+        """Convert object data to dictionary"""
         return {
             'id': self.id,
             'name': self.name,

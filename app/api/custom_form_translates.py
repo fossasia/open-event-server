@@ -13,6 +13,12 @@ class CustomFormTranslateList(ResourceList):
     """Create and List Custom Form Translates"""
 
     def query(self, view_kwargs):
+        """
+        query method for different view_kwargs
+        :param view_kwargs:
+        :return:
+        """
+
         query_ = self.session.query(CustomFormTranslates)
         if view_kwargs.get('custom_form_id'):
             query_ = query_.filter(custom_forms_id=view_kwargs['custom_form_id'])
@@ -29,18 +35,14 @@ class CustomFormTranslateList(ResourceList):
 
 
 class CustomFormTranslateDetail(ResourceDetail):
-    """
-    CustomForm Resource
-    """
+    """CustomFormTranslate Resource Detail"""
 
     schema = CustomFormTranslateSchema
     data_layer = {'session': db.session, 'model': CustomFormTranslates}
 
 
 class CustomFormTranslateRelationship(ResourceRelationship):
-    """
-    CustomFormTranslate Relationship (Required)
-    """
+    """CustomFormTranslate Relationship (Required)"""
 
     decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
@@ -49,9 +51,7 @@ class CustomFormTranslateRelationship(ResourceRelationship):
 
 
 class CustomFormTranslateListPost(ResourceList):
-    """
-    Create and List Custom Form Translates
-    """
+    """Create and List Custom Form Translates"""
 
     def before_post(self, data):
         """

@@ -7,14 +7,10 @@ from utils.common import use_defaults
 
 @use_defaults()
 class CustomFormTranslateSchema(Schema):
-    """
-    API Schema for Custom Forms database model
-    """
+    """API Schema for Custom Forms database model"""
 
     class Meta:
-        """
-        Meta class for CustomForm Schema
-        """
+        """Meta class for CustomForm Schema"""
 
         type_ = 'custom-form-translate'
         self_view = 'v1.custom_form_translate_detail'
