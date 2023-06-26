@@ -157,7 +157,7 @@ pyupgrade = "3.4.0"
 # For testing
 coverage = "7.2.7"
 dredd_hooks = "0.2"
-pytest = "7.1.2"
+pytest = "7.4.0"
 pytest-cov = "4.1.0"
 objproxies = "0.9.4"
 pylint-flask-sqlalchemy = "^0.2.0"
