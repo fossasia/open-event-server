@@ -9,14 +9,10 @@ from utils.common import use_defaults
 
 @use_defaults()
 class CustomFormSchema(Schema):
-    """
-    API Schema for Custom Forms database model
-    """
+    """API Schema for Custom Form Translates database model"""
 
     class Meta:
-        """
-        Meta class for CustomForm Schema
-        """
+        """Meta class for Custom Form Translates Schema"""
 
         type_ = 'custom-form'
         self_view = 'v1.custom_form_detail'

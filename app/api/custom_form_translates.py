@@ -10,9 +10,7 @@ from app.models.custom_form_translate import CustomFormTranslates
 
 
 class CustomFormTranslateList(ResourceList):
-    """
-    Create and List Custom Form Translates
-    """
+    """Create and List Custom Form Translates"""
 
     def query(self, view_kwargs):
         query_ = self.session.query(CustomFormTranslates)

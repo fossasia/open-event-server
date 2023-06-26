@@ -31,6 +31,12 @@ from app.api.custom_form_options import (
     CustomFormOptionList,
     CustomFormOptionRelationship,
 )
+from app.api.custom_form_translates import (
+    CustomFormTranslateDetail,
+    CustomFormTranslateList,
+    CustomFormTranslateListPost,
+    CustomFormTranslateRelationship,
+)
 from app.api.custom_forms import (
     CustomFormDetail,
     CustomFormList,
@@ -293,12 +299,6 @@ from app.api.video_stream_moderators import (
     VideoStreamModeratorDetail,
     VideoStreamModeratorList,
     VideoStreamModeratorRelationship,
-)
-from app.api.custom_form_translates import (
-    CustomFormTranslateListPost,
-    CustomFormTranslateList,
-    CustomFormTranslateDetail,
-    CustomFormTranslateRelationship,
 )
 
 # users
@@ -1969,14 +1969,20 @@ api.route(
     'video_stream_moderator_stream',
     '/video-stream-moderators/<int:id>/relationships/video-stream',
 )
-api.route(CustomFormTranslateListPost, 'custom_form_translate_list_post', '/custom-form-translates')
+api.route(
+    CustomFormTranslateListPost,
+    'custom_form_translate_list_post',
+    '/custom-form-translates',
+)
 api.route(
     CustomFormTranslateList,
     'custom_form_translate_list',
-    '/custom-forms/<int:custom_form_id>/custom-form-translates'
+    '/custom-forms/<int:custom_form_id>/custom-form-translates',
 )
 api.route(
-    CustomFormTranslateDetail, 'custom_form_translate_detail', '/custom-form-translates/<int:id>'
+    CustomFormTranslateDetail,
+    'custom_form_translate_detail',
+    '/custom-form-translates/<int:id>',
 )
 api.route(
     CustomFormTranslateRelationship,
