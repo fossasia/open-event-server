@@ -41,7 +41,3 @@ def use_defaults():
         return k
 
     return wrapper
-
-def copy_properties(src, dest):
-    for attr in src:
-        setattr(dest, attr, getattr(src, attr))

@@ -4,6 +4,7 @@ from marshmallow_jsonapi.flask import Relationship, Schema
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
 
+
 @use_defaults()
 class CustomFormTranslateSchema(Schema):
     """

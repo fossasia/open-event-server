@@ -2,9 +2,10 @@ from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
+from app.api.custom.schema.custom_form_translate import TranslationSchema
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
-from app.api.custom.schema.custom_form_translate import TranslationSchema
+
 
 @use_defaults()
 class CustomFormSchema(Schema):
