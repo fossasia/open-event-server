@@ -1,12 +1,12 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permissions import jwt_required
+from app.api.helpers.utilities import require_relationship
 from app.api.schema.custom_form_translates import CustomFormTranslateSchema
 from app.models import db
 from app.models.custom_form_translate import CustomFormTranslates
-from app.api.helpers.utilities import require_relationship
-from app.api.helpers.permissions import jwt_required
-from app.api.helpers.permission_manager import has_access
 
 
 class CustomFormTranslateList(ResourceList):
@@ -21,7 +21,7 @@ class CustomFormTranslateList(ResourceList):
                 getattr(CustomFormTranslates, 'custom_form_id')
                 == view_kwargs['custom_form_id']
             )
-            if (view_kwargs.get('language_code')):
+            if view_kwargs.get('language_code'):
                 query_ = query_.filter(
                     getattr(CustomFormTranslates, 'language_code')
                     == view_kwargs['language_code']
@@ -44,6 +44,7 @@ class CustomFormTranslateDetail(ResourceDetail):
     schema = CustomFormTranslateSchema
     data_layer = {'session': db.session, 'model': CustomFormTranslates}
 
+
 class CustomFormTranslateRelationship(ResourceRelationship):
     """
     CustomFormTranslate Relationship (Required)
@@ -54,24 +55,25 @@ class CustomFormTranslateRelationship(ResourceRelationship):
     schema = CustomFormTranslateSchema
     data_layer = {'session': db.session, 'model': CustomFormTranslates}
 
+
 class CustomFormTranslateListPost(ResourceList):
     """
     Create and List Custom Form Translates
     """
 
-    def before_post(self, args, kwargs, data):
+    def before_post(self, data):
         """
         method to check for required relationship with event
-        :param args:
-        :param kwargs:
         :param data:
         :return:
         """
         require_relationship(['custom_form'], data)
         if not has_access('is_coorganizer', custom_form=data['custom_form']):
             raise ObjectNotFound(
-                {'parameter': 'custom_form'}, "Custom Form: {} not found".format(data['custom_form'])
+                {'parameter': 'custom_form'},
+                "Custom Form: {} not found".format(data['custom_form']),
             )
+
     schema = CustomFormTranslateSchema
     methods = [
         'POST',

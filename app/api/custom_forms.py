@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
+from app.api.data_layers.CustomFormTranslateLayer import CustomFormTranslateLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -10,9 +11,8 @@ from app.api.helpers.utilities import require_relationship
 from app.api.schema.custom_forms import CustomFormSchema
 from app.models import db
 from app.models.custom_form import CUSTOM_FORM_IDENTIFIER_NAME_MAP, CustomForms
-from app.models.event import Event
 from app.models.custom_form_translate import CustomFormTranslates
-from app.api.data_layers.CustomFormTranslateLayer import CustomFormTranslateLayer
+from app.models.event import Event
 
 
 class CustomFormListPost(ResourceList):
@@ -20,7 +20,7 @@ class CustomFormListPost(ResourceList):
     Create and List Custom Forms
     """
 
-    def before_post(self, args, kwargs, data):
+    def before_post(self, data):
         """
         method to check for required relationship with event
         :param args:
@@ -44,13 +44,18 @@ class CustomFormListPost(ResourceList):
     methods = [
         'POST',
     ]
-    data_layer = {'class': CustomFormTranslateLayer, 'session': db.session, 'model': CustomForms}
+    data_layer = {
+        'class': CustomFormTranslateLayer,
+        'session': db.session,
+        'model': CustomForms,
+    }
 
 
 class CustomFormList(ResourceList):
     """
     Create and List Custom Forms
     """
+
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -65,7 +70,7 @@ class CustomFormList(ResourceList):
         else:
             query_ = event_query(query_, view_kwargs)
         return query_
-    
+
     def after_get(self, custom_forms):
         """
         query method for different view_kwargs
@@ -75,7 +80,11 @@ class CustomFormList(ResourceList):
         for item in custom_forms['data']:
             translation = []
             if item['attributes']['is-complex']:
-                customFormTranslates = CustomFormTranslates.query.filter_by(custom_form_id=item['id']).filter_by(form_id=item['attributes']['form-id']).all()
+                customFormTranslates = (
+                    CustomFormTranslates.query.filter_by(custom_form_id=item['id'])
+                    .filter_by(form_id=item['attributes']['form-id'])
+                    .all()
+                )
                 for customFormTranslate in customFormTranslates:
                     translation.append(customFormTranslate.convert_to_dict())
                 item['attributes']['translations'] = translation
@@ -120,10 +129,9 @@ class CustomFormDetail(ResourceDetail):
             custom_form = safe_query(CustomForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = custom_form.id
 
-    def before_patch(self, args, kwargs, data):
+    def before_patch(self, kwargs, data):
         """
         before patch method
-        :param args:
         :param kwargs:
         :param data:
         :return:
@@ -131,7 +139,11 @@ class CustomFormDetail(ResourceDetail):
         translation = data.get('translations')
         if translation:
             for translate in translation:
-                customFormTranslate = CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id']).filter_by(id=translate['id']).first()
+                customFormTranslate = (
+                    CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id'])
+                    .filter_by(id=translate['id'])
+                    .first()
+                )
                 if 'isDeleted' in translate and translate['isDeleted']:
                     db.session.delete(customFormTranslate)
                 else:
@@ -148,14 +160,15 @@ class CustomFormDetail(ResourceDetail):
                         customFormTranslate.language_code = translate['language_code']
                         db.session.add(customFormTranslate)
 
-    def before_delete(self, args, kwargs):
+    def before_delete(self, kwargs):
         """
         before delete method
-        :param args:
         :param kwargs:
         :return:
         """
-        customFormTranslate = CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id']).all()
+        customFormTranslate = CustomFormTranslates.query.filter_by(
+            custom_form_id=kwargs['id']
+        ).all()
         for item in customFormTranslate:
             db.session.delete(item)
 
@@ -169,7 +182,11 @@ class CustomFormDetail(ResourceDetail):
         data = custom_form['data']
         attributes = data['attributes']
         if attributes and attributes['is-complex']:
-            customFormTranslates = CustomFormTranslates.query.filter_by(custom_form_id=data['id']).filter_by(form_id=attributes['form-id']).all()
+            customFormTranslates = (
+                CustomFormTranslates.query.filter_by(custom_form_id=data['id'])
+                .filter_by(form_id=attributes['form-id'])
+                .all()
+            )
             for customFormTranslate in customFormTranslates:
                 translation.append(customFormTranslate.convert_to_dict())
             attributes['translations'] = translation
