@@ -17,8 +17,10 @@ class TestXCalExport(OpenEventTestCase):
             xcal_string = xcal.export(test_event.id)
             xcal_original = fromstring(xcal_string)
             assert fromstring(tostring(xcal_original))[0][3].text == "example"
-            assert fromstring(tostring(xcal_original))[0][2].text == \
-                "Schedule for sessions at example"
+            assert (
+                fromstring(tostring(xcal_original))[0][2].text
+                == "Schedule for sessions at example"
+            )
 
 
 if __name__ == '__main__':

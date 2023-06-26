@@ -152,6 +152,52 @@ Read more [here](/docs/general/roles.md).
 
 ## Development
 
+### Initial setup
+
+#### Python and Poetry installatioon
+
+We use Python 3.8. If your operating system does not provide Python 3.8 out of the
+box, it is best installed using [`pyenv`](https://github.com/pyenv/pyenv/).
+
+For Mac users, see [here](https://opensource.com/article/19/5/python-3-default-mac) for more info.
+```bash
+$ brew install pyenv
+$ pyenv init # follow instructions to add run commands to your environment
+```
+After editing your environment file, reload your shell and navigate to this repo, then install `3.8.17` to be used locally:
+```bash
+$ pyenv install 3.8.17
+$ cd ...your../open-event-server/
+$ pyenv local 3.8.17
+```
+Now the Python version should automatically change when used within open-event-server.
+
+
+We also expect [poetry](https://python-poetry.org/) being available.
+
+#### Package setup
+
+Change into the `open-event-server` directory, and execute the following commands:
+
+Activate Python 3.8.17 locally
+```bash
+$ pyenv local 3.8.17
+```
+
+Install dependencies using poetry
+```bash
+$ poetry install --with dev
+```
+
+Activate the pre-commit hook
+```bash
+$ poetry run pre-commit install
+```
+
+With that every git commit will be checked/formatted with various tools before
+being actually committed. 
+
+
 ### Development Mode
 
 To enable development mode (development Flask config), set `APP_CONFIG` environment variable to "config.DevelopmentConfig".

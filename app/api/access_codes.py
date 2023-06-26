@@ -59,7 +59,7 @@ class AccessCodeListPost(ResourceList):
                 except NoResultFound:
                     raise ConflictError(
                         {'pointer': '/data/relationships/tickets'},
-                        "Ticket with id {} does not exists".format(str(ticket)),
+                        f"Ticket with id {str(ticket)} does not exists",
                     )
 
     schema = AccessCodeSchema

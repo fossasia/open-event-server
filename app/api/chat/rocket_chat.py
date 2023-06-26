@@ -2,6 +2,7 @@ import logging
 import random
 import string
 from dataclasses import dataclass
+from typing import Optional
 
 import requests
 
@@ -10,7 +11,6 @@ from app.models import db
 from app.models.event import Event
 from app.models.user import User
 from app.settings import get_settings
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 

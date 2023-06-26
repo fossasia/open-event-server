@@ -1,9 +1,6 @@
-from app.models.role import Role
-from app.models.user import User
 from flask import request
 from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query_kwargs
@@ -16,6 +13,8 @@ from app.api.schema.groups import GroupSchema
 from app.models import db
 from app.models.event import Event
 from app.models.group import Group
+from app.models.role import Role
+from app.models.user import User
 from app.models.user_follow_group import UserFollowGroup
 from app.models.users_groups_role import UsersGroupsRoles
 

@@ -2,8 +2,9 @@ import logging
 from os import makedirs
 from os.path import exists
 
-from .docker import DockerCompose, DockerComposeError
 from git import Git
+
+from .docker import DockerCompose, DockerComposeError
 
 logger = logging.getLogger(__name__)
 

@@ -34,9 +34,7 @@ def event_invoices(invoice_identifier):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
     file_path = (
-        '../generated/invoices/{}/{}/'.format(key, generate_hash(key))
-        + invoice_identifier
-        + '.pdf'
+        f'../generated/invoices/{key}/{generate_hash(key)}/{invoice_identifier}.pdf'
     )
     try:
         return return_file('event-invoice', file_path, invoice_identifier)
@@ -56,14 +54,11 @@ def order_invoices(order_identifier):
             order = Order.query.filter_by(identifier=order_identifier).first()
         except NoResultFound:
             raise NotFoundError({'source': ''}, 'Order Invoice not found')
-        if (
-            has_access(
-                'is_coorganizer_or_user_itself',
-                event_id=order.event_id,
-                user_id=order.user_id,
-            )
-            or order.is_attendee(current_user)
-        ):
+        if has_access(
+            'is_coorganizer_or_user_itself',
+            event_id=order.event_id,
+            user_id=order.user_id,
+        ) or order.is_attendee(current_user):
             file_path = order.invoice_pdf_path
             if not os.path.isfile(file_path):
                 create_pdf_tickets_for_holder(order)
