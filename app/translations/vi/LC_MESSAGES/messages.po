@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-26 18:42+0000\n"
+"PO-Revision-Date: 2023-06-27 08:39+0000\n"
 "Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
@@ -23,19 +23,23 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:64
 msgid "Your speaker submission for {event_name} titled {session_name}"
-msgstr ""
+msgstr "Bạn đã nộp chuyên đề cho {event_name} có tiêu đề {session_name}"
 
 #: app/api/helpers/system_mails.py:75
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
+"Thành Công! Xin chúc mừng Bài của bạn cho {event_name} có tiêu đề "
+"{session_name} đã được chấp nhận"
 
 #: app/api/helpers/system_mails.py:86
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
+"Xác nhận! Xin chúc mừng Bài gửi của bạn cho {event_name} có tiêu đề "
+"{session_name} đã được xác nhận"
 
 #: app/api/helpers/system_mails.py:97
 msgid ""
