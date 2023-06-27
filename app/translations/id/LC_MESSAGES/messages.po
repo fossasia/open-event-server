@@ -6,244 +6,267 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2021-04-07 02:26+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"PO-Revision-Date: 2023-06-27 08:39+0000\n"
+"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-event/"
+"server/id/>\n"
 "Language: id\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/open-"
-"event/server/id/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.18.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
 msgid "Your speaker submission for {event_name} titled {session_name}"
-msgstr ""
+msgstr "Kiriman pembicara Anda untuk {event_name} berjudul {session_name}"
 
 #: app/api/helpers/system_mails.py:75
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
+"Diterima! Selamat Kiriman Anda untuk {event_name} berjudul {session_name} "
+"telah Diterima"
 
 #: app/api/helpers/system_mails.py:86
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
+"Dikonfirmasi! Selamat Kiriman Anda untuk {event_name} berjudul {session_name}"
+" telah Dikonfirmasi"
 
 #: app/api/helpers/system_mails.py:97
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
+"Tidak diterima. Kiriman Anda untuk {event_name} berjudul {session_name} "
+"tidak diterima"
 
 #: app/api/helpers/system_mails.py:108
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
+"Dibatalkan! Kiriman Anda untuk {event_name} berjudul {session_name} telah "
+"Dibatalkan"
 
 #: app/api/helpers/system_mails.py:119
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
+"Ditarik! Kiriman Anda untuk {event_name} berjudul {session_name} telah "
+"Ditarik"
 
 #: app/api/helpers/system_mails.py:132
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
+"Periode Penjualan Tiket untuk Satu atau Beberapa Tiket untuk {event_name} "
+"Berakhir"
 
 #: app/api/helpers/system_mails.py:137
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
 msgstr ""
+"Periode Penjualan Tiket untuk Satu atau Beberapa Tiket untuk {event_name} "
+"Berakhir dalam 24 Jam"
 
 #: app/api/helpers/system_mails.py:142
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
 msgstr ""
+"Periode Penjualan Tiket untuk Satu atau Beberapa Tiket untuk {event_name} "
+"Berakhir dalam 7 Hari"
 
 #: app/api/helpers/system_mails.py:147
 msgid "New session proposal for {session.event.name} titled {session.title}"
-msgstr ""
+msgstr "Proposal sesi baru untuk {session.event.name} berjudul {session.title}"
 
 #: app/api/helpers/system_mails.py:152
 msgid "Welcome to {app_name}. Please verify your account"
-msgstr ""
+msgstr "Selamat datang di {app_name}. Harap verifikasi akun Anda"
 
 #: app/api/helpers/system_mails.py:157
 msgid "Email Confirmation to Create Account for {app_name}"
-msgstr ""
+msgstr "Konfirmasi Email untuk Membuat Akun untuk {app_name}"
 
 #: app/api/helpers/system_mails.py:162
-#, fuzzy
 msgid "Your email has been already changed"
-msgstr "Akun Anda telah dibuat pada"
+msgstr "Email Anda telah diubah"
 
 #: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
-msgstr ""
+msgstr "{app_name}: Reset Kata Sandi"
 
 #: app/api/helpers/system_mails.py:172
-#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
-msgstr ""
-"Silakan gunakan tautan berikut untuk mengatur ulang kata sandi dan "
-"memverifikasi akun Anda."
+msgstr "{app_name}: Setel ulang sandi dan verifikasi akun Anda"
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
-msgstr ""
+msgstr "{app_name}: Perubahan Kata Sandi"
 
 #: app/api/helpers/system_mails.py:182
 msgid "Invitation to be {role} at Event: {event}"
-msgstr ""
+msgstr "Undangan untuk menjadi {role} di Acara: {event}"
 
 #: app/api/helpers/system_mails.py:187
 msgid "Invitation to be speaker at Session: {session}"
-msgstr ""
+msgstr "Undangan menjadi pembicara pada Sesi: {session}"
 
 #: app/api/helpers/system_mails.py:192
 msgid "Invitation to be {role} at Group: {group}"
-msgstr ""
+msgstr "Undangan untuk menjadi {role} di Grup: {group}"
 
 #: app/api/helpers/system_mails.py:197
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
 msgstr ""
+"Sampai jumpa di {event_name} pada {event_date} pada {event_time} "
+"({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:202
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
+"Tiket Anda untuk {event_name} pada {event_date} pada {event_time} "
+"({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:207
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
+"Pesanan baru untuk {event_name} pada {event_date} oleh {buyer_name}, "
+"{buyer_email} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:212
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
-msgstr ""
+msgstr "Pesanan Anda untuk {event_name} telah dibatalkan ({invoice_id})"
 
 #: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
-msgstr ""
+msgstr "Acara {event_name} telah diekspor"
 
 #: app/api/helpers/system_mails.py:222
 msgid "Export of event {event_name} failed"
-msgstr ""
+msgstr "Ekspor acara {event_name} gagal"
 
 #: app/api/helpers/system_mails.py:227
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
-msgstr ""
+msgstr "Faktur Anda untuk {event_name} untuk {date} tersedia di {app_name}"
 
 #: app/api/helpers/system_mails.py:233 app/api/helpers/system_mails.py:239
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
+"Pengingat: Faktur Anda untuk {event_name} untuk {date} tersedia di {app_name}"
 
 #: app/api/helpers/system_mails.py:245
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
+"Harap bayar tagihan tunggakan Anda untuk {event_name} untuk {date} pada "
+"{app_name}"
 
 #: app/api/helpers/system_mails.py:251
 msgid "Event {event_name} has been imported"
-msgstr ""
+msgstr "Acara {event_name} telah diimpor"
 
 #: app/api/helpers/system_mails.py:256
 msgid "Import of event failed"
-msgstr ""
+msgstr "Impor acara gagal"
 
 #: app/api/helpers/system_mails.py:269
 msgid "Test Mail Subject"
-msgstr ""
+msgstr "Subjek surat percobaan"
 
 #: app/api/helpers/system_mails.py:274
 msgid "Video Moderator of video {video_name} at event {event_name}"
-msgstr ""
+msgstr "Moderator Video dari video {video_name} di acara {event_name}"
 
 #: app/api/helpers/system_mails.py:279
 msgid "Join {event_name} from {group_name} on {event_date}"
-msgstr ""
+msgstr "Bergabunglah dengan {event_name} dari {group_name} pada {event_date}"
 
 #: app/api/helpers/system_mails.py:284
 msgid "{event_name} is over. Thank you for using {app_name}!"
-msgstr ""
+msgstr "{event_name} sudah berakhir. Terima kasih telah menggunakan {app_name}!"
 
 #: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
-msgstr ""
+msgstr "{event_name} sudah berakhir. Terima kasih telah berpartisipasi!"
 
 #: app/models/event.py:468 app/models/event.py:477
 msgid "Location Not Announced"
-msgstr ""
+msgstr "Lokasi Tidak Diumumkan"
 
 #: app/models/event.py:473
 msgid ""
 "Online (Please login to the platform to access the video room on the "
 "event page)"
 msgstr ""
+"Daring (Silakan masuk ke platform untuk mengakses ruang video di halaman "
+"acara)"
 
 #: app/templates/email/after_event.html:1
 #, python-format
 msgid "Hello %(email)s, your %(eventname)s is over."
-msgstr ""
+msgstr "Halo %(email)s, %(eventname)s Anda sudah berakhir."
 
 #: app/templates/email/after_event.html:3
 #, python-format
 msgid "Thank you for using the %(app_name)s platform for your event."
-msgstr ""
+msgstr "Terima kasih telah menggunakan platform %(app_name)s untuk acara Anda."
 
 #: app/templates/email/after_event.html:4
 msgid "We hope you enjoyed it."
-msgstr ""
+msgstr "Kami harap Anda menikmatinya."
 
 #: app/templates/email/after_event_speaker.html:1
 #, python-format
 msgid "Hello %(email)s, thank you for participating in our %(eventname)s."
 msgstr ""
+"Halo %(email)s, terima kasih telah berpartisipasi dalam %(eventname)s kami."
 
 #: app/templates/email/after_event_speaker.html:3
 msgid "We hope you enjoyed it and keep in touch."
-msgstr ""
+msgstr "Kami harap Anda menikmatinya dan tetap berhubungan."
 
 #: app/templates/email/event_export_fail.html:1
 #: app/templates/email/event_import_fail.html:1
 msgid "The error was as follows"
-msgstr ""
+msgstr "Kesalahannya adalah sebagai berikut"
 
 #: app/templates/email/event_exported.html:1
-#, fuzzy
 msgid "Click on the following link to download the event:"
-msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
+msgstr "Klik tautan berikut untuk mengunduh acara:"
 
 #: app/templates/email/event_imported.html:1
-#, fuzzy
 msgid "Click on the following link to manage your event"
-msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
+msgstr "Klik tautan berikut untuk mengelola acara Anda"
 
 #: app/templates/email/event_role.html:1 app/templates/email/group_role.html:1
 #: app/templates/email/user_confirm.html:1
 #: app/templates/email/user_event_role.html:1
 #, python-format
 msgid "Hello %(email)s,"
-msgstr ""
+msgstr "Halo %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(event)s."
-msgstr ""
+msgstr "Anda telah diundang untuk menjadi %(role)s di %(event)s."
 
 #: app/templates/email/event_role.html:6 app/templates/email/group_role.html:6
 #: app/templates/email/user_event_role.html:6
@@ -252,6 +275,8 @@ msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
+"Untuk menerima peran, harap daftar menggunakan tautan berikut: "
+"%(open_link)sTautan%(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -266,31 +291,30 @@ msgid "Hello"
 msgstr "Halo"
 
 #: app/templates/email/group_contact_user.html:2
-#, fuzzy, python-format
+#, python-format
 msgid "You have contacted the organizers of the group %(group_name)s."
-msgstr "Anda telah menghubungi penyelenggara acara"
+msgstr "Anda telah menghubungi penyelenggara grup %(group_name)s."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
-#, fuzzy
 msgid "Below you find a copy of your email."
-msgstr "Di bawah ini adalah salinan email Anda"
+msgstr "Di bawah ini Anda menemukan salinan email Anda."
 
 #: app/templates/email/group_contact_user.html:7
 #: app/templates/email/organizer_contact_attendee.html:7
-#, fuzzy
 msgid "Organizers have received your message and will follow up with you."
-msgstr "Penyelenggara telah menerima pesan Anda dan akan menindaklanjutinya"
+msgstr ""
+"Penyelenggara telah menerima pesan Anda dan akan menindaklanjutinya dengan "
+"Anda."
 
 #: app/templates/email/group_contact_user.html:8
-#, fuzzy
 msgid "This is a system message. Please do not reply to this message."
-msgstr "Ini adalah pesan sistem. Jangan membalas pesan ini. Balasan tidak dipantau"
+msgstr "Ini adalah pesan sistem. Tolong jangan balas pesan ini."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "Balasan tidak dipantau."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -298,14 +322,13 @@ msgstr ""
 #: app/templates/email/ticket_sales_end.html:23
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
-#, fuzzy
 msgid "Thank you."
-msgstr "Terima kasih"
+msgstr "Terima kasih."
 
 #: app/templates/email/group_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(group)s group."
-msgstr ""
+msgstr "Anda telah diundang untuk menjadi grup %(role)s di %(group)s."
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
@@ -313,7 +336,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "Halo %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -321,22 +344,23 @@ msgid ""
 "The invoice for your event %(event_name)s on %(app_name)s for %(date)s is"
 " now available."
 msgstr ""
+"Faktur untuk acara Anda %(event_name)s di %(app_name)s untuk %(date)s kini "
+"tersedia."
 
 #: app/templates/email/monthly_payment_email.html:4
 msgid "Your invoice payment is due within 30 days."
-msgstr ""
+msgstr "Pembayaran faktur Anda jatuh tempo dalam 30 hari."
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
 #: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
-#, fuzzy
 msgid "Amount Due"
-msgstr "Mode Pembayaran"
+msgstr "Jumlah Terutang"
 
 #: app/templates/email/monthly_payment_email.html:8
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "Silahkan membayar dalam waktu 30 hari."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
@@ -344,7 +368,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "Bayar Sekarang di: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -355,6 +379,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"Faktur mendetail tersedia di %(open_link)sarea penagihan%(close_link)s akun "
+"Anda."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -365,6 +391,8 @@ msgid ""
 "If you have any questions about invoices, please find more information on"
 " our FAQ at %(faq_url)s."
 msgstr ""
+"Jika Anda memiliki pertanyaan tentang faktur, temukan informasi selengkapnya "
+"di FAQ kami di %(faq_url)s."
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
@@ -372,7 +400,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "Terima kasih telah menggunakan %(app_name)s!"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -392,35 +420,40 @@ msgid ""
 "Just a friendly reminder that we haven't received your payment for your "
 "invoice for %(event_name)s for %(date)s."
 msgstr ""
+"Sekadar mengingatkan bahwa kami belum menerima pembayaran Anda untuk faktur "
+"Anda untuk %(event_name)s untuk %(date)s."
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"Pembayaran cepat dan mudah menggunakan kartu kredit atau akun PayPal Anda."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "Silahkan membayar dalam waktu 15 hari."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "Pembayaran Anda sekarang sudah lewat jatuh tempo."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
-msgstr ""
+msgstr "Harap segera bayar tagihan ini untuk menghindari penangguhan akun Anda."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
-msgstr ""
+msgstr "Keterlambatan pembayaran dapat dikenakan biaya keuangan %(percentage)s."
 
 #: app/templates/email/monthly_payment_post_due_email.html:18
 msgid ""
 "If you feel this invoice is incorrect or have any questions, you can "
 "contact our support team for assistance."
 msgstr ""
+"Jika Anda merasa faktur ini salah atau memiliki pertanyaan, Anda dapat "
+"menghubungi tim dukungan kami untuk mendapatkan bantuan."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
@@ -428,10 +461,12 @@ msgid ""
 "This is a reminder that we haven't received your payment for your invoice"
 " for %(event_name)s for %(date)s."
 msgstr ""
+"Ini adalah pengingat bahwa kami belum menerima pembayaran Anda atas faktur "
+"Anda untuk %(event_name)s untuk %(date)s."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "Silahkan membayar dalam waktu 2 hari."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -439,6 +474,8 @@ msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
 "%(session_name)s."
 msgstr ""
+"Ini adalah email otomatis dari %(app_name)s untuk penyelenggara "
+"%(session_name)s."
 
 #: app/templates/email/new_session.html:5
 #, python-format
@@ -446,14 +483,16 @@ msgid ""
 "Your %(open_link)sCall For Speakers%(close_link)s has received a new "
 "session proposal with the following details:"
 msgstr ""
+"%(open_link)sPanggilan Untuk Pembicara%(close_link)s Anda telah menerima "
+"proposal sesi baru dengan detail berikut:"
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
-msgstr ""
+msgstr "Sesi"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
-msgstr ""
+msgstr "Abstrak"
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -461,6 +500,8 @@ msgid ""
 "You can view all speaker details on the speaker profile page and the "
 "session proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
+"Anda dapat melihat semua detail pembicara di halaman profil pembicara dan "
+"proposal sesi di halaman sesi %(open_link)s%(close_link)s."
 
 #: app/templates/email/new_session.html:14
 #, python-format
@@ -468,19 +509,21 @@ msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
 "overview page%(close_link)s and click on the status badge of the session."
 msgstr ""
+"Untuk mengubah status sesi, buka halaman ikhtisar sesi "
+"%(open_link)s%(close_link)s dan klik lencana status sesi."
 
 #: app/templates/email/organizer_contact_attendee.html:2
-#, fuzzy, python-format
+#, python-format
 msgid "You have contacted the organizers of the event %(event_name)s."
-msgstr "Anda telah menghubungi penyelenggara acara"
+msgstr "Anda telah menghubungi penyelenggara acara %(event_name)s."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "This is a system message."
-msgstr ""
+msgstr "Ini adalah pesan sistem."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "Tolong jangan balas pesan ini."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
@@ -495,13 +538,13 @@ msgid "Please use the following link to reset your password."
 msgstr "Silakan gunakan tautan berikut untuk mengatur ulang kata sandi Anda."
 
 #: app/templates/email/password_reset.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Or paste this token in your %(app_name)s"
-msgstr "Atau tempelkan token ini di"
+msgstr "Atau tempel token ini di %(app_name)s Anda"
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "Aplikasi:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
@@ -518,6 +561,9 @@ msgid ""
 "\"%(session_title)s\" for the event %(event_name)s on %(app_name)s by "
 "%(inviter_name)s %(inviter_email)s."
 msgstr ""
+"Anda telah diundang sebagai pembicara untuk pengiriman sesi \""
+"%(session_title)s\" untuk acara %(event_name)s di %(app_name)s oleh "
+"%(inviter_name)s %(inviter_email)s."
 
 #: app/templates/email/speaker_invite.html:6
 #, python-format
@@ -525,12 +571,16 @@ msgid ""
 "You can accept or reject this invitation from %(open_link)sCall for "
 "Speakers%(close_link)s page."
 msgstr ""
+"Anda dapat menerima atau menolak undangan ini dari halaman %(open_link)"
+"sPanggilan untuk Pembicara%(close_link)s."
 
 #: app/templates/email/speaker_invite.html:9
 msgid ""
 "If you do not have an account yet you need to register before you can "
 "accept the invite."
 msgstr ""
+"Jika Anda belum memiliki akun, Anda harus mendaftar sebelum dapat menerima "
+"undangan."
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
@@ -542,12 +592,13 @@ msgstr "Dengan hormat"
 #: app/templates/email/ticket_cancelled.html:2
 #, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "Pesanan Anda %(order_id)s untuk %(event_name)s telah dibatalkan."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
 msgstr ""
+"Informasi tentang pesanan Anda yang dibatalkan ada di sini: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -555,27 +606,31 @@ msgid ""
 " owner of the order or the organizer of the event for more information "
 "about the cancellation."
 msgstr ""
+"Jika Anda belum melakukan pembatalan ini sendiri, silakan periksa dengan "
+"pemilik pesanan atau penyelenggara acara untuk informasi lebih lanjut "
+"tentang pembatalan."
 
 #: app/templates/email/ticket_cancelled.html:6
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
-msgstr "Anda telah menghubungi penyelenggara acara"
+msgstr ""
+"Untuk menghubungi penyelenggara acara, silakan gunakan formulir kontak di "
+"halaman acara di sini: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "Anda harus masuk untuk mengakses formulir."
 
 #: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "Terima kasih telah mendaftar untuk %(event_name)s."
 
 #: app/templates/email/ticket_purchased.html:4
-#, fuzzy
 msgid "This is your confirmation."
-msgstr "Ini adalah konfirmasi pesanan Anda. Tiket dapat diunduh di"
+msgstr "Ini adalah konfirmasi Anda."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -583,6 +638,8 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"Anda dapat mengunduh tiket %(open_link)s atau informasi pendaftaran Anda di "
+"sini %(close_link)s."
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
@@ -627,31 +684,31 @@ msgstr "Tanggal"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "Lokasi"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "Tambahkan ke kalender"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
-msgstr ""
+msgstr "Kalender Google"
 
 #: app/templates/email/ticket_purchased.html:20
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "Outlook"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
@@ -661,19 +718,19 @@ msgstr "Di bawah ini Anda menemukan pesan dari penyelenggara"
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:102
-#, fuzzy, python-format
+#, python-format
 msgid "Login to manage your orders at %(url)s."
-msgstr "Masuk untuk mengelola pesanan Anda di"
+msgstr "Masuk untuk mengelola pesanan Anda di %(url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
-msgstr "Ini adalah email konfirmasi tiket Anda untuk acara tersebut"
+msgstr "Ini adalah surat konfirmasi tiket Anda untuk acara %(eventname)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
-msgstr "Anda dapat mengunduh tiket di"
+msgstr "Anda dapat mengunduh tiket Anda di: %(order_view_url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
@@ -690,20 +747,22 @@ msgid ""
 "You have a new order for your event %(event_name)s starting at "
 "%(event_time)s on %(event_date)s."
 msgstr ""
+"Anda memiliki pesanan baru untuk acara Anda %(event_name)s mulai dari "
+"%(event_time)s di %(event_date)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
-#, fuzzy, python-format
+#, python-format
 msgid "The order has been processed successfully on %(app_name)s."
-msgstr "Kata sandi Anda berhasil diubah."
+msgstr "Pesanan telah berhasil diproses pada %(app_name)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
-msgstr ""
+msgstr "%(open_link)sKlik di sini%(close_link)s untuk melihat/mengunduh faktur."
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "Rincian pesanannya adalah:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -711,11 +770,11 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:187
 #: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
-msgstr ""
+msgstr "Tanggal dan Waktu Pembelian"
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
@@ -725,62 +784,62 @@ msgstr "Mode Pembayaran"
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
 msgid "Stripe"
-msgstr ""
+msgstr "Garis"
 
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "Paypal"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "Bank"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
 msgid "Cheque"
-msgstr ""
+msgstr "Memeriksa"
 
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
 msgid "Onsite"
-msgstr ""
+msgstr "Di tempat"
 
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "Omise"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
-msgstr ""
+msgstr "Beli di Faktur"
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
 msgid "Payment Status"
-msgstr ""
+msgstr "Status pembayaran"
 
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
 msgid "Completed"
-msgstr ""
+msgstr "Selesai"
 
 #: app/templates/email/ticket_purchased_organizer.html:50
 #: app/templates/pdf/order_invoice.html:232
@@ -790,81 +849,78 @@ msgstr "Tertunda"
 #: app/templates/email/ticket_purchased_organizer.html:52
 #: app/templates/pdf/order_invoice.html:234
 msgid "Placed"
-msgstr ""
+msgstr "Ditempatkan"
 
 #: app/templates/email/ticket_purchased_organizer.html:54
 #: app/templates/pdf/order_invoice.html:236
 msgid "Cancelled"
-msgstr ""
+msgstr "Dibatalkan"
 
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr ""
+msgstr "Kedaluwarsa"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
-msgstr ""
+msgstr "Tiket/Pendaftaran"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
-#, fuzzy
 msgid "Amount"
-msgstr "Jumlah Pajak"
+msgstr "Jumlah"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "Organisasi"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
-msgstr ""
+msgstr "Alamat"
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
-msgstr ""
+msgstr "Kota"
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
-#, fuzzy
 msgid "State"
-msgstr "Tanggal"
+msgstr "Status"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
-msgstr ""
+msgstr "Zip"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
-msgstr ""
+msgstr "Negara"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr ""
+msgstr "Id pajak"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
-#, fuzzy
 msgid "Hello,"
-msgstr "Halo"
+msgstr "Halo,"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
 #: app/templates/email/ticket_sales_end_tomorrow.html:3
 #, python-format
 msgid "This is an automatic message from %(url)s."
-msgstr ""
+msgstr "Ini adalah pesan otomatis dari %(url)s."
 
 #: app/templates/email/ticket_sales_end.html:5
 #, python-format
@@ -872,35 +928,38 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s has ended."
 msgstr ""
+"Periode penjualan tiket untuk satu atau beberapa tiket Anda untuk "
+"%(event_name)s telah berakhir."
 
 #: app/templates/email/ticket_sales_end.html:5
 msgid ""
 "If you would like to reactivate ticket sales for these tickets, please "
 "login to your account and edit the sales period for your tickets."
 msgstr ""
+"Jika Anda ingin mengaktifkan kembali penjualan tiket untuk tiket ini, harap "
+"login ke akun Anda dan edit periode penjualan tiket Anda."
 
 #: app/templates/email/ticket_sales_end.html:7
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "Penjualan Tiket telah berakhir untuk"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
 #: app/templates/email/ticket_sales_end_tomorrow.html:10
 msgid "Steps to change the ticket sales period"
-msgstr ""
+msgstr "Langkah-langkah mengubah periode penjualan tiket"
 
 #: app/templates/email/ticket_sales_end.html:12
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
 msgid "Login to your account."
-msgstr ""
+msgstr "Masuk ke akun Anda."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
 #: app/templates/email/ticket_sales_end_tomorrow.html:13
-#, fuzzy
 msgid "On the top right click “Manage Events”."
-msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
+msgstr "Di kanan atas klik \"Kelola Acara\"."
 
 #: app/templates/email/ticket_sales_end.html:14
 #: app/templates/email/ticket_sales_end_next_week.html:14
@@ -909,12 +968,14 @@ msgid ""
 "On the Events Dashboard choose the event you want to edit and click the "
 "“Edit Symbol” of the event."
 msgstr ""
+"Pada Dasbor Acara pilih acara yang ingin Anda edit dan klik \"Edit Simbol\" "
+"acara tersebut."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid "You are now editing the “Basic Details” of your event."
-msgstr ""
+msgstr "Anda sekarang sedang mengedit \"Detail Dasar\" acara Anda."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
@@ -923,18 +984,21 @@ msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
+"Gulir ke bawah ke bagian tiket, pilih tiket yang ingin Anda edit dan klik "
+"\"Simbol Pengaturan\" pada tiket."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
 #: app/templates/email/ticket_sales_end_tomorrow.html:16
 msgid "In the ticket settings adjust the sales period for the ticket."
 msgstr ""
+"Dalam pengaturan tiket, sesuaikan periode penjualan untuk tiket tersebut."
 
 #: app/templates/email/ticket_sales_end.html:17
 #: app/templates/email/ticket_sales_end_next_week.html:17
 #: app/templates/email/ticket_sales_end_tomorrow.html:17
 msgid "Repeat the steps for other tickets, if any."
-msgstr ""
+msgstr "Ulangi langkah tersebut untuk tiket lainnya, jika ada."
 
 #: app/templates/email/ticket_sales_end.html:18
 #: app/templates/email/ticket_sales_end_next_week.html:18
@@ -943,13 +1007,15 @@ msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
 msgstr ""
+"Gulir ke bagian bawah halaman dan simpan perubahan dengan mengklik "
+"\"Publikasikan\"."
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
 #: app/templates/email/ticket_sales_end_tomorrow.html:20
-#, fuzzy, python-format
+#, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
-msgstr "Anda telah menghubungi penyelenggara acara"
+msgstr "Anda dapat mengakses dasbor acara di sini %(dashboard_link)s."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #, python-format
@@ -957,6 +1023,8 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 7 days."
 msgstr ""
+"Periode penjualan tiket untuk satu atau beberapa tiket Anda untuk "
+"%(event_name)s akan berakhir dalam 7 hari."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
@@ -964,11 +1032,13 @@ msgid ""
 "If you would like to extend the period of your ticket sales, please login"
 " to your account and edit the sales period for your tickets."
 msgstr ""
+"Jika Anda ingin memperpanjang periode penjualan tiket Anda, silakan masuk ke "
+"akun Anda dan edit periode penjualan tiket Anda."
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
 #: app/templates/email/ticket_sales_end_tomorrow.html:7
 msgid "Ticket Sales ending for"
-msgstr ""
+msgstr "Penjualan Tiket berakhir untuk"
 
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
 #, python-format
@@ -976,35 +1046,37 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 24 hours."
 msgstr ""
+"Periode penjualan tiket untuk satu atau beberapa tiket Anda untuk "
+"%(event_name)s akan berakhir dalam 24 jam."
 
 #: app/templates/email/user_change_email.html:1
 #, python-format
 msgid "Hi %(email)s,"
-msgstr ""
+msgstr "Hai %(email)s,"
 
 #: app/templates/email/user_change_email.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Your email has been already changed from %(email)s to %(new_email)s."
-msgstr "Akun Anda telah dibuat pada"
+msgstr "Email Anda telah diubah dari %(email)s menjadi %(new_email)s."
 
 #: app/templates/email/user_change_email.html:3
 msgid "You should verify your new email."
-msgstr ""
+msgstr "Anda harus memverifikasi email baru Anda."
 
 #: app/templates/email/user_confirm.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
-msgstr "Silakan kunjungi tautan berikut untuk memverifikasi email Anda:"
+msgstr "Silakan kunjungi tautan ini untuk mengonfirmasi email Anda: %(url)s."
 
 #: app/templates/email/user_register.html:2
-#, fuzzy, python-format
+#, python-format
 msgid "Your account has been created on %(app_name)s."
-msgstr "Akun Anda telah dibuat pada"
+msgstr "Akun Anda telah dibuat di %(app_name)s."
 
 #: app/templates/email/user_register.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Your login is: %(email)s"
-msgstr "Login Anda adalah"
+msgstr "Login Anda adalah: %(email)s"
 
 #: app/templates/email/user_register.html:5
 #, python-format
@@ -1022,10 +1094,11 @@ msgid ""
 "You have been added as a video moderator of video %(video)s at event "
 "%(event)s."
 msgstr ""
+"Anda telah ditambahkan sebagai moderator video %(video)s di acara %(event)s."
 
 #: app/templates/email/video_stream_moderator.html:5
 msgid "You need to register on the platform to access the video stream."
-msgstr ""
+msgstr "Anda harus mendaftar di platform untuk mengakses aliran video."
 
 #: app/templates/pdf/order_invoice.html:177
 msgid "INVOICE"
@@ -1033,16 +1106,16 @@ msgstr "FAKTUR"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
-msgstr ""
+msgstr "Nama kontak"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
-msgstr ""
+msgstr "Telepon"
 
 #: app/templates/pdf/order_invoice.html:214
 msgid "Order By"
@@ -1054,55 +1127,54 @@ msgstr "Informasi tidak tersedia"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
-msgstr ""
+msgstr "Batas waktu"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
-msgstr ""
+msgstr "Setelah Faktur"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "Deskripsi"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
 msgstr "Harga"
 
 #: app/templates/pdf/order_invoice.html:320
-#, fuzzy
 msgid "Sub-Total"
-msgstr "Sub-Total (bersih)"
+msgstr "Sub-Total"
 
 #: app/templates/pdf/order_invoice.html:326
 msgid "for"
-msgstr ""
+msgstr "untuk"
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
-msgstr "Kode Diskon"
+msgstr "Kode diskon"
 
 #: app/templates/pdf/order_invoice.html:352
 #: app/templates/pdf/order_invoice.html:372
 #: app/templates/pdf/order_invoice.html:395
 #: app/templates/pdf/order_invoice.html:401
 msgid "incl."
-msgstr ""
+msgstr "termasuk"
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
-msgstr ""
+msgstr "Pajak"
 
 #: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
-msgstr ""
+msgstr "Termasuk dalam Total"
 
 #: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
-msgstr "Total Keseluruhan"
+msgstr "Hasil akhir"
 
 #: app/templates/pdf/ticket_attendee.html:141
 #: app/templates/pdf/ticket_purchaser.html:137
@@ -1111,45 +1183,47 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"Memesan\n"
+"                    #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
 #, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "Acara berlangsung online dan di %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
 msgid "Event taking place online."
-msgstr ""
+msgstr "Acara berlangsung secara online."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
 #, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "Acara berlangsung di %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "Detail lokasi atau acara online akan diumumkan."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
 #, python-format
 msgid "From: %(start_time)s"
-msgstr ""
+msgstr "Dari: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
 #, python-format
 msgid "To: %(end_time)s"
-msgstr ""
+msgstr "Kepada: %(end_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "informasi pemesanan"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
@@ -1158,6 +1232,8 @@ msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"Memesan\n"
+"                                        #%(invoice_number)s"
 
 #~ msgid "Thank you for your ticket order for"
 #~ msgstr "Terima kasih atas pesanan tiket Anda untuk"
@@ -1270,4 +1346,3 @@ msgstr ""
 
 #~ msgid "Event taking place at %(location)s."
 #~ msgstr ""
-
