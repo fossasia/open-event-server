@@ -171,7 +171,7 @@ class CustomFormDetail(ResourceDetail):
                         db.session.add(customFormTranslate)
 
     @staticmethod
-    def before_delete(kwargs):
+    def before_delete(obj, kwargs):
         """
         before delete method
         :param kwargs:
