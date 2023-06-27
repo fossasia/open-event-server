@@ -4070,27 +4070,27 @@ SQLAlchemy = ">=0.6"
 
 [[package]]
 name = "sqlalchemy-continuum"
-version = "1.3.12"
+version = "1.3.15"
 description = "Versioning and auditing extension for SQLAlchemy."
 optional = false
 python-versions = "*"
 files = [
-    {file = "SQLAlchemy-Continuum-1.3.12.tar.gz", hash = "sha256:ae51e5e7d300421b2270cb59413f6bbf5890ac3c9560995ac2dca1bc568033ba"},
-    {file = "SQLAlchemy_Continuum-1.3.12-py3-none-any.whl", hash = "sha256:8829ae87677c4f0ac14f5e6a2dd29a4a02be82e875db33fc1e05abf36e75741e"},
+    {file = "SQLAlchemy-Continuum-1.3.15.tar.gz", hash = "sha256:a52689d1580daabc496ca8420fa742d62b371bc43921d6c06374192e52e0c409"},
+    {file = "SQLAlchemy_Continuum-1.3.15-py3-none-any.whl", hash = "sha256:d2ecc798500f5d5195ecd2143f7d1eabb0aa46e0f213e38bfeb4331d25cc08d3"},
 ]
 
 [package.dependencies]
+six = "*"
 SQLAlchemy = ">=1.0.8"
 SQLAlchemy-Utils = ">=0.30.12"
 
 [package.extras]
-anyjson = ["anyjson (>=0.3.3)"]
 flask = ["Flask (>=0.9)"]
 flask-login = ["Flask-Login (>=0.2.9)"]
-flask-sqlalchemy = ["Flask-SQLAlchemy (>=1.0)"]
+flask-sqlalchemy = ["Flask-SQLAlchemy (>=1.0,<3.0.0)"]
 flexmock = ["flexmock (>=0.9.7)"]
 i18n = ["SQLAlchemy-i18n (>=0.8.4,!=1.1.0)"]
-test = ["Flask (>=0.9)", "Flask-Login (>=0.2.9)", "Flask-SQLAlchemy (>=1.0)", "PyMySQL (>=0.8.0)", "SQLAlchemy-i18n (>=0.8.4,!=1.1.0)", "anyjson (>=0.3.3)", "flexmock (>=0.9.7)", "psycopg2 (>=2.4.6)", "pytest (>=2.3.5)", "six (>=1.4.0)"]
+test = ["Flask (>=0.9)", "Flask-Login (>=0.2.9)", "Flask-SQLAlchemy (>=1.0,<3.0.0)", "PyMySQL (>=0.8.0)", "SQLAlchemy-i18n (>=0.8.4,!=1.1.0)", "flexmock (>=0.9.7)", "psycopg2 (>=2.4.6)", "pytest (>=2.3.5)", "six (>=1.4.0)"]
 
 [[package]]
 name = "sqlalchemy-utils"
@@ -4956,4 +4956,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "ba9afa6e4cb4277899b1bc0b5ccceddcb11f8c884a2e5a1d402c506bbb25aecd"
+content-hash = "1680514cb799d9f0da68b0b8fb850ef5ce857e6665d536ee5053462850d26305"
