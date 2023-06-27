@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
 "PO-Revision-Date: 2023-06-27 08:54+0000\n"
-"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Last-Translator: François Cartegnie <fcartegnie@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/open-event/server/"
 "fr/>\n"
 "Language: fr\n"
@@ -1072,7 +1072,7 @@ msgstr "Salut %(email)s,"
 #: app/templates/email/user_change_email.html:3
 #, python-format
 msgid "Your email has been already changed from %(email)s to %(new_email)s."
-msgstr ""
+msgstr "Votre adresse e-mail a déjà été modifiée de %(email)s à %(new_email)s."
 
 #: app/templates/email/user_change_email.html:3
 msgid "You should verify your new email."
@@ -1086,7 +1086,7 @@ msgstr "Veuillez visiter ce lien pour confirmer votre adresse e-mail : %(url)s."
 #: app/templates/email/user_register.html:2
 #, python-format
 msgid "Your account has been created on %(app_name)s."
-msgstr ""
+msgstr "Votre compte a été créé sur %(app_name)s."
 
 #: app/templates/email/user_register.html:3
 #, python-format
@@ -1115,7 +1115,7 @@ msgstr ""
 
 #: app/templates/email/video_stream_moderator.html:5
 msgid "You need to register on the platform to access the video stream."
-msgstr ""
+msgstr "Vous devez vous inscrire sur la plateforme pour accéder au flux vidéo."
 
 #: app/templates/pdf/order_invoice.html:177
 msgid "INVOICE"
