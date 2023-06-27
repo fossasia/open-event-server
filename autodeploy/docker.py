@@ -12,7 +12,7 @@ class DockerComposeError(Exception):
         self.errors = errors
 
     def __str__(self):
-        return '{}:\n {}'.format(self.message, self.errors)
+        return f'{self.message}:\n {self.errors}'
 
 
 def _docker_compose(cwd, *cmd):

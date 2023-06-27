@@ -17,10 +17,9 @@ class TestErrorsHelperValidation(OpenEventTestCase):
                 source="test source", detail="test detail"
             )
             json_object = json.dumps(jsonapi_errors([base_error_response.to_dict()]))
-            assert base_error_response.respond() != \
-                make_response(
-                    json_object, 200, {'Content-Type': 'application/vnd.api+json'}
-                )
+            assert base_error_response.respond() != make_response(
+                json_object, 200, {'Content-Type': 'application/vnd.api+json'}
+            )
 
 
 if __name__ == '__main__':

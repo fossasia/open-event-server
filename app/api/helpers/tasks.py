@@ -236,9 +236,7 @@ def resize_group_images_task(self, group_id, banner_url):
                 group_id, banner_url
             )
         )
-        uploaded_images = create_save_image_sizes(
-            banner_url, 'event-image', group.id
-        )
+        uploaded_images = create_save_image_sizes(banner_url, 'event-image', group.id)
 
         group.thumbnail_image_url = uploaded_images['thumbnail_image_url']
         save_to_db(group)

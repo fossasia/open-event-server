@@ -39,7 +39,8 @@ class StripePaymentsManager:
         :return: Stripe secret and publishable keys.
         """
         if not event:
-            settings = get_settings()
+            # Perform refresh from db to make sure Stripe keys are retrieved
+            settings = get_settings(from_db=True)
             if (
                 settings['app_environment'] == 'development'
                 and settings['stripe_test_secret_key']

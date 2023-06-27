@@ -62,8 +62,9 @@ ATTENDEE_FORM = {
     "gender": {"include": 0, "require": 0},
     "age_group": {"include": 0, "require": 0},
     "home_wiki": {"include": 0, "require": 0},
+    "wiki_scholarship": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
-    "is_consent_of_refund_policy" : {"include": 0, "require": 0},
+    "is_consent_of_refund_policy": {"include": 0, "require": 0},
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
     "is_consent_form_field": {"include": 0, "require": 0},
@@ -155,7 +156,8 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "is_consent_of_refund_policy": "Consent of refund policy",
         "language_form_1": "What is your native language, or what language are you most fluent in?",
         "language_form_2": "Are you fluent in any other of the following languages?",
-        "home_wiki": "What is your home wiki"
+        "home_wiki": "What is your home wiki",
+        "wiki_scholarship": "Have you received a Wikimedia scholarship?",
     },
 }
 
@@ -171,7 +173,11 @@ class CustomForms(db.Model):
     __tablename__ = 'custom_forms'
     __table_args__ = (
         UniqueConstraint(
-            'event_id', 'field_identifier', 'form', 'form_id', name='custom_form_identifier'
+            'event_id',
+            'field_identifier',
+            'form',
+            'form_id',
+            name='custom_form_identifier',
         ),
     )
     id = db.Column(db.Integer, primary_key=True)

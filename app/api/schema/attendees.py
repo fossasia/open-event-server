@@ -60,6 +60,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         validate=validate.OneOf(choices=AGE_GROUP_CHOICES), allow_none=True
     )
     home_wiki = fields.Str(allow_none=True)
+    wiki_scholarship = fields.Str(allow_none=True)
     birth_date = fields.DateTime(allow_none=True)
 
     ticket_id = fields.Str(allow_none=True)

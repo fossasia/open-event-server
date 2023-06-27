@@ -45,6 +45,7 @@ class TicketHolder(SoftDeletionModel):
     accept_receive_emails: bool = db.Column(db.Boolean)
     age_group: str = db.Column(db.String)
     home_wiki: str = db.Column(db.String)
+    wiki_scholarship: str = db.Column(db.String)
     birth_date: datetime = db.Column(db.DateTime(timezone=True))
     pdf_url: str = db.Column(db.String)
     ticket_id: int = db.Column(
@@ -128,7 +129,7 @@ class TicketHolder(SoftDeletionModel):
             identifier=self.order.identifier, extra_identifier=self.id
         )
         return (
-            'generated/tickets/{}/{}/'.format(key, generate_hash(key))
+            f'generated/tickets/{key}/{generate_hash(key)}/'
             + self.order.identifier
             + '.pdf'
         )

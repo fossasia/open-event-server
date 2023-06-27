@@ -73,7 +73,7 @@ class OrderSchema(Schema):
                 "omise",
                 "alipay",
                 "paytm",
-                "invoice"
+                "invoice",
             ]
         ),
         allow_none=True,

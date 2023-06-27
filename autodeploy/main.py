@@ -5,6 +5,7 @@ import threading
 from os.path import join
 
 import yaml
+
 from .auto_updater import AutoUpdater
 
 POLL_SECONDS = 60
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     cwd = args.workdir
     config_file = args.config
 
-    with open(config_file, 'r') as ymlfile:
+    with open(config_file) as ymlfile:
         config = yaml.safe_load(ymlfile)
 
     projects = [get_auto_updater(cwd, n, config[n]) for n in config]
