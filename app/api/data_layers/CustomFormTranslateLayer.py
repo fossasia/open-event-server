@@ -9,7 +9,7 @@ class CustomFormTranslateLayer(BaseDataLayer):
     """CustomFormTranslate Data Layer"""
 
     @staticmethod
-    def create_object(data):
+    def create_object(data, view_kwargs):
         """
         create_object method for the Charges layer
         charge the user using paypal or stripe
@@ -34,12 +34,12 @@ class CustomFormTranslateLayer(BaseDataLayer):
         customForm.position = data['position']
         customForm.type = data['type']
         save_to_db(customForm)
-
-        for item in data['translations']:
-            translation = CustomFormTranslates()
-            translation.form_id = data['form_id']
-            translation.custom_form_id = customForm.id
-            translation.name = item['name']
-            translation.language_code = item['language_code']
-            save_to_db(translation)
+        if 'translations' in data:
+            for item in data['translations']:
+                translation = CustomFormTranslates()
+                translation.form_id = data['form_id']
+                translation.custom_form_id = customForm.id
+                translation.name = item['name']
+                translation.language_code = item['language_code']
+                save_to_db(translation)
         return customForm
