@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
 "PO-Revision-Date: 2023-06-27 08:39+0000\n"
-"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"Last-Translator: François Cartegnie <fcartegnie@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/open-event/server/"
 "fr/>\n"
 "Language: fr\n"
@@ -903,152 +903,189 @@ msgstr "Ville"
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
+#, fuzzy
 msgid "State"
-msgstr ""
+msgstr "État"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
+#, fuzzy
 msgid "Zip"
-msgstr ""
+msgstr "Zip"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
+#, fuzzy
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
+#, fuzzy
 msgid "Tax ID"
-msgstr ""
+msgstr "Identifiant fiscal"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
+#, fuzzy
 msgid "Hello,"
-msgstr ""
+msgstr "Bonjour,"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
 #: app/templates/email/ticket_sales_end_tomorrow.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "This is an automatic message from %(url)s."
-msgstr ""
+msgstr "Il s'agit d'un message automatique de %(url)s."
 
 #: app/templates/email/ticket_sales_end.html:5
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s has ended."
 msgstr ""
+"La période de vente de billets pour un ou plusieurs de vos billets pour "
+"%(event_name)s est terminée."
 
 #: app/templates/email/ticket_sales_end.html:5
+#, fuzzy
 msgid ""
 "If you would like to reactivate ticket sales for these tickets, please "
 "login to your account and edit the sales period for your tickets."
 msgstr ""
+"Si vous souhaitez réactiver la vente de billets pour ces tickets, veuillez "
+"vous connecter à votre compte et modifier la période de vente de vos billets."
 
 #: app/templates/email/ticket_sales_end.html:7
+#, fuzzy
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "La vente de billets est terminée pour"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
 #: app/templates/email/ticket_sales_end_tomorrow.html:10
+#, fuzzy
 msgid "Steps to change the ticket sales period"
-msgstr ""
+msgstr "Étapes pour modifier la période de vente des billets"
 
 #: app/templates/email/ticket_sales_end.html:12
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
+#, fuzzy
 msgid "Login to your account."
-msgstr ""
+msgstr "Connectez-vous à votre compte."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
 #: app/templates/email/ticket_sales_end_tomorrow.html:13
+#, fuzzy
 msgid "On the top right click “Manage Events”."
-msgstr ""
+msgstr "En haut à droite, cliquez sur \"Gérer les événements\"."
 
 #: app/templates/email/ticket_sales_end.html:14
 #: app/templates/email/ticket_sales_end_next_week.html:14
 #: app/templates/email/ticket_sales_end_tomorrow.html:14
+#, fuzzy
 msgid ""
 "On the Events Dashboard choose the event you want to edit and click the "
 "“Edit Symbol” of the event."
 msgstr ""
+"Sur le tableau de bord des événements, choisissez l'événement que vous "
+"souhaitez modifier et cliquez sur \"Modifier le symbole\" de l'événement."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
+#, fuzzy
 msgid "You are now editing the “Basic Details” of your event."
 msgstr ""
+"Vous êtes en train de modifier les \"Détails de base\" de votre événement."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
+#, fuzzy
 msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
+"Faites défiler jusqu'à la section des billets, choisissez le billet que vous "
+"souhaitez modifier et cliquez sur le \"Symbole des paramètres\" du billet."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
 #: app/templates/email/ticket_sales_end_tomorrow.html:16
+#, fuzzy
 msgid "In the ticket settings adjust the sales period for the ticket."
 msgstr ""
+"Dans les paramètres du billet, ajustez la période de vente pour le billet."
 
 #: app/templates/email/ticket_sales_end.html:17
 #: app/templates/email/ticket_sales_end_next_week.html:17
 #: app/templates/email/ticket_sales_end_tomorrow.html:17
+#, fuzzy
 msgid "Repeat the steps for other tickets, if any."
-msgstr ""
+msgstr "Répétez les étapes pour les autres billets, le cas échéant."
 
 #: app/templates/email/ticket_sales_end.html:18
 #: app/templates/email/ticket_sales_end_next_week.html:18
 #: app/templates/email/ticket_sales_end_tomorrow.html:18
+#, fuzzy
 msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
 msgstr ""
+"Faites défiler jusqu'en bas de la page et enregistrez les modifications en "
+"cliquant sur \"Publier\"."
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
 #: app/templates/email/ticket_sales_end_tomorrow.html:20
-#, python-format
+#, fuzzy, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
 msgstr ""
+"Vous pouvez accéder au tableau de bord de l'événement ici %(dashboard_link)s."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 7 days."
 msgstr ""
+"La période de vente des billets pour un ou plusieurs de vos billets pour "
+"%(event_name)s prendra fin dans 7 jours."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
+#, fuzzy
 msgid ""
 "If you would like to extend the period of your ticket sales, please login"
 " to your account and edit the sales period for your tickets."
 msgstr ""
+"Si vous souhaitez prolonger la période de vente de vos billets, veuillez "
+"vous connecter à votre compte et modifier la période de vente de vos billets."
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
 #: app/templates/email/ticket_sales_end_tomorrow.html:7
+#, fuzzy
 msgid "Ticket Sales ending for"
-msgstr ""
+msgstr "Vente de billets se terminant pour"
 
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 24 hours."
 msgstr ""
+"La période de vente de billets pour un ou plusieurs de vos billets pour "
+"%(event_name)s prendra fin dans 24 heures."
 
 #: app/templates/email/user_change_email.html:1
-#, python-format
+#, fuzzy, python-format
 msgid "Hi %(email)s,"
-msgstr ""
+msgstr "Salut %(email)s,"
 
 #: app/templates/email/user_change_email.html:3
 #, python-format
@@ -1056,13 +1093,14 @@ msgid "Your email has been already changed from %(email)s to %(new_email)s."
 msgstr ""
 
 #: app/templates/email/user_change_email.html:3
+#, fuzzy
 msgid "You should verify your new email."
-msgstr ""
+msgstr "Vous devriez vérifier votre nouvel e-mail."
 
 #: app/templates/email/user_confirm.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
-msgstr ""
+msgstr "Veuillez visiter ce lien pour confirmer votre adresse e-mail : %(url)s."
 
 #: app/templates/email/user_register.html:2
 #, python-format
@@ -1070,34 +1108,39 @@ msgid "Your account has been created on %(app_name)s."
 msgstr ""
 
 #: app/templates/email/user_register.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "Your login is: %(email)s"
-msgstr ""
+msgstr "Votre identifiant de connexion est : %(email)s"
 
 #: app/templates/email/user_register.html:5
-#, python-format
+#, fuzzy, python-format
 msgid "Please visit the following link to verify your email: %(url)s"
 msgstr ""
+"Veuillez visiter le lien suivant pour vérifier votre adresse e-mail : %(url)s"
 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
+#, fuzzy
 msgid "Thank You"
-msgstr ""
+msgstr "De rien."
 
 #: app/templates/email/video_stream_moderator.html:2
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "You have been added as a video moderator of video %(video)s at event "
 "%(event)s."
 msgstr ""
+"Vous avez été ajouté en tant que modérateur vidéo de la vidéo %(video)s à "
+"l'événement %(event)s."
 
 #: app/templates/email/video_stream_moderator.html:5
 msgid "You need to register on the platform to access the video stream."
 msgstr ""
 
 #: app/templates/pdf/order_invoice.html:177
+#, fuzzy
 msgid "INVOICE"
-msgstr ""
+msgstr "FACTURE"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
@@ -1105,59 +1148,71 @@ msgstr "Contact"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
+#, fuzzy
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: app/templates/pdf/order_invoice.html:203
+#, fuzzy
 msgid "Phone"
-msgstr ""
+msgstr "Téléphone"
 
 #: app/templates/pdf/order_invoice.html:214
+#, fuzzy
 msgid "Order By"
-msgstr ""
+msgstr "Order By"
 
 #: app/templates/pdf/order_invoice.html:220
+#, fuzzy
 msgid "Information unavailable"
-msgstr ""
+msgstr "Information indisponible"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
 msgstr "Date prévue"
 
 #: app/templates/pdf/order_invoice.html:308
+#, fuzzy
 msgid "Upon Invoice"
-msgstr ""
+msgstr "Upon Invoice"
 
 #: app/templates/pdf/order_invoice.html:317
+#, fuzzy
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: app/templates/pdf/order_invoice.html:318
+#, fuzzy
 msgid "Price"
-msgstr ""
+msgstr "Prix"
 
 #: app/templates/pdf/order_invoice.html:320
+#, fuzzy
 msgid "Sub-Total"
-msgstr ""
+msgstr "Sous-total"
 
 #: app/templates/pdf/order_invoice.html:326
+#, fuzzy
 msgid "for"
-msgstr ""
+msgstr "pour"
 
 #: app/templates/pdf/order_invoice.html:330
+#, fuzzy
 msgid "Discount Code"
-msgstr ""
+msgstr "Code de réduction"
 
 #: app/templates/pdf/order_invoice.html:352
 #: app/templates/pdf/order_invoice.html:372
 #: app/templates/pdf/order_invoice.html:395
 #: app/templates/pdf/order_invoice.html:401
+#, fuzzy
 msgid "incl."
-msgstr ""
+msgstr "incl. (inclus)"
 
 #: app/templates/pdf/order_invoice.html:417
+#, fuzzy
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
@@ -1168,63 +1223,71 @@ msgid "Included in Total"
 msgstr "Inclus dans le total"
 
 #: app/templates/pdf/order_invoice.html:448
+#, fuzzy
 msgid "Grand Total"
-msgstr ""
+msgstr "Grand Total"
 
 #: app/templates/pdf/ticket_attendee.html:141
 #: app/templates/pdf/ticket_purchaser.html:137
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"Commande\n"
+"                    #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
-#, python-format
+#, fuzzy, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "Événement ayant lieu en ligne et à %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
+#, fuzzy
 msgid "Event taking place online."
-msgstr ""
+msgstr "Événement se déroulant en ligne."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
-#, python-format
+#, fuzzy, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "Événement ayant lieu à %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
+#, fuzzy
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "Détails de l'emplacement ou de l'événement en ligne à annoncer."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
-#, python-format
+#, fuzzy, python-format
 msgid "From: %(start_time)s"
-msgstr ""
+msgstr "De: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
-#, python-format
+#, fuzzy, python-format
 msgid "To: %(end_time)s"
-msgstr ""
+msgstr "À : %(end_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
+#, fuzzy
 msgid "Order Information"
-msgstr ""
+msgstr "Informations de commande"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"Commande\n"
+"                                        #%(invoice_number)s"
 
 #~ msgid "Thank you for your ticket order for"
 #~ msgstr ""
