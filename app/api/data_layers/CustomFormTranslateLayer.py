@@ -17,21 +17,28 @@ class CustomFormTranslateLayer(BaseDataLayer):
         :return:
         """
         customForm = CustomForms()
-        customForm.description = data['description']
+
+        keys = [
+            'description',
+            'name',
+            'form_id',
+            'is_fixed',
+            'is_complex',
+            'is_included',
+            'is_public',
+            'is_required',
+            'main_language',
+            'max',
+            'min',
+            'position',
+        ]
+        for key in keys:
+            if key in data:
+                customForm.__setattr__(key, data[key])
+
         customForm.event_id = data['event']
         customForm.field_identifier = data['field_identifier']
         customForm.form = data['form']
-        customForm.form_id = data['form_id']
-        customForm.is_complex = data['is_complex']
-        customForm.is_fixed = data['is_fixed']
-        customForm.is_included = data['is_included']
-        customForm.is_public = data['is_public']
-        customForm.is_required = data['is_required']
-        customForm.main_language = data['main_language']
-        customForm.max = data['max']
-        customForm.min = data['min']
-        customForm.name = data['name']
-        customForm.position = data['position']
         customForm.type = data['type']
         save_to_db(customForm)
         if 'translations' in data:
