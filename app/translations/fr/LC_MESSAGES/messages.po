@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-27 08:50+0000\n"
-"Last-Translator: François Cartegnie <fcartegnie@free.fr>\n"
+"PO-Revision-Date: 2023-06-27 08:54+0000\n"
+"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/open-event/server/"
 "fr/>\n"
 "Language: fr\n"
@@ -989,7 +989,7 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid "You are now editing the “Basic Details” of your event."
 msgstr ""
-"Vous êtes en train de modifier les \"Détails de base\" de votre événement."
+"Vous êtes en train de modifier les « Détails de base » de votre événement."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
@@ -999,7 +999,7 @@ msgid ""
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
 "Faites défiler jusqu'à la section des billets, choisissez le billet que vous "
-"souhaitez modifier et cliquez sur le \"Symbole des paramètres\" du billet."
+"souhaitez modifier et cliquez sur le « Symbole des paramètres » du billet."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
@@ -1021,7 +1021,7 @@ msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
 msgstr ""
-"Faites défiler jusqu'en bas de la page et enregistrez les modifications en "
+"Faites défiler vers le bas de la page et enregistrez les modifications en "
 "cliquant sur \"Publier\"."
 
 #: app/templates/email/ticket_sales_end.html:20
@@ -1038,8 +1038,8 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 7 days."
 msgstr ""
-"La période de vente des billets pour un ou plusieurs de vos billets pour "
-"%(event_name)s prendra fin dans 7 jours."
+"La période de vente d'un ou plusieurs de vos billets pour %(event_name)s se "
+"terminera dans 7 jours."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
