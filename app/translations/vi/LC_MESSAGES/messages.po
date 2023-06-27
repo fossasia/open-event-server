@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-27 08:39+0000\n"
+"PO-Revision-Date: 2023-06-27 09:10+0000\n"
 "Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
@@ -61,51 +61,57 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:132
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
-msgstr ""
+msgstr "Kết thúc thời gian bán vé cho {event_name}"
 
 #: app/api/helpers/system_mails.py:137
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
-msgstr ""
+msgstr "Thời gian bán vé cho {event_name} kết thúc sau 24 giờ"
 
 #: app/api/helpers/system_mails.py:142
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
-msgstr ""
+msgstr "Thời gian bán vé cho {event_name} kết thúc sau 7 ngày"
 
 #: app/api/helpers/system_mails.py:147
 msgid "New session proposal for {session.event.name} titled {session.title}"
-msgstr ""
+msgstr "Bài mới nộp {session.event.name} có tiêu đề {session.title}"
 
 #: app/api/helpers/system_mails.py:152
+#, fuzzy
 msgid "Welcome to {app_name}. Please verify your account"
-msgstr ""
+msgstr "Chào mừng bạn đến với {app_name}. Vui lòng xác minh tài khoản của bạn"
 
 #: app/api/helpers/system_mails.py:157
+#, fuzzy
 msgid "Email Confirmation to Create Account for {app_name}"
-msgstr ""
+msgstr "Email xác nhận tạo tài khoản cho {app_name}"
 
 #: app/api/helpers/system_mails.py:162
+#, fuzzy
 msgid "Your email has been already changed"
-msgstr ""
+msgstr "Email của bạn đã được thay đổi"
 
 #: app/api/helpers/system_mails.py:167
+#, fuzzy
 msgid "{app_name}: Password Reset"
-msgstr ""
+msgstr "{app_name}: Đặt lại mật khẩu"
 
 #: app/api/helpers/system_mails.py:172
+#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
-msgstr ""
+msgstr "{app_name}: Đặt lại mật khẩu và xác minh tài khoản của bạn"
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
-msgstr ""
+msgstr "{app_name}: Thay đổi mật khẩu"
 
 #: app/api/helpers/system_mails.py:182
+#, fuzzy
 msgid "Invitation to be {role} at Event: {event}"
-msgstr ""
+msgstr "Lời mời tham gia {role} tại Sự kiện: {event}"
 
 #: app/api/helpers/system_mails.py:187
 msgid "Invitation to be speaker at Session: {session}"
