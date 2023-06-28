@@ -28,6 +28,7 @@ class CustomFormTranslateLayer(BaseDataLayer):
             'is_included',
             'is_public',
             'is_required',
+            'field_identifier',
             'main_language',
             'max',
             'min',
