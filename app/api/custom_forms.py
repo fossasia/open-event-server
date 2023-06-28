@@ -20,7 +20,7 @@ class CustomFormListPost(ResourceList):
     Create and List Custom Forms
     """
 
-    def before_post(self, data):
+    def before_post(self, args, kwargs, data):
         """
         method to check for required relationship with event
         :param args:
@@ -131,7 +131,7 @@ class CustomFormDetail(ResourceDetail):
             view_kwargs['id'] = custom_form.id
 
     @staticmethod
-    def before_patch(kwargs, data):
+    def before_patch(args, kwargs, data):
         """
         before patch method
         :param kwargs:
@@ -141,12 +141,19 @@ class CustomFormDetail(ResourceDetail):
         translation = data.get('translations')
         if translation:
             for translate in translation:
-                customFormTranslate = (
-                    CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id'])
-                    .filter_by(id=translate['id'])
-                    .first()
-                )
-                if 'isDeleted' in translate and translate['isDeleted']:
+                try:
+                    customFormTranslate = (
+                        CustomFormTranslates.query.filter_by(custom_form_id=kwargs['id'])
+                        .filter_by(id=translate['id'])
+                        .first()
+                    )
+                except:
+                    customFormTranslate = None
+                if (
+                    customFormTranslate is not None
+                    and 'isDeleted' in translate
+                    and translate['isDeleted']
+                ):
                     db.session.delete(customFormTranslate)
                 else:
                     if customFormTranslate:
@@ -163,7 +170,7 @@ class CustomFormDetail(ResourceDetail):
                         db.session.add(customFormTranslate)
 
     @staticmethod
-    def before_delete(kwargs):
+    def before_delete(obj, kwargs):
         """
         before delete method
         :param kwargs:
