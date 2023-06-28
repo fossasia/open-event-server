@@ -131,9 +131,10 @@ class CustomFormDetail(ResourceDetail):
             view_kwargs['id'] = custom_form.id
 
     @staticmethod
-    def before_patch(args, kwargs, data):
+    def before_patch(_args, kwargs, data):
         """
         before patch method
+        :param _args:
         :param kwargs:
         :param data:
         :return:
@@ -170,9 +171,10 @@ class CustomFormDetail(ResourceDetail):
                         db.session.add(customFormTranslate)
 
     @staticmethod
-    def before_delete(obj, kwargs):
+    def before_delete(_obj, kwargs):
         """
         before delete method
+        :param _obj:
         :param kwargs:
         :return:
         """

@@ -9,12 +9,12 @@ class CustomFormTranslateLayer(BaseDataLayer):
     """CustomFormTranslate Data Layer"""
 
     @staticmethod
-    def create_object(data, view_kwargs):
+    def create_object(data, _view_kwargs):
         """
         create_object method for the Charges layer
         charge the user using paypal or stripe
         :param data:
-        :param view_kwargs:
+        :param _view_kwargs:
         :return:
         """
         customForm = CustomForms()
