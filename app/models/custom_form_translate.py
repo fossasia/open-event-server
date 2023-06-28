@@ -27,19 +27,20 @@ class CustomFormTranslates(db.Model):
             'form_id': self.form_id,
         }
 
-    def check_custom_form_translate(self, custom_form_id, translate_id):
+    @staticmethod
+    def check_custom_form_translate(custom_form_id, translate_id):
         """
         check custom form translate
         :param custom_form_id:
-        :param form_id:
+        :param translate_id:
         :return:
         """
         try:
-            customFormTranslates = (
+            customFormTranslate = (
                 CustomFormTranslates.query.filter_by(custom_form_id=custom_form_id)
                 .filter_by(id=translate_id)
-                .all()
+                .first()
             )
-            return customFormTranslates
-        except:
+            return customFormTranslate
+        except Exception:
             return None
