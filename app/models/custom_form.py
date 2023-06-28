@@ -157,7 +157,7 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "language_form_1": "What is your native language, or what language are you most fluent in?",
         "language_form_2": "Are you fluent in any other of the following languages?",
         "home_wiki": "What is your home wiki",
-        "wiki_scholarship": "Have you received a Wikimedia scholarship?",
+        "wiki_scholarship": "Have you received a Wikimania scholarship?",
     },
 }
 
