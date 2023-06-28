@@ -68,6 +68,8 @@ ATTENDEE_FORM = {
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
     "is_consent_form_field": {"include": 0, "require": 0},
+    "is_consent_form_field_photo": {"include": 0, "require": 0},
+    "is_consent_form_field_email": {"include": 0, "require": 0},
 }
 
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
@@ -154,6 +156,8 @@ CUSTOM_FORM_IDENTIFIER_NAME_MAP = {
         "acceptReceiveEmails": "Email consent",
         "is_consent_form_field": "Consent form field",
         "is_consent_of_refund_policy": "Consent of refund policy",
+        "is_consent_form_field_photo": "Consent of wikimania photo policy",
+        "is_consent_form_field_email": "Consent of receiving wikimania email update",
         "language_form_1": "What is your native language, or what language are you most fluent in?",
         "language_form_2": "Are you fluent in any other of the following languages?",
         "home_wiki": "What is your home wiki",
