@@ -142,9 +142,13 @@ class CustomFormDetail(ResourceDetail):
         translation = data.get('translations')
         if translation:
             for translate in translation:
-                customFormTranslate = CustomFormTranslates.check_custom_form_translate(
-                    kwargs['id'], translate['id']
-                )
+                customFormTranslate = None
+                if 'id' in translate:
+                    customFormTranslate = (
+                        CustomFormTranslates.check_custom_form_translate(
+                            kwargs['id'], translate['id']
+                        )
+                    )
                 if (
                     customFormTranslate is not None
                     and 'isDeleted' in translate
