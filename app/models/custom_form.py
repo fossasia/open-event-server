@@ -70,6 +70,7 @@ ATTENDEE_FORM = {
     "is_consent_form_field": {"include": 0, "require": 0},
 }
 
+
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
 speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 attendee_form_str = json.dumps(ATTENDEE_FORM, separators=(',', ':'))
