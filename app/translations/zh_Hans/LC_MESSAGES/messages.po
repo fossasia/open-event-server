@@ -7,18 +7,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2017-03-18 02:52+0000\n"
-"Last-Translator: 17Y5C35 NG XING YU <ng.xingyu@dhs.sg>\n"
+"PO-Revision-Date: 2023-06-26 18:42+0000\n"
+"Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"open-event/server/zh_Hans/>\n"
 "Language: zh_Hans\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects"
-"/open-event/organizer-server/zh_Hans/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.18.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -374,7 +375,7 @@ msgstr ""
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr ""
+msgstr "团队"
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #, python-format
@@ -439,7 +440,7 @@ msgstr ""
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
-msgstr ""
+msgstr "届会"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
@@ -615,11 +616,11 @@ msgstr "日期"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "位置"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
@@ -708,7 +709,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
 msgid "Payment Mode"
-msgstr ""
+msgstr "付款方式"
 
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
@@ -718,17 +719,17 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
 msgid "Stripe"
-msgstr ""
+msgstr "条纹"
 
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "贝宝"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "岸边"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
@@ -738,12 +739,12 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
 msgid "Onsite"
-msgstr ""
+msgstr "现场"
 
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "御濑"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
@@ -753,7 +754,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
@@ -768,7 +769,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
 msgid "Completed"
-msgstr ""
+msgstr "已完结"
 
 #: app/templates/email/ticket_purchased_organizer.html:50
 #: app/templates/pdf/order_invoice.html:232
@@ -778,17 +779,17 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:52
 #: app/templates/pdf/order_invoice.html:234
 msgid "Placed"
-msgstr ""
+msgstr "已放置"
 
 #: app/templates/email/ticket_purchased_organizer.html:54
 #: app/templates/pdf/order_invoice.html:236
 msgid "Cancelled"
-msgstr ""
+msgstr "取消成功"
 
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr ""
+msgstr "已过期"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
@@ -796,13 +797,13 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
-msgstr ""
+msgstr "金额"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "机构"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
@@ -837,7 +838,7 @@ msgstr ""
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr ""
+msgstr "税号"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
@@ -1018,7 +1019,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
-msgstr ""
+msgstr "联系人名称"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
@@ -1039,7 +1040,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
-msgstr ""
+msgstr "截止日期"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
@@ -1047,7 +1048,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
@@ -1063,7 +1064,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
-msgstr ""
+msgstr "优惠码"
 
 #: app/templates/pdf/order_invoice.html:352
 #: app/templates/pdf/order_invoice.html:372
@@ -1074,19 +1075,19 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
-msgstr ""
+msgstr "合计"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
-msgstr ""
+msgstr "收税"
 
 #: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
-msgstr ""
+msgstr "包括在总计中"
 
 #: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
-msgstr ""
+msgstr "累计"
 
 #: app/templates/pdf/ticket_attendee.html:141
 #: app/templates/pdf/ticket_purchaser.html:137
@@ -1746,4 +1747,3 @@ msgstr ""
 
 #~ msgid "Event taking place at %(location)s."
 #~ msgstr ""
-

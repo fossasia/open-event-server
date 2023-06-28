@@ -6,18 +6,20 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2016-12-21 13:08+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2023-06-26 18:42+0000\n"
+"Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/open-event/"
+"server/ru/>\n"
 "Language: ru\n"
-"Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -373,7 +375,7 @@ msgstr ""
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr ""
+msgstr "Команда"
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #, python-format
@@ -438,7 +440,7 @@ msgstr ""
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
-msgstr ""
+msgstr "Сеанс"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
@@ -572,7 +574,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
-msgstr ""
+msgstr "Итог заказа"
 
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
@@ -580,7 +582,7 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
@@ -592,7 +594,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_attendee.html:10
 #: app/templates/pdf/order_invoice.html:319
 msgid "Quantity"
-msgstr ""
+msgstr "Кол-во"
 
 #: app/templates/email/ticket_purchased.html:12
 #: app/templates/email/ticket_purchased_organizer.html:14
@@ -609,15 +611,15 @@ msgstr ""
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "Расположение"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
@@ -697,7 +699,7 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:187
 #: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
-msgstr ""
+msgstr "Адрес электронной почты"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
@@ -706,7 +708,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
 msgid "Payment Mode"
-msgstr ""
+msgstr "Режим оплаты"
 
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
@@ -721,27 +723,27 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "Paypal"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "Банковский перевод"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
 msgid "Cheque"
-msgstr ""
+msgstr "Банковский чек"
 
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
 msgid "Onsite"
-msgstr ""
+msgstr "На месте"
 
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "Омисе"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
@@ -751,7 +753,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
@@ -766,27 +768,27 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
 msgid "Completed"
-msgstr ""
+msgstr "Выполнено"
 
 #: app/templates/email/ticket_purchased_organizer.html:50
 #: app/templates/pdf/order_invoice.html:232
 msgid "Pending"
-msgstr ""
+msgstr "В ожидании"
 
 #: app/templates/email/ticket_purchased_organizer.html:52
 #: app/templates/pdf/order_invoice.html:234
 msgid "Placed"
-msgstr ""
+msgstr "Размещено"
 
 #: app/templates/email/ticket_purchased_organizer.html:54
 #: app/templates/pdf/order_invoice.html:236
 msgid "Cancelled"
-msgstr ""
+msgstr "Отменен"
 
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr ""
+msgstr "Просрочен"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
@@ -794,31 +796,31 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
-msgstr ""
+msgstr "Кол-во"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "Организация"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
-msgstr ""
+msgstr "Адрес"
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
-msgstr ""
+msgstr "Город"
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
 msgid "State"
-msgstr ""
+msgstr "Штат"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
@@ -828,13 +830,13 @@ msgstr ""
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
-msgstr ""
+msgstr "Страна"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr ""
+msgstr "ИНН"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
@@ -1015,7 +1017,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
-msgstr ""
+msgstr "Contact Name"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
@@ -1024,7 +1026,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
-msgstr ""
+msgstr "Телефон"
 
 #: app/templates/pdf/order_invoice.html:214
 msgid "Order By"
@@ -1036,7 +1038,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
-msgstr ""
+msgstr "Срок выполнения"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
@@ -1044,11 +1046,11 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
-msgstr ""
+msgstr "Цена"
 
 #: app/templates/pdf/order_invoice.html:320
 msgid "Sub-Total"
@@ -1060,7 +1062,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
-msgstr ""
+msgstr "Код скидки"
 
 #: app/templates/pdf/order_invoice.html:352
 #: app/templates/pdf/order_invoice.html:372
@@ -1071,19 +1073,19 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
-msgstr ""
+msgstr "Итого"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
-msgstr ""
+msgstr "Tax"
 
 #: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
-msgstr ""
+msgstr "Включено в итого"
 
 #: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
-msgstr ""
+msgstr "Общая сумма"
 
 #: app/templates/pdf/ticket_attendee.html:141
 #: app/templates/pdf/ticket_purchaser.html:137
@@ -1743,4 +1745,3 @@ msgstr ""
 
 #~ msgid "Event taking place at %(location)s."
 #~ msgstr ""
-
