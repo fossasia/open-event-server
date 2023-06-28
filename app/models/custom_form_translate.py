@@ -42,5 +42,5 @@ class CustomFormTranslates(db.Model):
                 .first()
             )
             return customFormTranslate
-        except Exception:
+        except ModuleNotFoundError:
             return None
