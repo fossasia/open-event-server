@@ -114,8 +114,8 @@ ATTENDEE_FORM = {
     "wiki_scholarship": {"include": 0, "require": 0},
     "accept_video_recording": {"include": 0, "require": 0},
     "is_consent_of_refund_policy": {"include": 0, "require": 0},
-    "language_form_1": {"include": 0, "require": 0},
-    "language_form_2": {"include": 0, "require": 0},
+    "native_language": {"include": 0, "require": 0},
+    "fluent_language": {"include": 0, "require": 0},
     "is_consent_form_field": {"include": 0, "require": 0},
 }
 
@@ -150,8 +150,8 @@ ATTENDEE_CUSTOM_FORM = {
     "acceptReceiveEmails": "Email consent",
     "is_consent_form_field": "Consent form field",
     "is_consent_of_refund_policy": "Consent of refund policy",
-    "language_form_1": "What is your native language, or what language are you most fluent in?",
-    "language_form_2": "Are you fluent in any other of the following languages?",
+    "native_language": "What is your native language, or what language are you most fluent in?",
+    "fluent_language": "Are you fluent in any other of the following languages?",
     "home_wiki": "What is your home wiki",
     "wiki_scholarship": "Have you received a Wikimedia scholarship?",
 }
