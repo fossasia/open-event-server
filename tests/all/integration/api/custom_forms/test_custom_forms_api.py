@@ -20,6 +20,9 @@ def test_custom_form_create(db, client, user, jwt):
                     "is-included": True,
                     "is-required": True,
                     "is-complex": False,
+                    "form-id": "60af0a01-ca58-4121-a559-edc21c3dd233",
+                    "main-language": "en-US",
+                    "translations": [{"name": "email-ES", "language_code": "es-ES"}],
                 },
                 "relationships": {
                     "event": {"data": {"id": str(event.id), "type": "event"}}
