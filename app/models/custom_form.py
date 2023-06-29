@@ -117,6 +117,8 @@ ATTENDEE_FORM = {
     "language_form_1": {"include": 0, "require": 0},
     "language_form_2": {"include": 0, "require": 0},
     "is_consent_form_field": {"include": 0, "require": 0},
+    "is_consent_form_field_photo": {"include": 0, "require": 0},
+    "is_consent_form_field_email": {"include": 0, "require": 0},
 }
 
 ATTENDEE_CUSTOM_FORM = {
@@ -149,6 +151,8 @@ ATTENDEE_CUSTOM_FORM = {
     "acceptShareDetails": "Partner contact consent",
     "acceptReceiveEmails": "Email consent",
     "is_consent_form_field": "Consent form field",
+    "is_consent_form_field_photo": "Wikimania photo consent",
+    "is_consent_form_field_email": "Wikimania email updates",
     "is_consent_of_refund_policy": "Consent of refund policy",
     "language_form_1": "What is your native language, or what language are you most fluent in?",
     "language_form_2": "Are you fluent in any other of the following languages?",
