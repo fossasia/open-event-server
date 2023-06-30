@@ -568,7 +568,6 @@ GENDER_CHOICES = [
     'Transgender',
     'Non-binary',
     'Genderqueer',
-    'Open',
     'An identity not listed here',
     'I prefer not to say',
 ]
