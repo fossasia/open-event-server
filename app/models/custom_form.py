@@ -145,7 +145,7 @@ ATTENDEE_CUSTOM_FORM = {
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "instagram": "Instagram",
-    "gender": "Gender",
+    "gender": "Which of these categories describe your gender identity? (check all that apply)",
     "ageGroup": "Age Group",
     "acceptVideoRecording": "Photo & video & text consent",
     "acceptShareDetails": "Partner contact consent",
