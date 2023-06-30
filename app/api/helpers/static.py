@@ -563,11 +563,14 @@ AGE_GROUP_CHOICES = [
 ]
 
 GENDER_CHOICES = [
-    'Male',
-    'Female',
-    'Other',
-    'Diverse / Non-binary',
-    'Prefer not to share',
+    'Man',
+    'Woman',
+    'Transgender',
+    'Non-binary',
+    'Genderqueer',
+    'Open',
+    'An identity not listed here',
+    'I prefer not to say',
 ]
 
 LEVEL_CHOICES = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
