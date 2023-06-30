@@ -1,4 +1,3 @@
-from email.policy import default
 import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validate, validates_schema

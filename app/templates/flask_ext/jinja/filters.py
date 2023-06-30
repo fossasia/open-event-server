@@ -4,8 +4,8 @@ import humanize
 import pytz
 from forex_python.converter import CurrencyCodes
 
-from app.api.helpers.utilities import strip_tags
 from app.api.helpers.mail import convert_to_user_locale
+from app.api.helpers.utilities import strip_tags
 
 
 def humanize_helper(time):
@@ -31,7 +31,9 @@ def init_filters(app):
         if not date:
             return ''
         if timezone:
-            date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(pytz.timezone(timezone))
+            date = date.replace(tzinfo=pytz.timezone('UTC')).astimezone(
+                pytz.timezone(timezone)
+            )
         return date.strftime(format)
 
     @app.template_filter('date')

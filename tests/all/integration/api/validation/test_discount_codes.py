@@ -1,11 +1,12 @@
 import unittest
 
+import pytest
+
 from app.api.helpers.errors import UnprocessableEntityError
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 from tests.all.integration.utils import OpenEventLegacyTestCase
 from tests.factories.discount_code import DiscountCodeFactory
 from tests.factories.ticket import TicketFactory
-import pytest
 
 
 class TestDiscountCodeValidation(OpenEventLegacyTestCase):

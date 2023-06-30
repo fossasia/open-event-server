@@ -21,6 +21,20 @@ exclude = '''
 )
 '''
 
+[tool.pylint.MAIN]
+load-plugins = [ "pylint_flask_sqlalchemy", "pylint_flask" ]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "invalid-name",
+]
+
+[tool.pylint.CODE_STYLE]
+max-line-length = 90
+
 [tool.isort]
 profile = "black"
 line_length = 90
@@ -65,18 +79,18 @@ itsdangerous = "2.0.1"
 humanize = "4.1.0"
 celery = "5.2.7"
 redis = "4.5.5"
-apscheduler = "3.9.1"
+apscheduler = "3.10.1"
 pillow = "9.5.0"
 gunicorn = "20.1.0"
 boto = "2.49"
 geoip2 = "4.7.0"
-SQLAlchemy-Continuum = "1.3.12"
+SQLAlchemy-Continuum = "1.3.15"
 bleach = "4.1.0"
-stripe = "3.0.0"
+stripe = "5.4.0"
 xhtml2pdf = "0.2.6"
 flask-caching = "2.0.2"
 forex-python = "1.8"
-pycryptodome = "3.14.1"
+pycryptodome = "3.18.0"
 oauth2 = "~1.9.0"
 qrcode = "7.4.2"
 python-magic = "0.4.25"
@@ -120,9 +134,9 @@ fastapi = "^0.95.2"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
 broadcaster = {extras = ["redis"], version = "^0.2.0"}
 sqlalchemy-citext = "^1.8.0"
-coolname = "^1.1.0"
+coolname = "^2.2.0"
 python-slugify = "^8.0.1"
-cryptography = "40.0.2"
+cryptography = "41.0.1"
 Flask-Migrate = "2.7.0"
 marrow-mailer = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "develop"}
 marrow-util = {git = "https://github.com/LexMachinaInc/util.git", rev = "develop"}
@@ -143,9 +157,11 @@ pyupgrade = "3.4.0"
 # For testing
 coverage = "7.2.7"
 dredd_hooks = "0.2"
-pytest = "7.1.2"
+pytest = "7.4.0"
 pytest-cov = "4.1.0"
 objproxies = "0.9.4"
+pylint-flask-sqlalchemy = "^0.2.0"
+pylint-flask = "^0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

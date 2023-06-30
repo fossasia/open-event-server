@@ -30,6 +30,12 @@ from app.api.custom_form_options import (
     CustomFormOptionList,
     CustomFormOptionRelationship,
 )
+from app.api.custom_form_translates import (
+    CustomFormTranslateDetail,
+    CustomFormTranslateList,
+    CustomFormTranslateListPost,
+    CustomFormTranslateRelationship,
+)
 from app.api.custom_forms import (
     CustomFormDetail,
     CustomFormList,
@@ -1663,6 +1669,7 @@ api.route(
     'custom_form_detail',
     '/custom-forms/<int:id>',
     '/custom-form-options/<int:custom_form_option_id>/custom-form',
+    '/custom-form-translates/<int:custom_form_translate_id>/custom-form',
 )
 api.route(
     CustomFormRelationshipRequired,
@@ -1867,7 +1874,7 @@ api.route(
 api.route(
     ChatmosphereDetail,
     'chatmosphere_background',
-    '/events/<event_identifier>/chatmosphere'
+    '/events/<event_identifier>/chatmosphere',
 )
 api.route(
     VideoStreamRelationship,
@@ -1959,4 +1966,24 @@ api.route(
     VideoStreamModeratorRelationship,
     'video_stream_moderator_stream',
     '/video-stream-moderators/<int:id>/relationships/video-stream',
+)
+api.route(
+    CustomFormTranslateListPost,
+    'custom_form_translate_list_post',
+    '/custom-form-translates',
+)
+api.route(
+    CustomFormTranslateList,
+    'custom_form_translate_list',
+    '/custom-forms/<int:custom_form_id>/custom-form-translates',
+)
+api.route(
+    CustomFormTranslateDetail,
+    'custom_form_translate_detail',
+    '/custom-form-translates/<int:id>',
+)
+api.route(
+    CustomFormTranslateRelationship,
+    'custom_form_translate_form',
+    '/custom-form-translates/<int:id>/relationships/custom-form',
 )

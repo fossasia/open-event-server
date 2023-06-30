@@ -1,13 +1,13 @@
 from urllib.parse import quote
 
 import pytz
-from app.api.helpers.utilities import remove_html_tags
 from flask import jsonify
 from flask_jwt_extended import current_user
 from icalendar import Calendar, Event, Timezone
 from sqlalchemy import or_
 from sqlalchemy.orm import joinedload
 
+from app.api.helpers.utilities import remove_html_tags
 from app.models.session import Session
 
 

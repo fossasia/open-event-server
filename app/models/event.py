@@ -1,9 +1,6 @@
-from email.policy import default
 import re
 from argparse import Namespace
 from datetime import datetime
-
-from sqlalchemy.sql.expression import or_, and_
 
 import flask_login as login
 import pytz
@@ -12,6 +9,7 @@ from flask_babel import _
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
+from sqlalchemy.sql.expression import and_, or_
 
 from app.api.helpers.db import get_new_identifier
 from app.models import db
@@ -64,7 +62,7 @@ class Event(SoftDeletionModel):
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
     public_stream_link = db.Column(db.String)
-    stream_loop = db.Column(db.Boolean, default = False)
+    stream_loop = db.Column(db.Boolean, default=False)
     stream_autoplay = db.Column(db.Boolean, default=False)
     is_featured = db.Column(db.Boolean, default=False, nullable=False)
     is_promoted = db.Column(db.Boolean, default=False, nullable=False)
@@ -474,7 +472,9 @@ class Event(SoftDeletionModel):
     @property
     def event_location_status(self):
         if self.online:
-            return _('Online (Please login to the platform to access the video room on the event page)')
+            return _(
+                'Online (Please login to the platform to access the video room on the event page)'
+            )
         elif self.location_name:
             return self.location_name
         else:
@@ -501,7 +501,12 @@ class Event(SoftDeletionModel):
     def tickets_placed_or_completed_count(self):
         obj = (
             db.session.query(Order.event_id)
-            .filter(and_(Order.event_id==self.id, or_(Order.status=='completed', Order.status=='placed')))
+            .filter(
+                and_(
+                    Order.event_id == self.id,
+                    or_(Order.status == 'completed', Order.status == 'placed'),
+                )
+            )
             .join(TicketHolder)
         )
         return obj.count()

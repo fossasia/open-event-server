@@ -549,15 +549,27 @@ PAYMENT_CURRENCY_CHOICES = [
     'USD',
 ]
 
-AGE_GROUP_CHOICES = ['Under 18', '18-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75-84', '85+', 'I prefer not '
-                                                                                                       'to say']
+AGE_GROUP_CHOICES = [
+    'Under 18',
+    '18-24',
+    '25-34',
+    '35-44',
+    '45-54',
+    '55-64',
+    '65-74',
+    '75-84',
+    '85+',
+    'I prefer not to say',
+]
 
 GENDER_CHOICES = [
-    'Male',
-    'Female',
-    'Other',
-    'Diverse / Non-binary',
-    'Prefer not to share',
+    'Man',
+    'Woman',
+    'Transgender',
+    'Non-binary',
+    'Genderqueer',
+    'An identity not listed here',
+    'I prefer not to say',
 ]
 
 LEVEL_CHOICES = ['Beginner', 'Intermediate', 'Advanced', 'Expert']

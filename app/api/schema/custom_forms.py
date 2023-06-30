@@ -2,20 +2,17 @@ from marshmallow import validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
+from app.api.custom.schema.custom_form_translate import TranslationSchema
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
 
 
 @use_defaults()
 class CustomFormSchema(Schema):
-    """
-    API Schema for Custom Forms database model
-    """
+    """API Schema for Custom Form Translates database model"""
 
     class Meta:
-        """
-        Meta class for CustomForm Schema
-        """
+        """Meta class for Custom Form Translates Schema"""
 
         type_ = 'custom-form'
         self_view = 'v1.custom_form_detail'
@@ -65,3 +62,5 @@ class CustomFormSchema(Schema):
     form_id = fields.Str(allow_none=True)
     min = fields.Integer(allow_none=True, default=0)
     max = fields.Integer(allow_none=True, default=10)
+    main_language = fields.Str(allow_none=True)
+    translations = fields.Nested(TranslationSchema, many=True)

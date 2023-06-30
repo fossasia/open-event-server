@@ -16,7 +16,7 @@ from app.settings import get_settings
 def format_timedelta(td):
     hours, remainder = divmod(td.total_seconds(), 3600)
     minutes, _ = divmod(remainder, 60)
-    return '{:02}:{:02}'.format(int(hours), int(minutes))
+    return f'{int(hours):02}:{int(minutes):02}'
 
 
 class PentabarfExporter:
