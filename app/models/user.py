@@ -206,7 +206,9 @@ class User(SoftDeletionModel):
         if event_id:
             uer = uer.filter_by(event_id=event_id)
             event = Event.query.get(event_id)
-            ugr = ugr.filter_by(group=event.group)
+            # Validation to ensure event is not None
+            if event is not None and event.group is not None:
+                ugr = ugr.filter_by(group=event.group)
         return bool(uer.first() or ugr.first())
 
     def is_owner(self, event_id):
