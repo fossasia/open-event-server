@@ -227,7 +227,7 @@ msgstr "Chúng tôi hy vọng bạn thích nó."
 #: app/templates/email/after_event_speaker.html:1
 #, python-format
 msgid "Hello %(email)s, thank you for participating in our %(eventname)s."
-msgstr "Xin chào %(email)s, cảm ơn bạn đã tham gia %(eventname) của chúng tôi."
+msgstr "Xin chào %(email)s, cảm ơn bạn đã tham gia %(eventname)s của chúng tôi."
 
 #: app/templates/email/after_event_speaker.html:3
 msgid "We hope you enjoyed it and keep in touch."
@@ -325,7 +325,7 @@ msgstr "Bạn đã được mời làm %(role)s tại nhóm %(group)s."
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr "Xin chào %(tên)s,"
+msgstr "Xin chào %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
