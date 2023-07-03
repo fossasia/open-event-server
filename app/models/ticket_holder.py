@@ -80,6 +80,8 @@ class TicketHolder(SoftDeletionModel):
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_consent_form_field: bool = db.Column(db.Boolean, default=False)
+    is_consent_form_field_photo: bool = db.Column(db.Boolean, default=False)
+    is_consent_form_field_email: bool = db.Column(db.Boolean, default=False)
 
     @property
     def name(self):

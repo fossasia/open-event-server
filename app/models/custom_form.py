@@ -117,6 +117,8 @@ ATTENDEE_FORM = {
     "native_language": {"include": 0, "require": 0},
     "fluent_language": {"include": 0, "require": 0},
     "is_consent_form_field": {"include": 0, "require": 0},
+    "is_consent_form_field_photo": {"include": 0, "require": 0},
+    "is_consent_form_field_email": {"include": 0, "require": 0},
 }
 
 ATTENDEE_CUSTOM_FORM = {
@@ -143,17 +145,19 @@ ATTENDEE_CUSTOM_FORM = {
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "instagram": "Instagram",
-    "gender": "Gender",
+    "gender": "Which of these categories describe your gender identity? (check all that apply)",
     "ageGroup": "Age Group",
     "acceptVideoRecording": "Photo & video & text consent",
     "acceptShareDetails": "Partner contact consent",
     "acceptReceiveEmails": "Email consent",
     "is_consent_form_field": "Consent form field",
+    "is_consent_form_field_photo": "Wikimania photo consent",
+    "is_consent_form_field_email": "Wikimania email updates",
     "is_consent_of_refund_policy": "Consent of refund policy",
     "native_language": "What is your native language, or what language are you most fluent in?",
     "fluent_language": "Are you fluent in any other of the following languages?",
     "home_wiki": "What is your home wiki",
-    "wiki_scholarship": "Have you received a Wikimedia scholarship?",
+    "wiki_scholarship": "Have you received a Wikimania scholarship?",
 }
 
 
