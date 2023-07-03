@@ -1,19 +1,16 @@
 """empty message
 
 Revision ID: f508644acbd3
-Revises: abf585f1ad76
+Revises: 05b1aab46b66
 Create Date: 2023-06-29 15:22:56.735800
 
 """
 
 from alembic import op
-import sqlalchemy as sa
-import sqlalchemy_utils
-from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = 'f508644acbd3'
-down_revision = 'abf585f1ad76'
+down_revision = '05b1aab46b66'
 
 
 def upgrade():
