@@ -33,8 +33,10 @@ class TestExportCSV(OpenEventTestCase):
             test_order = OrderFactory(created_at=datetime.now())
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
-            field_data = export_attendees_csv([test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
-            assert field_data[1][8] == 'tax id'
+            field_data = export_attendees_csv(
+                [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
+            # new export_attendees_csv will return list of dictionary for csv_writer
+            assert field_data[0].get("Email") is not None
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():
