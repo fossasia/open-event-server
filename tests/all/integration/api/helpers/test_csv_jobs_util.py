@@ -11,6 +11,7 @@ from tests.factories.custom_form import CustomFormFactory
 from tests.factories.order import OrderFactory
 from tests.factories.session import SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
+from app.models.custom_form import ATTENDEE_CUSTOM_FORM
 
 
 class TestExportCSV(OpenEventTestCase):
@@ -32,7 +33,7 @@ class TestExportCSV(OpenEventTestCase):
             test_order = OrderFactory(created_at=datetime.now())
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
-            field_data = export_attendees_csv([test_attendee], [custom_forms])
+            field_data = export_attendees_csv([test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
             assert field_data[1][8] == 'tax id'
 
     def _test_export_session_csv(self, test_session=None):
