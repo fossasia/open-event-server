@@ -36,7 +36,7 @@ class TestExportCSV(OpenEventTestCase):
             field_data = export_attendees_csv(
                 [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
             # new export_attendees_csv will return list of dictionary for csv_writer
-            assert field_data[0].get("email") is not None
+            assert field_data[0].get("Tax ID") == "tax id"
 
     def _test_export_session_csv(self, test_session=None):
         with self.app.test_request_context():
