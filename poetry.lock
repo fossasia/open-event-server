@@ -3077,21 +3077,21 @@ files = [
 
 [[package]]
 name = "pycln"
-version = "2.1.3"
+version = "2.1.5"
 description = "A formatter for finding and removing unused import statements."
 optional = false
 python-versions = ">=3.6.2,<4"
 files = [
-    {file = "pycln-2.1.3-py3-none-any.whl", hash = "sha256:161142502e4ff9853cd462a38401e29eb56235919856df2cb7fa4c84e463717f"},
-    {file = "pycln-2.1.3.tar.gz", hash = "sha256:a33bfc64ded74a623b7cf49eca38b58db4348facc60c35af26d45de149b256f5"},
+    {file = "pycln-2.1.5-py3-none-any.whl", hash = "sha256:1e1f2542aabc8942fd945bbecd39b55ed5f25cd9a70fa116a554cceaab4fdc3b"},
+    {file = "pycln-2.1.5.tar.gz", hash = "sha256:5029007881d00b87bfc8831ef7cf59c90cc214fbbcc8773f0a9560ddef8d150a"},
 ]
 
 [package.dependencies]
 libcst = {version = ">=0.3.10,<0.5.0", markers = "python_version >= \"3.7\""}
-pathspec = ">=0.9.0,<0.11.0"
+pathspec = ">=0.9.0,<0.12.0"
 pyyaml = ">=5.3.1,<7.0.0"
 tomlkit = ">=0.11.1,<0.12.0"
-typer = ">=0.4.1,<0.8.0"
+typer = ">=0.4.1,<0.10.0"
 
 [[package]]
 name = "pycountry"
@@ -4956,4 +4956,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8,<3.10"
-content-hash = "608931cc2a0e34ae1be49fead7d2ed7057db27ab686edda2b59e46ff9adb0352"
+content-hash = "101b42eb8c9a67e577631e96d06721cbafa7c35daf5dc417fb9a1e26627e2e72"
