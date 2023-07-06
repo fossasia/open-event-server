@@ -99,3 +99,17 @@ class VideoStream(db.Model):
                 .exists()
             ).scalar()
         )
+
+class VideoStreamChannel(db.Model):
+    __tablename__ = "video_stream_channels" 
+    id = db.Column(db.Integer, primary_key=True)
+    video_stream_id = db.Column(
+        db.Integer, db.ForeignKey('video_streams.id', ondelete='CASCADE'), unique=True
+    )
+    video_stream = db.relationship('VideoStream', backref=backref('video_stream', uselist=False))
+
+    channel_id = db.Column(
+        db.Integer, db.ForeignKey('video_channels.id', ondelete='CASCADE')
+    )
+    channel = db.relationship(VideoChannel, backref='streams')
+    channel_type = db.Column(db.String)

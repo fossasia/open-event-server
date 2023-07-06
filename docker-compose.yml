@@ -2,13 +2,13 @@ version: '3.5'
 
 x-environment-vars: &environment-vars
   POSTGRES_HOST: postgres
-  DATABASE_URL: postgresql://open_event_user:opev_pass@postgres:5432/open_event
+  DATABASE_URL: postgresql://open_event_user:opev_pass@postgres:5432/open_event_clone
   REDIS_URL: redis://redis:6379/0
   ADMIN_EMAIL: "@{ADMIN_EMAIL}"
   ADMIN_PASSWORD: "@{ADMIN_PASSWORD}"
 
 x-defaults: &defaults
-  image: eventyay/open-event-server:development
+  image: oes_server:custom
   restart: unless-stopped
   env_file:
     - .env
@@ -33,6 +33,8 @@ services:
       POSTGRES_USER: open_event_user
       POSTGRES_PASSWORD: opev_pass
       POSTGRES_DB: open_event
+    ports:
+      - 5432:5432
 
   redis:
     image: redis:3-alpine
