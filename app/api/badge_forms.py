@@ -68,6 +68,7 @@ class BadgeFormList(ResourceList):
 class BadgeFormDetail(ResourceDetail):
     """BadgeForm Resource Detail"""
 
+    @staticmethod
     def before_get_object(self, view_kwargs):
         """
         before get method
@@ -201,6 +202,7 @@ class BadgeFormRelationship(ResourceRelationship):
 class BadgeFormListPost(ResourceList):
     """Create and List Custom Form Translates"""
 
+    @staticmethod
     def before_post(self, _args, _kwargs, data):
         """
         method to check for required relationship with event
@@ -212,7 +214,8 @@ class BadgeFormListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound(
-                {'parameter': 'event_id'}, "Event: {} not found".format(data['event_id'])
+                {'parameter': 'event_id'},
+                f"Event: {data['event_id']} not found",
             )
 
     schema = BadgeFormSchema
