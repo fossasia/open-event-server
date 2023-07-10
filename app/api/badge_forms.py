@@ -69,7 +69,7 @@ class BadgeFormDetail(ResourceDetail):
     """BadgeForm Resource Detail"""
 
     @staticmethod
-    def before_get_object(self, view_kwargs):
+    def before_get_object(view_kwargs):
         """
         before get method
         :param view_kwargs:
@@ -203,7 +203,7 @@ class BadgeFormListPost(ResourceList):
     """Create and List Custom Form Translates"""
 
     @staticmethod
-    def before_post(self, _args, _kwargs, data):
+    def before_post(_args, _kwargs, data):
         """
         method to check for required relationship with event
         :param args:
