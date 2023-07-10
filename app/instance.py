@@ -75,6 +75,7 @@ def create_app():
     global app_created
     if not app_created:
         BlueprintsManager.register(app)
+        #TODO: RENABLE all graphsql files
         graphql_views.init_app(app)
     Migrate(app, db)
 
