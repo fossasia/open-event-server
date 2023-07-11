@@ -26,6 +26,7 @@ class BadgeFieldForms(db.Model):
     margin_bottom = db.Column(db.Integer, nullable=False)
     margin_left = db.Column(db.Integer, nullable=False)
     margin_right = db.Column(db.Integer, nullable=False)
+    qr_custom_field = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f'<BadgeFieldForm {self.id}>'

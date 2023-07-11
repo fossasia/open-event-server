@@ -133,6 +133,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_bottom = badgeField['margin_bottom']
                     badgeFieldForm.margin_left = badgeField['margin_left']
                     badgeFieldForm.margin_right = badgeField['margin_right']
+                    badgeFieldForm.qr_custom_field = badgeField['qr_custom_field']
                     db.session.add(badgeFieldForm)
 
     @staticmethod
