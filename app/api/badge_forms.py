@@ -68,8 +68,7 @@ class BadgeFormList(ResourceList):
 class BadgeFormDetail(ResourceDetail):
     """BadgeForm Resource Detail"""
 
-    @staticmethod
-    def before_get_object(view_kwargs):
+    def before_get_object(self, view_kwargs):
         """
         before get method
         :param view_kwargs:
@@ -90,8 +89,7 @@ class BadgeFormDetail(ResourceDetail):
             badge_form = safe_query(BadgeForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = badge_form.id
 
-    @staticmethod
-    def before_patch(_args, kwargs, data):
+    def before_patch(self, _args, kwargs, data):
         """
         before patch method
         :param _args:
@@ -114,13 +112,13 @@ class BadgeFormDetail(ResourceDetail):
                 ):
                     db.session.delete(badgeFieldForm)
                 else:
-                    badgeFieldForm = BadgeFieldForms()
                     if badgeFieldForm:
                         badgeFieldForm.badge_id = data['badge_id']
                     else:
-                        badgeFieldForm.badge_id = data['form_id']
-                        badgeFieldForm.badge_form_id = kwargs['id']
+                        badgeFieldForm = BadgeFieldForms()
+                        badgeFieldForm.badge_id = data['badge_id']
 
+                    badgeFieldForm.badge_form_id = kwargs['id']
                     badgeFieldForm.custom_field = badgeField['custom_field']
                     badgeFieldForm.sample_text = badgeField['sample_text']
                     badgeFieldForm.font_name = badgeField['font_name']
@@ -136,8 +134,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_right = badgeField['margin_right']
                     db.session.add(badgeFieldForm)
 
-    @staticmethod
-    def before_delete(_obj, kwargs):
+    def before_delete(self, _obj, kwargs):
         """
         before delete method
         :param _obj:
@@ -148,8 +145,7 @@ class BadgeFormDetail(ResourceDetail):
         for item in badgeFieldForm:
             db.session.delete(item)
 
-    @staticmethod
-    def after_patch(badge_form):
+    def after_patch(self, badge_form):
         """
         after patch method
         :param badge_form:
