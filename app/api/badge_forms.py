@@ -89,7 +89,8 @@ class BadgeFormDetail(ResourceDetail):
             badge_form = safe_query(BadgeForms, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = badge_form.id
 
-    def before_patch(self, _args, kwargs, data):
+    @staticmethod
+    def before_patch(_args, kwargs, data):
         """
         before patch method
         :param _args:
@@ -134,7 +135,8 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_right = badgeField['margin_right']
                     db.session.add(badgeFieldForm)
 
-    def before_delete(self, _obj, kwargs):
+    @staticmethod
+    def before_delete(_obj, kwargs):
         """
         before delete method
         :param _obj:
@@ -145,7 +147,8 @@ class BadgeFormDetail(ResourceDetail):
         for item in badgeFieldForm:
             db.session.delete(item)
 
-    def after_patch(self, badge_form):
+    @staticmethod
+    def after_patch(badge_form):
         """
         after patch method
         :param badge_form:
