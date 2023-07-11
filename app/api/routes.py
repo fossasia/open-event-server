@@ -815,6 +815,7 @@ api.route(
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
     '/speaker-invites/<int:speaker_invite_id>/event',
+    '/badge-forms/<int:badge_form_id>/event',
 )
 api.route(
     EventRelationship,
@@ -941,6 +942,12 @@ api.route(
     'event_custom_forms',
     '/events/<int:id>/relationships/custom-forms',
     '/events/<identifier>/relationships/custom-forms',
+)
+api.route(
+    EventRelationship,
+    'event_badge_forms',
+    '/events/<int:id>/relationships/badge-forms',
+    '/events/<identifier>/relationships/badge-forms',
 )
 api.route(
     EventRelationship,

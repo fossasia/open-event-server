@@ -11,6 +11,7 @@ class BadgeForms(db.Model):
     badge_image_url = db.Column(db.String, nullable=False)
     badge_orientation = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event = db.relationship('Event', backref='badge_forms_')
 
     def __repr__(self):
         return f'<BadgeForm {self.id}>'

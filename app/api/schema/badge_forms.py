@@ -13,7 +13,7 @@ class BadgeFormSchema(Schema):
     class Meta:
         """Meta class for Badge Form Schema"""
 
-        type_ = 'badge_form'
+        type_ = 'badge-form'
         self_view = 'v1.badge_form_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize

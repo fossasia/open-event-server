@@ -39,9 +39,18 @@ class BadgeFieldForms(db.Model):
             'sample_text': self.sample_text,
             'badge_id': self.badge_id,
             'font_size': self.font_size,
+            'font_name': self.font_name,
+            'font_weight': self.font_weight,
+            'font_color': self.font_color,
+            'text_rotation': self.text_rotation,
             'text_alignment': self.text_alignment,
             'text_type': self.text_type,
             'is_deleted': self.is_deleted,
+            'margin_top': self.margin_top,
+            'margin_bottom': self.margin_bottom,
+            'margin_left': self.margin_left,
+            'margin_right': self.margin_right,
+            'qr_custom_field': self.qr_custom_field,
         }
 
     @staticmethod

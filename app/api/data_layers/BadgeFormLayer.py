@@ -54,9 +54,9 @@ class BadgeFormLayer(BaseDataLayer):
                 badgeFieldForm = BadgeFieldForms()
                 for key in keyBadgeFields:
                     if key in item:
-                        badgeFieldForm.__setattr__(key, data[key])
+                        badgeFieldForm.__setattr__(key, item[key])
 
-                badgeFieldForm.badge_id = data['badge_id']
+                badgeFieldForm.badge_id = item['badge_id']
                 badgeFieldForm.badge_form_id = badgeForm.id
                 save_to_db(badgeFieldForm)
         return badgeForm

@@ -61,7 +61,7 @@ class BadgeFormList(ResourceList):
     data_layer = {
         'session': db.session,
         'model': BadgeForms,
-        'methods': {'query': query},
+        'methods': {'query': query, 'after_get': after_get},
     }
 
 
@@ -108,7 +108,7 @@ class BadgeFormDetail(ResourceDetail):
                     )
                 if (
                     badgeFieldForm is not None
-                    and 'isDeleted' in badgeField
+                    and 'is_deleted' in badgeField
                     and badgeField['is_deleted']
                 ):
                     db.session.delete(badgeFieldForm)
@@ -134,6 +134,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_left = badgeField['margin_left']
                     badgeFieldForm.margin_right = badgeField['margin_right']
                     badgeFieldForm.qr_custom_field = badgeField['qr_custom_field']
+                    badgeFieldForm.is_deleted = False
                     db.session.add(badgeFieldForm)
 
     @staticmethod
@@ -158,15 +159,15 @@ class BadgeFormDetail(ResourceDetail):
         badgeFields = []
         data = badge_form['data']
         attributes = data['attributes']
-        if attributes and attributes['is-complex']:
-            badgeFieldForms = (
-                BadgeFieldForms.query.filter_by(badge_form_id=data['id'])
-                .filter_by(form_id=attributes['form-id'])
-                .all()
-            )
-            for badgeFieldForm in badgeFieldForms:
-                badgeFields.append(badgeFieldForm.convert_to_dict())
-            attributes['badge_fields'] = badgeFields
+        print(badge_form)
+        badgeFieldForms = (
+            BadgeFieldForms.query.filter_by(badge_form_id=data['id'])
+            .filter_by(badge_id=attributes['badge-id'])
+            .all()
+        )
+        for badgeFieldForm in badgeFieldForms:
+            badgeFields.append(badgeFieldForm.convert_to_dict())
+        attributes['badge_fields'] = badgeFields
         return badge_form
 
     decorators = (
