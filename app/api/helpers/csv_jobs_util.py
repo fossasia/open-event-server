@@ -57,72 +57,65 @@ def export_orders_csv(orders):
     return rows
 
 
-def export_attendees_csv(attendees, custom_forms):
+def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
+    return_dict_list = []
 
-    headers = [
-        'Order#',
-        'Order Date',
-        'Status',
-        'Payment Type',
-        'Payment Mode',
-        'Ticket Name',
-        'Ticket Price',
-        'Ticket Type',
-        'Tax ID',
-        'Address',
-        'Company',
-        'Country',
-        'State',
-        'City',
-        'Zipcode',
-    ]
-
-    for fields in custom_forms:
-        headers.append(fields.name)
-
-    rows = [headers]
     for attendee in attendees:
-        column = [
-            str(attendee.order.get_invoice_number()) if attendee.order else '-',
-            str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
+        data = {
+            'Order#': str(attendee.order.get_invoice_number()) if attendee.order else '-',
+            'Order Date': str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
             if attendee.order and attendee.order.created_at
             else '-',
-            str(attendee.order.status)
+            'Status': str(attendee.order.status)
             if attendee.order and attendee.order.status
             else '-',
-            str(attendee.order.paid_via)
+            'Payment Type': str(attendee.order.paid_via)
             if attendee.order and attendee.order.paid_via
             else '',
-            str(attendee.order.payment_mode)
+            'Payment Mode':  str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
-            str(attendee.ticket.name) if attendee.ticket and attendee.ticket.name else '',
-            str(attendee.ticket.price)
+            'Ticket Name':  str(attendee.ticket.name)
+            if attendee.ticket and attendee.ticket.name else '',
+            'Ticket Price': str(attendee.ticket.price)
             if attendee.ticket and attendee.ticket.price
             else '0',
-            str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '',
-            str(attendee.order.tax_business_info)
+            'Ticket Type': str(attendee.ticket.type)
+            if attendee.ticket and attendee.ticket.type else '',
+            'Tax ID': str(attendee.order.tax_business_info)
             if attendee.order.tax_business_info
             else '',
-            str(attendee.order.address) if attendee.order.address else '',
-            str(attendee.order.company) if attendee.order.company else '',
-            str(attendee.order.country) if attendee.order.country else '',
-            str(attendee.order.state) if attendee.order.state else '',
-            str(attendee.order.city) if attendee.order.city else '',
-            str(attendee.order.zipcode) if attendee.order.zipcode else '',
-        ]
+            'Address': str(attendee.order.address) if attendee.order.address else '',
+            'Company':  str(attendee.order.company) if attendee.order.company else '',
+            'Country': str(attendee.order.country) if attendee.order.country else '',
+            'State':  str(attendee.order.state) if attendee.order.state else '',
+            'City': str(attendee.order.city) if attendee.order.city else '',
+            'Zipcode': str(attendee.order.zipcode) if attendee.order.zipcode else '',
+        }
+
         for field in custom_forms:
+            # keys don't match up, for keys like
+            # acceptVideoRecording vs accept_video_recording ..
+            key_mapping = {}
+
+            for k in attendee_form_dict.keys():
+                key_mapping[k.replace("_", "").lower()] = k
+
+            field_raw = field.identifier.replace("_", "").lower()
+            key = key_mapping.get(field_raw)
+            converted_header = attendee_form_dict.get(key)
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
-                column.append(
-                    fields_dict.get(field.identifier, '') if fields_dict else ''
-                )
+                data[converted_header] = fields_dict.get(
+                    field.identifier, '') if fields_dict else ''
             else:
-                column.append(getattr(attendee, field.identifier, ''))
+                dict_value = (getattr(attendee, field.identifier, ''))
+                dict_value = "Yes" if str(dict_value) == "True" \
+                    else "No" if str(dict_value) == "False" else dict_value
+                data[converted_header] = dict_value
+        return_dict_list.append(data)
 
-        rows.append(column)
-
-    return rows
+    return return_dict_list
 
 
 def export_sessions_csv(sessions):
