@@ -67,8 +67,8 @@ class TicketHolder(SoftDeletionModel):
     )
     complex_field_values: str = db.Column(db.JSON)
     is_consent_of_refund_policy: bool = db.Column(db.Boolean, default=False)
-    language_form_1: str = db.Column(db.JSON)
-    language_form_2: str = db.Column(db.JSON)
+    native_language: str = db.Column(db.JSON)
+    fluent_language: str = db.Column(db.JSON)
     user = db.relationship(
         'User',
         foreign_keys=[email],

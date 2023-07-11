@@ -128,6 +128,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
     is_checkin_restricted = fields.Boolean(default=True)
     auto_checkin_enabled = fields.Boolean(default=False)
     form_id = fields.Str(allow_none=True)
+    badge_id = fields.Str(allow_none=True)
     event = Relationship(
         self_view='v1.ticket_event',
         self_view_kwargs={'id': '<id>'},
