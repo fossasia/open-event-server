@@ -19,11 +19,11 @@ class BadgeFormSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    badge_id = fields.Str(required=True)
-    badge_size = fields.Str(required=False)
-    badge_color = fields.Str(required=False)
-    badge_image_url = fields.Str(required=False)
-    badge_orientation = fields.Str(required=False)
+    badge_id = fields.String(allow_none=False)
+    badge_size = fields.String(allow_none=True)
+    badge_color = fields.String(allow_none=True)
+    badge_image_url = fields.String(allow_none=True)
+    badge_orientation = fields.String(allow_none=True)
     event = Relationship(
         self_view='v1.badge_form_event',
         self_view_kwargs={'id': '<id>'},
