@@ -39,7 +39,7 @@ from app.api.helpers.xcal import XCalExporter
 from app.api.imports import import_event_task_base
 from app.instance import create_app
 from app.models import db
-from app.models.custom_form import CustomForms
+from app.models.custom_form import CustomForms, ATTENDEE_CUSTOM_FORM
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
@@ -52,8 +52,8 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.user_follow_group import UserFollowGroup
 from app.settings import get_settings
-
 from .import_helpers import update_import_job
+from app.api.helpers.csv_jobs_util import export_attendees_csv
 
 """
 Define all API v2 celery tasks here
@@ -541,20 +541,43 @@ def export_attendees_csv_task(self, event_id):
     custom_forms = db.session.query(CustomForms).filter_by(
         event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
     )
+
+    field_headers = list(ATTENDEE_CUSTOM_FORM.keys())
+
+    def custom_form_validation(cf_orm, field_headers):
+        # set() is O(1) in membership testing
+        field_headers_set = set(field_headers)
+        forms_result = [None] * len(field_headers_set)
+
+        for row in cf_orm:
+            if row.field_identifier in field_headers_set:
+
+                field_headers_set.discard(row.field_identifier)
+                index_append = field_headers.index(row.field_identifier)
+                # forms_result.append(row)
+                forms_result.insert(index_append, row)
+
+        forms_result = [e for e in forms_result if e is not None]
+        return forms_result
+
     try:
+        custom_forms = custom_form_validation(custom_forms, field_headers)
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = f"attendees-{uuid.uuid1().hex}.csv"
         file_path = os.path.join(filedir, filename)
 
-        with open(file_path, "w") as temp_file:
-            writer = csv.writer(temp_file)
-            from app.api.helpers.csv_jobs_util import export_attendees_csv
+        dict_list = export_attendees_csv(attendees, custom_forms, ATTENDEE_CUSTOM_FORM)
+        csv_headers = list(dict_list[0].keys())
 
-            content = export_attendees_csv(attendees, custom_forms)
-            for row in content:
+        with open(file_path, "w") as temp_file:
+            writer = csv.DictWriter(temp_file, fieldnames=csv_headers)
+            writer.writeheader()
+
+            for row in dict_list:
                 writer.writerow(row)
+
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
         attendees_csv_url = upload(
             attendees_csv_file,

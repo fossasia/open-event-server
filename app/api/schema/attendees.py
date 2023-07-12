@@ -74,10 +74,10 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     complex_field_values = CustomFormValueField(allow_none=True)
     is_consent_form_field = fields.Boolean(allow_none=True)
     is_consent_of_refund_policy = fields.Boolean()
+    native_language = fields.Str(allow_none=True)
+    fluent_language = fields.Str(allow_none=True)
     is_consent_form_field_photo = fields.Boolean(allow_none=True)
     is_consent_form_field_email = fields.Boolean(allow_none=True)
-    language_form_1 = fields.Str(allow_none=True)
-    language_form_2 = fields.Str(allow_none=True)
     event = Relationship(
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},
