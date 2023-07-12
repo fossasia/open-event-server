@@ -140,7 +140,7 @@ cryptography = "41.0.1"
 Flask-Migrate = "2.7.0"
 marrow-mailer = {git = "https://github.com/LexMachinaInc/mailer.git", rev = "develop"}
 marrow-util = {git = "https://github.com/LexMachinaInc/util.git", rev = "develop"}
-jinja2 = "<3"
+jinja2 = "<4"
 markupsafe = "<2.1"
 dnspython = "<3"
 
