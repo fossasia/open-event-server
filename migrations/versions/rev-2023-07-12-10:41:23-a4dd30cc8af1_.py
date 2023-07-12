@@ -1,17 +1,18 @@
 """empty message
 
-Revision ID: 284704f87457
+Revision ID: a4dd30cc8af1
 Revises: f508644acbd3
-Create Date: 2023-07-11 09:46:28.462980
+Create Date: 2023-07-12 10:41:23.082067
 
 """
 
 from alembic import op
 import sqlalchemy as sa
+import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = '284704f87457'
+revision = 'a4dd30cc8af1'
 down_revision = 'f508644acbd3'
 
 
@@ -20,10 +21,10 @@ def upgrade():
     op.create_table('badge_forms',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('badge_id', sa.String(), nullable=False),
-    sa.Column('badge_size', sa.String(), nullable=False),
-    sa.Column('badge_color', sa.String(), nullable=False),
-    sa.Column('badge_image_url', sa.String(), nullable=False),
-    sa.Column('badge_orientation', sa.String(), nullable=False),
+    sa.Column('badge_size', sa.String(), nullable=True),
+    sa.Column('badge_color', sa.String(), nullable=True),
+    sa.Column('badge_image_url', sa.String(), nullable=True),
+    sa.Column('badge_orientation', sa.String(), nullable=True),
     sa.Column('event_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -32,21 +33,21 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('badge_form_id', sa.Integer(), nullable=True),
     sa.Column('badge_id', sa.String(), nullable=False),
-    sa.Column('custom_field', sa.String(), nullable=False),
-    sa.Column('sample_text', sa.String(), nullable=False),
-    sa.Column('font_size', sa.Integer(), nullable=False),
-    sa.Column('font_name', sa.String(), nullable=False),
-    sa.Column('font_weight', sa.String(), nullable=False),
-    sa.Column('font_color', sa.String(), nullable=False),
-    sa.Column('text_rotation', sa.Integer(), nullable=False),
-    sa.Column('text_alignment', sa.String(), nullable=False),
-    sa.Column('text_type', sa.String(), nullable=False),
-    sa.Column('is_deleted', sa.Boolean(), nullable=False),
-    sa.Column('margin_top', sa.Integer(), nullable=False),
-    sa.Column('margin_bottom', sa.Integer(), nullable=False),
-    sa.Column('margin_left', sa.Integer(), nullable=False),
-    sa.Column('margin_right', sa.Integer(), nullable=False),
-    sa.Column('qr_custom_field', sa.String(), nullable=False),
+    sa.Column('custom_field', sa.String(), nullable=True),
+    sa.Column('sample_text', sa.String(), nullable=True),
+    sa.Column('font_size', sa.Integer(), nullable=True),
+    sa.Column('font_name', sa.String(), nullable=True),
+    sa.Column('font_weight', sa.String(), nullable=True),
+    sa.Column('font_color', sa.String(), nullable=True),
+    sa.Column('text_rotation', sa.Integer(), nullable=True),
+    sa.Column('text_alignment', sa.String(), nullable=True),
+    sa.Column('text_type', sa.String(), nullable=True),
+    sa.Column('is_deleted', sa.Boolean(), nullable=True),
+    sa.Column('margin_top', sa.Integer(), nullable=True),
+    sa.Column('margin_bottom', sa.Integer(), nullable=True),
+    sa.Column('margin_left', sa.Integer(), nullable=True),
+    sa.Column('margin_right', sa.Integer(), nullable=True),
+    sa.Column('qr_custom_field', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['badge_form_id'], ['badge_forms.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

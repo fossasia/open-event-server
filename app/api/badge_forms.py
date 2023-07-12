@@ -48,7 +48,7 @@ class BadgeFormList(ResourceList):
                 .all()
             )
             for badgeFieldForm in badgeFieldForms:
-                badgeFieldForms.append(badgeFieldForm.convert_to_dict())
+                badgeFields.append(badgeFieldForm.convert_to_dict())
             item['attributes']['badge_fields'] = badgeFields
         return badge_forms
 
