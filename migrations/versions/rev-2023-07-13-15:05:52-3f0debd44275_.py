@@ -1,18 +1,17 @@
 """empty message
 
-Revision ID: d1c4a3c3f83b
+Revision ID: 3f0debd44275
 Revises: f508644acbd3
-Create Date: 2023-07-12 15:31:49.477098
+Create Date: 2023-07-13 15:05:52.627311
 
 """
 
 from alembic import op
 import sqlalchemy as sa
-import sqlalchemy_utils
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'd1c4a3c3f83b'
+revision = '3f0debd44275'
 down_revision = 'f508644acbd3'
 
 
@@ -47,7 +46,7 @@ def upgrade():
     sa.Column('margin_bottom', sa.Integer(), nullable=True),
     sa.Column('margin_left', sa.Integer(), nullable=True),
     sa.Column('margin_right', sa.Integer(), nullable=True),
-    sa.Column('qr_custom_field', sa.String(), nullable=True),
+    sa.Column('qr_custom_field', postgresql.ARRAY(sa.String()), nullable=True),
     sa.ForeignKeyConstraint(['badge_form_id'], ['badge_forms.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

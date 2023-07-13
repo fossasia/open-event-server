@@ -20,4 +20,4 @@ class BadgeFieldFormSchema(Schema):
     margin_bottom = fields.Integer(allow_none=True)
     margin_left = fields.Integer(allow_none=True)
     margin_right = fields.Integer(allow_none=True)
-    qr_custom_field = fields.String(allow_none=True)
+    qr_custom_field = fields.List(fields.String(), allow_none=True)
