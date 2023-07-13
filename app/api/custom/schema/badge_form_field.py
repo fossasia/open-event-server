@@ -5,6 +5,7 @@ class BadgeFieldFormSchema(Schema):
     """Badge Field Form Schema"""
 
     badge_id = fields.String(allow_none=False)
+    field_identifier = fields.String(allow_none=True)
     custom_field = fields.String(allow_none=True)
     sample_text = fields.String(allow_none=True)
     font_size = fields.Integer(allow_none=True)
@@ -15,9 +16,9 @@ class BadgeFieldFormSchema(Schema):
     text_alignment = fields.String(allow_none=True)
     text_type = fields.String(allow_none=True)
     id = fields.Integer(allow_none=True)
-    isDeleted = fields.Boolean(allow_none=True, default=False)
+    is_deleted = fields.Boolean(allow_none=True, default=False)
     margin_top = fields.Integer(allow_none=True)
     margin_bottom = fields.Integer(allow_none=True)
     margin_left = fields.Integer(allow_none=True)
     margin_right = fields.Integer(allow_none=True)
-    qr_custom_field = fields.List(fields.String(), allow_none=True)
+    qr_custom_field = fields.List(fields.String(), allow_none=True, default=None)

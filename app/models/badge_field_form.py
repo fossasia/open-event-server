@@ -13,6 +13,7 @@ class BadgeFieldForms(db.Model):
         'BadgeForms', backref='badge_field_form', foreign_keys=[badge_form_id]
     )
     badge_id = db.Column(db.String, nullable=False)
+    field_identifier = db.Column(db.String, nullable=True)
     custom_field = db.Column(db.String, nullable=True)
     sample_text = db.Column(db.String, nullable=True)
     font_size = db.Column(db.Integer, nullable=True)
@@ -37,6 +38,7 @@ class BadgeFieldForms(db.Model):
         """Convert object data to dictionary"""
         return {
             'id': self.id,
+            'field_identifier': self.field_identifier,
             'custom_field': self.custom_field,
             'sample_text': self.sample_text,
             'badge_id': self.badge_id,
@@ -47,7 +49,7 @@ class BadgeFieldForms(db.Model):
             'text_rotation': self.text_rotation,
             'text_alignment': self.text_alignment,
             'text_type': self.text_type,
-            'isDeleted': self.is_deleted,
+            'is_deleted': self.is_deleted,
             'margin_top': self.margin_top,
             'margin_bottom': self.margin_bottom,
             'margin_left': self.margin_left,

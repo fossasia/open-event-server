@@ -120,6 +120,7 @@ class BadgeFormDetail(ResourceDetail):
                         badgeFieldForm.badge_id = data['badge_id']
 
                     badgeFieldForm.badge_form_id = kwargs['id']
+                    badgeFieldForm.field_identifier = badgeField['field_identifier']
                     badgeFieldForm.custom_field = badgeField['custom_field']
                     badgeFieldForm.sample_text = badgeField['sample_text']
                     badgeFieldForm.font_name = badgeField['font_name']
@@ -133,8 +134,8 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_bottom = badgeField['margin_bottom']
                     badgeFieldForm.margin_left = badgeField['margin_left']
                     badgeFieldForm.margin_right = badgeField['margin_right']
-                    badgeFieldForm.qr_custom_field = badgeField['qr_custom_field']
-                    badgeFieldForm.is_deleted = False
+                    badgeFieldForm.qr_custom_field = badgeField.get('qr_custom_field')
+                    badgeFieldForm.is_deleted = badgeField['is_deleted']
                     db.session.add(badgeFieldForm)
 
     @staticmethod
