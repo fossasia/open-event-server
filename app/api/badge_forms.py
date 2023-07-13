@@ -49,7 +49,7 @@ class BadgeFormList(ResourceList):
             )
             for badgeFieldForm in badgeFieldForms:
                 badgeFields.append(badgeFieldForm.convert_to_dict())
-            item['attributes']['badge_fields'] = badgeFields
+            item['attributes']['badge-fields'] = badgeFields
         return badge_forms
 
     view_kwargs = True
@@ -108,8 +108,8 @@ class BadgeFormDetail(ResourceDetail):
                     )
                 if (
                     badgeFieldForm is not None
-                    and 'is_deleted' in badgeField
-                    and badgeField['is_deleted']
+                    and 'isDeleted' in badgeField
+                    and badgeField['isDeleted']
                 ):
                     db.session.delete(badgeFieldForm)
                 else:
@@ -167,7 +167,7 @@ class BadgeFormDetail(ResourceDetail):
         )
         for badgeFieldForm in badgeFieldForms:
             badgeFields.append(badgeFieldForm.convert_to_dict())
-        attributes['badge_fields'] = badgeFields
+        attributes['badge-fields'] = badgeFields
         return badge_form
 
     decorators = (

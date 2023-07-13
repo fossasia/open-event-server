@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a4dd30cc8af1
+Revision ID: d1c4a3c3f83b
 Revises: f508644acbd3
-Create Date: 2023-07-12 10:41:23.082067
+Create Date: 2023-07-12 15:31:49.477098
 
 """
 
@@ -12,7 +12,7 @@ import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = 'a4dd30cc8af1'
+revision = 'd1c4a3c3f83b'
 down_revision = 'f508644acbd3'
 
 
@@ -37,7 +37,7 @@ def upgrade():
     sa.Column('sample_text', sa.String(), nullable=True),
     sa.Column('font_size', sa.Integer(), nullable=True),
     sa.Column('font_name', sa.String(), nullable=True),
-    sa.Column('font_weight', sa.String(), nullable=True),
+    sa.Column('font_weight', sa.Integer(), nullable=True),
     sa.Column('font_color', sa.String(), nullable=True),
     sa.Column('text_rotation', sa.Integer(), nullable=True),
     sa.Column('text_alignment', sa.String(), nullable=True),

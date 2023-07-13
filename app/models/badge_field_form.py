@@ -16,7 +16,7 @@ class BadgeFieldForms(db.Model):
     sample_text = db.Column(db.String, nullable=True)
     font_size = db.Column(db.Integer, nullable=True)
     font_name = db.Column(db.String, nullable=True)
-    font_weight = db.Column(db.String, nullable=True)
+    font_weight = db.Column(db.Integer, nullable=True)
     font_color = db.Column(db.String, nullable=True)
     text_rotation = db.Column(db.Integer, nullable=True)
     text_alignment = db.Column(db.String, nullable=True)
@@ -45,7 +45,7 @@ class BadgeFieldForms(db.Model):
             'text_rotation': self.text_rotation,
             'text_alignment': self.text_alignment,
             'text_type': self.text_type,
-            'is_deleted': self.is_deleted,
+            'isDeleted': self.is_deleted,
             'margin_top': self.margin_top,
             'margin_bottom': self.margin_bottom,
             'margin_left': self.margin_left,
