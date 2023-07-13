@@ -43,7 +43,6 @@ class BadgeFormLayer(BaseDataLayer):
                 'text_rotation',
                 'text_alignment',
                 'text_type',
-                'is_deleted',
                 'margin_top',
                 'margin_bottom',
                 'margin_left',
@@ -57,6 +56,7 @@ class BadgeFormLayer(BaseDataLayer):
                         badgeFieldForm.__setattr__(key, item[key])
 
                 badgeFieldForm.badge_id = item['badge_id']
+                badgeFieldForm.is_deleted = item['isDeleted']
                 badgeFieldForm.badge_form_id = badgeForm.id
                 save_to_db(badgeFieldForm)
         return badgeForm
