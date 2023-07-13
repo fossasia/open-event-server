@@ -1,0 +1,30 @@
+<!--suppress ALL -->
+<html xmlns:pdf="https://github.com/xhtml2pdf/xhtml2pdf/blob/master/doc/usage.rst">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div style="background: {{ badgeForms.badge_image_url }}">
+        <div>
+            <div>
+                {% for badgeFieldForm in badgeFieldForms %}
+                    {% if badgeFieldForm.custom_field == 'QR' %}
+                        <div id="badge_qr">QR</div>
+                    {% else %}
+                        <p class="field-style" 
+                            style="font-size: {{badgeFieldForm.font_size}} px;
+                            text-align: {{badgeFieldForm.text_alignment}};
+                            text-transform: {{badgeFieldForm.text_type}};
+                            color: {{badgeFieldForm.font_color}}">
+                            {{ badgeFieldForm.sample_text }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
