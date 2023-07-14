@@ -5,18 +5,12 @@ from flask_jwt_extended import jwt_required
 from app.api.helpers.badge_forms import create_preivew_badge_pdf, create_print_badge_pdf
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permission_manager import has_access
-from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models.badge_form import BadgeForms
 from app.models.ticket_holder import TicketHolder
 
 badge_forms_routes = Blueprint(
     'badge_forms_routes', __name__, url_prefix='/v1/badge-forms'
 )
-
-
-def file_pdf_path(self) -> str:
-    key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=self.badge_id)
-    return f'static/media/{key}/{generate_hash(key)}/{self.badge_id}.pdf'
 
 
 @badge_forms_routes.route('/preivew-badge-pdf/<string:badge_id>')
@@ -30,8 +24,7 @@ def preivew_badge_pdf(badge_id):
 
     if not (has_access('is_coorganizer', event_id=badgeForms.event_id)):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
-    create_preivew_badge_pdf(badgeForms)
-    file_path = file_pdf_path(badgeForms)
+    file_path = create_preivew_badge_pdf(badgeForms)
     return send_from_directory('../', file_path, as_attachment=True)
 
 
@@ -54,6 +47,5 @@ def print_badge_pdf():
     if not (has_access('is_coorganizer', event_id=badgeForms.event_id)):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
 
-    create_print_badge_pdf(badgeForms, ticketHolders)
-    file_path = file_pdf_path(badgeForms)
+    file_path = create_print_badge_pdf(badgeForms, ticketHolders)
     return send_from_directory('../', file_path, as_attachment=True)
