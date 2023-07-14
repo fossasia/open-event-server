@@ -13,6 +13,7 @@ from app.models import db
 from app.models.badge_field_form import BadgeFieldForms
 from app.models.badge_form import BadgeForms
 from app.models.event import Event
+from app.models.ticket_holder import TicketHolder
 
 
 class BadgeFormList(ResourceList):
@@ -29,6 +30,10 @@ class BadgeFormList(ResourceList):
             events = safe_query_kwargs(Event, view_kwargs, 'event_id')
             query_ = self.session.query(BadgeForms).filter_by(event_id=events.id)
             query_ = query_.filter_by(badge_id=view_kwargs.get('badge_id'))
+        if view_kwargs.get('attendee_id'):
+            attendee = safe_query_kwargs(TicketHolder, view_kwargs, 'attendee_id')
+            badge_id_attendee = attendee.ticket.badge_id
+            query_ = query_.filter_by(badge_id=badge_id_attendee)
         else:
             query_ = event_query(query_, view_kwargs)
         return query_

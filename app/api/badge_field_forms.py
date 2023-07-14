@@ -20,7 +20,7 @@ class BadgeFieldFormList(ResourceList):
         """
         query_ = self.session.query(BadgeFieldForms)
         if view_kwargs.get('badge_form_id'):
-            query_ = query_.filter(badge_forms_id=view_kwargs['badge_form_id'])
+            query_ = query_.filter_by(badge_forms_id=view_kwargs['badge_form_id'])
         return query_
 
     schema = BadgeFieldFormSchema

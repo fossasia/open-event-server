@@ -9,7 +9,7 @@ class BadgeFieldForms(db.Model):
         db.Integer, db.ForeignKey('badge_forms.id', ondelete='CASCADE')
     )
     badge_form = db.relationship(
-        'BadgeForms', backref='badge_field_form', foreign_keys=[badge_form_id]
+        'BadgeForms', backref='badge_field_forms_', foreign_keys=[badge_form_id]
     )
     badge_id = db.Column(db.String, nullable=False)
     custom_field = db.Column(db.String, nullable=True)
@@ -29,7 +29,7 @@ class BadgeFieldForms(db.Model):
     qr_custom_field = db.Column(db.String, nullable=True)
 
     def __repr__(self):
-        return f'<BadgeFieldForm {self.id}>'
+        return f'<BadgeFieldForms {self.id}>'
 
     def convert_to_dict(self):
         """Convert object data to dictionary"""
