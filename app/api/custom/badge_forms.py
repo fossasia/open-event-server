@@ -13,17 +13,15 @@ badge_forms_routes = Blueprint(
 )
 
 
-@badge_forms_routes.route('/preivew-badge-pdf/<string:badge_id>')
+@badge_forms_routes.route('/preivew-badge-pdf', methods=['POST'])
 @jwt_required
-def preivew_badge_pdf(badge_id):
-    badgeForms = BadgeForms.query.filter_by(badge_id=badge_id).first()
+def preivew_badge_pdf():
+    badgeForms = request.json.get('badgeForms')
     if badgeForms is None:
         raise NotFoundError(
             {'source': ''}, 'This badge form is not associated with any ticket'
         )
 
-    if not (has_access('is_coorganizer', event_id=badgeForms.event_id)):
-        raise ForbiddenError({'source': ''}, 'Unauthorized Access')
     file_path = create_preivew_badge_pdf(badgeForms)
     return send_from_directory('../', file_path, as_attachment=True)
 

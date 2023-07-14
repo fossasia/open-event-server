@@ -16,19 +16,17 @@ def create_preivew_badge_pdf(badgeForms):
     Create tickets and invoices for the holders of an order.
     :param badgeForms: The order for which to create tickets for.
     """
-    badgeFieldForms = (
-        BadgeFieldForms.query.filter_by(badge_form_id=badgeForms.id)
-        .filter_by(badge_id=badgeForms.badge_id)
-        .all()
-    )
+    badgeFieldForms = badgeForms['badgeFields']
+    badgeId = badgeForms['badgeID']
     create_save_pdf(
         render_template(
             'pdf/badge_forms.html', badgeForms=badgeForms, badgeFieldForms=badgeFieldForms
         ),
-        UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeForms.badge_id),
-        identifier=badgeForms.badge_id,
+        UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId),
+        identifier=badgeId,
     )
-    return file_pdf_path(badgeForms)
+    key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId)
+    return f'static/media/{key}/{generate_hash(key)}/{badgeId}.pdf'
 
 
 def create_print_badge_pdf(badgeForms, ticketHolder):
