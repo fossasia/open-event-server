@@ -34,6 +34,7 @@ class BadgeFormLayer(BaseDataLayer):
 
         if 'badge_fields' in data:
             keyBadgeFields = [
+                'field_identifier',
                 'custom_field',
                 'sample_text',
                 'font_size',
@@ -48,6 +49,7 @@ class BadgeFormLayer(BaseDataLayer):
                 'margin_left',
                 'margin_right',
                 'qr_custom_field',
+                'is_deleted',
             ]
             for item in data['badge_fields']:
                 badgeFieldForm = BadgeFieldForms()
@@ -56,7 +58,7 @@ class BadgeFormLayer(BaseDataLayer):
                         badgeFieldForm.__setattr__(key, item[key])
 
                 badgeFieldForm.badge_id = item['badge_id']
-                badgeFieldForm.is_deleted = item['isDeleted']
+                badgeFieldForm.is_deleted = item['is_deleted']
                 badgeFieldForm.badge_form_id = badgeForm.id
                 save_to_db(badgeFieldForm)
         return badgeForm

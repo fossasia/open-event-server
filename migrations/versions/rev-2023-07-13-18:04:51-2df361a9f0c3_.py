@@ -1,18 +1,18 @@
 """empty message
 
-Revision ID: d1c4a3c3f83b
+Revision ID: 2df361a9f0c3
 Revises: f508644acbd3
-Create Date: 2023-07-12 15:31:49.477098
+Create Date: 2023-07-13 18:04:51.453684
 
 """
 
 from alembic import op
 import sqlalchemy as sa
 import sqlalchemy_utils
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'd1c4a3c3f83b'
+revision = '2df361a9f0c3'
 down_revision = 'f508644acbd3'
 
 
@@ -33,6 +33,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('badge_form_id', sa.Integer(), nullable=True),
     sa.Column('badge_id', sa.String(), nullable=False),
+    sa.Column('field_identifier', sa.String(), nullable=True),
     sa.Column('custom_field', sa.String(), nullable=True),
     sa.Column('sample_text', sa.String(), nullable=True),
     sa.Column('font_size', sa.Integer(), nullable=True),
@@ -47,7 +48,7 @@ def upgrade():
     sa.Column('margin_bottom', sa.Integer(), nullable=True),
     sa.Column('margin_left', sa.Integer(), nullable=True),
     sa.Column('margin_right', sa.Integer(), nullable=True),
-    sa.Column('qr_custom_field', sa.String(), nullable=True),
+    sa.Column('qr_custom_field', postgresql.ARRAY(sa.String()), nullable=True),
     sa.ForeignKeyConstraint(['badge_form_id'], ['badge_forms.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
