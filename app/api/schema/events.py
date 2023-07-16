@@ -119,6 +119,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     xcal_url = fields.Url(dump_only=True)
     refund_policy = fields.String(allow_none=True)
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
+    is_badges_enabled = fields.Bool(default=True)
 
     tickets = Relationship(
         self_view='v1.event_ticket',

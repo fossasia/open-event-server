@@ -107,14 +107,14 @@ class BadgeFormDetail(ResourceDetail):
         if badgeFields:
             for badgeField in badgeFields:
                 badgeFieldForm = None
-                if 'id' in badgeField:
+                if 'badge_field_id' in badgeField:
                     badgeFieldForm = BadgeFieldForms.check_badge_field_form(
-                        kwargs['id'], badgeField['id']
+                        kwargs['id'], badgeField['badge_field_id']
                     )
                 if (
                     badgeFieldForm is not None
-                    and 'isDeleted' in badgeField
-                    and badgeField['isDeleted']
+                    and 'is_deleted' in badgeField
+                    and badgeField['is_deleted']
                 ):
                     db.session.delete(badgeFieldForm)
                 else:

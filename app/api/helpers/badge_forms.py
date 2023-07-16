@@ -16,6 +16,7 @@ def create_preivew_badge_pdf(badgeForms):
     Create tickets and invoices for the holders of an order.
     :param badgeForms: The order for which to create tickets for.
     """
+    badgeForms = badgeForms[0]
     badgeFieldForms = badgeForms['badgeFields']
     badgeId = badgeForms['badgeID']
     create_save_pdf(

@@ -15,7 +15,7 @@ class BadgeFieldFormSchema(Schema):
     text_rotation = fields.Integer(allow_none=True)
     text_alignment = fields.String(allow_none=True)
     text_type = fields.String(allow_none=True)
-    id = fields.Integer(allow_none=True)
+    badge_field_id = fields.Integer(allow_none=True)
     is_deleted = fields.Boolean(allow_none=True, default=False)
     margin_top = fields.Integer(allow_none=True)
     margin_bottom = fields.Integer(allow_none=True)
