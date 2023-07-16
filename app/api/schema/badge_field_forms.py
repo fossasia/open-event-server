@@ -12,7 +12,7 @@ class BadgeFieldFormSchema(Schema):
     class Meta:
         """Meta class for Badge Field Form Schema"""
 
-        type_ = 'custom-form-translate'
+        type_ = 'badge-field-form'
         self_view = 'v1.badge_field_form_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
