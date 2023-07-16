@@ -17,7 +17,7 @@ class BadgeFieldFormSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Integer(dump_only=True)
+    badge_field_id = fields.Integer(dump_only=True)
     badge_form = Relationship(
         self_view='v1.badge_field_form_badge_form',
         self_view_kwargs={'id': '<id>'},
