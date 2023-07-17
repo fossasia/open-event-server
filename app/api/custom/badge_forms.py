@@ -16,6 +16,8 @@ badge_forms_routes = Blueprint(
 @badge_forms_routes.route('/preivew-badge-pdf', methods=['POST'])
 @jwt_required
 def preivew_badge_pdf():
+    """Preview Badge Template PDF"""
+
     badgeForms = request.json.get('badgeForms')
     if badgeForms is None:
         raise NotFoundError(
@@ -29,6 +31,8 @@ def preivew_badge_pdf():
 @badge_forms_routes.route('/print-badge-pdf', methods=['POST'])
 @jwt_required
 def print_badge_pdf():
+    """Print Badge PDF with information Attendee"""
+
     attendee_id = request.json.get('attendee_id')
     ticketHolders = TicketHolder.query.filter_by(id=attendee_id).first()
     if ticketHolders is None:
@@ -42,7 +46,7 @@ def print_badge_pdf():
         raise NotFoundError(
             {'source': ''}, 'This badge form is not associated with any ticket'
         )
-    if not (has_access('is_coorganizer', event_id=badgeForms.event_id)):
+    if not has_access('is_coorganizer', event_id=badgeForms.event_id):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
 
     file_path = create_print_badge_pdf(badgeForms, ticketHolders)

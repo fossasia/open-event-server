@@ -7,6 +7,8 @@ from app.models.badge_field_form import BadgeFieldForms
 
 
 def file_pdf_path(self) -> str:
+    """Contructor path of File PDF"""
+
     key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=self.badge_id)
     return f'static/media/{key}/{generate_hash(key)}/{self.badge_id}.pdf'
 
