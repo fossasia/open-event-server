@@ -189,7 +189,6 @@ class BadgeFormDetail(ResourceDetail):
         'session': db.session,
         'model': BadgeForms,
         'methods': {
-            'before_get_object': before_get_object,
             'before_patch': before_patch,
             'before_delete': before_delete,
             'after_patch': after_patch,
