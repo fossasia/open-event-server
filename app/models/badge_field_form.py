@@ -59,17 +59,17 @@ class BadgeFieldForms(db.Model):
         }
 
     @staticmethod
-    def check_badge_field_form(badge_form_id, badge_field_form_id):
+    def check_badge_field_form(id, badge_id):
         """
         check custom form translate
-        :param badge_form_id:
-        :param badge_field_form_id:
+        :param id:
+        :param badge_id:
         :return:
         """
         try:
             badgeFieldForm = (
-                BadgeFieldForms.query.filter_by(badge_form_id=badge_form_id)
-                .filter_by(id=badge_field_form_id)
+                BadgeFieldForms.query.filter_by(badge_id=badge_id)
+                .filter_by(id=id)
                 .first()
             )
             return badgeFieldForm

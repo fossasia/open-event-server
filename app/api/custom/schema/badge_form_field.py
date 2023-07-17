@@ -4,6 +4,7 @@ from marshmallow import Schema, fields
 class BadgeFieldFormSchema(Schema):
     """Badge Field Form Schema"""
 
+    badge_field_id = fields.Integer(allow_none=False)
     badge_id = fields.String(allow_none=False)
     field_identifier = fields.String(allow_none=True)
     custom_field = fields.String(allow_none=True)

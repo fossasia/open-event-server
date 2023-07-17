@@ -109,7 +109,7 @@ class BadgeFormDetail(ResourceDetail):
                 badgeFieldForm = None
                 if 'badge_field_id' in badgeField:
                     badgeFieldForm = BadgeFieldForms.check_badge_field_form(
-                        kwargs['id'], badgeField['badge_field_id']
+                        badgeField['badge_field_id'], badgeField['badge_id']
                     )
                 if (
                     badgeFieldForm is not None
@@ -165,7 +165,6 @@ class BadgeFormDetail(ResourceDetail):
         badgeFields = []
         data = badge_form['data']
         attributes = data['attributes']
-        print(badge_form)
         badgeFieldForms = (
             BadgeFieldForms.query.filter_by(badge_form_id=data['id'])
             .filter_by(badge_id=attributes['badge-id'])
