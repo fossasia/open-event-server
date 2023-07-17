@@ -1,6 +1,8 @@
 from sqlalchemy import String
-from app.models import db
 from sqlalchemy.dialects.postgresql import ARRAY
+
+from app.models import db
+
 
 class BadgeFieldForms(db.Model):
     """Badge Field Form database model"""
@@ -28,8 +30,7 @@ class BadgeFieldForms(db.Model):
     margin_bottom = db.Column(db.Integer, nullable=True)
     margin_left = db.Column(db.Integer, nullable=True)
     margin_right = db.Column(db.Integer, nullable=True)
-    qr_custom_field = db.Column(ARRAY(String),nullable=True)
-    
+    qr_custom_field = db.Column(ARRAY(String), nullable=True)
 
     def __repr__(self):
         return f'<BadgeFieldForms {self.id}>'
