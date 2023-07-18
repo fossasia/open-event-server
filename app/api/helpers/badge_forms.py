@@ -1,9 +1,16 @@
+import base64
+import io
+
+import qrcode
 from flask import render_template
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy import asc
 
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
+from app.api.helpers.utilities import to_snake_case
 from app.models.badge_field_form import BadgeFieldForms
+from app.models.custom_form import CustomForms
+from app.models.ticket_holder import TicketHolder
 
 
 def file_pdf_path(self) -> str:
@@ -32,34 +39,90 @@ def create_preivew_badge_pdf(badgeForms):
     return f'static/media/{key}/{generate_hash(key)}/{badgeId}.pdf'
 
 
-def create_print_badge_pdf(badgeForms, ticketHolder):
+def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: TicketHolder):
+    try:
+        field.sample_text = getattr(ticket_holder, field.field_identifier) or ''
+    except AttributeError:
+        try:
+            field.sample_text = (
+                ticket_holder.complex_field_values[field.field_identifier] or ''
+            )
+        except AttributeError:
+            print(f"get_value_from_field_indentifier ===={field.field_identifier}")
+
+
+def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder) -> dict:
+    qr_value = {}
+    custom_fields = []
+    for field_identifier in field.qr_custom_field:
+        value_ = ""
+        try:
+            snake_case_field_identifier = to_snake_case(field_identifier)
+            value_ = getattr(ticket_holder, snake_case_field_identifier)
+        except AttributeError:
+            try:
+                value_ = ticket_holder.complex_field_values[field_identifier]
+                # Get the field description then Capitalize first letter and remove space.
+                custom_form = CustomForms.query.filter_by(
+                    field_identifier=field_identifier,
+                    form_id=ticket_holder.ticket_id.form_id,
+                ).first()
+                field_description = custom_form.description.title().replace(' ', '')
+                custom_fields.append({field_description: value_})
+            except AttributeError:
+                print(field_identifier)
+
+        qr_value.update({field_identifier: str(value_)})
+    qr_value.update(
+        {'custom_fields': custom_fields, 'ticket_id': ticket_holder.ticket_id}
+    )
+    return qr_value
+
+
+def create_base64_img_qr(qr_code_data: str) -> str:
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=2,
+    )
+    qr.add_data(qr_code_data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    io_buffer = io.BytesIO()
+    img.save(io_buffer)
+    qr_img_str = base64.b64encode(io_buffer.getvalue()).decode()
+    return qr_img_str
+
+
+def create_print_badge_pdf(badge_form, ticket_holder):
     """
     Create tickets and invoices for the holders of an order.
     :param badgeForms: The order for which to create tickets for.
     """
     badgeFieldForms = (
-        BadgeFieldForms.query.filter_by(badge_form_id=badgeForms.id)
-        .filter_by(badge_id=badgeForms.badge_id)
+        BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
+        .filter_by(badge_id=badge_form.badge_id)
+        .order_by(asc("id"))
         .all()
     )
     for field in badgeFieldForms:
-        try:
-            field.sample_text = getattr(ticketHolder, field.field_identifier)
-        except AttributeError:
-            try:
-                field.sample_text = ticketHolder.complex_field_values[
-                    field.field_identifier
-                ]
-            except AttributeError:
-                raise ObjectNotFound(
-                    {'parameter': '{field.field_identifier}'}, "Access Code:  not found"
-                )
+        # if field not in list_field_show:
+        #     field.sample_text = " "
+        #     continue
+        if field.custom_field.lower() == 'qr':
+            # for field_identifier_ in field.qr_custom_field:
+            qr_code_data = get_value_from_qr_filed(field, ticket_holder)
+            qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
 
+            field.sample_text = create_base64_img_qr(qr_rendered)
+            continue
+        get_value_from_field_indentifier(field, ticket_holder)
     create_save_pdf(
         render_template(
-            'pdf/badge_forms.html', badgeForms=badgeForms, badgeFieldForms=badgeFieldForms
+            'pdf/badge_forms.html', badgeForms=badge_form, badgeFieldForms=badgeFieldForms
         ),
-        UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeForms.badge_id),
-        identifier=badgeForms.badge_id,
+        UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
+        identifier=badge_form.badge_id,
     )
-    return file_pdf_path(badgeForms)
+    return file_pdf_path(badge_form)

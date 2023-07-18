@@ -12,7 +12,9 @@
             <div>
                 {% for badgeFieldForm in badgeFieldForms %}
                     {% if badgeFieldForm.custom_field == 'QR' %}
-                        <div id="badge_qr">QR</div>
+                        <div id="badge_qr" style="width: 300px; height: 300px; text-align: center;">
+                            <img src="data:image/png;base64, {{ badgeFieldForm.sample_text }}" alt="QR" />
+                        </div>
                     {% else %}
                         <p class="field-style" 
                             style="font-size: {{badgeFieldForm.font_size}} px;
