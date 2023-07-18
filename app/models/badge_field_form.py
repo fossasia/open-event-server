@@ -58,6 +58,14 @@ class BadgeFieldForms(db.Model):
             'qr_custom_field': self.qr_custom_field,
         }
 
+    def convert_to_dict_by_ticket(self):
+        """Convert object data to dictionary"""
+        return {
+            'id': self.id,
+            'field_identifier': self.field_identifier,
+            'custom_field': self.custom_field,
+        }
+
     @staticmethod
     def check_badge_field_form(badge_field_id, badge_id):
         """

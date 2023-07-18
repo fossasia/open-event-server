@@ -1,10 +1,12 @@
 import base64
 import io
+from datetime import datetime
 
 import qrcode
 from flask import render_template
 from sqlalchemy import asc
 
+from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.utilities import to_snake_case
@@ -40,15 +42,16 @@ def create_preivew_badge_pdf(badgeForms):
 
 
 def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: TicketHolder):
+    snake_case_field_identifier = to_snake_case(field.field_identifier)
     try:
-        field.sample_text = getattr(ticket_holder, field.field_identifier) or ''
+        field.sample_text = getattr(ticket_holder, snake_case_field_identifier) or ''
     except AttributeError:
         try:
             field.sample_text = (
-                ticket_holder.complex_field_values[field.field_identifier] or ''
+                ticket_holder.complex_field_values[snake_case_field_identifier] or ''
             )
         except AttributeError:
-            print(f"get_value_from_field_indentifier ===={field.field_identifier}")
+            print(f"get_value_from_field_indentifier ===={snake_case_field_identifier}")
 
 
 def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder) -> dict:
@@ -95,7 +98,7 @@ def create_base64_img_qr(qr_code_data: str) -> str:
     return qr_img_str
 
 
-def create_print_badge_pdf(badge_form, ticket_holder):
+def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
     """
     Create tickets and invoices for the holders of an order.
     :param badgeForms: The order for which to create tickets for.
@@ -107,9 +110,6 @@ def create_print_badge_pdf(badge_form, ticket_holder):
         .all()
     )
     for field in badgeFieldForms:
-        # if field not in list_field_show:
-        #     field.sample_text = " "
-        #     continue
         if field.custom_field.lower() == 'qr':
             # for field_identifier_ in field.qr_custom_field:
             qr_code_data = get_value_from_qr_filed(field, ticket_holder)
@@ -117,6 +117,10 @@ def create_print_badge_pdf(badge_form, ticket_holder):
 
             field.sample_text = create_base64_img_qr(qr_rendered)
             continue
+        elif list_field_show is None or field.field_identifier not in list_field_show:
+            field.sample_text = ' '
+            continue
+
         get_value_from_field_indentifier(field, ticket_holder)
     create_save_pdf(
         render_template(
@@ -125,4 +129,7 @@ def create_print_badge_pdf(badge_form, ticket_holder):
         UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
         identifier=badge_form.badge_id,
     )
+    ticket_holder.is_badge_printed = True
+    ticket_holder.badge_printed_at = datetime.now()
+    save_to_db(ticket_holder, 'Ticket Holder saved')
     return file_pdf_path(badge_form)

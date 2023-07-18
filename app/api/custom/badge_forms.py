@@ -34,6 +34,7 @@ def print_badge_pdf():
     """Print Badge PDF with information Attendee"""
 
     attendee_id = request.json.get('attendee_id')
+    list_field_show = request.json.get('list_field_show')
     ticketHolders = TicketHolder.query.filter_by(id=attendee_id).first()
     if ticketHolders is None:
         raise NotFoundError(
@@ -49,5 +50,5 @@ def print_badge_pdf():
     if not has_access('is_coorganizer', event_id=badgeForms.event_id):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')
 
-    file_path = create_print_badge_pdf(badgeForms, ticketHolders)
+    file_path = create_print_badge_pdf(badgeForms, ticketHolders, list_field_show)
     return send_from_directory('../', file_path, as_attachment=True)

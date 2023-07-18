@@ -2016,7 +2016,6 @@ api.route(
 api.route(
     BadgeFormList,
     'badge_form_list',
-    '/attendees/<int:attendee_id>/badge-forms',
     '/events/<int:event_id>/badge-forms',
     '/events/<event_identifier>/badge-forms',
     '/events/<int:event_id>/badge-forms/<string:badge_id>',
