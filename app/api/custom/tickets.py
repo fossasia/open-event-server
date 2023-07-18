@@ -27,6 +27,6 @@ def get_badge_field(ticket_id):
 
     result = []
     for badgeFieldForm in badgeFieldForms:
-        result.append(badgeFieldForm.convert_to_dict_by_ticket())
+        result.append(badgeFieldForm.get_badge_field())
 
     return jsonify(result)

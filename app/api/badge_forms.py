@@ -103,7 +103,7 @@ class BadgeFormDetail(ResourceDetail):
             for badgeField in badgeFields:
                 badgeFieldForm = None
                 if 'badge_field_id' in badgeField:
-                    badgeFieldForm = BadgeFieldForms.check_badge_field_form(
+                    badgeFieldForm = BadgeFieldForms.get_badge_field_form_if_exist(
                         badgeField['badge_field_id'], badgeField['badge_id']
                     )
                 if (

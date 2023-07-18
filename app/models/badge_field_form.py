@@ -58,8 +58,8 @@ class BadgeFieldForms(db.Model):
             'qr_custom_field': self.qr_custom_field,
         }
 
-    def convert_to_dict_by_ticket(self):
-        """Convert object data to dictionary"""
+    def get_badge_field(self):
+        """Support for only api from ticket #8982"""
         return {
             'id': self.id,
             'field_identifier': self.field_identifier,
@@ -67,7 +67,7 @@ class BadgeFieldForms(db.Model):
         }
 
     @staticmethod
-    def check_badge_field_form(badge_field_id, badge_id):
+    def get_badge_field_form_if_exist(badge_field_id, badge_id):
         """
         check custom form translate
         :param badge_field_id:

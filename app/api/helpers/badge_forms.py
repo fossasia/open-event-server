@@ -111,13 +111,12 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
     )
     for field in badgeFieldForms:
         if field.custom_field.lower() == 'qr':
-            # for field_identifier_ in field.qr_custom_field:
             qr_code_data = get_value_from_qr_filed(field, ticket_holder)
             qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
 
             field.sample_text = create_base64_img_qr(qr_rendered)
             continue
-        elif list_field_show is None or field.field_identifier not in list_field_show:
+        if list_field_show is None or field.field_identifier not in list_field_show:
             field.sample_text = ' '
             continue
 
