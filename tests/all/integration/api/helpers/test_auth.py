@@ -1,3 +1,5 @@
+import json
+
 from flask_login import login_user, logout_user
 
 from app.api.helpers.auth import AuthManager
@@ -41,3 +43,14 @@ def test_check_auth_admin(db):
     user.is_admin = False
     status = AuthManager.check_auth_admin('authtest2@gmail.com', 'password')
     assert False == status
+
+
+def test_get_user_id(client, jwt):
+    response = client.get(
+        f'/v1/users/user-details/get-user-id',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+    )
+
+    assert response.status_code == 200
+    assert json.loads(response.data)['user_id']
