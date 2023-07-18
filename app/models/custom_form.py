@@ -150,7 +150,7 @@ ATTENDEE_CUSTOM_FORM = {
     "acceptVideoRecording": "Photo & video & text consent",
     "acceptShareDetails": "Partner contact consent",
     "acceptReceiveEmails": "Email consent",
-    "is_consent_form_field": "Consent form field",
+    "is_consent_form_field": "Code of conduct consent",
     "is_consent_form_field_photo": "Wikimania photo consent",
     "is_consent_form_field_email": "Wikimania email updates",
     "is_consent_of_refund_policy": "Consent of refund policy",
