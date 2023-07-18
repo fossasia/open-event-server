@@ -68,7 +68,8 @@ class BadgeFormList(ResourceList):
 class BadgeFormDetail(ResourceDetail):
     """BadgeForm Resource Detail"""
 
-    def before_get_object(self, view_kwargs):
+    @staticmethod
+    def before_get_object(view_kwargs):
         """
         before get method
         :param view_kwargs:
