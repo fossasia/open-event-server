@@ -23,6 +23,8 @@ def get_user_id():
         }, 401
     try:
         data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
+        if not data.get('identity', False):
+            return {"message": "Can't get user id!", "data": None}, 404
         return {"user_id": data["identity"]}, 200
     except UnicodeDecodeError:
         return {"message": "Can't get user id!", "data": None}, 500
