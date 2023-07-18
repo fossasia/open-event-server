@@ -17,7 +17,6 @@ from app.models.ticket_holder import TicketHolder
 
 def file_pdf_path(self) -> str:
     """Contructor path of File PDF"""
-
     key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=self.badge_id)
     return f'static/media/{key}/{generate_hash(key)}/{self.badge_id}.pdf'
 
@@ -42,6 +41,7 @@ def create_preivew_badge_pdf(badgeForms):
 
 
 def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: TicketHolder):
+    """Get the value of a field."""
     snake_case_field_identifier = to_snake_case(field.field_identifier)
     try:
         field.sample_text = getattr(ticket_holder, snake_case_field_identifier) or ''
@@ -55,6 +55,7 @@ def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: Tick
 
 
 def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder) -> dict:
+    """Get the value of a QR code field."""
     qr_value = {}
     custom_fields = []
     for field_identifier in field.qr_custom_field:
@@ -83,6 +84,7 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
 
 
 def create_base64_img_qr(qr_code_data: str) -> str:
+    """Create a base64 image of a QR code."""
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,

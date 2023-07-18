@@ -12,7 +12,6 @@ ticket_routes = Blueprint('ticket_routes', __name__, url_prefix='/v1/tickets')
 @jwt_required
 def get_badge_field(ticket_id):
     """Get Badge Field"""
-
     ticket = Ticket.query.filter_by(id=ticket_id).first()
     if ticket is None:
         raise NotFoundError(

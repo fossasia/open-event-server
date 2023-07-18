@@ -17,7 +17,6 @@ badge_forms_routes = Blueprint(
 @jwt_required
 def preivew_badge_pdf():
     """Preview Badge Template PDF"""
-
     badgeForms = request.json.get('badgeForms')
     if badgeForms is None:
         raise NotFoundError(
@@ -31,8 +30,7 @@ def preivew_badge_pdf():
 @badge_forms_routes.route('/print-badge-pdf', methods=['POST'])
 @jwt_required
 def print_badge_pdf():
-    """Print Badge PDF with information Attendee"""
-
+    """Print Badge Template PDF"""
     attendee_id = request.json.get('attendee_id')
     list_field_show = request.json.get('list_field_show')
     ticketHolders = TicketHolder.query.filter_by(id=attendee_id).first()
