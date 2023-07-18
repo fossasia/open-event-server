@@ -9,6 +9,9 @@ users_routes = Blueprint('users_routes', __name__, url_prefix='/v1/users')
 @users_routes.route('/user-details/get-user-id', methods=['GET'])
 @jwt_required
 def get_user_id():
+    """
+    Get user id from token
+    """
     token = None
     if "Authorization" in request.headers:
         token = request.headers["Authorization"].split(" ")[1]
@@ -20,7 +23,6 @@ def get_user_id():
         }, 401
     try:
         data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
-        print(data)
         return {"user_id": data["identity"]}, 200
-    except Exception:
+    except UnicodeDecodeError:
         return {"message": "Can't get user id!", "data": None}, 500

@@ -46,8 +46,10 @@ def test_check_auth_admin(db):
 
 
 def test_get_user_id(client, jwt):
+    """Method to test get user id"""
+
     response = client.get(
-        f'/v1/users/user-details/get-user-id',
+        '/v1/users/user-details/get-user-id',
         content_type='application/vnd.api+json',
         headers=jwt,
     )
