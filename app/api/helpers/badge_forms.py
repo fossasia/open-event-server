@@ -69,7 +69,7 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
                 # Get the field description then Capitalize first letter and remove space.
                 custom_form = CustomForms.query.filter_by(
                     field_identifier=field_identifier,
-                    form_id=ticket_holder.ticket_id.form_id,
+                    form_id=ticket_holder.ticket.form_id,
                 ).first()
                 field_description = custom_form.description.title().replace(' ', '')
                 custom_fields.append({field_description: value_})
