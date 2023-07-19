@@ -21,7 +21,6 @@ class StationList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
         query_ = self.session.query(Station)
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
@@ -92,9 +91,8 @@ class StationRelationship(ResourceRelationship):
 
 class StationListPost(ResourceList):
     """Create and List Station"""
-    
-    @staticmethod
-    def before_post(args, kwargs, data):
+
+    def before_post(self, args, kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:
