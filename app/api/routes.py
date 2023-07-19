@@ -242,6 +242,7 @@ from app.api.tracks import (
     TrackRelationshipOptional,
     TrackRelationshipRequired,
 )
+from app.api.user_check_in import UserCheckInListPost, UserCheckInList, UserCheckInDetail, UserCheckInRelationship
 from app.api.user_emails import (
     UserEmailDetail,
     UserEmailList,
@@ -2025,4 +2026,42 @@ api.route(
     StationRelationship,
     'station_microlocation',
     '/stations/<int:id>/relationships/microlocation',
+)
+# user check in
+api.route(
+    UserCheckInListPost,
+    'user_check_in_list_post',
+    '/user-check-in',
+)
+api.route(
+    UserCheckInList,
+    'user_check_in_list',
+    '/events/<int:event_id>/user-check-in',
+    '/events/<event_identifier>/user-check-in',
+    '/microlocations/<int:microlocation_id>/user-check-in',
+)
+api.route(
+    UserCheckInDetail,
+    'user_check_in_detail',
+    '/user-check-in/<int:id>'
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_ticket',
+    '/user-check-in/<int:id>/relationships/ticket',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_attendee',
+    '/user-check-in/<int:id>/relationships/attendee',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_station',
+    '/user-check-in/<int:id>/relationships/station',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_session',
+    '/user-check-in/<int:id>/relationships/session',
 )
