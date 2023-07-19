@@ -759,3 +759,37 @@ Delete a single ticket.
             "self": "/v1/orders/7201904e-c695-4251-a30a-61765a37ff24/tickets"
           }
         }
+
+## List Badge Forms for an Ticket [/v1/tickets/{ticket_id}/badge-forms]
++ Parameters
+    + ticket_id: 1 (integer) - id of the ticket
+
+### List Badge Forms for an Ticket [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        [
+            {
+                "custom_field": "Email",
+                "field_identifier": "email",
+                "id": 8200
+            },
+            {
+                "custom_field": "Are you fluent in any other of the following languages?",
+                "field_identifier": "fluent_language",
+                "id": 8202
+            },
+            {
+                "custom_field": "Age Group",
+                "field_identifier": "ageGroup",
+                "id": 8201
+            }
+        ]

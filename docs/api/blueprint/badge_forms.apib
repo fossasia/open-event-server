@@ -1,0 +1,35 @@
+# Group Badge Forms
+Badge Forms related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `badge-color`  | Badge Color | string | - |
+| `badge-size` | Badge Size | string | - |
+| `badge-id` | Badge Id | string | **yes** |
+| `badge-image-url` | Badge Image Url | String | - |
+| `badge-orientation` | Badge Orientation | String | - |
+
+
+
+## Print PDF for an Attendee [/v1/badge-forms/print-badge-pdf]
+
+### Print PDF for an Attendee [POST]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "attendee_id": 5,
+                "list_field_show" : ["email", "jobTitle"]
+            }
+
++ Response 200 (application/pdf)
+
+        File PDF
