@@ -1471,3 +1471,24 @@ Check if the email passed is available or not. True is returned if the email is 
         {
             "exists": true
         }
+
+
+## Get User ID [/v1/users/user-details/get-user-id]
+
+### Get User ID [GET]
+
+Get the user id using JWT token
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "user_id": "2"
+        }
