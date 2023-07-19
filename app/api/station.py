@@ -57,7 +57,7 @@ class StationDetail(ResourceDetail):
         if not has_access('is_coorganizer', event=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
-                f"Event: {data['event']} not found",
+                f"Event: {data['event']} not found {args} {kwargs}",
             )
 
         if data.get('microlocation'):
