@@ -92,7 +92,8 @@ class StationRelationship(ResourceRelationship):
 class StationListPost(ResourceList):
     """Create and List Station"""
 
-    def before_post(self, args, kwargs, data):
+    @staticmethod
+    def before_post(args, kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:
