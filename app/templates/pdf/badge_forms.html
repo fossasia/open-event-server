@@ -6,41 +6,37 @@
     <style type="text/css">
     </style>
 </head>
-<body>
+<body style="width: 100%;">
     <div style="background: {{ badgeForms.badge_image_url }}">
-        <div>
-            <div>
-                {% for badgeFieldForm in badgeFieldForms %}
-                    {% if badgeFieldForm.custom_field == 'QR' %}
-                        <div id="badge_qr" style="width: auto; height: auto; text-align: center;
-                            margin-top:{{badgeFieldForm.margin_top}}mm; 
-                            margin-bottom:{{badgeFieldForm.margin_bottom}}mm; 
-                            margin-left:{{badgeFieldForm.margin_left}}mm; 
-                            margin-right:{{badgeFieldForm.margin_right}}mm;">
-                            <img src="data:image/png;base64, {{ badgeFieldForm.sample_text }}" alt="QR" />
-                        </div>
-                    {% else %}
-                        <p class="field-style" 
-                            style="font-family: {{badgeFieldForm.font_name}};
-                            font-size: {{badgeFieldForm.font_size}} px;
-                            text-align: center;
-                            text-transform: {{badgeFieldForm.text_type}};
-                            font-weight:{{badgeFieldForm.font_weight}};
-                            -webkit-transform: rotate({{badgeFieldForm.text_rotation}}deg);
-                            -moz-transform: rotate({{badgeFieldForm.text_rotation}}deg);
-                            -o-transform: rotate({{badgeFieldForm.text_rotation}}deg);
-                            writing-mode: lr-tb;
-                            margin-top:{{badgeFieldForm.margin_top}}mm;
-                            margin-bottom:{{badgeFieldForm.margin_bottom}}mm;
-                            margin-left:{{badgeFieldForm.margin_left}}mm;
-                            margin-right:{{badgeFieldForm.margin_right}}mm;
-                            color: {{badgeFieldForm.font_color}}">
-                            {{ badgeFieldForm.sample_text }}
-                        </p>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+        {% for badgeFieldForm in badgeFieldForms %}
+            {% if badgeFieldForm.custom_field == 'QR' %}
+                <div id="badge_qr" style="text-align: center;
+                    margin-top:{{badgeFieldForm.margin_top}}mm; 
+                    margin-bottom:{{badgeFieldForm.margin_bottom}}mm; 
+                    margin-left:{{badgeFieldForm.margin_left}}mm; 
+                    margin-right:{{badgeFieldForm.margin_right}}mm;">
+                    <img src="data:image/png;base64, {{ badgeFieldForm.sample_text }}" width="400" alt="QR" />
+                </div>
+            {% else %}
+                <p class="field-style" 
+                    style="font-family: {{badgeFieldForm.font_name}};
+                    font-size: {{badgeFieldForm.font_size}} px;
+                    text-align: center;
+                    text-transform: {{badgeFieldForm.text_type}};
+                    font-weight:{{badgeFieldForm.font_weight}};
+                    -webkit-transform: rotate({{badgeFieldForm.text_rotation}}deg);
+                    -moz-transform: rotate({{badgeFieldForm.text_rotation}}deg);
+                    -o-transform: rotate({{badgeFieldForm.text_rotation}}deg);
+                    writing-mode: lr-tb;
+                    margin-top:{{badgeFieldForm.margin_top}}mm;
+                    margin-bottom:{{badgeFieldForm.margin_bottom}}mm;
+                    margin-left:{{badgeFieldForm.margin_left}}mm;
+                    margin-right:{{badgeFieldForm.margin_right}}mm;
+                    color: {{badgeFieldForm.font_color}}">
+                    {{ badgeFieldForm.sample_text }}
+                </p>
+            {% endif %}
+        {% endfor %}
     </div>
 </body>
 </html>
