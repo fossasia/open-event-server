@@ -45,10 +45,11 @@ class StationDetail(ResourceDetail):
     """Station detail by id"""
 
     @staticmethod
-    def before_patch(_args, data):
+    def before_patch(args, kwargs, data):
         """
         before patch method
-        :param _args:
+        :param args:
+        :param kwargs:
         :param data:
         :return:
         """
