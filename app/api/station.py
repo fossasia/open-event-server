@@ -63,7 +63,7 @@ class StationDetail(ResourceDetail):
                 f"Event: {data['event']} not found",
             )
 
-        if hasattr(data, 'microlocation'):
+        if data['microlocation']:
             require_relationship(['microlocation'], data)
             if not has_access('is_coorganizer', microlocation=data['microlocation']):
                 raise ObjectNotFound(
@@ -110,7 +110,7 @@ class StationListPost(ResourceList):
                 f"Event: {data['event']} not found",
             )
 
-        if hasattr(data, 'microlocation'):
+        if data['microlocation']:
             require_relationship(['microlocation'], data)
             if not has_access('is_coorganizer', microlocation=data['microlocation']):
                 raise ObjectNotFound(
