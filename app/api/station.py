@@ -14,8 +14,10 @@ from app.models.station import Station
 
 class StationList(ResourceList):
     """Create and List Station"""
+
     def query(self, view_kwargs):
-        """ query method for different view_kwargs
+        """
+        query method for different view_kwargs
         :param view_kwargs:
         :return:
         """
@@ -41,7 +43,8 @@ class StationList(ResourceList):
 
 
 class StationDetail(ResourceDetail):
-    """ Station detail by id """
+    """Station detail by id"""
+
     @staticmethod
     def before_patch(_args, data):
         """
@@ -89,11 +92,14 @@ class StationRelationship(ResourceRelationship):
 
 class StationListPost(ResourceList):
     """Create and List Station"""
-
-    def before_post(self, args, kwargs, data):
+    
+    @staticmethod
+    def before_post(args, kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:
+        :param args:
+        :param kwargs:
         :return:
         """
         require_relationship(['event'], data)
