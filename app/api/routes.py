@@ -213,6 +213,7 @@ from app.api.sponsors import (
     SponsorListPost,
     SponsorRelationship,
 )
+from app.api.station import StationListPost, StationDetail, StationRelationship, StationList
 from app.api.stripe_authorization import (
     StripeAuthorizationDetail,
     StripeAuthorizationListPost,
@@ -803,6 +804,7 @@ api.route(
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
     '/speaker-invites/<int:speaker_invite_id>/event',
+    '/stations/<int:station_id>/event',
 )
 api.route(
     EventRelationship,
@@ -1033,6 +1035,12 @@ api.route(
     '/events/<int:id>/relationships/speaker-invites',
     '/events/<identifier>/relationships/speaker-invites',
 )
+api.route(
+    EventRelationship,
+    'station',
+    '/events/<int:id>/relationships/station',
+    '/events/<identifier>/relationships/stations',
+)
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
@@ -1048,6 +1056,7 @@ api.route(
     'microlocation_detail',
     '/microlocations/<int:id>',
     '/sessions/<int:session_id>/microlocation',
+    '/stations/<int:station_id>/microlocation',
 )
 api.route(
     MicrolocationRelationshipOptional,
@@ -1988,4 +1997,32 @@ api.route(
     CustomFormTranslateRelationship,
     'custom_form_translate_form',
     '/custom-form-translates/<int:id>/relationships/custom-form',
+)
+# station
+api.route(
+    StationListPost,
+    'station_list_post',
+    '/station',
+)
+api.route(
+    StationList,
+    'station_list',
+    '/events/<int:event_id>/stations',
+    '/events/<event_identifier>/stations',
+    '/microlocations/<int:microlocation_id>/stations',
+)
+api.route(
+    StationDetail,
+    'station_detail',
+    '/stations/<int:id>'
+)
+api.route(
+    StationRelationship,
+    'station_event',
+    '/stations/<int:id>/relationships/event',
+)
+api.route(
+    StationRelationship,
+    'station_microlocation',
+    '/stations/<int:id>/relationships/microlocation',
 )
