@@ -20,11 +20,12 @@ class StationSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    station_name = fields.String(allow_none=False, validate=validate.Length(min=1))
-    station_type = fields.String(allow_none=False, validate=validate.OneOf(choices=STATION_CHOICES))
-    microlocation_id = fields.Function(lambda obj: "{}".format(obj.microlocation.id))
+    station_name = fields.String(required=True, validate=validate.Length(min=1))
+    station_type = fields.String(required=True,
+                                 validate=validate.OneOf(choices=STATION_CHOICES))
+    microlocation_id = fields.Function(lambda obj: obj.microlocation.id)
 
-    room = fields.Function(lambda obj: "{}".format(obj.microlocation.room))
+    room = fields.Function(lambda obj: obj.microlocation.room)
     event = Relationship(
         self_view='v1.station_event',
         self_view_kwargs={'id': '<id>'},
