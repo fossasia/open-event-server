@@ -63,4 +63,5 @@ class CustomFormSchema(Schema):
     min = fields.Integer(allow_none=True, default=0)
     max = fields.Integer(allow_none=True, default=10)
     main_language = fields.Str(allow_none=True)
+    is_allow_edit = fields.Boolean(default=False)
     translations = fields.Nested(TranslationSchema, many=True)
