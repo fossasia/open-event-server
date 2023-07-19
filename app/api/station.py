@@ -21,8 +21,7 @@ class StationList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
-        query_ = Station.query
+        query_ = self.session.query(Station)
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             query_ = query_.filter_by(event_id=event.id)
@@ -43,15 +42,13 @@ class StationList(ResourceList):
 
 
 class StationDetail(ResourceDetail):
-    """
-    Station detail by id
-    """
+    """Station detail by id"""
 
     @staticmethod
-    def before_patch(_args, kwargs, data):
+    def before_patch(args, kwargs, data):
         """
         before patch method
-        :param _args:
+        :param args:
         :param kwargs:
         :param data:
         :return:
@@ -60,10 +57,10 @@ class StationDetail(ResourceDetail):
         if not has_access('is_coorganizer', event=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
-                f"Event: {data['event']} not found",
+                f"Event: {data['event']} not found {args} {kwargs}",
             )
 
-        if data['microlocation']:
+        if data.get('microlocation'):
             require_relationship(['microlocation'], data)
             if not has_access('is_coorganizer', microlocation=data['microlocation']):
                 raise ObjectNotFound(
@@ -74,7 +71,7 @@ class StationDetail(ResourceDetail):
             if data['station_type'] != 'registration':
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    "Microlocation: missing from your request.",
                 )
 
     schema = StationSchema
@@ -101,16 +98,18 @@ class StationListPost(ResourceList):
         """
         method to check for required relationship with event and microlocation
         :param data:
+        :param args:
+        :param kwargs:
         :return:
         """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
-                f"Event: {data['event']} not found",
+                f"Event: {data['event']} not found {args} {kwargs}",
             )
 
-        if data['microlocation']:
+        if data.get('microlocation'):
             require_relationship(['microlocation'], data)
             if not has_access('is_coorganizer', microlocation=data['microlocation']):
                 raise ObjectNotFound(
@@ -121,7 +120,7 @@ class StationListPost(ResourceList):
             if data['station_type'] != 'registration':
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    "Microlocation: missing from your request.",
                 )
 
     schema = StationSchema
