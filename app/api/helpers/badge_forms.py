@@ -51,7 +51,7 @@ def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: Tick
                 snake_case_field_identifier
             ]
         except AttributeError:
-            print(f"get_value_from_field_indentifier ===={snake_case_field_identifier}")
+            print(snake_case_field_identifier)
 
 
 def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder) -> dict:
