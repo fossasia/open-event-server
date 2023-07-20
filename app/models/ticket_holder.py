@@ -16,8 +16,8 @@ class TicketHolder(SoftDeletionModel):
     __tablename__ = "ticket_holders"
 
     id: int = db.Column(db.Integer, primary_key=True)
-    firstname: str = db.Column(db.String, nullable=False)
-    lastname: str = db.Column(db.String, nullable=False)
+    firstname: str = db.Column(db.String)
+    lastname: str = db.Column(db.String)
     email: str = db.Column(CIText)
     address: str = db.Column(db.String)
     city: str = db.Column(db.String)
@@ -82,6 +82,8 @@ class TicketHolder(SoftDeletionModel):
     is_consent_form_field: bool = db.Column(db.Boolean, default=False)
     is_consent_form_field_photo: bool = db.Column(db.Boolean, default=False)
     is_consent_form_field_email: bool = db.Column(db.Boolean, default=False)
+    is_badge_printed: bool = db.Column(db.Boolean, default=False)
+    badge_printed_at: datetime = db.Column(db.DateTime(timezone=True))
 
     @property
     def name(self):

@@ -77,6 +77,7 @@ class Ticket(SoftDeletionModel):
         'DiscountCode', secondary=discount_codes_tickets, backref="tickets"
     )
     form_id = db.Column(db.String)
+    badge_id = db.Column(db.String)
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
