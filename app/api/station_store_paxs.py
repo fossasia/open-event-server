@@ -56,25 +56,20 @@ class StationStorePaxDetail(ResourceDetail):
         :param data:
         :return:
         """
-        require_relationship(['event'], data)
-        if not has_access('is_coorganizer', event=data['event']):
-            raise ObjectNotFound(
-                {'parameter': 'event'},
-                f"Event: {data['event']} not found",
-            )
-
-        if data['microlocation']:
-            require_relationship(['microlocation'], data)
-            if not has_access('is_coorganizer', microlocation=data['microlocation']):
+        if data['station']:
+            require_relationship(['station'], data)
+            if not has_access('is_coorganizer', station=data['station']):
                 raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: {data['microlocation']} not found",
+                    {'parameter': 'station'},
+                    f"Event: {data['station']} not found",
                 )
-        else:
-            if data['station_type'] != 'registration':
+
+        if data['session']:
+            require_relationship(['session'], data)
+            if not has_access('is_coorganizer', session=data['session']):
                 raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    {'parameter': 'session'},
+                    f"Microlocation: {data['session']} not found",
                 )
 
     schema = StationStorePaxSchema
@@ -103,25 +98,20 @@ class StationStorePaxListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event'], data)
-        if not has_access('is_coorganizer', event=data['event']):
-            raise ObjectNotFound(
-                {'parameter': 'event'},
-                f"Event: {data['event']} not found",
-            )
-
-        if data['microlocation']:
-            require_relationship(['microlocation'], data)
-            if not has_access('is_coorganizer', microlocation=data['microlocation']):
+        if data['station']:
+            require_relationship(['station'], data)
+            if not has_access('is_coorganizer', station=data['station']):
                 raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: {data['microlocation']} not found",
+                    {'parameter': 'station'},
+                    f"Event: {data['station']} not found",
                 )
-        else:
-            if data['station_type'] != 'registration':
+
+        if data['session']:
+            require_relationship(['session'], data)
+            if not has_access('is_coorganizer', session=data['session']):
                 raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    {'parameter': 'session'},
+                    f"Microlocation: {data['session']} not found",
                 )
 
     schema = StationStorePaxSchema
