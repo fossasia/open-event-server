@@ -15,7 +15,8 @@ from app.models.station_store_pax import StationStorePax
 class StationStorePaxList(ResourceList):
     """Create and List Station Store Pax"""
 
-    def query(self, view_kwargs):
+    @staticmethod
+    def query(view_kwargs):
         """
         query method for different view_kwargs
         :param view_kwargs:
@@ -37,11 +38,7 @@ class StationStorePaxList(ResourceList):
         'GET',
     ]
     schema = StationStorePaxSchema
-    data_layer = {
-        'session': db.session,
-        'model': StationStorePax,
-        'methods': {'query': query},
-    }
+    data_layer = {'session': db.session, 'model': StationStorePax}
 
 
 class StationStorePaxDetail(ResourceDetail):

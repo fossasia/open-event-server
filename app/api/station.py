@@ -15,7 +15,8 @@ from app.models.station import Station
 class StationList(ResourceList):
     """Create and List Station"""
 
-    def query(self, view_kwargs):
+    @staticmethod
+    def query(view_kwargs):
         """
         query method for different view_kwargs
         :param view_kwargs:
@@ -34,11 +35,7 @@ class StationList(ResourceList):
 
     view_kwargs = True
     schema = StationSchema
-    data_layer = {
-        'session': db.session,
-        'model': Station,
-        'methods': {'query': query},
-    }
+    data_layer = {'session': db.session, 'model': Station}
 
 
 class StationDetail(ResourceDetail):
