@@ -75,9 +75,7 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
                 print(field_identifier)
 
         qr_value.update({field_identifier: str(value_)})
-    qr_value.update(
-        {'custom_fields': custom_fields, 'ticket_id': ticket_holder.ticket_id}
-    )
+    qr_value.update({'custom_fields': custom_fields, 'ticket_id': ticket_holder.id})
     return qr_value
 
 
