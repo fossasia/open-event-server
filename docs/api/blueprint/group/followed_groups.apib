@@ -1,0 +1,221 @@
+# Group Followed Groups
+
+This Group's APIs can be used for adding a particular group to the followed group's list of the user.
+
+## Followed Groups Collection [/v1/user-follow-groups]
+
+### Create a Followed Group [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+            {
+                "data": {
+                    "type": "user-follow-group",
+                    "relationships": {
+                        "group": {
+                            "data": {
+                                "id": "1",
+                                "type": "group"
+                            }
+                        }
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-follow-group",
+                "relationships": {
+                    "group": {
+                        "links": {
+                            "self": "/v1/user-follow-groups/1/relationships/group",
+                            "related": "/v1/user-follow-groups/1/group"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-follow-groups/1/relationships/user",
+                            "related": "/v1/user-follow-groups/1/user"
+                        }
+                    }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-follow-groups/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-follow-groups/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+}
+
+## Followed Groups Collection List [/v1/users/1/followed-groups]
+
+### List All Followed Groups of an User [GET]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-follow-group",
+                    "relationships": {
+                        "group": {
+                            "links": {
+                                "self": "/v1/user-follow-groups/1/relationships/group",
+                                "related": "/v1/user-follow-groups/1/group"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-follow-groups/1/relationships/user",
+                                "related": "/v1/user-follow-groups/1/user"
+                            }
+                        }
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/user-follow-groups/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/users/1/followed-groups"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Followed Users Collection List [/v1/groups/1/followers]
+
+### List All Followed Users of a Group [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-follow-group",
+                    "relationships": {
+                        "group": {
+                            "links": {
+                                "self": "/v1/user-follow-groups/1/relationships/group",
+                                "related": "/v1/user-follow-groups/1/group"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-follow-groups/1/relationships/user",
+                                "related": "/v1/user-follow-groups/1/user"
+                            }
+                        }
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/user-follow-groups/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/groups/1/followers"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Followed Groups Detail [/v1/user-follow-groups/{group_id}]
++ Parameters
+    + group_id: 1 (integer) - ID of the User Group Followed in the form of an integer
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-follow-group",
+                "relationships": {
+                    "group": {
+                        "links": {
+                            "self": "/v1/user-follow-groups/1/relationships/group",
+                            "related": "/v1/user-follow-groups/1/group"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-follow-groups/1/relationships/user",
+                            "related": "/v1/user-follow-groups/1/user"
+                        }
+                    }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-follow-groups/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-follow-groups/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Unfollow Followed Group [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

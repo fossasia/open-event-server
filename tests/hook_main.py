@@ -27,6 +27,7 @@ from tests.factories.notification import NotificationSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
+from tests.factories.user_follow_group import UserFollowGroupFactory
 from tests.factories.microlocation import MicrolocationFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from tests.factories.page import PageFactory
@@ -49,6 +50,7 @@ from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic
+from tests.factories.group import GroupFactory, GroupFactoryBasic
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
@@ -4809,6 +4811,73 @@ def favourite_session_delete(transaction):
     with stash['app'].app_context():
         user_fav_session = UserFavouriteSessionFactory()
         db.session.add(user_fav_session)
+        db.session.commit()
+
+
+# ------------------------- User Follow Group -------------------------
+
+
+@hooks.before("Follow Groups > Follow Groups Collection List > List All Followed Groups")
+def follow_groupss_list_get(transaction):
+    """
+    GET /user-follow-groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_follow_group = UserFollowGroupFactory()
+        db.session.add(user_follow_group)
+        db.session.commit()
+
+
+@hooks.before("Followed Groups > Follow Groups Collection > Create a Followed Groups")
+def followed_groups_list_post(transaction):
+    """
+    POST /user-follow-groups
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        group = GroupFactoryBasic()
+        db.session.add(group)
+        db.session.commit()
+
+
+@hooks.before("Followed Groups > Followed Groups Detail > Get Details")
+def follow_group_details_get(transaction):
+    """
+    GET /user-follow-groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_follow_group = UserFollowGroupFactory()
+        db.session.add(user_follow_group)
+        db.session.commit()
+
+@hooks.before("Followed Groups > Followed Users Collection List > Followed Users Collection List")
+def list_group_followers(transaction):
+    """
+    GET /groups/1/followers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_follow_group = UserFollowGroupFactory()
+        db.session.add(user_follow_group)
+        db.session.commit()
+
+
+@hooks.before("Follow Groups > Follow Groups Detail > Delete Followed Groups")
+def follow_group_delete(transaction):
+    """
+    DELETE /user-follow-groups/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_follow_group = UserFollowGroupFactory()
+        db.session.add(user_follow_group)
         db.session.commit()
 
 
