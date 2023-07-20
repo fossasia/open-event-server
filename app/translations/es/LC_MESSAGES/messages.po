@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-07-10 20:52+0000\n"
-"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"PO-Revision-Date: 2023-07-19 20:04+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/open-event/"
 "server/es/>\n"
 "Language: es\n"
@@ -259,7 +259,7 @@ msgstr "Haz clic en el siguiente enlace para gestionar tu evento"
 #: app/templates/email/user_event_role.html:1
 #, python-format
 msgid "Hello %(email)s,"
-msgstr "Hola %member%,"
+msgstr "Hola %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
@@ -897,9 +897,8 @@ msgstr "Ciudad"
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
-#, fuzzy
 msgid "State"
-msgstr "Cita"
+msgstr "Estado"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
