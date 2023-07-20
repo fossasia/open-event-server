@@ -13,7 +13,7 @@ badge_forms_routes = Blueprint(
 )
 
 
-@badge_forms_routes.route('/preivew-badge-pdf', methods=['POST'])
+@badge_forms_routes.route('/preview-badge-pdf', methods=['POST'])
 @jwt_required
 def preivew_badge_pdf():
     """Preview Badge Template PDF"""
