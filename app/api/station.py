@@ -21,7 +21,6 @@ class StationList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
         query_ = Station.query
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
@@ -43,12 +42,10 @@ class StationList(ResourceList):
 
 
 class StationDetail(ResourceDetail):
-    """
-    Station detail by id
-    """
+    """Station detail by id"""
 
     @staticmethod
-    def before_patch(_args, kwargs, data):
+    def before_patch(_args, _kwargs, data):
         """
         before patch method
         :param _args:
@@ -74,7 +71,7 @@ class StationDetail(ResourceDetail):
             if data['station_type'] != 'registration':
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    "Microlocation: missing from your request.",
                 )
 
     schema = StationSchema
@@ -97,7 +94,7 @@ class StationListPost(ResourceList):
     """Create and List Station"""
 
     @staticmethod
-    def before_post(args, kwargs, data):
+    def before_post(_args, _kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:

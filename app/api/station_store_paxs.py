@@ -21,7 +21,6 @@ class StationStorePaxList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
         query_ = StationStorePax.query
         if view_kwargs.get('station_id'):
             station = safe_query_kwargs(Station, view_kwargs, 'station_id')
@@ -42,12 +41,10 @@ class StationStorePaxList(ResourceList):
 
 
 class StationStorePaxDetail(ResourceDetail):
-    """
-    StationStorePax detail by id
-    """
+    """StationStorePax detail by id"""
 
     @staticmethod
-    def before_patch(_args, kwargs, data):
+    def before_patch(_args, _kwargs, data):
         """
         before patch method
         :param _args:
@@ -91,7 +88,7 @@ class StationStorePaxListPost(ResourceList):
     """Create and List StationStorePax"""
 
     @staticmethod
-    def before_post(args, kwargs, data):
+    def before_post(_args, _kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:
