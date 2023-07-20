@@ -1,6 +1,7 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
 
+from app.api.helpers.static import STATION_TYPE
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
 
@@ -18,9 +19,8 @@ class UserCheckInSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    track_name = fields.String()
-    session_name = fields.String()
-    speaker_name = fields.String()
+    success = fields.Boolean(dump_only=True)
+    message = fields.Method("get_check_in_out_status")
 
     ticket = Relationship(
         self_view='v1.user_check_in_ticket',
@@ -58,3 +58,11 @@ class UserCheckInSchema(Schema):
         type_='session',
         load_only=True,
     )
+
+    def get_check_in_out_status(self, obj):
+        if obj.station.station_type == STATION_TYPE.get('check in'):
+            obj.success = True
+            return "Attendee check in successful."
+        if obj.station.station_type == STATION_TYPE.get('check out'):
+            obj.success = True
+            return "Attendee check out successful."
