@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.db import safe_query_kwargs
+from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
@@ -73,6 +74,20 @@ class StationDetail(ResourceDetail):
                     {'parameter': 'microlocation'},
                     "Microlocation: microlocation_id is missing from your request.",
                 )
+        station = Station.query.filter_by(
+            station_type=data.get('station_type'),
+            microlocation_id=data.get('microlocation'),
+            event_id=data.get('event'),
+        ).first()
+        if station:
+            raise UnprocessableEntityError(
+                {
+                    'station_type': data.get('station_type'),
+                    'microlocation_id': data.get('microlocation'),
+                    'event_id': data.get('event'),
+                },
+                "A Station already exists for the provided Event ID, Microlocation ID and Station type",
+            )
 
     schema = StationSchema
     data_layer = {
@@ -123,8 +138,34 @@ class StationListPost(ResourceList):
                     "Microlocation: missing from your request.",
                 )
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        function to check if station already exist
+        @param data:
+        @param view_kwargs:
+        """
+        station = Station.query.filter_by(
+            station_type=data.get('station_type'),
+            microlocation_id=data.get('microlocation'),
+            event_id=data.get('event'),
+        ).first()
+        if station:
+            raise UnprocessableEntityError(
+                {
+                    'station_type': data.get('station_type'),
+                    'microlocation_id': data.get('microlocation'),
+                    'event_id': data.get('event'),
+                    'view_kwargs': view_kwargs,
+                },
+                "A Station already exists for the provided Event ID, Microlocation ID and Station type",
+            )
+
     schema = StationSchema
     methods = [
         'POST',
     ]
-    data_layer = {'session': db.session, 'model': Station}
+    data_layer = {
+        'session': db.session,
+        'model': Station,
+        'methods': {'before_create_object': before_create_object},
+    }
