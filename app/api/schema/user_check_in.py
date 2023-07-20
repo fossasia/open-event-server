@@ -19,7 +19,7 @@ class UserCheckInSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    success = fields.Boolean(dump_only=True)
+    success = fields.Boolean(dump_only=True, default=True)
     message = fields.Method("get_check_in_out_status")
 
     ticket = Relationship(
@@ -59,10 +59,18 @@ class UserCheckInSchema(Schema):
         load_only=True,
     )
 
-    def get_check_in_out_status(self, obj):
+    @staticmethod
+    def get_check_in_out_status(obj):
+        """
+        get checkin status
+        @param obj:
+        @return:
+        """
         if obj.station.station_type == STATION_TYPE.get('check in'):
-            obj.success = True
             return "Attendee check in successful."
         if obj.station.station_type == STATION_TYPE.get('check out'):
-            obj.success = True
             return "Attendee check out successful."
+        if obj.station.station_type == STATION_TYPE.get('registration'):
+            return "Ticket register successful."
+        if obj.station.station_type == STATION_TYPE.get('daily'):
+            return "Attendee daily check successful."
