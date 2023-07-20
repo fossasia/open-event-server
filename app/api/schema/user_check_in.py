@@ -29,6 +29,7 @@ class UserCheckInSchema(Schema):
         related_view_kwargs={'id': '<id>'},
         schema='TicketSchemaPublic',
         type_='ticket',
+        load_only=True,
     )
     ticket_holder = Relationship(
         self_view='v1.user_check_in_attendee',
@@ -37,6 +38,7 @@ class UserCheckInSchema(Schema):
         related_view_kwargs={'id': '<id>'},
         schema='AttendeeSchemaPublic',
         type_='attendee',
+        load_only=True,
     )
     station = Relationship(
         self_view='v1.user_check_in_station',
@@ -45,6 +47,7 @@ class UserCheckInSchema(Schema):
         related_view_kwargs={'id': '<id>'},
         schema='StationSchema',
         type_='station',
+        load_only=True,
     )
     session = Relationship(
         self_view='v1.user_check_in_session',
@@ -53,4 +56,5 @@ class UserCheckInSchema(Schema):
         related_view_kwargs={'id': '<id>'},
         schema='SessionSchema',
         type_='session',
+        load_only=True,
     )

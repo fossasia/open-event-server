@@ -191,6 +191,21 @@ class UserCheckInListPost(ResourceList):
                     "Location of your session not matches with station location"
                     ", please check with the organizer.",
                 )
+            if session.session_type_id:
+                session_type = (
+                    self.session.query(SessionType)
+                    .filter(SessionType.id == session.session_type_id)
+                    .one()
+                )
+                data['session_name'] = session_type.name
+            if session.track_id:
+                track = (
+                    self.session.query(Track).filter(Track.id == session.track_id).one()
+                )
+                data['session_name'] = track.name
+            data['speaker_name'] = ', '.join(
+                [str(speaker.name) for speaker in session.speakers]
+            )
 
             if station.station_type in (
                 STATION_TYPE.get('check in'),
@@ -202,6 +217,7 @@ class UserCheckInListPost(ResourceList):
                     .filter(
                         UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
                         UserCheckIn.session_id == data.get('session'),
+                        UserCheckIn.check_in_out_at >= datetime.datetime.now().date(),
                     )
                     .order_by(UserCheckIn.check_in_out_at.desc())
                     .first()
@@ -211,7 +227,7 @@ class UserCheckInListPost(ResourceList):
                         attendee_check_in_status.station.station_type
                         == station.station_type
                         and station.station_type == STATION_TYPE.get('check in')
-                    ) and attendee_check_in_status.check_in_out_at.date() == datetime.datetime.now().date():
+                    ):
                         raise UnprocessableEntityError(
                             {
                                 'attendee': data.get('ticket_holder'),
@@ -244,7 +260,10 @@ class UserCheckInListPost(ResourceList):
                 if station.station_type == STATION_TYPE.get('registration'):
                     attendee_check_in_status = (
                         self.session.query(UserCheckIn)
-                        .filter(UserCheckIn.ticket_id == data.get('ticket'))
+                        .filter(
+                            UserCheckIn.ticket_id == data.get('ticket'),
+                            UserCheckIn.created_at >= datetime.datetime.now().date(),
+                        )
                         .first()
                     )
                     if attendee_check_in_status:
@@ -261,6 +280,7 @@ class UserCheckInListPost(ResourceList):
                         .filter(
                             UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
                             UserCheckIn.session_id == data.get('session'),
+                            UserCheckIn.created_at >= datetime.datetime.now().date(),
                         )
                         .order_by(UserCheckIn.check_in_out_at.desc())
                         .first()
@@ -268,10 +288,10 @@ class UserCheckInListPost(ResourceList):
                     if attendee_check_in_status:
                         raise UnprocessableEntityError(
                             {
-                                'ticket': data.get('ticket'),
+                                'ticket_holder': data.get('ticket_holder'),
                                 'station ': data.get('station'),
                             },
-                            "Ticket already registed on station.",
+                            "Attendee already check in daily on station.",
                         )
 
         if station.station_type in (
@@ -279,6 +299,7 @@ class UserCheckInListPost(ResourceList):
             STATION_TYPE.get('check out'),
         ):
             data['check_in_out_at'] = datetime.datetime.utcnow()
+        data['created_at'] = datetime.datetime.utcnow()
 
     schema = UserCheckInSchema
     methods = [

@@ -1,3 +1,5 @@
+from sqlalchemy.sql import func as sql_func
+
 from app.models import db
 
 
@@ -30,6 +32,9 @@ class UserCheckIn(db.Model):
     session_name = db.Column(db.String, nullable=True)
     speaker_name = db.Column(db.String, nullable=True)
     check_in_out_at = db.Column(db.DateTime(timezone=True))
+    created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
+    updated_at = db.Column(db.DateTime(timezone=True))
+    is_deleted = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<User Check In {self.id}>'
