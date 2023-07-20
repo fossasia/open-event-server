@@ -68,7 +68,7 @@ class StationDetail(ResourceDetail):
                     f"Microlocation: {data['microlocation']} not found",
                 )
         else:
-            if data['station_type'] == 'session':
+            if data['station_type'] in ('check in', 'check out'):
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
                     "Microlocation: microlocation_id is missing from your request.",
@@ -117,7 +117,7 @@ class StationListPost(ResourceList):
                     f"Microlocation: {data['microlocation']} not found",
                 )
         else:
-            if data['station_type'] == 'session':
+            if data['station_type'] in ('check in', 'check out'):
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
                     "Microlocation: missing from your request.",
