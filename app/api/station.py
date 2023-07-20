@@ -118,7 +118,7 @@ class StationListPost(ResourceList):
             if data['station_type'] != 'registration':
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
-                    f"Microlocation: missing from your request.",
+                    "Microlocation: missing from your request.",
                 )
 
     schema = StationSchema

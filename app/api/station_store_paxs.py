@@ -32,6 +32,10 @@ class StationStorePaxList(ResourceList):
         return query_
 
     view_kwargs = True
+    decorators = (jwt_required,)
+    methods = [
+        'GET',
+    ]
     schema = StationStorePaxSchema
     data_layer = {
         'session': db.session,
