@@ -18,13 +18,9 @@ class UserCheckInSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    station_id = fields.Function(lambda obj: "{}".format(obj.station.id))
-    is_check_in = fields.Boolean(allow_none=False)
     track_name = fields.String()
     session_name = fields.String()
     speaker_name = fields.String()
-    check_in_at = fields.DateTime(allow_none=True)
-    check_out_at = fields.DateTime(allow_none=True)
 
     ticket = Relationship(
         self_view='v1.user_check_in_ticket',

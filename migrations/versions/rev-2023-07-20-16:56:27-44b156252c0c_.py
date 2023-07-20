@@ -1,17 +1,18 @@
 """empty message
 
-Revision ID: 5bd31dacdd57
+Revision ID: 44b156252c0c
 Revises: 9881f067213b
-Create Date: 2023-07-19 16:40:02.078321
+Create Date: 2023-07-20 16:56:27.092506
 
 """
 
 from alembic import op
 import sqlalchemy as sa
+import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = '5bd31dacdd57'
+revision = '44b156252c0c'
 down_revision = '9881f067213b'
 
 
@@ -23,9 +24,10 @@ def upgrade():
     sa.Column('ticket_holder_id', sa.Integer(), nullable=True),
     sa.Column('session_id', sa.Integer(), nullable=True),
     sa.Column('station_id', sa.Integer(), nullable=True),
-    sa.Column('is_check_in', sa.Boolean(), nullable=True),
-    sa.Column('check_in_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('check_out_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('track_name', sa.String(), nullable=True),
+    sa.Column('session_name', sa.String(), nullable=True),
+    sa.Column('speaker_name', sa.String(), nullable=True),
+    sa.Column('check_in_out_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['session_id'], ['sessions.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['station_id'], ['station.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['ticket_holder_id'], ['ticket_holders.id'], ondelete='CASCADE'),
