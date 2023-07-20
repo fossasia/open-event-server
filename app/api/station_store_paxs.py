@@ -30,7 +30,6 @@ class StationStorePaxList(ResourceList):
         if view_kwargs.get('session_id'):
             session = safe_query_kwargs(Session, view_kwargs, 'session_id')
             query_ = query_.filter_by(session_id=session.id)
-
         return query_
 
     view_kwargs = True
@@ -61,7 +60,7 @@ class StationStorePaxDetail(ResourceDetail):
             if not has_access('is_coorganizer', station=data['station']):
                 raise ObjectNotFound(
                     {'parameter': 'station'},
-                    f"Event: {data['station']} not found",
+                    f"Station: {data['station']} not found",
                 )
 
         if data['session']:
@@ -69,7 +68,7 @@ class StationStorePaxDetail(ResourceDetail):
             if not has_access('is_coorganizer', session=data['session']):
                 raise ObjectNotFound(
                     {'parameter': 'session'},
-                    f"Microlocation: {data['session']} not found",
+                    f"Session: {data['session']} not found",
                 )
 
     schema = StationStorePaxSchema
@@ -103,7 +102,7 @@ class StationStorePaxListPost(ResourceList):
             if not has_access('is_coorganizer', station=data['station']):
                 raise ObjectNotFound(
                     {'parameter': 'station'},
-                    f"Event: {data['station']} not found",
+                    f"Station: {data['station']} not found",
                 )
 
         if data['session']:
@@ -111,7 +110,7 @@ class StationStorePaxListPost(ResourceList):
             if not has_access('is_coorganizer', session=data['session']):
                 raise ObjectNotFound(
                     {'parameter': 'session'},
-                    f"Microlocation: {data['session']} not found",
+                    f"Session: {data['session']} not found",
                 )
 
     schema = StationStorePaxSchema

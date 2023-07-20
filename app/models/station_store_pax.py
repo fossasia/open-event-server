@@ -6,8 +6,9 @@ from app.models import db
 class StationStorePax(db.Model):
     """Station Store Pax database model"""
 
+    __tablename__ = 'station_store_paxs'
     id = db.Column(db.Integer, primary_key=True)
-    station_id = db.Column(db.Integer, db.ForeignKey('stations.id', ondelete='CASCADE'))
+    station_id = db.Column(db.Integer, db.ForeignKey('station.id', ondelete='CASCADE'))
     station = db.relationship(
         'Station', backref='station_store_paxs', foreign_keys=[station_id]
     )
@@ -22,4 +23,4 @@ class StationStorePax(db.Model):
     )
 
     def __repr__(self):
-        return f'<Station {self.id}>'
+        return f'<StationStorePax {self.id}>'
