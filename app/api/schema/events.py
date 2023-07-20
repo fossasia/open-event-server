@@ -119,6 +119,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     xcal_url = fields.Url(dump_only=True)
     refund_policy = fields.String(allow_none=True)
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
+    is_badges_enabled = fields.Bool(default=True)
 
     tickets = Relationship(
         self_view='v1.event_ticket',
@@ -392,6 +393,16 @@ class EventSchemaPublic(SoftDeletionSchema):
         schema='StationSchema',
         type_='station',
         many=True,
+    )
+    badge_forms = Relationship(
+        attribute='badge_form',
+        self_view='v1.event_badge_forms',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.badge_form_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='BadgeFormSchema',
+        many=True,
+        type_='badge-form',
     )
 
 
