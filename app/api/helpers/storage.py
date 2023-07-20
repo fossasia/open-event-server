@@ -77,6 +77,7 @@ UPLOAD_PATHS = {
         'order': 'orders/invoices/pdf/{identifier}',
         'tickets_all': 'orders/tickets/pdf/{identifier}/{extra_identifier}',
         'event_invoice': 'events/organizer/invoices/pdf/{event_identifier}/{identifier}',
+        'badge_forms_pdf': 'badge-forms/generated-pdf/{identifier}',
     },
 }
 
