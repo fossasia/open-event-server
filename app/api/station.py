@@ -69,7 +69,7 @@ class StationDetail(ResourceDetail):
                     f"Microlocation: {data['microlocation']} not found",
                 )
         else:
-            if data['station_type'] in ('check in', 'check out'):
+            if data['station_type'] in ('check in', 'check out', 'daily'):
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
                     "Microlocation: microlocation_id is missing from your request.",
@@ -86,7 +86,8 @@ class StationDetail(ResourceDetail):
                     'microlocation_id': data.get('microlocation'),
                     'event_id': data.get('event'),
                 },
-                "A Station already exists for the provided Event ID, Microlocation ID and Station type",
+                "A Station already exists for the provided Event ID"
+                ", Microlocation ID and Station type",
             )
 
     schema = StationSchema
@@ -132,7 +133,7 @@ class StationListPost(ResourceList):
                     f"Microlocation: {data['microlocation']} not found",
                 )
         else:
-            if data['station_type'] in ('check in', 'check out'):
+            if data['station_type'] in ('check in', 'check out', 'daily'):
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
                     "Microlocation: missing from your request.",
@@ -144,11 +145,15 @@ class StationListPost(ResourceList):
         @param data:
         @param view_kwargs:
         """
-        station = Station.query.filter_by(
-            station_type=data.get('station_type'),
-            microlocation_id=data.get('microlocation'),
-            event_id=data.get('event'),
-        ).first()
+        station = (
+            self.session.query(Station)
+            .filter_by(
+                station_type=data.get('station_type'),
+                microlocation_id=data.get('microlocation'),
+                event_id=data.get('event'),
+            )
+            .first()
+        )
         if station:
             raise UnprocessableEntityError(
                 {
@@ -157,7 +162,8 @@ class StationListPost(ResourceList):
                     'event_id': data.get('event'),
                     'view_kwargs': view_kwargs,
                 },
-                "A Station already exists for the provided Event ID, Microlocation ID and Station type",
+                "A Station already exists for the provided Event ID"
+                ", Microlocation ID and Station type",
             )
 
     schema = StationSchema
