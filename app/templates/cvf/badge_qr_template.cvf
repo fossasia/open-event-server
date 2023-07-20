@@ -1,0 +1,133 @@
+BEGIN:VCARD
+
+VERSION:3.0
+
+X-SOCIALPROFILE;TYPE=EVENTYAY:{{ ticket_id }}
+
+EMAIL:{{ email }}
+{% if firstname or lastname %}
+FN:{{ firstname|default('') }} {{ lastname|default('') }}
+
+N:{{ lastname|default('') }};{{ firstname|default('') }};;;
+{% endif %}
+
+{% if phone %}
+TEL;TYPE=HOME:{{ phone }}
+{% endif %}
+
+{% if workPhone %}
+TEL;TYPE=WORK:{{ workPhone }}
+{% endif %}
+
+{% if address or city or state or country %}
+ADR;TYPE=ADDRESS:;;{{ address }};{{city|default('')}};{{state|default('')}};;{{country|default('')}}
+{% endif %}
+
+{% if billingAddress %}
+ADR;TYPE=BILLING:;;{{billingAddress}};;;;
+{% endif %}
+
+{% if homeAddress %}
+ADR;TYPE=HOME:;;{{homeAddress}};;;;
+{% endif %}
+
+{% if shippingAddress %}
+ADR;TYPE=SHIPPING:;;{{shippingAddress}};;;;
+{% endif %}
+
+{% if workAddress %}
+ADR;TYPE=WORK:;;{{workAddress}};;;;
+{% endif %}
+
+{% if company %}
+ORG:{{company}}
+{% endif %}
+
+{% if jobTitle %}
+ORG:{{jobTitle}}
+{% endif %}
+
+{% if website %}
+URL;TYPE=WEBSITE:{{website}}
+{% endif %}
+
+{% if blog %}
+URL;TYPE=BLOG:{{blog}}
+{% endif %}
+
+{% if twitter %}
+URL;TYPE=TWITTER:{{twitter}}
+{% endif %}
+
+{% if facebook %}
+URL;TYPE=FACEBOK:{{facebook}}
+{% endif %}
+
+{% if github %}
+URL;TYPE=GITHUB:{{github}}
+{% endif %}
+
+{% if linkedin %}
+URL;TYPE=LINIKENDIN:{{linkedin}}
+{% endif %}
+
+{% if instagram %}
+URL;TYPE=INSTAGRAM:{{instagram}}
+{% endif %}
+
+{% if gender %}
+X-SOCIALPROFILE;TYPE=GENDER:{{gender}}
+{% endif %}
+
+{% if ageGroup %}
+X-SOCIALPROFILE;TYPE=AGEGROUP:{{ageGroup}}
+{% endif %}
+
+{% if acceptVideoRecording %}
+X-SOCIALPROFILE;TYPE=ACCEPTVIDEORECORDING:{{acceptVideoRecording}}
+{% endif %}
+
+{% if acceptShareDetails %}
+X-SOCIALPROFILE;TYPE=ACCEPTSHAREDETAILS:{{acceptShareDetails}}
+{% endif %}
+
+{% if acceptReceiveEmails %}
+X-SOCIALPROFILE;TYPE=ACCEPTRECEIVEEMAILS:{{acceptReceiveEmails}}
+{% endif %}
+
+{% if is_consent_form_field %}
+X-SOCIALPROFILE;TYPE=ConsentFormField:{{is_consent_form_field}}
+{% endif %}
+
+{% if is_consent_form_field_photo %}
+X-SOCIALPROFILE;TYPE=ConsentFormFieldPhoto:{{is_consent_form_field_photo}}
+{% endif %}
+
+{% if is_consent_of_refund_policy %}
+X-SOCIALPROFILE;TYPE=ConsentOfRefundPolicy:{{is_consent_of_refund_policy}}
+{% endif %}
+
+{% if native_language %}
+X-SOCIALPROFILE;TYPE=NativeLanguage:{{native_language}}
+{% endif %}
+
+{% if fluent_language %}
+X-SOCIALPROFILE;TYPE=FluentLanguage:{{fluent_language}}
+{% endif %}
+
+{% if home_wiki %}
+X-SOCIALPROFILE;TYPE=HomeWiki:{{home_wiki}}
+{% endif %}
+
+{% if wiki_scholarship %}
+X-SOCIALPROFILE;TYPE=WikiScholarship:{{wiki_scholarship}}
+{% endif %}
+
+{% for custom_field in custom_fields %}
+{% for key, value in custom_field.items() %}
+X-SOCIALPROFILE;TYPE={{key}}:{{value}}
+{% endfor %}
+{% endfor %}
+
+END:VCARD
+

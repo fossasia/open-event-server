@@ -25,6 +25,18 @@ from app.api.attendees import (
     AttendeeRelationshipOptional,
     AttendeeRelationshipRequired,
 )
+from app.api.badge_field_forms import (
+    BadgeFieldFormDetail,
+    BadgeFieldFormList,
+    BadgeFieldFormListPost,
+    BadgeFieldFormRelationship,
+)
+from app.api.badge_forms import (
+    BadgeFormDetail,
+    BadgeFormList,
+    BadgeFormListPost,
+    BadgeFormRelationship,
+)
 from app.api.bootstrap import api
 from app.api.custom_form_options import (
     CustomFormOptionDetail,
@@ -816,6 +828,7 @@ api.route(
     '/exhibitors/<int:exhibitor_id>/event',
     '/speaker-invites/<int:speaker_invite_id>/event',
     '/stations/<int:station_id>/event',
+    '/badge-forms/<int:badge_form_id>/event',
 )
 api.route(
     EventRelationship,
@@ -942,6 +955,12 @@ api.route(
     'event_custom_forms',
     '/events/<int:id>/relationships/custom-forms',
     '/events/<identifier>/relationships/custom-forms',
+)
+api.route(
+    EventRelationship,
+    'event_badge_forms',
+    '/events/<int:id>/relationships/badge-forms',
+    '/events/<identifier>/relationships/badge-forms',
 )
 api.route(
     EventRelationship,
@@ -2057,4 +2076,50 @@ api.route(
     StationStorePaxRelationship,
     'station_store_pax_session',
     '/station-store-paxs/<int:id>/relationships/session',
+)
+api.route(
+    BadgeFormListPost,
+    'badge_form_list_post',
+    '/badge-forms',
+)
+api.route(
+    BadgeFormList,
+    'badge_form_list',
+    '/events/<int:event_id>/badge-forms',
+    '/events/<event_identifier>/badge-forms',
+    '/events/<int:event_id>/badge-forms/<string:badge_id>',
+    '/events/<event_identifier>/badge-forms/<string:badge_id>',
+)
+api.route(
+    BadgeFormDetail,
+    'badge_form_detail',
+    '/badge-forms/<int:id>',
+)
+api.route(
+    BadgeFormRelationship,
+    'badge_form_event',
+    '/badge-forms/<int:id>/relationships/event',
+)
+api.route(
+    BadgeFieldFormListPost,
+    'badge_field_form_list_post',
+    '/badge-field-forms',
+)
+api.route(
+    BadgeFieldFormList,
+    'badge_field_form_list',
+    '/badge-forms/<int:badge_form_id>/badge-field-forms',
+    '/badge-forms/<badge_form_identifier>/badge-field-forms',
+    '/badge-forms/<int:badge_form_id>/badge-field-forms/<string:badge_id>',
+    '/badge-forms/<badge_form_identifier>/badge-field-forms/<string:badge_id>',
+)
+api.route(
+    BadgeFieldFormDetail,
+    'badge_field_form_detail',
+    '/badge-field-forms/<int:id>',
+)
+api.route(
+    BadgeFieldFormRelationship,
+    'badge_field_form_badge_form',
+    '/badge-field-forms/<int:id>/relationships/badge_form',
 )
