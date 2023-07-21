@@ -95,21 +95,19 @@ class StationStorePaxListPost(ResourceList):
         :param data:
         :return:
         """
-        if data['station']:
-            require_relationship(['station'], data)
-            if not has_access('is_coorganizer', station=data['station']):
-                raise ObjectNotFound(
-                    {'parameter': 'station'},
-                    f"Station: {data['station']} not found",
-                )
+        require_relationship(['station'], data)
+        if not has_access('is_coorganizer', station=data['station']):
+            raise ObjectNotFound(
+                {'parameter': 'station'},
+                f"Station: {data['station']} not found",
+            )
 
-        if data['session']:
-            require_relationship(['session'], data)
-            if not has_access('is_coorganizer', session=data['session']):
-                raise ObjectNotFound(
-                    {'parameter': 'session'},
-                    f"Session: {data['session']} not found",
-                )
+        require_relationship(['session'], data)
+        if not has_access('is_coorganizer', session=data['session']):
+            raise ObjectNotFound(
+                {'parameter': 'session'},
+                f"Session: {data['session']} not found",
+            )
 
     schema = StationStorePaxSchema
     methods = [
