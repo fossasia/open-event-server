@@ -20,12 +20,12 @@ class StationStorePaxList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = StationStorePax.query
+        query_ = self.session.query(StationStorePax)
         if view_kwargs.get('station_id'):
             query_ = query_.join(Station).filter_by(id=view_kwargs.get('station_id'))
-
         if view_kwargs.get('session_id'):
             query_ = query_.join(Session).filter_by(id=view_kwargs.get('session_id'))
+
         return query_
 
     view_kwargs = True
