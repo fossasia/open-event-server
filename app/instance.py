@@ -23,6 +23,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from app.api import routes  # noqa: Used for registering routes
+from app.api.custom.check_in_stats import check_in_stats_routes
 from app.api.helpers.auth import AuthManager, is_token_blacklisted
 from app.api.helpers.cache import cache
 from app.api.helpers.errors import ErrorResponse
@@ -208,6 +209,7 @@ def create_app():
         app.register_blueprint(badge_forms_routes)
         app.register_blueprint(ticket_routes)
         app.register_blueprint(users_routes)
+        app.register_blueprint(check_in_stats_routes)
 
         add_engine_pidguard(db.engine)
 
