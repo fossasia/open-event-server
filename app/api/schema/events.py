@@ -385,6 +385,15 @@ class EventSchemaPublic(SoftDeletionSchema):
         type_='speaker-invite',
         many=True,
     )
+    station = Relationship(
+        self_view='v1.station',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.station_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='StationSchema',
+        type_='station',
+        many=True,
+    )
     badge_forms = Relationship(
         attribute='badge_form',
         self_view='v1.event_badge_forms',
