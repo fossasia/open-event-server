@@ -209,6 +209,7 @@ class CustomForms(db.Model):
     min = db.Column(db.Integer, default=0, nullable=True)
     max = db.Column(db.Integer, default=10, nullable=True)
     main_language = db.Column(db.String)
+    is_allow_edit = db.Column(db.Boolean, default=False)
 
     @property
     def identifier(self):
