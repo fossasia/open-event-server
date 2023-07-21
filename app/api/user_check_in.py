@@ -83,13 +83,12 @@ class UserCheckInListPost(ResourceList):
         except NoResultFound:
             raise ObjectNotFound({'parameter': data.get('station')}, "Station: not found")
 
-        if station.station_type == 'registration' or data.get('ticket'):
-            require_relationship(['ticket'], data)
-            if not has_access('is_coorganizer', ticket=data.get('ticket')):
-                raise ObjectNotFound(
-                    {'parameter': 'ticket'},
-                    f"Ticket: {data['ticket']} not found",
-                )
+        require_relationship(['ticket_holder'], data)
+        if not has_access('is_coorganizer', ticket_holder=data.get('ticket_holder')):
+            raise ObjectNotFound(
+                {'parameter': 'ticket_holder'},
+                f"TicketHolder: {data['ticket_holder']} not found",
+            )
         if station.station_type != STATION_TYPE.get('registration') or data.get(
             'session'
         ):
@@ -98,15 +97,6 @@ class UserCheckInListPost(ResourceList):
                 raise ObjectNotFound(
                     {'parameter': 'session'},
                     f"Session: {data['session']} not found",
-                )
-        if station.station_type != STATION_TYPE.get('registration') or data.get(
-            'ticket_holder'
-        ):
-            require_relationship(['ticket_holder'], data)
-            if not has_access('is_coorganizer', ticket_holder=data.get('ticket_holder')):
-                raise ObjectNotFound(
-                    {'parameter': 'ticket_holder'},
-                    f"TicketHolder: {data['ticket_holder']} not found",
                 )
 
     def before_create_object(self, data, _view_kwargs):
@@ -156,99 +146,97 @@ class UserCheckInListPost(ResourceList):
                 [str(speaker.name) for speaker in session.speakers]
             )
 
-            if station.station_type in (
-                STATION_TYPE.get('check in'),
-                STATION_TYPE.get('check out'),
-            ):
+        if station.station_type in (
+            STATION_TYPE.get('check in'),
+            STATION_TYPE.get('check out'),
+        ):
 
+            attendee_check_in_status = (
+                self.session.query(UserCheckIn)
+                .filter(
+                    UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
+                    UserCheckIn.session_id == data.get('session'),
+                    UserCheckIn.check_in_out_at >= datetime.datetime.utcnow().date(),
+                )
+                .order_by(UserCheckIn.check_in_out_at.desc())
+                .first()
+            )
+            if attendee_check_in_status:
+                if (
+                    attendee_check_in_status.station.station_type == station.station_type
+                    and station.station_type == STATION_TYPE.get('check in')
+                ):
+                    raise UnprocessableEntityError(
+                        {
+                            'attendee': data.get('ticket_holder'),
+                            'session ': data.get('session'),
+                        },
+                        "Attendee already checked in.",
+                    )
+                if (
+                    attendee_check_in_status.station.station_type == station.station_type
+                    and station.station_type == STATION_TYPE.get('check out')
+                ):
+                    raise UnprocessableEntityError(
+                        {
+                            'attendee': data.get('ticket_holder'),
+                            'session ': data.get('session'),
+                        },
+                        "Attendee not check in yet.",
+                    )
+            else:
+                if station.station_type == STATION_TYPE.get('check out'):
+                    raise UnprocessableEntityError(
+                        {
+                            'attendee': data.get('ticket_holder'),
+                            'session ': data.get('session'),
+                        },
+                        "Attendee not check in yet.",
+                    )
+        else:
+            if station.station_type == STATION_TYPE.get('registration'):
                 attendee_check_in_status = (
                     self.session.query(UserCheckIn)
                     .filter(
                         UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
-                        UserCheckIn.session_id == data.get('session'),
-                        UserCheckIn.check_in_out_at >= datetime.datetime.utcnow().date(),
+                        UserCheckIn.station_id == data.get('station'),
+                        UserCheckIn.created_at >= datetime.datetime.utcnow().date(),
                     )
-                    .order_by(UserCheckIn.check_in_out_at.desc())
                     .first()
                 )
                 if attendee_check_in_status:
-                    if (
-                        attendee_check_in_status.station.station_type
-                        == station.station_type
-                        and station.station_type == STATION_TYPE.get('check in')
-                    ):
-                        raise UnprocessableEntityError(
-                            {
-                                'attendee': data.get('ticket_holder'),
-                                'session ': data.get('session'),
-                            },
-                            "Attendee already checked in.",
-                        )
-                    if (
-                        attendee_check_in_status.station.station_type
-                        == station.station_type
-                        and station.station_type == STATION_TYPE.get('check out')
-                    ):
-                        raise UnprocessableEntityError(
-                            {
-                                'attendee': data.get('ticket_holder'),
-                                'session ': data.get('session'),
-                            },
-                            "Attendee not check in yet.",
-                        )
-                else:
-                    if station.station_type == STATION_TYPE.get('check out'):
-                        raise UnprocessableEntityError(
-                            {
-                                'attendee': data.get('ticket_holder'),
-                                'session ': data.get('session'),
-                            },
-                            "Attendee not check in yet.",
-                        )
-            else:
-                if station.station_type == STATION_TYPE.get('registration'):
-                    attendee_check_in_status = (
-                        self.session.query(UserCheckIn)
-                        .filter(
-                            UserCheckIn.ticket_id == data.get('ticket'),
-                            UserCheckIn.created_at >= datetime.datetime.utcnow().date(),
-                        )
-                        .first()
+                    raise UnprocessableEntityError(
+                        {
+                            'ticket': data.get('ticket'),
+                            'station ': data.get('station'),
+                        },
+                        "Attendee already registered.",
                     )
-                    if attendee_check_in_status:
-                        raise UnprocessableEntityError(
-                            {
-                                'ticket': data.get('ticket'),
-                                'station ': data.get('station'),
-                            },
-                            "Ticket already registed on station.",
-                        )
-                if station.station_type == STATION_TYPE.get('daily'):
-                    attendee_check_in_status = (
-                        self.session.query(UserCheckIn)
-                        .filter(
-                            UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
-                            UserCheckIn.session_id == data.get('session'),
-                            UserCheckIn.created_at >= datetime.datetime.utcnow().date(),
-                        )
-                        .order_by(UserCheckIn.check_in_out_at.desc())
-                        .first()
+            if station.station_type == STATION_TYPE.get('daily'):
+                attendee_check_in_status = (
+                    self.session.query(UserCheckIn)
+                    .filter(
+                        UserCheckIn.ticket_holder_id == data.get('ticket_holder'),
+                        UserCheckIn.station_id == data.get('station'),
+                        UserCheckIn.session_id == data.get('session'),
+                        UserCheckIn.created_at >= datetime.datetime.utcnow().date(),
                     )
-                    if attendee_check_in_status:
-                        raise UnprocessableEntityError(
-                            {
-                                'ticket_holder': data.get('ticket_holder'),
-                                'station ': data.get('station'),
-                            },
-                            "Attendee already check in daily on station.",
-                        )
+                    .first()
+                )
+                if attendee_check_in_status:
+                    raise UnprocessableEntityError(
+                        {
+                            'ticket_holder': data.get('ticket_holder'),
+                            'station ': data.get('station'),
+                        },
+                        "Attendee already check daily on station.",
+                    )
 
         if station.station_type in (
             STATION_TYPE.get('check in'),
             STATION_TYPE.get('check out'),
         ):
             data['check_in_out_at'] = datetime.datetime.utcnow()
-        data['created_at'] = datetime.datetime.utcnow()
 
     schema = UserCheckInSchema
     methods = [

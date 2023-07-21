@@ -22,15 +22,6 @@ class UserCheckInSchema(Schema):
     success = fields.Boolean(dump_only=True, default=True)
     message = fields.Method("get_check_in_out_status")
 
-    ticket = Relationship(
-        self_view='v1.user_check_in_ticket',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.ticket_detail',
-        related_view_kwargs={'id': '<id>'},
-        schema='TicketSchemaPublic',
-        type_='ticket',
-        load_only=True,
-    )
     ticket_holder = Relationship(
         self_view='v1.user_check_in_attendee',
         self_view_kwargs={'id': '<id>'},
@@ -74,3 +65,4 @@ class UserCheckInSchema(Schema):
             return "Ticket register successful."
         if obj.station.station_type == STATION_TYPE.get('daily'):
             return "Attendee daily check successful."
+        return None

@@ -580,5 +580,5 @@ STATION_TYPE = {
     'registration': 'registration',
     'check in': 'check in',
     'check out': 'check out',
-    'daily': ' daily',
+    'daily': 'daily',
 }
