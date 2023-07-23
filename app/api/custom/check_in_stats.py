@@ -21,6 +21,11 @@ check_in_stats_routes = Blueprint(
 @check_in_stats_routes.route('/event/<int:event_id>', methods=['GET'])
 @jwt_required
 def get_registration_stats(event_id):
+    """
+    API for get event check in/out stats
+    @param event_id: event id to check
+    @return: stats
+    """
     # check if event is existed
     event = Event.query.filter(Event.id == event_id).first()
     current_time = datetime.datetime.utcnow().date()
@@ -130,6 +135,13 @@ def get_registration_stats(event_id):
 
 
 def get_session_stats(session_ids, session_checked_in, session_checked_out):
+    """
+    Get session stats
+    @param session_ids: session id to get
+    @param session_checked_in: session_checked_in
+    @param session_checked_out: session_checked_out
+    @return: list of session stats
+    """
     session_stat = []
     session_ids = [session_id.strip() for session_id in session_ids.split(",")]
     for session_id in session_ids:
@@ -175,6 +187,14 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
 
 
 def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_time):
+    """
+    get track stats
+    @param track_ids: track_ids
+    @param check_in_attendee: check_in_attendee
+    @param check_out_attendee: check_out_attendee
+    @param current_time: current_time
+    @return: list of track stats
+    """
     track_stat = []
     track_ids = [session_id.strip() for session_id in track_ids.split(",")]
     for track_id in track_ids:
