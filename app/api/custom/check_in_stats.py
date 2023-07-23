@@ -23,7 +23,7 @@ check_in_stats_routes = Blueprint(
 def get_registration_stats(event_id):
     # check if event is existed
     event = Event.query.filter(Event.id == event_id).first()
-    current_time = datetime.datetime.utcnow()
+    current_time = datetime.datetime.utcnow().date()
     if event is None:
         return {"message": "Event can not be found."}, 404
     stations = Station.query.filter(Station.event_id == event_id).all()
@@ -45,17 +45,22 @@ def get_registration_stats(event_id):
     ]
     registered_attendee = (
         UserCheckIn.query.with_entities(UserCheckIn.ticket_holder_id)
-        .filter(UserCheckIn.station_id.in_(registration_stations))
+        .filter(
+            UserCheckIn.station_id.in_(registration_stations),
+            UserCheckIn.created_at >= current_time,
+        )
         .group_by(UserCheckIn.ticket_holder_id)
         .count()
     )
 
     check_in_attendee = UserCheckIn.query.filter(
-        UserCheckIn.station_id.in_(check_in_stations)
+        UserCheckIn.station_id.in_(check_in_stations),
+        UserCheckIn.created_at >= current_time,
     )
 
     check_out_attendee = UserCheckIn.query.filter(
-        UserCheckIn.station_id.in_(check_out_stations)
+        UserCheckIn.station_id.in_(check_out_stations),
+        UserCheckIn.created_at >= current_time,
     )
 
     session_checked_in = check_in_attendee.with_entities(
@@ -75,6 +80,7 @@ def get_registration_stats(event_id):
             [user_check_in.session_id for user_check_in in session_checked_in]
         ),
         Session.id == UserCheckIn.session_id,
+        UserCheckIn.created_at >= current_time,
     )
 
     track_checked_in_count = (
@@ -88,6 +94,7 @@ def get_registration_stats(event_id):
             [user_check_in.session_id for user_check_in in session_checked_out]
         ),
         UserCheckIn.session_id == Session.id,
+        UserCheckIn.created_at >= current_time,
     )
 
     track_checked_out_count = (
@@ -98,95 +105,16 @@ def get_registration_stats(event_id):
     session_stat = []
     track_stat = []
     if request.args.get('session_ids'):
-        session_ids = [
-            session_id.strip()
-            for session_id in request.args.get('session_ids').split(",")
-        ]
-        for session_id in session_ids:
-            session_check_in = session_checked_in.filter(
-                UserCheckIn.session_id == session_id
-            ).count()
-            session_check_out = session_checked_out.filter(
-                UserCheckIn.session_id == session_id
-            ).count()
-            current_session = (
-                db.session.query(Session, SessionType)
-                .filter(
-                    Session.id == session_id, Session.session_type_id == SessionType.id
-                )
-                .with_entities(SessionType.name)
-                .first()
-            )
-            session_name = ''
-            if current_session:
-                session_name = current_session._asdict()['name']
-            current_track = (
-                db.session.query(Session, Track)
-                .filter(Session.id == session_id, Session.track_id == Track.id)
-                .with_entities(Track.name)
-                .first()
-            )
-            track_name = ''
-            if current_track:
-                track_name = current_track._asdict()['name']
-            current_speakers = [
-                str(speaker.name)
-                for speaker in db.session.query(Session)
-                .filter(Session.id == session_id)
-                .first()
-                .speakers
-            ]
-            session_stat.append(
-                {
-                    "session_id": session_id,
-                    "session_name": session_name,
-                    "track_name": track_name,
-                    "speakers": current_speakers,
-                    "check_in": session_check_in,
-                    "check out": session_check_out,
-                }
-            )
-            sub_track_checked_in = db.session.query(UserCheckIn, Session).filter(
-                Session.id.in_(
-                    [user_check_in.session_id for user_check_in in session_checked_in]
-                ),
-                Session.id == session_id,
-                UserCheckIn.session_id == Session.id,
-            )
-
-            sub_track_checked_in_count = (
-                sub_track_checked_in.with_entities(
-                    UserCheckIn.ticket_holder_id, Session.track_id
-                )
-                .group_by(UserCheckIn.ticket_holder_id, Session.track_id)
-                .count()
-            )
-
-            sub_track_checked_out = db.session.query(UserCheckIn, Session).filter(
-                Session.id.in_(
-                    [user_check_out.session_id for user_check_out in session_checked_out]
-                ),
-                Session.id == session_id,
-                UserCheckIn.session_id == Session.id,
-            )
-
-            sub_track_checked_out_count = (
-                sub_track_checked_out.with_entities(
-                    UserCheckIn.ticket_holder_id, Session.track_id
-                )
-                .group_by(UserCheckIn.ticket_holder_id, Session.track_id)
-                .count()
-            )
-            track_stat.append(
-                {
-                    "session_id": session_id,
-                    "current_session_name": session_name,
-                    "current_name": track_name,
-                    "current_speakers": current_speakers,
-                    "check_in": sub_track_checked_in_count,
-                    "check out": sub_track_checked_out_count,
-                }
-            )
+        session_stat = get_session_stats(
+            request.args.get('session_ids'), session_checked_in, session_checked_out
+        )
+    if request.args.get('track_ids'):
+        track_stat = get_track_stats(
+            request.args.get('track_ids'),
+            check_in_attendee,
+            check_out_attendee,
+            current_time,
+        )
 
     return {
         "total_attendee": total_attendee,
@@ -199,3 +127,123 @@ def get_registration_stats(event_id):
         "session_stats": session_stat,
         "track_stats": track_stat,
     }, 200
+
+
+def get_session_stats(session_ids, session_checked_in, session_checked_out):
+    session_stat = []
+    session_ids = [session_id.strip() for session_id in session_ids.split(",")]
+    for session_id in session_ids:
+        session_check_in = session_checked_in.filter(
+            UserCheckIn.session_id == session_id
+        ).count()
+        session_check_out = session_checked_out.filter(
+            UserCheckIn.session_id == session_id
+        ).count()
+        current_session = (
+            db.session.query(Session, SessionType)
+            .filter(Session.id == session_id, Session.session_type_id == SessionType.id)
+            .with_entities(SessionType.name)
+            .first()
+        )
+        session_name = ''
+        if current_session:
+            session_name = current_session._asdict()['name']
+        current_track = (
+            db.session.query(Session, Track)
+            .filter(Session.id == session_id, Session.track_id == Track.id)
+            .with_entities(Track.name)
+            .first()
+        )
+        track_name = ''
+        if current_track:
+            track_name = current_track._asdict()['name']
+        current_speakers = ''
+        speakers = db.session.query(Session).filter(Session.id == session_id).first()
+        if speakers:
+            current_speakers = [str(speaker.name) for speaker in speakers.speakers]
+        session_stat.append(
+            {
+                "session_id": session_id,
+                "session_name": session_name,
+                "track_name": track_name,
+                "speakers": current_speakers,
+                "check_in": session_check_in,
+                "check_out": session_check_out,
+            }
+        )
+    return session_stat
+
+
+def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_time):
+    track_stat = []
+    track_ids = [session_id.strip() for session_id in track_ids.split(",")]
+    for track_id in track_ids:
+        track_checked_in = db.session.query(UserCheckIn, Session).filter(
+            Session.id.in_(
+                [user_check_in.session_id for user_check_in in check_in_attendee]
+            ),
+            UserCheckIn.id.in_([user_check_in.id for user_check_in in check_in_attendee]),
+            Session.id == UserCheckIn.session_id,
+            UserCheckIn.created_at >= current_time,
+            Session.track_id == track_id,
+        )
+
+        track_checked_in_count = (
+            track_checked_in.with_entities(UserCheckIn.ticket_holder_id, Session.track_id)
+            .group_by(UserCheckIn.ticket_holder_id, Session.track_id)
+            .count()
+        )
+
+        track_checked_out = db.session.query(UserCheckIn, Session).filter(
+            Session.id.in_(
+                [user_check_in.session_id for user_check_in in check_out_attendee]
+            ),
+            UserCheckIn.id.in_(
+                [user_check_in.id for user_check_in in check_out_attendee]
+            ),
+            UserCheckIn.session_id == Session.id,
+            UserCheckIn.created_at >= current_time,
+            Session.track_id == track_id,
+        )
+
+        track_checked_out_count = (
+            track_checked_out.with_entities(
+                UserCheckIn.ticket_holder_id, Session.track_id
+            )
+            .group_by(UserCheckIn.ticket_holder_id, Session.track_id)
+            .count()
+        )
+        current_track = Track.query.filter(Track.id == track_id).first()
+        current_session = Session.query.filter(
+            Session.track_id == track_id,
+            Session.starts_at <= datetime.datetime.utcnow(),
+            Session.ends_at >= datetime.datetime.utcnow(),
+        ).first()
+        current_speakers = ''
+        session_name = ''
+        if current_session:
+            current_speakers = [str(speaker.name) for speaker in current_session.speakers]
+            current_session_name = (
+                db.session.query(Session, SessionType)
+                .filter(
+                    Session.id == current_session.id,
+                    Session.session_type_id == SessionType.id,
+                )
+                .with_entities(SessionType.name)
+                .first()
+            )
+            session_name = ''
+            if current_session:
+                session_name = current_session_name._asdict()['name']
+
+        track_stat.append(
+            {
+                "track_id": track_id,
+                "track_name": current_track.name,
+                "current_speakers": current_speakers,
+                "current_session": session_name,
+                "check_in": track_checked_in_count,
+                "check_out": track_checked_out_count,
+            }
+        )
+    return track_stat
