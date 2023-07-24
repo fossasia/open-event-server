@@ -21,8 +21,9 @@ class StationSchema(Schema):
 
     id = fields.Integer(dump_only=True)
     station_name = fields.String(required=True, validate=validate.Length(min=1))
-    station_type = fields.String(required=True,
-                                 validate=validate.OneOf(choices=STATION_CHOICES))
+    station_type = fields.String(
+        required=True, validate=validate.OneOf(choices=STATION_CHOICES)
+    )
     microlocation_id = fields.Function(lambda obj: obj.microlocation.id)
 
     room = fields.Function(lambda obj: obj.microlocation.room)
