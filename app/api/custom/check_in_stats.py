@@ -145,6 +145,11 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
     session_stat = []
     session_ids = [session_id.strip() for session_id in session_ids.split(",")]
     for session_id in session_ids:
+        speakers = db.session.query(Session).filter(Session.id == session_id).first()
+        if speakers:
+            current_speakers = [str(speaker.name) for speaker in speakers.speakers]
+        else:
+            break
         session_check_in = session_checked_in.filter(
             UserCheckIn.session_id == session_id
         ).count()
@@ -169,10 +174,7 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
         track_name = ''
         if current_track:
             track_name = current_track._asdict()['name']
-        current_speakers = ''
-        speakers = db.session.query(Session).filter(Session.id == session_id).first()
-        if speakers:
-            current_speakers = [str(speaker.name) for speaker in speakers.speakers]
+
         session_stat.append(
             {
                 "session_id": session_id,
@@ -198,6 +200,11 @@ def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_ti
     track_stat = []
     track_ids = [session_id.strip() for session_id in track_ids.split(",")]
     for track_id in track_ids:
+        current_track = Track.query.filter(Track.id == track_id).first()
+        if current_track:
+            track_name = current_track.name
+        else:
+            break
         track_checked_in = db.session.query(UserCheckIn, Session).filter(
             Session.id.in_(
                 [user_check_in.session_id for user_check_in in check_in_attendee]
@@ -233,7 +240,7 @@ def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_ti
             .group_by(UserCheckIn.ticket_holder_id, Session.track_id)
             .count()
         )
-        current_track = Track.query.filter(Track.id == track_id).first()
+
         current_session = Session.query.filter(
             Session.track_id == track_id,
             Session.starts_at <= datetime.datetime.utcnow(),
@@ -259,7 +266,7 @@ def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_ti
         track_stat.append(
             {
                 "track_id": track_id,
-                "track_name": current_track.name,
+                "track_name": track_name,
                 "current_speakers": current_speakers,
                 "current_session": session_name,
                 "check_in": track_checked_in_count,
