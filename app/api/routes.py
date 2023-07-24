@@ -231,6 +231,12 @@ from app.api.station import (
     StationListPost,
     StationRelationship,
 )
+from app.api.station_store_paxs import (
+    StationStorePaxDetail,
+    StationStorePaxList,
+    StationStorePaxListPost,
+    StationStorePaxRelationship,
+)
 from app.api.stripe_authorization import (
     StripeAuthorizationDetail,
     StripeAuthorizationListPost,
@@ -2085,6 +2091,31 @@ api.route(
     UserCheckInRelationship,
     'user_check_in_session',
     '/user-check-in/<int:id>/relationships/session',
+)
+api.route(
+    StationStorePaxListPost,
+    'station_store_pax_list_post',
+    '/station-store-paxs',
+)
+api.route(
+    StationStorePaxList,
+    'station_store_pax_list',
+    '/stations/<int:station_id>/station-store-paxs',
+    '/sessions/<int:session_id>/station-store-paxs',
+    '/stations/<int:station_id>/sessions/<int:session_id>/station-store-paxs',
+)
+api.route(
+    StationStorePaxDetail, 'station_store_pax_detail', '/station-store-paxs/<int:id>'
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_station',
+    '/station-store-paxs/<int:id>/relationships/station',
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_session',
+    '/station-store-paxs/<int:id>/relationships/session',
 )
 api.route(
     BadgeFormListPost,
