@@ -8,6 +8,10 @@ from app.api.helpers.errors import UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
+from app.api.helpers.user_check_in import (
+    validate_check_in_out_status,
+    validate_microlocation,
+)
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.station import StationSchema
 from app.api.schema.user_check_in import UserCheckInSchema
@@ -106,30 +110,11 @@ class UserCheckInListPost(ResourceList):
         :param _view_kwargs:
         :return:
         """
-        try:
-            station = self.session.query(Station).filter_by(id=data.get('station')).one()
-        except NoResultFound:
-            raise ObjectNotFound({'parameter': data.get('station')}, "Station: not found")
+        station = self.session.query(Station).filter_by(id=data.get('station')).one()
         if station.station_type != STATION_TYPE.get('registration'):
-            # validate if microlocation_id from session matches
-            # microlocation_id from station
-            try:
-                session = (
-                    self.session.query(Session).filter_by(id=data.get('session')).one()
-                )
-            except NoResultFound:
-                raise ObjectNotFound(
-                    {'parameter': data.get('station')}, "Station: not found"
-                )
-            if station.microlocation_id != session.microlocation_id:
-                raise UnprocessableEntityError(
-                    {
-                        'station microlocation': station.microlocation_id,
-                        'session microlocation': session.microlocation_id,
-                    },
-                    "Location of your session not matches with station location"
-                    ", please check with the organizer.",
-                )
+            # validate if microlocation_id from session matches with station
+            session = self.session.query(Session).filter_by(id=data.get('session')).one()
+            validate_microlocation(station=station, session=session)
             if session.session_type_id:
                 session_type = (
                     self.session.query(SessionType)
@@ -141,7 +126,7 @@ class UserCheckInListPost(ResourceList):
                 track = (
                     self.session.query(Track).filter(Track.id == session.track_id).one()
                 )
-                data['session_name'] = track.name
+                data['track_name'] = track.name
             data['speaker_name'] = ', '.join(
                 [str(speaker.name) for speaker in session.speakers]
             )
@@ -161,38 +146,9 @@ class UserCheckInListPost(ResourceList):
                 .order_by(UserCheckIn.check_in_out_at.desc())
                 .first()
             )
-            if attendee_check_in_status:
-                if (
-                    attendee_check_in_status.station.station_type == station.station_type
-                    and station.station_type == STATION_TYPE.get('check in')
-                ):
-                    raise UnprocessableEntityError(
-                        {
-                            'attendee': data.get('ticket_holder'),
-                            'session ': data.get('session'),
-                        },
-                        "Attendee already checked in.",
-                    )
-                if (
-                    attendee_check_in_status.station.station_type == station.station_type
-                    and station.station_type == STATION_TYPE.get('check out')
-                ):
-                    raise UnprocessableEntityError(
-                        {
-                            'attendee': data.get('ticket_holder'),
-                            'session ': data.get('session'),
-                        },
-                        "Attendee not check in yet.",
-                    )
-            else:
-                if station.station_type == STATION_TYPE.get('check out'):
-                    raise UnprocessableEntityError(
-                        {
-                            'attendee': data.get('ticket_holder'),
-                            'session ': data.get('session'),
-                        },
-                        "Attendee not check in yet.",
-                    )
+            validate_check_in_out_status(
+                station=station, attendee_data=attendee_check_in_status
+            )
         else:
             if station.station_type == STATION_TYPE.get('registration'):
                 attendee_check_in_status = (
