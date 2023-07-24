@@ -16,14 +16,13 @@ from app.models.station import Station
 class StationList(ResourceList):
     """Create and List Station"""
 
-    @staticmethod
-    def query(view_kwargs):
+    def query(self, view_kwargs):
         """
         query method for different view_kwargs
         :param view_kwargs:
         :return:
         """
-        query_ = Station.query
+        query_ = self.session.query(Station)
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
             query_ = query_.filter_by(event_id=event.id)
@@ -36,14 +35,18 @@ class StationList(ResourceList):
 
     view_kwargs = True
     schema = StationSchema
-    data_layer = {'session': db.session, 'model': Station}
+    data_layer = {
+        'session': db.session,
+        'model': Station,
+        'methods': {'query': query},
+    }
 
 
 class StationDetail(ResourceDetail):
     """Station detail by id"""
 
     @staticmethod
-    def before_patch(_args, _kwargs, data):
+    def before_patch(args, kwargs, data):
         """
         before patch method
         :param args:
@@ -55,7 +58,7 @@ class StationDetail(ResourceDetail):
         if not has_access('is_coorganizer', event=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
-                f"Event: {data['event']} not found.",
+                f"Event: {data['event']} not found {args} {kwargs}",
             )
 
         if data.get('microlocation'):
@@ -107,7 +110,7 @@ class StationListPost(ResourceList):
     """Create and List Station"""
 
     @staticmethod
-    def before_post(_args, _kwargs, data):
+    def before_post(args, kwargs, data):
         """
         method to check for required relationship with event and microlocation
         :param data:
@@ -119,7 +122,7 @@ class StationListPost(ResourceList):
         if not has_access('is_coorganizer', event=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
-                f"Event: {data['event']} not found.",
+                f"Event: {data['event']} not found {args} {kwargs}",
             )
 
         if data.get('microlocation'):
