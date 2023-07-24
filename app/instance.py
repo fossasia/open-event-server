@@ -55,8 +55,8 @@ class ReverseProxied:
     ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
     """
 
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, wsgi_app):
+        self.app = wsgi_app
 
     def __call__(self, environ, start_response):
         scheme = environ.get('HTTP_X_FORWARDED_PROTO')
