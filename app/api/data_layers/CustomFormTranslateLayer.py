@@ -34,6 +34,7 @@ class CustomFormTranslateLayer(BaseDataLayer):
             'min',
             'type',
             'position',
+            'is_allow_edit',
         ]
         for key in keys:
             if key in data:

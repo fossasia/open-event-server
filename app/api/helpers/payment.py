@@ -114,6 +114,8 @@ class StripePaymentsManager:
         if not currency or currency == "":
             currency = "USD"
 
+        event_name = order_invoice.event.name
+
         try:
             payment_intent = stripe.PaymentIntent.create(
                 amount=int(order_invoice.amount * 100),
@@ -122,6 +124,7 @@ class StripePaymentsManager:
                 automatic_payment_methods={
                     'enabled': True,
                 },
+                description=f"Eventyay {event_name}"
             )
             return payment_intent
 

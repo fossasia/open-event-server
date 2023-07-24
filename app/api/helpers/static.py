@@ -573,3 +573,12 @@ GENDER_CHOICES = [
 ]
 
 LEVEL_CHOICES = ['Beginner', 'Intermediate', 'Advanced', 'Expert']
+
+STATION_CHOICES = ['registration', 'daily', 'check in', 'check out']
+
+STATION_TYPE = {
+    'registration': 'registration',
+    'check in': 'check in',
+    'check out': 'check out',
+    'daily': 'daily',
+}

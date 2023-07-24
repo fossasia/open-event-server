@@ -169,6 +169,10 @@ def create_app():
         from app.api.custom.group_role_invite import group_role_invites_routes
         from app.api.video_stream import streams_routes
         from app.api.events import events_blueprint
+        from app.api.custom.badge_forms import badge_forms_routes
+        from app.api.custom.tickets import ticket_routes
+        from app.api.custom.users import users_routes
+        from app.api.custom.users_check_in import users_check_in_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -202,6 +206,10 @@ def create_app():
         app.register_blueprint(events_blueprint)
         app.register_blueprint(tickets_routes)
         app.register_blueprint(group_role_invites_routes)
+        app.register_blueprint(badge_forms_routes)
+        app.register_blueprint(ticket_routes)
+        app.register_blueprint(users_routes)
+        app.register_blueprint(users_check_in_routes)
 
         add_engine_pidguard(db.engine)
 

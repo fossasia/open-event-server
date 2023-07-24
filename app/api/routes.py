@@ -24,6 +24,18 @@ from app.api.attendees import (
     AttendeeRelationshipOptional,
     AttendeeRelationshipRequired,
 )
+from app.api.badge_field_forms import (
+    BadgeFieldFormDetail,
+    BadgeFieldFormList,
+    BadgeFieldFormListPost,
+    BadgeFieldFormRelationship,
+)
+from app.api.badge_forms import (
+    BadgeFormDetail,
+    BadgeFormList,
+    BadgeFormListPost,
+    BadgeFormRelationship,
+)
 from app.api.bootstrap import api
 from app.api.custom_form_options import (
     CustomFormOptionDetail,
@@ -212,6 +224,18 @@ from app.api.sponsors import (
     SponsorListPost,
     SponsorRelationship,
 )
+from app.api.station import (
+    StationDetail,
+    StationList,
+    StationListPost,
+    StationRelationship,
+)
+from app.api.station_store_paxs import (
+    StationStorePaxDetail,
+    StationStorePaxList,
+    StationStorePaxListPost,
+    StationStorePaxRelationship,
+)
 from app.api.stripe_authorization import (
     StripeAuthorizationDetail,
     StripeAuthorizationListPost,
@@ -239,6 +263,12 @@ from app.api.tracks import (
     TrackListPost,
     TrackRelationshipOptional,
     TrackRelationshipRequired,
+)
+from app.api.user_check_in import (
+    UserCheckInDetail,
+    UserCheckInList,
+    UserCheckInListPost,
+    UserCheckInRelationship,
 )
 from app.api.user_emails import (
     UserEmailDetail,
@@ -802,6 +832,8 @@ api.route(
     '/users-events-roles/<int:users_events_roles_id>/event',
     '/exhibitors/<int:exhibitor_id>/event',
     '/speaker-invites/<int:speaker_invite_id>/event',
+    '/stations/<int:station_id>/event',
+    '/badge-forms/<int:badge_form_id>/event',
 )
 api.route(
     EventRelationship,
@@ -931,6 +963,12 @@ api.route(
 )
 api.route(
     EventRelationship,
+    'event_badge_forms',
+    '/events/<int:id>/relationships/badge-forms',
+    '/events/<identifier>/relationships/badge-forms',
+)
+api.route(
+    EventRelationship,
     'event_faqs',
     '/events/<int:id>/relationships/faqs',
     '/events/<identifier>/relationships/faqs',
@@ -1032,6 +1070,12 @@ api.route(
     '/events/<int:id>/relationships/speaker-invites',
     '/events/<identifier>/relationships/speaker-invites',
 )
+api.route(
+    EventRelationship,
+    'station',
+    '/events/<int:id>/relationships/station',
+    '/events/<identifier>/relationships/stations',
+)
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
@@ -1047,6 +1091,7 @@ api.route(
     'microlocation_detail',
     '/microlocations/<int:id>',
     '/sessions/<int:session_id>/microlocation',
+    '/stations/<int:station_id>/microlocation',
 )
 api.route(
     MicrolocationRelationshipOptional,
@@ -1986,4 +2031,133 @@ api.route(
     CustomFormTranslateRelationship,
     'custom_form_translate_form',
     '/custom-form-translates/<int:id>/relationships/custom-form',
+)
+# station
+api.route(
+    StationListPost,
+    'station_list_post',
+    '/station',
+)
+api.route(
+    StationList,
+    'station_list',
+    '/events/<int:event_id>/stations',
+    '/events/<event_identifier>/stations',
+    '/microlocations/<int:microlocation_id>/stations',
+)
+api.route(StationDetail, 'station_detail', '/stations/<int:id>')
+api.route(
+    StationRelationship,
+    'station_event',
+    '/stations/<int:id>/relationships/event',
+)
+api.route(
+    StationRelationship,
+    'station_microlocation',
+    '/stations/<int:id>/relationships/microlocation',
+)
+# user check in
+api.route(
+    UserCheckInListPost,
+    'user_check_in_list_post',
+    '/user-check-in',
+)
+api.route(
+    UserCheckInList,
+    'user_check_in_list',
+    '/events/<int:event_id>/user-check-in',
+    '/events/<event_identifier>/user-check-in',
+    '/microlocations/<int:microlocation_id>/user-check-in',
+)
+api.route(UserCheckInDetail, 'user_check_in_detail', '/user-check-in/<int:id>')
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_ticket',
+    '/user-check-in/<int:id>/relationships/ticket',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_attendee',
+    '/user-check-in/<int:id>/relationships/attendee',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_station',
+    '/user-check-in/<int:id>/relationships/station',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_session',
+    '/user-check-in/<int:id>/relationships/session',
+)
+api.route(
+    StationStorePaxListPost,
+    'station_store_pax_list_post',
+    '/station-store-paxs',
+)
+api.route(
+    StationStorePaxList,
+    'station_store_pax_list',
+    '/stations/<int:station_id>/station-store-paxs',
+    '/sessions/<int:session_id>/station-store-paxs',
+    '/stations/<int:station_id>/sessions/<int:session_id>/station-store-paxs',
+)
+api.route(
+    StationStorePaxDetail, 'station_store_pax_detail', '/station-store-paxs/<int:id>'
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_station',
+    '/station-store-paxs/<int:id>/relationships/station',
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_session',
+    '/station-store-paxs/<int:id>/relationships/session',
+)
+api.route(
+    BadgeFormListPost,
+    'badge_form_list_post',
+    '/badge-forms',
+)
+api.route(
+    BadgeFormList,
+    'badge_form_list',
+    '/events/<int:event_id>/badge-forms',
+    '/events/<event_identifier>/badge-forms',
+    '/events/<int:event_id>/badge-forms/<string:badge_id>',
+    '/events/<event_identifier>/badge-forms/<string:badge_id>',
+)
+api.route(
+    BadgeFormDetail,
+    'badge_form_detail',
+    '/badge-forms/<int:id>',
+)
+api.route(
+    BadgeFormRelationship,
+    'badge_form_event',
+    '/badge-forms/<int:id>/relationships/event',
+)
+api.route(
+    BadgeFieldFormListPost,
+    'badge_field_form_list_post',
+    '/badge-field-forms',
+)
+api.route(
+    BadgeFieldFormList,
+    'badge_field_form_list',
+    '/badge-forms/<int:badge_form_id>/badge-field-forms',
+    '/badge-forms/<badge_form_identifier>/badge-field-forms',
+    '/badge-forms/<int:badge_form_id>/badge-field-forms/<string:badge_id>',
+    '/badge-forms/<badge_form_identifier>/badge-field-forms/<string:badge_id>',
+)
+api.route(
+    BadgeFieldFormDetail,
+    'badge_field_form_detail',
+    '/badge-field-forms/<int:id>',
+)
+api.route(
+    BadgeFieldFormRelationship,
+    'badge_field_form_badge_form',
+    '/badge-field-forms/<int:id>/relationships/badge_form',
 )

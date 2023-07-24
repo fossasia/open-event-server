@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-27 09:10+0000\n"
+"PO-Revision-Date: 2023-06-30 07:52+0000\n"
 "Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
@@ -46,18 +46,22 @@ msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
+"Không được chấp nhận. Bài gửi của bạn cho {event_name} có tiêu đề "
+"{session_name} không được chấp nhận"
 
 #: app/api/helpers/system_mails.py:108
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
+"Đã hủy! Bài gửi của bạn cho {event_name} có tiêu đề {session_name} đã bị Hủy"
 
 #: app/api/helpers/system_mails.py:119
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
+"Rút ra! Bài gửi của bạn cho {event_name} có tiêu đề {session_name} đã bị Rút"
 
 #: app/api/helpers/system_mails.py:132
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
@@ -80,27 +84,22 @@ msgid "New session proposal for {session.event.name} titled {session.title}"
 msgstr "Bài mới nộp {session.event.name} có tiêu đề {session.title}"
 
 #: app/api/helpers/system_mails.py:152
-#, fuzzy
 msgid "Welcome to {app_name}. Please verify your account"
 msgstr "Chào mừng bạn đến với {app_name}. Vui lòng xác minh tài khoản của bạn"
 
 #: app/api/helpers/system_mails.py:157
-#, fuzzy
 msgid "Email Confirmation to Create Account for {app_name}"
 msgstr "Email xác nhận tạo tài khoản cho {app_name}"
 
 #: app/api/helpers/system_mails.py:162
-#, fuzzy
 msgid "Your email has been already changed"
 msgstr "Email của bạn đã được thay đổi"
 
 #: app/api/helpers/system_mails.py:167
-#, fuzzy
 msgid "{app_name}: Password Reset"
 msgstr "{app_name}: Đặt lại mật khẩu"
 
 #: app/api/helpers/system_mails.py:172
-#, fuzzy
 msgid "{app_name}: Reset your password and verify your account"
 msgstr "{app_name}: Đặt lại mật khẩu và xác minh tài khoản của bạn"
 
@@ -109,146 +108,156 @@ msgid "{app_name}: Password Change"
 msgstr "{app_name}: Thay đổi mật khẩu"
 
 #: app/api/helpers/system_mails.py:182
-#, fuzzy
 msgid "Invitation to be {role} at Event: {event}"
 msgstr "Lời mời tham gia {role} tại Sự kiện: {event}"
 
 #: app/api/helpers/system_mails.py:187
 msgid "Invitation to be speaker at Session: {session}"
-msgstr ""
+msgstr "Lời mời làm diễn giả tại: {session}"
 
 #: app/api/helpers/system_mails.py:192
 msgid "Invitation to be {role} at Group: {group}"
-msgstr ""
+msgstr "Lời mời tham gia {role} tại Nhóm: {group}"
 
 #: app/api/helpers/system_mails.py:197
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
 msgstr ""
+"Hẹn gặp bạn tại {event_name} trên {event_date} tại {event_time} "
+"({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:202
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
+"Vé của bạn cho {event_name} trên {event_date} tại {event_time} ({invoice_id})"
+" "
 
 #: app/api/helpers/system_mails.py:207
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
+"Đặt vé mới cho {event_name} on {event_date} by {buyer_name}, {buyer_email} "
+"({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:212
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
-msgstr ""
+msgstr "Đơn đặt hàng {event_name} của bạn đã bị hủy ({invoice_id})"
 
 #: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
-msgstr ""
+msgstr "Data của sự kiện {event_name} đã được xuất"
 
 #: app/api/helpers/system_mails.py:222
 msgid "Export of event {event_name} failed"
-msgstr ""
+msgstr "Xuất dữ liệu sự kiện {event_name} không thành công"
 
 #: app/api/helpers/system_mails.py:227
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
-msgstr ""
+msgstr "Hóa đơn của bạn cho {event_name} cho {date} có sẵn trên {app_name}"
 
 #: app/api/helpers/system_mails.py:233 app/api/helpers/system_mails.py:239
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
+"Nhắc nhở: Hóa đơn của bạn cho {event_name} cho {date} có sẵn trên {app_name}"
 
 #: app/api/helpers/system_mails.py:245
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
+"Vui lòng thanh toán hóa đơn quá hạn của bạn cho {event_name} cho {date} vào "
+"{app_name}"
 
 #: app/api/helpers/system_mails.py:251
 msgid "Event {event_name} has been imported"
-msgstr ""
+msgstr "Dữ liệu của sự kiện {event_name} đã được xuất"
 
 #: app/api/helpers/system_mails.py:256
 msgid "Import of event failed"
-msgstr ""
+msgstr "Nhập sự kiện không thành công"
 
 #: app/api/helpers/system_mails.py:269
 msgid "Test Mail Subject"
-msgstr ""
+msgstr "Chủ đề thư kiểm tra"
 
 #: app/api/helpers/system_mails.py:274
 msgid "Video Moderator of video {video_name} at event {event_name}"
-msgstr ""
+msgstr "Video Moderator of video {video_name} tại sự kiện {event_name}"
 
 #: app/api/helpers/system_mails.py:279
 msgid "Join {event_name} from {group_name} on {event_date}"
-msgstr ""
+msgstr "Tham gia {event_name} từ {group_name} trên {event_date}"
 
 #: app/api/helpers/system_mails.py:284
 msgid "{event_name} is over. Thank you for using {app_name}!"
-msgstr ""
+msgstr "{event_name} đã kết thúc. Cảm ơn bạn đã sử dụng {app_name}!"
 
 #: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
-msgstr ""
+msgstr "{event_name} đã kết thúc. Cảm ơn bạn đã tham gia!"
 
 #: app/models/event.py:468 app/models/event.py:477
 msgid "Location Not Announced"
-msgstr ""
+msgstr "Địa điểm không được công bố"
 
 #: app/models/event.py:473
 msgid ""
 "Online (Please login to the platform to access the video room on the "
 "event page)"
 msgstr ""
+"Trực tuyến (Vui lòng đăng nhập vào nền tảng để truy cập phòng video trên "
+"trang sự kiện)"
 
 #: app/templates/email/after_event.html:1
 #, python-format
 msgid "Hello %(email)s, your %(eventname)s is over."
-msgstr ""
+msgstr "Xin chào %(email)s, %(eventname)s của bạn đã kết thúc."
 
 #: app/templates/email/after_event.html:3
 #, python-format
 msgid "Thank you for using the %(app_name)s platform for your event."
-msgstr ""
+msgstr "Cảm ơn bạn đã sử dụng nền tảng %(app_name)s cho sự kiện của mình."
 
 #: app/templates/email/after_event.html:4
 msgid "We hope you enjoyed it."
-msgstr ""
+msgstr "Chúng tôi hy vọng bạn thích nó."
 
 #: app/templates/email/after_event_speaker.html:1
 #, python-format
 msgid "Hello %(email)s, thank you for participating in our %(eventname)s."
-msgstr ""
+msgstr "Xin chào %(email)s, cảm ơn bạn đã tham gia %(eventname)s của chúng tôi."
 
 #: app/templates/email/after_event_speaker.html:3
 msgid "We hope you enjoyed it and keep in touch."
-msgstr ""
+msgstr "Chúng tôi hy vọng bạn thích nó và giữ liên lạc."
 
 #: app/templates/email/event_export_fail.html:1
 #: app/templates/email/event_import_fail.html:1
 msgid "The error was as follows"
-msgstr ""
+msgstr "Lỗi như sau"
 
 #: app/templates/email/event_exported.html:1
 msgid "Click on the following link to download the event:"
-msgstr ""
+msgstr "Nhấp vào liên kết sau để tải sự kiện xuống :"
 
 #: app/templates/email/event_imported.html:1
 msgid "Click on the following link to manage your event"
-msgstr ""
+msgstr "Nhấp vào liên kết sau để quản lý sự kiện của bạn"
 
 #: app/templates/email/event_role.html:1 app/templates/email/group_role.html:1
 #: app/templates/email/user_confirm.html:1
 #: app/templates/email/user_event_role.html:1
 #, python-format
 msgid "Hello %(email)s,"
-msgstr ""
+msgstr "Xin chào %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(event)s."
-msgstr ""
+msgstr "Bạn đã được mời trở thành %(role)s tại %(event)s."
 
 #: app/templates/email/event_role.html:6 app/templates/email/group_role.html:6
 #: app/templates/email/user_event_role.html:6
@@ -257,6 +266,8 @@ msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
+"Để chấp nhận vai trò, vui lòng đăng ký bằng liên kết sau: "
+"%(open_link)sLink%(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -268,31 +279,31 @@ msgstr ""
 #: app/templates/email/user_register.html:1
 #: app/templates/email/video_stream_moderator.html:1
 msgid "Hello"
-msgstr ""
+msgstr "Xin chào"
 
 #: app/templates/email/group_contact_user.html:2
 #, python-format
 msgid "You have contacted the organizers of the group %(group_name)s."
-msgstr ""
+msgstr "Bạn đã liên hệ với ban tổ chức của nhóm %(group_name)s."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
 msgid "Below you find a copy of your email."
-msgstr ""
+msgstr "Dưới đây bạn tìm thấy một bản sao email của bạn."
 
 #: app/templates/email/group_contact_user.html:7
 #: app/templates/email/organizer_contact_attendee.html:7
 msgid "Organizers have received your message and will follow up with you."
-msgstr ""
+msgstr "Ban tổ chức đã nhận được tin nhắn của bạn và sẽ liên hệ với bạn."
 
 #: app/templates/email/group_contact_user.html:8
 msgid "This is a system message. Please do not reply to this message."
-msgstr ""
+msgstr "Đây là một thông báo hệ thống. Vui lòng không trả lời tin nhắn này."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "Các câu trả lời không được giám sát."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -301,12 +312,12 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
 msgid "Thank you."
-msgstr ""
+msgstr "Cám ơn."
 
 #: app/templates/email/group_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(group)s group."
-msgstr ""
+msgstr "Bạn đã được mời làm %(role)s tại nhóm %(group)s."
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
@@ -314,7 +325,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "Xin chào %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -322,21 +333,23 @@ msgid ""
 "The invoice for your event %(event_name)s on %(app_name)s for %(date)s is"
 " now available."
 msgstr ""
+"Hóa đơn cho sự kiện %(event_name)s của bạn trên %(app_name)s cho %(date)s "
+"hiện đã có."
 
 #: app/templates/email/monthly_payment_email.html:4
 msgid "Your invoice payment is due within 30 days."
-msgstr ""
+msgstr "Thanh toán hóa đơn của bạn đến hạn trong vòng 30 ngày."
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
 #: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
 msgid "Amount Due"
-msgstr ""
+msgstr "Số tiền đến hạn"
 
 #: app/templates/email/monthly_payment_email.html:8
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "Vui lòng thanh toán trong vòng 30 ngày."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
@@ -344,7 +357,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "Thanh toán ngay tại: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -355,6 +368,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"Hóa đơn chi tiết có sẵn trong %(open_link)skhu vực thanh toán%(close_link)s "
+"trong tài khoản của bạn."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -365,6 +380,8 @@ msgid ""
 "If you have any questions about invoices, please find more information on"
 " our FAQ at %(faq_url)s."
 msgstr ""
+"Nếu bạn có bất kỳ câu hỏi nào về hóa đơn, vui lòng tìm thêm thông tin về Câu "
+"hỏi thường gặp của chúng tôi tại %(faq_url)s."
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
@@ -372,7 +389,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "Cảm ơn bạn đã sử dụng %(app_name)s!"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -392,35 +409,43 @@ msgid ""
 "Just a friendly reminder that we haven't received your payment for your "
 "invoice for %(event_name)s for %(date)s."
 msgstr ""
+"Chỉ là một lời nhắc thân thiện rằng chúng tôi chưa nhận được khoản thanh "
+"toán cho hóa đơn của bạn cho %(event_name)s cho %(date)s."
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"Thanh toán nhanh chóng và đơn giản bằng thẻ tín dụng hoặc tài khoản PayPal "
+"của bạn."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "Vui lòng thanh toán trong vòng 30 ngày."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "Khoản thanh toán của bạn hiện đã quá hạn."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
 msgstr ""
+"Vui lòng thanh toán hóa đơn này ngay lập tức để tránh tài khoản của bạn bị "
+"tạm ngưng."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
-msgstr ""
+msgstr "Các khoản thanh toán trễ có thể phải chịu phí tài chính %(percentage)s."
 
 #: app/templates/email/monthly_payment_post_due_email.html:18
 msgid ""
 "If you feel this invoice is incorrect or have any questions, you can "
 "contact our support team for assistance."
 msgstr ""
+"Nếu bạn cảm thấy hóa đơn này không chính xác hoặc có bất kỳ câu hỏi nào, bạn "
+"có thể liên hệ với nhóm hỗ trợ của chúng tôi để được trợ giúp."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
@@ -428,10 +453,12 @@ msgid ""
 "This is a reminder that we haven't received your payment for your invoice"
 " for %(event_name)s for %(date)s."
 msgstr ""
+"Đây là lời nhắc rằng chúng tôi chưa nhận được khoản thanh toán cho hóa đơn "
+"của bạn cho %(event_name)s cho %(date)s."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "Vui lòng thanh toán trong vòng 2 ngày."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -439,6 +466,8 @@ msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
 "%(session_name)s."
 msgstr ""
+"Đây là email tự động từ %(app_name)s dành cho những người tổ chức "
+"%(session_name)s."
 
 #: app/templates/email/new_session.html:5
 #, python-format
@@ -446,6 +475,8 @@ msgid ""
 "Your %(open_link)sCall For Speakers%(close_link)s has received a new "
 "session proposal with the following details:"
 msgstr ""
+"%(open_link)sCall For Speakers%(close_link)s của bạn đã nhận được đề xuất "
+"phiên mới với các chi tiết sau:"
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
@@ -453,7 +484,7 @@ msgstr "Bài Nói"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
-msgstr ""
+msgstr "Tóm tắt nội dung"
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -461,6 +492,8 @@ msgid ""
 "You can view all speaker details on the speaker profile page and the "
 "session proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
+"Bạn có thể xem tất cả thông tin chi tiết về diễn giả trên trang hồ sơ diễn "
+"giả và các tiêu đề trên %(open_link)strang %(close_link)s."
 
 #: app/templates/email/new_session.html:14
 #, python-format
@@ -468,46 +501,50 @@ msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
 "overview page%(close_link)s and click on the status badge of the session."
 msgstr ""
+"Để thay đổi trạng thái của tiêu đề, vui lòng truy cập %(open_link)strang "
+"tổng quan về tiêu đề %(close_link)s và nhấp vào huy hiệu trạng thái."
 
 #: app/templates/email/organizer_contact_attendee.html:2
 #, python-format
 msgid "You have contacted the organizers of the event %(event_name)s."
-msgstr ""
+msgstr "Bạn đã liên hệ với ban tổ chức sự kiện %(event_name)s."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "This is a system message."
-msgstr ""
+msgstr "Đây là một thông báo hệ thống."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "Vui lòng không trả lời tin nhắn này."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "Mật khẩu của bạn đã được thay đổi thành công."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr ""
+msgstr "Vui lòng đăng nhập bằng mật khẩu mới của bạn."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "Vui lòng sử dụng liên kết sau để đặt lại mật khẩu của bạn."
 
 #: app/templates/email/password_reset.html:3
 #, python-format
 msgid "Or paste this token in your %(app_name)s"
-msgstr ""
+msgstr "Hoặc dán mã thông báo này vào %(app_name)s của bạn"
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "Ứng dụng:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
+"Vui lòng sử dụng liên kết sau để đặt lại mật khẩu và xác minh tài khoản của "
+"bạn."
 
 #: app/templates/email/speaker_invite.html:4
 #, python-format
@@ -516,6 +553,8 @@ msgid ""
 "\"%(session_title)s\" for the event %(event_name)s on %(app_name)s by "
 "%(inviter_name)s %(inviter_email)s."
 msgstr ""
+"Bạn đã được mời làm diễn giả cho \"%(session_title)s\" cho sự kiện "
+"%(event_name)s trên %(app_name)s bởi %(inviter_name)s %(inviter_email)s."
 
 #: app/templates/email/speaker_invite.html:6
 #, python-format
@@ -523,29 +562,33 @@ msgid ""
 "You can accept or reject this invitation from %(open_link)sCall for "
 "Speakers%(close_link)s page."
 msgstr ""
+"Bạn có thể chấp nhận hoặc từ chối lời mời này từ trang %(open_link)sCall for "
+"Speakers%(close_link)s."
 
 #: app/templates/email/speaker_invite.html:9
 msgid ""
 "If you do not have an account yet you need to register before you can "
 "accept the invite."
 msgstr ""
+"Nếu bạn chưa có tài khoản, bạn cần phải đăng ký trước khi có thể chấp nhận "
+"lời mời."
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
 #: app/templates/email/ticket_purchased.html:33
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
-msgstr ""
+msgstr "Trân trọng"
 
 #: app/templates/email/ticket_cancelled.html:2
 #, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "Đơn đặt hàng %(order_id)s cho %(event_name)s của bạn đã bị hủy."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
-msgstr ""
+msgstr "Thông tin về đơn đặt hàng bị hủy của bạn ở đây: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -553,6 +596,8 @@ msgid ""
 " owner of the order or the organizer of the event for more information "
 "about the cancellation."
 msgstr ""
+"Nếu bạn chưa tự mình thực hiện việc hủy này, vui lòng kiểm tra với chủ sở "
+"hữu đơn hàng hoặc đơn vị tổ chức sự kiện để biết thêm thông tin về việc hủy."
 
 #: app/templates/email/ticket_cancelled.html:6
 #, python-format
@@ -560,19 +605,21 @@ msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
 msgstr ""
+"Để liên hệ với ban tổ chức sự kiện, vui lòng sử dụng biểu mẫu liên hệ trên "
+"trang sự kiện tại đây: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "Bạn cần đăng nhập để truy cập biểu mẫu."
 
 #: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "Cảm ơn bạn đã đăng ký %(event_name)s."
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "This is your confirmation."
-msgstr ""
+msgstr "Đây là xác nhận của bạn."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -580,6 +627,8 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"Bạn có thể tải xuống vé %(open_link)shoặc thông tin đăng ký tại "
+"đây%(close_link)s."
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
@@ -591,13 +640,13 @@ msgstr "Tóm tắt theo thứ tự"
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
-msgstr ""
+msgstr "Tên"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
 msgid "Ticket"
-msgstr ""
+msgstr "Vé"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
@@ -609,12 +658,12 @@ msgstr "Số lượng"
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
 msgid "Order Number"
-msgstr ""
+msgstr "Số đơn đặt hàng"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
 msgid "About this event"
-msgstr ""
+msgstr "Về sự kiện này"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
@@ -632,54 +681,54 @@ msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "Thêm vào lịch"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
-msgstr ""
+msgstr "Lịch Google"
 
 #: app/templates/email/ticket_purchased.html:20
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "Outlook"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "Dưới đây bạn tìm thấy một tin nhắn từ người tổ chức"
 
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:102
 #, python-format
 msgid "Login to manage your orders at %(url)s."
-msgstr ""
+msgstr "Đăng nhập để quản lý đơn hàng của bạn tại %(url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
-msgstr ""
+msgstr "Đây là thư xác nhận vé của bạn cho sự kiện %(eventname)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
-msgstr ""
+msgstr "Bạn có thể tải vé xuống tại: %(order_view_url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
-msgstr ""
+msgstr "Tóm tắt vé"
 
 #: app/templates/email/ticket_purchased_organizer.html:1
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "Chúc mừng!"
 
 #: app/templates/email/ticket_purchased_organizer.html:4
 #, python-format
@@ -687,20 +736,22 @@ msgid ""
 "You have a new order for your event %(event_name)s starting at "
 "%(event_time)s on %(event_date)s."
 msgstr ""
+"Bạn có đơn đặt hàng mới cho sự kiện của mình %(event_name)s bắt đầu từ "
+"%(event_time)s trên %(event_date)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "The order has been processed successfully on %(app_name)s."
-msgstr ""
+msgstr "Đơn đặt hàng đã được xử lý thành công trên %(app_name)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
-msgstr ""
+msgstr "%(open_link)s Nhấp vào đây%(close_link)s để xem/tải xuống hóa đơn."
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "Các chi tiết của đơn đặt hàng là:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -712,7 +763,7 @@ msgstr "Email"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
-msgstr ""
+msgstr "Ngày và giờ mua"
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
@@ -722,12 +773,12 @@ msgstr "Phương thức thanh toán"
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
 msgid "None"
-msgstr ""
+msgstr "Không có"
 
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
@@ -757,7 +808,7 @@ msgstr "Omise"
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
@@ -767,12 +818,12 @@ msgstr "Paytm"
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
-msgstr ""
+msgstr "Mua hàng trên hóa đơn"
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
 msgid "Payment Status"
-msgstr ""
+msgstr "Trạng thái thanh toán"
 
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
@@ -801,7 +852,7 @@ msgstr "Đã hết hạn"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
-msgstr ""
+msgstr "Vé/Đăng ký"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
@@ -833,7 +884,7 @@ msgstr "Tiểu Bang"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
-msgstr ""
+msgstr "Zip"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
@@ -851,49 +902,51 @@ msgstr "Mã số thuế"
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
 msgid "Hello,"
-msgstr ""
+msgstr "Xin chào"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
 #: app/templates/email/ticket_sales_end_tomorrow.html:3
 #, python-format
 msgid "This is an automatic message from %(url)s."
-msgstr ""
+msgstr "Đây là tin nhắn tự động từ %(url)s."
 
 #: app/templates/email/ticket_sales_end.html:5
 #, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s has ended."
-msgstr ""
+msgstr "Thời gian bán vé cho %(event_name)s đã kết thúc."
 
 #: app/templates/email/ticket_sales_end.html:5
 msgid ""
 "If you would like to reactivate ticket sales for these tickets, please "
 "login to your account and edit the sales period for your tickets."
 msgstr ""
+"Nếu bạn muốn kích hoạt lại việc bán vé, vui lòng đăng nhập vào tài khoản của "
+"bạn và chỉnh sửa thời gian bán vé của bạn."
 
 #: app/templates/email/ticket_sales_end.html:7
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "Bán vé đã kết thúc cho"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
 #: app/templates/email/ticket_sales_end_tomorrow.html:10
 msgid "Steps to change the ticket sales period"
-msgstr ""
+msgstr "Các bước thay đổi thời gian bán vé"
 
 #: app/templates/email/ticket_sales_end.html:12
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
 msgid "Login to your account."
-msgstr ""
+msgstr "Đăng nhập vào tài khoản của bạn."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
 #: app/templates/email/ticket_sales_end_tomorrow.html:13
 msgid "On the top right click “Manage Events”."
-msgstr ""
+msgstr "Ở trên cùng bên phải, nhấp vào \"Quản lý sự kiện\"."
 
 #: app/templates/email/ticket_sales_end.html:14
 #: app/templates/email/ticket_sales_end_next_week.html:14
@@ -902,12 +955,14 @@ msgid ""
 "On the Events Dashboard choose the event you want to edit and click the "
 "“Edit Symbol” of the event."
 msgstr ""
+"Trên Bảng điều khiển sự kiện, chọn sự kiện bạn muốn chỉnh sửa và nhấp vào "
+"\"Chỉnh sửa biểu tượng\" của sự kiện."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid "You are now editing the “Basic Details” of your event."
-msgstr ""
+msgstr "Bây giờ bạn đang chỉnh sửa \"Chi tiết cơ bản\" của sự kiện của mình."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
@@ -916,18 +971,20 @@ msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
+"Kéo xuống phần vé, chọn vé bạn muốn chỉnh sửa và nhấp vào \"Biểu tượng cài "
+"đặt\" của vé."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
 #: app/templates/email/ticket_sales_end_tomorrow.html:16
 msgid "In the ticket settings adjust the sales period for the ticket."
-msgstr ""
+msgstr "Trong cài đặt vé, điều chỉnh thời gian bán vé."
 
 #: app/templates/email/ticket_sales_end.html:17
 #: app/templates/email/ticket_sales_end_next_week.html:17
 #: app/templates/email/ticket_sales_end_tomorrow.html:17
 msgid "Repeat the steps for other tickets, if any."
-msgstr ""
+msgstr "Lặp lại các bước cho các vé khác, nếu có."
 
 #: app/templates/email/ticket_sales_end.html:18
 #: app/templates/email/ticket_sales_end_next_week.html:18
@@ -936,6 +993,7 @@ msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
 msgstr ""
+"Cuộn xuống cuối trang và lưu các thay đổi bằng cách nhấp vào \"Xuất bản\"."
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
@@ -943,13 +1001,14 @@ msgstr ""
 #, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
 msgstr ""
+"Bạn có thể truy cập trang tổng quan của sự kiện tại đây %(dashboard_link)s."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 7 days."
-msgstr ""
+msgstr "Thời gian bán vé của bạn cho %(event_name)s sẽ kết thúc sau 7 ngày."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
@@ -957,57 +1016,59 @@ msgid ""
 "If you would like to extend the period of your ticket sales, please login"
 " to your account and edit the sales period for your tickets."
 msgstr ""
+"Nếu bạn muốn kéo dài thời gian bán vé, vui lòng đăng nhập vào tài khoản của "
+"bạn và chỉnh sửa thời gian bán vé của bạn."
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
 #: app/templates/email/ticket_sales_end_tomorrow.html:7
 msgid "Ticket Sales ending for"
-msgstr ""
+msgstr "Bán vé kết thúc cho"
 
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
 #, python-format
 msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 24 hours."
-msgstr ""
+msgstr "Thời gian bán vé cho của bạn cho %(event_name)s sẽ kết thúc sau 24 giờ."
 
 #: app/templates/email/user_change_email.html:1
 #, python-format
 msgid "Hi %(email)s,"
-msgstr ""
+msgstr "Xin chào %(email)s,"
 
 #: app/templates/email/user_change_email.html:3
 #, python-format
 msgid "Your email has been already changed from %(email)s to %(new_email)s."
-msgstr ""
+msgstr "Email của bạn đã được thay đổi từ %(email)s thành %(new_email)s."
 
 #: app/templates/email/user_change_email.html:3
 msgid "You should verify your new email."
-msgstr ""
+msgstr "Bạn nên xác minh email mới của mình."
 
 #: app/templates/email/user_confirm.html:3
 #, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
-msgstr ""
+msgstr "Vui lòng truy cập liên kết này để xác nhận email của bạn: %(url)s."
 
 #: app/templates/email/user_register.html:2
 #, python-format
 msgid "Your account has been created on %(app_name)s."
-msgstr ""
+msgstr "Tài khoản của bạn đã được tạo trên %(app_name)s."
 
 #: app/templates/email/user_register.html:3
 #, python-format
 msgid "Your login is: %(email)s"
-msgstr ""
+msgstr "Thông tin đăng nhập của bạn là: %(email)s"
 
 #: app/templates/email/user_register.html:5
 #, python-format
 msgid "Please visit the following link to verify your email: %(url)s"
-msgstr ""
+msgstr "Vui lòng truy cập liên kết sau để xác minh email của bạn: %(url)s"
 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
 msgid "Thank You"
-msgstr ""
+msgstr "Cám ơn."
 
 #: app/templates/email/video_stream_moderator.html:2
 #, python-format
@@ -1015,14 +1076,16 @@ msgid ""
 "You have been added as a video moderator of video %(video)s at event "
 "%(event)s."
 msgstr ""
+"Bạn đã được thêm làm người điều hành video của video %(video)s tại sự kiện "
+"%(event)s."
 
 #: app/templates/email/video_stream_moderator.html:5
 msgid "You need to register on the platform to access the video stream."
-msgstr ""
+msgstr "Bạn cần đăng ký trên nền tảng để truy cập luồng video."
 
 #: app/templates/pdf/order_invoice.html:177
 msgid "INVOICE"
-msgstr ""
+msgstr "HÓA ĐƠN"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
@@ -1031,7 +1094,7 @@ msgstr "Contact Name"
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
-msgstr ""
+msgstr ".ZIP"
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
@@ -1039,11 +1102,11 @@ msgstr "Điện Thoại"
 
 #: app/templates/pdf/order_invoice.html:214
 msgid "Order By"
-msgstr ""
+msgstr "Đặt hàng bởi"
 
 #: app/templates/pdf/order_invoice.html:220
 msgid "Information unavailable"
-msgstr ""
+msgstr "Thông tin không có"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
@@ -1051,7 +1114,7 @@ msgstr "Ngày đáo hạn"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
-msgstr ""
+msgstr "theo hóa đơn"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
@@ -1063,11 +1126,11 @@ msgstr "Giá"
 
 #: app/templates/pdf/order_invoice.html:320
 msgid "Sub-Total"
-msgstr ""
+msgstr "Tổng phụ"
 
 #: app/templates/pdf/order_invoice.html:326
 msgid "for"
-msgstr ""
+msgstr "cho"
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
@@ -1078,7 +1141,7 @@ msgstr "Mã giảm giá"
 #: app/templates/pdf/order_invoice.html:395
 #: app/templates/pdf/order_invoice.html:401
 msgid "incl."
-msgstr ""
+msgstr "bao gồm"
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
@@ -1103,45 +1166,47 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"Đặt hàng\n"
+"                    #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
 #, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "Sự kiện diễn ra trực tuyến và tại %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
 msgid "Event taking place online."
-msgstr ""
+msgstr "Sự kiện diễn ra trực tuyến."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
 #, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "Sự kiện diễn ra tại %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "Địa điểm hoặc chi tiết sự kiện trực tuyến sẽ được thông báo"
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
 #, python-format
 msgid "From: %(start_time)s"
-msgstr ""
+msgstr "Từ: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
 #, python-format
 msgid "To: %(end_time)s"
-msgstr ""
+msgstr "Tới: %(end_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "Thông tin đặt hàng"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
@@ -1150,6 +1215,8 @@ msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"Đặt hàng\n"
+"                                        #%(invoice_number)s"
 
 #~ msgid "Thank you for your ticket order for"
 #~ msgstr ""
