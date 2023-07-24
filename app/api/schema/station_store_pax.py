@@ -18,7 +18,7 @@ class StationStorePaxSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    current_pax = fields.Integer(allow_none=False)
+    current_pax = fields.Integer(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
     station = Relationship(
