@@ -231,6 +231,12 @@ from app.api.station import (
     StationListPost,
     StationRelationship,
 )
+from app.api.station_store_paxs import (
+    StationStorePaxDetail,
+    StationStorePaxList,
+    StationStorePaxListPost,
+    StationStorePaxRelationship,
+)
 from app.api.stripe_authorization import (
     StripeAuthorizationDetail,
     StripeAuthorizationListPost,
@@ -258,6 +264,12 @@ from app.api.tracks import (
     TrackListPost,
     TrackRelationshipOptional,
     TrackRelationshipRequired,
+)
+from app.api.user_check_in import (
+    UserCheckInDetail,
+    UserCheckInList,
+    UserCheckInListPost,
+    UserCheckInRelationship,
 )
 from app.api.user_emails import (
     UserEmailDetail,
@@ -2045,6 +2057,65 @@ api.route(
     StationRelationship,
     'station_microlocation',
     '/stations/<int:id>/relationships/microlocation',
+)
+# user check in
+api.route(
+    UserCheckInListPost,
+    'user_check_in_list_post',
+    '/user-check-in',
+)
+api.route(
+    UserCheckInList,
+    'user_check_in_list',
+    '/events/<int:event_id>/user-check-in',
+    '/events/<event_identifier>/user-check-in',
+    '/microlocations/<int:microlocation_id>/user-check-in',
+)
+api.route(UserCheckInDetail, 'user_check_in_detail', '/user-check-in/<int:id>')
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_ticket',
+    '/user-check-in/<int:id>/relationships/ticket',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_attendee',
+    '/user-check-in/<int:id>/relationships/attendee',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_station',
+    '/user-check-in/<int:id>/relationships/station',
+)
+api.route(
+    UserCheckInRelationship,
+    'user_check_in_session',
+    '/user-check-in/<int:id>/relationships/session',
+)
+api.route(
+    StationStorePaxListPost,
+    'station_store_pax_list_post',
+    '/station-store-paxs',
+)
+api.route(
+    StationStorePaxList,
+    'station_store_pax_list',
+    '/stations/<int:station_id>/station-store-paxs',
+    '/sessions/<int:session_id>/station-store-paxs',
+    '/stations/<int:station_id>/sessions/<int:session_id>/station-store-paxs',
+)
+api.route(
+    StationStorePaxDetail, 'station_store_pax_detail', '/station-store-paxs/<int:id>'
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_station',
+    '/station-store-paxs/<int:id>/relationships/station',
+)
+api.route(
+    StationStorePaxRelationship,
+    'station_store_pax_session',
+    '/station-store-paxs/<int:id>/relationships/session',
 )
 api.route(
     BadgeFormListPost,
