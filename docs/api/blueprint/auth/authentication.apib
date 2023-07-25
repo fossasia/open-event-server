@@ -166,3 +166,29 @@ Any refresh token that was issued before this request is made will be invalidate
         {
             "success": true
         }
+
+## API to verify password of signed in account [/v1/auth/verify_password]
+
+### API to verify password of signed in account [POST]
+
+API to verify password of signed in account using JWT token
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "password": "password"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "result": true
+        }

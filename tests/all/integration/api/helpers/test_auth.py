@@ -56,3 +56,18 @@ def test_get_user_id(client, jwt):
 
     assert response.status_code == 200
     assert json.loads(response.data)['user_id']
+
+
+def test_verify_password(client, jwt):
+    """Method to test verify password"""
+    data = json.dumps({'password': 'password'})
+
+    response = client.post(
+        '/v1/auth/verify-password',
+        content_type='application/vnd.api+json',
+        headers=jwt,
+        data=data,
+    )
+
+    assert response.status_code == 200
+    assert json.loads(response.data)['result']
