@@ -4961,24 +4961,24 @@ def exhibitor_delete(transaction):
         db.session.commit()
 
 
-# @hooks.before(
-#     "Attendees > Search Attendees under an event > Search All Attendees under an event"
-# )
-# def search_attendees_from_event(transaction):
-#     """
-#     GET /v1/events/{event_id}/attendees/search
-#     :param transaction:
-#     :return:
-#     """
-#     with stash['app'].app_context():
-#         event = EventFactoryBasic()
-#         ticket = TicketFactory()
-#         completed_order = OrderFactory(status='completed')
-#         attendee = AttendeeFactoryBase.create_batch(
-#             1, order_id=completed_order.id, ticket_id=ticket.id, event_id=event.id
-#         )
-#         db.session.add(event)
-#         db.session.add(ticket)
-#         db.session.add(completed_order)
-#         db.session.add(attendee)
-#         db.session.commit()
+@hooks.before(
+    "Attendees > Search Attendees under an event > Search All Attendees under an event"
+)
+def search_attendees_from_event(transaction):
+    """
+    GET /v1/events/{event_id}/attendees/search
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        ticket = TicketFactory()
+        completed_order = OrderFactory(status='completed')
+        attendee = AttendeeFactoryBase.create_batch(
+            1, order_id=completed_order.id, ticket_id=ticket.id, event_id=event.id
+        )
+        db.session.add(event)
+        db.session.add(ticket)
+        db.session.add(completed_order)
+        db.session.add(attendee)
+        db.session.commit()
