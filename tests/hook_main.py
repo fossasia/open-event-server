@@ -53,6 +53,7 @@ from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
     AttendeeFactory,
+    AttendeeFactoryBase,
     AttendeeOrderSubFactory,
 )
 from tests.factories.session_type import SessionTypeFactory
