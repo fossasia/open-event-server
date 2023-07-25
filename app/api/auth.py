@@ -468,17 +468,18 @@ def environment_details():
     return envdump.dump_environment()
 
 
-@auth_routes.route('/verify-password/<int:user_id>', methods=['POST'])
-def verify_password(user_id):
+@auth_routes.route('/verify-password', methods=['POST'])
+@jwt_required
+def verify_password():
     data = request.get_json()
     password = data.get('password')
 
-    if not all([user_id, password]):
+    if not all([current_user.id, password]):
         logging.error('user or password missing')
         return jsonify(error='user or password missing'), 400
 
     try:
-        user = User.query.filter_by(id=user_id).one()
+        user = User.query.filter_by(id=current_user.id).one()
     except NoResultFound:
         logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
