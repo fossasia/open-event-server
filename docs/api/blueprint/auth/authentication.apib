@@ -179,12 +179,12 @@ API to verify password of signed in account using JWT token
 
             Content-Type: application/vnd.api+json
 
-            Authorization: JWT <Auth Key>
+            Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNDk2OTU2ODMwLCJuYmYiOjE0OTY5NTY4MzAsImV4cCI6MTQ5NzA0MzIzMH0.bjl0
 
     + Body
 
             {
-                "password": "string"
+                "password": "password"
             }
 
 + Response 200 (application/vnd.api+json)
