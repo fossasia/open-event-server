@@ -4,7 +4,7 @@ from tests.factories.order import OrderFactory
 from tests.factories.ticket import TicketFactory
 
 
-def test_count_sold_and_reserved_tickets(db, jwt, client):
+def test_event_search_attendee(db, jwt, client):
     """Method to test the count query of sold tickets"""
 
     event = EventFactoryBasic()

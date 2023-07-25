@@ -4957,3 +4957,18 @@ def exhibitor_delete(transaction):
     with stash['app'].app_context():
         ExhibitorFactory()
         db.session.commit()
+
+
+@hooks.before(
+    "Attendees > Search Attendees under an event > Search All Attendees under an event"
+)
+def search_attendees_from_event(transaction):
+    """
+    GET /v1/events/{event_id}/attendees/search
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
