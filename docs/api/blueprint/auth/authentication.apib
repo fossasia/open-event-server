@@ -177,7 +177,7 @@ API to verify password of signed in account using JWT token
 
     + Headers
 
-            Accept: application/json
+            Content-Type: application/vnd.api+json
 
             Authorization: JWT <Auth Key>
 
@@ -187,7 +187,7 @@ API to verify password of signed in account using JWT token
                 "password": "password"
             }
 
-+ Response 200 (application/json)
++ Response 200 (application/vnd.api+json)
 
         {
             "result": true
