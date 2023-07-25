@@ -26,6 +26,11 @@ class TrackSchema(SoftDeletionSchema):
 
     @validates_schema
     def valid_color(self, data):
+        if 'color' not in data:
+            raise UnprocessableEntityError(
+                {'pointer': '/data/attributes/color'},
+                "Color attribut is required",
+            )
         if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', data['color']):
             raise UnprocessableEntityError(
                 {'pointer': 'data/attributes/color'},
