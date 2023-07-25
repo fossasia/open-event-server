@@ -14,6 +14,8 @@ class Microlocation(SoftDeletionModel):
     hidden_in_scheduler = db.Column(db.Boolean, default=False, nullable=False)
     position = db.Column(db.Integer, default=0, nullable=False)
     room = db.Column(db.String)
+    is_chat_enabled = db.Column(db.Boolean, default=False, nullable=True)
+    # chat_room_id = db.Column(db.String, nullable=True)
     session = db.relationship('Session', backref="microlocation")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     video_stream_id = db.Column(

@@ -27,6 +27,8 @@ class MicrolocationSchema(SoftDeletionSchema):
     longitude = fields.Float(validate=lambda n: -180 <= n <= 180, allow_none=True)
     floor = fields.Integer(allow_none=True)
     hidden_in_scheduler = fields.Boolean(default=False)
+    # chat_room_id = fields.Str(dump_only=True, allow_none=True)
+    is_chat_enabled = fields.Boolean(default=False, allow_none=True)
     position = fields.Integer(allow_none=True, default=0)
     room = fields.Str(allow_none=True)
     sessions = Relationship(
