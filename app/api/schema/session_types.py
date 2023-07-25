@@ -26,6 +26,11 @@ class SessionTypeSchema(SoftDeletionSchema):
 
     @validates_schema
     def validate_length(self, data):
+        if 'length' not in data:
+            raise UnprocessableEntityError(
+                {'pointer': '/data/attributes/length'},
+                "Length attribute is missing",
+            )
         try:
             datetime.strptime(data['length'], '%H:%M')
         except ValueError:
