@@ -6,7 +6,6 @@ from tests.factories.ticket import TicketFactory
 
 def test_event_search_attendee(db, jwt, client):
     """Method to test the count query of sold tickets"""
-
     event = EventFactoryBasic()
     ticket = TicketFactory()
     completed_order = OrderFactory(status='completed')

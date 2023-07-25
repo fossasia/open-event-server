@@ -819,7 +819,7 @@ def group_get_list(transaction):
 
 
 @hooks.before("Group > Groups under an User > List All Groups under an User")
-def group_get_list(transaction):
+def group_get_list_from_user(transaction):
     """
     GET /users/1/groups
     :param transaction:

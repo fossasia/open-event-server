@@ -200,6 +200,7 @@ def delete_unused_discount_codes(event_id):
 @to_event_id
 @jwt_required
 def search_attendees(event_id):
+    """Search attendees by name or email."""
     query = TicketHolder.query.filter(TicketHolder.event_id == event_id)
     args = request.args
     if args.get('name'):
