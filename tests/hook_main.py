@@ -51,7 +51,11 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
-from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
+from tests.factories.attendee import (
+    AttendeeFactory,
+    AttendeeFactoryBase,
+    AttendeeOrderSubFactory,
+)
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
@@ -4970,5 +4974,13 @@ def search_attendees_from_event(transaction):
     """
     with stash['app'].app_context():
         event = EventFactoryBasic()
+        ticket = TicketFactory()
+        completed_order = OrderFactory(status='completed')
+        attendee = AttendeeFactoryBase.create_batch(
+            1, order_id=completed_order.id, ticket_id=ticket.id, event_id=event.id
+        )
         db.session.add(event)
+        db.session.add(ticket)
+        db.session.add(completed_order)
+        db.session.add(attendee)
         db.session.commit()
