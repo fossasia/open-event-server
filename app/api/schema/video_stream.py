@@ -56,6 +56,7 @@ class VideoStreamSchema(Schema):
         schema='MicrolocationSchema',
         type_='microlocation',
     )
+
     event = Relationship(
         self_view='v1.video_stream_event',
         self_view_kwargs={'id': '<id>'},

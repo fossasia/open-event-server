@@ -1,3 +1,4 @@
+from app.api.translation_channels import TranslationChannelsList, TranslationChannelsListPost, TranslationChannelsDetail, TranslationChannelsRelationship
 from app.api.access_codes import (
     AccessCodeDetail,
     AccessCodeList,
@@ -1907,6 +1908,24 @@ api.route(ImportJobList, 'import_job_list', '/import-jobs')
 api.route(ImportJobDetail, 'import_job_detail', '/import-jobs/<int:id>')
 
 # Video Streams
+
+
+api.route(TranslationChannelsList, 'translation_channels_list', "/translation_channels",
+          '/video-streams/<int:video_stream_id>/translation_channels')
+
+api.route(TranslationChannelsListPost,
+          'translation_channels_list_post', '/translation_channels')
+
+api.route(TranslationChannelsDetail, 'translation_channels_detail',
+          '/translation_channels/<int:id>')
+
+api.route(TranslationChannelsRelationship, 'translation_channels_video_stream',
+          '/translation_channel/<int:id>/relationships/video-stream')
+
+api.route(TranslationChannelsRelationship, 'translation_channels_channel',
+          '/translation_channel/<int:id>/relationships/channels')
+
+
 api.route(VideoStreamList, 'video_stream_list', '/video-streams')
 api.route(
     VideoStreamDetail,
@@ -1943,6 +1962,8 @@ api.route(
     'video_stream_moderators',
     '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
+
+
 api.route(
     VideoStreamRelationship,
     'video_stream_recordings',
