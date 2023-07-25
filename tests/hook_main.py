@@ -53,7 +53,6 @@ from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
     AttendeeFactory,
-    AttendeeFactoryBase,
     AttendeeOrderSubFactory,
 )
 from tests.factories.session_type import SessionTypeFactory
@@ -4974,16 +4973,4 @@ def search_attendees_from_event(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
-
-        ticket = TicketFactory()
-        db.session.add(ticket)
-
-        completed_order = OrderFactory(status='completed')
-        db.session.add(completed_order)
-
-        attendee = AttendeeFactoryBase.create_batch(
-            1, order_id=completed_order.id, ticket_id=ticket.id, event_id=event.id
-        )
-        db.session.add(attendee)
-
         db.session.commit()
