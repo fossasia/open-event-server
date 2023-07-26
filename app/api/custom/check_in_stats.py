@@ -1,6 +1,7 @@
 import datetime
 
 from flask import Blueprint, request
+from sqlalchemy import desc
 
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
@@ -9,6 +10,7 @@ from app.models.event import Event
 from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.station import Station
+from app.models.station_store_pax import StationStorePax
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_check_in import UserCheckIn
@@ -175,6 +177,21 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
         if current_track:
             track_name = current_track._asdict()['name']
 
+        stationStorePaxs = (
+            db.session.query(StationStorePax)
+            .filter(StationStorePax.session_id == session_id)
+            .order_by(desc("created_at"))
+            .all()
+        )
+        manual_count = {}
+        if stationStorePaxs:
+            pax = stationStorePaxs[0]
+            manual_count = {
+                "current_pax": pax.current_pax,
+                "created_at": pax.created_at.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "modified_at": pax.modified_at.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            }
+
         session_stat.append(
             {
                 "session_id": session_id,
@@ -183,6 +200,7 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
                 "speakers": current_speakers,
                 "check_in": session_check_in,
                 "check_out": session_check_out,
+                "manual_count": manual_count,
             }
         )
     return session_stat
