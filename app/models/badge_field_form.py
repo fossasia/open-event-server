@@ -31,6 +31,7 @@ class BadgeFieldForms(db.Model):
     margin_left = db.Column(db.Integer, nullable=True)
     margin_right = db.Column(db.Integer, nullable=True)
     qr_custom_field = db.Column(ARRAY(String), nullable=True)
+    is_field_expanded = db.Column(db.Boolean, nullable=True)
 
     def __repr__(self):
         return f'<BadgeFieldForms {self.id}>'
@@ -56,6 +57,7 @@ class BadgeFieldForms(db.Model):
             'margin_left': self.margin_left,
             'margin_right': self.margin_right,
             'qr_custom_field': self.qr_custom_field,
+            'is_field_expanded': self.is_field_expanded,
         }
 
     def get_badge_field(self):
