@@ -9,6 +9,7 @@ import requests
 from app.api.helpers.db import get_new_identifier, get_or_create
 from app.models import db
 from app.models.event import Event
+from app.models.microlocation import Microlocation
 from app.models.user import User
 from app.settings import get_settings
 
@@ -96,14 +97,20 @@ class RocketChat:
             )
             raise RocketChatException('Error while registration', response=res)
 
-    def get_token(self, user: User, event: Optional[Event] = None, retried=False):
+    def get_token(
+        self,
+        user: User,
+        event: Optional[Event] = None,
+        retried=False,
+        microlocation: Optional[Microlocation] = None,
+    ):
         if user.rocket_chat_token:
             res = requests.post(self.login_url, json=dict(resume=user.rocket_chat_token))
 
             data = res.json()
             if res.status_code == 200:
                 if event:
-                    self.add_in_room(event, data['data']['userId'])
+                    self.add_in_room(event, data['data']['userId'], microlocation)
                 return dict(method='resumed', token=user.rocket_chat_token, res=data)
             elif res.status_code == 401:
                 # Token Expired. Login again
@@ -145,14 +152,18 @@ class RocketChat:
 
         return bot_user
 
-    def create_room(self, event: Event, data):
+    def create_room(self, event: Event, microlocation: Optional[Microlocation], data):
         bot_token = data['token']
         bot_id = data['res']['data']['userId']
+        if microlocation:
+            chat_room_name = microlocation.chat_room_name
+        else:
+            chat_room_name = event.chat_room_name
 
         res = requests.post(
             self.api_url + '/api/v1/groups.create',
             json=dict(
-                name=event.chat_room_name,
+                name=chat_room_name,
                 members=[bot_id],
             ),
             headers={
@@ -165,20 +176,31 @@ class RocketChat:
             raise RocketChatException('Error while creating room', response=res)
         else:
             group_data = res.json()
-            event.chat_room_id = group_data['group']['_id']
-            db.session.add(event)
+            if microlocation:
+                microlocation.chat_room_id = group_data['group']['_id']
+                db.session.add(microlocation)
+            else:
+                event.chat_room_id = group_data['group']['_id']
+                db.session.add(event)
             db.session.commit()
 
-    def add_in_room(self, event: Event, rocket_user_id):
+    def add_in_room(
+        self, event: Event, rocket_user_id, microlocation: Optional[Microlocation] = None
+    ):
         bot = self.check_or_create_bot()
         data = self.get_token(bot)
 
-        if not event.chat_room_id:
-            self.create_room(event, data)
+        if (not event.chat_room_id) or (microlocation and not microlocation.chat_room_id):
+            self.create_room(event=event, microlocation=microlocation, data=data)
+
+        if microlocation:
+            chat_room_id = microlocation.chat_room_id
+        else:
+            chat_room_id = event.chat_room_id
 
         bot_token = data['token']
         bot_id = data['res']['data']['userId']
-        room_info = {'roomId': event.chat_room_id, 'userId': rocket_user_id}
+        room_info = {'roomId': chat_room_id, 'userId': rocket_user_id}
 
         res = requests.post(
             self.api_url + '/api/v1/groups.invite',
@@ -198,7 +220,11 @@ def generate_pass(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def get_rocket_chat_token(user: User, event: Optional[Event] = None):
+def get_rocket_chat_token(
+    user: User,
+    event: Optional[Event] = None,
+    microlocation: Optional[Microlocation] = None,
+):
     settings = get_settings()
     if not (api_url := settings['rocket_chat_url']):
         raise RocketChatException(
@@ -206,7 +232,7 @@ def get_rocket_chat_token(user: User, event: Optional[Event] = None):
         )
 
     rocket_chat = RocketChat(api_url)
-    return rocket_chat.get_token(user, event)
+    return rocket_chat.get_token(user, event, microlocation=microlocation)
 
 
 def rename_rocketchat_room(event: Event):

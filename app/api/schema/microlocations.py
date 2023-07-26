@@ -28,7 +28,9 @@ class MicrolocationSchema(SoftDeletionSchema):
     floor = fields.Integer(allow_none=True)
     hidden_in_scheduler = fields.Boolean(default=False)
     # chat_room_id = fields.Str(dump_only=True, allow_none=True)
+    chat_room_name = fields.Str(dump_only=True)
     is_chat_enabled = fields.Boolean(default=False, allow_none=True)
+    is_global_event_room = fields.Boolean(default=False, allow_none=True)
     position = fields.Integer(allow_none=True, default=0)
     room = fields.Str(allow_none=True)
     sessions = Relationship(
