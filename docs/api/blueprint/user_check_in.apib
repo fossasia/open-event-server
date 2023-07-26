@@ -1,0 +1,46 @@
+# Group Users Check In
+
+For using the API you need(mostly) to register as an user check in. Registering gives you access to all non admin API endpoints. After registration, you need to create your JWT access token to send requests to the API endpoints.
+
+
+## Get Registration Stats [/v1/user-check-in/stats/event/{event_id}?session_ids=1]
++ Parameters
+    + event_id: 1 (integer) - ID of the event in the form of an integer
+
+
+### Get Registration Stats [GET]
+Get registration stats.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "session_stats": [
+                {
+                    "check_in": 0,
+                    "check_out": 0,
+                    "manual_count": {},
+                    "session_id": "1",
+                    "session_name": "example",
+                    "speakers": [],
+                    "track_name": "example"
+                }
+            ],
+            "total_attendee": 0,
+            "total_not_checked_in": 0,
+            "total_registered": 0,
+            "total_session_checked_in": 0,
+            "total_session_checked_out": 0,
+            "total_track_checked_in": 0,
+            "total_track_checked_out": 0,
+            "track_stats": []
+        }
