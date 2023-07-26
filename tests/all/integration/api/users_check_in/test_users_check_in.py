@@ -4,6 +4,7 @@ from tests.factories.speaker import SpeakerFactory
 
 
 def test_get_registration_stats(db, client, jwt):
+    """Test get registration stats endpoint."""
     speaker = SpeakerFactory()
     db.session.add(speaker)
     db.session.commit()
