@@ -24,7 +24,7 @@ class VideoChannelListPost(ResourceList):
 class VideoChannelList(ResourceList):
     """List of Video Channels"""
 
-    def before_get(self, args, kwargs):
+    def before_get(self, unused_args, unused_kwargs):
         """Providing the requester with the (public) video channel schema"""
         if is_logged_in() and has_access('is_admin'):
             self.schema = VideoChannelSchema
@@ -42,7 +42,7 @@ class VideoChannelList(ResourceList):
 class VideoChannelDetail(ResourceDetail):
     """Details of Video Channel"""
 
-    def before_get(self, args, kwargs):
+    def before_get(self, unused_args, kwargs):
         """
         Providing the requester with the (public) video channel schema,
         as well as further details.
