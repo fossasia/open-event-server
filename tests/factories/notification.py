@@ -31,6 +31,5 @@ class NotificationActorSubFactory(BaseFactory):
 
 
 class NotificationSubFactory(NotificationFactoryBase):
-
     user = factory.SubFactory(UserFactory)
     content = factory.SubFactory(NotificationContentSubFactory)

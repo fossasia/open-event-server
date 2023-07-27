@@ -135,7 +135,6 @@ class UserCheckInListPost(ResourceList):
             STATION_TYPE.get('check in'),
             STATION_TYPE.get('check out'),
         ):
-
             attendee_check_in_status = (
                 self.session.query(UserCheckIn)
                 .filter(

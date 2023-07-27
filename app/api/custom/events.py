@@ -125,7 +125,7 @@ def reorder_speakers(event_id):
 
     result = group_by(data, 'order')
     updates = {}
-    for (order, items) in result.items():
+    for order, items in result.items():
         speaker_ids = {item['speaker'] for item in items}
         result = Speaker.query.filter(Speaker.id.in_(speaker_ids)).update(
             {Speaker.order: order}, synchronize_session=False
@@ -170,7 +170,7 @@ def reorder_exhibitors(event_id):
 
     result = group_by(data, 'position')
     updates = {}
-    for (position, items) in result.items():
+    for position, items in result.items():
         exhibitor_ids = {item['exhibitor'] for item in items}
         result = Exhibitor.query.filter(Exhibitor.id.in_(exhibitor_ids)).update(
             {Exhibitor.position: position}, synchronize_session=False

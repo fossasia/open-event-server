@@ -351,7 +351,7 @@ class EventList(ResourceList):
             )
 
         if view_kwargs.get('group_id') and 'GET' in request.method:
-            group = safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
+            safe_query(Group, 'id', view_kwargs.get('group_id'), 'group_id')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'group_id') == view_kwargs['group_id']
             )

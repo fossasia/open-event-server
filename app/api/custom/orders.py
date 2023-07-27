@@ -184,7 +184,6 @@ def ticket_attendee_pdf(attendee_id):
 
 @order_blueprint.route('/<string:order_identifier>/verify', methods=['POST'])
 def verify_order_payment(order_identifier):
-
     order = Order.query.filter_by(identifier=order_identifier).first()
 
     if order.payment_mode == 'stripe':

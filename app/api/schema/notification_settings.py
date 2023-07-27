@@ -6,7 +6,6 @@ from app.api.helpers.utilities import dasherize
 
 class NotificationSettingSchema(Schema):
     class Meta:
-
         type_ = 'notification-setting'
         self_view = 'v1.notification_setting_detail'
         self_view_kwargs = {'id': '<id>'}

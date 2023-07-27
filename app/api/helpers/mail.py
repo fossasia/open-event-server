@@ -624,7 +624,6 @@ def send_email_to_attendees(order):
 
 
 def send_order_purchase_organizer_email(order, recipients):
-
     order_tickets = OrderTicket.query.filter_by(order_id=order.id).all()
     emails = list({organizer.email for organizer in recipients})
     print(emails[0])
@@ -679,9 +678,7 @@ def send_order_purchase_organizer_email(order, recipients):
 def send_order_cancel_email(order):
     cancel_msg = ''
     if order.cancel_note:
-        cancel_msg = "<br/>Message from the organizer: {cancel_note}".format(
-            cancel_note=order.cancel_note
-        )
+        cancel_msg = f"<br/>Message from the organizer: {order.cancel_note}"
 
     order_url = (
         get_settings()['frontend_url'] + '/orders/' + str(order.identifier) + '/view/'

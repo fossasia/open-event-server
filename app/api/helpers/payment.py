@@ -124,7 +124,7 @@ class StripePaymentsManager:
                 automatic_payment_methods={
                     'enabled': True,
                 },
-                description=f"Eventyay {event_name}"
+                description=f"Eventyay {event_name}",
             )
             return payment_intent
 

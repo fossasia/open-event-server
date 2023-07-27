@@ -8,9 +8,9 @@ import sentry_sdk
 import sqlalchemy as sa
 import stripe
 from celery.signals import after_task_publish
-from flask_babel import Babel
 from envparse import env
 from flask import Flask, json, make_response, request
+from flask_babel import Babel
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_login import current_user
@@ -29,6 +29,7 @@ from app.api.helpers.errors import ErrorResponse
 from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.mail_recorder import MailRecorder
 from app.extensions import limiter, shell
+from app.graphql import views as graphql_views
 from app.models import db
 from app.models.utils import add_engine_pidguard, sqlite_datetime_fix
 from app.templates.flask_ext.jinja.filters import init_filters
@@ -39,7 +40,6 @@ from app.views.healthcheck import (
     health_check_migrations,
 )
 from app.views.redis_store import redis_store
-from app.graphql import views as graphql_views
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -139,40 +139,37 @@ def create_app():
     # development api
     with app.app_context():
         from app.api.admin_statistics_api.events import event_statistics
-        from app.api.auth import auth_routes
-        from app.api.custom.attendees import attendee_blueprint
+        from app.api.admin_translations import admin_blueprint
+        from app.api.auth import auth_routes, authorised_blueprint
         from app.api.bootstrap import api_v1
         from app.api.celery_tasks import celery_routes
-        from app.api.event_copy import event_copy
-        from app.api.exports import export_routes
-        from app.api.imports import import_routes
-        from app.api.uploads import upload_routes
-        from app.api.users import user_misc_routes
-        from app.api.orders import order_misc_routes
-        from app.api.role_invites import role_invites_misc_routes
-        from app.api.speaker_invites import speaker_invites_misc_routes
-        from app.api.auth import authorised_blueprint
-        from app.api.admin_translations import admin_blueprint
-        from app.api.orders import alipay_blueprint, stripe_blueprint
-        from app.api.sessions import sessions_blueprint
-        from app.api.settings import admin_misc_routes
-        from app.api.server_version import info_route
-        from app.api.custom.orders import ticket_blueprint
-        from app.api.custom.orders import order_blueprint
-        from app.api.custom.invoices import event_blueprint
-        from app.api.custom.calendars import calendar_routes
-        from app.api.tickets import tickets_routes
-        from app.api.custom.role_invites import role_invites_routes
-        from app.api.custom.users_groups_roles import users_groups_roles_routes
-        from app.api.custom.events import events_routes
-        from app.api.custom.groups import groups_routes
-        from app.api.custom.group_role_invite import group_role_invites_routes
-        from app.api.video_stream import streams_routes
-        from app.api.events import events_blueprint
+        from app.api.custom.attendees import attendee_blueprint
         from app.api.custom.badge_forms import badge_forms_routes
+        from app.api.custom.calendars import calendar_routes
+        from app.api.custom.events import events_routes
+        from app.api.custom.group_role_invite import group_role_invites_routes
+        from app.api.custom.groups import groups_routes
+        from app.api.custom.invoices import event_blueprint
+        from app.api.custom.orders import order_blueprint, ticket_blueprint
+        from app.api.custom.role_invites import role_invites_routes
         from app.api.custom.tickets import ticket_routes
         from app.api.custom.users import users_routes
         from app.api.custom.users_check_in import users_check_in_routes
+        from app.api.custom.users_groups_roles import users_groups_roles_routes
+        from app.api.event_copy import event_copy
+        from app.api.events import events_blueprint
+        from app.api.exports import export_routes
+        from app.api.imports import import_routes
+        from app.api.orders import alipay_blueprint, order_misc_routes, stripe_blueprint
+        from app.api.role_invites import role_invites_misc_routes
+        from app.api.server_version import info_route
+        from app.api.sessions import sessions_blueprint
+        from app.api.settings import admin_misc_routes
+        from app.api.speaker_invites import speaker_invites_misc_routes
+        from app.api.tickets import tickets_routes
+        from app.api.uploads import upload_routes
+        from app.api.users import user_misc_routes
+        from app.api.video_stream import streams_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)

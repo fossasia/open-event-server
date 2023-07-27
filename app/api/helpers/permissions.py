@@ -159,7 +159,6 @@ def to_event_id(func):
 
     @wraps(func)
     def decorated_function(*args, **kwargs):
-
         if 'event_identifier' in kwargs:
             if not kwargs['event_identifier'].isdigit():
                 event = (

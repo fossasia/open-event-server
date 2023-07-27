@@ -295,9 +295,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
     speaker = Speaker.query.get(speaker_id)
     try:
         logging.info(
-            'Speaker image resizing tasks started for speaker with id {}'.format(
-                speaker_id
-            )
+            f'Speaker image resizing tasks started for speaker with id {speaker_id}'
         )
         uploaded_images = create_save_image_sizes(photo_url, 'speaker-image', speaker_id)
         speaker.small_image_url = uploaded_images['small_image_url']
@@ -726,7 +724,6 @@ def export_admin_sales_csv_task(self, status='all'):
 
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
 def export_speakers_csv_task(self, event_id, status='all'):
-
     if status not in [
         'all',
         'pending',
@@ -832,7 +829,6 @@ def rename_chat_room(event_id):
 
 @celery.task(base=RequestContextTask, name='export.group.followers.csv', bind=True)
 def export_group_followers_csv_task(self, group_id):
-
     followers = UserFollowGroup.query.filter_by(group_id=group_id).all()
 
     try:
