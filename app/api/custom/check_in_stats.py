@@ -86,6 +86,7 @@ def get_registration_stats(event_id):
         Session.id.in_(
             [user_check_in.session_id for user_check_in in session_checked_in]
         ),
+        UserCheckIn.station_id.in_(check_in_stations),
         Session.id == UserCheckIn.session_id,
         UserCheckIn.created_at >= current_time,
     )
@@ -100,6 +101,7 @@ def get_registration_stats(event_id):
         Session.id.in_(
             [user_check_in.session_id for user_check_in in session_checked_out]
         ),
+        UserCheckIn.station_id.in_(check_out_stations),
         UserCheckIn.session_id == Session.id,
         UserCheckIn.created_at >= current_time,
     )
