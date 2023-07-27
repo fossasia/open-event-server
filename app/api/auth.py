@@ -466,3 +466,30 @@ def requires_basic_auth(f):
 def environment_details():
     envdump = EnvironmentDump(include_config=False)
     return envdump.dump_environment()
+
+
+@auth_routes.route('/verify-password', methods=['POST'])
+@jwt_required
+def verify_password():
+    data = request.get_json()
+    password = data.get('password')
+
+    if not all([current_user.id, password]):
+        logging.error('user or password missing')
+        return jsonify(error='user or password missing'), 400
+
+    try:
+        user = User.query.filter_by(id=current_user.id).one()
+    except NoResultFound:
+        logging.info('User Not Found')
+        raise NotFoundError({'source': ''}, 'User Not Found')
+
+    result = False
+    if user.is_correct_password(password):
+        result = True
+
+    return jsonify(
+        {
+            "result": result,
+        }
+    )

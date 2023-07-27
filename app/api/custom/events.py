@@ -15,6 +15,7 @@ from app.models.event import Event
 from app.models.exhibitor import Exhibitor
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.ticket_holder import TicketHolder
 
 events_routes = Blueprint('events_routes', __name__, url_prefix='/v1/events')
 
@@ -193,3 +194,23 @@ def delete_unused_discount_codes(event_id):
     db.session.commit()
 
     return jsonify({'success': True, 'deletes': result})
+
+
+@events_routes.route('/<string:event_identifier>/attendees/search', methods=['GET'])
+@to_event_id
+@jwt_required
+def search_attendees(event_id):
+    """Search attendees by name or email."""
+    query = TicketHolder.query.filter(TicketHolder.event_id == event_id)
+    args = request.args
+    if args.get('name'):
+        query = query.filter(
+            (TicketHolder.firstname.ilike('%' + args.get('name') + '%'))
+            | (TicketHolder.lastname.ilike('%' + args.get('name') + '%'))
+        )
+    if args.get('email'):
+        query = query.filter(TicketHolder.email.ilike('%' + args.get('email') + '%'))
+
+    attendees = query.order_by(TicketHolder.id.desc()).all()
+
+    return jsonify({'attendees': attendees})
