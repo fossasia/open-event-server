@@ -51,7 +51,10 @@ from tests.factories.tax import TaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
-from tests.factories.attendee import AttendeeFactory, AttendeeOrderSubFactory
+from tests.factories.attendee import (
+    AttendeeFactory,
+    AttendeeOrderSubFactory,
+)
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
 from tests.factories.ticket_tag import TicketTagFactory
@@ -828,7 +831,7 @@ def group_get_list(transaction):
 
 
 @hooks.before("Group > Groups under an User > List All Groups under an User")
-def group_get_list_from_users(transaction):
+def group_get_list_from_user(transaction):
     """
     GET /users/1/groups
     :param transaction:
@@ -3592,7 +3595,6 @@ def image_upload_post(transaction):
     :param transaction:
     :return:
     """
-    pass
 
 
 @hooks.before("Upload > File Upload > Upload a File")
@@ -4969,4 +4971,19 @@ def exhibitor_delete(transaction):
     """
     with stash['app'].app_context():
         ExhibitorFactory()
+        db.session.commit()
+
+
+@hooks.before(
+    "Attendees > Search Attendees under an event > Search All Attendees under an event"
+)
+def search_attendees_from_event(transaction):
+    """
+    GET /v1/events/{event_id}/attendees/search
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
