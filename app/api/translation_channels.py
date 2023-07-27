@@ -36,7 +36,7 @@ class TranslationChannelsList(ResourceList):
             records = self.session.query(TranslationChannel).filter_by(
                 video_stream_id=stream_id
             )
-            return records
+        return records
 
     methods = ["GET"]
     schema = TranslationChannelSchema

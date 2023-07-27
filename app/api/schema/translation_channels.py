@@ -1,10 +1,12 @@
-
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship, Schema
+
 from app.api.helpers.utilities import dasherize
 
 
 class TranslationChannelSchema(Schema):
+    """Schema of Translation Channel objects"""
+
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True)
     url = fields.String(required=True)

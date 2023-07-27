@@ -10,6 +10,7 @@ from app.models.video_stream import VideoStream
 
 
 class VideoChannelListPost(ResourceList):
+    """Post to Video Channel List"""
 
     methods = ['POST']
     decorators = (api.has_permission('is_admin', methods="POST"),)
@@ -21,7 +22,10 @@ class VideoChannelListPost(ResourceList):
 
 
 class VideoChannelList(ResourceList):
+    """List of Video Channels"""
+
     def before_get(self, args, kwargs):
+        """Providing the requester with the (public) video channel schema"""
         if is_logged_in() and has_access('is_admin'):
             self.schema = VideoChannelSchema
         else:
@@ -36,7 +40,13 @@ class VideoChannelList(ResourceList):
 
 
 class VideoChannelDetail(ResourceDetail):
+    """Details of Video Channel"""
+
     def before_get(self, args, kwargs):
+        """
+        Providing the requester with the (public) video channel schema,
+        as well as further details.
+        """
         if is_logged_in() and has_access('is_admin'):
             self.schema = VideoChannelSchema
         else:
