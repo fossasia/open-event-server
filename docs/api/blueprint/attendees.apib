@@ -244,6 +244,60 @@ Get a list of attendees of an event.
           }
         }
 
+## Search Attendees under an event [/v1/events/{event_id}/attendees/search]
++ Parameters
+    + event_id: 1 (integer) - Identifier of the event
+
+### Search All Attendees under an event [GET]
+Search a list of attendees of an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+    {
+      "attendees": [
+        {
+          "facebook": null,
+          "address": "address",
+          "ticket-id": "31",
+          "is-checked-out": null,
+          "checkout-times": null,
+          "job-title": null,
+          "deleted-at": null,
+          "work-address": null,
+          "checkin-times": null,
+          "state": "example",
+          "country": "IN",
+          "lastname": "UnDoe",
+          "city": "example",
+          "phone": null,
+          "company": null,
+          "is-checked-in": false,
+          "gender": null,
+          "shipping-address": null,
+          "blog": null,
+          "firstname": "John",
+          "website": null,
+          "billing-address": null,
+          "pdf-url": null,
+          "tax-business-info": null,
+          "home-address": null,
+          "work-phone": null,
+          "birth-date": null,
+          "github": null,
+          "twitter": null,
+          "email": "johndoe@example.com",
+          "attendee-notes": null
+        }
+      ]
+    }
+
 ## List Attendees under a ticket [/v1/tickets/{ticket_id}/attendees]
 + Parameters
     + ticket_id: 1 (integer) - Identifier of the event
@@ -535,3 +589,4 @@ Delete a single attendee.
             "version": "1.0"
           }
         }
+            
