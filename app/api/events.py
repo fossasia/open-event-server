@@ -129,6 +129,12 @@ def get_chat_token(event_id: int):
 @jwt_required
 @to_event_id
 def get_room_chat_token(event_id: int, microlocation_id: int):
+    """
+    Get room chat token for specific room
+    @param event_id: event identifier
+    @param microlocation_id: microlocation id
+    @return: room chat token
+    """
     event = Event.query.get_or_404(event_id)
     microlocation = Microlocation.query.get_or_404(microlocation_id)
 
@@ -147,14 +153,13 @@ def get_room_chat_token(event_id: int, microlocation_id: int):
     except RocketChatException as rce:
         if rce.code == RocketChatException.CODES.DISABLED:
             return jsonify({'success': False, 'code': rce.code})
-        else:
-            return jsonify(
-                {
-                    'success': False,
-                    'code': rce.code,
-                    'response': rce.response is not None and rce.response.json(),
-                }
-            )
+        return jsonify(
+            {
+                'success': False,
+                'code': rce.code,
+                'response': rce.response is not None and rce.response.json(),
+            }
+        )
 
 
 def validate_event(user, data):
