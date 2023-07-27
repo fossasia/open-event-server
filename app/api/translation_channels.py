@@ -15,6 +15,7 @@ from app.models.video_stream import VideoStream
 class TranslationChannelsList(ResourceList):
     """Get list of Translation Channels"""
 
+    @staticmethod
     def before_get(self, unused_args, kwargs):
         """Function called when requesting Translation Channels List"""
         stream_id = kwargs.get("video_stream_id")
@@ -51,6 +52,7 @@ class TranslationChannelsList(ResourceList):
 class TranslationChannelsListPost(ResourceList):
     """Post a list of Translation Channels"""
 
+    @staticmethod
     def before_post(self, unused_args, unused_kwargs, data):
         """Function called when posting to the Translation Channel List"""
         require_relationship(['video_stream', 'channel'], data)
