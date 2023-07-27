@@ -1,4 +1,3 @@
 #!/bin/sh
-pycln --config pyproject.toml .
-isort .
+ruff .
 black .
