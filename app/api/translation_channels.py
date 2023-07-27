@@ -16,7 +16,7 @@ class TranslationChannelsList(ResourceList):
     """Get list of Translation Channels"""
 
     @staticmethod
-    def before_get(self, unused_args, kwargs):
+    def before_get(kwargs):
         """Function called when requesting Translation Channels List"""
         stream_id = kwargs.get("video_stream_id")
         if stream_id:
@@ -37,7 +37,9 @@ class TranslationChannelsList(ResourceList):
             records = self.session.query(TranslationChannel).filter_by(
                 video_stream_id=stream_id
             )
-        return records
+            return records
+        else:
+            return None
 
     methods = ["GET"]
     schema = TranslationChannelSchema
@@ -53,7 +55,7 @@ class TranslationChannelsListPost(ResourceList):
     """Post a list of Translation Channels"""
 
     @staticmethod
-    def before_post(self, unused_args, unused_kwargs, data):
+    def before_post(data):
         """Function called when posting to the Translation Channel List"""
         require_relationship(['video_stream', 'channel'], data)
         video_stream = db.session.query(
