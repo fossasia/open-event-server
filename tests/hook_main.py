@@ -5054,6 +5054,8 @@ def get_station_store_pax_by_station_session(transaction):
             station=station,
             session=session,
         )
+        db.session.add(station)
+        db.session.add(session)
         db.session.commit()
 
 
@@ -5107,4 +5109,5 @@ def get_stations_by_event(transaction):
             event=event,
             microlocation=microlocation,
         )
+        db.session.add(event)
         db.session.commit()
