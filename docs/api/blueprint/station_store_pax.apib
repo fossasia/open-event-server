@@ -1,0 +1,69 @@
+# Group Station Store Paxs
+
+## Create Station Store Paxs [/v1/station-store-paxs]
+
+### Create Station Store Paxs [GET]
+Create station store paxs.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "type": "station-store-pax",
+                "relationships": {
+                      "station": {
+                        "data": {
+                          "type": "station",
+                          "id": "1"
+                        }
+                      },
+                      "session": {
+                        "data": {
+                          "type": "session",
+                          "id": "1"
+                        }
+                      }
+                    },
+                "attributes": {
+                      "current_pax": "10"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "type": "station-store-pax",
+            "id": "1",
+            "attributes": {
+              "current_pax": "10"
+            }
+            "relationships": {
+              "station": {
+                "links": {
+                  "self": "/v1/station-store-paxs/1/relationships/station",
+                  "related": "/v1/station-store-paxs/1/station"
+                }
+              },
+              "session": {
+                "links": {
+                  "self": "/v1/station-store-paxs/1/relationships/session",
+                  "related": "/v1/station-store-paxs/1/session"
+                }
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/station-store-paxs/1"
+            }
+          }
+        }

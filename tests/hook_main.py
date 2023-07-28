@@ -29,7 +29,7 @@ from tests.factories.notification import NotificationSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
-from tests.factories.microlocation import MicrolocationFactory
+from tests.factories.microlocation import MicrolocationFactory, MicrolocationSubFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from tests.factories.page import PageFactory
 from tests.factories.event_copyright import EventCopyrightFactory
@@ -50,7 +50,8 @@ from tests.factories.event_role_permission import EventRolePermissionsFactory
 from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
-from tests.factories.session import SessionFactory, SessionFactoryBasic
+from tests.factories.station import StationFactory
+from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
@@ -4998,5 +4999,29 @@ def get_badge_form_by_ticket(transaction):
         BadgeFieldFormFactory(
             badge_form=badge_form,
             badge_id=ticket.badge_id,
+        )
+        db.session.commit()
+
+
+@hooks.before(
+    "Station Store Paxs > Create Station Store Paxs > Create Station Store Paxs"
+)
+def get_badge_form_by_ticket(transaction):
+    """
+    GET /v1/events/{event_id}/attendees/search
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
         )
         db.session.commit()
