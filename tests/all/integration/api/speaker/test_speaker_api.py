@@ -104,7 +104,7 @@ def test_edit_speaker_required_fields_missing(db, client, user, jwt):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['mobile', 'speaking_experience']",
+                'detail': "Missing required fields ['mobile', 'Speaking Experience']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
