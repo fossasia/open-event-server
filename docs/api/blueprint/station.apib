@@ -81,37 +81,37 @@ Get station.
 + Response 200 (application/json)
 
         {
-            "data": {
-                "type": "station",
-                "relationships": {
-                    "microlocation": {
-                        "links": {
-                            "self": "/v1/stations/1/relationships/microlocation"
-                        }
-                    },
-                    "event": {
-                        "links": {
-                            "self": "/v1/stations/1/relationships/event",
-                            "related": "/v1/events/1"
-                        }
-                    }
-                },
-                "attributes": {
-                    "station-type": "example",
-                    "station-name": "example"
-                },
-                "id": 1,
-                "links": {
-                    "self": "/v1/stations/1"
-                }
-            },
-            "links": {
-                "self": "/v1/stations/1"
-            },
-            "jsonapi": {
-                "version": "1.0"
-            }
-        }
+          "data": {
+              "type": "station",
+              "attributes": {
+                  "station-type": "example",
+                  "station-name": "example"
+              },
+              "relationships": {
+                  "event": {
+                      "links": {
+                          "self": "/v1/stations/1/relationships/event",
+                          "related": "/v1/events/1"
+                      }
+                  },
+                  "microlocation": {
+                      "links": {
+                          "self": "/v1/stations/1/relationships/microlocation"
+                      }
+                  }
+              },
+              "id": 1,
+              "links": {
+                  "self": "/v1/stations/1"
+              }
+          },
+          "links": {
+              "self": "/v1/stations/1"
+          },
+          "jsonapi": {
+              "version": "1.0"
+          }
+      }
 
 ## Get Stations by Event [/v1/events/{event_id}/stations]
 + Parameters
