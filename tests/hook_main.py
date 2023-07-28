@@ -3,9 +3,6 @@ import sys
 
 import dredd_hooks as hooks
 import requests
-from tests.factories.badge_field_form import BadgeFieldFormFactory
-
-from tests.factories.badge_form import BadgeFormFactory
 
 # DO NOT REMOVE THIS. This adds the project root for successful imports.
 # Imports from the project directory should be placed only below this
@@ -23,6 +20,8 @@ from app.api import routes  # noqa Workaround for importing all required models
 # imports from factories
 
 from tests.factories.event_location import EventLocationFactory
+from tests.factories.badge_field_form import BadgeFieldFormFactory
+from tests.factories.badge_form import BadgeFormFactory
 from tests.factories.custom_system_role import CustomSysRoleFactory
 from tests.factories.panel_permission import PanelPermissionFactory
 from tests.factories.user import UserFactory
