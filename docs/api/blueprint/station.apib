@@ -17,15 +17,15 @@ Create station.
             "data": {
               "type": "station",
               "attributes": {
-                "station-name": 'station name',
-                "station-type": 'registration'
+                "station-name": "station name",
+                "station-type": "registration"
               },
               "relationships": {
                 "event": {"data": {"id": "1", "type": "event"}},
                 "microlocation": {
                     "data": {"id": "1", "type": "microlocation"}
-                },
-              },
+                }
+              }
             }
           }
 
@@ -67,7 +67,7 @@ Create station.
 
 ## Get Station [/v1/stations/{station_id}]
 + Parameters
-    + station_id: 2 (integer) - ID of the station in the form of an integer
+    + station_id: 1 (integer) - ID of the station in the form of an integer
 
 ### Get Station [GET]
 Get station.
@@ -103,14 +103,14 @@ Get station.
               },
               "id": 2,
               "links": {
-                  "self": "/v1/station/2"
+                "self": "/v1/station/2"
               }
           },
           "links": {
-              "self": "/v1/station/2"
+            "self": "/v1/station/2"
           },
           "jsonapi": {
-              "version": "1.0"
+            "version": "1.0"
           }
         }
 
