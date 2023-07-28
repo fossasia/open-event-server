@@ -51,7 +51,6 @@ from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
 from tests.factories.station import StationFactory
-from tests.factories.station_store_pax import StationStorePaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
@@ -5038,22 +5037,7 @@ def get_station_store_pax_by_station_session(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        microlocation = MicrolocationSubFactory(
-            event=event,
-        )
-        station = StationFactory(
-            event=event, microlocation=microlocation, station_type='registration'
-        )
-        session = SessionSubFactory(
-            event=event,
-            microlocation=microlocation,
-        )
-        StationStorePaxFactory(
-            current_pax=10,
-            station=station,
-            session=session,
-        )
+        EventFactoryBasic()
         db.session.commit()
 
 
@@ -5075,7 +5059,7 @@ def create_station(transaction):
 @hooks.before("Stations > Get Station > Get Station")
 def get_station(transaction):
     """
-    GET /v1/station/{station_id}
+    GET /v1/stations/{station_id}
     :param transaction:
     :return:
     """
@@ -5099,12 +5083,5 @@ def get_stations_by_event(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        microlocation = MicrolocationSubFactory(
-            event=event,
-        )
-        StationFactory(
-            event=event,
-            microlocation=microlocation,
-        )
+        EventFactoryBasic()
         db.session.commit()
