@@ -75,8 +75,8 @@ Create station store paxs.
 
 ## Get Station Store Paxs By Station and Session [/v1/stations/{station_id}/sessions/{session_id}/station-store-paxs]
 + Parameters
-    + station_id: 1 (integer) - ID of the station in the form of an integer
-    + session_id: 1 (integer) - ID of the session in the form of an integer
+    + station_id: 2 (integer) - ID of the station in the form of an integer
+    + session_id: 2 (integer) - ID of the session in the form of an integer
 
 ### Get Station Store Paxs By Station and Session [GET]
 Get station store paxs By station and session.
@@ -95,14 +95,14 @@ Get station store paxs By station and session.
               "relationships": {
                   "session": {
                       "links": {
-                          "self": "/v1/station-store-paxs/1/relationships/session",
-                          "related": "/v1/sessions/1"
+                          "self": "/v1/station-store-paxs/2/relationships/session",
+                          "related": "/v1/sessions/2"
                       }
                   },
                   "station": {
                       "links": {
-                          "self": "/v1/station-store-paxs/1/relationships/station",
-                          "related": "/v1/stations/1"
+                          "self": "/v1/station-store-paxs/2/relationships/station",
+                          "related": "/v1/stations/2"
                       }
                   }
               },
@@ -111,15 +111,18 @@ Get station store paxs By station and session.
                   "modified-at": "2023-07-28T04:30:48.251435+00:00",
                   "created-at": "2023-07-28T04:30:48.251430+00:00"
               },
-              "id": 1,
+              "id": 2,
               "links": {
-                  "self": "/v1/station-store-paxs/1"
+                  "self": "/v1/station-store-paxs/2"
               }
           },
           "links": {
-              "self": "/v1/station-store-paxs/1"
+              "self": "/v1/station-store-paxs/2"
+          },
+          "meta": {
+            "count": 1
           },
           "jsonapi": {
-              "version": "1.0"
+            "version": "1.0"
           }
         }

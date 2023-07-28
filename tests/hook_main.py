@@ -5033,7 +5033,7 @@ def create_station_store_pax(transaction):
 )
 def get_station_store_pax_by_station_session(transaction):
     """
-    POST /v1/station-store-paxs
+    GET /v1/stations/{station_id}/sessions/{session_id}/station-store-paxs
     :param transaction:
     :return:
     """
@@ -5060,11 +5060,51 @@ def get_station_store_pax_by_station_session(transaction):
 @hooks.before("Stations > Create Station > Create Station")
 def create_station(transaction):
     """
-    POST /v1/station-store-paxs
+    POST /v1/station
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        EventFactoryBasic()
-        MicrolocationFactory()
+        event = EventFactoryBasic()
+        MicrolocationSubFactory(
+            event=event,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Get Station > Get Station")
+def get_station(transaction):
+    """
+    GET /v1/station/{station_id}
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Get Stations by Event > Get Stations by Event")
+def get_stations_by_event(transaction):
+    """
+    GET /v1/events/{event_id}/stations
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event,
+            microlocation=microlocation,
+        )
         db.session.commit()
