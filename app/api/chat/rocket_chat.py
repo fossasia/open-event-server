@@ -193,7 +193,7 @@ class RocketChat:
         if (not event.chat_room_id) or (microlocation and not microlocation.chat_room_id):
             self.create_room(event=event, microlocation=microlocation, data=data)
 
-        if microlocation:
+        if microlocation is not None:
             chat_room_id = microlocation.chat_room_id
         else:
             chat_room_id = event.chat_room_id

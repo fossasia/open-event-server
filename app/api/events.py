@@ -144,7 +144,7 @@ def get_room_chat_token(event_id: int, microlocation_id: int):
     if not event.is_chat_enabled:
         raise NotFoundError({'source': ''}, 'Chat Not Enabled')
 
-    if not microlocation.is_chat_enabled:
+    if not microlocation.is_chat_enabled and not microlocation.is_global_event_room:
         raise NotFoundError({'source': ''}, 'Chat Not Enabled For This Room')
 
     try:
