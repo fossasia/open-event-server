@@ -5006,7 +5006,7 @@ def get_badge_form_by_ticket(transaction):
 @hooks.before(
     "Station Store Paxs > Create Station Store Paxs > Create Station Store Paxs"
 )
-def get_badge_form_by_ticket(transaction):
+def create_station_store_pax(transaction):
     """
     GET /v1/events/{event_id}/attendees/search
     :param transaction:
