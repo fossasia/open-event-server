@@ -5039,19 +5039,16 @@ def get_station_store_pax_by_station_session(transaction):
     """
     with stash['app'].app_context():
         event = EventFactoryBasic()
-        db.session.commit()
         microlocation = MicrolocationSubFactory(
             event=event,
         )
         station = StationFactory(
             event=event, microlocation=microlocation, station_type='registration'
         )
-        db.session.commit()
         session = SessionSubFactory(
             event=event,
             microlocation=microlocation,
         )
-        db.session.commit()
         StationStorePaxFactory(
             current_pax=10,
             station=station,
@@ -5103,11 +5100,9 @@ def get_stations_by_event(transaction):
     """
     with stash['app'].app_context():
         event = EventFactoryBasic()
-        db.session.commit()
         microlocation = MicrolocationSubFactory(
             event=event,
         )
-        db.session.commit()
         StationFactory(
             event=event,
             microlocation=microlocation,

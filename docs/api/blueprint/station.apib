@@ -78,7 +78,7 @@ Get station.
 
             Authorization: JWT <Auth Key>
 
-+ Response 200 (application/json)
++ Response 200 (application/vnd.api+json)
 
         {
           "data": {
@@ -129,40 +129,14 @@ Get Stations by event.
 + Response (application/json)
 
     {
-        "meta": {
-            "count": 1
-        },
-        "data": [
-            {
-              "type": "station",
-              "relationships": {
-                "event": {
-                    "links": {
-                        "self": "/v1/station/1/relationships/event",
-                        "related": "/v1/station/1"
-                    }
-                },
-                "microlocation": {
-                    "links": {
-                        "self": "/v1/station/1/relationships/microlocation",
-                        "related": "/v1/station/1"
-                    }
-                }
-              },
-              "attributes": {
-                "station-name": "station name",
-                "station-type": "registration"
-              },
-              "id": 1,
-              "links": {
-                  "self": "/v1/station/1"
-              }
-            }
-        ],
-        "jsonapi": {
-            "version": "1.0"
-        },
-        "links": {
-            "self": "/v1/events/1/custom-forms"
-        }
+      "data": [],
+      "links": {
+          "self": "/v1/events/1/stations"
+      },
+      "meta": {
+          "count": 0
+      },
+      "jsonapi": {
+          "version": "1.0"
+      }
     }
