@@ -1,9 +1,9 @@
 import os.path as path
 import sys
-from app.models.badge_field_form import BadgeFieldForms
 
 import dredd_hooks as hooks
 import requests
+from tests.factories.badge_field_form import BadgeFieldFormFactory
 
 from tests.factories.badge_form import BadgeFormFactory
 
@@ -4996,7 +4996,7 @@ def get_badge_form_by_ticket(transaction):
             event=event,
             badge_id=ticket.badge_id,
         )
-        BadgeFieldForms(
+        BadgeFieldFormFactory(
             badge_form=badge_form,
             badge_id=ticket.badge_id,
         )

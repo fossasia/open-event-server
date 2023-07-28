@@ -1,7 +1,8 @@
 import json
 
+from app.models.badge_field_form import BadgeFieldForms
 from tests.factories import common
-from tests.factories.badge_field_form import BadgeFieldForms
+from tests.factories.badge_field_form import BadgeFieldFormFactory
 from tests.factories.badge_form import BadgeFormFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.ticket import TicketFactory
@@ -18,7 +19,7 @@ def test_get_badge_form_by_ticket(db, client, jwt):
         event=event,
         badge_id=ticket.badge_id,
     )
-    BadgeFieldForms(
+    BadgeFieldFormFactory(
         badge_form=badge_form,
         badge_id=ticket.badge_id,
     )
