@@ -8,3 +8,26 @@ Badge Forms related to the events.
 | `badge-id` | Badge Id | string | **yes** |
 | `badge-image-url` | Badge Image Url | String | - |
 | `badge-orientation` | Badge Orientation | String | - |
+
+## Get Badge Form By Ticket [/v1/events/{event_id}/badge-forms]
++ Parameters
+  + event_id: 1 (integer) - ID of the event in the form of an integer
+
+### Get Badge Form By Ticket [GET]
+Get badge form.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+    [
+      {
+        "custom_field": "example",
+        "field_identifier": "example",
+        "id": 1
+      }
+    ]

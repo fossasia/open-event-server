@@ -1,8 +1,11 @@
 import os.path as path
 import sys
+from app.models.badge_field_form import BadgeFieldForms
 
 import dredd_hooks as hooks
 import requests
+
+from tests.factories.badge_form import BadgeFormFactory
 
 # DO NOT REMOVE THIS. This adds the project root for successful imports.
 # Imports from the project directory should be placed only below this
@@ -4973,4 +4976,28 @@ def search_attendees_from_event(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Badge Forms > Get Badge Form By Ticket > Get Badge Form By Ticket")
+def get_badge_form_by_ticket(transaction):
+    """
+    GET /v1/events/{event_id}/attendees/search
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        ticket = TicketFactory(
+            event=event,
+            badge_id='example',
+        )
+        badge_form = BadgeFormFactory(
+            event=event,
+            badge_id=ticket.badge_id,
+        )
+        BadgeFieldForms(
+            badge_form=badge_form,
+            badge_id=ticket.badge_id,
+        )
         db.session.commit()
