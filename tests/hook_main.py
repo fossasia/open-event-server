@@ -51,6 +51,7 @@ from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
 from tests.factories.station import StationFactory
+from tests.factories.station_store_pax import StationStorePaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
@@ -4982,7 +4983,7 @@ def search_attendees_from_event(transaction):
 @hooks.before("Badge Forms > Get Badge Form By Ticket > Get Badge Form By Ticket")
 def get_badge_form_by_ticket(transaction):
     """
-    GET /v1/events/{event_id}/attendees/search
+    GET /v1/ticket/{ticket_id}/badge-forms
     :param transaction:
     :return:
     """
@@ -5008,7 +5009,7 @@ def get_badge_form_by_ticket(transaction):
 )
 def create_station_store_pax(transaction):
     """
-    GET /v1/events/{event_id}/attendees/search
+    POST /v1/station-store-paxs
     :param transaction:
     :return:
     """
@@ -5024,4 +5025,46 @@ def create_station_store_pax(transaction):
             event=event,
             microlocation=microlocation,
         )
+        db.session.commit()
+
+
+@hooks.before(
+    "Station Store Paxs > Get Station Store Paxs By Station and Session > Get Station Store Paxs By Station and Session"
+)
+def get_station_store_pax_by_station_session(transaction):
+    """
+    POST /v1/station-store-paxs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        station = StationFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        session = SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        StationStorePaxFactory(
+            current_pax=10,
+            station=station,
+            session=session,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Create Station > Create Station")
+def create_station(transaction):
+    """
+    POST /v1/station-store-paxs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        EventFactoryBasic()
+        MicrolocationFactory()
         db.session.commit()

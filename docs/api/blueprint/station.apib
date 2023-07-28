@@ -1,3 +1,66 @@
 # Group Stations
 
-## Create Station [/v1/tickets/{ticket_id}/badge-forms]
+## Create Station [/v1/station]
+
+### Create Station [POST]
+Create station.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+          {
+            "data": {
+              "type": "station",
+              "attributes": {
+                "station-name": "station name",
+                "station-type": "registration",
+              },
+              "relationships": {
+                "event": {"data": {"id": "1", "type": "event"}},
+                "microlocation": {
+                    "data": {"id": "1", "type": "microlocation"}
+                },
+              },
+            }
+          }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+              "type": "station",
+              "relationships": {
+                  "event": {
+                      "links": {
+                          "self": "/v1/station/1/relationships/event",
+                          "related": "/v1/station/1"
+                      }
+                  },
+                  "microlocation": {
+                      "links": {
+                          "self": "/v1/station/1/relationships/microlocation",
+                          "related": "/v1/station/1"
+                      }
+                  }
+              },
+              "attributes": {
+                "station-name": "station name",
+                "station-type": "registration",
+              },
+              "id": 1,
+              "links": {
+                  "self": "/v1/station/1"
+              }
+          },
+          "links": {
+              "self": "/v1/station/1"
+          },
+          "jsonapi": {
+              "version": "1.0"
+          }
+        }
