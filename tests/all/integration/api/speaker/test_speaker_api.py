@@ -292,7 +292,7 @@ def test_custom_form_complex_fields_missing_required(db, client, user, jwt):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['best_friend', 'heard_from']",
+                'detail': "Missing required fields ['Best Friend', 'Heard From']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
