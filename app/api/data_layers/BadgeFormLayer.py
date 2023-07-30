@@ -50,6 +50,7 @@ class BadgeFormLayer(BaseDataLayer):
                 'margin_right',
                 'qr_custom_field',
                 'is_deleted',
+                'is_field_expanded',
             ]
             for item in data['badge_fields']:
                 badgeFieldForm = BadgeFieldForms()
