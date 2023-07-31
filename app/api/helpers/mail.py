@@ -42,7 +42,6 @@ def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=N
     """
     Sends email and records it in DB
     """
-    print(subject)
     from .tasks import get_smtp_config, send_email_task_sendgrid, send_email_task_smtp
 
     if not MessageSettings.is_enabled(action):
