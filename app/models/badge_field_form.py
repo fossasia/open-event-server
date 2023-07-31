@@ -20,7 +20,7 @@ class BadgeFieldForms(db.Model):
     sample_text = db.Column(db.String, nullable=True)
     font_size = db.Column(db.Integer, nullable=True)
     font_name = db.Column(db.String, nullable=True)
-    font_weight = db.Column(db.Integer, nullable=True)
+    font_weight = db.Column(db.JSON)
     font_color = db.Column(db.String, nullable=True)
     text_rotation = db.Column(db.Integer, nullable=True)
     text_alignment = db.Column(db.String, nullable=True)
