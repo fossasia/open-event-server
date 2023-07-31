@@ -42,6 +42,7 @@ def send_email(to, action, subject, html, attachments=None, bcc=None, reply_to=N
     """
     Sends email and records it in DB
     """
+    print(subject)
     from .tasks import get_smtp_config, send_email_task_sendgrid, send_email_task_smtp
 
     if not MessageSettings.is_enabled(action):
@@ -138,10 +139,11 @@ def send_email_confirmation(email, link):
     """account confirmation"""
     action = MailType.USER_CONFIRM
     mail = MAILS[action]
+    app_name = get_settings()['app_name']
     send_email(
         to=email,
         action=action,
-        subject=mail['subject'],
+        subject=mail['subject'].format(app_name=app_name),
         html=render_template(mail['template'], email=email, link=link),
     )
 
