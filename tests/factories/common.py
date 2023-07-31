@@ -26,6 +26,8 @@ fee_ = 1.23
 average_rating_ = 3
 rating_count_ = 1
 slug_ = factory.Sequence(lambda n: f'example_slug{n}')
+array_ = []
+boolean_ = False
 
 
 def socialUrl_(name):
