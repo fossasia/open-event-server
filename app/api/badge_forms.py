@@ -137,6 +137,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_right = badgeField['margin_right']
                     badgeFieldForm.qr_custom_field = badgeField.get('qr_custom_field')
                     badgeFieldForm.is_deleted = badgeField['is_deleted']
+                    badgeFieldForm.is_field_expanded = badgeField['is_field_expanded']
                     db.session.add(badgeFieldForm)
 
     @staticmethod

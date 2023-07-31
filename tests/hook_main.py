@@ -338,6 +338,19 @@ def user_speaker(transaction):
         db.session.commit()
 
 
+@hooks.before("Users Check In > Get Registration Stats > Get Registration Stats")
+def get_registration_stats(transaction):
+    """
+    GET v1/user-check-in/stats/event/1?session_ids=1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
