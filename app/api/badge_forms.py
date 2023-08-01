@@ -45,6 +45,7 @@ class BadgeFormList(ResourceList):
             badgeFieldForms = (
                 BadgeFieldForms.query.filter_by(badge_form_id=item['id'])
                 .filter_by(badge_id=item['attributes']['badge-id'])
+                .order_by(BadgeFieldForms.id.asc())
                 .all()
             )
             for badgeFieldForm in badgeFieldForms:
