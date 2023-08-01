@@ -58,6 +58,7 @@ from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
     AttendeeFactory,
     AttendeeOrderSubFactory,
+    AttendeeSubFactory,
 )
 from tests.factories.session_type import SessionTypeFactory
 from tests.factories.track import TrackFactory
@@ -5119,5 +5120,34 @@ def get_stations_by_event(transaction):
         StationFactory(
             event=event,
             microlocation=microlocation,
+        )
+        db.session.commit()
+
+
+@hooks.before("Users Check In > Create User Check In > Create User Check In")
+def get_stations_by_event(transaction):
+    """
+    POST /v1/user-check-in
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        ticket = TicketFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        AttendeeSubFactory(
+            event=event,
+            ticket=ticket,
         )
         db.session.commit()
