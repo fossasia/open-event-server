@@ -13,7 +13,7 @@ class BadgeFieldFormSchema(Schema):
     sample_text = fields.String(allow_none=True)
     font_size = fields.Integer(allow_none=True)
     font_name = fields.String(allow_none=True)
-    font_weight = fields.List(fields.Nested(FontWeight, allow_none=True, required=False))
+    font_weight = fields.List(fields.Nested(FontWeight), allow_none=True)
     font_color = fields.String(allow_none=True)
     text_rotation = fields.Integer(allow_none=True)
     text_alignment = fields.String(allow_none=True)
