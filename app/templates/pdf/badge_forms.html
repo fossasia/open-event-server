@@ -11,21 +11,21 @@
         {% for badgeFieldForm in badgeFieldForms %}
             {% if badgeFieldForm.custom_field == 'QR' %}
                 <div id="badge_qr" style="text-align: center;
-                    margin-top:{{badgeFieldForm.margin_top}}mm; 
-                    margin-bottom:{{badgeFieldForm.margin_bottom}}mm; 
-                    margin-left:{{badgeFieldForm.margin_left}}mm; 
+                    margin-top:{{badgeFieldForm.margin_top}}mm;
+                    margin-bottom:{{badgeFieldForm.margin_bottom}}mm;
+                    margin-left:{{badgeFieldForm.margin_left}}mm;
                     margin-right:{{badgeFieldForm.margin_right}}mm;">
                     <img src="data:image/png;base64, {{ badgeFieldForm.sample_text }}" width="400" alt="QR" />
                 </div>
             {% else %}
-                <p class="field-style" 
+                <p class="field-style"
                     style="font-family: {{badgeFieldForm.font_name}};
                     font-size: {{badgeFieldForm.font_size}} px;
                     text-align: center;
                     text-transform: {{badgeFieldForm.text_type}};
-                    font-weight:{{badgeFieldForm.font_weight.font_weight}};
-                    font-style:{{badgeFieldForm.font_weight.font_style}};
-                    text-decoration:{{badgeFieldForm.font_weight.text_decoration}};
+                    font-weight: {{badgeFieldForm.font_weight}};
+                    font-style: {{badgeFieldForm.font_style}};
+                    text-decoration: {{badgeFieldForm.text_decoration}};
                     -webkit-transform: rotate({{badgeFieldForm.text_rotation}}deg);
                     -moz-transform: rotate({{badgeFieldForm.text_rotation}}deg);
                     -o-transform: rotate({{badgeFieldForm.text_rotation}}deg);

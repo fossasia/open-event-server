@@ -29,6 +29,29 @@ def create_preivew_badge_pdf(badgeForms):
     badgeForms = badgeForms[0]
     badgeFieldForms = badgeForms['badgeFields']
     badgeId = badgeForms['badgeID']
+    for badge_field in badgeFieldForms:
+        font_weight = []
+        font_style = []
+        text_decoration = []
+        for item in badge_field.get('font_weight'):
+            if item.get('font_weight'):
+                font_weight.append(item.get('font_weight'))
+            if item.get('font_style'):
+                font_style.append(item.get('font_style'))
+            if item.get('text_decoration'):
+                text_decoration.append(item.get('text_decoration'))
+        if not font_weight:
+            badge_field['font_weight'] = 'none'
+        else:
+            badge_field['font_weight'] = ','.join(font_weight)
+        if not font_style:
+            badge_field['font_style'] = 'none'
+        else:
+            badge_field['font_style'] = ','.join(font_style)
+        if not text_decoration:
+            badge_field['text_decoration'] = 'none'
+        else:
+            badge_field['text_decoration'] = ','.join(text_decoration)
     create_save_pdf(
         render_template(
             'pdf/badge_forms.html', badgeForms=badgeForms, badgeFieldForms=badgeFieldForms
@@ -119,6 +142,31 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
             continue
 
         get_value_from_field_indentifier(field, ticket_holder)
+
+    for badge_field in badgeFieldForms:
+        font_weight = []
+        font_style = []
+        text_decoration = []
+        for item in badge_field.get('font_weight'):
+            if item.get('font_weight'):
+                font_weight.append(item.get('font_weight'))
+            if item.get('font_style'):
+                font_style.append(item.get('font_style'))
+            if item.get('text_decoration'):
+                text_decoration.append(item.get('text_decoration'))
+        if not font_weight:
+            badge_field['font_weight'] = 'none'
+        else:
+            badge_field['font_weight'] = ','.join(font_weight)
+        if not font_style:
+            badge_field['font_style'] = 'none'
+        else:
+            badge_field['font_style'] = ','.join(font_style)
+        if not text_decoration:
+            badge_field['text_decoration'] = 'none'
+        else:
+            badge_field['text_decoration'] = ','.join(text_decoration)
+
     create_save_pdf(
         render_template(
             'pdf/badge_forms.html', badgeForms=badge_form, badgeFieldForms=badgeFieldForms

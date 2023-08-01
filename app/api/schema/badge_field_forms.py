@@ -43,7 +43,7 @@ class BadgeFieldFormSchema(Schema):
     text_type = fields.String(required=False)
     is_deleted = fields.Boolean(required=False, default=False)
     font_name = fields.String(required=False)
-    font_weight = fields.Nested(FontWeight, allow_none=True, required=False)
+    font_weight = fields.List(fields.Nested(FontWeight, allow_none=True, required=False))
     font_color = fields.String(required=False)
     margin_top = fields.Integer(required=False)
     margin_bottom = fields.Integer(required=False)
