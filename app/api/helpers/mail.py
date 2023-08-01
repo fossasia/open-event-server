@@ -137,8 +137,8 @@ def send_email_with_action(user, action, template_name, bcc=None, **kwargs):
 def send_email_confirmation(email, link):
     """account confirmation"""
     action = MailType.USER_CONFIRM
-    mail = MAILS[action]
     app_name = get_settings()['app_name']
+    mail = MAILS[action]
     send_email(
         to=email,
         action=action,
