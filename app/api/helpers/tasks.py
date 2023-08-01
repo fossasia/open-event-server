@@ -21,11 +21,9 @@ from sendgrid.helpers.mail import (
     From,
     Mail,
 )
-from sqlalchemy import asc, desc, func
 
 from app.api.chat.rocket_chat import rename_rocketchat_room
 from app.api.exports import event_export_task_base
-from app.api.helpers.csv_jobs_util import export_attendees_csv
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import (
     create_save_image_sizes,
@@ -41,7 +39,7 @@ from app.api.helpers.xcal import XCalExporter
 from app.api.imports import import_event_task_base
 from app.instance import create_app
 from app.models import db
-from app.models.custom_form import ATTENDEE_CUSTOM_FORM, CustomForms
+from app.models.custom_form import CustomForms, ATTENDEE_CUSTOM_FORM
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
@@ -54,8 +52,8 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.user_follow_group import UserFollowGroup
 from app.settings import get_settings
-
 from .import_helpers import update_import_job
+from app.api.helpers.csv_jobs_util import export_attendees_csv
 
 """
 Define all API v2 celery tasks here
@@ -539,15 +537,9 @@ def export_order_pdf_task(self, event_id):
 
 @celery.task(base=RequestContextTask, name='export.attendees.csv', bind=True)
 def export_attendees_csv_task(self, event_id):
-    attendees = (
-        db.session.query(TicketHolder)
-        .filter_by(event_id=event_id)
-        .order_by(desc(func.date(TicketHolder.created_at)))
-    )
-    custom_forms = (
-        db.session.query(CustomForms)
-        .filter_by(event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True)
-        .order_by(asc("position"))
+    attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    custom_forms = db.session.query(CustomForms).filter_by(
+        event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True
     )
 
     field_headers = list(ATTENDEE_CUSTOM_FORM.keys())
@@ -556,14 +548,14 @@ def export_attendees_csv_task(self, event_id):
         # set() is O(1) in membership testing
         field_headers_set = set(field_headers)
         forms_result = [None] * len(field_headers_set)
-        index_append = 0
 
         for row in cf_orm:
             if row.field_identifier in field_headers_set:
+
                 field_headers_set.discard(row.field_identifier)
+                index_append = field_headers.index(row.field_identifier)
                 # forms_result.append(row)
-            forms_result.insert(index_append, row)
-            index_append += 1
+                forms_result.insert(index_append, row)
 
         forms_result = [e for e in forms_result if e is not None]
         return forms_result
@@ -577,11 +569,7 @@ def export_attendees_csv_task(self, event_id):
         file_path = os.path.join(filedir, filename)
 
         dict_list = export_attendees_csv(attendees, custom_forms, ATTENDEE_CUSTOM_FORM)
-        csv_headers = []
-        for row in dict_list:
-            for key in row.keys():
-                if key is not None and key not in csv_headers:
-                    csv_headers.append(key)
+        csv_headers = list(dict_list[0].keys())
 
         with open(file_path, "w") as temp_file:
             writer = csv.DictWriter(temp_file, fieldnames=csv_headers)
