@@ -33,13 +33,14 @@ def create_preivew_badge_pdf(badgeForms):
         font_weight = []
         font_style = []
         text_decoration = []
-        for item in badge_field.get('font_weight'):
-            if item.get('font_weight'):
-                font_weight.append(item.get('font_weight'))
-            if item.get('font_style'):
-                font_style.append(item.get('font_style'))
-            if item.get('text_decoration'):
-                text_decoration.append(item.get('text_decoration'))
+        if badge_field.get('font_weight'):
+            for item in badge_field.get('font_weight'):
+                if item.get('font_weight'):
+                    font_weight.append(item.get('font_weight'))
+                if item.get('font_style'):
+                    font_style.append(item.get('font_style'))
+                if item.get('text_decoration'):
+                    text_decoration.append(item.get('text_decoration'))
         if not font_weight:
             badge_field['font_weight'] = 'none'
         else:
@@ -147,13 +148,14 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
         font_weight = []
         font_style = []
         text_decoration = []
-        for item in badge_field.get('font_weight'):
-            if item.get('font_weight'):
-                font_weight.append(item.get('font_weight'))
-            if item.get('font_style'):
-                font_style.append(item.get('font_style'))
-            if item.get('text_decoration'):
-                text_decoration.append(item.get('text_decoration'))
+        if badge_field.get('font_weight'):
+            for item in badge_field.get('font_weight'):
+                if item.get('font_weight'):
+                    font_weight.append(item.get('font_weight'))
+                if item.get('font_style'):
+                    font_style.append(item.get('font_style'))
+                if item.get('text_decoration'):
+                    text_decoration.append(item.get('text_decoration'))
         if not font_weight:
             badge_field['font_weight'] = 'none'
         else:

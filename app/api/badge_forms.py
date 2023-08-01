@@ -127,7 +127,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.font_name = badgeField['font_name']
                     badgeFieldForm.font_size = badgeField['font_size']
                     badgeFieldForm.font_color = badgeField['font_color']
-                    badgeFieldForm.font_weight = badgeField['font_weight']
+                    badgeFieldForm.font_weight = badgeField.get('font_weight')
                     badgeFieldForm.text_rotation = badgeField['text_rotation']
                     badgeFieldForm.text_alignment = badgeField['text_alignment']
                     badgeFieldForm.text_type = badgeField['text_type']
