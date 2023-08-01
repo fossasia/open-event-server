@@ -55,7 +55,7 @@ class StationDetail(ResourceDetail):
         :return:
         """
         require_relationship(['event'], data)
-        if not has_access('is_coorganizer', event=data['event']):
+        if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
                 f"Event: {data['event']} not found {args} {kwargs}",
@@ -63,11 +63,6 @@ class StationDetail(ResourceDetail):
 
         if data.get('microlocation'):
             require_relationship(['microlocation'], data)
-            if not has_access('is_coorganizer', microlocation=data['microlocation']):
-                raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: {data['microlocation']} not found",
-                )
         else:
             if data['station_type'] in ('check in', 'check out', 'daily'):
                 raise ObjectNotFound(
@@ -119,7 +114,7 @@ class StationListPost(ResourceList):
         :return:
         """
         require_relationship(['event'], data)
-        if not has_access('is_coorganizer', event=data['event']):
+        if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound(
                 {'parameter': 'event'},
                 f"Event: {data['event']} not found {args} {kwargs}",
@@ -127,11 +122,6 @@ class StationListPost(ResourceList):
 
         if data.get('microlocation'):
             require_relationship(['microlocation'], data)
-            if not has_access('is_coorganizer', microlocation=data['microlocation']):
-                raise ObjectNotFound(
-                    {'parameter': 'microlocation'},
-                    f"Microlocation: {data['microlocation']} not found",
-                )
         else:
             if data['station_type'] in ('check in', 'check out', 'daily'):
                 raise ObjectNotFound(

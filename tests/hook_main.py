@@ -20,6 +20,8 @@ from app.api import routes  # noqa Workaround for importing all required models
 # imports from factories
 
 from tests.factories.event_location import EventLocationFactory
+from tests.factories.badge_field_form import BadgeFieldFormFactory
+from tests.factories.badge_form import BadgeFormFactory
 from tests.factories.custom_system_role import CustomSysRoleFactory
 from tests.factories.panel_permission import PanelPermissionFactory
 from tests.factories.user import UserFactory
@@ -27,7 +29,7 @@ from tests.factories.notification import NotificationSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.group import GroupFactory
 from tests.factories.social_link import SocialLinkFactory
-from tests.factories.microlocation import MicrolocationFactory
+from tests.factories.microlocation import MicrolocationFactory, MicrolocationSubFactory
 from tests.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from tests.factories.page import PageFactory
 from tests.factories.event_copyright import EventCopyrightFactory
@@ -48,7 +50,9 @@ from tests.factories.event_role_permission import EventRolePermissionsFactory
 from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
-from tests.factories.session import SessionFactory, SessionFactoryBasic
+from tests.factories.station import StationFactory
+from tests.factories.station_store_pax import StationStorePaxFactory
+from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
@@ -4986,4 +4990,134 @@ def search_attendees_from_event(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Badge Forms > Get Badge Form By Ticket > Get Badge Form By Ticket")
+def get_badge_form_by_ticket(transaction):
+    """
+    GET /v1/ticket/{ticket_id}/badge-forms
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        ticket = TicketFactory(
+            event=event,
+            badge_id='example',
+        )
+        badge_form = BadgeFormFactory(
+            event=event,
+            badge_id=ticket.badge_id,
+        )
+        BadgeFieldFormFactory(
+            badge_form=badge_form,
+            badge_id=ticket.badge_id,
+        )
+        db.session.commit()
+
+
+@hooks.before(
+    "Station Store Paxs > Create Station Store Paxs > Create Station Store Paxs"
+)
+def create_station_store_pax(transaction):
+    """
+    POST /v1/station-store-paxs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        db.session.commit()
+
+
+@hooks.before(
+    "Station Store Paxs > Get Station Store Paxs By Station and Session > Get Station Store Paxs By Station and Session"
+)
+def get_station_store_pax_by_station_session(transaction):
+    """
+    GET /v1/stations/{station_id}/sessions/{session_id}/station-store-paxs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        station = StationFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        session = SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        StationStorePaxFactory(
+            current_pax=10,
+            station=station,
+            session=session,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Create Station > Create Station")
+def create_station(transaction):
+    """
+    POST /v1/station
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        MicrolocationSubFactory(
+            event=event,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Get Station > Get Station")
+def get_station(transaction):
+    """
+    GET /v1/stations/{station_id}
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        db.session.commit()
+
+
+@hooks.before("Stations > Get Stations by Event > Get Stations by Event")
+def get_stations_by_event(transaction):
+    """
+    GET /v1/events/{event_id}/stations
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        StationFactory(
+            event=event,
+            microlocation=microlocation,
+        )
         db.session.commit()
