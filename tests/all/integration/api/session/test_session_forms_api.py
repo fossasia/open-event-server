@@ -115,7 +115,7 @@ def test_edit_session_required_fields_missing(db, client, user, jwt):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['level', 'short_abstract']",
+                'detail': "Missing required fields ['Level', 'Short Abstract']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
@@ -162,7 +162,7 @@ def test_create_session_required_fields_missing(db, client, user, jwt):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['level', 'short_abstract']",
+                'detail': "Missing required fields ['Level', 'Short Abstract']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
@@ -328,7 +328,7 @@ def test_custom_form_complex_fields_missing_required(db, client, user, jwt):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['best_friend', 'slides_url']",
+                'detail': "Missing required fields ['Best Friend', 'Slide']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
@@ -377,7 +377,7 @@ def test_custom_form_create_complex_fields_missing_required(db, client, user, jw
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['best_friend', 'slides_url']",
+                'detail': "Missing required fields ['Best Friend', 'Slide']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',

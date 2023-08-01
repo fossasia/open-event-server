@@ -1,0 +1,131 @@
+# Group Stations
+
+## Create Station [/v1/station]
+
+### Create Station [POST]
+Create station.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+          {
+            "data": {
+              "type": "station",
+              "attributes": {
+                "station-name": "station name",
+                "station-type": "registration"
+              },
+              "relationships": {
+                "event": {"data": {"id": "1", "type": "event"}},
+                "microlocation": {
+                    "data": {"id": "1", "type": "microlocation"}
+                }
+              }
+            }
+          }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+              "type": "station",
+              "relationships": {
+                  "event": {
+                      "links": {
+                          "self": "/v1/station/1/relationships/event",
+                          "related": "/v1/station/1"
+                      }
+                  },
+                  "microlocation": {
+                      "links": {
+                          "self": "/v1/station/1/relationships/microlocation",
+                          "related": "/v1/station/1"
+                      }
+                  }
+              },
+              "attributes": {
+                "station-name": "station name",
+                "station-type": "registration"
+              },
+              "id": 1,
+              "links": {
+                  "self": "/v1/station/1"
+              }
+          },
+          "links": {
+              "self": "/v1/station/1"
+          },
+          "jsonapi": {
+              "version": "1.0"
+          }
+        }
+
+## Get Station [/v1/stations/{station_id}]
++ Parameters
+    + station_id: 1 (integer) - ID of the station in the form of an integer
+
+### Get Station [GET]
+Get station.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+              "type": "station",
+              "attributes": {
+                  "station-type": "example",
+                  "station-name": "example"
+              },
+              "relationships": {
+                  "event": {
+                      "links": {
+                          "self": "/v1/stations/1/relationships/event",
+                          "related": "/v1/events/1"
+                      }
+                  },
+                  "microlocation": {
+                      "links": {
+                          "self": "/v1/stations/1/relationships/microlocation"
+                      }
+                  }
+              },
+              "id": 1,
+              "links": {
+                  "self": "/v1/stations/1"
+              }
+          },
+          "links": {
+              "self": "/v1/stations/1"
+          },
+          "jsonapi": {
+              "version": "1.0"
+          }
+      }
+
+## Get Stations by Event [/v1/events/{event_id}/stations]
++ Parameters
+    + event_id: 1 (integer) - ID of the station in the form of an integer
+
+### Get Stations by Event [GET]
+Get Stations by event.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response (application/vnd.api+json)
+
+    {"data": [], "links": {"self": "/v1/events/1/stations"}, "meta": {"count": 0}, "jsonapi": {"version": "1.0"}}

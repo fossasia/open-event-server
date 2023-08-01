@@ -60,13 +60,13 @@ def validate_custom_form_constraints(form, obj, excluded):
             continue
         if not field.is_complex:
             if not getattr(obj, field.identifier):
-                missing_required_fields.append(field.identifier)
+                missing_required_fields.append(field.name)
         else:
             if obj.complex_field_values:
                 if obj.complex_field_values.get(field.identifier) is None:
-                    missing_required_fields.append(field.identifier)
+                    missing_required_fields.append(field.name)
             else:
-                missing_required_fields.append(field.identifier)
+                missing_required_fields.append(field.name)
 
     if len(missing_required_fields) > 0:
         raise UnprocessableEntityError(
