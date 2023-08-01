@@ -5125,7 +5125,7 @@ def get_stations_by_event(transaction):
 
 
 @hooks.before("Users Check In > Create User Check In > Create User Check In")
-def get_stations_by_event(transaction):
+def create_user_check_in(transaction):
     """
     POST /v1/user-check-in
     :param transaction:
