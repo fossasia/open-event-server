@@ -12,21 +12,22 @@ from app.models.ticket import Ticket
 
 
 def calculated_sale_by_status(id, status):
+    """calculated_sale_by_status"""
     query_ = OrderTicket.query.join(Order).join(Order.discount_code, isouter=True)
     order_ticket_ids: OrderTicket = query_.filter(
         OrderTicket.ticket_id == id, Order.status == status
     ).all()
-    sum = 0
+    total_amount = 0
     if order_ticket_ids:
         for order_ticket_id in order_ticket_ids:
             if order_ticket_id.price and order_ticket_id.quantity:
                 discount_amount = 0
                 if order_ticket_id.order.discount_code:
                     discount_amount = order_ticket_id.order.discount_code.value
-                sum += (
+                total_amount += (
                     order_ticket_id.price - discount_amount
                 ) * order_ticket_id.quantity
-    return sum
+    return total_amount
 
 
 class OrderStatisticsTicketSchema(Schema):
