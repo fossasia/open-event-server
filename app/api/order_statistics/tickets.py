@@ -11,11 +11,11 @@ from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 
 
-def calculated_sale_by_status(id, status):
+def calculated_sale_by_status(ticket_id, status):
     """calculated_sale_by_status"""
     query_ = OrderTicket.query.join(Order).join(Order.discount_code, isouter=True)
     order_ticket_ids: OrderTicket = query_.filter(
-        OrderTicket.ticket_id == id, Order.status == status
+        OrderTicket.ticket_id == ticket_id, Order.status == status
     ).all()
     total_amount = 0
     if order_ticket_ids:
