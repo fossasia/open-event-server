@@ -13,23 +13,19 @@ from app.models.ticket import Ticket
 
 def calculated_sale_by_status(id, status):
     query_ = OrderTicket.query.join(Order).join(Order.discount_code, isouter=True)
-    query_ = query_.filter(OrderTicket.ticket_id == id, Order.status == status)
-    orderTickets = query_.all()
+    order_ticket_ids: OrderTicket = query_.filter(
+        OrderTicket.ticket_id == id, Order.status == status
+    ).all()
     sum = 0
-    if orderTickets:
-        for order_ticket in orderTickets:
-            if order_ticket.price:
-                if order_ticket.quantity:
-                    sum += order_ticket.price * order_ticket.quantity
-                else:
-                    sum += order_ticket.price
-                if order_ticket.order.discount_code:
-                    if order_ticket.quantity:
-                        sum -= (
-                            order_ticket.order.discount_code.value * order_ticket.quantity
-                        )
-                    else:
-                        sum -= order_ticket.order.discount_code.value
+    if order_ticket_ids:
+        for order_ticket_id in order_ticket_ids:
+            if order_ticket_id.price and order_ticket_id.quantity:
+                discount_amount = 0
+                if order_ticket_id.order.discount_code:
+                    discount_amount = order_ticket_id.order.discount_code.value
+                sum += (
+                    order_ticket_id.price - discount_amount
+                ) * order_ticket_id.quantity
     return sum
 
 
