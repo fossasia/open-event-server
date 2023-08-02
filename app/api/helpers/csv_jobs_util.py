@@ -72,28 +72,25 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
             'Payment Type': str(attendee.order.paid_via)
             if attendee.order and attendee.order.paid_via
             else '',
-            'Payment Mode': str(attendee.order.payment_mode)
+            'Payment Mode':  str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
-            'Ticket Name': str(attendee.ticket.name)
-            if attendee.ticket and attendee.ticket.name
-            else '',
+            'Ticket Name':  str(attendee.ticket.name)
+            if attendee.ticket and attendee.ticket.name else '',
             'Ticket Price': str(attendee.ticket.price)
             if attendee.ticket and attendee.ticket.price
             else '0',
             'Ticket Type': str(attendee.ticket.type)
-            if attendee.ticket and attendee.ticket.type
-            else '',
+            if attendee.ticket and attendee.ticket.type else '',
             'Tax ID': str(attendee.order.tax_business_info)
             if attendee.order.tax_business_info
             else '',
             'Address': str(attendee.order.address) if attendee.order.address else '',
-            'Company': str(attendee.order.company) if attendee.order.company else '',
+            'Company':  str(attendee.order.company) if attendee.order.company else '',
             'Country': str(attendee.order.country) if attendee.order.country else '',
-            'State': str(attendee.order.state) if attendee.order.state else '',
+            'State':  str(attendee.order.state) if attendee.order.state else '',
             'City': str(attendee.order.city) if attendee.order.city else '',
             'Zipcode': str(attendee.order.zipcode) if attendee.order.zipcode else '',
-            'Email': '',
         }
 
         for field in custom_forms:
@@ -109,19 +106,12 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
             converted_header = attendee_form_dict.get(key)
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
-                converted_header = field.identifier
-                data[converted_header] = (
-                    fields_dict.get(field.identifier, '') if fields_dict else ''
-                )
+                data[converted_header] = fields_dict.get(
+                    field.identifier, '') if fields_dict else ''
             else:
-                dict_value = getattr(attendee, field.identifier, '')
-                dict_value = (
-                    "Yes"
-                    if str(dict_value) == "True"
-                    else "No"
-                    if str(dict_value) == "False"
-                    else dict_value
-                )
+                dict_value = (getattr(attendee, field.identifier, ''))
+                dict_value = "Yes" if str(dict_value) == "True" \
+                    else "No" if str(dict_value) == "False" else dict_value
                 data[converted_header] = dict_value
         return_dict_list.append(data)
 
