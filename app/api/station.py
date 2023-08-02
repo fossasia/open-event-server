@@ -107,7 +107,7 @@ class StationListPost(ResourceList):
         if data.get('microlocation'):
             require_relationship(['microlocation'], data)
         else:
-            if data['station_type'] in ('check in', 'check out', 'daily'):
+            if data['station_type'] in ('check in', 'check out'):
                 raise ObjectNotFound(
                     {'parameter': 'microlocation'},
                     "Microlocation: missing from your request.",
