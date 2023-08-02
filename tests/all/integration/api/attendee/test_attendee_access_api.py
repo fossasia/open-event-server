@@ -23,7 +23,7 @@ def test_get_attendees_error(db, client, user, jwt, admin_user, admin_jwt):
 
     response = client.get('/v1/attendees', content_type='application/vnd.api+json')
 
-    assert response.status_code == 405
+    assert response.status_code == 404
 
     response = client.get(
         '/v1/attendees',
@@ -31,7 +31,7 @@ def test_get_attendees_error(db, client, user, jwt, admin_user, admin_jwt):
         headers=jwt,
     )
 
-    assert response.status_code == 405
+    assert response.status_code == 404
 
     get_minimal_attendee(db, user, owner=True)
 
@@ -41,7 +41,7 @@ def test_get_attendees_error(db, client, user, jwt, admin_user, admin_jwt):
         headers=jwt,
     )
 
-    assert response.status_code == 405
+    assert response.status_code == 404
 
     get_minimal_attendee(db, admin_user, owner=True)
 
@@ -51,7 +51,7 @@ def test_get_attendees_error(db, client, user, jwt, admin_user, admin_jwt):
         headers=admin_jwt,
     )
 
-    assert response.status_code == 405
+    assert response.status_code == 404
 
 
 def test_get_event_attendees_owner(db, client, user, jwt):
