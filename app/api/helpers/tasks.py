@@ -549,7 +549,6 @@ def export_attendees_csv_task(self, event_id):
         .filter_by(event_id=event_id, form=CustomForms.TYPE.ATTENDEE, is_included=True)
         .order_by(asc("position"))
     )
-
     field_headers = list(ATTENDEE_CUSTOM_FORM.keys())
 
     def custom_form_validation(cf_orm, field_headers):
