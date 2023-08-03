@@ -21,7 +21,6 @@ from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 from app.api.attendees import (
     AttendeeDetail,
     AttendeeList,
-    AttendeeListPost,
     AttendeeRelationshipOptional,
     AttendeeRelationshipRequired,
 )
@@ -264,6 +263,12 @@ from app.api.tracks import (
     TrackListPost,
     TrackRelationshipOptional,
     TrackRelationshipRequired,
+)
+from app.api.translation_channels import (
+    TranslationChannelsDetail,
+    TranslationChannelsList,
+    TranslationChannelsListPost,
+    TranslationChannelsRelationship,
 )
 from app.api.user_check_in import (
     UserCheckInDetail,
@@ -1495,7 +1500,6 @@ api.route(
 )
 
 # attendees
-api.route(AttendeeListPost, 'attendee_list_post', '/attendees')
 api.route(
     AttendeeList,
     'attendee_list',
@@ -1907,6 +1911,35 @@ api.route(ImportJobList, 'import_job_list', '/import-jobs')
 api.route(ImportJobDetail, 'import_job_detail', '/import-jobs/<int:id>')
 
 # Video Streams
+api.route(
+    TranslationChannelsList,
+    'translation_channels_list',
+    "/translation_channels",
+    '/video-streams/<int:video_stream_id>/translation_channels',
+)
+
+api.route(
+    TranslationChannelsListPost, 'translation_channels_list_post', '/translation_channels'
+)
+
+api.route(
+    TranslationChannelsDetail,
+    'translation_channels_detail',
+    '/translation_channels/<int:id>',
+)
+
+api.route(
+    TranslationChannelsRelationship,
+    'translation_channels_video_stream',
+    '/translation_channel/<int:id>/relationships/video-stream',
+)
+
+api.route(
+    TranslationChannelsRelationship,
+    'translation_channels_channel',
+    '/translation_channel/<int:id>/relationships/channels',
+)
+
 api.route(VideoStreamList, 'video_stream_list', '/video-streams')
 api.route(
     VideoStreamDetail,
@@ -1943,6 +1976,8 @@ api.route(
     'video_stream_moderators',
     '/video-streams/<int:id>/relationships/video-stream-moderators',
 )
+
+
 api.route(
     VideoStreamRelationship,
     'video_stream_recordings',

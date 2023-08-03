@@ -199,7 +199,7 @@ def test_order_pending_incomplete_complex_custom_form(client, db, user, jwt):
                 'status': 422,
                 'source': {'pointer': '/data/attributes'},
                 'title': 'Unprocessable Entity',
-                'detail': "Missing required fields ['what_college', 'what_university']",
+                'detail': "Missing required fields ['what college', 'what university']",
             }
         ],
         'jsonapi': {'version': '1.0'},
@@ -238,7 +238,7 @@ def test_order_placed_incomplete_complex_custom_form(client, db, user, jwt):
                 'status': 422,
                 'source': {'pointer': '/data/attributes'},
                 'title': 'Unprocessable Entity',
-                'detail': "Missing required fields ['what_college', 'what_university']",
+                'detail': "Missing required fields ['what college', 'what university']",
             }
         ],
         'jsonapi': {'version': '1.0'},

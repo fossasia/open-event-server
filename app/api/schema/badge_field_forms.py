@@ -1,8 +1,16 @@
+from marshmallow.schema import Schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship, Schema
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
+
+
+class FontWeight(Schema):
+    name = fields.String(required=False)
+    font_weight = fields.String(required=False)
+    font_style = fields.String(required=False)
+    text_decoration = fields.String(required=False)
 
 
 @use_defaults()
@@ -35,7 +43,7 @@ class BadgeFieldFormSchema(Schema):
     text_type = fields.String(required=False)
     is_deleted = fields.Boolean(required=False, default=False)
     font_name = fields.String(required=False)
-    font_weight = fields.Integer(required=False)
+    font_weight = fields.List(fields.Nested(FontWeight), allow_none=True, required=False)
     font_color = fields.String(required=False)
     margin_top = fields.Integer(required=False)
     margin_bottom = fields.Integer(required=False)
@@ -43,3 +51,4 @@ class BadgeFieldFormSchema(Schema):
     margin_right = fields.Integer(required=False)
     text_rotation = fields.Integer(required=False)
     qr_custom_field = fields.List(fields.String(), required=False)
+    is_field_expanded = fields.Boolean(required=False, default=False)

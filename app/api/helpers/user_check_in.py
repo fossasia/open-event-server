@@ -112,6 +112,14 @@ def validate_microlocation(station: Station, session: Session):
             "Location of your session not matches with station location"
             ", please check with the organizer.",
         )
+    if station.event_id != session.event_id:
+        raise UnprocessableEntityError(
+            {
+                'station event_id': station.event_id,
+                'session event_id': session.event_id,
+            },
+            "Session not belong to this event.",
+        )
 
 
 def validate_check_in_out_status(station: Station, attendee_data: UserCheckIn):

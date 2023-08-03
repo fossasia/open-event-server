@@ -123,6 +123,45 @@ def get_chat_token(event_id: int):
             )
 
 
+@events_blueprint.route(
+    '/<string:event_identifier>/room/<string:microlocation_id>/chat-token',
+)
+@jwt_required
+@to_event_id
+def get_room_chat_token(event_id: int, microlocation_id: int):
+    """
+    Get room chat token for specific room
+    @param event_id: event identifier
+    @param microlocation_id: microlocation id
+    @return: room chat token
+    """
+    event = Event.query.get_or_404(event_id)
+    microlocation = Microlocation.query.get_or_404(microlocation_id)
+
+    if not VideoStream(event_id=event.id).user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    if not microlocation.is_chat_enabled and not microlocation.is_global_event_room:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled For This Room')
+
+    try:
+        data = get_rocket_chat_token(current_user, event, microlocation)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        return jsonify(
+            {
+                'success': False,
+                'code': rce.code,
+                'response': rce.response is not None and rce.response.json(),
+            }
+        )
+
+
 def validate_event(user, data):
     if not user.can_create_event():
         raise ForbiddenError({'source': ''}, "Please verify your Email")

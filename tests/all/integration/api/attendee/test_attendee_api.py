@@ -94,7 +94,7 @@ def test_edit_attendee_required_fields_missing(db, client, jwt, user):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['email', 'tax_business_info']",
+                'detail': "Missing required fields ['Email', 'Tax Business Info']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
@@ -208,7 +208,7 @@ def test_custom_form_complex_fields_missing_required(db, client, jwt, user):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['best_friend', 'job_title']",
+                'detail': "Missing required fields ['Best Friend', 'Job Title']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',
@@ -290,7 +290,7 @@ def test_custom_form_complex_fields_missing_required_one(db, client, jwt, user):
     assert json.loads(response.data) == {
         'errors': [
             {
-                'detail': "Missing required fields ['best_friend']",
+                'detail': "Missing required fields ['Best Friend']",
                 'source': {'pointer': '/data/attributes'},
                 'status': 422,
                 'title': 'Unprocessable Entity',

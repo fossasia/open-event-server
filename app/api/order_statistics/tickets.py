@@ -11,6 +11,25 @@ from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 
 
+def calculated_sale_by_status(ticket_id, status):
+    """calculated_sale_by_status"""
+    query_ = OrderTicket.query.join(Order).join(Order.discount_code, isouter=True)
+    order_ticket_ids: OrderTicket = query_.filter(
+        OrderTicket.ticket_id == ticket_id, Order.status == status
+    ).all()
+    total_amount = 0
+    if order_ticket_ids:
+        for order_ticket_id in order_ticket_ids:
+            if order_ticket_id.price and order_ticket_id.quantity:
+                discount_amount = 0
+                if order_ticket_id.order.discount_code:
+                    discount_amount = order_ticket_id.order.discount_code.value
+                total_amount += (
+                    order_ticket_id.price - discount_amount
+                ) * order_ticket_id.quantity
+    return total_amount
+
+
 class OrderStatisticsTicketSchema(Schema):
     """
     Api schema
@@ -137,48 +156,13 @@ class OrderStatisticsTicketSchema(Schema):
 
     def sales_count(self, obj):
         obj_id = obj.id
-        total = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id)
-            .scalar()
-        )
-        draft = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'draft')
-            .scalar()
-        )
-        cancelled = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'cancelled')
-            .scalar()
-        )
-        pending = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'pending')
-            .scalar()
-        )
-        expired = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'expired')
-            .scalar()
-        )
-        placed = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'placed')
-            .scalar()
-        )
-        completed = (
-            db.session.query(func.sum(Order.amount.label('sum')))
-            .join(Order.order_tickets)
-            .filter(OrderTicket.ticket_id == obj_id, Order.status == 'completed')
-            .scalar()
-        )
+        draft = calculated_sale_by_status(obj_id, 'draft')
+        cancelled = calculated_sale_by_status(obj_id, 'cancelled')
+        pending = calculated_sale_by_status(obj_id, 'pending')
+        expired = calculated_sale_by_status(obj_id, 'expired')
+        placed = calculated_sale_by_status(obj_id, 'placed')
+        completed = calculated_sale_by_status(obj_id, 'completed')
+        total = draft + cancelled + pending + expired + placed + completed
         result = {
             'total': total or 0,
             'draft': draft or 0,

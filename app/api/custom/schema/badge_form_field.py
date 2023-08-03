@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from app.api.schema.badge_field_forms import FontWeight
+
 
 class BadgeFieldFormSchema(Schema):
     """Badge Field Form Schema"""
@@ -11,7 +13,7 @@ class BadgeFieldFormSchema(Schema):
     sample_text = fields.String(allow_none=True)
     font_size = fields.Integer(allow_none=True)
     font_name = fields.String(allow_none=True)
-    font_weight = fields.Integer(allow_none=True)
+    font_weight = fields.List(fields.Nested(FontWeight), allow_none=True)
     font_color = fields.String(allow_none=True)
     text_rotation = fields.Integer(allow_none=True)
     text_alignment = fields.String(allow_none=True)
@@ -23,3 +25,4 @@ class BadgeFieldFormSchema(Schema):
     margin_left = fields.Integer(allow_none=True)
     margin_right = fields.Integer(allow_none=True)
     qr_custom_field = fields.List(fields.String(), allow_none=True, default=None)
+    is_field_expanded = fields.Boolean(allow_none=True, default=True)

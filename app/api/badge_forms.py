@@ -45,6 +45,7 @@ class BadgeFormList(ResourceList):
             badgeFieldForms = (
                 BadgeFieldForms.query.filter_by(badge_form_id=item['id'])
                 .filter_by(badge_id=item['attributes']['badge-id'])
+                .order_by(BadgeFieldForms.id.asc())
                 .all()
             )
             for badgeFieldForm in badgeFieldForms:
@@ -127,7 +128,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.font_name = badgeField['font_name']
                     badgeFieldForm.font_size = badgeField['font_size']
                     badgeFieldForm.font_color = badgeField['font_color']
-                    badgeFieldForm.font_weight = badgeField['font_weight']
+                    badgeFieldForm.font_weight = badgeField.get('font_weight')
                     badgeFieldForm.text_rotation = badgeField['text_rotation']
                     badgeFieldForm.text_alignment = badgeField['text_alignment']
                     badgeFieldForm.text_type = badgeField['text_type']
@@ -137,6 +138,7 @@ class BadgeFormDetail(ResourceDetail):
                     badgeFieldForm.margin_right = badgeField['margin_right']
                     badgeFieldForm.qr_custom_field = badgeField.get('qr_custom_field')
                     badgeFieldForm.is_deleted = badgeField['is_deleted']
+                    badgeFieldForm.is_field_expanded = badgeField['is_field_expanded']
                     db.session.add(badgeFieldForm)
 
     @staticmethod
