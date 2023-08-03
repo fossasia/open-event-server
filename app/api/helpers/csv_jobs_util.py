@@ -109,7 +109,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
             converted_header = attendee_form_dict.get(key)
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
-                converted_header = field.identifier
+                converted_header = field.name
                 data[converted_header] = (
                     fields_dict.get(field.identifier, '') if fields_dict else ''
                 )
@@ -122,6 +122,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
                     if str(dict_value) == "False"
                     else dict_value
                 )
+                converted_header = field.name
                 data[converted_header] = dict_value
         return_dict_list.append(data)
 
