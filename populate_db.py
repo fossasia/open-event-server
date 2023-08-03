@@ -390,6 +390,7 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
+
     get_or_create(
         VideoChannel,
         provider='jitsi',
