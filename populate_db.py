@@ -429,6 +429,12 @@ def populate():
         name='Libre Work',
         defaults={'url': 'https://2d.freiland-potsdam.de/'},
     )
+    get_or_create(
+        VideoChannel,
+        provider='youtube_privacy',
+        name='YouTube Privacy',
+        defaults={'url': 'https://youtube-nocookie.com'},
+    )
 
     db.session.commit()
 
