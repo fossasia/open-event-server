@@ -99,7 +99,7 @@ class UserCheckInListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=station.event_id):
             raise UnprocessableEntityError(
                 {'parameter': 'station'},
-                f"Only admin/organiser/coorganizer of event only able to check in",
+                "Only admin/organiser/coorganizer of event only able to check in",
             )
         if station.station_type != STATION_TYPE.get('registration'):
             # validate if microlocation_id from session matches with station
