@@ -95,6 +95,11 @@ class UserCheckInListPost(ResourceList):
         :return:
         """
         station = self.session.query(Station).filter_by(id=data.get('station')).one()
+        if not has_access('is_coorganizer', event_id=station.event_id):
+            raise UnprocessableEntityError(
+                {'parameter': 'station'},
+                "Only admin/organiser/coorganizer of event only able to check in",
+            )
         if station.station_type != STATION_TYPE.get('registration'):
             # validate if microlocation_id from session matches with station
             session = self.session.query(Session).filter_by(id=data.get('session')).one()
