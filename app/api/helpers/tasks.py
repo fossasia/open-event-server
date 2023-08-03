@@ -587,6 +587,8 @@ def export_attendees_csv_task(self, event_id):
             writer.writeheader()
 
             for row in dict_list:
+                if None in row.keys():
+                    del row[None]
                 writer.writerow(row)
 
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
