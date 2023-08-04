@@ -24,6 +24,7 @@ class AttendeeFactoryBase(BaseFactory):
     ticket_id = None
     order_id = None
     modified_at = common.date_
+    is_discount_applied = True
 
 
 class AttendeeSubFactory(AttendeeFactoryBase):

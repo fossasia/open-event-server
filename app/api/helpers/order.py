@@ -240,7 +240,7 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
+def calculate_order_amount(tickets, verify_discount=None, discount_code=None):
     from app.api.helpers.ticketing import (
         is_discount_available,
         validate_discount_code,
@@ -248,6 +248,8 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
     )
     from app.models.discount_code import DiscountCode
 
+    if verify_discount is None:
+        verify_discount = True
     ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
