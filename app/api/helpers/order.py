@@ -240,7 +240,7 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, verify_discount, discount_code=None):
+def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
     from app.api.helpers.ticketing import (
         is_discount_available,
         validate_discount_code,
@@ -278,9 +278,10 @@ def calculate_order_amount(tickets, verify_discount, discount_code=None):
         quantity = ticket_info.get('quantity', 1)  # Default to single ticket
         if ticket_info.get('quantity_discount'):
             quantity_discount['numb_discount'] = ticket_info.get('quantity_discount')
-            quantity_discount['numb_no_discount'] = quantity_discount[
-                'numb_no_discount'
-            ] - ticket_info.get('quantity_discount')
+        if quantity_discount['numb_discount'] >= quantity:
+            discount_quantity = quantity
+        else:
+            discount_quantity = quantity_discount['numb_discount']
         if not event:
             event = ticket.event
 
@@ -343,9 +344,7 @@ def calculate_order_amount(tickets, verify_discount, discount_code=None):
                         'code': discount_code.code,
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
-                        'total': round(
-                            discount_amount * quantity_discount.get('numb_discount'), 2
-                        ),
+                        'total': round(discount_amount * discount_quantity, 2),
                         'type': code.type,
                     }
                     if quantity_discount.get('numb_no_discount') > 0:
@@ -354,18 +353,14 @@ def calculate_order_amount(tickets, verify_discount, discount_code=None):
                             'exhausted.'
                         )
 
-        total_discount += round(
-            discount_amount * quantity_discount.get('numb_discount'), 2
-        )
+        total_discount += round(discount_amount * discount_quantity, 2)
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
             if ticket_fee > fees.maximum_fee:
                 ticket_fee = fees.maximum_fee
-        sub_total = (
-            ticket_fee
-            + (price - discount_amount) * quantity_discount.get('numb_discount')
-            + price * (quantity - quantity_discount.get('numb_discount'))
-        )
+        sub_total = ticket_fee + (price - discount_amount) * discount_quantity
+        if quantity - discount_quantity > 0:
+            sub_total += price * (quantity - discount_quantity)
         total_amount = total_amount + sub_total
         ticket_list.append(
             {
@@ -380,6 +375,7 @@ def calculate_order_amount(tickets, verify_discount, discount_code=None):
                 'discounted_tax': round(discounted_tax, 2),
             }
         )
+        quantity_discount['numb_discount'] = quantity_discount['numb_discount'] - quantity
 
     sub_total = total_amount
     tax_dict = None

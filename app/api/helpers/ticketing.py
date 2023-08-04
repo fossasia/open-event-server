@@ -192,7 +192,7 @@ def is_discount_available(
         raise UnprocessableEntityError(
             {'pointer': 'discount_sold_out'}, "Discount tickets sold out."
         )
-    if (qty + old_holders - discount_code.tickets_number) >= 0:
+    if (qty + old_holders - discount_code.tickets_number) > 0:
         quantity_discount['numb_no_discount'] = (
             qty + old_holders - discount_code.tickets_number
         )
