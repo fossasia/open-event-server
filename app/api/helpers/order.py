@@ -136,10 +136,16 @@ def create_pdf_tickets_for_holder(order):
 
         tickets = []
         for order_ticket in order_tickets:
+            attendee_count = get_count(
+                TicketHolder.query.filter_by(order_id=order_ticket.order.id)
+                .filter_by(ticket_id=order_ticket.ticket.id)
+                .filter_by(is_discount_applied=True)
+            )
             ticket = dict(
                 id=order_ticket.ticket.id,
                 price=order_ticket.price,
                 quantity=order_ticket.quantity,
+                quantity_discount=attendee_count,
             )
             tickets.append(ticket)
 
@@ -240,7 +246,7 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, verify_discount=None, discount_code=None):
+def calculate_order_amount(tickets, verify_discount, discount_code=None):
     from app.api.helpers.ticketing import (
         is_discount_available,
         validate_discount_code,
@@ -349,7 +355,7 @@ def calculate_order_amount(tickets, verify_discount=None, discount_code=None):
                         'total': round(discount_amount * discount_quantity, 2),
                         'type': code.type,
                     }
-                    if quantity_discount.get('numb_no_discount') > 0:
+                    if int(quantity_discount.get('numb_no_discount')) > 0:
                         discount_data['warning'] = (
                             'Your order not fully discount due to discount code usage is '
                             'exhausted.'

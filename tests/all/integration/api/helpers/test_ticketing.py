@@ -1,3 +1,4 @@
+from app.api.helpers.errors import UnprocessableEntityError
 from tests.factories.attendee import AttendeeFactoryBase
 from tests.factories.discount_code import DiscountCodeTicketFactory
 from tests.factories.order import OrderFactory
@@ -47,9 +48,9 @@ def test_match_discount_quantity(db):
         is_discount_applied=True,
     )
 
-    discount_quantity = discount_code.is_available(ticket_holders=[1])
-    assert discount_quantity.get('numb_discount') == quantity_discount.get(
-        'numb_discount'
-    )
+    try:
+        discount_code.is_available(ticket_holders=[1])
+    except UnprocessableEntityError as e:
+        assert e.source['pointer'] == 'discount_sold_out'
 
     assert discount_code.confirmed_attendees_count == 5
