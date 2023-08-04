@@ -22,8 +22,15 @@ def test_match_discount_quantity(db):
         ticket_id=ticket.id,
         event_id=ticket.event_id,
     )
+    quantity_discount: dict = {
+        'numb_no_discount': 0,
+        'numb_discount': 1,
+    }
 
-    assert discount_code.is_available(ticket_holders=[1]) is True
+    discount_quantity = discount_code.is_available(ticket_holders=[1])
+    assert discount_quantity.get('numb_discount') == quantity_discount.get(
+        'numb_discount'
+    )
 
     order_with_discount = OrderFactory(
         status='completed', discount_code_id=discount_code.id
@@ -33,8 +40,16 @@ def test_match_discount_quantity(db):
 
     # Attendees associated with the order with discount code should be counted
     AttendeeFactoryBase.create_batch(
-        5, order_id=order_with_discount.id, ticket_id=ticket.id, event_id=ticket.event_id
+        5,
+        order_id=order_with_discount.id,
+        ticket_id=ticket.id,
+        event_id=ticket.event_id,
+        is_discount_applied=True,
     )
 
-    assert discount_code.is_available(ticket_holders=[1]) is False
+    discount_quantity = discount_code.is_available(ticket_holders=[1])
+    assert discount_quantity.get('numb_discount') == quantity_discount.get(
+        'numb_discount'
+    )
+
     assert discount_code.confirmed_attendees_count == 5

@@ -258,7 +258,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
 
     if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
-        is_discount_available(
+        quantity_discount = is_discount_available(
             discount_code,
             tickets=tickets,
             quantity_discount=quantity_discount,

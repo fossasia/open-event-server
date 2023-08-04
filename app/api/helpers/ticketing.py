@@ -157,6 +157,11 @@ def is_discount_available(
     Validation of discount code belonging to the tickets and events should be done
     before calling this method
     """
+    if quantity_discount is None:
+        quantity_discount: dict = {
+            'numb_no_discount': 0,
+            'numb_discount': 0,
+        }
     qty = 0
     # TODO(Areeb): Extremely confusing here what should we do about deleted tickets here
     ticket_ids = [ticket.id for ticket in discount_code.tickets]
