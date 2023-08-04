@@ -144,7 +144,9 @@ def create_pdf_tickets_for_holder(order):
             tickets.append(ticket)
 
         # calculate order amount using helper function
-        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)
+        order_amount = calculate_order_amount(
+            tickets, verify_discount=False, discount_code=order.discount_code
+        )
 
         create_save_pdf(
             render_template(
@@ -238,16 +240,30 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code=None):
-    from app.api.helpers.ticketing import validate_discount_code, validate_tickets
+def calculate_order_amount(tickets, verify_discount, discount_code=None):
+    from app.api.helpers.ticketing import (
+        is_discount_available,
+        validate_discount_code,
+        validate_tickets,
+    )
     from app.models.discount_code import DiscountCode
 
     ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
+    quantity_discount: dict = {
+        'numb_no_discount': 0,
+        'numb_discount': 0,
+    }
 
     if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
+        is_discount_available(
+            discount_code,
+            tickets=tickets,
+            quantity_discount=quantity_discount,
+            verify_discount=verify_discount,
+        )
 
     event = tax = tax_included = fees = None
     total_amount = total_tax = total_discount = 0.0
@@ -260,6 +276,11 @@ def calculate_order_amount(tickets, discount_code=None):
         ticket_fee = 0.0
 
         quantity = ticket_info.get('quantity', 1)  # Default to single ticket
+        if ticket_info.get('quantity_discount'):
+            quantity_discount['numb_discount'] = ticket_info.get('quantity_discount')
+            quantity_discount['numb_no_discount'] = quantity_discount[
+                'numb_no_discount'
+            ] - ticket_info.get('quantity_discount')
         if not event:
             event = ticket.event
 
@@ -322,16 +343,29 @@ def calculate_order_amount(tickets, discount_code=None):
                         'code': discount_code.code,
                         'percent': round(discount_percent, 2),
                         'amount': round(discount_amount, 2),
-                        'total': round(discount_amount * quantity, 2),
+                        'total': round(
+                            discount_amount * quantity_discount.get('numb_discount'), 2
+                        ),
                         'type': code.type,
                     }
+                    if quantity_discount.get('numb_no_discount') > 0:
+                        discount_data['warning'] = (
+                            'Your order not fully discount due to discount code usage is '
+                            'exhausted.'
+                        )
 
-        total_discount += round(discount_amount * quantity, 2)
+        total_discount += round(
+            discount_amount * quantity_discount.get('numb_discount'), 2
+        )
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
             if ticket_fee > fees.maximum_fee:
                 ticket_fee = fees.maximum_fee
-        sub_total = ticket_fee + (price - discount_amount) * quantity
+        sub_total = (
+            ticket_fee
+            + (price - discount_amount) * quantity_discount.get('numb_discount')
+            + price * (quantity - quantity_discount.get('numb_discount'))
+        )
         total_amount = total_amount + sub_total
         ticket_list.append(
             {

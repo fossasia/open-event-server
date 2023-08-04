@@ -7,7 +7,7 @@ from flask_jwt_extended import current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.custom.schema.order_amount import OrderAmountInputSchema
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.db import safe_query, safe_query_by_id, save_to_db
 from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.order import (
@@ -21,6 +21,7 @@ from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
+from app.models.discount_code import DiscountCode
 from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
@@ -91,7 +92,11 @@ def calculate_amount():
     data, errors = OrderAmountInputSchema().load(request.get_json())
     if errors:
         return make_response(jsonify(errors), 422)
-    return jsonify(calculate_order_amount(data['tickets'], data.get('discount_code')))
+    return jsonify(
+        calculate_order_amount(
+            data['tickets'], data.get('discount_verify'), data.get('discount_code')
+        )
+    )
 
 
 @order_blueprint.route('/create-order', methods=['POST'])
@@ -102,7 +107,9 @@ def create_order():
         return make_response(jsonify(errors), 422)
 
     tickets_dict = data['tickets']
-    order_amount = calculate_order_amount(tickets_dict, data.get('discount_code'))
+    order_amount = calculate_order_amount(
+        tickets_dict, data.get('discount_verify'), data.get('discount_code')
+    )
     ticket_ids = {ticket['id'] for ticket in tickets_dict}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets_dict}
     tickets = (
@@ -116,14 +123,41 @@ def create_order():
         )
 
     event = tickets[0].event
+    discount_code = None
+    discount_threshold = 0
+    if data.get('discount_code'):
+        if isinstance(data.get('discount_code'), int) or (
+            isinstance(data.get('discount_code'), str)
+            and data.get('discount_code').isdigit()
+        ):
+            # Discount Code ID is passed
+            discount_code = safe_query_by_id(DiscountCode, data.get('discount_code'))
+            current_discount_usage_count = discount_code.confirmed_attendees_count
+            discount_threshold = (
+                discount_code.tickets_number - current_discount_usage_count
+            )
 
     try:
         attendees = []
         for ticket in tickets:
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
+                is_discount_applied = False
+                if (
+                    discount_code
+                    and (ticket in discount_code.tickets)
+                    and (discount_threshold > 0)
+                ):
+                    is_discount_applied = True
+                    discount_threshold -= 1
                 attendees.append(
-                    TicketHolder(firstname='', lastname='', ticket=ticket, event=event)
+                    TicketHolder(
+                        firstname='',
+                        lastname='',
+                        ticket=ticket,
+                        event=event,
+                        is_discount_applied=is_discount_applied,
+                    )
                 )
                 db.session.commit()
     except Exception as e:
@@ -184,7 +218,6 @@ def ticket_attendee_pdf(attendee_id):
 
 @order_blueprint.route('/<string:order_identifier>/verify', methods=['POST'])
 def verify_order_payment(order_identifier):
-
     order = Order.query.filter_by(identifier=order_identifier).first()
 
     if order.payment_mode == 'stripe':
