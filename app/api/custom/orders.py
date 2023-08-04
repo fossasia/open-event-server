@@ -125,17 +125,17 @@ def create_order():
     event = tickets[0].event
     discount_code = None
     discount_threshold = 0
-    if data.get('discount_code'):
-        if isinstance(data.get('discount_code'), int) or (
+    if data.get('discount_code') and (
+        isinstance(data.get('discount_code'), int)
+        or (
             isinstance(data.get('discount_code'), str)
             and data.get('discount_code').isdigit()
-        ):
-            # Discount Code ID is passed
-            discount_code = safe_query_by_id(DiscountCode, data.get('discount_code'))
-            current_discount_usage_count = discount_code.confirmed_attendees_count
-            discount_threshold = (
-                discount_code.tickets_number - current_discount_usage_count
-            )
+        )
+    ):
+        # Discount Code ID is passed
+        discount_code = safe_query_by_id(DiscountCode, data.get('discount_code'))
+        current_discount_usage_count = discount_code.confirmed_attendees_count
+        discount_threshold = discount_code.tickets_number - current_discount_usage_count
 
     try:
         attendees = []

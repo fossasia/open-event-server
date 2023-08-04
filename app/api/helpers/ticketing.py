@@ -177,7 +177,7 @@ def is_discount_available(
 
     max_quantity = qty if discount_code.max_quantity < 0 else discount_code.max_quantity
 
-    if not (discount_code.min_quantity <= qty <= max_quantity):
+    if not discount_code.min_quantity <= qty <= max_quantity:
         logger.warning(
             "Discount code is not applied with your quantity.",
             extra=dict(
@@ -188,11 +188,10 @@ def is_discount_available(
                 old_holders=old_holders,
             ),
         )
-    if not (old_holders < discount_code.tickets_number):
-        if verify_discount:
-            raise UnprocessableEntityError(
-                {'pointer': 'discount_sold_out'}, "Discount tickets sold out."
-            )
+    if not (old_holders < discount_code.tickets_number) and verify_discount:
+        raise UnprocessableEntityError(
+            {'pointer': 'discount_sold_out'}, "Discount tickets sold out."
+        )
     if (qty + old_holders - discount_code.tickets_number) >= 0:
         quantity_discount['numb_no_discount'] = (
             qty + old_holders - discount_code.tickets_number
