@@ -168,3 +168,21 @@ def get_new_identifier(model=None, length=None):
     if not identifier.isdigit() and count == 0:
         return identifier
     return get_new_identifier(model)
+
+
+def save_bulk_to_db(items, msg="Saved to db", print_error=True):
+    """Convenience function to wrap a proper DB save
+    :param print_error:
+    :param item: will be saved to database
+    :param msg: Message to log
+    """
+    try:
+        logging.info(msg)
+        db.session.bulk_save_objects(items)
+        logging.info('added to session')
+        db.session.commit()
+        return True
+    except Exception:
+        logging.exception('DB Exception!')
+        db.session.rollback()
+        return False
