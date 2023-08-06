@@ -116,6 +116,9 @@ def validate_discount_code(
                     discount_code=discount_code,
                 ),
             )
+            raise UnprocessableEntityError(
+                {'pointer': 'discount_code_id'}, 'Invalid Discount Code'
+            )
 
     now = pytz.utc.localize(datetime.utcnow())
     valid_from = discount_code.valid_from
