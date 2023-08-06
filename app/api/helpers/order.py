@@ -367,7 +367,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
     sub_total = total_amount
     tax_dict = None
     if tax:
-        tax_dict = get_tax_amount(tax_included, total_amount, tax)
+        tax_dict, total_amount = get_tax_amount(tax_included, total_amount, tax)
 
     return dict(
         tax=tax_dict,
@@ -449,4 +449,4 @@ def get_tax_amount(tax_included, total_amount, tax):
         percent=tax.rate if tax else 0.0,
         name=tax.name,
     )
-    return tax_dict
+    return tax_dict, total_amount
