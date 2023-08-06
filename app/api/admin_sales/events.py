@@ -72,6 +72,7 @@ class AdminSalesByEventsList(ResourceList):
         return Event.query
 
     def after_get(self, res):
+        """following the get event, compute the price"""
         if 'data' in res:
             data = res['data']
             _events_id = map(lambda x: x['id'], data)
