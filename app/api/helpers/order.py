@@ -331,18 +331,14 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
                         if tax:
                             discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
                         discount_percent = code.value
-                    discount_data = {
-                        'code': discount_code.code,
-                        'percent': round(discount_percent, 2),
-                        'amount': round(discount_amount, 2),
-                        'total': round(discount_amount * discount_quantity, 2),
-                        'type': code.type,
-                    }
-                    if int(quantity_discount.get('numb_no_discount')) > 0:
-                        discount_data['warning'] = (
-                            'Your order not fully discount due to discount code usage is '
-                            'exhausted.'
-                        )
+                    discount_data = get_discount_data(
+                        discount_code,
+                        discount_percent,
+                        discount_amount,
+                        discount_quantity,
+                        code,
+                        quantity_discount,
+                    )
 
         total_discount += round(discount_amount * discount_quantity, 2)
         if fees and not ticket.is_fee_absorbed:
@@ -371,17 +367,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
     sub_total = total_amount
     tax_dict = None
     if tax:
-        if tax_included:
-            total_tax = total_amount - total_amount / (1 + tax.rate / 100)
-        else:
-            total_tax = total_amount * tax.rate / 100
-            total_amount += total_tax
-        tax_dict = dict(
-            included=tax_included,
-            amount=round(total_tax, 2),
-            percent=tax.rate if tax else 0.0,
-            name=tax.name,
-        )
+        tax_dict = get_tax_amount(tax_included, total_amount, tax)
 
     return dict(
         tax=tax_dict,
@@ -427,3 +413,40 @@ def get_price(ticket, ticket_info):
     else:
         price = ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
     return price
+
+
+def get_discount_data(
+    discount_code,
+    discount_percent,
+    discount_amount,
+    discount_quantity,
+    code,
+    quantity_discount,
+):
+    discount_data = {
+        'code': discount_code.code,
+        'percent': round(discount_percent, 2),
+        'amount': round(discount_amount, 2),
+        'total': round(discount_amount * discount_quantity, 2),
+        'type': code.type,
+    }
+    if int(quantity_discount.get('numb_no_discount')) > 0:
+        discount_data['warning'] = (
+            'Your order not fully discount due to discount code usage is ' 'exhausted.'
+        )
+    return discount_data
+
+
+def get_tax_amount(tax_included, total_amount, tax):
+    if tax_included:
+        total_tax = total_amount - total_amount / (1 + tax.rate / 100)
+    else:
+        total_tax = total_amount * tax.rate / 100
+        total_amount += total_tax
+    tax_dict = dict(
+        included=tax_included,
+        amount=round(total_tax, 2),
+        percent=tax.rate if tax else 0.0,
+        name=tax.name,
+    )
+    return tax_dict
