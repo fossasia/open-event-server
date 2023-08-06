@@ -21,6 +21,7 @@ from app.api.orders import validate_attendees
 from app.api.schema.orders import OrderSchema
 from app.extensions.limiter import limiter
 from app.models import db
+from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
 from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
@@ -124,7 +125,9 @@ def create_order():
 
     event = tickets[0].event
     discount_code = None
+    access_code = None
     discount_threshold = 0
+    access_threshold = 0
     if data.get('discount_code') and (
         isinstance(data.get('discount_code'), int)
         or (
@@ -134,15 +137,29 @@ def create_order():
     ):
         # Discount Code ID is passed
         discount_code = safe_query_by_id(DiscountCode, data.get('discount_code'))
-        current_discount_usage_count = discount_code.confirmed_attendees_count
-        discount_threshold = discount_code.tickets_number - current_discount_usage_count
-
+        if discount_code is not None:
+            current_discount_usage_count = discount_code.confirmed_attendees_count
+            discount_threshold = (
+                discount_code.tickets_number - current_discount_usage_count
+            )
+    if data.get('access_code') and (
+        isinstance(data.get('access_code'), int)
+        or (
+            isinstance(data.get('access_code'), str) and data.get('access_code').isdigit()
+        )
+    ):
+        # Access Code check
+        access_code = safe_query_by_id(AccessCode, data.get('access_code'))
+        if access_code is not None:
+            current_access_usage_count = access_code.confirmed_attendees_count
+            access_threshold = access_code.tickets_number - current_access_usage_count
     try:
         attendees = []
         for ticket in tickets:
             for _ in range(ticket_map[ticket.id]['quantity']):
                 ticket.raise_if_unavailable()
                 is_discount_applied = False
+                is_access_code_applied = False
                 if (
                     discount_code
                     and (ticket in discount_code.tickets)
@@ -150,6 +167,21 @@ def create_order():
                 ):
                     is_discount_applied = True
                     discount_threshold -= 1
+
+                if (
+                    access_code
+                    and (ticket in access_code.tickets)
+                    and access_threshold >= 0
+                ):
+                    if access_threshold == 0:
+                        raise UnprocessableEntityError(
+                            {'source': 'access_code'},
+                            f"Access code for ticket {ticket.name} is exhausted, "
+                            f"only {access_code.tickets_number - current_access_usage_count} quantity is available",
+                        )
+                    is_access_code_applied = True
+                    access_threshold -= 1
+
                 attendees.append(
                     TicketHolder(
                         firstname='',
@@ -157,6 +189,7 @@ def create_order():
                         ticket=ticket,
                         event=event,
                         is_discount_applied=is_discount_applied,
+                        is_access_code_applied=is_access_code_applied,
                     )
                 )
                 db.session.commit()
@@ -176,6 +209,7 @@ def create_order():
         amount=order_amount['total'],
         event=event,
         discount_code_id=data.get('discount_code'),
+        access_code_id=data.get('access_code'),
         ticket_holders=attendees,
     )
     db.session.commit()

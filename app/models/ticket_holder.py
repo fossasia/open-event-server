@@ -85,6 +85,7 @@ class TicketHolder(SoftDeletionModel):
     is_badge_printed: bool = db.Column(db.Boolean, default=False)
     badge_printed_at: datetime = db.Column(db.DateTime(timezone=True))
     is_discount_applied: bool = db.Column(db.Boolean, default=False)
+    is_access_code_applied: bool = db.Column(db.Boolean, default=False)
 
     @property
     def name(self):

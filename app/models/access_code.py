@@ -3,8 +3,11 @@ from datetime import datetime
 
 from sqlalchemy.sql import func
 
+from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
+from app.models.order import Order
+from app.models.ticket_holder import TicketHolder
 
 
 @dataclass(init=False, unsafe_hash=True)
@@ -44,3 +47,16 @@ class AccessCode(SoftDeletionModel):
     @property
     def valid_expire_time(self):
         return self.valid_till or self.event.ends_at
+
+    def get_confirmed_attendees_query(self):
+        return (
+            TicketHolder.query.filter_by(deleted_at=None)
+            .filter_by(is_access_code_applied=True)
+            .join(Order)
+            .filter_by(access_code_id=self.id)
+            .filter(Order.status.in_(['completed', 'placed']))
+        )
+
+    @property
+    def confirmed_attendees_count(self) -> int:
+        return get_count(self.get_confirmed_attendees_query())

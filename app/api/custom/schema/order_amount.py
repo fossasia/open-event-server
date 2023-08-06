@@ -11,6 +11,7 @@ class TicketSchema(Schema):
 class OrderAmountInputSchema(Schema):
     tickets = fields.Nested(TicketSchema, many=True)
     discount_code = fields.Integer(load_from='discount-code')
+    access_code = fields.Integer(load_from='access-code')
     amount = fields.Float(allow_none=True)
     discount_verify = fields.Boolean(
         required=False, default=True, load_from='discount-verify'
