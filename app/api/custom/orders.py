@@ -128,6 +128,7 @@ def create_order():
     access_code = None
     discount_threshold = 0
     access_threshold = 0
+    current_access_usage_count = 0
     if data.get('discount_code') and (
         isinstance(data.get('discount_code'), int)
         or (

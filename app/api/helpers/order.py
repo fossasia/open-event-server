@@ -257,10 +257,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
     ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
-    quantity_discount: dict = {
-        'numb_no_discount': 0,
-        'numb_discount': 0,
-    }
+    quantity_discount: dict = {'numb_no_discount': 0, 'numb_discount': 0}
 
     if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
