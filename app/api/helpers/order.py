@@ -299,20 +299,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
         if not tax and event.tax:
             tax = event.tax
             tax_included = tax.is_tax_included_in_price
-
-        if ticket.type in ['donation', 'donationRegistration']:
-            price = ticket_info.get('price')
-            if not price or price > ticket.max_price or price < ticket.min_price:
-                raise UnprocessableEntityError(
-                    {'pointer': 'tickets/price'},
-                    f"Price for donation ticket should be present and within range "
-                    f"{ticket.min_price} to {ticket.max_price}",
-                )
-        else:
-            price = (
-                ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
-            )
-
+        price = get_price(ticket, ticket_info)
         if tax:
             if tax_included:
                 ticket_tax = price - price / (1 + tax.rate / 100)
@@ -426,3 +413,17 @@ def on_order_completed(order):
     )
     send_order_purchase_organizer_email(order, organizer_set)
     notify_ticket_purchase_organizer(order)
+
+
+def get_price(ticket, ticket_info):
+    if ticket.type in ['donation', 'donationRegistration']:
+        price = ticket_info.get('price')
+        if not price or price > ticket.max_price or price < ticket.min_price:
+            raise UnprocessableEntityError(
+                {'pointer': 'tickets/price'},
+                f"Price for donation ticket should be present and within range "
+                f"{ticket.min_price} to {ticket.max_price}",
+            )
+    else:
+        price = ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
+    return price
