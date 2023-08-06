@@ -6,7 +6,7 @@ import uuid
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy import func
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.models import db
@@ -168,3 +168,20 @@ def get_new_identifier(model=None, length=None):
     if not identifier.isdigit() and count == 0:
         return identifier
     return get_new_identifier(model)
+
+
+def save_bulk_to_db(items, msg="Saved to db"):
+    """Convenience function to wrap a proper DB save
+    :param item: will be saved to database
+    :param msg: Message to log
+    """
+    try:
+        logging.info(msg)
+        db.session.bulk_save_objects(items)
+        logging.info('added to session')
+        db.session.commit()
+        return True
+    except SQLAlchemyError:
+        logging.exception('DB Exception!')
+        db.session.rollback()
+        return False
