@@ -130,7 +130,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
 
             field_raw = field.identifier.replace("_", "").lower()
             key = key_mapping.get(field_raw)
-            converted_header = field.name
+            converted_header = attendee_form_dict.get(key)
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
                 converted_header = field.name
