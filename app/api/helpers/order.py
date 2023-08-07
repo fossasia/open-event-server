@@ -339,6 +339,9 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
                         code,
                         quantity_discount,
                     )
+                quantity_discount['numb_discount'] = (
+                    quantity_discount['numb_discount'] - quantity
+                )
 
         total_discount += round(discount_amount * discount_quantity, 2)
         if fees and not ticket.is_fee_absorbed:
@@ -362,7 +365,6 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
                 'discounted_tax': round(discounted_tax, 2),
             }
         )
-        quantity_discount['numb_discount'] = quantity_discount['numb_discount'] - quantity
 
     sub_total = total_amount
     tax_dict = None
