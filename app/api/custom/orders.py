@@ -178,7 +178,8 @@ def create_order():
                         raise UnprocessableEntityError(
                             {'source': 'access_code'},
                             f"Access code for ticket {ticket.name} is exhausted, "
-                            f"only {access_code.tickets_number - current_access_usage_count} quantity is available",
+                            f"only {access_code.tickets_number - current_access_usage_count} "
+                            "quantity is available",
                         )
                     is_access_code_applied = True
                     access_threshold -= 1

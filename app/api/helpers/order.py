@@ -269,7 +269,7 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
         )
 
     event = tax = tax_included = fees = None
-    total_amount = total_tax = total_discount = 0.0
+    total_amount = total_discount = 0.0
     ticket_list = []
     for ticket in fetched_tickets:
         ticket_tax = discounted_tax = 0.0
@@ -318,14 +318,14 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
                         discount_amount = min(code.value, price)
                         discount_percent = (discount_amount / price) * 100
                         if tax:
-                            if tax_included:
-                                discounted_tax = (price - discount_amount) - (
-                                    price - discount_amount
-                                ) / (1 + tax.rate / 100)
-                            else:
-                                discounted_tax = (
-                                    (price - discount_amount) * tax.rate / 100
-                                )
+                            tax_rate = tax.rate / 100
+                            tax_factor = 1 + tax_rate
+                            discounted_price = price - discount_amount
+                            discounted_tax = (
+                                discounted_price * tax_rate / tax_factor
+                                if tax_included
+                                else discounted_price * tax_rate
+                            )
                     else:
                         discount_amount = (price * code.value) / 100
                         if tax:
@@ -423,6 +423,16 @@ def get_discount_data(
     code,
     quantity_discount,
 ):
+    """
+    Get discount data for calculate price
+    @param discount_code: discount code
+    @param discount_percent: discount percent
+    @param discount_amount: discount amount
+    @param discount_quantity: discount quantity
+    @param code: code
+    @param quantity_discount: quantity discount
+    @return: discount data
+    """
     discount_data = {
         'code': discount_code.code,
         'percent': round(discount_percent, 2),
@@ -438,6 +448,13 @@ def get_discount_data(
 
 
 def get_tax_amount(tax_included, total_amount, tax):
+    """
+    Get tax amount for calculate price
+    @param tax_included: tax included
+    @param total_amount: total amount
+    @param tax: tax model
+    @return: tax and amount after tax
+    """
     if tax_included:
         total_tax = total_amount - total_amount / (1 + tax.rate / 100)
     else:

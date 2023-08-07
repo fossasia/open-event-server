@@ -49,6 +49,10 @@ class AccessCode(SoftDeletionModel):
         return self.valid_till or self.event.ends_at
 
     def get_confirmed_attendees_query(self):
+        """
+        Get list of attendee who complete order using access code
+        @return: list of attendee
+        """
         return (
             TicketHolder.query.filter_by(deleted_at=None)
             .filter_by(is_access_code_applied=True)
