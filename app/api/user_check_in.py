@@ -4,7 +4,9 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
 from app.api.helpers.user_check_in import (
@@ -18,6 +20,7 @@ from app.models import db
 from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.station import Station
+from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_check_in import UserCheckIn
 
@@ -95,11 +98,29 @@ class UserCheckInListPost(ResourceList):
         :return:
         """
         station = self.session.query(Station).filter_by(id=data.get('station')).one()
+        current_time = datetime.datetime.utcnow()
         if not has_access('is_coorganizer', event_id=station.event_id):
             raise UnprocessableEntityError(
                 {'parameter': 'station'},
                 "Only admin/organiser/coorganizer of event only able to check in",
             )
+        try:
+            attendee = (
+                self.session.query(TicketHolder)
+                .filter_by(id=data.get('ticket_holder'))
+                .one()
+            )
+        except NoResultFound:
+            raise ObjectNotFound(
+                {'parameter': data.get('attendee')}, "Attendee: not found"
+            )
+
+        if attendee.event_id != station.event_id:
+            raise UnprocessableEntityError(
+                {'parameter': 'Attendee'},
+                "Attendee not belong to this event",
+            )
+
         if station.station_type != STATION_TYPE.get('registration'):
             # validate if microlocation_id from session matches with station
             session = self.session.query(Session).filter_by(id=data.get('session')).one()
@@ -138,6 +159,7 @@ class UserCheckInListPost(ResourceList):
             validate_check_in_out_status(
                 station=station, attendee_data=attendee_check_in_status
             )
+            data['check_in_out_at'] = current_time
         else:
             if station.station_type == STATION_TYPE.get('registration'):
                 attendee_check_in_status = (
@@ -157,6 +179,10 @@ class UserCheckInListPost(ResourceList):
                         },
                         "Attendee already registered.",
                     )
+                # update register time for attendee
+                attendee.is_registered = True
+                attendee.register_times = current_time
+                save_to_db(attendee)
             if station.station_type == STATION_TYPE.get('daily'):
                 attendee_check_in_status = (
                     self.session.query(UserCheckIn)
@@ -177,11 +203,14 @@ class UserCheckInListPost(ResourceList):
                         "Attendee already check daily on station.",
                     )
 
-        if station.station_type in (
-            STATION_TYPE.get('check in'),
-            STATION_TYPE.get('check out'),
-        ):
-            data['check_in_out_at'] = datetime.datetime.utcnow()
+        if station.station_type == STATION_TYPE.get('check in'):
+            attendee.is_checked_in = True
+            attendee.checkin_times = current_time
+            save_to_db(attendee)
+        if station.station_type == STATION_TYPE.get('check out'):
+            attendee.is_checked_out = True
+            attendee.checkout_times = current_time
+        save_to_db(attendee)
 
     schema = UserCheckInSchema
     methods = [
