@@ -117,6 +117,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
             'State': str(attendee.order.state) if attendee.order.state else '',
             'City': str(attendee.order.city) if attendee.order.city else '',
             'Zipcode': str(attendee.order.zipcode) if attendee.order.zipcode else '',
+            'Email': '',
         }
 
         for field in custom_forms:
@@ -129,7 +130,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
 
             field_raw = field.identifier.replace("_", "").lower()
             key = key_mapping.get(field_raw)
-            converted_header = attendee_form_dict.get(key)
+            converted_header = field.name
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
                 data[converted_header] = (
