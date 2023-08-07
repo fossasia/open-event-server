@@ -123,9 +123,17 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
         for field in custom_forms:
             # keys don't match up, for keys like
             # acceptVideoRecording vs accept_video_recording ..
+            key_mapping = {}
+
+            for k in attendee_form_dict.keys():
+                key_mapping[k.replace("_", "").lower()] = k
+
+            field_raw = field.identifier.replace("_", "").lower()
+            key = key_mapping.get(field_raw)
             converted_header = field.name
             if field.is_complex:
                 fields_dict = attendee.complex_field_values
+                converted_header = field.name
                 data[converted_header] = (
                     fields_dict.get(field.identifier, '') if fields_dict else ''
                 )
@@ -138,6 +146,7 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
                     if str(dict_value) == "False"
                     else dict_value
                 )
+                converted_header = field.name
                 data[converted_header] = dict_value
         return_dict_list.append(data)
 
