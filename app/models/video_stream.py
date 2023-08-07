@@ -41,6 +41,8 @@ class VideoStream(db.Model):
         db.Integer, db.ForeignKey('video_channels.id', ondelete='CASCADE')
     )
     channel = db.relationship(VideoChannel, backref='streams')
+    is_chat_enabled = db.Column(db.Boolean, default=False, nullable=True)
+    is_global_event_room = db.Column(db.Boolean, default=False, nullable=True)
 
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
