@@ -3,8 +3,6 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <style type="text/css">
-    </style>
 </head>
 <body style="width: 100%;">
     <div style="background: {{ badgeForms.badge_image_url }}">
@@ -18,8 +16,7 @@
                     <img src="data:image/png;base64, {{ badgeFieldForm.sample_text }}" width="400" alt="QR" />
                 </div>
             {% else %}
-                <p class="field-style"
-                    style="font-family: {{badgeFieldForm.font_name}};
+                <p style="font-family: {{badgeFieldForm.font_name}};
                     font-size: {{badgeFieldForm.font_size}} px;
                     text-align: center;
                     text-transform: {{badgeFieldForm.text_type}};
