@@ -9,6 +9,12 @@ from tests.factories.ticket import TicketSubFactory
 
 
 def get_minimal_attendee(db, user):
+    """
+    create attendee
+    @param db: db
+    @param user: user
+    @return: attendee created
+    """
     attendee = AttendeeOrderTicketSubFactory(
         email=None, address=None, city=None, state=None, country=None, order__user=user
     )
@@ -18,6 +24,13 @@ def get_minimal_attendee(db, user):
 
 
 def test_attendee_not_register_yet(db, client, jwt, user):
+    """
+    Testing for case attendee not register yet
+    @param db: db
+    @param client: client
+    @param jwt: jwt
+    @param user: user
+    """
     attendee = get_minimal_attendee(db, user)
     data = {'event_id': attendee.event_id, 'attendee_id': attendee.id}
     response = client.get(
@@ -31,6 +44,13 @@ def test_attendee_not_register_yet(db, client, jwt, user):
 
 
 def test_attendee_registered(db, client, jwt, user):
+    """
+    Test user is already registered
+    @param db: db
+    @param client: client
+    @param jwt: jwt
+    @param user: user
+    """
     user.is_super_admin = True
     event = EventFactoryBasic()
     microlocation = MicrolocationSubFactory(event=event)

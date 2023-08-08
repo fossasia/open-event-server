@@ -55,6 +55,7 @@ def send_receipt():
 def check_attendee_state():
     """
     API to check attendee state is check in/registered
+    @return: user is registered or not
     """
     from app.models.event import Event
 
@@ -86,6 +87,10 @@ def check_attendee_state():
 
 
 def validate_param_as_id(param):
+    """
+    validate id if integer or not
+    @param param: param to check
+    """
     if not (isinstance(param, int) or (isinstance(param, str) and param.isdigit())):
         raise UnprocessableEntityError(
             {'parameter': f'{param}'}, f'{param} is not a valid id'

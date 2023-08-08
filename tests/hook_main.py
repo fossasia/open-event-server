@@ -521,7 +521,7 @@ def group_event_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -842,7 +842,7 @@ def group_get_list_from_user(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -856,7 +856,7 @@ def group_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -870,7 +870,7 @@ def group_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -901,7 +901,7 @@ def group_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -915,7 +915,7 @@ def group_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
