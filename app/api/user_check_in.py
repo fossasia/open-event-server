@@ -101,6 +101,7 @@ class UserCheckInListPost(ResourceList):
             station = db.session.query(Station).filter_by(id=data.get('station')).one()
         except NoResultFound:
             raise ObjectNotFound({'parameter': data.get('station')}, "Station: not found")
+        current_time = datetime.datetime.utcnow()
         if not has_access('is_coorganizer', event_id=station.event_id):
             raise UnprocessableEntityError(
                 {'parameter': 'station'},
