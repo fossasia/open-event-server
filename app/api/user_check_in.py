@@ -97,8 +97,10 @@ class UserCheckInListPost(ResourceList):
         :param _view_kwargs:
         :return:
         """
-        station = self.session.query(Station).filter_by(id=data.get('station')).one()
-        current_time = datetime.datetime.utcnow()
+        try:
+            station = db.session.query(Station).filter_by(id=data.get('station')).one()
+        except NoResultFound:
+            raise ObjectNotFound({'parameter': data.get('station')}, "Station: not found")
         if not has_access('is_coorganizer', event_id=station.event_id):
             raise UnprocessableEntityError(
                 {'parameter': 'station'},
@@ -123,20 +125,28 @@ class UserCheckInListPost(ResourceList):
 
         if station.station_type != STATION_TYPE.get('registration'):
             # validate if microlocation_id from session matches with station
-            session = self.session.query(Session).filter_by(id=data.get('session')).one()
+            session = (
+                self.session.query(Session).filter_by(id=data.get('session')).first()
+            )
+            if session is None:
+                raise ObjectNotFound(
+                    {'parameter': data.get('session')}, "Session: not found"
+                )
             validate_microlocation(station=station, session=session)
             if session.session_type_id:
                 session_type = (
                     self.session.query(SessionType)
                     .filter(SessionType.id == session.session_type_id)
-                    .one()
+                    .first()
                 )
-                data['session_name'] = session_type.name
+                if session_type is not None:
+                    data['session_name'] = session_type.name
             if session.track_id:
                 track = (
-                    self.session.query(Track).filter(Track.id == session.track_id).one()
+                    self.session.query(Track).filter(Track.id == session.track_id).first()
                 )
-                data['track_name'] = track.name
+                if track is not None:
+                    data['track_name'] = track.name
             data['speaker_name'] = ', '.join(
                 [str(speaker.name) for speaker in session.speakers]
             )
