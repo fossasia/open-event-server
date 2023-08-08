@@ -2,7 +2,11 @@ import pytz
 
 from app.api.admin_sales.utils import event_type, summary
 from app.api.helpers.group_user_role import get_user_group_role
+from app.models import db
+from app.models.access_code import AccessCode
 from app.models.helpers.versioning import strip_tags
+from app.models.order import OrderTicket
+from app.models.ticket import access_codes_tickets
 
 
 def export_orders_csv(orders):
@@ -15,6 +19,7 @@ def export_orders_csv(orders):
         'Total Amount',
         'Quantity',
         'Discount Code',
+        'Access Code',
         'First Name',
         'Last Name',
         'Email',
@@ -30,6 +35,24 @@ def export_orders_csv(orders):
     rows = [headers]
     for order in orders:
         if order.status != "deleted":
+            orderTickets = db.session.query(OrderTicket).filter_by(order_id=order.id)
+            access_code_value = ''
+            for order_ticket in orderTickets:
+                accessCodesTicket = (
+                    db.session.query(access_codes_tickets)
+                    .filter(access_codes_tickets.c.ticket_id == order_ticket.ticket_id)
+                    .first()
+                )
+                if accessCodesTicket:
+                    access_code = (
+                        db.session.query(AccessCode)
+                        .filter_by(id=accessCodesTicket.access_code_id)
+                        .first()
+                    )
+                    if access_code:
+                        access_code_value = access_code.code
+                        break
+
             column = [
                 str(order.get_invoice_number()),
                 str(order.created_at) if order.created_at else '',
@@ -39,6 +62,7 @@ def export_orders_csv(orders):
                 str(order.amount) if order.amount else '',
                 str(order.tickets_count),
                 str(order.discount_code.code) if order.discount_code else '',
+                str(access_code_value),
                 str(order.user.first_name)
                 if order.user and order.user.first_name
                 else '',
