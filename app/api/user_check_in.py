@@ -203,14 +203,6 @@ class UserCheckInListPost(ResourceList):
                         "Attendee already check daily on station.",
                     )
 
-        if station.station_type == STATION_TYPE.get('check in'):
-            attendee.is_checked_in = True
-            attendee.checkin_times = current_time
-        if station.station_type == STATION_TYPE.get('check out'):
-            attendee.is_checked_out = True
-            attendee.checkout_times = current_time
-        save_to_db(attendee)
-
     schema = UserCheckInSchema
     methods = [
         'POST',
