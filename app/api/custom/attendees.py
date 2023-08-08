@@ -50,24 +50,29 @@ def send_receipt():
         raise UnprocessableEntityError({'source': ''}, 'Order identifier missing')
 
 
-@attendee_blueprint.route(
-    '/events/<int:event_id>/attendees/<int:attendee_id>/state', methods=['GET']
-)
+@attendee_blueprint.route('/states', methods=['GET'])
 @jwt_required
-def check_attendee_state(attendee_id: int, event_id: int):
+def check_attendee_state():
     """
     API to check attendee state is check in/registered
-    @param event_id: event id
-    @param attendee_id: attendee id
     """
     from app.models.event import Event
 
-    Event.query.get_or_404(event_id)
+    event_id = request.args.get('event_id')
+    attendee_id = request.args.get('attendee_id')
+    if event_id is not None:
+        validate_param_as_id(event_id)
+    if attendee_id is not None:
+        validate_param_as_id(attendee_id)
+    try:
+        event = safe_query_by_id(Event, event_id)
+    except ObjectNotFound:
+        raise NotFoundError({'parameter': f'{event_id}'}, "Event not found")
     try:
         attendee = safe_query_by_id(TicketHolder, attendee_id)
     except ObjectNotFound:
-        raise NotFoundError({'parameter': '{attendee_id}'}, "Attendee not found")
-    if event_id != attendee.event_id:
+        raise NotFoundError({'parameter': f'{attendee_id}'}, "Attendee not found")
+    if event.id != attendee.event_id:
         raise UnprocessableEntityError(
             {'parameter': 'Attendee'},
             "Attendee not belong to this event",
@@ -78,3 +83,10 @@ def check_attendee_state(attendee_id: int, event_id: int):
             'register_times': attendee.register_times,
         }
     )
+
+
+def validate_param_as_id(param):
+    if not (isinstance(param, int) or (isinstance(param, str) and param.isdigit())):
+        raise UnprocessableEntityError(
+            {'parameter': f'{param}'}, f'{param} is not a valid id'
+        )

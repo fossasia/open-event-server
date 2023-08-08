@@ -19,10 +19,12 @@ def get_minimal_attendee(db, user):
 
 def test_attendee_not_register_yet(db, client, jwt, user):
     attendee = get_minimal_attendee(db, user)
+    data = {'event_id': attendee.event_id, 'attendee_id': attendee.id}
     response = client.get(
-        f'/v1/events/{attendee.event_id}/attendees/{attendee.id}/state',
+        '/v1/states',
         content_type='application/vnd.api+json',
         headers=jwt,
+        query_string=data,
     )
     assert response.status_code == 200
     assert json.loads(response.data)['is_registered'] is False
@@ -68,10 +70,13 @@ def test_attendee_registered(db, client, jwt, user):
         data=data,
     )
 
+    data = {'event_id': event.id, 'attendee_id': attendee.id}
+
     response = client.get(
-        f'/v1/events/{event.id}/attendees/{attendee.id}/state',
+        '/v1/states',
         content_type='application/vnd.api+json',
         headers=jwt,
+        query_string=data,
     )
     assert response.status_code == 200
     assert json.loads(response.data)['is_registered'] is True

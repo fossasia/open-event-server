@@ -15,6 +15,8 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `is-checked-out` | If the attendee has checked out | boolean | - |
 | `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
+| `is-registered` | If the attendee is registered | boolean | - |
+| `register-times` | Comma separated register times | string | - |
 
 ## Send order receipts [v1/attendees/send-receipt]
 
@@ -109,6 +111,7 @@ Get a list of attendees of an order.
                 "deleted-at": null,
                 "work-address": null,
                 "checkin-times": null,
+                "register-times": null,
                 "state": "example",
                 "country": "IN",
                 "lastname": "UnDoe",
@@ -116,6 +119,7 @@ Get a list of attendees of an order.
                 "phone": null,
                 "company": null,
                 "is-checked-in": false,
+                "is-registered": false,
                 "gender": null,
                 "shipping-address": null,
                 "blog": null,
@@ -146,7 +150,7 @@ Get a list of attendees of an order.
             "self": "/v1/orders/7201904e-c695-4251-a30a-61765a37ff24/attendees"
           }
         }
-        
+
 ## List Attendees under an event [/v1/events/{event_id}/attendees]
 + Parameters
     + event_id: 1 (integer) - Identifier of the event
@@ -206,6 +210,7 @@ Get a list of attendees of an event.
                 "deleted-at": null,
                 "work-address": null,
                 "checkin-times": null,
+                "register-times": null,
                 "state": "example",
                 "country": "IN",
                 "lastname": "UnDoe",
@@ -213,6 +218,7 @@ Get a list of attendees of an event.
                 "phone": null,
                 "company": null,
                 "is-checked-in": false,
+                "is-registered": false,
                 "gender": null,
                 "shipping-address": null,
                 "blog": null,
@@ -279,6 +285,8 @@ Search a list of attendees of an event.
           "phone": null,
           "company": null,
           "is-checked-in": false,
+          "is-registered": false,
+          "register-times": null,
           "gender": null,
           "shipping-address": null,
           "blog": null,
@@ -364,6 +372,8 @@ Get a list of attendees of a ticket.
                 "phone": null,
                 "company": null,
                 "is-checked-in": false,
+                "is-registered": false,
+                "register-times": null,
                 "gender": null,
                 "shipping-address": null,
                 "blog": null,
@@ -445,6 +455,8 @@ Get a single attendee.
                     "phone": null,
                     "company": null,
                     "is-checked-in": false,
+                    "is-registered": false,
+                    "register-times": null,
                     "gender": null,
                     "shipping-address": null,
                     "blog": null,
@@ -589,4 +601,26 @@ Delete a single attendee.
             "version": "1.0"
           }
         }
-            
+
+## Get Attendee State [/v1/states{?event_id,attendee_id}]
++ Parameters
+    + event_id: 1 (integer) - ID of the event in
+    + attendee_id: 1 (integer) - ID of the attendee
+
+### Get Attendee State [GET]
+Check attendee state if attendee is registered or not.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "is_registered": true,
+            "register_times": "2023-08-08 03:03:52.827812"
+        }
