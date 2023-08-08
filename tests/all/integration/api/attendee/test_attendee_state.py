@@ -22,7 +22,7 @@ def test_attendee_not_register_yet(db, client, jwt, user):
     data = {'event_id': attendee.event_id, 'attendee_id': attendee.id}
     response = client.get(
         '/v1/states',
-        content_type='application/vnd.api+json',
+        content_type='application/json',
         headers=jwt,
         query_string=data,
     )
@@ -74,7 +74,7 @@ def test_attendee_registered(db, client, jwt, user):
 
     response = client.get(
         '/v1/states',
-        content_type='application/vnd.api+json',
+        content_type='application/json',
         headers=jwt,
         query_string=data,
     )
