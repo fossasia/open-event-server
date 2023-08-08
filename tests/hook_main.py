@@ -828,7 +828,7 @@ def group_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
