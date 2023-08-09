@@ -33,8 +33,8 @@ def create_preivew_badge_pdf(badgeForms):
         font_weight = []
         font_style = []
         text_decoration = []
-        if badge_field.get('font_weight'):
-            for item in badge_field.get('font_weight'):
+        if badge_field['font_weight']:
+            for item in badge_field['font_weight']:
                 if item.get('font_weight'):
                     font_weight.append(item.get('font_weight'))
                 if item.get('font_style'):
@@ -149,8 +149,9 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
         font_weight = []
         font_style = []
         text_decoration = []
-        if badge_field.get('font_weight'):
-            for item in badge_field.get('font_weight'):
+        badge_field.font_weight_tmp = badge_field.font_weight
+        if badge_field.font_weight:
+            for item in badge_field.font_weight:
                 if item.get('font_weight'):
                     font_weight.append(item.get('font_weight'))
                 if item.get('font_style'):
@@ -158,18 +159,17 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
                 if item.get('text_decoration'):
                     text_decoration.append(item.get('text_decoration'))
         if not font_weight:
-            badge_field['font_weight'] = 'none'
+            badge_field.font_weight = 'none'
         else:
-            badge_field['font_weight'] = ','.join(font_weight)
+            badge_field.font_weight = ','.join(font_weight)
         if not font_style:
-            badge_field['font_style'] = 'none'
+            badge_field.font_style = 'none'
         else:
-            badge_field['font_style'] = ','.join(font_style)
+            badge_field.font_style = ','.join(font_style)
         if not text_decoration:
-            badge_field['text_decoration'] = 'none'
+            badge_field.text_decoration = 'none'
         else:
-            badge_field['text_decoration'] = ','.join(text_decoration)
-
+            badge_field.text_decoration = ','.join(text_decoration)
     create_save_pdf(
         render_template(
             'pdf/badge_forms.html', badgeForms=badge_form, badgeFieldForms=badgeFieldForms
@@ -180,5 +180,7 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
     )
     ticket_holder.is_badge_printed = True
     ticket_holder.badge_printed_at = datetime.now()
+    for badge_field in badgeFieldForms:
+        badge_field.font_weight = badge_field.font_weight_tmp
     save_to_db(ticket_holder, 'Ticket Holder saved')
     return file_pdf_path(badge_form)
