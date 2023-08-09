@@ -21,13 +21,7 @@ from app.api.helpers.notification import (
     notify_ticket_purchase_organizer,
 )
 from app.api.helpers.storage import UPLOAD_PATHS
-from app.api.helpers.ticketing import (
-    is_discount_available,
-    validate_discount_code,
-    validate_tickets,
-)
 from app.models import db
-from app.models.discount_code import DiscountCode
 from app.models.order import OrderTicket
 from app.models.setting import Setting
 from app.models.ticket import Ticket
@@ -253,6 +247,13 @@ def create_onsite_attendees_for_order(data):
 
 
 def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
+    from app.api.helpers.ticketing import (
+        is_discount_available,
+        validate_discount_code,
+        validate_tickets,
+    )
+    from app.models.discount_code import DiscountCode
+
     ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
