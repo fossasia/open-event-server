@@ -30,6 +30,12 @@ def create_preivew_badge_pdf(badgeForms):
     badgeFieldForms = badgeForms['badgeFields']
     badgeId = badgeForms['badgeID']
 
+    badgeFieldForms = [
+        badge_field
+        for badge_field in badgeFieldForms
+        if badge_field['is_deleted'] is False
+    ]
+
     for badge_field in badgeFieldForms:
         if badge_field.get('custom_field').lower() == 'qr':
             qr_code_data = get_qr_data_badge_preview(badge_field)
