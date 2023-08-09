@@ -11,7 +11,6 @@ from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.utilities import require_relationship
 from app.api.schema.attendees import AttendeeSchema
 from app.models import db
 from app.models.order import Order
@@ -49,67 +48,6 @@ def get_sold_and_reserved_tickets_count(ticket_id):
         )
         .count()
     )
-
-
-class AttendeeListPost(ResourceList):
-    """
-    List and create Attendees through direct URL
-    """
-
-    def before_post(self, args, kwargs, data):
-        """
-        Before post method to check for required relationship and proper permissions
-        :param args:
-        :param kwargs:
-        :param data:
-        :return:
-        """
-        require_relationship(['ticket', 'event'], data)
-
-        ticket = (
-            db.session.query(Ticket)
-            .filter_by(id=int(data['ticket']), deleted_at=None)
-            .first()
-        )
-        if ticket is None:
-            raise UnprocessableEntityError(
-                {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
-            )
-        if ticket.event_id != int(data['event']):
-            raise UnprocessableEntityError(
-                {'pointer': '/data/relationships/ticket'},
-                "Ticket belongs to a different Event",
-            )
-        # Check if the ticket is already sold out or not.
-        ticket.raise_if_unavailable()
-
-        if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
-            if 'is_checked_in' not in data or not data['is_checked_in']:
-                raise UnprocessableEntityError(
-                    {'pointer': '/data/attributes/device_name_checkin'},
-                    "Attendee needs to be checked in first",
-                )
-            if 'checkin_times' not in data or data['checkin_times'] is None:
-                raise UnprocessableEntityError(
-                    {'pointer': '/data/attributes/device_name_checkin'},
-                    "Check in Times missing",
-                )
-            if len(data['checkin_times'].split(",")) != len(
-                data['device_name_checkin'].split(",")
-            ):
-                raise UnprocessableEntityError(
-                    {'pointer': '/data/attributes/device_name_checkin'},
-                    "Check in Times missing for the corresponding device name",
-                )
-
-        if 'checkin_times' in data:
-            if 'device_name_checkin' not in data or data['device_name_checkin'] is None:
-                data['device_name_checkin'] = '-'
-
-    decorators = (jwt_required,)
-    methods = ['POST']
-    schema = AttendeeSchema
-    data_layer = {'session': db.session, 'model': TicketHolder}
 
 
 class AttendeeList(ResourceList):

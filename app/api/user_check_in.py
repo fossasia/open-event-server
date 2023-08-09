@@ -5,7 +5,6 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.errors import UnprocessableEntityError
-from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
 from app.api.helpers.user_check_in import (
@@ -77,31 +76,16 @@ class UserCheckInListPost(ResourceList):
         :return:
         """
         require_relationship(['station'], data)
-        if not has_access('is_coorganizer', station=data.get('station')):
-            raise ObjectNotFound(
-                {'parameter': 'station'},
-                f"Station: {data['station']} not found",
-            )
         try:
             station = db.session.query(Station).filter_by(id=data.get('station')).one()
         except NoResultFound:
             raise ObjectNotFound({'parameter': data.get('station')}, "Station: not found")
 
         require_relationship(['ticket_holder'], data)
-        if not has_access('is_coorganizer', ticket_holder=data.get('ticket_holder')):
-            raise ObjectNotFound(
-                {'parameter': 'ticket_holder'},
-                f"TicketHolder: {data['ticket_holder']} not found",
-            )
         if station.station_type != STATION_TYPE.get('registration') or data.get(
             'session'
         ):
             require_relationship(['session'], data)
-            if not has_access('is_coorganizer', session=data.get('session')):
-                raise ObjectNotFound(
-                    {'parameter': 'session'},
-                    f"Session: {data['session']} not found",
-                )
 
     def before_create_object(self, data, _view_kwargs):
         """
@@ -111,6 +95,11 @@ class UserCheckInListPost(ResourceList):
         :return:
         """
         station = self.session.query(Station).filter_by(id=data.get('station')).one()
+        if not has_access('is_coorganizer', event_id=station.event_id):
+            raise UnprocessableEntityError(
+                {'parameter': 'station'},
+                "Only admin/organiser/coorganizer of event only able to check in",
+            )
         if station.station_type != STATION_TYPE.get('registration'):
             # validate if microlocation_id from session matches with station
             session = self.session.query(Session).filter_by(id=data.get('session')).one()
