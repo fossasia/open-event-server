@@ -122,9 +122,10 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
 def get_qr_data_badge_preview(field: BadgeFieldForms) -> dict:
     """Get the value of a QR code field."""
     qr_value = {}
-    for field_identifier in field.get('qr_custom_field'):
-        value_ = "Sample Data"
-        qr_value.update({field_identifier: str(value_)})
+    if field.get('qr_custom_field') is not None:
+        for field_identifier in field.get('qr_custom_field'):
+            value_ = "Sample Data"
+            qr_value.update({field_identifier: str(value_)})
     return qr_value
 
 
