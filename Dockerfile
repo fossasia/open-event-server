@@ -12,7 +12,7 @@ RUN apk update && \
 
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk --no-cache add --virtual gdk-pixbuf-dev=20230808.151436 && \
-  apk --no-cache add postgresql-libs ca-certificates libxslt jpeg zlib file libxml2
+  apk --no-cache add postgresql-libs ca-certificates=20230506-r0 libxslt=1.1.38-r0 jpeg=9e-r1 zlib=1.2.13-r1 file=5.45-r0 libxml2=2.11.4-r0
 # PDF Generation: weasyprint
 RUN apk --no-cache add cairo-dev pango-dev ttf-opensans
 
