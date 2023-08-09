@@ -33,8 +33,8 @@ def create_preivew_badge_pdf(badgeForms):
         font_weight = []
         font_style = []
         text_decoration = []
-        if badge_field['font_weight']:
-            for item in badge_field['font_weight']:
+        if badge_field.get('font_weight'):
+            for item in badge_field.get('font_weight'):
                 if item.get('font_weight'):
                     font_weight.append(item.get('font_weight'))
                 if item.get('font_style'):
