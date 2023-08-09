@@ -31,7 +31,36 @@ This Group's APIs can be used for adding a particular session to the favourite l
 
 + Response 201 (application/vnd.api+json)
 
-{"data": {"type": "user-favourite-session", "relationships": {"user": {"links": {"self": "/v1/user-favourite-sessions/1/relationships/user", "related": "/v1/favourite-sessions/1/user"}}, "session": {"links": {"self": "/v1/user-favourite-sessions/1/relationships/session", "related": "/v1/user-favourite-sessions/1/session"}}}, "id": "1", "links": {"self": "/v1/user-favourite-sessions/1"}}, "links": {"self": "/v1/user-favourite-sessions/1"}, "jsonapi": {"version": "1.0"}}
+        {
+            "data": {
+                "type": "user-favourite-session",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-sessions/1/relationships/user",
+                            "related": "/v1/favourite-sessions/1/user"
+                        }
+                    },
+                    "session": {
+                        "links": {
+                            "self": "/v1/user-favourite-sessions/1/relationships/session",
+                            "related": "/v1/user-favourite-sessions/1/session"
+                        }
+                    }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-favourite-sessions/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-favourite-sessions/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+    
 
 ## Favourite Sessions Collection List [/v1/users/1/user-favourite-sessions]
 

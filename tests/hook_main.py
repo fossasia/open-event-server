@@ -4834,6 +4834,36 @@ def favourite_session_delete(transaction):
         db.session.commit()
 
 
+@hooks.before(
+    "Favourite Sessions > Favourite Sessions Collection List > List All Favourite Sessions of a Session"
+)
+def favourite_sessions_list_get_under_session(transaction):
+    """
+    GET /v1/sessions/1/user-favourite-sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_session = UserFavouriteSessionFactory()
+        db.session.add(user_fav_session)
+        db.session.commit()
+
+
+@hooks.before(
+    "Favourite Sessions > Favourite Sessions Collection List > List All Favourite Sessions of an Event"
+)
+def favourite_sessions_list_get_under_event(transaction):
+    """
+    GET /v1/sessions/1/user-favourite-sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_session = UserFavouriteSessionFactory()
+        db.session.add(user_fav_session)
+        db.session.commit()
+
+
 # ------------------------- Admin Statistics -------------------------
 
 
