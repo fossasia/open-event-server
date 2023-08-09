@@ -31,40 +31,9 @@ This Group's APIs can be used for adding a particular session to the favourite l
 
 + Response 201 (application/vnd.api+json)
 
-        {
-            "data": {
-                "type": "user-favourite-session",
-                "relationships": {
-                    "user": {
-                        "links": {
-                            "self": "/v1/user-favourite-sessions/1/relationships/user",
-                            "related": "/v1/favourite-sessions/1/user"
-                        }
-                    },
-                    "session": {
-                        "links": {
-                            "self": "/v1/user-favourite-sessions/1/relationships/session",
-                            "related": "/v1/user-favourite-sessions/1/session"
-                        }
-                    }
-                },
-                "attributes": {
-                    "deleted-at": null
-                },
-                "id": "1",
-                "links": {
-                    "self": "/v1/user-favourite-sessions/1"
-                }
-            },
-            "links": {
-                "self": "/v1/user-favourite-sessions/1"
-            },
-            "jsonapi": {
-                "version": "1.0"
-            }
-        }
+{"data": {"type": "user-favourite-session", "relationships": {"user": {"links": {"self": "/v1/user-favourite-sessions/1/relationships/user", "related": "/v1/favourite-sessions/1/user"}}, "session": {"links": {"self": "/v1/user-favourite-sessions/1/relationships/session", "related": "/v1/user-favourite-sessions/1/session"}}}, "id": "1", "links": {"self": "/v1/user-favourite-sessions/1"}}, "links": {"self": "/v1/user-favourite-sessions/1"}, "jsonapi": {"version": "1.0"}}
 
-## Favourite Sessions Collection List [/v1/user/1/favourite-sessions]
+## Favourite Sessions Collection List [/v1/users/1/user-favourite-sessions]
 
 ### List All Favourite Sessions of an User [GET]
 
@@ -95,9 +64,6 @@ This Group's APIs can be used for adding a particular session to the favourite l
                             }
                         }
                     },
-                    "attributes": {
-                        "deleted-at": null
-                    },
                     "links": {
                         "self": "/v1/user-favourite-sessions/1"
                     }
@@ -114,7 +80,7 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
-## Favourite Sessions Collection List [/v1/session/1/favourite-sessions]
+## Favourite Sessions Collection List [/v1/sessions/1/user-favourite-sessions]
 
 ### List All Favourite Sessions of a Session [GET]
 
@@ -145,9 +111,6 @@ This Group's APIs can be used for adding a particular session to the favourite l
                             }
                         }
                     },
-                    "attributes": {
-                        "deleted-at": null
-                    },
                     "links": {
                         "self": "/v1/user-favourite-sessions/1"
                     }
@@ -164,7 +127,7 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
-## Favourite Sessions Collection List [/v1/event/1/favourite-sessions]
+## Favourite Sessions Collection List [/v1/events/1/user-favourite-sessions]
 
 ### List All Favourite Sessions of an Event [GET]
 
@@ -194,9 +157,6 @@ This Group's APIs can be used for adding a particular session to the favourite l
                                 "related": "/v1/favourite-sessions/1/user"
                             }
                         }
-                    },
-                    "attributes": {
-                        "deleted-at": null
                     },
                     "links": {
                         "self": "/v1/user-favourite-sessions/1"
@@ -241,9 +201,6 @@ This Group's APIs can be used for adding a particular session to the favourite l
                     "self": "/v1/user-favourite-sessions/1"
                 },
                 "id": "1",
-                "attributes": {
-                    "deleted-at": null
-                },
                 "relationships": {
                     "user": {
                         "links": {
