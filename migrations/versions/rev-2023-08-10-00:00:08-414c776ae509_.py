@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f7dd7b77049c
-Revises: 8b5bc48e1d4c
-Create Date: 2023-08-06 22:53:06.358005
+Revision ID: 414c776ae509
+Revises: 3e8e18c0bebe
+Create Date: 2023-08-10 00:00:08.837497
 
 """
 
@@ -11,8 +11,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f7dd7b77049c'
-down_revision = '8b5bc48e1d4c'
+revision = '414c776ae509'
+down_revision = '3e8e18c0bebe'
 
 
 def upgrade():
@@ -31,3 +31,4 @@ def downgrade():
     op.drop_constraint(u'orders_access_code_id_fkey', 'orders', type_='foreignkey')
     op.drop_column('orders', 'access_code_id')
     # ### end Alembic commands ###
+
