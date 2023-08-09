@@ -41,6 +41,7 @@ RUN apk --no-cache add libmagic cairo pango ttf-opensans && \
 RUN apk --no-cache add fontconfig=2.14.2-r3
 RUN echo @edge http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
     apk --no-cache add wqy-zenhei@edge=0.9.45-r2
+    
 RUN fc-cache -f
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
