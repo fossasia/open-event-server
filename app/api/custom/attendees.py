@@ -61,11 +61,11 @@ def check_attendee_state():
 
     if not request.args.get('event_id', False):
         raise NotFoundError(
-            {'parameter': 'event_id'}, "event_id is missing from your request"
+            {'parameter': 'event_id'}, "event_id is missing from your request."
         )
     if not request.args.get('attendee_id', False):
         raise NotFoundError(
-            {'parameter': 'attendee_id'}, "attendee_id is missing from your request"
+            {'parameter': 'attendee_id'}, "attendee_id is missing from your request."
         )
     event_id = request.args.get('event_id')
     attendee_id = request.args.get('attendee_id')
