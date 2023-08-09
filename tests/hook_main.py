@@ -52,7 +52,7 @@ from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
 from tests.factories.station import StationFactory
 from tests.factories.station_store_pax import StationStorePaxFactory
-from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
+from tests.factories.session import SessionFactory, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
 from tests.factories.ticket import TicketFactory
 from tests.factories.attendee import (
@@ -4801,7 +4801,7 @@ def favourite_sessions_list_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactoryBasic()
+        session = SessionFactory()
         db.session.add(session)
         db.session.commit()
 
