@@ -293,11 +293,11 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
             tax_included = tax.is_tax_included_in_price
         price = get_price(ticket, ticket_info)
         if tax:
-            if tax_included:
-                ticket_tax = price - price / (1 + tax.rate / 100)
-            else:
-                ticket_tax = price * tax.rate / 100
-
+            ticket_tax = (
+                price - price / (1 + tax.rate / 100)
+                if tax_included
+                else price * tax.rate / 100
+            )
         if discount_code and ticket.type not in ['free', 'freeRegistration']:
             code = (
                 DiscountCode.query.with_parent(ticket)
@@ -306,23 +306,13 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
             )
             if code:
                 if discount_code.id == code.id:
-                    if code.type == 'amount':
-                        discount_amount = min(code.value, price)
-                        discount_percent = (discount_amount / price) * 100
-                        if tax:
-                            tax_rate = tax.rate / 100
-                            tax_factor = 1 + tax_rate
-                            discounted_price = price - discount_amount
-                            discounted_tax = (
-                                discounted_price * tax_rate / tax_factor
-                                if tax_included
-                                else discounted_price * tax_rate
-                            )
-                    else:
-                        discount_amount = (price * code.value) / 100
-                        if tax:
-                            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
-                        discount_percent = code.value
+                    (
+                        discount_amount,
+                        discount_percent,
+                        discounted_tax,
+                    ) = get_discount_amount(
+                        code, price, tax_included, tax, ticket_tax, discounted_tax
+                    )
                     discount_data = get_discount_data(
                         discount_code,
                         discount_percent,
@@ -339,10 +329,8 @@ def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
             ticket_fee = min(ticket_fee, fees.maximum_fee)
-        sub_total = (
-            ticket_fee + (price - discount_amount) * discount_quantity
-        )  # ticket discounted
-        sub_total += price * max(0, quantity - discount_quantity)  # ticket not discount
+        sub_total = ticket_fee + (price - discount_amount) * discount_quantity
+        sub_total += price * max(0, quantity - discount_quantity)
         total_amount = total_amount + sub_total
         ticket_list.append(
             {
@@ -471,3 +459,24 @@ def get_event_fee(ticket):
 
     fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
     return event, fees
+
+
+def get_discount_amount(code, price, tax_included, tax, ticket_tax, discounted_tax):
+    if code.type == 'amount':
+        discount_amount = min(code.value, price)
+        discount_percent = (discount_amount / price) * 100
+        if tax:
+            tax_rate = tax.rate / 100
+            tax_factor = 1 + tax_rate
+            discounted_price = price - discount_amount
+            discounted_tax = (
+                discounted_price * tax_rate / tax_factor
+                if tax_included
+                else discounted_price * tax_rate
+            )
+    else:
+        discount_amount = (price * code.value) / 100
+        if tax:
+            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
+        discount_percent = code.value
+    return discount_amount, discount_percent, discounted_tax
