@@ -61,7 +61,7 @@ from tests.factories.attendee import (
     AttendeeSubFactory,
 )
 from tests.factories.session_type import SessionTypeFactory
-from tests.factories.track import TrackFactory
+from tests.factories.track import TrackFactory, TrackFactoryBase
 from tests.factories.ticket_tag import TicketTagFactory
 from tests.factories.role import RoleFactory
 from tests.factories.ticket_fee import TicketFeesFactory
@@ -4801,7 +4801,9 @@ def favourite_sessions_list_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactory()
+        event = EventFactoryBasic()
+        track = TrackFactoryBase()
+        session = SessionSubFactory(event=event, track=track)
         db.session.add(session)
         db.session.commit()
 
