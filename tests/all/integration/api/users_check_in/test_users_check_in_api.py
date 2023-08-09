@@ -4,7 +4,7 @@ from tests.factories.attendee import AttendeeSubFactory
 from tests.factories.event import EventFactoryBasic
 from tests.factories.microlocation import MicrolocationSubFactory
 from tests.factories.session import SessionSubFactory
-from tests.factories.station import StationFactory
+from tests.factories.station import StationSubFactory
 from tests.factories.ticket import TicketFactory
 
 
@@ -18,7 +18,7 @@ def test_create_station_from_user_check_in(db, client, jwt, user):
     ticket = TicketFactory(
         event=event,
     )
-    station = StationFactory(
+    station = StationSubFactory(
         event=event, microlocation=microlocation, station_type='registration'
     )
     session = SessionSubFactory(
