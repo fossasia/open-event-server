@@ -153,6 +153,7 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
     badgeFieldForms = (
         BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
         .filter_by(badge_id=badge_form.badge_id)
+        .filter_by(is_deleted=False)
         .order_by(asc("id"))
         .all()
     )
