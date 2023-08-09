@@ -50,11 +50,11 @@ from tests.factories.event_role_permission import EventRolePermissionsFactory
 from tests.factories.sponsor import SponsorFactory
 from tests.factories.speakers_call import SpeakersCallFactory
 from tests.factories.tax import TaxFactory
-from tests.factories.station import StationFactory
+from tests.factories.station import StationFactory, StationSubFactory
 from tests.factories.station_store_pax import StationStorePaxFactory
 from tests.factories.session import SessionFactory, SessionFactoryBasic, SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
-from tests.factories.ticket import TicketFactory
+from tests.factories.ticket import TicketFactory, TicketSubFactory
 from tests.factories.attendee import (
     AttendeeFactory,
     AttendeeOrderSubFactory,
@@ -88,7 +88,6 @@ from tests.factories.exhibitor import ExhibitorFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
-
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -522,7 +521,7 @@ def group_event_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -829,7 +828,7 @@ def group_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -843,7 +842,7 @@ def group_get_list_from_user(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -857,7 +856,7 @@ def group_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -871,7 +870,7 @@ def group_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -902,7 +901,7 @@ def group_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -916,7 +915,7 @@ def group_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
+        EventFactoryBasic()
         group = GroupFactory()
         db.session.add(group)
         db.session.commit()
@@ -2178,6 +2177,35 @@ def get_attendees_from_ticket(transaction):
     with stash['app'].app_context():
         ticket = TicketFactory()
         db.session.add(ticket)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Get Attendee State > Get Attendee State")
+def get_attendee_state(transaction):
+    """
+    GET /v1/states{?event_id,attendee_id}
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        microlocation = MicrolocationSubFactory(
+            event=event,
+        )
+        ticket = TicketSubFactory(
+            event=event,
+        )
+        StationSubFactory(
+            event=event, microlocation=microlocation, station_type='registration'
+        )
+        SessionSubFactory(
+            event=event,
+            microlocation=microlocation,
+        )
+        AttendeeSubFactory(
+            event=event,
+            ticket=ticket,
+        )
         db.session.commit()
 
 
@@ -5139,7 +5167,7 @@ def create_user_check_in(transaction):
         ticket = TicketFactory(
             event=event,
         )
-        StationFactory(
+        StationSubFactory(
             event=event, microlocation=microlocation, station_type='registration'
         )
         SessionSubFactory(

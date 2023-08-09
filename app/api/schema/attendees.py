@@ -70,6 +70,8 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     checkout_times = fields.Str(allow_none=True)
     attendee_notes = fields.Str(allow_none=True)
     is_checked_out = fields.Boolean()
+    is_registered = fields.Boolean()
+    register_times = fields.Str(allow_none=True)
     pdf_url = fields.Url(dump_only=True)
     complex_field_values = CustomFormValueField(allow_none=True)
     is_consent_form_field = fields.Boolean(allow_none=True)
