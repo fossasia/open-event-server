@@ -29,6 +29,14 @@ def create_preivew_badge_pdf(badgeForms):
     badgeForms = badgeForms[0]
     badgeFieldForms = badgeForms['badgeFields']
     badgeId = badgeForms['badgeID']
+
+    for badge_field in badgeFieldForms:
+        if badge_field.get('custom_field').lower() == 'qr':
+            qr_code_data = get_qr_data_badge_preview(badge_field)
+            qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
+            badge_field['sample_text'] = create_base64_img_qr(qr_rendered)
+            badge_field['text_rotation'] = 0
+
     for badge_field in badgeFieldForms:
         font_weight = []
         font_style = []
@@ -88,19 +96,29 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
             value_ = getattr(ticket_holder, snake_case_field_identifier)
         except AttributeError:
             try:
-                value_ = ticket_holder.complex_field_values[field_identifier]
-                # Get the field description then Capitalize first letter and remove space.
-                custom_form = CustomForms.query.filter_by(
-                    field_identifier=field_identifier,
-                    form_id=ticket_holder.ticket.form_id,
-                ).first()
-                field_description = custom_form.description.title().replace(' ', '')
-                custom_fields.append({field_description: value_})
+                if ticket_holder.complex_field_values is not None:
+                    value_ = ticket_holder.complex_field_values[field_identifier]
+                    # Get the field description then Capitalize first letter and remove space.
+                    custom_form = CustomForms.query.filter_by(
+                        field_identifier=field_identifier,
+                        form_id=ticket_holder.ticket.form_id,
+                    ).first()
+                    field_description = custom_form.description.title().replace(' ', '')
+                    custom_fields.append({field_description: value_})
             except AttributeError:
                 print(field_identifier)
 
         qr_value.update({field_identifier: str(value_)})
     qr_value.update({'custom_fields': custom_fields, 'ticket_id': ticket_holder.id})
+    return qr_value
+
+
+def get_qr_data_badge_preview(field: BadgeFieldForms) -> dict:
+    """Get the value of a QR code field."""
+    qr_value = {}
+    for field_identifier in field.get('qr_custom_field'):
+        value_ = "Sample Data"
+        qr_value.update({field_identifier: str(value_)})
     return qr_value
 
 
@@ -133,6 +151,7 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
         .all()
     )
     for field in badgeFieldForms:
+        field.sample_text_tmp = field.sample_text
         if field.custom_field.lower() == 'qr':
             qr_code_data = get_value_from_qr_filed(field, ticket_holder)
             qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
@@ -182,5 +201,6 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
     ticket_holder.badge_printed_at = datetime.now()
     for badge_field in badgeFieldForms:
         badge_field.font_weight = badge_field.font_weight_tmp
+        badge_field.sample_text = badge_field.sample_text_tmp
     save_to_db(ticket_holder, 'Ticket Holder saved')
     return file_pdf_path(badge_form)
