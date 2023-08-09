@@ -89,7 +89,6 @@ from tests.all.integration.api.helpers.order.test_calculate_order_amount import 
     _create_taxed_tickets,
 )
 
-
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
 api_password = "fossasia"
@@ -5015,6 +5014,31 @@ def get_badge_form_by_ticket(transaction):
             badge_form=badge_form,
             badge_id=ticket.badge_id,
         )
+        db.session.commit()
+
+
+@hooks.before("Badge Forms > Print Badge > Print Badge")
+def print_badge_by_attendee(transaction):
+    """
+    GET /v1/badge-forms/print-badge-pdf
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        ticket = TicketFactory(
+            event=event,
+            badge_id='example',
+        )
+        badge_form = BadgeFormFactory(
+            event=event,
+            badge_id=ticket.badge_id,
+        )
+        BadgeFieldFormFactory(
+            badge_form=badge_form,
+            badge_id=ticket.badge_id,
+        )
+        AttendeeFactory()
         db.session.commit()
 
 

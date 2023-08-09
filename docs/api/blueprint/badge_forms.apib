@@ -31,3 +31,39 @@ Get badge form.
         "id": 1
       }
     ]
+
+## Print Badge [/v1/badge-forms/print-badge-pdf]
+
+### Print Badge [POST]
+Printing badge for attendee.
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "attendee_id": 1,
+                "list_field_show": ["email"]
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Content-Disposition: attachment; filename=7bc47998-2227-471e-83e3-8dfe211ce798.pdf
+
+            Content-Length: 1554
+
+            Content-Type: application/pdf
+
+            Last-Modified: Wed, 09 Aug 2023 03:09:59 GMT
+
+            Cache-Control: public, max-age=43200
+
+            Expires: Wed, 09 Aug 2023 15:09:59 GMT
+
+            Server: Werkzeug/2.0.3 Python/3.8.10
