@@ -76,15 +76,15 @@ def check_attendee_state():
     try:
         event = safe_query_by_id(Event, event_id)
     except ObjectNotFound:
-        raise NotFoundError({'parameter': f'{event_id}'}, "Event not found")
+        raise NotFoundError({'parameter': f'{event_id}'}, "Event not found.")
     try:
         attendee = safe_query_by_id(TicketHolder, attendee_id)
     except ObjectNotFound:
-        raise NotFoundError({'parameter': f'{attendee_id}'}, "Attendee not found")
+        raise NotFoundError({'parameter': f'{attendee_id}'}, "Attendee not found.")
     if event.id != attendee.event_id:
         raise UnprocessableEntityError(
             {'parameter': 'Attendee'},
-            "Attendee not belong to this event",
+            "Attendee not belong to this event.",
         )
     return jsonify(
         {
