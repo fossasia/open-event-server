@@ -59,6 +59,7 @@ def create_preivew_badge_pdf(badgeForms):
         ),
         UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId),
         identifier=badgeId,
+        new_renderer=True,
     )
     key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId)
     return f'static/media/{key}/{generate_hash(key)}/{badgeId}.pdf'
@@ -175,6 +176,7 @@ def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
         ),
         UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
         identifier=badge_form.badge_id,
+        new_renderer=True,
     )
     ticket_holder.is_badge_printed = True
     ticket_holder.badge_printed_at = datetime.now()
