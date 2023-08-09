@@ -80,7 +80,7 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
-## Favourite Sessions Collection List [/v1/sessions/2/user-favourite-sessions]
+## Favourite Sessions Collection List [/v1/sessions/1/user-favourite-sessions]
 
 ### List All Favourite Sessions of a Session [GET]
 
@@ -127,7 +127,7 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
-## Favourite Sessions Collection List [/v1/events/2/user-favourite-sessions]
+## Favourite Sessions Collection List [/v1/events/1/user-favourite-sessions]
 
 ### List All Favourite Sessions of an Event [GET]
 
@@ -218,21 +218,3 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
-### Delete Favourite Session [DELETE]
-
-+ Request
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "message": "Object successfully deleted"
-            },
-            "jsonapi": {
-                "version": "1.0"
-            }
-        }
