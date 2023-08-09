@@ -218,3 +218,21 @@ This Group's APIs can be used for adding a particular session to the favourite l
             }
         }
 
+### Delete Favourite Session [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
