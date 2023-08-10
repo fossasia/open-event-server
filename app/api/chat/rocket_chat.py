@@ -176,7 +176,7 @@ class RocketChat:
                         user.rocket_chat_token = None
                         db.session.add(user)
                         db.session.commit()
-                        return self.get_token(user, event, retried=True)
+                        return self.get_token_virtual_room(user, event, retried=True)
                     else:
                         raise rce
             else:
@@ -301,8 +301,7 @@ class RocketChat:
         self, event: Event, rocket_user_id, videoStream: Optional[VideoStream] = None
     ):
         bot = self.check_or_create_bot()
-        data = self.get_token(bot)
-
+        data = self.get_token_virtual_room(bot, videoStream=videoStream)
         if (not event.chat_room_id) or (videoStream and not videoStream.chat_room_id):
             self.create_room_virtual_room(event=event, videoStream=videoStream, data=data)
 

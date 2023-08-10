@@ -167,7 +167,7 @@ def get_room_chat_token(event_id: int, microlocation_id: int):
 
 
 @events_blueprint.route(
-    '/<string:event_identifier>/virtual-room/<string:video_stream_id>/chat-token',
+    '/<string:event_identifier>/virtual-room/<int:video_stream_id>/chat-token',
 )
 @jwt_required
 @to_event_id
