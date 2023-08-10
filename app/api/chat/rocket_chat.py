@@ -359,7 +359,7 @@ def get_rocket_chat_token_virtual_room(
         )
 
     rocket_chat = RocketChat(api_url)
-    return rocket_chat.get_token_virtual_room(user, event, videoStream)
+    return rocket_chat.get_token_virtual_room(user, event, videoStream=videoStream)
 
 
 def rename_rocketchat_room(event: Event):
