@@ -38,15 +38,14 @@ FROM base
 # these libs are necessary for operation
 RUN apk --no-cache add libmagic cairo pango ttf-opensans && \
     apk --no-cache add postgresql-libs libxslt jpeg zlib libxml2 # those *might* be useful
-RUN apk --no-cache add fontconfig=2.14.2-r3 font-noto-gujarati=23.5.1-r0 font-noto-kannada=23.5.1-r0 && \
-    apk --no-cache add font-noto-osage=23.5.1-r0 font-noto-kayahli=23.5.1-r0 font-noto-oriya=23.5.1-r0 && \
-    apk --no-cache add font-noto-telugu=23.5.1-r0 font-noto-tamil=23.5.1-r0 font-noto-bengali=23.5.1-r0 && \
-    apk --no-cache add font-noto-malayalam=23.5.1-r0 font-noto-arabic=23.5.1-r0 font-noto-extra=23.5.1-r0 && \
-    apk --no-cache add font-noto-armenian=23.5.1-r0 font-noto-cherokee=23.5.1-r0 font-noto-devanagari=23.5.1-r0 && \
-    apk --no-cache add font-noto-ethiopic=23.5.1-r0 font-noto-georgian=23.5.1-r0 font-noto-hebrew=23.5.1-r0 && \
-    apk --no-cache add font-noto-lao=23.5.1-r0 font-noto-thaana=23.5.1-r0 font-noto-thai=23.5.1-r0 && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
-    apk --no-cache add wqy-zenhei@edge=0.9.45-r2
+# Various fonts for proper name printing
+RUN apk --no-cache add fontconfig font-noto-gujarati font-noto-kannada && \
+    apk --no-cache add font-noto-osage font-noto-kayahli font-noto-oriya && \
+    apk --no-cache add font-noto-telugu font-noto-tamil font-noto-bengali && \
+    apk --no-cache add font-noto-malayalam font-noto-arabic font-noto-extra && \
+    apk --no-cache add font-noto-armenian font-noto-cherokee font-noto-devanagari && \
+    apk --no-cache add font-noto-ethiopic font-noto-georgian font-noto-hebrew && \
+    apk --no-cache add font-noto-lao font-noto-thaana font-noto-thai font-noto-cjk
 RUN fc-cache -f
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
