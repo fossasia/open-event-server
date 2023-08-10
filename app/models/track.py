@@ -12,6 +12,7 @@ class Track(SoftDeletionModel):
     color = db.Column(db.String, nullable=False)
     sessions = db.relationship('Session', backref='track')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    position = db.Column(db.Integer, default=0, nullable=False)
 
     @staticmethod
     def get_service_name():
