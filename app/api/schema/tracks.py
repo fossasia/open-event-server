@@ -42,6 +42,7 @@ class TrackSchema(SoftDeletionSchema):
     description = fields.Str(allow_none=True)
     color = fields.Str(required=True)
     font_color = fields.Str(allow_none=True, dump_only=True)
+    position = fields.Integer(allow_none=True, default=0)
     event = Relationship(
         self_view='v1.track_event',
         self_view_kwargs={'id': '<id>'},
