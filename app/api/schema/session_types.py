@@ -42,6 +42,7 @@ class SessionTypeSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     length = fields.Str(required=True)
+    position = fields.Integer(allow_none=True, default=0)
     event = Relationship(
         self_view='v1.session_type_event',
         self_view_kwargs={'id': '<id>'},
