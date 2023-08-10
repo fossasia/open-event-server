@@ -138,6 +138,27 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Badge Export as PDF [/v1/badge-forms/print-badge-pdf{?attendee_id,list_field_show}]
++ Parameters
+    + attendee_id: 1 (string) - ID of the attendee in the form of an integer.
+    + list_field_show (string, `[]`) - list of fields to ne showed in badge
+
+
+### Start a Task to Export Badge of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+
 ## Start Attendees Export as CSV [/v1/events/{event_identifier}/export/attendees/csv]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)

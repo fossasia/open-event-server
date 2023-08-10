@@ -1,12 +1,9 @@
 import base64
 import io
-from datetime import datetime
 
 import qrcode
 from flask import render_template
-from sqlalchemy import asc
 
-from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.api.helpers.utilities import to_snake_case
@@ -33,8 +30,8 @@ def create_preivew_badge_pdf(badgeForms):
         font_weight = []
         font_style = []
         text_decoration = []
-        if badge_field['font_weight']:
-            for item in badge_field['font_weight']:
+        if badge_field.get('font_weight'):
+            for item in badge_field.get('font_weight'):
                 if item.get('font_weight'):
                     font_weight.append(item.get('font_weight'))
                 if item.get('font_style'):
@@ -87,15 +84,18 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
             value_ = getattr(ticket_holder, snake_case_field_identifier)
         except AttributeError:
             try:
-                value_ = ticket_holder.complex_field_values[field_identifier]
-                # Get the field description then Capitalize first letter and remove space.
-                custom_form = CustomForms.query.filter_by(
-                    field_identifier=field_identifier,
-                    form_id=ticket_holder.ticket.form_id,
-                ).first()
-                field_description = custom_form.description.title().replace(' ', '')
-                custom_fields.append({field_description: value_})
+                if ticket_holder.complex_field_values is not None:
+                    value_ = ticket_holder.complex_field_values[field_identifier]
+                    # Get the field description then Capitalize first letter and remove space.
+                    custom_form = CustomForms.query.filter_by(
+                        field_identifier=field_identifier,
+                        form_id=ticket_holder.ticket.form_id,
+                    ).first()
+                    field_description = custom_form.description.title().replace(' ', '')
+                    custom_fields.append({field_description: value_})
             except AttributeError:
+                print(field_identifier)
+            except Exception:
                 print(field_identifier)
 
         qr_value.update({field_identifier: str(value_)})
@@ -118,67 +118,3 @@ def create_base64_img_qr(qr_code_data: str) -> str:
     img.save(io_buffer)
     qr_img_str = base64.b64encode(io_buffer.getvalue()).decode()
     return qr_img_str
-
-
-def create_print_badge_pdf(badge_form, ticket_holder, list_field_show):
-    """
-    Create tickets and invoices for the holders of an order.
-    :param badgeForms: The order for which to create tickets for.
-    """
-    badgeFieldForms = (
-        BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
-        .filter_by(badge_id=badge_form.badge_id)
-        .order_by(asc("id"))
-        .all()
-    )
-    for field in badgeFieldForms:
-        if field.custom_field.lower() == 'qr':
-            qr_code_data = get_value_from_qr_filed(field, ticket_holder)
-            qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
-
-            field.sample_text = create_base64_img_qr(qr_rendered)
-            continue
-        if list_field_show is None or field.field_identifier not in list_field_show:
-            field.sample_text = ' '
-            continue
-
-        get_value_from_field_indentifier(field, ticket_holder)
-
-    for badge_field in badgeFieldForms:
-        font_weight = []
-        font_style = []
-        text_decoration = []
-        badge_field.font_weight_tmp = badge_field.font_weight
-        if badge_field.font_weight:
-            for item in badge_field.font_weight:
-                if item.get('font_weight'):
-                    font_weight.append(item.get('font_weight'))
-                if item.get('font_style'):
-                    font_style.append(item.get('font_style'))
-                if item.get('text_decoration'):
-                    text_decoration.append(item.get('text_decoration'))
-        if not font_weight:
-            badge_field.font_weight = 'none'
-        else:
-            badge_field.font_weight = ','.join(font_weight)
-        if not font_style:
-            badge_field.font_style = 'none'
-        else:
-            badge_field.font_style = ','.join(font_style)
-        if not text_decoration:
-            badge_field.text_decoration = 'none'
-        else:
-            badge_field.text_decoration = ','.join(text_decoration)
-    create_save_pdf(
-        render_template(
-            'pdf/badge_forms.html', badgeForms=badge_form, badgeFieldForms=badgeFieldForms
-        ),
-        UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
-        identifier=badge_form.badge_id,
-    )
-    ticket_holder.is_badge_printed = True
-    ticket_holder.badge_printed_at = datetime.now()
-    for badge_field in badgeFieldForms:
-        badge_field.font_weight = badge_field.font_weight_tmp
-    save_to_db(ticket_holder, 'Ticket Holder saved')
-    return file_pdf_path(badge_form)

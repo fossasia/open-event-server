@@ -55,13 +55,20 @@ from app.models.user import User
 from app.models.user_follow_group import UserFollowGroup
 from app.settings import get_settings
 
+from ...models.badge_field_form import BadgeFieldForms
+from ...models.badge_form import BadgeForms
+from .badge_forms import (
+    create_base64_img_qr,
+    get_value_from_field_indentifier,
+    get_value_from_qr_filed,
+)
+from .errors import NotFoundError
 from .import_helpers import update_import_job
 
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
 """
-
 
 logger = logging.getLogger(__name__)
 
@@ -727,7 +734,6 @@ def export_admin_sales_csv_task(self, status='all'):
 
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
 def export_speakers_csv_task(self, event_id, status='all'):
-
     if status not in [
         'all',
         'pending',
@@ -833,7 +839,6 @@ def rename_chat_room(event_id):
 
 @celery.task(base=RequestContextTask, name='export.group.followers.csv', bind=True)
 def export_group_followers_csv_task(self, group_id):
-
     followers = UserFollowGroup.query.filter_by(group_id=group_id).all()
 
     try:
@@ -861,3 +866,92 @@ def export_group_followers_csv_task(self, group_id):
         logging.exception('Error in exporting group followers as CSV')
 
     return result
+
+
+@celery.task(base=RequestContextTask, name='export.badge.pdf', bind=True)
+def create_print_badge_pdf(self, attendee_id, list_field_show):
+    """
+    Create tickets and invoices for the holders of an order.
+    @param self: create_print_badge_pdf
+    @param attendee_id: attendee
+    @param list_field_show: field will be included in badge pdf
+    @return: create pdf file and return download link
+    """
+    try:
+        ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
+        if ticket_holder is None:
+            raise NotFoundError(
+                {'source': ''}, 'This ticket holder is not associated with any ticket'
+            )
+        badge_form = BadgeForms.query.filter_by(
+            badge_id=ticket_holder.ticket.badge_id
+        ).first()
+        if badge_form is None:
+            raise NotFoundError(
+                {'source': ''}, 'This badge form is not associated with any ticket'
+            )
+        badge_field_forms = (
+            BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
+            .filter_by(badge_id=badge_form.badge_id)
+            .filter_by(is_deleted=False)
+            .order_by(asc("id"))
+            .all()
+        )
+        for field in badge_field_forms:
+            field.sample_text_tmp = field.sample_text
+            if field.custom_field.lower() == 'qr':
+                qr_code_data = get_value_from_qr_filed(field, ticket_holder)
+                qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
+
+                field.sample_text = create_base64_img_qr(qr_rendered)
+                continue
+            if list_field_show is None or field.field_identifier not in list_field_show:
+                field.sample_text = ' '
+                continue
+
+            get_value_from_field_indentifier(field, ticket_holder)
+
+        for badge_field in badge_field_forms:
+            font_weight = []
+            font_style = []
+            text_decoration = []
+            badge_field.font_weight_tmp = badge_field.font_weight
+            if badge_field.font_weight:
+                for item in badge_field.font_weight:
+                    if item.get('font_weight'):
+                        font_weight.append(item.get('font_weight'))
+                    if item.get('font_style'):
+                        font_style.append(item.get('font_style'))
+                    if item.get('text_decoration'):
+                        text_decoration.append(item.get('text_decoration'))
+            if not font_weight:
+                badge_field.font_weight = 'none'
+            else:
+                badge_field.font_weight = ','.join(font_weight)
+            if not font_style:
+                badge_field.font_style = 'none'
+            else:
+                badge_field.font_style = ','.join(font_style)
+            if not text_decoration:
+                badge_field.text_decoration = 'none'
+            else:
+                badge_field.text_decoration = ','.join(text_decoration)
+        result = create_save_pdf(
+            render_template(
+                'pdf/badge_forms.html',
+                badgeForms=badge_form,
+                badgeFieldForms=badge_field_forms,
+            ),
+            UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
+            identifier=badge_form.badge_id,
+        )
+        ticket_holder.is_badge_printed = True
+        ticket_holder.badge_printed_at = datetime.now()
+        for badge_field in badge_field_forms:
+            badge_field.font_weight = badge_field.font_weight_tmp
+            badge_field.sample_text = badge_field.sample_text_tmp
+        save_to_db(ticket_holder, 'Ticket Holder saved')
+    except Exception as e:
+        result = {'__error': True, 'result': str(e)}
+        logging.exception('Error in exporting group followers as CSV')
+    return {'download_url': result}
