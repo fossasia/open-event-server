@@ -109,6 +109,14 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         type_='ticket',
         dump_only=True,
     )
+    tag = Relationship(
+        self_view='v1.attendee_tag',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.tags_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='TagSchema',
+        type_='tag',
+    )
 
 
 class AttendeeSchema(AttendeeSchemaPublic):

@@ -241,6 +241,7 @@ from app.api.stripe_authorization import (
     StripeAuthorizationListPost,
     StripeAuthorizationRelationship,
 )
+from app.api.tags import TagDetail, TagList, TagListPost, TagRelationship
 from app.api.tax import TaxDetail, TaxList, TaxRelationship
 from app.api.ticket_fees import TicketFeeDetail, TicketFeeList
 from app.api.ticket_tags import (
@@ -840,6 +841,7 @@ api.route(
     '/speaker-invites/<int:speaker_invite_id>/event',
     '/stations/<int:station_id>/event',
     '/badge-forms/<int:badge_form_id>/event',
+    '/tags/<int:tag_id>/event',
 )
 api.route(
     EventRelationship,
@@ -1530,6 +1532,11 @@ api.route(
     'attendee_user',
     '/attendees/<int:id>/relationships/user',
 )
+api.route(
+    AttendeeRelationshipOptional,
+    'attendee_tag',
+    '/attendees/<int:id>/relationships/tag',
+)
 
 # event locations
 api.route(EventLocationList, 'event_location_list', '/event-locations')
@@ -2198,3 +2205,13 @@ api.route(
     'badge_field_form_badge_form',
     '/badge-field-forms/<int:id>/relationships/badge_form',
 )
+
+api.route(TagListPost, 'tag_post', '/tags')
+api.route(TagList, 'tags_list', '/events/<int:event_id>/tags')
+api.route(
+    TagDetail,
+    'tags_detail',
+    '/tags/<int:id>',
+    '/attendees/<int:attendee_id>/tags',
+)
+api.route(TagRelationship, 'tags_event', '/tags/<int:id>/relationships/event')
