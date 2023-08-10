@@ -65,3 +65,22 @@ def summary(event):
     )
     status_codes = ['placed', 'completed', 'pending']
     return {s: status_summary(sales_summary, tickets_summary, s) for s in status_codes}
+
+
+def summary_by_id(event_id):
+    """Returns sales as dictionary for all status codes"""
+    sales_summary = (
+        Order.query.filter_by(event_id=event_id)
+        .with_entities(Order.status, func.sum(Order.amount))
+        .group_by(Order.status)
+        .all()
+    )
+    tickets_summary = (
+        TicketHolder.query.join(Order)
+        .filter(Order.event_id == event_id)
+        .with_entities(Order.status, func.count())
+        .group_by(Order.status)
+        .all()
+    )
+    status_codes = ['placed', 'completed', 'pending']
+    return {s: status_summary(sales_summary, tickets_summary, s) for s in status_codes}
