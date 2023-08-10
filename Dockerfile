@@ -38,10 +38,12 @@ FROM base
 # these libs are necessary for operation
 RUN apk --no-cache add libmagic cairo pango ttf-opensans && \
     apk --no-cache add postgresql-libs libxslt jpeg zlib libxml2 # those *might* be useful
-RUN apk --no-cache add fontconfig=2.14.2-r3
-RUN echo @edge http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+RUN apk --no-cache add fontconfig=2.14.2-r3 font-noto-gujarati=23.5.1-r0 font-noto-kannada=23.5.1-r0 && \
+    apk --no-cache add font-noto-osage=23.5.1-r0 font-noto-kayahli=23.5.1-r0 font-noto-oriya=23.5.1-r0 && \
+    apk --no-cache add font-noto-telugu=23.5.1-r0 font-noto-tamil=23.5.1-r0 font-noto-bengali=23.5.1-r0 && \
+    apk --no-cache add font-noto-malayalam=23.5.1-r0 font-noto-arabic=23.5.1-r0 font-noto-extra=23.5.1-r0 && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
     apk --no-cache add wqy-zenhei@edge=0.9.45-r2
-    
 RUN fc-cache -f
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
