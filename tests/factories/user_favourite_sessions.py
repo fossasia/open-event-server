@@ -3,7 +3,7 @@ import factory
 from app.models.user import User
 from app.models.user_favourite_session import UserFavouriteSession
 from tests.factories.base import BaseFactory
-from tests.factories.session import SessionFactoryBasic
+from tests.factories.session import SessionFactory
 
 
 class UserFavouriteSessionFactory(BaseFactory):
@@ -11,4 +11,4 @@ class UserFavouriteSessionFactory(BaseFactory):
         model = UserFavouriteSession
 
     user = factory.LazyAttribute(lambda a: User.query.first())
-    session = factory.SubFactory(SessionFactoryBasic)
+    session = factory.SubFactory(SessionFactory)

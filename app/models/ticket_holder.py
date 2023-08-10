@@ -54,9 +54,11 @@ class TicketHolder(SoftDeletionModel):
     order_id: int = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     is_checked_in: bool = db.Column(db.Boolean, default=False)
     is_checked_out: bool = db.Column(db.Boolean, default=False)
+    is_registered: bool = db.Column(db.Boolean, default=False)
     device_name_checkin: str = db.Column(db.String)
     checkin_times: str = db.Column(db.String)
     checkout_times: str = db.Column(db.String)
+    register_times: str = db.Column(db.String)
     attendee_notes: str = db.Column(db.String)
     event_id: int = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'), nullable=False
