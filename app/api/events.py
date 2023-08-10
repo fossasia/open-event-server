@@ -13,7 +13,11 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import and_, or_
 
 from app.api.bootstrap import api
-from app.api.chat.rocket_chat import RocketChatException, get_rocket_chat_token
+from app.api.chat.rocket_chat import (
+    RocketChatException,
+    get_rocket_chat_token,
+    get_rocket_chat_token_virtual_room,
+)
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import safe_query, safe_query_kwargs, save_to_db
 from app.api.helpers.errors import (
@@ -149,6 +153,45 @@ def get_room_chat_token(event_id: int, microlocation_id: int):
 
     try:
         data = get_rocket_chat_token(current_user, event, microlocation)
+        return jsonify({'success': True, 'token': data['token']})
+    except RocketChatException as rce:
+        if rce.code == RocketChatException.CODES.DISABLED:
+            return jsonify({'success': False, 'code': rce.code})
+        return jsonify(
+            {
+                'success': False,
+                'code': rce.code,
+                'response': rce.response is not None and rce.response.json(),
+            }
+        )
+
+
+@events_blueprint.route(
+    '/<string:event_identifier>/virtual-room/<string:video_stream_id>/chat-token',
+)
+@jwt_required
+@to_event_id
+def get_virtual_room_chat_token(event_id: int, video_stream_id: int):
+    """
+    Get room chat token for specific room
+    @param event_id: event identifier
+    @param video_stream_id: microlocation id
+    @return: room chat token
+    """
+    event = Event.query.get_or_404(event_id)
+    videoStream = VideoStream.query.get_or_404(video_stream_id)
+
+    if not VideoStream(event_id=event.id).user_can_access:
+        raise NotFoundError({'source': ''}, 'Video Stream Not Found')
+
+    if not event.is_chat_enabled:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled')
+
+    if not videoStream.is_chat_enabled and not videoStream.is_global_event_room:
+        raise NotFoundError({'source': ''}, 'Chat Not Enabled For This Room')
+
+    try:
+        data = get_rocket_chat_token_virtual_room(current_user, event, videoStream)
         return jsonify({'success': True, 'token': data['token']})
     except RocketChatException as rce:
         if rce.code == RocketChatException.CODES.DISABLED:
