@@ -5235,5 +5235,5 @@ def badge_export_pdf_get(transaction):
             badge_form=badge_form,
             badge_id=ticket.badge_id,
         )
-        AttendeeFactory(ticket_id=1, event_id=event.id)
+        AttendeeFactory(ticket_id=1)
         db.session.commit()
