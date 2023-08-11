@@ -945,6 +945,7 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
             '%s: Error in exporting Badge as PDF', self.request.id.__str__()
         )
     except Exception as e:
+        logging.exception(e)
         result = {
             '__error': True,
             'result': 'Unexpected error when trying to print badge, please try again.',
