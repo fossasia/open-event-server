@@ -1,4 +1,5 @@
 import re
+
 from flask_jwt_extended import current_user
 from sqlalchemy import or_
 from sqlalchemy.orm import backref
@@ -103,7 +104,7 @@ class VideoStream(db.Model):
                 .exists()
             ).scalar()
         )
-    
+
     @property
     def chat_room_name(self):
         return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + str(self.id)
