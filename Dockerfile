@@ -38,6 +38,14 @@ FROM base
 # these libs are necessary for operation
 RUN apk --no-cache add libmagic cairo pango ttf-opensans && \
     apk --no-cache add postgresql-libs libxslt jpeg zlib libxml2 # those *might* be useful
+# Various fonts for proper name printing
+RUN apk --no-cache add fontconfig font-noto-gujarati font-noto-kannada && \
+    apk --no-cache add font-noto-osage font-noto-kayahli font-noto-oriya && \
+    apk --no-cache add font-noto-telugu font-noto-tamil font-noto-bengali && \
+    apk --no-cache add font-noto-malayalam font-noto-arabic font-noto-extra && \
+    apk --no-cache add font-noto-armenian font-noto-cherokee font-noto-devanagari && \
+    apk --no-cache add font-noto-ethiopic font-noto-georgian font-noto-hebrew && \
+    apk --no-cache add font-noto-lao font-noto-thaana font-noto-thai font-noto-cjk
 RUN fc-cache -f
 
 COPY --from=builder /opt/pysetup/.venv /opt/pysetup/.venv
