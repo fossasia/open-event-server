@@ -5234,7 +5234,7 @@ def list_all_translation(transaction):
 )
 def list_all_translation_of_video_stream(transaction):
     """
-    :param transaction:
+    :param transaction: transaction
     :return:
     """
     with stash['app'].app_context():
