@@ -895,23 +895,21 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         )
         for field in badge_field_forms:
             field.sample_text_tmp = field.sample_text
-            field.font_weight_tmp = field.font_weight
             if field.custom_field is not None and field.custom_field.lower() == 'qr':
                 qr_code_data = get_value_from_qr_filed(field, ticket_holder)
                 qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
-
                 field.sample_text = create_base64_img_qr(qr_rendered)
                 continue
             if list_field_show is None or field.field_identifier not in list_field_show:
                 field.sample_text = ' '
                 continue
-
             get_value_from_field_indentifier(field, ticket_holder)
-
             # Font style set up
+        for field in badge_field_forms:
             font_weight = []
             font_style = []
             text_decoration = []
+            field.font_weight_tmp = field.font_weight
             if field.font_weight is not None:
                 for item in field.font_weight:
                     if item.get('font_weight', False):
@@ -938,10 +936,8 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         ticket_holder.is_badge_printed = True
         ticket_holder.badge_printed_at = datetime.now()
         for badge_field in badge_field_forms:
-            if badge_field.font_weight_tmp is not None:
-                badge_field.font_weight = badge_field.font_weight_tmp
-            if badge_field.sample_text_tmp is not None:
-                badge_field.sample_text = badge_field.sample_text_tmp
+            badge_field.font_weight = badge_field.font_weight_tmp
+            badge_field.sample_text = badge_field.sample_text_tmp
         save_to_db(ticket_holder, 'Ticket Holder saved')
     except AttributeError as e:
         result = {'__error': True, 'result': str(e)}
@@ -953,7 +949,4 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
             '__error': True,
             'result': 'Unexpected error when trying to print badge, please try again.',
         }
-        logging.exception(
-            '%s: Error in exporting Badge as PDF - %s', self.request.id.__str__(), e
-        )
     return result
