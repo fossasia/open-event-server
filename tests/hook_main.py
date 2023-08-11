@@ -4,6 +4,9 @@ import sys
 import dredd_hooks as hooks
 import requests
 
+from tests.factories.translation_channel import TranslationChannelFactory
+from tests.factories.video_stream import VideoStreamFactoryBase
+
 # DO NOT REMOVE THIS. This adds the project root for successful imports.
 # Imports from the project directory should be placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
@@ -5210,4 +5213,32 @@ def create_user_check_in(transaction):
             event=event,
             ticket=ticket,
         )
+        db.session.commit()
+
+
+@hooks.before(
+    "Translation Channels > Translation Channels > List all Translation Channels"
+)
+def list_all_translation(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        video_stream = VideoStreamFactoryBase()
+        TranslationChannelFactory(video_stream=video_stream)
+        db.session.commit()
+
+
+@hooks.before(
+    "Translation Channels > Translation Channels > List all Translation Channels Of Video Stream"
+)
+def list_all_translation_of_video_stream(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        video_stream = VideoStreamFactoryBase()
+        TranslationChannelFactory(video_stream=video_stream)
         db.session.commit()
