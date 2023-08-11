@@ -6,6 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
 from app.api.helpers.user_check_in import (

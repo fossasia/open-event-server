@@ -318,26 +318,24 @@ def handle_unserializable_data(obj):
 
 
 def create_export_badge_job(task_id, event_id, attendee_id):
-    """
-    Create export job for an export that is going to start
-    """
+    """Create export job for an export that is going to start"""
     export_job = ExportJob.query.filter_by(
         event_id=event_id, attendee_id=attendee_id
     ).first()
     task_url = url_for('tasks.celery_task', task_id=task_id)
-    current_logged_user = get_current_user()
+    logged_user = get_current_user()
 
     if export_job:
 
         export_job.task = task_url
-        export_job.user_email = current_logged_user.email
+        export_job.user_email = logged_user.email
         export_job.attendee_id = attendee_id
         export_job.event = Event.query.get(event_id)
         export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
             task=task_url,
-            user_email=current_logged_user.email,
+            user_email=logged_user.email,
             attendee_id=attendee_id,
             event=Event.query.get(event_id),
         )
@@ -345,6 +343,11 @@ def create_export_badge_job(task_id, event_id, attendee_id):
 
 
 def comma_separated_params_to_list(param):
+    """
+    convert string to list separated by comma
+    @param param: string to be separates
+    @return: array string
+    """
     result = []
     for val in param.split(','):
         if val:

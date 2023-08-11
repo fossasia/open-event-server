@@ -86,7 +86,8 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
             try:
                 if ticket_holder.complex_field_values is not None:
                     value_ = ticket_holder.complex_field_values[field_identifier]
-                    # Get the field description then Capitalize first letter and remove space.
+                    # Get the field description then
+                    # Capitalize first letter and remove space.
                     custom_form = CustomForms.query.filter_by(
                         field_identifier=field_identifier,
                         form_id=ticket_holder.ticket.form_id,
