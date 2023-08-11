@@ -1023,6 +1023,12 @@ api.route(
     '/events/<int:id>/relationships/group',
     '/events/<identifier>/relationships/group',
 )
+api.route(
+    EventRelationship,
+    'event_tags',
+    '/events/<int:id>/relationships/tags',
+    '/events/<identifier>/relationships/tags',
+)
 # Events -> roles:
 api.route(
     EventRelationship,
