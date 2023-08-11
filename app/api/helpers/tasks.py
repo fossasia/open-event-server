@@ -947,11 +947,15 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         save_to_db(ticket_holder, 'Ticket Holder saved')
     except AttributeError as e:
         result = {'__error': True, 'result': str(e)}
-        logging.exception(f'{self.request.id.__str__()}: Error in exporting Badge as PDF')
+        logging.exception(
+            '%s: Error in exporting Badge as PDF', self.request.id.__str__()
+        )
     except Exception:
         result = {
             '__error': True,
             'result': 'Unexpected error when trying to print badge, please try again.',
         }
-        logging.exception(f'{self.request.id.__str__()}: Error in exporting Badge as PDF')
+        logging.exception(
+            '%s: Error in exporting Badge as PDF', self.request.id.__str__()
+        )
     return result
