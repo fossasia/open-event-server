@@ -1,3 +1,5 @@
+import re
+
 from flask_jwt_extended import current_user
 from sqlalchemy import or_
 from sqlalchemy.orm import backref
@@ -41,6 +43,9 @@ class VideoStream(db.Model):
         db.Integer, db.ForeignKey('video_channels.id', ondelete='CASCADE')
     )
     channel = db.relationship(VideoChannel, backref='streams')
+    is_chat_enabled = db.Column(db.Boolean, default=False, nullable=True)
+    is_global_event_room = db.Column(db.Boolean, default=False, nullable=True)
+    chat_room_id = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return f'<VideoStream {self.name!r} {self.url!r}>'
@@ -99,3 +104,7 @@ class VideoStream(db.Model):
                 .exists()
             ).scalar()
         )
+
+    @property
+    def chat_room_name(self):
+        return re.sub('[^0-9a-zA-Z!]', '-', self.name) + '-' + str(self.id)
