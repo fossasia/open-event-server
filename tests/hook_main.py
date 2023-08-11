@@ -4,9 +4,6 @@ import sys
 import dredd_hooks as hooks
 import requests
 
-from tests.factories.translation_channel import TranslationChannelFactory
-from tests.factories.video_stream import VideoStreamFactoryBase
-
 # DO NOT REMOVE THIS. This adds the project root for successful imports.
 # Imports from the project directory should be placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
@@ -91,6 +88,8 @@ from tests.factories.exhibitor import ExhibitorFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
+from tests.factories.translation_channel import TranslationChannelFactory
+from tests.factories.video_stream import VideoStreamFactoryBase
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
