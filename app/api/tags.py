@@ -76,6 +76,29 @@ class TagDetail(ResourceDetail):
     """
 
     @staticmethod
+    def before_patch(_obj, _kwargs, data):
+        """
+        before patch method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        require_relationship(['event'], data)
+        tag = (
+            db.session.query(Tag)
+            .filter_by(
+                name=data.get('name'), event_id=int(data['event']), deleted_at=None
+            )
+            .first()
+        )
+        if tag and tag.is_read_only:
+            raise ConflictError(
+                {'pointer': '/data/attributes/is_read_only'},
+                "Cannot update read-only tag",
+            )
+
+    @staticmethod
     def before_delete(_obj, kwargs):
         """
         before delete method to check for required relationship and proper permission
@@ -92,7 +115,7 @@ class TagDetail(ResourceDetail):
     data_layer = {
         'session': db.session,
         'model': Tag,
-        'methods': {'before_delete': before_delete},
+        'methods': {'before_delete': before_delete, before_patch: 'before_patch'},
     }
 
 
