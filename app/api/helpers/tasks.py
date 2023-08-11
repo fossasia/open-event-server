@@ -878,21 +878,7 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
     @return: create pdf file and return download link
     """
     try:
-        ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
-        if ticket_holder is None:
-            raise NotFoundError('This ticket holder is not associated with any ticket')
-        badge_form = BadgeForms.query.filter_by(
-            badge_id=ticket_holder.ticket.badge_id
-        ).first()
-        if badge_form is None:
-            raise NotFoundError('This badge form is not associated with any ticket')
-        badge_field_forms = (
-            BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
-            .filter_by(badge_id=badge_form.badge_id)
-            .filter_by(is_deleted=False)
-            .order_by(asc("id"))
-            .all()
-        )
+        ticket_holder, badge_form, badge_field_forms = validate_badge_print(attendee_id)
         for field in badge_field_forms:
             field.sample_text_tmp = field.sample_text
             if field.custom_field is not None and field.custom_field.lower() == 'qr':
@@ -941,13 +927,33 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         save_to_db(ticket_holder, 'Ticket Holder saved')
     except AttributeError as e:
         result = {'__error': True, 'result': str(e)}
-        logging.exception(
-            '%s: Error in exporting Badge as PDF', self.request.id.__str__()
-        )
-    except Exception as e:
-        logging.exception(e)
+    except Exception:
         result = {
             '__error': True,
             'result': 'Unexpected error when trying to print badge, please try again.',
         }
     return result
+
+
+def validate_badge_print(attendee_id):
+    """
+    Validate and get attendee, badge form and badge field
+    @param attendee_id: attendee
+    @return: ticket_holder, badge_form, badge_field_forms
+    """
+    ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
+    if ticket_holder is None:
+        raise NotFoundError('This ticket holder is not associated with any ticket')
+    badge_form = BadgeForms.query.filter_by(
+        badge_id=ticket_holder.ticket.badge_id
+    ).first()
+    if badge_form is None:
+        raise NotFoundError('This badge form is not associated with any ticket')
+    badge_field_forms = (
+        BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
+        .filter_by(badge_id=badge_form.badge_id)
+        .filter_by(is_deleted=False)
+        .order_by(asc("id"))
+        .all()
+    )
+    return ticket_holder, badge_form, badge_field_forms
