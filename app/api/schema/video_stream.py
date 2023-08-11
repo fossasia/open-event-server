@@ -47,6 +47,9 @@ class VideoStreamSchema(Schema):
     bg_img_url = fields.Str(required=False, allow_none=True)
     additional_information = fields.Str(required=False, allow_none=True)
     extra = fields.Nested(VideoStreamExtraSchema, allow_none=True)
+    is_chat_enabled = fields.Boolean(default=False, allow_none=True)
+    is_global_event_room = fields.Boolean(default=False, allow_none=True)
+    chat_room_name = fields.Str(dump_only=True)
     rooms = Relationship(
         many=True,
         self_view='v1.video_stream_rooms',
