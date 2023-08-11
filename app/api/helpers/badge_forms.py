@@ -77,29 +77,32 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
     """Get the value of a QR code field."""
     qr_value = {}
     custom_fields = []
-    for field_identifier in field.qr_custom_field:
-        value_ = ""
-        try:
-            snake_case_field_identifier = to_snake_case(field_identifier)
-            value_ = getattr(ticket_holder, snake_case_field_identifier)
-        except AttributeError:
+    if field.qr_custom_field is not None:
+        for field_identifier in field.qr_custom_field:
+            value_ = ""
             try:
-                if ticket_holder.complex_field_values is not None:
-                    value_ = ticket_holder.complex_field_values[field_identifier]
-                    # Get the field description then
-                    # Capitalize first letter and remove space.
-                    custom_form = CustomForms.query.filter_by(
-                        field_identifier=field_identifier,
-                        form_id=ticket_holder.ticket.form_id,
-                    ).first()
-                    field_description = custom_form.description.title().replace(' ', '')
-                    custom_fields.append({field_description: value_})
+                snake_case_field_identifier = to_snake_case(field_identifier)
+                value_ = getattr(ticket_holder, snake_case_field_identifier)
             except AttributeError:
-                print(field_identifier)
-            except Exception:
-                print(field_identifier)
+                try:
+                    if ticket_holder.complex_field_values is not None:
+                        value_ = ticket_holder.complex_field_values[field_identifier]
+                        # Get the field description then
+                        # Capitalize first letter and remove space.
+                        custom_form = CustomForms.query.filter_by(
+                            field_identifier=field_identifier,
+                            form_id=ticket_holder.ticket.form_id,
+                        ).first()
+                        field_description = custom_form.description.title().replace(
+                            ' ', ''
+                        )
+                        custom_fields.append({field_description: value_})
+                except AttributeError:
+                    print(field_identifier)
+                except Exception:
+                    print(field_identifier)
 
-        qr_value.update({field_identifier: str(value_)})
+            qr_value.update({field_identifier: str(value_)})
     qr_value.update({'custom_fields': custom_fields, 'ticket_id': ticket_holder.id})
     return qr_value
 
