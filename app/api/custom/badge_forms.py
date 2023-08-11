@@ -9,6 +9,7 @@ from app.api.helpers.export_helpers import (
     create_export_badge_job,
 )
 from app.api.helpers.permission_manager import has_access
+from app.models.badge_form import BadgeForms
 from app.models.ticket_holder import TicketHolder
 
 badge_forms_routes = Blueprint(
@@ -52,6 +53,13 @@ def print_badge_pdf():
     if ticket_holder is None:
         raise NotFoundError(
             {'source': ''}, 'This ticket holder is not associated with any ticket'
+        )
+    badge_form = BadgeForms.query.filter_by(
+        badge_id=ticket_holder.ticket.badge_id
+    ).first()
+    if badge_form is None:
+        raise NotFoundError(
+            {'source': ''}, 'This badge form is not associated with any ticket'
         )
     if not has_access('is_coorganizer', event_id=ticket_holder.event_id):
         raise ForbiddenError({'source': ''}, 'Unauthorized Access')

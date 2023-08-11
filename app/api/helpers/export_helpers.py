@@ -350,6 +350,6 @@ def comma_separated_params_to_list(param):
     """
     result = []
     for val in param.split(','):
-        if val:
+        if val is not None:
             result.append(val.strip())
     return result

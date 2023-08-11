@@ -899,7 +899,7 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         )
         for field in badge_field_forms:
             field.sample_text_tmp = field.sample_text
-            if field.custom_field.lower() == 'qr':
+            if field.custom_field is not None and field.custom_field.lower() == 'qr':
                 qr_code_data = get_value_from_qr_filed(field, ticket_holder)
                 qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
 
@@ -911,25 +911,25 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
 
             get_value_from_field_indentifier(field, ticket_holder)
 
-        for badge_field in badge_field_forms:
+            # Font style set up
             font_weight = []
             font_style = []
             text_decoration = []
-            badge_field.font_weight_tmp = badge_field.font_weight
-            if badge_field.font_weight:
-                for item in badge_field.font_weight:
-                    if item.get('font_weight'):
+            field.font_weight_tmp = field.font_weight
+            if field.font_weight is not None:
+                for item in field.font_weight:
+                    if item.get('font_weight', False):
                         font_weight.append(item.get('font_weight'))
-                    if item.get('font_style'):
+                    if item.get('font_style', False):
                         font_style.append(item.get('font_style'))
-                    if item.get('text_decoration'):
+                    if item.get('text_decoration', False):
                         text_decoration.append(item.get('text_decoration'))
-            badge_field.font_weight = 'none' if not font_weight else ','.join(font_weight)
-            badge_field.font_style = 'none' if not font_style else ','.join(font_style)
-            badge_field.text_decoration = (
+            field.font_weight = 'none' if not font_weight else ','.join(font_weight)
+            field.font_style = 'none' if not font_style else ','.join(font_style)
+            field.text_decoration = (
                 'none' if not text_decoration else ','.join(text_decoration)
             )
-        result = create_save_pdf(
+        badge_url = create_save_pdf(
             render_template(
                 'pdf/badge_forms.html',
                 badgeForms=badge_form,
@@ -938,13 +938,20 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
             UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
             identifier=badge_form.badge_id,
         )
+        result = {'download_url': badge_url}
         ticket_holder.is_badge_printed = True
         ticket_holder.badge_printed_at = datetime.now()
         for badge_field in badge_field_forms:
             badge_field.font_weight = badge_field.font_weight_tmp
             badge_field.sample_text = badge_field.sample_text_tmp
         save_to_db(ticket_holder, 'Ticket Holder saved')
-    except Exception as e:
+    except AttributeError as e:
         result = {'__error': True, 'result': str(e)}
-        logging.exception('Error in exporting group followers as CSV')
-    return {'download_url': result}
+        logging.exception(f'{self.request.id.__str__()}: Error in exporting Badge as PDF')
+    except Exception:
+        result = {
+            '__error': True,
+            'result': 'Unexpected error when trying to print badge, please try again.',
+        }
+        logging.exception(f'{self.request.id.__str__()}: Error in exporting Badge as PDF')
+    return result
