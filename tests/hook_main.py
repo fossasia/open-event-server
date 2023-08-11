@@ -5216,6 +5216,27 @@ def create_user_check_in(transaction):
 
 
 @hooks.before(
+    "Event Export > Start Badge Export as PDF > Start a Task to Export Badge of an Event as PDF"
+)
+def badge_export_pdf_get(transaction):
+    event = EventFactoryBasic()
+    ticket = TicketFactory(
+        event=event,
+        badge_id='example',
+    )
+    badge_form = BadgeFormFactory(
+        event=event,
+        badge_id=ticket.badge_id,
+    )
+    BadgeFieldFormFactory(
+        badge_form=badge_form,
+        badge_id=ticket.badge_id,
+    )
+    AttendeeFactory(ticket_id=1)
+    db.session.commit()
+
+
+@hooks.before(
     "Translation Channels > Translation Channels > List all Translation Channels"
 )
 def list_all_translation(transaction):

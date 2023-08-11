@@ -17,6 +17,7 @@ class ExportJob(db.Model):
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('export_jobs'))
+    attendee_id = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return '<ExportJob %d for event %d>' % (self.id, self.event.id)
