@@ -348,8 +348,4 @@ def comma_separated_params_to_list(param):
     @param param: string to be separates
     @return: array string
     """
-    result = []
-    for val in param.split(','):
-        if val is not None:
-            result.append(val.strip())
-    return result
+    return list(filter(lambda x: x and x is not None, param.split(',')))

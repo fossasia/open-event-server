@@ -880,16 +880,12 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
     try:
         ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
         if ticket_holder is None:
-            raise NotFoundError(
-                {'source': ''}, 'This ticket holder is not associated with any ticket'
-            )
+            raise NotFoundError('This ticket holder is not associated with any ticket')
         badge_form = BadgeForms.query.filter_by(
             badge_id=ticket_holder.ticket.badge_id
         ).first()
         if badge_form is None:
-            raise NotFoundError(
-                {'source': ''}, 'This badge form is not associated with any ticket'
-            )
+            raise NotFoundError('This badge form is not associated with any ticket')
         badge_field_forms = (
             BadgeFieldForms.query.filter_by(badge_form_id=badge_form.id)
             .filter_by(badge_id=badge_form.badge_id)
@@ -942,20 +938,22 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
         ticket_holder.is_badge_printed = True
         ticket_holder.badge_printed_at = datetime.now()
         for badge_field in badge_field_forms:
-            badge_field.font_weight = badge_field.font_weight_tmp
-            badge_field.sample_text = badge_field.sample_text_tmp
+            if badge_field.font_weight_tmp is not None:
+                badge_field.font_weight = badge_field.font_weight_tmp
+            if badge_field.sample_text_tmp is not None:
+                badge_field.sample_text = badge_field.sample_text_tmp
         save_to_db(ticket_holder, 'Ticket Holder saved')
     except AttributeError as e:
         result = {'__error': True, 'result': str(e)}
         logging.exception(
             '%s: Error in exporting Badge as PDF', self.request.id.__str__()
         )
-    except Exception:
+    except Exception as e:
         result = {
             '__error': True,
             'result': 'Unexpected error when trying to print badge, please try again.',
         }
         logging.exception(
-            '%s: Error in exporting Badge as PDF', self.request.id.__str__()
+            '%s: Error in exporting Badge as PDF - %s', self.request.id.__str__(), e
         )
     return result
