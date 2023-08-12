@@ -3,7 +3,7 @@ from flask.helpers import send_from_directory, url_for
 from flask_jwt_extended import jwt_required
 
 from app.api.helpers.badge_forms import create_preivew_badge_pdf
-from app.api.helpers.errors import ForbiddenError, NotFoundError
+from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.export_helpers import (
     comma_separated_params_to_list,
     create_export_badge_job,
@@ -48,8 +48,14 @@ def print_badge_pdf():
         )
     attendee_id = request.args.get('attendee_id')
     list_field_show = comma_separated_params_to_list(request.args.get('list_field_show'))
-
-    ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
+    if isinstance(attendee_id, int) or (
+        isinstance(attendee_id, str) and attendee_id.isdigit()
+    ):
+        ticket_holder = TicketHolder.query.filter_by(id=attendee_id).first()
+    else:
+        raise UnprocessableEntityError(
+            {'pointer': 'ticket_holder'}, "Invalid Attendee Id"
+        )
     if ticket_holder is None:
         raise NotFoundError(
             {'source': ''}, 'This ticket holder is not associated with any ticket'
