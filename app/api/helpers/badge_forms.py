@@ -87,7 +87,7 @@ def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: Tick
     except AttributeError:
         try:
             field.sample_text = ticket_holder.complex_field_values[field.field_identifier]
-        except AttributeError:
+        except (AttributeError, KeyError):
             print(snake_case_field_identifier)
 
 
