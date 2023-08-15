@@ -88,6 +88,8 @@ from tests.factories.exhibitor import ExhibitorFactory
 from tests.all.integration.api.helpers.order.test_calculate_order_amount import (
     _create_taxed_tickets,
 )
+from tests.factories.translation_channel import TranslationChannelFactory
+from tests.factories.video_stream import VideoStreamFactoryBase
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -5236,4 +5238,32 @@ def badge_export_pdf_get(transaction):
             badge_id=ticket.badge_id,
         )
         AttendeeFactory(ticket_id=1)
+        db.session.commit()
+
+
+@hooks.before(
+    "Translation Channels > Translation Channels > List all Translation Channels"
+)
+def list_all_translation(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        video_stream = VideoStreamFactoryBase()
+        TranslationChannelFactory(video_stream=video_stream)
+        db.session.commit()
+
+
+@hooks.before(
+    "Translation Channels > Translation Channels > List all Translation Channels Of Video Stream"
+)
+def list_all_translation_of_video_stream(transaction):
+    """
+    :param transaction: transaction
+    :return:
+    """
+    with stash['app'].app_context():
+        video_stream = VideoStreamFactoryBase()
+        TranslationChannelFactory(video_stream=video_stream)
         db.session.commit()
