@@ -1,0 +1,128 @@
+# Group Translation Channels
+Data related to translation channel table
+
+| Parameter | Description | Type | Required | Public |
+|:----------|-------------|------|----------|--------|
+| `name` | Name of Translation channel | string | **yes** | **yes** |
+| `url` | URL of Translation channel | Url | **yes** | **yes** |
+
+## Translation Channels [/v1/translation_channels{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `url`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+
+### List all Translation Channels [GET]
+Get a list of all Translation Channels
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "relationships": {
+                        "channel": {
+                            "links": {
+                                "self": "/v1/translation_channel/1/relationships/channels",
+                                "related": "/v1/video-channels/1"
+                            }
+                        },
+                        "video-stream": {
+                            "links": {
+                                "self": "/v1/translation_channel/1/relationships/video-stream",
+                                "related": "/v1/video-streams/1"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "example-channel",
+                        "url": "http://example-channel.com"
+                    },
+                    "type": "translation_channel",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/translation_channels/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/translation_channels?page%5Bsize%5D=10&page%5Bnumber%5D=2&sort=url&filter=%5B%5D"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Translation Channels [/v1/video-streams/{video_stream_id}/translation_channels]
++ Parameters
+    + video_stream_id: 1 (string) - identifier or stream id.
+
+
+
+### List all Translation Channels Of Video Stream [GET]
+Get a list of all Video Streams
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "relationships": {
+                        "channel": {
+                            "links": {
+                                "self": "/v1/translation_channel/1/relationships/channels",
+                                "related": "/v1/video-channels/1"
+                            }
+                        },
+                        "video-stream": {
+                            "links": {
+                                "self": "/v1/translation_channel/1/relationships/video-stream",
+                                "related": "/v1/video-streams/1"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "example-channel",
+                        "url": "http://example-channel.com"
+                    },
+                    "type": "translation_channel",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/translation_channels/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/translation_channels?page%5Bsize%5D=10&page%5Bnumber%5D=2&sort=url&filter=%5B%5D"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }

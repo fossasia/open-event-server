@@ -39,7 +39,7 @@ class TranslationChannelsList(ResourceList):
             )
             return records
         else:
-            return None
+            return self.session.query(TranslationChannel)
 
     methods = ["GET"]
     schema = TranslationChannelSchema
