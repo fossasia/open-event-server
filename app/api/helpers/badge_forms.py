@@ -34,7 +34,10 @@ def create_preivew_badge_pdf(badgeForms):
     ]
 
     for badge_field in badgeFieldForms:
-        if badge_field.get('custom_field').lower() == 'qr':
+        if (
+            badge_field.get('custom_field') is not None
+            and badge_field.get('custom_field').lower() == 'qr'
+        ):
             qr_code_data = get_qr_data_badge_preview(badge_field)
             qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
             badge_field['sample_text'] = create_base64_img_qr(qr_rendered)
