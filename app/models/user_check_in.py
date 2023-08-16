@@ -1,6 +1,7 @@
 import datetime
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 class UserCheckIn(db.Model):
@@ -35,3 +36,38 @@ class UserCheckIn(db.Model):
 
     def __repr__(self):
         return f'<User Check In {self.id}>'
+
+
+class VirtualCheckIn(SoftDeletionModel):
+    """Virtual check in database model"""
+
+    __tablename__ = 'virtual_check_in'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    ticket_holder_id = db.Column(
+        db.Integer, db.ForeignKey('ticket_holders.id', ondelete='SET NULL')
+    )
+    ticket_holder = db.relationship('TicketHolder', backref='virtual_check_ins')
+
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    event = db.relationship('Event', backref='virtual_check_ins')
+
+    microlocation_id = db.Column(
+        db.Integer,
+        db.ForeignKey('microlocations.id', ondelete='SET NULL'),
+        nullable=True,
+        default=None,
+    )
+    microlocation = db.relationship('Microlocation', backref='virtual_check_ins')
+
+    check_in_type = db.Column(db.String, nullable=False)
+    check_in_at = db.Column(db.DateTime(timezone=True))
+    check_out_at = db.Column(db.DateTime(timezone=True))
+
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow())
+    updated_at = db.Column(db.DateTime(timezone=True))
+    is_deleted = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return '<Virtual Check In %r>' % self.id
