@@ -265,3 +265,27 @@ def virtual_check_in(event_identifier):
     virtual_event_check_in(data, attendees_ids, event.id)
 
     return jsonify({'message': 'Attendee check in/out success'})
+
+
+@events_routes.route('/<string:event_identifier>/sessions/languages', methods=['GET'])
+@to_event_id
+def get_languages(event_id):
+    language_list = list(
+        zip(
+            *db.session.query(Session.language)
+            .distinct()
+            .filter(
+                Session.event_id == event_id,
+                Session.language != None,
+            )
+            .order_by(asc(Session.language))
+            .all()
+        )
+    )
+    languages = list(
+        map(
+            str,
+            language_list[0] if language_list else [],
+        )
+    )
+    return jsonify(languages)
