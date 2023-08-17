@@ -1,6 +1,6 @@
 from marshmallow import Schema, ValidationError, fields, validate, validates_schema
 
-CHECK_IN_TYPE = ['event', 'room']
+CHECK_IN_TYPE = ['event', 'virtual-room', 'room']
 
 
 class VirtualCheckInSchema(Schema):

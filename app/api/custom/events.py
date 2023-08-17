@@ -260,7 +260,8 @@ def virtual_check_in(event_identifier):
 
     attendees = TicketHolder.query.filter(TicketHolder.order_id.in_(orders_id)).all()
 
-    for attendee in attendees:
-        virtual_event_check_in(data, attendee, event.id)
+    attendees_ids = [attendee.id for attendee in attendees]
+
+    virtual_event_check_in(data, attendees_ids, event.id)
 
     return jsonify({'message': 'Attendee check in/out success'})

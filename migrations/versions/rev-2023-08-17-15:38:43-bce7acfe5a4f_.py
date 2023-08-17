@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 50aea295ed75
+Revision ID: bce7acfe5a4f
 Revises: 24271525a263
-Create Date: 2023-08-16 15:40:45.585299
+Create Date: 2023-08-17 15:38:43.387065
 
 """
 
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '50aea295ed75'
+revision = 'bce7acfe5a4f'
 down_revision = '24271525a263'
 
 
@@ -20,7 +20,7 @@ def upgrade():
     op.create_table('virtual_check_in',
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('ticket_holder_id', sa.Integer(), nullable=True),
+    sa.Column('ticket_holder_id', sa.ARRAY(sa.Integer()), nullable=True),
     sa.Column('event_id', sa.Integer(), nullable=True),
     sa.Column('microlocation_id', sa.Integer(), nullable=True),
     sa.Column('check_in_type', sa.String(), nullable=False),
@@ -31,7 +31,6 @@ def upgrade():
     sa.Column('is_deleted', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ondelete='SET NULL'),
     sa.ForeignKeyConstraint(['microlocation_id'], ['microlocations.id'], ondelete='SET NULL'),
-    sa.ForeignKeyConstraint(['ticket_holder_id'], ['ticket_holders.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

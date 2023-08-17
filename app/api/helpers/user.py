@@ -69,11 +69,11 @@ def get_user_id_from_token(token: str):
     return data["identity"]
 
 
-def virtual_event_check_in(data, attendee, event_id):
-    current_time = datetime.datetime.utcnow()
+def virtual_event_check_in(data, attendee_ids, event_id):
+    current_time = datetime.datetime.now()
     if data['is_check_in']:
         virtual_check_in = VirtualCheckIn(
-            ticket_holder_id=attendee.id,
+            ticket_holder_id=attendee_ids,
             event_id=event_id,
             check_in_type=data['check_in_type'],
             check_in_at=current_time,
@@ -82,7 +82,7 @@ def virtual_event_check_in(data, attendee, event_id):
     else:
         virtual_check_in = (
             VirtualCheckIn.query.filter(
-                VirtualCheckIn.ticket_holder_id == attendee.id,
+                VirtualCheckIn.ticket_holder_id == attendee_ids,
                 VirtualCheckIn.event_id == event_id,
                 VirtualCheckIn.microlocation_id == data.get('microlocation_id'),
             )

@@ -1,5 +1,7 @@
 import datetime
 
+from sqlalchemy import ARRAY, Integer, func
+
 from app.models import db
 from app.models.base import SoftDeletionModel
 
@@ -45,10 +47,7 @@ class VirtualCheckIn(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    ticket_holder_id = db.Column(
-        db.Integer, db.ForeignKey('ticket_holders.id', ondelete='SET NULL')
-    )
-    ticket_holder = db.relationship('TicketHolder', backref='virtual_check_ins')
+    ticket_holder_id = db.Column(ARRAY(Integer), nullable=True)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
     event = db.relationship('Event', backref='virtual_check_ins')
@@ -65,7 +64,7 @@ class VirtualCheckIn(SoftDeletionModel):
     check_in_at = db.Column(db.DateTime(timezone=True))
     check_out_at = db.Column(db.DateTime(timezone=True))
 
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow())
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True))
     is_deleted = db.Column(db.Boolean, default=False)
 

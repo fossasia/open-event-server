@@ -7,6 +7,7 @@ from app.models.access_code import AccessCode
 from app.models.helpers.versioning import strip_tags
 from app.models.order import OrderTicket
 from app.models.ticket import access_codes_tickets
+from app.models.user_check_in import VirtualCheckIn
 
 
 def export_orders_csv(orders):
@@ -148,9 +149,21 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
                 )
                 converted_header = field.name
                 data[converted_header] = dict_value
+        data['virtual_event_checkin_times'] = get_virtual_checkin_times(attendee.id)
         return_dict_list.append(data)
 
     return return_dict_list
+
+
+def get_virtual_checkin_times(attendee_id: int):
+    virtual_check_in = VirtualCheckIn.query.filter(
+        VirtualCheckIn.ticket_holder_id.any(attendee_id),
+        VirtualCheckIn.check_in_type == 'room',
+    ).all()
+    virtual_check_in_times = [
+        item.check_in_at.strftime("%Y-%m-%dT%H:%M:%S%z") for item in virtual_check_in
+    ]
+    return virtual_check_in_times
 
 
 def export_sessions_csv(sessions):
