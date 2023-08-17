@@ -69,4 +69,4 @@ class VirtualCheckIn(SoftDeletionModel):
     is_deleted = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return '<Virtual Check In %r>' % self.id
+        return f'<Virtual Check In {self.id}>'

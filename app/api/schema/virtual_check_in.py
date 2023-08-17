@@ -15,6 +15,13 @@ class VirtualCheckInSchema(Schema):
 
     @validates_schema
     def validate_microlocation_requires_a(self, data):
-        if 'check_in_type' in data and data['check_in_type'] == 'room':
-            if 'microlocation_id' not in data:
-                raise ValidationError('microlocation_id is required for room check in.')
+        """
+        validate when check_in_type is room, microlocation id is required
+        @param data: data
+        """
+        if (
+            'check_in_type' in data
+            and data['check_in_type'] == 'room'
+            and 'microlocation_id' not in data
+        ):
+            raise ValidationError('microlocation_id is required for room check in.')

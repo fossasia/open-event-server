@@ -156,6 +156,11 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
 
 
 def get_virtual_checkin_times(attendee_id: int):
+    """
+    get check in times of attendee
+    @param attendee_id: attendee_id
+    @return: time check in of attendee
+    """
     virtual_check_in = VirtualCheckIn.query.filter(
         VirtualCheckIn.ticket_holder_id.any(attendee_id),
         VirtualCheckIn.check_in_type == 'room',

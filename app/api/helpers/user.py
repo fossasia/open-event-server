@@ -70,6 +70,12 @@ def get_user_id_from_token(token: str):
 
 
 def virtual_event_check_in(data, attendee_ids, event_id):
+    """
+    do check in for attendee in virtual event
+    @param data: data
+    @param attendee_ids: attendee_ids
+    @param event_id: event_id
+    """
     current_time = datetime.datetime.now()
     if data['is_check_in']:
         virtual_check_in = VirtualCheckIn(
@@ -93,6 +99,5 @@ def virtual_event_check_in(data, attendee_ids, event_id):
             raise UnprocessableEntityError({'errors': 'Attendee not check in yet'})
         if virtual_check_in.check_out_at is not None:
             raise UnprocessableEntityError({'errors': 'Attendee Already checked out'})
-        else:
-            virtual_check_in.check_out_at = current_time
+        virtual_check_in.check_out_at = current_time
     save_to_db(virtual_check_in)
