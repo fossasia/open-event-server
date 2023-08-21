@@ -24,7 +24,9 @@ class TagList(ResourceList):
         query_ = self.session.query(Tag)
         if view_kwargs.get('event_id'):
             event = safe_query_kwargs(Event, view_kwargs, 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+            query_ = (
+                query_.join(Event).filter(Event.id == event.id).order_by(Tag.id.asc())
+            )
         return query_
 
     view_kwargs = True
@@ -92,7 +94,7 @@ class TagDetail(ResourceDetail):
             )
             .first()
         )
-        if tag and tag.is_read_only:
+        if tag and tag.is_read_only and tag.name != data.get('name'):
             raise ConflictError(
                 {'pointer': '/data/attributes/is_read_only'},
                 "Cannot update read-only tag",
