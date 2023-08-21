@@ -26,6 +26,23 @@ def create_preivew_badge_pdf(badgeForms):
     badgeForms = badgeForms[0]
     badgeFieldForms = badgeForms['badgeFields']
     badgeId = badgeForms['badgeID']
+
+    badgeFieldForms = [
+        badge_field
+        for badge_field in badgeFieldForms
+        if badge_field['is_deleted'] is False
+    ]
+
+    for badge_field in badgeFieldForms:
+        if (
+            badge_field.get('custom_field') is not None
+            and badge_field.get('custom_field').lower() == 'qr'
+        ):
+            qr_code_data = get_qr_data_badge_preview(badge_field)
+            qr_rendered = render_template('cvf/badge_qr_template.cvf', **qr_code_data)
+            badge_field['sample_text'] = create_base64_img_qr(qr_rendered)
+            badge_field['text_rotation'] = 0
+
     for badge_field in badgeFieldForms:
         font_weight = []
         font_style = []
@@ -56,6 +73,7 @@ def create_preivew_badge_pdf(badgeForms):
         ),
         UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId),
         identifier=badgeId,
+        new_renderer=True,
     )
     key = UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badgeId)
     return f'static/media/{key}/{generate_hash(key)}/{badgeId}.pdf'
@@ -69,7 +87,7 @@ def get_value_from_field_indentifier(field: BadgeFieldForms, ticket_holder: Tick
     except AttributeError:
         try:
             field.sample_text = ticket_holder.complex_field_values[field.field_identifier]
-        except AttributeError:
+        except (AttributeError, KeyError):
             print(snake_case_field_identifier)
 
 
@@ -104,6 +122,16 @@ def get_value_from_qr_filed(field: BadgeFieldForms, ticket_holder: TicketHolder)
 
             qr_value.update({field_identifier: str(value_)})
     qr_value.update({'custom_fields': custom_fields, 'ticket_id': ticket_holder.id})
+    return qr_value
+
+
+def get_qr_data_badge_preview(field: BadgeFieldForms) -> dict:
+    """Get the value of a QR code field."""
+    qr_value = {}
+    if field.get('qr_custom_field') is not None:
+        for field_identifier in field.get('qr_custom_field'):
+            value_ = "Sample Data"
+            qr_value.update({field_identifier: str(value_)})
     return qr_value
 
 
