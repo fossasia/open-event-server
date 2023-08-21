@@ -390,6 +390,7 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
+
     get_or_create(
         VideoChannel,
         provider='jitsi',
@@ -428,6 +429,12 @@ def populate():
         provider='libre',
         name='Libre Work',
         defaults={'url': 'https://2d.freiland-potsdam.de/'},
+    )
+    get_or_create(
+        VideoChannel,
+        provider='youtube_privacy',
+        name='YouTube Privacy',
+        defaults={'url': 'https://youtube-nocookie.com'},
     )
 
     db.session.commit()

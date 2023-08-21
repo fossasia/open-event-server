@@ -214,3 +214,27 @@ def search_attendees(event_id):
     attendees = query.order_by(TicketHolder.id.desc()).all()
 
     return jsonify({'attendees': attendees})
+
+
+@events_routes.route('/<string:event_identifier>/sessions/languages', methods=['GET'])
+@to_event_id
+def get_languages(event_id):
+    language_list = list(
+        zip(
+            *db.session.query(Session.language)
+            .distinct()
+            .filter(
+                Session.event_id == event_id,
+                Session.language != None,
+            )
+            .order_by(asc(Session.language))
+            .all()
+        )
+    )
+    languages = list(
+        map(
+            str,
+            language_list[0] if language_list else [],
+        )
+    )
+    return jsonify(languages)
