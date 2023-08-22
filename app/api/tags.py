@@ -111,7 +111,8 @@ class TagDetail(ResourceDetail):
         """
         ticketHolders = TicketHolder.query.filter_by(tag_id=kwargs['id']).all()
         for item in ticketHolders:
-            db.session.delete(item)
+            item.tag_id = None
+            db.session.add(item)
 
     schema = TagSchema
     data_layer = {
