@@ -396,9 +396,9 @@ def create_save_pdf(
 
     pdf_content = pdf_data.encode('utf-8')
     if not new_renderer:
-        file = open(dest, "wb")
-        pisa.CreatePDF(io.BytesIO(pdf_content), file)
-        file.close()
+        with open(dest, 'wb') as file_:
+            pisa.CreatePDF(io.BytesIO(pdf_content), file_)
+
     else:
         HTML(string=pdf_content).write_pdf(dest)
 
