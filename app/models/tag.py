@@ -14,4 +14,4 @@ class Tag(SoftDeletionModel):
     event = db.relationship("Event", backref="tags_", foreign_keys=[event_id])
 
     def __repr__(self):
-        return '<Tag %r>' % self.id
+        return f'<Tag {self.id!r}>'

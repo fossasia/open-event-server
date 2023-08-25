@@ -6,14 +6,10 @@ from app.api.schema.base import SoftDeletionSchema
 
 
 class TagSchema(SoftDeletionSchema):
-    """
-    API Schema for user tag Model
-    """
+    """API Schema for user tag Model"""
 
     class Meta:
-        """
-        Meta class for user tag API schema
-        """
+        """Meta class for user tag API schema"""
 
         type_ = 'tag'
         self_view = 'v1.tags_detail'

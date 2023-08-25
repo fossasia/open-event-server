@@ -11,9 +11,7 @@ from app.models.ticket_holder import TicketHolder
 
 
 class TagList(ResourceList):
-    """
-    List User Emails for a user
-    """
+    """List User Emails for a user"""
 
     def query(self, view_kwargs):
         """
@@ -38,11 +36,10 @@ class TagList(ResourceList):
 
 
 class TagListPost(ResourceList):
-    """
-    Create new alternate email for a user
-    """
+    """Create new alternate email for a user"""
 
-    def before_post(self, _args, _kwargs, data):
+    @staticmethod
+    def before_post(_args, _kwargs, data):
         """
         before post method to check for required relationship and proper permission
         :param args:
@@ -69,13 +66,15 @@ class TagListPost(ResourceList):
     methods = [
         'POST',
     ]
-    data_layer = {'session': db.session, 'model': Tag}
+    data_layer = {
+        'session': db.session,
+        'model': Tag,
+        'methods': {'before_post': before_post},
+    }
 
 
 class TagDetail(ResourceDetail):
-    """
-    User Email detail by id
-    """
+    """User Email detail by id"""
 
     @staticmethod
     def before_patch(_obj, _kwargs, data):
@@ -123,9 +122,7 @@ class TagDetail(ResourceDetail):
 
 
 class TagRelationship(ResourceRelationship):
-    """
-    User Email Relationship
-    """
+    """User Email Relationship"""
 
     schema = TagSchema
     data_layer = {'session': db.session, 'model': Tag}
