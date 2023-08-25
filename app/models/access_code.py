@@ -58,7 +58,7 @@ class AccessCode(SoftDeletionModel):
             .filter_by(is_access_code_applied=True)
             .join(Order)
             .filter_by(access_code_id=self.id)
-            .filter(Order.status.in_(['completed', 'placed']))
+            .filter(Order.status.in_(['completed', 'placed', 'pending', 'initializing']))
         )
 
     @property

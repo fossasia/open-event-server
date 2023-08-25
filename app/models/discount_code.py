@@ -49,7 +49,7 @@ class DiscountCode(SoftDeletionModel):
             .filter_by(is_discount_applied=True)
             .join(Order)
             .filter_by(discount_code_id=self.id)
-            .filter(Order.status.in_(['completed', 'placed']))
+            .filter(Order.status.in_(['completed', 'placed', 'pending', 'initializing']))
         )
 
     @property
