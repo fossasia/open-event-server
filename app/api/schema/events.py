@@ -404,6 +404,16 @@ class EventSchemaPublic(SoftDeletionSchema):
         many=True,
         type_='badge-form',
     )
+    tags = Relationship(
+        attribute='tag',
+        self_view='v1.event_tags',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.tags_list',
+        related_view_kwargs={'event_id': '<id>'},
+        schema='TagSchema',
+        many=True,
+        type_='tag',
+    )
 
 
 class EventSchema(EventSchemaPublic):
