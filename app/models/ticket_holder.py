@@ -88,6 +88,8 @@ class TicketHolder(SoftDeletionModel):
     badge_printed_at: datetime = db.Column(db.DateTime(timezone=True))
     is_discount_applied: bool = db.Column(db.Boolean, default=False)
     is_access_code_applied: bool = db.Column(db.Boolean, default=False)
+    tag_id: int = db.Column(db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
+    tag = db.relationship('Tag', backref='ticket_holders')
 
     @property
     def name(self):
