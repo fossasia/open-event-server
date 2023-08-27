@@ -86,6 +86,8 @@ class TicketHolder(SoftDeletionModel):
     is_consent_form_field_email: bool = db.Column(db.Boolean, default=False)
     is_badge_printed: bool = db.Column(db.Boolean, default=False)
     badge_printed_at: datetime = db.Column(db.DateTime(timezone=True))
+    tag_id: int = db.Column(db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
+    tag = db.relationship('Tag', backref='ticket_holders')
 
     @property
     def name(self):

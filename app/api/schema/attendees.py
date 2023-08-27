@@ -82,6 +82,7 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
     is_consent_form_field_email = fields.Boolean(allow_none=True)
     is_badge_printed = fields.Boolean(allow_none=True)
     badge_printed_at = fields.DateTime(allow_none=True)
+    tag_id = fields.Int(allow_none=True)
     event = Relationship(
         self_view='v1.attendee_event',
         self_view_kwargs={'id': '<id>'},
@@ -108,6 +109,14 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
         schema='TicketSchemaPublic',
         type_='ticket',
         dump_only=True,
+    )
+    tag = Relationship(
+        self_view='v1.attendee_tag',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.tags_detail',
+        related_view_kwargs={'attendee_id': '<id>'},
+        schema='TagSchema',
+        type_='tag',
     )
 
 
