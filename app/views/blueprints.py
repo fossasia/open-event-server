@@ -1,6 +1,7 @@
 import flask_login as login
 import requests
-from flask import Blueprint, make_response, redirect, request, url_for
+from flask_smorest import Blueprint
+from flask import make_response, redirect, request, url_for
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
@@ -83,7 +84,7 @@ class MyAdminIndexView(AdminIndexView):
         return redirect(url_for('.index'))
 
 
-home_routes = Blueprint('home', __name__)
+home_routes = Blueprint('home', __name__ , description = "Home Routes Blueprint")
 
 
 # Flask views
