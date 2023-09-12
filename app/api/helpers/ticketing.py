@@ -146,11 +146,22 @@ def validate_discount_code(
     return discount_code
 
 
-def is_discount_available(discount_code, tickets=None, ticket_holders=None):
+def is_discount_available(
+    discount_code,
+    tickets=None,
+    ticket_holders=None,
+    quantity_discount=None,
+    verify_discount=True,
+):
     """
     Validation of discount code belonging to the tickets and events should be done
     before calling this method
     """
+    if quantity_discount is None:
+        quantity_discount: dict = {
+            'numb_no_discount': 0,
+            'numb_discount': 0,
+        }
     qty = 0
     # TODO(Areeb): Extremely confusing here what should we do about deleted tickets here
     ticket_ids = [ticket.id for ticket in discount_code.tickets]
@@ -171,13 +182,9 @@ def is_discount_available(discount_code, tickets=None, ticket_holders=None):
 
     max_quantity = qty if discount_code.max_quantity < 0 else discount_code.max_quantity
 
-    available = (
-        (qty + old_holders) <= discount_code.tickets_number
-        and discount_code.min_quantity <= qty <= max_quantity
-    )
-    if not available:
+    if not discount_code.min_quantity <= qty <= max_quantity:
         logger.warning(
-            "Discount code usage exhausted",
+            "Discount code is not applied with your quantity.",
             extra=dict(
                 discount_code=discount_code,
                 ticket_ids=ticket_ids,
@@ -186,7 +193,18 @@ def is_discount_available(discount_code, tickets=None, ticket_holders=None):
                 old_holders=old_holders,
             ),
         )
-    return available
+    if not (old_holders < discount_code.tickets_number) and verify_discount:
+        raise UnprocessableEntityError(
+            {'pointer': 'discount_sold_out'}, "Discount tickets sold out."
+        )
+    if (qty + old_holders - discount_code.tickets_number) > 0:
+        quantity_discount['numb_no_discount'] = (
+            qty + old_holders - discount_code.tickets_number
+        )
+        quantity_discount['numb_discount'] = discount_code.tickets_number - old_holders
+    else:
+        quantity_discount['numb_discount'] = qty
+    return quantity_discount
 
 
 class TicketingManager:

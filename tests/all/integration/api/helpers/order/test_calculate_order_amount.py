@@ -204,7 +204,9 @@ def test_discount_code(db):
     )
     db.session.commit()
 
-    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code.id)
+    amount_data = calculate_order_amount(
+        [{'id': ticket.id}], discount_code=discount_code.id
+    )
 
     assert amount_data['total'] == 90.0
     assert amount_data['tax'] is None
@@ -255,7 +257,7 @@ def test_multiple_tickets_discount(db):
         [ticket_a, ticket_b, ticket_c, ticket_d], [2, 3, 1, 2]
     )
 
-    amount_data = calculate_order_amount(tickets_dict, discount.id)
+    amount_data = calculate_order_amount(tickets_dict, discount_code=discount.id)
 
     assert amount_data['total'] == 1115.0
     assert amount_data['discount'] == 793.7
@@ -284,7 +286,9 @@ def test_discount_code_amount_type(db):
     )
     db.session.commit()
 
-    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code.id)
+    amount_data = calculate_order_amount(
+        [{'id': ticket.id}], discount_code=discount_code.id
+    )
 
     assert amount_data['total'] == 50.0
     assert amount_data['discount'] == 50.0
@@ -303,7 +307,9 @@ def test_discount_code_more_amount(db):
     )
     db.session.commit()
 
-    amount_data = calculate_order_amount([{'id': ticket.id}], discount_code.id)
+    amount_data = calculate_order_amount(
+        [{'id': ticket.id}], discount_code=discount_code.id
+    )
 
     assert amount_data['total'] == 0.0
     assert amount_data['discount'] == 50.0
@@ -350,7 +356,7 @@ def test_tax_included_with_discount(db):
     discount_code = DiscountCodeTicketSubFactory(type='percent', value=10.0, tickets=[])
     tickets_dict = _create_taxed_tickets(db, discount_code=discount_code)
 
-    amount_data = calculate_order_amount(tickets_dict, discount_code)
+    amount_data = calculate_order_amount(tickets_dict, discount_code=discount_code)
 
     assert amount_data['sub_total'] == 4021.87
     assert amount_data['total'] == 4021.87
@@ -365,7 +371,7 @@ def test_tax_excluded_with_discount(db):
         db, tax_included=False, discount_code=discount_code
     )
 
-    amount_data = calculate_order_amount(tickets_dict, discount_code)
+    amount_data = calculate_order_amount(tickets_dict, discount_code=discount_code)
 
     assert amount_data['sub_total'] == 4021.87
     assert amount_data['total'] == 4745.81
@@ -397,7 +403,7 @@ def test_ticket_with_deleted_discount_code(db):
     db.session.commit()
 
     with pytest.raises(ObjectNotFound):
-        calculate_order_amount([{'id': ticket.id}], discount.id)
+        calculate_order_amount([{'id': ticket.id}], discount_code=discount.id)
 
 
 def test_ticket_with_different_discount_code(db):
@@ -406,7 +412,7 @@ def test_ticket_with_different_discount_code(db):
     db.session.commit()
 
     with pytest.raises(UnprocessableEntityError, match='Invalid Discount Code'):
-        calculate_order_amount([{'id': ticket.id}], discount.id)
+        calculate_order_amount([{'id': ticket.id}], discount_code=discount.id)
 
 
 def test_request_calculate_order_amount(client, db):
@@ -420,7 +426,11 @@ def test_request_calculate_order_amount(client, db):
         '/v1/orders/calculate-amount',
         content_type='application/json',
         data=json.dumps(
-            {'tickets': tickets_dict, 'discount-code': str(discount_code.id)}
+            {
+                'tickets': tickets_dict,
+                'discount-code': str(discount_code.id),
+                'discount_verify': True,
+            }
         ),
     )
 

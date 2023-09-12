@@ -136,15 +136,23 @@ def create_pdf_tickets_for_holder(order):
 
         tickets = []
         for order_ticket in order_tickets:
+            attendee_count = get_count(
+                TicketHolder.query.filter_by(order_id=order_ticket.order.id)
+                .filter_by(ticket_id=order_ticket.ticket.id)
+                .filter_by(is_discount_applied=True)
+            )
             ticket = dict(
                 id=order_ticket.ticket.id,
                 price=order_ticket.price,
                 quantity=order_ticket.quantity,
+                quantity_discount=attendee_count,
             )
             tickets.append(ticket)
 
         # calculate order amount using helper function
-        order_amount = calculate_order_amount(tickets, discount_code=order.discount_code)
+        order_amount = calculate_order_amount(
+            tickets, verify_discount=False, discount_code=order.discount_code
+        )
 
         create_save_pdf(
             render_template(
@@ -238,19 +246,30 @@ def create_onsite_attendees_for_order(data):
     del data['on_site_tickets']
 
 
-def calculate_order_amount(tickets, discount_code=None):
-    from app.api.helpers.ticketing import validate_discount_code, validate_tickets
+def calculate_order_amount(tickets, verify_discount=True, discount_code=None):
+    from app.api.helpers.ticketing import (
+        is_discount_available,
+        validate_discount_code,
+        validate_tickets,
+    )
     from app.models.discount_code import DiscountCode
 
     ticket_ids = {ticket['id'] for ticket in tickets}
     ticket_map = {int(ticket['id']): ticket for ticket in tickets}
     fetched_tickets = validate_tickets(ticket_ids)
+    quantity_discount: dict = {'numb_no_discount': 0, 'numb_discount': 0}
 
     if tickets and discount_code:
         discount_code = validate_discount_code(discount_code, tickets=tickets)
+        quantity_discount = is_discount_available(
+            discount_code,
+            tickets=tickets,
+            quantity_discount=quantity_discount,
+            verify_discount=verify_discount,
+        )
 
     event = tax = tax_included = fees = None
-    total_amount = total_tax = total_discount = 0.0
+    total_amount = total_discount = 0.0
     ticket_list = []
     for ticket in fetched_tickets:
         ticket_tax = discounted_tax = 0.0
@@ -260,39 +279,25 @@ def calculate_order_amount(tickets, discount_code=None):
         ticket_fee = 0.0
 
         quantity = ticket_info.get('quantity', 1)  # Default to single ticket
+        if ticket_info.get('quantity_discount'):
+            quantity_discount['numb_discount'] = ticket_info.get('quantity_discount')
+        discount_quantity = (
+            quantity
+            if quantity_discount['numb_discount'] >= quantity
+            else quantity_discount['numb_discount']
+        )
         if not event:
-            event = ticket.event
-
-            if event.deleted_at:
-                raise ObjectNotFound(
-                    {'pointer': 'tickets/event'}, f'Event: {event.id} not found'
-                )
-
-            fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
-
+            event, fees = get_event_fee(ticket)
         if not tax and event.tax:
             tax = event.tax
             tax_included = tax.is_tax_included_in_price
-
-        if ticket.type in ['donation', 'donationRegistration']:
-            price = ticket_info.get('price')
-            if not price or price > ticket.max_price or price < ticket.min_price:
-                raise UnprocessableEntityError(
-                    {'pointer': 'tickets/price'},
-                    f"Price for donation ticket should be present and within range "
-                    f"{ticket.min_price} to {ticket.max_price}",
-                )
-        else:
-            price = (
-                ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
-            )
-
+        price = get_price(ticket, ticket_info)
         if tax:
-            if tax_included:
-                ticket_tax = price - price / (1 + tax.rate / 100)
-            else:
-                ticket_tax = price * tax.rate / 100
-
+            ticket_tax = (
+                price - price / (1 + tax.rate / 100)
+                if tax_included
+                else price * tax.rate / 100
+            )
         if discount_code and ticket.type not in ['free', 'freeRegistration']:
             code = (
                 DiscountCode.query.with_parent(ticket)
@@ -301,37 +306,31 @@ def calculate_order_amount(tickets, discount_code=None):
             )
             if code:
                 if discount_code.id == code.id:
-                    if code.type == 'amount':
-                        discount_amount = min(code.value, price)
-                        discount_percent = (discount_amount / price) * 100
-                        if tax:
-                            if tax_included:
-                                discounted_tax = (price - discount_amount) - (
-                                    price - discount_amount
-                                ) / (1 + tax.rate / 100)
-                            else:
-                                discounted_tax = (
-                                    (price - discount_amount) * tax.rate / 100
-                                )
-                    else:
-                        discount_amount = (price * code.value) / 100
-                        if tax:
-                            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
-                        discount_percent = code.value
-                    discount_data = {
-                        'code': discount_code.code,
-                        'percent': round(discount_percent, 2),
-                        'amount': round(discount_amount, 2),
-                        'total': round(discount_amount * quantity, 2),
-                        'type': code.type,
-                    }
+                    (
+                        discount_amount,
+                        discount_percent,
+                        discounted_tax,
+                    ) = get_discount_amount(
+                        code, price, tax_included, tax, ticket_tax, discounted_tax
+                    )
+                    discount_data = get_discount_data(
+                        discount_code,
+                        discount_percent,
+                        discount_amount,
+                        discount_quantity,
+                        code,
+                        quantity_discount,
+                    )
+                quantity_discount['numb_discount'] = (
+                    quantity_discount['numb_discount'] - quantity
+                )
 
-        total_discount += round(discount_amount * quantity, 2)
+        total_discount += round(discount_amount * discount_quantity, 2)
         if fees and not ticket.is_fee_absorbed:
             ticket_fee = fees.service_fee * (price * quantity) / 100
-            if ticket_fee > fees.maximum_fee:
-                ticket_fee = fees.maximum_fee
-        sub_total = ticket_fee + (price - discount_amount) * quantity
+            ticket_fee = min(ticket_fee, fees.maximum_fee)
+        sub_total = ticket_fee + (price - discount_amount) * discount_quantity
+        sub_total += price * max(0, quantity - discount_quantity)
         total_amount = total_amount + sub_total
         ticket_list.append(
             {
@@ -350,17 +349,7 @@ def calculate_order_amount(tickets, discount_code=None):
     sub_total = total_amount
     tax_dict = None
     if tax:
-        if tax_included:
-            total_tax = total_amount - total_amount / (1 + tax.rate / 100)
-        else:
-            total_tax = total_amount * tax.rate / 100
-            total_amount += total_tax
-        tax_dict = dict(
-            included=tax_included,
-            amount=round(total_tax, 2),
-            percent=tax.rate if tax else 0.0,
-            name=tax.name,
-        )
+        tax_dict, total_amount = get_tax_amount(tax_included, total_amount, tax)
 
     return dict(
         tax=tax_dict,
@@ -392,3 +381,102 @@ def on_order_completed(order):
     )
     send_order_purchase_organizer_email(order, organizer_set)
     notify_ticket_purchase_organizer(order)
+
+
+def get_price(ticket, ticket_info):
+    if ticket.type in ['donation', 'donationRegistration']:
+        price = ticket_info.get('price')
+        if not price or price > ticket.max_price or price < ticket.min_price:
+            raise UnprocessableEntityError(
+                {'pointer': 'tickets/price'},
+                f"Price for donation ticket should be present and within range "
+                f"{ticket.min_price} to {ticket.max_price}",
+            )
+    else:
+        price = ticket.price if ticket.type not in ['free', 'freeRegistration'] else 0.0
+    return price
+
+
+def get_discount_data(
+    discount_code,
+    discount_percent,
+    discount_amount,
+    discount_quantity,
+    code,
+    quantity_discount,
+):
+    """
+    Get discount data for calculate price
+    @param discount_code: discount code
+    @param discount_percent: discount percent
+    @param discount_amount: discount amount
+    @param discount_quantity: discount quantity
+    @param code: code
+    @param quantity_discount: quantity discount
+    @return: discount data
+    """
+    discount_data = {
+        'code': discount_code.code,
+        'percent': round(discount_percent, 2),
+        'amount': round(discount_amount, 2),
+        'total': round(discount_amount * discount_quantity, 2),
+        'type': code.type,
+    }
+    if int(quantity_discount.get('numb_no_discount')) > 0:
+        discount_data[
+            'warning'
+        ] = 'Your order not fully discount due to discount code usage is exhausted.'
+    return discount_data
+
+
+def get_tax_amount(tax_included, total_amount, tax):
+    """
+    Get tax amount for calculate price
+    @param tax_included: tax included
+    @param total_amount: total amount
+    @param tax: tax model
+    @return: tax and amount after tax
+    """
+    if tax_included:
+        total_tax = total_amount - total_amount / (1 + tax.rate / 100)
+    else:
+        total_tax = total_amount * tax.rate / 100
+        total_amount += total_tax
+    tax_dict = dict(
+        included=tax_included,
+        amount=round(total_tax, 2),
+        percent=tax.rate if tax else 0.0,
+        name=tax.name,
+    )
+    return tax_dict, total_amount
+
+
+def get_event_fee(ticket):
+    event = ticket.event
+
+    if event.deleted_at:
+        raise ObjectNotFound({'pointer': 'tickets/event'}, f'Event: {event.id} not found')
+
+    fees = TicketFees.query.filter_by(currency=event.payment_currency).first()
+    return event, fees
+
+
+def get_discount_amount(code, price, tax_included, tax, ticket_tax, discounted_tax):
+    if code.type == 'amount':
+        discount_amount = min(code.value, price)
+        discount_percent = (discount_amount / price) * 100
+        if tax:
+            tax_rate = tax.rate / 100
+            tax_factor = 1 + tax_rate
+            discounted_price = price - discount_amount
+            discounted_tax = (
+                discounted_price * tax_rate / tax_factor
+                if tax_included
+                else discounted_price * tax_rate
+            )
+    else:
+        discount_amount = (price * code.value) / 100
+        if tax:
+            discounted_tax = ticket_tax - (ticket_tax * code.value / 100)
+        discount_percent = code.value
+    return discount_amount, discount_percent, discounted_tax

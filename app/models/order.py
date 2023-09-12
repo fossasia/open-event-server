@@ -96,6 +96,13 @@ class Order(db.Model):
         default=None,
     )
     discount_code = db.relationship('DiscountCode', backref='orders')
+    access_code_id = db.Column(
+        db.Integer,
+        db.ForeignKey('access_codes.id', ondelete='SET NULL'),
+        nullable=True,
+        default=None,
+    )
+    access_code = db.relationship('AccessCode', backref='orders')
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])

@@ -29,7 +29,11 @@ def test_create_order(client, db, jwt):
         content_type='application/json',
         headers=jwt,
         data=json.dumps(
-            {'tickets': tickets_dict, 'discount-code': str(discount_code.id)}
+            {
+                'tickets': tickets_dict,
+                'discount-code': str(discount_code.id),
+                'discount-verify': True,
+            }
         ),
     )
 

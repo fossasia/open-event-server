@@ -46,9 +46,10 @@ class DiscountCode(SoftDeletionModel):
     def get_confirmed_attendees_query(self):
         return (
             TicketHolder.query.filter_by(deleted_at=None)
+            .filter_by(is_discount_applied=True)
             .join(Order)
             .filter_by(discount_code_id=self.id)
-            .filter(Order.status.in_(['completed', 'placed']))
+            .filter(Order.status.in_(['completed', 'placed', 'pending', 'initializing']))
         )
 
     @property
