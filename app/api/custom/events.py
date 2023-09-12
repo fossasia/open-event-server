@@ -2,17 +2,21 @@ from flask import Blueprint, jsonify, render_template, request
 from flask_jwt_extended import current_user
 from sqlalchemy import asc, distinct, func, or_
 
-from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError
+from app.api.helpers.errors import ForbiddenError, NotFoundError, UnprocessableEntityError
 from app.api.helpers.mail import send_email
 from app.api.helpers.permissions import is_coorganizer, jwt_required, to_event_id
 from app.api.helpers.system_mails import MAILS, MailType
+from app.api.helpers.user import get_user_id_from_token, virtual_event_check_in
 from app.api.helpers.utilities import group_by, strip_tags
 from app.api.schema.exhibitors import ExhibitorReorderSchema
 from app.api.schema.speakers import SpeakerReorderSchema
+from app.api.schema.virtual_check_in import VirtualCheckInSchema
 from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.exhibitor import Exhibitor
+from app.models.microlocation import Microlocation
+from app.models.order import Order
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
@@ -214,6 +218,53 @@ def search_attendees(event_id):
     attendees = query.order_by(TicketHolder.id.desc()).all()
 
     return jsonify({'attendees': attendees})
+
+
+@events_routes.route('/<string:event_identifier>/virtual/check-in', methods=['POST'])
+@jwt_required
+def virtual_check_in(event_identifier):
+    """Search attendees by name or email."""
+    event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+    if event is None:
+        raise NotFoundError({'source': ''}, 'event can not be found')
+    data, errors = VirtualCheckInSchema().load(request.get_json())
+    if errors:
+        raise UnprocessableEntityError(
+            {'pointer': '/data', 'errors': errors}, 'Data in incorrect format'
+        )
+    token = None
+    if "Authorization" in request.headers:
+        token = request.headers["Authorization"].split(" ")[1]
+    if not token:
+        return {
+            "message": "Authentication Token is missing!",
+            "data": None,
+            "error": "Unauthorized",
+        }, 401
+    user_id = get_user_id_from_token(token)
+    if user_id is None:
+        return {"message": "Can't get user id!", "data": None}, 404
+
+    if data.get('microlocation_id') is not None:
+        microlocation = Microlocation.query.filter(
+            Microlocation.id == data.get('microlocation_id')
+        ).first()
+        if microlocation is None:
+            raise NotFoundError({'source': ''}, 'microlocation can not be found')
+
+    orders = Order.query.filter(
+        Order.user_id == user_id, Order.event_id == event.id
+    ).all()
+
+    orders_id = [order.id for order in orders]
+
+    attendees = TicketHolder.query.filter(TicketHolder.order_id.in_(orders_id)).all()
+
+    attendees_ids = [attendee.id for attendee in attendees]
+
+    virtual_event_check_in(data, attendees_ids, event.id)
+
+    return jsonify({'message': 'Attendee check in/out success'})
 
 
 @events_routes.route('/<string:event_identifier>/sessions/languages', methods=['GET'])
