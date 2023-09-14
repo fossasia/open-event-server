@@ -1,0 +1,8 @@
+DONE Update acording to pyproject.toml
+
+TODO ImportError: cannot import name 'MigrateCommand' from 'flask_migrate'
+see https://medium.datadriveninvestor.com/migrating-flask-script-to-flask-2-0-cli-4a5eee269139
+  (better https://webcache.googleusercontent.com/search?q=cache:https://medium.datadriveninvestor.com/migrating-flask-script-to-flask-2-0-cli-4a5eee269139)
+https://stackoverflow.com/questions/68527489/cant-import-migratecommand-from-flask-migrate
+
+
