@@ -8,42 +8,53 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-09-20 17:18+0000\n"
+"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/open-event/"
+"server/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
 msgid "Your speaker submission for {event_name} titled {session_name}"
-msgstr ""
+msgstr "Din ansökan som talare för {event_name} med titeln {session_name}"
 
 #: app/api/helpers/system_mails.py:75
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
+"Accepterades! Grattis, din ansökan för {event_name} med titeln {session_name}"
+" har accepterats"
 
 #: app/api/helpers/system_mails.py:86
+#, fuzzy
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
+"Bekräftades! Grattis, din ansökan för {event_name} med titeln {session_name} "
+"har bekräftats"
 
 #: app/api/helpers/system_mails.py:97
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
+"Accepterades inte. Din ansökan för {event_name} med titeln {session_name} "
+"accepterades inte"
 
 #: app/api/helpers/system_mails.py:108
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
+"Avbröts! Din ansökan för {event_name} med titeln {session_name} har avbrutits"
 
 #: app/api/helpers/system_mails.py:119
 msgid ""
@@ -73,15 +84,16 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:152
 msgid "Welcome to {app_name}. Please verify your account"
-msgstr ""
+msgstr "Välkommen till {app_name}. Vänligen bekräfta ditt konto"
 
 #: app/api/helpers/system_mails.py:157
 msgid "Email Confirmation to Create Account for {app_name}"
 msgstr ""
+"Bekräftelsemeddelande via e-post för att skapa ett konto till {app_name}"
 
 #: app/api/helpers/system_mails.py:162
 msgid "Your email has been already changed"
-msgstr ""
+msgstr "Din e-postadress har redan ändrats"
 
 #: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
@@ -89,7 +101,7 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:172
 msgid "{app_name}: Reset your password and verify your account"
-msgstr ""
+msgstr "{app_name}: Återställ ditt lösenord och bekräfta ditt konto"
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
@@ -112,10 +124,13 @@ msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
 msgstr ""
 
 #: app/api/helpers/system_mails.py:202
+#, fuzzy
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
+"Biljetterna för {event_name} den {event_date} klockan {event_time} "
+"({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:207
 msgid ""
@@ -125,25 +140,27 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:212
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
-msgstr ""
+msgstr "Din beställning för {event_name} har avbrutits ({invoice_id})"
 
 #: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
-msgstr ""
+msgstr "Händelsen {event_name} har exporterats"
 
 #: app/api/helpers/system_mails.py:222
 msgid "Export of event {event_name} failed"
-msgstr ""
+msgstr "Exporteringen av eventet {event_name} misslyckades"
 
 #: app/api/helpers/system_mails.py:227
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
-msgstr ""
+msgstr "Din faktura för {event_name} för {date} är tillgänglig i {app_name}"
 
 #: app/api/helpers/system_mails.py:233 app/api/helpers/system_mails.py:239
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
+"Påminnelse: Din faktura för {event_name} för {date} är tillgänglig på "
+"{app_name}"
 
 #: app/api/helpers/system_mails.py:245
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
@@ -151,11 +168,11 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:251
 msgid "Event {event_name} has been imported"
-msgstr ""
+msgstr "Eventet {event_name} har importerats"
 
 #: app/api/helpers/system_mails.py:256
 msgid "Import of event failed"
-msgstr ""
+msgstr "Importen av eventet misslyckades"
 
 #: app/api/helpers/system_mails.py:269
 msgid "Test Mail Subject"
@@ -167,15 +184,15 @@ msgstr ""
 
 #: app/api/helpers/system_mails.py:279
 msgid "Join {event_name} from {group_name} on {event_date}"
-msgstr ""
+msgstr "Gå med i {event_name} från {group_name} den {event_date}"
 
 #: app/api/helpers/system_mails.py:284
 msgid "{event_name} is over. Thank you for using {app_name}!"
-msgstr ""
+msgstr "{event_name} är slut. Tack för att du använder {app_name}!"
 
 #: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
-msgstr ""
+msgstr "{event_name} är över. Tack för att du deltog!"
 
 #: app/models/event.py:468 app/models/event.py:477
 msgid "Location Not Announced"
@@ -195,7 +212,7 @@ msgstr ""
 #: app/templates/email/after_event.html:3
 #, python-format
 msgid "Thank you for using the %(app_name)s platform for your event."
-msgstr ""
+msgstr "Tack för att du använder %(app_name)s plattform för ditt event."
 
 #: app/templates/email/after_event.html:4
 msgid "We hope you enjoyed it."
@@ -208,27 +225,27 @@ msgstr ""
 
 #: app/templates/email/after_event_speaker.html:3
 msgid "We hope you enjoyed it and keep in touch."
-msgstr ""
+msgstr "Vi hoppas att du tyckte om det och att du håller kontakt."
 
 #: app/templates/email/event_export_fail.html:1
 #: app/templates/email/event_import_fail.html:1
 msgid "The error was as follows"
-msgstr ""
+msgstr "Felet var som följer"
 
 #: app/templates/email/event_exported.html:1
 msgid "Click on the following link to download the event:"
-msgstr ""
+msgstr "Klicka på den följande länken för att hämta eventet:"
 
 #: app/templates/email/event_imported.html:1
 msgid "Click on the following link to manage your event"
-msgstr ""
+msgstr "Klicka på den följande länken för att hantera ditt event"
 
 #: app/templates/email/event_role.html:1 app/templates/email/group_role.html:1
 #: app/templates/email/user_confirm.html:1
 #: app/templates/email/user_event_role.html:1
 #, python-format
 msgid "Hello %(email)s,"
-msgstr ""
+msgstr "Hej %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
@@ -243,6 +260,8 @@ msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
+"Vänligen registrera för att acceptera rollen genom att använda följande länk:"
+" %(open_link)sLänk%(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -254,7 +273,7 @@ msgstr ""
 #: app/templates/email/user_register.html:1
 #: app/templates/email/video_stream_moderator.html:1
 msgid "Hello"
-msgstr ""
+msgstr "Hej"
 
 #: app/templates/email/group_contact_user.html:2
 #, python-format
@@ -270,15 +289,18 @@ msgstr ""
 #: app/templates/email/organizer_contact_attendee.html:7
 msgid "Organizers have received your message and will follow up with you."
 msgstr ""
+"Organisatörerna har tagit emot ditt meddelande kommer att göra en "
+"uppföljning med dig."
 
 #: app/templates/email/group_contact_user.html:8
 msgid "This is a system message. Please do not reply to this message."
 msgstr ""
+"Det här är ett system-meddelande. Vänligen svara inte på det här meddelandet."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "Svaren är inte övervakade."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -287,7 +309,7 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
 msgid "Thank you."
-msgstr ""
+msgstr "Tack så mycket."
 
 #: app/templates/email/group_role.html:3
 #, python-format
@@ -300,7 +322,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "Hej %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -311,18 +333,18 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_email.html:4
 msgid "Your invoice payment is due within 30 days."
-msgstr ""
+msgstr "Betalningen för din faktura måste vara betald inom 30 dagar."
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
 #: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
 msgid "Amount Due"
-msgstr ""
+msgstr "Förfallet belopp"
 
 #: app/templates/email/monthly_payment_email.html:8
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "Vänligen betala inom 30 dagar."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
@@ -330,7 +352,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "Betala här: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -341,6 +363,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"En detaljerad faktura är tillgänglig i "
+"%(open_link)sfaktureringsdelen%(close_link)s för ditt konto."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -358,7 +382,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "Tack för att du använder %(app_name)s!"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -383,18 +407,22 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"Betalningen är snabb och enkel genom att använda antingen ditt kreditkort "
+"eller PayPal-konto."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "Vänligen betala inom 15 dagar."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "Din betalning har nu förfallit."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
 msgstr ""
+"Vänligen betala den här fakturan omedelbart för att undvika att ditt konto "
+"spärras."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
@@ -417,7 +445,7 @@ msgstr ""
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "Vänligen betala inom 2 dagar."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -435,11 +463,11 @@ msgstr ""
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
-msgstr ""
+msgstr "Session"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
-msgstr ""
+msgstr "Abstrakt"
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -462,23 +490,23 @@ msgstr ""
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "This is a system message."
-msgstr ""
+msgstr "Det här är ett system-meddelande."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "Vänligen svara inte på det här meddelandet."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "Ändringen av ditt lösenord lyckades."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr ""
+msgstr "Vänligen logga in med ditt nya lösenord."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "Vänligen använd den följande länken för att återställa ditt lösenord."
 
 #: app/templates/email/password_reset.html:3
 #, python-format
@@ -487,13 +515,15 @@ msgstr ""
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "App:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
+"Vänligen använd den följande länken för att återställa ditt lösenord och "
+"bekräfta ditt konto."
 
 #: app/templates/email/speaker_invite.html:4
 #, python-format
@@ -521,17 +551,17 @@ msgstr ""
 #: app/templates/email/ticket_purchased.html:33
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
-msgstr ""
+msgstr "Med vänliga hälsningar"
 
 #: app/templates/email/ticket_cancelled.html:2
 #, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "Din beställning %(order_id)s för %(event_name)s har avbrutits."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
-msgstr ""
+msgstr "Informationen om din avbrutna beställning finns här: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -546,19 +576,21 @@ msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
 msgstr ""
+"Vänligen använd kontaktformuläret på eventets sida för att kontakta "
+"organisatörerna till eventet här: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "Du behöver logga in för att få åtkomst till formuläret."
 
 #: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "Tack för att du registrerar dig för %(event_name)s."
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "This is your confirmation."
-msgstr ""
+msgstr "Det här är din bekräftelse."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -566,6 +598,8 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"Du kan hämta dina %(open_link)sbiljetter eller registreringsinformationen "
+"här%(close_link)s."
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
@@ -577,48 +611,48 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
 msgid "Ticket"
-msgstr ""
+msgstr "Biljett"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
 #: app/templates/pdf/order_invoice.html:319
 msgid "Quantity"
-msgstr ""
+msgstr "Kvantitet"
 
 #: app/templates/email/ticket_purchased.html:12
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
 msgid "Order Number"
-msgstr ""
+msgstr "Ordernummer"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
 msgid "About this event"
-msgstr ""
+msgstr "Om det här eventet"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "Plats"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "Lägg till i kalender"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
@@ -626,37 +660,39 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:20
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "Outlook"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "Nedan finner du ett meddelande från organisatören"
 
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:102
 #, python-format
 msgid "Login to manage your orders at %(url)s."
-msgstr ""
+msgstr "Logga in på %(url)s för att hantera dina beställningar."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
 msgstr ""
+"Det här är ett bekräftelsemeddelande via e-post för biljetterna till eventet "
+"%(eventname)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
-msgstr ""
+msgstr "Du kan hämta dina biljetter här: %(order_view_url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
@@ -665,7 +701,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:1
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "Grattis!"
 
 #: app/templates/email/ticket_purchased_organizer.html:4
 #, python-format
@@ -682,11 +718,11 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
-msgstr ""
+msgstr "%(open_link)sKlicka här%(close_link)s för att visa/hämta fakturan."
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "Detaljerna för beställningen är:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -694,7 +730,7 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:187
 #: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
@@ -703,7 +739,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
 msgid "Payment Mode"
-msgstr ""
+msgstr "Betalningsläge"
 
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
@@ -718,17 +754,17 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "Paypal"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "Bank"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
 msgid "Cheque"
-msgstr ""
+msgstr "Check"
 
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
@@ -738,22 +774,22 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "Omise"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
-msgstr ""
+msgstr "Fakturaköp"
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
@@ -797,7 +833,7 @@ msgstr ""
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "Organisation"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
