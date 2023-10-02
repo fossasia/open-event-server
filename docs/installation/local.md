@@ -149,11 +149,18 @@ python3 manage.py db stamp head
 
 **Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
-**Note 3:** In the case you get the error that "OSError: no library called "cairo-2" was found" or "OSError: cannot load library 'pango-1.0'", run the following commands ([ref](https://stackoverflow.com/a/75663010)):
+**Note 3:** In the case you get the error "OSError: no library called "cairo-2" was found" or "OSError: cannot load library 'pango-1.0'", run the following commands ([ref](https://stackoverflow.com/a/75663010)):
 
 ```sh
 brew install cairo
 brew install pango
+```
+
+**Note 4:** In the case you get the error "OSError: ctypes.util.find_library() did not manage to locate a library called 'fontconfig', run the following commands from inside the Poetry shell ([ref](https://stackoverflow.com/a/46941804)):
+
+```sh
+brew install python3 cairo pango gdk-pixbuf libffi
+python3 -m pip install --upgrade --force-reinstall weasyprint
 ```
 
 ## Start application
