@@ -67,7 +67,7 @@ In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo
 - Install [Poetry](https://python-poetry.org/docs) to handle Python dependencies:
 
   ```sh
-  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+  curl -sSL https://install.python-poetry.org | python3 -
   source ~/.profile
   ```
 
