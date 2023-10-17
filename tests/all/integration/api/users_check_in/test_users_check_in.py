@@ -14,7 +14,7 @@ def test_get_registration_stats(db, client, jwt):
         headers=jwt,
     )
 
-    result = {
+    result = { "2023-10-17": {
         "session_stats": [
             {
                 "check_in": 0,
@@ -34,7 +34,7 @@ def test_get_registration_stats(db, client, jwt):
         "total_track_checked_in": 0,
         "total_track_checked_out": 0,
         "track_stats": [],
-    }
+    }}
 
     assert response.status_code == 200
     assert json.loads(response.data) == result

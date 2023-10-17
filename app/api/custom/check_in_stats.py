@@ -84,7 +84,7 @@ def get_registration_stats(event_id):
         )
 
         if len(dates) == 0:
-            return {
+            return { "2023-10-17": {
                 "total_attendee": total_attendee,
                 "total_registered": 0,
                 "total_not_checked_in": total_attendee - 0,
@@ -104,7 +104,7 @@ def get_registration_stats(event_id):
                         "track_name": "",
                     }
                 ],
-            }, 200
+            }}, 200
 
         results = {}
         for date in dates:
