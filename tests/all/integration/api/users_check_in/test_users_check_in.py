@@ -14,7 +14,7 @@ def test_get_registration_stats(db, client, jwt):
         headers=jwt,
     )
 
-    result = { 
+    result = {
         "2023-10-17": {
             "session_stats": [
                 {
