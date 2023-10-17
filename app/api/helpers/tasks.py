@@ -960,3 +960,4 @@ def validate_badge_print(attendee_id):
         .all()
     )
     return ticket_holder, badge_form, badge_field_forms
+    
