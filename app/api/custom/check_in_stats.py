@@ -84,27 +84,29 @@ def get_registration_stats(event_id):
         )
 
         if len(dates) == 0:
-            return { "2023-10-17": {
-                "total_attendee": total_attendee,
-                "total_registered": 0,
-                "total_not_checked_in": total_attendee - 0,
-                "total_track_checked_in": 0,
-                "total_track_checked_out": 0,
-                "total_session_checked_in": 0,
-                "total_session_checked_out": 0,
-                "track_stats": [],
-                "session_stats": [
-                    {
-                        "check_in": 0,
-                        "check_out": 0,
-                        "manual_count": {},
-                        "session_id": request.args.get('session_ids'),
-                        "session_name": "",
-                        "speakers": [],
-                        "track_name": "",
-                    }
-                ],
-            }}, 200
+            return {
+                "2023-10-17": {
+                    "total_attendee": total_attendee,
+                    "total_registered": 0,
+                    "total_not_checked_in": total_attendee - 0,
+                    "total_track_checked_in": 0,
+                    "total_track_checked_out": 0,
+                    "total_session_checked_in": 0,
+                    "total_session_checked_out": 0,
+                    "track_stats": [],
+                    "session_stats": [
+                        {
+                            "check_in": 0,
+                            "check_out": 0,
+                            "manual_count": {},
+                            "session_id": request.args.get('session_ids'),
+                            "session_name": "",
+                            "speakers": [],
+                            "track_name": "",
+                        }
+                    ],
+                }
+            }, 200
 
         results = {}
         for date in dates:
