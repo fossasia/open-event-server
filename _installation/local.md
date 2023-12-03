@@ -67,7 +67,7 @@ In case you use Ubuntu 20.04+, where Python 3.8 is not provided in official repo
 - Install [Poetry](https://python-poetry.org/docs) to handle Python dependencies:
 
   ```sh
-  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+  curl -sSL https://install.python-poetry.org | python3 -
   source ~/.profile
   ```
 
@@ -147,7 +147,21 @@ python3 manage.py db stamp head
 ```
 **Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
-**Note2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+
+**Note 3:** In the case you get the error "OSError: no library called "cairo-2" was found" or "OSError: cannot load library 'pango-1.0'", run the following commands ([ref](https://stackoverflow.com/a/75663010)):
+
+```sh
+brew install cairo
+brew install pango
+```
+
+**Note 4:** In the case you get the error "OSError: ctypes.util.find_library() did not manage to locate a library called 'fontconfig', run the following commands from inside the Poetry shell ([ref](https://stackoverflow.com/a/46941804)):
+
+```sh
+brew install python3 cairo pango gdk-pixbuf libffi
+python3 -m pip install --upgrade --force-reinstall weasyprint
+```
 
 ## Start application
 
