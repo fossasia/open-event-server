@@ -22,7 +22,6 @@ x-defaults: &defaults
     - ./generated:/data/app/generated # Workaround for #6155
 
 services:
-
   postgres:
     image: postgis/postgis:12-3.0-alpine
     container_name: opev-postgres
@@ -49,6 +48,7 @@ services:
       - 8080:8080
 
   celery:
+    platform: linux/x86_64
     <<: *defaults
     container_name: opev-celery
     depends_on:
