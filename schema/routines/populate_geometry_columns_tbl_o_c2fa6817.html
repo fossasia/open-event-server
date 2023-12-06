@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>populate_geometry_columns(tbl_oid oid, use_typmod boolean DEFAULT true)</h1><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p><p>args: relation_oid, use_typmod=true - Ensures geometry columns are defined with type modifiers or have appropriate spatial constraints This ensures they will be registered correctly in geometry_columns view. By default will convert all geometry columns with no type modifier to ones with type modifiers. To get old behavior set use_typmod=false</p></p>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>tbl_oid</td>
+                                    <td>oid</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>use_typmod</td>
+                                    <td>boolean</td>
+                                    <td>IN</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;gcs         RECORD;&#10;&#9;gc          RECORD;&#10;&#9;gc_old      RECORD;&#10;&#9;gsrid       integer;&#10;&#9;gndims      integer;&#10;&#9;gtype       text;&#10;&#9;query       text;&#10;&#9;gc_is_valid boolean;&#10;&#9;inserted    integer;&#10;&#9;constraint_successful boolean :&#61; false;&#10;&#10;BEGIN&#10;&#9;inserted :&#61; 0;&#10;&#10;&#9;-- Iterate through all geometry columns in this table&#10;&#9;FOR gcs IN&#10;&#9;SELECT n.nspname, c.relname, a.attname&#10;&#9;&#9;FROM pg_class c,&#10;&#9;&#9;&#9; pg_attribute a,&#10;&#9;&#9;&#9; pg_type t,&#10;&#9;&#9;&#9; pg_namespace n&#10;&#9;&#9;WHERE c.relkind IN(&#39;r&#39;, &#39;f&#39;)&#10;&#9;&#9;AND t.typname &#61; &#39;geometry&#39;&#10;&#9;&#9;AND a.attisdropped &#61; false&#10;&#9;&#9;AND a.atttypid &#61; t.oid&#10;&#9;&#9;AND a.attrelid &#61; c.oid&#10;&#9;&#9;AND c.relnamespace &#61; n.oid&#10;&#9;&#9;AND n.nspname NOT ILIKE &#39;pg_temp%&#39;&#10;&#9;&#9;AND c.oid &#61; tbl_oid&#10;&#9;LOOP&#10;&#10;        RAISE DEBUG &#39;Processing column %.%.%&#39;, gcs.nspname, gcs.relname, gcs.attname;&#10;&#10;        gc_is_valid :&#61; true;&#10;        -- Find the srid, coord_dimension, and type of current geometry&#10;        -- in geometry_columns -- which is now a view&#10;&#10;        SELECT type, srid, coord_dimension INTO gc_old&#10;            FROM geometry_columns&#10;            WHERE f_table_schema &#61; gcs.nspname AND f_table_name &#61; gcs.relname AND f_geometry_column &#61; gcs.attname;&#10;&#10;        IF upper(gc_old.type) &#61; &#39;GEOMETRY&#39; THEN&#10;        -- This is an unconstrained geometry we need to do something&#10;        -- We need to figure out what to set the type by inspecting the data&#10;            EXECUTE &#39;SELECT public.ST_srid(&#39; || quote_ident(gcs.attname) || &#39;) As srid, public.GeometryType(&#39; || quote_ident(gcs.attname) || &#39;) As type, public.ST_NDims(&#39; || quote_ident(gcs.attname) || &#39;) As dims &#39; ||&#10;                     &#39; FROM ONLY &#39; || quote_ident(gcs.nspname) || &#39;.&#39; || quote_ident(gcs.relname) ||&#10;                     &#39; WHERE &#39; || quote_ident(gcs.attname) || &#39; IS NOT NULL LIMIT 1;&#39;&#10;                INTO gc;&#10;            IF gc IS NULL THEN -- there is no data so we can not determine geometry type&#10;            &#9;RAISE WARNING &#39;No data in table %.%, so no information to determine geometry type and srid&#39;, gcs.nspname, gcs.relname;&#10;            &#9;RETURN 0;&#10;            END IF;&#10;            gsrid :&#61; gc.srid; gtype :&#61; gc.type; gndims :&#61; gc.dims;&#10;&#10;            IF use_typmod THEN&#10;                BEGIN&#10;                    EXECUTE &#39;ALTER TABLE &#39; || quote_ident(gcs.nspname) || &#39;.&#39; || quote_ident(gcs.relname) || &#39; ALTER COLUMN &#39; || quote_ident(gcs.attname) ||&#10;                        &#39; TYPE geometry(&#39; || postgis_type_name(gtype, gndims, true) || &#39;, &#39; || gsrid::text  || &#39;) &#39;;&#10;                    inserted :&#61; inserted + 1;&#10;                EXCEPTION&#10;                        WHEN invalid_parameter_value OR feature_not_supported THEN&#10;                        RAISE WARNING &#39;Could not convert &#39;&#39;%&#39;&#39; in &#39;&#39;%.%&#39;&#39; to use typmod with srid %, type %: %&#39;, quote_ident(gcs.attname), quote_ident(gcs.nspname), quote_ident(gcs.relname), gsrid, postgis_type_name(gtype, gndims, true), SQLERRM;&#10;                            gc_is_valid :&#61; false;&#10;                END;&#10;&#10;            ELSE&#10;                -- Try to apply srid check to column&#10;            &#9;constraint_successful &#61; false;&#10;                IF (gsrid &gt; 0 AND postgis_constraint_srid(gcs.nspname, gcs.relname,gcs.attname) IS NULL ) THEN&#10;                    BEGIN&#10;                        EXECUTE &#39;ALTER TABLE ONLY &#39; || quote_ident(gcs.nspname) || &#39;.&#39; || quote_ident(gcs.relname) ||&#10;                                 &#39; ADD CONSTRAINT &#39; || quote_ident(&#39;enforce_srid_&#39; || gcs.attname) ||&#10;                                 &#39; CHECK (ST_srid(&#39; || quote_ident(gcs.attname) || &#39;) &#61; &#39; || gsrid || &#39;)&#39;;&#10;                        constraint_successful :&#61; true;&#10;                    EXCEPTION&#10;                        WHEN check_violation THEN&#10;                            RAISE WARNING &#39;Not inserting &#39;&#39;%&#39;&#39; in &#39;&#39;%.%&#39;&#39; into geometry_columns: could not apply constraint CHECK (st_srid(%) &#61; %)&#39;, quote_ident(gcs.attname), quote_ident(gcs.nspname), quote_ident(gcs.relname), quote_ident(gcs.attname), gsrid;&#10;                            gc_is_valid :&#61; false;&#10;                    END;&#10;                END IF;&#10;&#10;                -- Try to apply ndims check to column&#10;                IF (gndims IS NOT NULL AND postgis_constraint_dims(gcs.nspname, gcs.relname,gcs.attname) IS NULL ) THEN&#10;                    BEGIN&#10;                        EXECUTE &#39;ALTER TABLE ONLY &#39; || quote_ident(gcs.nspname) || &#39;.&#39; || quote_ident(gcs.relname) || &#39;&#10;                                 ADD CONSTRAINT &#39; || quote_ident(&#39;enforce_dims_&#39; || gcs.attname) || &#39;&#10;                                 CHECK (st_ndims(&#39; || quote_ident(gcs.attname) || &#39;) &#61; &#39;||gndims||&#39;)&#39;;&#10;                        constraint_successful :&#61; true;&#10;                    EXCEPTION&#10;                        WHEN check_violation THEN&#10;                            RAISE WARNING &#39;Not inserting &#39;&#39;%&#39;&#39; in &#39;&#39;%.%&#39;&#39; into geometry_columns: could not apply constraint CHECK (st_ndims(%) &#61; %)&#39;, quote_ident(gcs.attname), quote_ident(gcs.nspname), quote_ident(gcs.relname), quote_ident(gcs.attname), gndims;&#10;                            gc_is_valid :&#61; false;&#10;                    END;&#10;                END IF;&#10;&#10;                -- Try to apply geometrytype check to column&#10;                IF (gtype IS NOT NULL AND postgis_constraint_type(gcs.nspname, gcs.relname,gcs.attname) IS NULL ) THEN&#10;                    BEGIN&#10;                        EXECUTE &#39;ALTER TABLE ONLY &#39; || quote_ident(gcs.nspname) || &#39;.&#39; || quote_ident(gcs.relname) || &#39;&#10;                        ADD CONSTRAINT &#39; || quote_ident(&#39;enforce_geotype_&#39; || gcs.attname) || &#39;&#10;                        CHECK (geometrytype(&#39; || quote_ident(gcs.attname) || &#39;) &#61; &#39; || quote_literal(gtype) || &#39;)&#39;;&#10;                        constraint_successful :&#61; true;&#10;                    EXCEPTION&#10;                        WHEN check_violation THEN&#10;                            -- No geometry check can be applied. This column contains a number of geometry types.&#10;                            RAISE WARNING &#39;Could not add geometry type check (%) to table column: %.%.%&#39;, gtype, quote_ident(gcs.nspname),quote_ident(gcs.relname),quote_ident(gcs.attname);&#10;                    END;&#10;                END IF;&#10;                 --only count if we were successful in applying at least one constraint&#10;                IF constraint_successful THEN&#10;                &#9;inserted :&#61; inserted + 1;&#10;                END IF;&#10;            END IF;&#10;&#9;    END IF;&#10;&#10;&#9;END LOOP;&#10;&#10;&#9;RETURN inserted;&#10;END</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+asgiref==3.7.2
+dj-database-url==2.1.0
+Django==5.0
+django-cors-headers==4.3.1
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+environs==9.5.0
+marshmallow==3.20.1
+packaging==23.2
+psycopg==3.1.14
+psycopg-binary==3.1.14
+PyJWT==2.8.0
+python-dotenv==1.0.0
+pytz==2023.3.post1
+sqlparse==0.4.4
+typing_extensions==4.8.0
+whitenoise==6.6.0

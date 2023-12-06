@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>postgis_type_name(geomname character varying, coord_dimension integer, use_new_name boolean DEFAULT true)</h1><br />
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>geomname</td>
+                                    <td>character varying</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>coord_dimension</td>
+                                    <td>integer</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>use_new_name</td>
+                                    <td>boolean</td>
+                                    <td>IN</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT CASE WHEN $3 THEN new_name ELSE old_name END As geomname&#10;&#9;FROM&#10;&#9;( VALUES&#10;&#9;&#9;&#9;(&#39;GEOMETRY&#39;, &#39;Geometry&#39;, 2),&#10;&#9;&#9;&#9;(&#39;GEOMETRY&#39;, &#39;GeometryZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;GEOMETRYM&#39;, &#39;GeometryM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;GEOMETRY&#39;, &#39;GeometryZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;GEOMETRYCOLLECTION&#39;, &#39;GeometryCollection&#39;, 2),&#10;&#9;&#9;&#9;(&#39;GEOMETRYCOLLECTION&#39;, &#39;GeometryCollectionZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;GEOMETRYCOLLECTIONM&#39;, &#39;GeometryCollectionM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;GEOMETRYCOLLECTION&#39;, &#39;GeometryCollectionZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;POINT&#39;, &#39;Point&#39;, 2),&#10;&#9;&#9;&#9;(&#39;POINT&#39;, &#39;PointZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POINTM&#39;,&#39;PointM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POINT&#39;, &#39;PointZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;MULTIPOINT&#39;,&#39;MultiPoint&#39;, 2),&#10;&#9;&#9;&#9;(&#39;MULTIPOINT&#39;,&#39;MultiPointZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTIPOINTM&#39;,&#39;MultiPointM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTIPOINT&#39;,&#39;MultiPointZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;POLYGON&#39;, &#39;Polygon&#39;, 2),&#10;&#9;&#9;&#9;(&#39;POLYGON&#39;, &#39;PolygonZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POLYGONM&#39;, &#39;PolygonM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POLYGON&#39;, &#39;PolygonZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;MULTIPOLYGON&#39;, &#39;MultiPolygon&#39;, 2),&#10;&#9;&#9;&#9;(&#39;MULTIPOLYGON&#39;, &#39;MultiPolygonZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTIPOLYGONM&#39;, &#39;MultiPolygonM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTIPOLYGON&#39;, &#39;MultiPolygonZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;MULTILINESTRING&#39;, &#39;MultiLineString&#39;, 2),&#10;&#9;&#9;&#9;(&#39;MULTILINESTRING&#39;, &#39;MultiLineStringZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTILINESTRINGM&#39;, &#39;MultiLineStringM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTILINESTRING&#39;, &#39;MultiLineStringZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;LINESTRING&#39;, &#39;LineString&#39;, 2),&#10;&#9;&#9;&#9;(&#39;LINESTRING&#39;, &#39;LineStringZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;LINESTRINGM&#39;, &#39;LineStringM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;LINESTRING&#39;, &#39;LineStringZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;CIRCULARSTRING&#39;, &#39;CircularString&#39;, 2),&#10;&#9;&#9;&#9;(&#39;CIRCULARSTRING&#39;, &#39;CircularStringZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;CIRCULARSTRINGM&#39;, &#39;CircularStringM&#39; ,3),&#10;&#9;&#9;&#9;(&#39;CIRCULARSTRING&#39;, &#39;CircularStringZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;COMPOUNDCURVE&#39;, &#39;CompoundCurve&#39;, 2),&#10;&#9;&#9;&#9;(&#39;COMPOUNDCURVE&#39;, &#39;CompoundCurveZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;COMPOUNDCURVEM&#39;, &#39;CompoundCurveM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;COMPOUNDCURVE&#39;, &#39;CompoundCurveZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;CURVEPOLYGON&#39;, &#39;CurvePolygon&#39;, 2),&#10;&#9;&#9;&#9;(&#39;CURVEPOLYGON&#39;, &#39;CurvePolygonZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;CURVEPOLYGONM&#39;, &#39;CurvePolygonM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;CURVEPOLYGON&#39;, &#39;CurvePolygonZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;MULTICURVE&#39;, &#39;MultiCurve&#39;, 2),&#10;&#9;&#9;&#9;(&#39;MULTICURVE&#39;, &#39;MultiCurveZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTICURVEM&#39;, &#39;MultiCurveM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTICURVE&#39;, &#39;MultiCurveZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;MULTISURFACE&#39;, &#39;MultiSurface&#39;, 2),&#10;&#9;&#9;&#9;(&#39;MULTISURFACE&#39;, &#39;MultiSurfaceZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTISURFACEM&#39;, &#39;MultiSurfaceM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;MULTISURFACE&#39;, &#39;MultiSurfaceZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;POLYHEDRALSURFACE&#39;, &#39;PolyhedralSurface&#39;, 2),&#10;&#9;&#9;&#9;(&#39;POLYHEDRALSURFACE&#39;, &#39;PolyhedralSurfaceZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POLYHEDRALSURFACEM&#39;, &#39;PolyhedralSurfaceM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;POLYHEDRALSURFACE&#39;, &#39;PolyhedralSurfaceZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;TRIANGLE&#39;, &#39;Triangle&#39;, 2),&#10;&#9;&#9;&#9;(&#39;TRIANGLE&#39;, &#39;TriangleZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;TRIANGLEM&#39;, &#39;TriangleM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;TRIANGLE&#39;, &#39;TriangleZM&#39;, 4),&#10;&#10;&#9;&#9;&#9;(&#39;TIN&#39;, &#39;Tin&#39;, 2),&#10;&#9;&#9;&#9;(&#39;TIN&#39;, &#39;TinZ&#39;, 3),&#10;&#9;&#9;&#9;(&#39;TINM&#39;, &#39;TinM&#39;, 3),&#10;&#9;&#9;&#9;(&#39;TIN&#39;, &#39;TinZM&#39;, 4) )&#10;&#9;&#9;&#9; As g(old_name, new_name, coord_dimension)&#10;&#9;WHERE (upper(old_name) &#61; upper($1) OR upper(new_name) &#61; upper($1))&#10;&#9;&#9;AND coord_dimension &#61; $2;</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

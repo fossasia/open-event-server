@@ -1,0 +1,56 @@
+[tool.ruff]
+line-length = 120
+
+exclude = [
+    "migrations",
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "venv",
+]
+
+select = [
+    "F", # Pyflakes
+    "E", # pycodestyle errors
+    # "W", # pycodestyle warnings
+    # "C90", # McCabe
+    "I", # isort
+    "UP", # pyupgrade
+    "PLC", "PLE", "PLW", # Pylint
+    # "PLR", # Pylint refactoring
+    "PD", # pandas checks
+    "NPY", # numpy checks
+    "RUF", # ruff internal check
+]
+
+output-format = "grouped"
+
+# By default, always show source code snippets.
+show-source = true
+
+# Assume Python 3.11
+# Note: helps prevent breaking autofixes from, e.g., pyupgrade
+target-version = "py311"
+
+ignore = [ "RUF012", "RUF005" ]
+
+
+[tool.ruff.isort]
+known-local-folder = ["common_func"]
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+no_site_packages = true
+namespace_packages = true
+explicit_package_bases = true
+check_untyped_defs = true
+
+[tool.black]
+line-length = 120
+force-exclude = 'migrations'
+
+[tool.pylint]
+max-line-length = 120

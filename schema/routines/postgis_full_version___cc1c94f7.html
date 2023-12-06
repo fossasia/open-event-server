@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>postgis_full_version()</h1><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p><p>Reports full postgis version and build configuration infos.</p></p>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>IN</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;libver text;&#10;&#9;svnver text;&#10;&#9;projver text;&#10;&#9;geosver text;&#10;&#9;sfcgalver text;&#10;&#9;cgalver text;&#10;&#9;gdalver text;&#10;&#9;libxmlver text;&#10;&#9;liblwgeomver text;&#10;&#9;dbproc text;&#10;&#9;relproc text;&#10;&#9;fullver text;&#10;&#9;rast_lib_ver text;&#10;&#9;rast_scr_ver text;&#10;&#9;topo_scr_ver text;&#10;&#9;json_lib_ver text;&#10;&#9;protobuf_lib_ver text;&#10;&#9;sfcgal_lib_ver text;&#10;&#9;sfcgal_scr_ver text;&#10;&#9;pgsql_scr_ver text;&#10;&#9;pgsql_ver text;&#10;&#9;core_is_extension bool;&#10;BEGIN&#10;&#9;SELECT public.postgis_lib_version() INTO libver;&#10;&#9;SELECT public.postgis_proj_version() INTO projver;&#10;&#9;SELECT public.postgis_geos_version() INTO geosver;&#10;&#9;SELECT public.postgis_libjson_version() INTO json_lib_ver;&#10;&#9;SELECT public.postgis_libprotobuf_version() INTO protobuf_lib_ver;&#10;&#9;SELECT public._postgis_scripts_pgsql_version() INTO pgsql_scr_ver;&#10;&#9;SELECT public._postgis_pgsql_version() INTO pgsql_ver;&#10;&#9;BEGIN&#10;&#9;&#9;SELECT public.postgis_gdal_version() INTO gdalver;&#10;&#9;EXCEPTION&#10;&#9;&#9;WHEN undefined_function THEN&#10;&#9;&#9;&#9;gdalver :&#61; NULL;&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Function postgis_gdal_version() not found.  Is raster support enabled and rtpostgis.sql installed?&#39;;&#10;&#9;END;&#10;&#9;BEGIN&#10;&#9;&#9;SELECT public.postgis_sfcgal_version() INTO sfcgalver;&#10;    BEGIN&#10;      SELECT public.postgis_sfcgal_scripts_installed() INTO sfcgal_scr_ver;&#10;    EXCEPTION&#10;      WHEN undefined_function THEN&#10;        sfcgal_scr_ver :&#61; &#39;missing&#39;;&#10;    END;&#10;&#9;EXCEPTION&#10;&#9;&#9;WHEN undefined_function THEN&#10;&#9;&#9;&#9;sfcgalver :&#61; NULL;&#10;&#9;END;&#10;&#9;SELECT public.postgis_liblwgeom_version() INTO liblwgeomver;&#10;&#9;SELECT public.postgis_libxml_version() INTO libxmlver;&#10;&#9;SELECT public.postgis_scripts_installed() INTO dbproc;&#10;&#9;SELECT public.postgis_scripts_released() INTO relproc;&#10;&#9;select public.postgis_svn_version() INTO svnver;&#10;&#9;BEGIN&#10;&#9;&#9;SELECT topology.postgis_topology_scripts_installed() INTO topo_scr_ver;&#10;&#9;EXCEPTION&#10;&#9;&#9;WHEN undefined_function OR invalid_schema_name THEN&#10;&#9;&#9;&#9;topo_scr_ver :&#61; NULL;&#10;&#9;&#9;&#9;RAISE DEBUG &#39;Function postgis_topology_scripts_installed() not found. Is topology support enabled and topology.sql installed?&#39;;&#10;&#9;&#9;WHEN insufficient_privilege THEN&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Topology support cannot be inspected. Is current user granted USAGE on schema &quot;topology&quot; ?&#39;;&#10;&#9;&#9;WHEN OTHERS THEN&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Function postgis_topology_scripts_installed() could not be called: % (%)&#39;, SQLERRM, SQLSTATE;&#10;&#9;END;&#10;&#10;&#9;BEGIN&#10;&#9;&#9;SELECT postgis_raster_scripts_installed() INTO rast_scr_ver;&#10;&#9;EXCEPTION&#10;&#9;&#9;WHEN undefined_function THEN&#10;&#9;&#9;&#9;rast_scr_ver :&#61; NULL;&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Function postgis_raster_scripts_installed() not found. Is raster support enabled and rtpostgis.sql installed?&#39;;&#10;&#9;END;&#10;&#10;&#9;BEGIN&#10;&#9;&#9;SELECT public.postgis_raster_lib_version() INTO rast_lib_ver;&#10;&#9;EXCEPTION&#10;&#9;&#9;WHEN undefined_function THEN&#10;&#9;&#9;&#9;rast_lib_ver :&#61; NULL;&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Function postgis_raster_lib_version() not found. Is raster support enabled and rtpostgis.sql installed?&#39;;&#10;&#9;END;&#10;&#10;&#9;fullver &#61; &#39;POSTGIS&#61;&quot;&#39; || libver;&#10;&#10;&#9;IF  svnver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; r&#39; || svnver;&#10;&#9;END IF;&#10;&#10;&#9;fullver &#61; fullver || &#39;&quot;&#39;;&#10;&#10;&#9;IF EXISTS (&#10;&#9;&#9;SELECT * FROM pg_catalog.pg_extension&#10;&#9;&#9;WHERE extname &#61; &#39;postgis&#39;)&#10;&#9;THEN&#10;&#9;&#9;&#9;fullver &#61; fullver || &#39; [EXTENSION]&#39;;&#10;&#9;&#9;&#9;core_is_extension :&#61; true;&#10;&#9;ELSE&#10;&#9;&#9;&#9;core_is_extension :&#61; false;&#10;&#9;END IF;&#10;&#10;&#9;IF liblwgeomver !&#61; relproc THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; (liblwgeom version mismatch: &quot;&#39; || liblwgeomver || &#39;&quot;)&#39;;&#10;&#9;END IF;&#10;&#10;&#9;fullver &#61; fullver || &#39; PGSQL&#61;&quot;&#39; || pgsql_scr_ver || &#39;&quot;&#39;;&#10;&#9;IF pgsql_scr_ver !&#61; pgsql_ver THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; (procs need upgrade for use with &quot;&#39; || pgsql_ver || &#39;&quot;)&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF  geosver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; GEOS&#61;&quot;&#39; || geosver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF  sfcgalver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; SFCGAL&#61;&quot;&#39; || sfcgalver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF  projver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; PROJ&#61;&quot;&#39; || projver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF  gdalver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; GDAL&#61;&quot;&#39; || gdalver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF  libxmlver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; LIBXML&#61;&quot;&#39; || libxmlver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF json_lib_ver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; LIBJSON&#61;&quot;&#39; || json_lib_ver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF protobuf_lib_ver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; LIBPROTOBUF&#61;&quot;&#39; || protobuf_lib_ver || &#39;&quot;&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF dbproc !&#61; relproc THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; (core procs from &quot;&#39; || dbproc || &#39;&quot; need upgrade)&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF topo_scr_ver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; TOPOLOGY&#39;;&#10;&#9;&#9;IF topo_scr_ver !&#61; relproc THEN&#10;&#9;&#9;&#9;fullver &#61; fullver || &#39; (topology procs from &quot;&#39; || topo_scr_ver || &#39;&quot; need upgrade)&#39;;&#10;&#9;&#9;END IF;&#10;&#9;&#9;IF core_is_extension AND NOT EXISTS (&#10;&#9;&#9;&#9;SELECT * FROM pg_catalog.pg_extension&#10;&#9;&#9;&#9;WHERE extname &#61; &#39;postgis_topology&#39;)&#10;&#9;&#9;THEN&#10;&#9;&#9;&#9;&#9;fullver &#61; fullver || &#39; [UNPACKAGED!]&#39;;&#10;&#9;&#9;END IF;&#10;&#9;END IF;&#10;&#10;&#9;IF rast_lib_ver IS NOT NULL THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; RASTER&#39;;&#10;&#9;&#9;IF rast_lib_ver !&#61; relproc THEN&#10;&#9;&#9;&#9;fullver &#61; fullver || &#39; (raster lib from &quot;&#39; || rast_lib_ver || &#39;&quot; need upgrade)&#39;;&#10;&#9;&#9;END IF;&#10;&#9;END IF;&#10;&#10;&#9;IF rast_scr_ver IS NOT NULL AND rast_scr_ver !&#61; relproc THEN&#10;&#9;&#9;fullver &#61; fullver || &#39; (raster procs from &quot;&#39; || rast_scr_ver || &#39;&quot; need upgrade)&#39;;&#10;&#9;END IF;&#10;&#10;&#9;IF sfcgal_scr_ver IS NOT NULL AND sfcgal_scr_ver !&#61; relproc THEN&#10;    fullver &#61; fullver || &#39; (sfcgal procs from &quot;&#39; || sfcgal_scr_ver || &#39;&quot; need upgrade)&#39;;&#10;&#9;END IF;&#10;&#10;&#9;RETURN fullver;&#10;END</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

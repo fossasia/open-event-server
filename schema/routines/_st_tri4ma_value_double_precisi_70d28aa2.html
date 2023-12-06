@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>_st_tri4ma(value double precision[], pos integer[], VARIADIC userargs text[] DEFAULT NULL::text[])</h1><br />
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>value</td>
+                                    <td>double precision[]</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>pos</td>
+                                    <td>integer[]</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>userargs</td>
+                                    <td>text[]</td>
+                                    <td>VARIADIC</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;&#9;x integer;&#10;&#9;&#9;y integer;&#10;&#9;&#9;z integer;&#10;&#10;&#9;&#9;Z1 double precision;&#10;&#9;&#9;Z2 double precision;&#10;&#9;&#9;Z3 double precision;&#10;&#9;&#9;Z4 double precision;&#10;&#9;&#9;Z5 double precision;&#10;&#9;&#9;Z6 double precision;&#10;&#9;&#9;Z7 double precision;&#10;&#9;&#9;Z8 double precision;&#10;&#9;&#9;Z9 double precision;&#10;&#10;&#9;&#9;tri double precision;&#10;&#9;&#9;_value double precision[][][];&#10;&#9;&#9;ndims int;&#10;&#9;BEGIN&#10;&#9;&#9;ndims :&#61; array_ndims(value);&#10;&#9;&#9;-- add a third dimension if 2-dimension&#10;&#9;&#9;IF ndims &#61; 2 THEN&#10;&#9;&#9;&#9;_value :&#61; public._ST_convertarray4ma(value);&#10;&#9;&#9;ELSEIF ndims !&#61; 3 THEN&#10;&#9;&#9;&#9;RAISE EXCEPTION &#39;First parameter of function must be a 3-dimension array&#39;;&#10;&#9;&#9;ELSE&#10;&#9;&#9;&#9;_value :&#61; value;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;-- only use the first raster passed to this function&#10;&#9;&#9;IF array_length(_value, 1) &gt; 1 THEN&#10;&#9;&#9;&#9;RAISE NOTICE &#39;Only using the values from the first raster&#39;;&#10;&#9;&#9;END IF;&#10;&#9;&#9;z :&#61; array_lower(_value, 1);&#10;&#10;&#9;&#9;IF (&#10;&#9;&#9;&#9;array_lower(_value, 2) !&#61; 1 OR array_upper(_value, 2) !&#61; 3 OR&#10;&#9;&#9;&#9;array_lower(_value, 3) !&#61; 1 OR array_upper(_value, 3) !&#61; 3&#10;&#9;&#9;) THEN&#10;&#9;&#9;&#9;RAISE EXCEPTION &#39;First parameter of function must be a 1x3x3 array with each of the lower bounds starting from 1&#39;;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;-- check that center pixel isn&#39;t NODATA&#10;&#9;&#9;IF _value[z][2][2] IS NULL THEN&#10;&#9;&#9;&#9;RETURN NULL;&#10;&#9;&#9;-- substitute center pixel for any neighbor pixels that are NODATA&#10;&#9;&#9;ELSE&#10;&#9;&#9;&#9;FOR y IN 1..3 LOOP&#10;&#9;&#9;&#9;&#9;FOR x IN 1..3 LOOP&#10;&#9;&#9;&#9;&#9;&#9;IF _value[z][y][x] IS NULL THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;_value[z][y][x] &#61; _value[z][2][2];&#10;&#9;&#9;&#9;&#9;&#9;END IF;&#10;&#9;&#9;&#9;&#9;END LOOP;&#10;&#9;&#9;&#9;END LOOP;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;-------------------------------------------------&#10;&#9;&#9;--|   Z1&#61; Z(-1,1) |  Z2&#61; Z(0,1)&#9;| Z3&#61; Z(1,1)  |--&#10;&#9;&#9;-------------------------------------------------&#10;&#9;&#9;--|   Z4&#61; Z(-1,0) |  Z5&#61; Z(0,0) | Z6&#61; Z(1,0)  |--&#10;&#9;&#9;-------------------------------------------------&#10;&#9;&#9;--|   Z7&#61; Z(-1,-1)|  Z8&#61; Z(0,-1)|  Z9&#61; Z(1,-1)|--&#10;&#9;&#9;-------------------------------------------------&#10;&#10;&#9;&#9;-- _scale width and height units / z units to make z units equal to height width units&#10;&#9;&#9;Z1 :&#61; _value[z][1][1];&#10;&#9;&#9;Z2 :&#61; _value[z][2][1];&#10;&#9;&#9;Z3 :&#61; _value[z][3][1];&#10;&#9;&#9;Z4 :&#61; _value[z][1][2];&#10;&#9;&#9;Z5 :&#61; _value[z][2][2];&#10;&#9;&#9;Z6 :&#61; _value[z][3][2];&#10;&#9;&#9;Z7 :&#61; _value[z][1][3];&#10;&#9;&#9;Z8 :&#61; _value[z][2][3];&#10;&#9;&#9;Z9 :&#61; _value[z][3][3];&#10;&#10;&#9;&#9;tri :&#61; ( abs(Z1 - Z5 ) + abs( Z2 - Z5 ) + abs( Z3 - Z5 ) + abs( Z4 - Z5 ) + abs( Z6 - Z5 ) + abs( Z7 - Z5 ) + abs( Z8 - Z5 ) + abs ( Z9 - Z5 )) / 8;&#10;&#10;&#9;&#9;return tri;&#10;&#9;END;</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

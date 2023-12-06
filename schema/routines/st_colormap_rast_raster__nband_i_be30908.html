@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>st_colormap(rast raster, nband integer DEFAULT 1, colormap text DEFAULT &#39;grayscale&#39;::text, method text DEFAULT &#39;INTERPOLATE&#39;::text)</h1><br />
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>rast</td>
+                                    <td>raster</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>nband</td>
+                                    <td>integer</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>colormap</td>
+                                    <td>text</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>method</td>
+                                    <td>text</td>
+                                    <td>IN</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;&#9;_ismap boolean;&#10;&#9;&#9;_colormap text;&#10;&#9;&#9;_element text[];&#10;&#9;BEGIN&#10;&#9;&#9;_ismap :&#61; TRUE;&#10;&#10;&#9;&#9;-- clean colormap to see what it is&#10;&#9;&#9;_colormap :&#61; split_part(colormap, E&#39;\n&#39;, 1);&#10;&#9;&#9;_colormap :&#61; regexp_replace(_colormap, E&#39;:+&#39;, &#39; &#39;, &#39;g&#39;);&#10;&#9;&#9;_colormap :&#61; regexp_replace(_colormap, E&#39;,+&#39;, &#39; &#39;, &#39;g&#39;);&#10;&#9;&#9;_colormap :&#61; regexp_replace(_colormap, E&#39;\\t+&#39;, &#39; &#39;, &#39;g&#39;);&#10;&#9;&#9;_colormap :&#61; regexp_replace(_colormap, E&#39; +&#39;, &#39; &#39;, &#39;g&#39;);&#10;&#9;&#9;_element :&#61; regexp_split_to_array(_colormap, &#39; &#39;);&#10;&#10;&#9;&#9;-- treat as colormap&#10;&#9;&#9;IF (array_length(_element, 1) &gt; 1) THEN&#10;&#9;&#9;&#9;_colormap :&#61; colormap;&#10;&#9;&#9;-- treat as keyword&#10;&#9;&#9;ELSE&#10;&#9;&#9;&#9;method :&#61; &#39;INTERPOLATE&#39;;&#10;&#9;&#9;&#9;CASE lower(trim(both from _colormap))&#10;&#9;&#9;&#9;&#9;WHEN &#39;grayscale&#39;, &#39;greyscale&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;_colormap :&#61; &#39;&#10;100%   0&#10;  0% 254&#10;  nv 255&#10;&#9;&#9;&#9;&#9;&#9;&#39;;&#10;&#9;&#9;&#9;&#9;WHEN &#39;pseudocolor&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;_colormap :&#61; &#39;&#10;100% 255   0   0 255&#10; 50%   0 255   0 255&#10;  0%   0   0 255 255&#10;  nv   0   0   0   0&#10;&#9;&#9;&#9;&#9;&#9;&#39;;&#10;&#9;&#9;&#9;&#9;WHEN &#39;fire&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;_colormap :&#61; &#39;&#10;  100% 243 255 221 255&#10;93.75% 242 255 178 255&#10; 87.5% 255 255 135 255&#10;81.25% 255 228  96 255&#10;   75% 255 187  53 255&#10;68.75% 255 131   7 255&#10; 62.5% 255  84   0 255&#10;56.25% 255  42   0 255&#10;   50% 255   0   0 255&#10;43.75% 255  42   0 255&#10; 37.5% 224  74   0 255&#10;31.25% 183  91   0 255&#10;   25% 140  93   0 255&#10;18.75%  99  82   0 255&#10; 12.5%  58  58   1 255&#10; 6.25%  12  15   0 255&#10;    0%   0   0   0 255&#10;    nv   0   0   0   0&#10;&#9;&#9;&#9;&#9;&#9;&#39;;&#10;&#9;&#9;&#9;&#9;WHEN &#39;bluered&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;_colormap :&#61; &#39;&#10;100.00% 165   0  33 255&#10; 94.12% 216  21  47 255&#10; 88.24% 247  39  53 255&#10; 82.35% 255  61  61 255&#10; 76.47% 255 120  86 255&#10; 70.59% 255 172 117 255&#10; 64.71% 255 214 153 255&#10; 58.82% 255 241 188 255&#10; 52.94% 255 255 234 255&#10; 47.06% 234 255 255 255&#10; 41.18% 188 249 255 255&#10; 35.29% 153 234 255 255&#10; 29.41% 117 211 255 255&#10; 23.53%  86 176 255 255&#10; 17.65%  61 135 255 255&#10; 11.76%  40  87 255 255&#10;  5.88%  24  28 247 255&#10;  0.00%  36   0 216 255&#10;     nv   0   0   0   0&#10;&#9;&#9;&#9;&#9;&#9;&#39;;&#10;&#9;&#9;&#9;&#9;ELSE&#10;&#9;&#9;&#9;&#9;&#9;RAISE EXCEPTION &#39;Unknown colormap keyword: %&#39;, colormap;&#10;&#9;&#9;&#9;END CASE;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;RETURN public._ST_colormap($1, $2, _colormap, $4);&#10;&#9;END;</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

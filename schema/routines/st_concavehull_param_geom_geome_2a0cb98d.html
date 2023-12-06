@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>st_concavehull(param_geom geometry, param_pctconvex double precision, param_allow_holes boolean DEFAULT false)</h1><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p><p>args: geomA, target_percent, allow_holes=false - The concave hull of a geometry represents a possibly concave geometry that encloses all geometries within the set. You can think of it as shrink wrapping.</p></p>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>param_geom</td>
+                                    <td>geometry</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>param_pctconvex</td>
+                                    <td>double precision</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>param_allow_holes</td>
+                                    <td>boolean</td>
+                                    <td>IN</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;&#9;var_convhull public.geometry :&#61; public.ST_ForceSFS(public.ST_ConvexHull(param_geom));&#10;&#9;&#9;var_param_geom public.geometry :&#61; public.ST_ForceSFS(param_geom);&#10;&#9;&#9;var_initarea float :&#61; public.ST_Area(var_convhull);&#10;&#9;&#9;var_newarea float :&#61; var_initarea;&#10;&#9;&#9;var_div integer :&#61; 6; &#10;&#9;&#9;var_tempgeom public.geometry;&#10;&#9;&#9;var_tempgeom2 public.geometry;&#10;&#9;&#9;var_cent public.geometry;&#10;&#9;&#9;var_geoms public.geometry[4]; &#10;&#9;&#9;var_enline public.geometry;&#10;&#9;&#9;var_resultgeom public.geometry;&#10;&#9;&#9;var_atempgeoms public.geometry[];&#10;&#9;&#9;var_buf float :&#61; 1; &#10;&#9;BEGIN&#10;&#9;&#9;-- We start with convex hull as our base&#10;&#9;&#9;var_resultgeom :&#61; var_convhull;&#10;&#10;&#9;&#9;IF param_pctconvex &#61; 1 THEN&#10;&#9;&#9;&#9;-- this is the same as asking for the convex hull&#10;&#9;&#9;&#9;return var_resultgeom;&#10;&#9;&#9;ELSIF public.ST_GeometryType(var_param_geom) &#61; &#39;ST_Polygon&#39; THEN -- it is as concave as it is going to get&#10;&#9;&#9;&#9;IF param_allow_holes THEN -- leave the holes&#10;&#9;&#9;&#9;&#9;RETURN var_param_geom;&#10;&#9;&#9;&#9;ELSE -- remove the holes&#10;&#9;&#9;&#9;&#9;var_resultgeom :&#61; public.ST_MakePolygon(public.ST_ExteriorRing(var_param_geom));&#10;&#9;&#9;&#9;&#9;RETURN var_resultgeom;&#10;&#9;&#9;&#9;END IF;&#10;&#9;&#9;END IF;&#10;&#9;&#9;IF public.ST_Dimension(var_resultgeom) &gt; 1 AND param_pctconvex BETWEEN 0 and 0.99 THEN&#10;&#9;&#9;-- get linestring that forms envelope of geometry&#10;&#9;&#9;&#9;var_enline :&#61; public.ST_Boundary(public.ST_Envelope(var_param_geom));&#10;&#9;&#9;&#9;var_buf :&#61; public.ST_Length(var_enline)/1000.0;&#10;&#9;&#9;&#9;IF public.ST_GeometryType(var_param_geom) &#61; &#39;ST_MultiPoint&#39; AND public.ST_NumGeometries(var_param_geom) BETWEEN 4 and 200 THEN&#10;&#9;&#9;&#9;-- we make polygons out of points since they are easier to cave in.&#10;&#9;&#9;&#9;-- Note we limit to between 4 and 200 points because this process is slow and gets quadratically slow&#10;&#9;&#9;&#9;&#9;var_buf :&#61; sqrt(public.ST_Area(var_convhull)*0.8/(public.ST_NumGeometries(var_param_geom)*public.ST_NumGeometries(var_param_geom)));&#10;&#9;&#9;&#9;&#9;var_atempgeoms :&#61; ARRAY(SELECT geom FROM public.ST_DumpPoints(var_param_geom));&#10;&#9;&#9;&#9;&#9;-- 5 and 10 and just fudge factors&#10;&#9;&#9;&#9;&#9;var_tempgeom :&#61; public.ST_Union(ARRAY(SELECT geom&#10;&#9;&#9;&#9;&#9;&#9;&#9;FROM (&#10;&#9;&#9;&#9;&#9;&#9;&#9;-- fuse near neighbors together&#10;&#9;&#9;&#9;&#9;&#9;&#9;SELECT DISTINCT ON (i) i,  public.ST_Distance(var_atempgeoms[i],var_atempgeoms[j]), public.ST_Buffer(public.ST_MakeLine(var_atempgeoms[i], var_atempgeoms[j]) , var_buf*5, &#39;quad_segs&#61;3&#39;) As geom&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;FROM generate_series(1,array_upper(var_atempgeoms, 1)) As i&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;INNER JOIN generate_series(1,array_upper(var_atempgeoms, 1)) As j&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ON (&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9; NOT public.ST_Intersects(var_atempgeoms[i],var_atempgeoms[j])&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;AND public.ST_DWithin(var_atempgeoms[i],var_atempgeoms[j], var_buf*10)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;UNION ALL&#10;&#9;&#9;&#9;&#9;&#9;&#9;-- catch the ones with no near neighbors&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;SELECT i, 0, public.ST_Buffer(var_atempgeoms[i] , var_buf*10, &#39;quad_segs&#61;3&#39;) As geom&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;FROM generate_series(1,array_upper(var_atempgeoms, 1)) As i&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;LEFT JOIN generate_series(ceiling(array_upper(var_atempgeoms,1)/2)::integer,array_upper(var_atempgeoms, 1)) As j&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ON (&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9; NOT public.ST_Intersects(var_atempgeoms[i],var_atempgeoms[j])&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;AND public.ST_DWithin(var_atempgeoms[i],var_atempgeoms[j], var_buf*10)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;WHERE j IS NULL&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;ORDER BY 1, 2&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;) As foo&#9;) );&#10;&#9;&#9;&#9;&#9;IF public.ST_IsValid(var_tempgeom) AND public.ST_GeometryType(var_tempgeom) &#61; &#39;ST_Polygon&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;var_tempgeom :&#61; public.ST_ForceSFS(public.ST_Intersection(var_tempgeom, var_convhull));&#10;&#9;&#9;&#9;&#9;&#9;IF param_allow_holes THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; var_tempgeom;&#10;&#9;&#9;&#9;&#9;&#9;ELSIF public.ST_GeometryType(var_tempgeom) &#61; &#39;ST_Polygon&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; public.ST_ForceSFS(public.ST_MakePolygon(public.ST_ExteriorRing(var_tempgeom)));&#10;&#9;&#9;&#9;&#9;&#9;ELSE&#10;&#9;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; public.ST_ForceSFS(public.ST_ConvexHull(var_param_geom));&#10;&#9;&#9;&#9;&#9;&#9;END IF;&#10;&#9;&#9;&#9;&#9;&#9;-- make sure result covers original (#3638)&#10;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; public.ST_Union(param_geom, var_param_geom);&#10;&#9;&#9;&#9;&#9;&#9;return var_param_geom;&#10;&#9;&#9;&#9;&#9;ELSIF public.ST_IsValid(var_tempgeom) THEN&#10;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; public.ST_ForceSFS(public.ST_Intersection(var_tempgeom, var_convhull));&#10;&#9;&#9;&#9;&#9;END IF;&#10;&#9;&#9;&#9;END IF;&#10;&#10;&#9;&#9;&#9;IF public.ST_GeometryType(var_param_geom) &#61; &#39;ST_Polygon&#39; THEN&#10;&#9;&#9;&#9;&#9;IF NOT param_allow_holes THEN&#10;&#9;&#9;&#9;&#9;&#9;var_param_geom :&#61; public.ST_ForceSFS(public.ST_MakePolygon(public.ST_ExteriorRing(var_param_geom)));&#10;&#9;&#9;&#9;&#9;END IF;&#10;&#9;&#9;&#9;&#9;-- make sure result covers original (#3638)&#10;&#9;&#9;&#9;&#9;--var_param_geom :&#61; public.ST_Union(param_geom, var_param_geom);&#10;&#9;&#9;&#9;&#9;return var_param_geom;&#10;&#9;&#9;&#9;END IF;&#10;            var_cent :&#61; public.ST_Centroid(var_param_geom);&#10;            IF (public.ST_XMax(var_enline) - public.ST_XMin(var_enline) ) &gt; var_buf AND (public.ST_YMax(var_enline) - public.ST_YMin(var_enline) ) &gt; var_buf THEN&#10;                    IF public.ST_Dwithin(public.ST_Centroid(var_convhull) , public.ST_Centroid(public.ST_Envelope(var_param_geom)), var_buf/2) THEN&#10;                -- If the geometric dimension is &gt; 1 and the object is symettric (cutting at centroid will not work -- offset a bit)&#10;                        var_cent :&#61; public.ST_Translate(var_cent, (public.ST_XMax(var_enline) - public.ST_XMin(var_enline))/1000,  (public.ST_YMAX(var_enline) - public.ST_YMin(var_enline))/1000);&#10;                    ELSE&#10;                        -- uses closest point on geometry to centroid. I can&#39;t explain why we are doing this&#10;                        var_cent :&#61; public.ST_ClosestPoint(var_param_geom,var_cent);&#10;                    END IF;&#10;                    IF public.ST_DWithin(var_cent, var_enline,var_buf) THEN&#10;                        var_cent :&#61; public.ST_centroid(public.ST_Envelope(var_param_geom));&#10;                    END IF;&#10;                    -- break envelope into 4 triangles about the centroid of the geometry and returned the clipped geometry in each quadrant&#10;                    FOR i in 1 .. 4 LOOP&#10;                       var_geoms[i] :&#61; public.ST_MakePolygon(public.ST_MakeLine(ARRAY[public.ST_PointN(var_enline,i), public.ST_PointN(var_enline,i+1), var_cent, public.ST_PointN(var_enline,i)]));&#10;                       var_geoms[i] :&#61; public.ST_ForceSFS(public.ST_Intersection(var_param_geom, public.ST_Buffer(var_geoms[i],var_buf)));&#10;                       IF public.ST_IsValid(var_geoms[i]) THEN&#10;&#10;                       ELSE&#10;                            var_geoms[i] :&#61; public.ST_BuildArea(public.ST_MakeLine(ARRAY[public.ST_PointN(var_enline,i), public.ST_PointN(var_enline,i+1), var_cent, public.ST_PointN(var_enline,i)]));&#10;                       END IF;&#10;                    END LOOP;&#10;                    var_tempgeom :&#61; public.ST_Union(ARRAY[public.ST_ConvexHull(var_geoms[1]), public.ST_ConvexHull(var_geoms[2]) , public.ST_ConvexHull(var_geoms[3]), public.ST_ConvexHull(var_geoms[4])]);&#10;                    --RAISE NOTICE &#39;Curr vex % &#39;, public.ST_AsText(var_tempgeom);&#10;                    IF public.ST_Area(var_tempgeom) &lt;&#61; var_newarea AND public.ST_IsValid(var_tempgeom)  THEN --AND public.ST_GeometryType(var_tempgeom) ILIKE &#39;%Polygon&#39;&#10;&#10;                        var_tempgeom :&#61; public.ST_Buffer(public.ST_ConcaveHull(var_geoms[1],least(param_pctconvex + param_pctconvex/var_div),true),var_buf, &#39;quad_segs&#61;2&#39;);&#10;                        FOR i IN 1 .. 4 LOOP&#10;                            var_geoms[i] :&#61; public.ST_Buffer(public.ST_ConcaveHull(var_geoms[i],least(param_pctconvex + param_pctconvex/var_div),true), var_buf, &#39;quad_segs&#61;2&#39;);&#10;                            IF public.ST_IsValid(var_geoms[i]) Then&#10;                                var_tempgeom :&#61; public.ST_Union(var_tempgeom, var_geoms[i]);&#10;                            ELSE&#10;                                RAISE NOTICE &#39;Not valid % %&#39;, i, public.ST_AsText(var_tempgeom);&#10;                                var_tempgeom :&#61; public.ST_Union(var_tempgeom, public.ST_ConvexHull(var_geoms[i]));&#10;                            END IF;&#10;                        END LOOP;&#10;&#10;                        --RAISE NOTICE &#39;Curr concave % &#39;, public.ST_AsText(var_tempgeom);&#10;                        IF public.ST_IsValid(var_tempgeom) THEN&#10;                            var_resultgeom :&#61; var_tempgeom;&#10;                        END IF;&#10;                        var_newarea :&#61; public.ST_Area(var_resultgeom);&#10;                    ELSIF public.ST_IsValid(var_tempgeom) THEN&#10;                        var_resultgeom :&#61; var_tempgeom;&#10;                    END IF;&#10;&#10;                    IF public.ST_NumGeometries(var_resultgeom) &gt; 1  THEN&#10;                        var_tempgeom :&#61; public._ST_ConcaveHull(var_resultgeom);&#10;                        IF public.ST_IsValid(var_tempgeom) AND public.ST_GeometryType(var_tempgeom) ILIKE &#39;ST_Polygon&#39; THEN&#10;                            var_resultgeom :&#61; var_tempgeom;&#10;                        ELSE&#10;                            var_resultgeom :&#61; public.ST_Buffer(var_tempgeom,var_buf, &#39;quad_segs&#61;2&#39;);&#10;                        END IF;&#10;                    END IF;&#10;                    IF param_allow_holes &#61; false THEN&#10;                    -- only keep exterior ring since we do not want holes&#10;                        var_resultgeom :&#61; public.ST_MakePolygon(public.ST_ExteriorRing(var_resultgeom));&#10;                    END IF;&#10;                ELSE&#10;                    var_resultgeom :&#61; public.ST_Buffer(var_resultgeom,var_buf);&#10;                END IF;&#10;                var_resultgeom :&#61; public.ST_ForceSFS(public.ST_Intersection(var_resultgeom, public.ST_ConvexHull(var_param_geom)));&#10;            ELSE&#10;                -- dimensions are too small to cut&#10;                var_resultgeom :&#61; public._ST_ConcaveHull(var_param_geom);&#10;            END IF;&#10;&#10;            RETURN var_resultgeom;&#10;&#9;END;</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

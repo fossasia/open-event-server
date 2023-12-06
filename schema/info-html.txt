@@ -1,0 +1,5 @@
+date=2023-11-23 13:40:18+0000
+os=Linux 5.15.0-88-generic
+schemaspy-version=6.2.4
+schemaspy-build=6.2.4.41 2023-07-21 11:15:12
+renderer=Graphviz dot 2.43.0 

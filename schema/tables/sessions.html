@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>sessions - open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>sessions</h1><p><span id="recordNumber">5440</span> rows</p><br />
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Columns</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="standard_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="10"
+                                    data-length-change="false">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th title='Are nulls allowed?'>Nulls</th>
+                                    <th title='Is column automatically updated?'>Auto</th>
+                                    <th title='Default value'>Default</th>
+                                    <th title='Columns in tables that reference this column'>Children</th>
+                                    <th title='Columns in tables that are referenced by this column'>Parents</th>
+                                    <th title='Comments' class="toggle"><span>Comments</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="id">id</span></td>
+                                    <td>serial</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title='Automatically updated by the database'>√</td>
+                                    <td>nextval(&#39;session_id_seq&#39;::regclass)</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="exhibitors_sessions.session_id references sessions.id via exhibitors_sessions_session_id_fkey"><a href='exhibitors_sessions.html'>exhibitors_sessions</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">exhibitors_sessions_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="feedback.session_id references sessions.id via feedback_session_id_fkey"><a href='feedback.html'>feedback</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">feedback_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="speaker_invites.session_id references sessions.id via speaker_invites_session_id_fkey"><a href='speaker_invites.html'>speaker_invites</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">speaker_invites_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="speakers_sessions.session_id references sessions.id via speakers_sessions_session_id_fkey"><a href='speakers_sessions.html'>speakers_sessions</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">speakers_sessions_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="station_store_paxs.session_id references sessions.id via station_store_paxs_session_id_fkey"><a href='station_store_paxs.html'>station_store_paxs</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">station_store_paxs_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="user_check_in.session_id references sessions.id via user_check_in_session_id_fkey"><a href='user_check_in.html'>user_check_in</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">user_check_in_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="user_favourite_sessions.session_id references sessions.id via user_favourite_sessions_session_id_fkey"><a href='user_favourite_sessions.html'>user_favourite_sessions</a><span class='relatedKey'>.session_id</span></td>
+                                                <td class="constraint detail">user_favourite_sessions_session_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="title">title</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="subtitle">subtitle</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="short_abstract">short_abstract</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="long_abstract">long_abstract</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="comments">comments</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="starts_at">starts_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="ends_at">ends_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="track_id">track_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="sessions.track_id references tracks.id via session_track_id_fkey"><a href='tracks.html'>tracks</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">session_track_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="language">language</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="microlocation_id">microlocation_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="sessions.microlocation_id references microlocations.id via sessions_microlocation_id_fkey"><a href='microlocations.html'>microlocations</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">sessions_microlocation_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="session_type_id">session_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="sessions.session_type_id references session_types.id via sessions_session_type_id_fkey"><a href='session_types.html'>session_types</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">sessions_session_type_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="slides_url">slides_url</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="video_url">video_url</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="audio_url">audio_url</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="signup_url">signup_url</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="event_id">event_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="sessions.event_id references events.id via sessions_event_id_fkey"><a href='events.html'>events</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">sessions_event_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="state">state</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="created_at">created_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="deleted_at">deleted_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="submitted_at">submitted_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="submission_modifier">submission_modifier</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_mail_sent">is_mail_sent</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="level">level</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="creator_id">creator_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="sessions.creator_id references users.id via sessions_creator_id_fkey"><a href='users.html'>users</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">sessions_creator_id_fkey</td>
+                                                <td class="constraint detail"><span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="last_modified_at">last_modified_at</span></td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="send_email">send_email</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_locked">is_locked</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>false</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="complex_field_values">complex_field_values</span></td>
+                                    <td>json</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="average_rating">average_rating</span></td>
+                                    <td>float8</td>
+                                    <td>17,17</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>&#39;0&#39;::double precision</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="rating_count">rating_count</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>0</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="facebook">facebook</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="github">github</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="gitlab">gitlab</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="instagram">instagram</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="linkedin">linkedin</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="twitter">twitter</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="website">website</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="favourite_count">favourite_count</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>0</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="mastodon">mastodon</span></td>
+                                    <td>varchar</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="slides">slides</span></td>
+                                    <td>json</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="indexes_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="10"
+                                    data-length-change="false">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> session_pkey</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>id</td>
+                                </tr>
+                                <tr>
+                                    <td title='Indexed'>session_event_idx</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>event_id</td>
+                                </tr>
+                                <tr>
+                                    <td title='Indexed'>session_state_idx</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>state</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 id="Relationships" class="box-title">Relationships</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
+                                <h5>Close relationships within degrees of separation</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
+                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" id="node1" href="exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="1177,615,1436,737">
+<area shape="rect" id="node2" href="sessions.html" target="_top" title="sessions" alt="" coords="703,351,1113,1623">
+<area shape="rect" id="node4" href="events.html" target="_top" title="events" alt="" coords="5,703,324,996">
+<area shape="rect" id="node5" href="users.html" target="_top" title="users" alt="" coords="368,1519,659,1695">
+<area shape="rect" id="node6" href="microlocations.html" target="_top" title="microlocations" alt="" coords="393,576,634,752">
+<area shape="rect" id="node7" href="session_types.html" target="_top" title="session_types" alt="" coords="409,769,617,916">
+<area shape="rect" id="node8" href="tracks.html" target="_top" title="tracks" alt="" coords="423,412,603,559">
+<area shape="rect" id="node3" href="feedback.html" target="_top" title="feedback" alt="" coords="1224,1607,1389,1812">
+<area shape="rect" id="node9" href="speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="1195,5,1419,181">
+<area shape="rect" id="node10" href="speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="1182,755,1431,877">
+<area shape="rect" id="node11" href="station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="1181,199,1433,375">
+<area shape="rect" id="node12" href="user_check_in.html" target="_top" title="user_check_in" alt="" coords="1203,392,1411,597">
+<area shape="rect" id="node13" href="user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="1157,1203,1456,1379">
+</map>
+                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/sessions.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" id="node1" href="access_codes.html" target="_top" title="access_codes" alt="" coords="1239,2429,1441,2517">
+<area shape="rect" id="node2" href="events.html" target="_top" title="events" alt="" coords="639,1568,828,1656">
+<area shape="rect" id="node3" href="users.html" target="_top" title="users" alt="" coords="13,2491,195,2579">
+<area shape="rect" id="node4" href="tickets.html" target="_top" title="tickets" alt="" coords="957,2324,1137,2412">
+<area shape="rect" id="node7" href="discount_codes.html" target="_top" title="discount_codes" alt="" coords="293,1873,515,1961">
+<area shape="rect" id="node11" href="event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="285,1141,523,1229">
+<area shape="rect" id="node12" href="event_topics.html" target="_top" title="event_topics" alt="" coords="5,1176,203,1264">
+<area shape="rect" id="node13" href="event_types.html" target="_top" title="event_types" alt="" coords="308,1568,500,1656">
+<area shape="rect" id="node14" href="groups.html" target="_top" title="groups" alt="" coords="321,2691,487,2779">
+<area shape="rect" id="node5" href="badge_forms.html" target="_top" title="badge_forms" alt="" coords="947,1193,1147,1281">
+<area shape="rect" id="node6" href="custom_forms.html" target="_top" title="custom_forms" alt="" coords="942,1299,1151,1387">
+<area shape="rect" id="node8" href="email_notifications.html" target="_top" title="email_notifications" alt="" coords="920,489,1173,577">
+<area shape="rect" id="node9" href="event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="927,1617,1166,1705">
+<area shape="rect" id="node10" href="event_invoices.html" target="_top" title="event_invoices" alt="" coords="939,2607,1155,2695">
+<area shape="rect" id="node15" href="exhibitors.html" target="_top" title="exhibitors" alt="" coords="1610,2272,1785,2360">
+<area shape="rect" id="node16" href="exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="1967,1737,2225,1860">
+<area shape="rect" id="node17" href="sessions.html" target="_top" title="sessions" alt="" coords="1492,877,1903,2149">
+<area shape="rect" id="node23" href="microlocations.html" target="_top" title="microlocations" alt="" coords="1232,1636,1448,1724">
+<area shape="rect" id="node29" href="session_types.html" target="_top" title="session_types" alt="" coords="1236,1299,1444,1387">
+<area shape="rect" id="node30" href="tracks.html" target="_top" title="tracks" alt="" coords="1250,1157,1430,1245">
+<area shape="rect" id="node18" href="export_jobs.html" target="_top" title="export_jobs" alt="" coords="953,1723,1141,1811">
+<area shape="rect" id="node19" href="faq.html" target="_top" title="faq" alt="" coords="1269,1881,1411,1969">
+<area shape="rect" id="node20" href="faq_types.html" target="_top" title="faq_types" alt="" coords="961,1864,1132,1952">
+<area shape="rect" id="node21" href="feedback.html" target="_top" title="feedback" alt="" coords="2013,491,2179,579">
+<area shape="rect" id="node22" href="import_jobs.html" target="_top" title="import_jobs" alt="" coords="309,2832,499,2920">
+<area shape="rect" id="node24" href="video_streams.html" target="_top" title="video_streams" alt="" coords="940,1512,1153,1600">
+<area shape="rect" id="node25" href="notification_actors.html" target="_top" title="notification_actors" alt="" coords="278,2937,530,3025">
+<area shape="rect" id="node26" href="notifications.html" target="_top" title="notifications" alt="" coords="306,3043,502,3131">
+<area shape="rect" id="node27" href="orders.html" target="_top" title="orders" alt="" coords="952,2465,1141,2553">
+<area shape="rect" id="node28" href="role_invites.html" target="_top" title="role_invites" alt="" coords="953,2077,1141,2165">
+<area shape="rect" id="node31" href="social_links.html" target="_top" title="social_links" alt="" coords="954,2183,1139,2271">
+<area shape="rect" id="node32" href="speaker.html" target="_top" title="speaker" alt="" coords="957,384,1137,472">
+<area shape="rect" id="node33" href="speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="1984,841,2208,929">
+<area shape="rect" id="node34" href="speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="940,631,1153,719">
+<area shape="rect" id="node35" href="speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="1971,701,2221,824">
+<area shape="rect" id="node36" href="sponsors.html" target="_top" title="sponsors" alt="" coords="965,736,1129,824">
+<area shape="rect" id="node37" href="station.html" target="_top" title="station" alt="" coords="1619,2167,1776,2255">
+<area shape="rect" id="node38" href="station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="1970,1147,2222,1323">
+<area shape="rect" id="node39" href="stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="909,877,1184,965">
+<area shape="rect" id="node40" href="tax.html" target="_top" title="tax" alt="" coords="971,983,1122,1071">
+<area shape="rect" id="node41" href="ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1235,2324,1445,2412">
+<area shape="rect" id="node42" href="ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="960,1088,1133,1176">
+<area shape="rect" id="node43" href="transaction.html" target="_top" title="transaction" alt="" coords="311,3148,497,3236">
+<area shape="rect" id="node44" href="user_check_in.html" target="_top" title="user_check_in" alt="" coords="1992,2076,2200,2281">
+<area shape="rect" id="node45" href="user_emails.html" target="_top" title="user_emails" alt="" coords="309,3253,499,3341">
+<area shape="rect" id="node46" href="user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="905,68,1188,156">
+<area shape="rect" id="node47" href="user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="1947,596,2245,684">
+<area shape="rect" id="node48" href="user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="605,2655,861,2743">
+<area shape="rect" id="node49" href="user_system_role.html" target="_top" title="user_system_role" alt="" coords="927,173,1166,261">
+<area shape="rect" id="node50" href="user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="247,1283,561,1371">
+<area shape="rect" id="node51" href="users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="920,279,1173,367">
+<area shape="rect" id="node52" href="users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="605,2760,861,2848">
+</map>
+                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/sessions.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="1177,615,1436,737">
+<area shape="rect" id="node2" href="sessions.html" target="_top" title="sessions" alt="" coords="703,351,1113,1623">
+<area shape="rect" id="node4" href="events.html" target="_top" title="events" alt="" coords="5,703,324,996">
+<area shape="rect" id="node5" href="users.html" target="_top" title="users" alt="" coords="368,1519,659,1695">
+<area shape="rect" id="node6" href="microlocations.html" target="_top" title="microlocations" alt="" coords="393,576,634,752">
+<area shape="rect" id="node7" href="session_types.html" target="_top" title="session_types" alt="" coords="409,769,617,916">
+<area shape="rect" id="node8" href="tracks.html" target="_top" title="tracks" alt="" coords="423,412,603,559">
+<area shape="rect" id="node3" href="feedback.html" target="_top" title="feedback" alt="" coords="1224,1607,1389,1812">
+<area shape="rect" id="node9" href="speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="1195,5,1419,181">
+<area shape="rect" id="node10" href="speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="1182,755,1431,877">
+<area shape="rect" id="node11" href="station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="1181,199,1433,375">
+<area shape="rect" id="node12" href="user_check_in.html" target="_top" title="user_check_in" alt="" coords="1203,392,1411,597">
+<area shape="rect" id="node13" href="user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="1157,1203,1456,1379">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/sessions.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="access_codes.html" target="_top" title="access_codes" alt="" coords="1475,567,1678,655">
+<area shape="rect" id="node2" href="events.html" target="_top" title="events" alt="" coords="875,1397,1065,1485">
+<area shape="rect" id="node3" href="users.html" target="_top" title="users" alt="" coords="241,952,439,1040">
+<area shape="rect" id="node4" href="tickets.html" target="_top" title="tickets" alt="" coords="1193,499,1373,587">
+<area shape="rect" id="node7" href="discount_codes.html" target="_top" title="discount_codes" alt="" coords="530,949,751,1037">
+<area shape="rect" id="node11" href="event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="522,2231,759,2319">
+<area shape="rect" id="node12" href="event_topics.html" target="_top" title="event_topics" alt="" coords="241,2556,439,2644">
+<area shape="rect" id="node13" href="event_types.html" target="_top" title="event_types" alt="" coords="545,1395,737,1483">
+<area shape="rect" id="node14" href="groups.html" target="_top" title="groups" alt="" coords="557,505,724,593">
+<area shape="rect" id="node43" href="transaction.html" target="_top" title="transaction" alt="" coords="7,949,197,1037">
+<area shape="rect" id="node5" href="badge_forms.html" target="_top" title="badge_forms" alt="" coords="1183,1912,1383,2000">
+<area shape="rect" id="node6" href="custom_forms.html" target="_top" title="custom_forms" alt="" coords="1179,2017,1388,2105">
+<area shape="rect" id="node8" href="email_notifications.html" target="_top" title="email_notifications" alt="" coords="1157,252,1410,340">
+<area shape="rect" id="node9" href="event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="1164,2123,1403,2211">
+<area shape="rect" id="node10" href="event_invoices.html" target="_top" title="event_invoices" alt="" coords="1175,357,1391,445">
+<area shape="rect" id="node15" href="exhibitors.html" target="_top" title="exhibitors" alt="" coords="1847,2544,2021,2632">
+<area shape="rect" id="node16" href="exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="2203,1485,2462,1608">
+<area shape="rect" id="node17" href="sessions.html" target="_top" title="sessions" alt="" coords="1729,1255,2139,2527">
+<area shape="rect" id="node23" href="microlocations.html" target="_top" title="microlocations" alt="" coords="1469,1521,1685,1609">
+<area shape="rect" id="node29" href="session_types.html" target="_top" title="session_types" alt="" coords="1473,1733,1681,1821">
+<area shape="rect" id="node30" href="tracks.html" target="_top" title="tracks" alt="" coords="1487,1627,1667,1715">
+<area shape="rect" id="node18" href="export_jobs.html" target="_top" title="export_jobs" alt="" coords="1189,2228,1377,2316">
+<area shape="rect" id="node19" href="faq.html" target="_top" title="faq" alt="" coords="1506,673,1647,761">
+<area shape="rect" id="node20" href="faq_types.html" target="_top" title="faq_types" alt="" coords="1198,676,1369,764">
+<area shape="rect" id="node21" href="feedback.html" target="_top" title="feedback" alt="" coords="2250,912,2415,1000">
+<area shape="rect" id="node22" href="import_jobs.html" target="_top" title="import_jobs" alt="" coords="546,1647,735,1735">
+<area shape="rect" id="node24" href="video_streams.html" target="_top" title="video_streams" alt="" coords="1177,1557,1390,1645">
+<area shape="rect" id="node25" href="notification_actors.html" target="_top" title="notification_actors" alt="" coords="515,1752,767,1840">
+<area shape="rect" id="node26" href="notifications.html" target="_top" title="notifications" alt="" coords="543,1857,739,1945">
+<area shape="rect" id="node27" href="orders.html" target="_top" title="orders" alt="" coords="1189,147,1378,235">
+<area shape="rect" id="node28" href="role_invites.html" target="_top" title="role_invites" alt="" coords="1189,781,1377,869">
+<area shape="rect" id="node31" href="social_links.html" target="_top" title="social_links" alt="" coords="1191,887,1376,975">
+<area shape="rect" id="node32" href="speaker.html" target="_top" title="speaker" alt="" coords="1193,2511,1373,2599">
+<area shape="rect" id="node33" href="speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="2221,1728,2445,1816">
+<area shape="rect" id="node34" href="speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="1177,992,1390,1080">
+<area shape="rect" id="node35" href="speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="2208,1927,2457,2049">
+<area shape="rect" id="node36" href="sponsors.html" target="_top" title="sponsors" alt="" coords="1201,1097,1365,1185">
+<area shape="rect" id="node37" href="station.html" target="_top" title="station" alt="" coords="1855,1149,2013,1237">
+<area shape="rect" id="node38" href="station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="2207,1240,2459,1416">
+<area shape="rect" id="node39" href="stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="1146,1203,1421,1291">
+<area shape="rect" id="node40" href="tax.html" target="_top" title="tax" alt="" coords="1208,1308,1359,1396">
+<area shape="rect" id="node41" href="ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1471,443,1682,531">
+<area shape="rect" id="node42" href="ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="1197,1663,1370,1751">
+<area shape="rect" id="node44" href="user_check_in.html" target="_top" title="user_check_in" alt="" coords="2229,1017,2437,1223">
+<area shape="rect" id="node45" href="user_emails.html" target="_top" title="user_emails" alt="" coords="546,1963,735,2051">
+<area shape="rect" id="node46" href="user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="1142,2616,1425,2704">
+<area shape="rect" id="node47" href="user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="2183,2273,2482,2361">
+<area shape="rect" id="node48" href="user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="842,396,1098,484">
+<area shape="rect" id="node49" href="user_system_role.html" target="_top" title="user_system_role" alt="" coords="1164,5,1403,93">
+<area shape="rect" id="node50" href="user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="483,1055,798,1143">
+<area shape="rect" id="node51" href="users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="1157,2369,1410,2457">
+<area shape="rect" id="node52" href="users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="842,501,1098,589">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/sessions.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="table.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>All Relationships</h1>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 class="box-title">Diagrams</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <h5>By default only columns that are primary keys, foreign keys or indexes are shown.</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#compactDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact</a></li>
+                                    <li class=""><a href="#largeDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large</a></li>
+                                    <li class=""><a href="#compactimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact Implied</a></li>
+                                    <li class=""><a href="#largeimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large Implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="compactDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactRelationshipsDiagram" name="compactRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="1107,241,1299,417">
+<area shape="rect" id="node4" href="tables/services.html" target="_top" title="services" alt="" coords="779,300,937,423">
+<area shape="rect" id="node28" href="tables/roles.html" target="_top" title="roles" alt="" coords="786,697,930,844">
+<area shape="rect" id="node2" href="tables/events.html" target="_top" title="events" alt="" coords="699,2775,1017,3068">
+<area shape="rect" id="node3" href="tables/groups.html" target="_top" title="groups" alt="" coords="379,951,615,1097">
+<area shape="rect" id="node7" href="tables/event_topics.html" target="_top" title="event_topics" alt="" coords="46,5021,255,5168">
+<area shape="rect" id="node17" href="tables/event_types.html" target="_top" title="event_types" alt="" coords="401,2833,593,2980">
+<area shape="rect" id="node29" href="tables/event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="379,5031,616,5207">
+<area shape="rect" id="node39" href="tables/discount_codes.html" target="_top" title="discount_codes" alt="" coords="387,1580,608,1815">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="5,1487,296,1663">
+<area shape="rect" id="node5" href="tables/notification_content.html" target="_top" title="notification_content" alt="" coords="19,4763,283,4880">
+<area shape="rect" id="node6" href="tables/user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="730,861,986,1037">
+<area shape="rect" id="node8" href="tables/tax.html" target="_top" title="tax" alt="" coords="1071,2552,1335,2699">
+<area shape="rect" id="node9" href="tables/session_types.html" target="_top" title="session_types" alt="" coords="1442,2176,1650,2323">
+<area shape="rect" id="node10" href="tables/custom_sys_roles.html" target="_top" title="custom_sys_roles" alt="" coords="739,4503,977,4625">
+<area shape="rect" id="node11" href="tables/user_emails.html" target="_top" title="user_emails" alt="" coords="403,1115,592,1291">
+<area shape="rect" id="node12" href="tables/import_jobs.html" target="_top" title="import_jobs" alt="" coords="403,1308,592,1455">
+<area shape="rect" id="node13" href="tables/ticket_tagging.html" target="_top" title="ticket_tagging" alt="" coords="1439,2716,1653,2839">
+<area shape="rect" id="node33" href="tables/tickets.html" target="_top" title="tickets" alt="" coords="1079,2716,1326,2921">
+<area shape="rect" id="node56" href="tables/ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="1116,2195,1289,2371">
+<area shape="rect" id="node14" href="tables/speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="2089,3155,2338,3277">
+<area shape="rect" id="node54" href="tables/speaker.html" target="_top" title="speaker" alt="" coords="1081,4231,1325,4465">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="1765,1651,2003,1944">
+<area shape="rect" id="node15" href="tables/custom_form_translates.html" target="_top" title="custom_form_translates" alt="" coords="1397,1848,1695,1995">
+<area shape="rect" id="node53" href="tables/custom_forms.html" target="_top" title="custom_forms" alt="" coords="1098,1835,1307,2069">
+<area shape="rect" id="node16" href="tables/orders.html" target="_top" title="orders" alt="" coords="1065,1409,1341,1673">
+<area shape="rect" id="node18" href="tables/social_links.html" target="_top" title="social_links" alt="" coords="1110,2939,1295,3085">
+<area shape="rect" id="node19" href="tables/orders_tickets.html" target="_top" title="orders_tickets" alt="" coords="1441,2552,1651,2699">
+<area shape="rect" id="node20" href="tables/microlocations.html" target="_top" title="microlocations" alt="" coords="1425,1655,1667,1831">
+<area shape="rect" id="node61" href="tables/video_streams.html" target="_top" title="video_streams" alt="" coords="1076,1180,1329,1356">
+<area shape="rect" id="node21" href="tables/station.html" target="_top" title="station" alt="" coords="1786,1989,1982,2165">
+<area shape="rect" id="node22" href="tables/discount_codes_tickets.html" target="_top" title="discount_codes_tickets" alt="" coords="1401,2412,1691,2535">
+<area shape="rect" id="node23" href="tables/users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="1076,687,1329,868">
+<area shape="rect" id="node24" href="tables/sponsors.html" target="_top" title="sponsors" alt="" coords="1121,3303,1285,3449">
+<area shape="rect" id="node25" href="tables/exhibitors.html" target="_top" title="exhibitors" alt="" coords="1766,3384,2002,3531">
+<area shape="rect" id="node26" href="tables/station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="2087,1723,2339,1899">
+<area shape="rect" id="node27" href="tables/badge_forms.html" target="_top" title="badge_forms" alt="" coords="1096,3739,1309,3885">
+<area shape="rect" id="node30" href="tables/roles_panels.html" target="_top" title="roles_panels" alt="" coords="1087,5327,1318,5449">
+<area shape="rect" id="node63" href="tables/panel_permissions.html" target="_top" title="panel_permissions" alt="" coords="733,5111,983,5228">
+<area shape="rect" id="node31" href="tables/custom_form_options.html" target="_top" title="custom_form_options" alt="" coords="1409,2012,1683,2159">
+<area shape="rect" id="node32" href="tables/export_jobs.html" target="_top" title="export_jobs" alt="" coords="1109,3575,1297,3721">
+<area shape="rect" id="node34" href="tables/user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="2064,592,2363,768">
+<area shape="rect" id="node35" href="tables/user_check_in.html" target="_top" title="user_check_in" alt="" coords="2109,1916,2317,2121">
+<area shape="rect" id="node36" href="tables/ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1395,2856,1697,3061">
+<area shape="rect" id="node37" href="tables/video_recordings.html" target="_top" title="video_recordings" alt="" coords="1427,1255,1665,1401">
+<area shape="rect" id="node40" href="tables/notification_actors.html" target="_top" title="notification_actors" alt="" coords="371,4608,623,4784">
+<area shape="rect" id="node41" href="tables/users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="1075,435,1331,669">
+<area shape="rect" id="node42" href="tables/feedback.html" target="_top" title="feedback" alt="" coords="2131,1307,2296,1512">
+<area shape="rect" id="node43" href="tables/user_system_role.html" target="_top" title="user_system_role" alt="" coords="1083,4676,1322,4857">
+<area shape="rect" id="node44" href="tables/event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="1083,3903,1322,4049">
+<area shape="rect" id="node45" href="tables/stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="1065,4067,1340,4213">
+<area shape="rect" id="node46" href="tables/video_stream_moderators.html" target="_top" title="video_stream_moderators" alt="" coords="1388,1085,1704,1237">
+<area shape="rect" id="node47" href="tables/email_notifications.html" target="_top" title="email_notifications" alt="" coords="1076,4483,1329,4659">
+<area shape="rect" id="node48" href="tables/access_codes_tickets.html" target="_top" title="access_codes_tickets" alt="" coords="1748,3160,2020,3283">
+<area shape="rect" id="node57" href="tables/access_codes.html" target="_top" title="access_codes" alt="" coords="1445,3312,1647,3517">
+<area shape="rect" id="node49" href="tables/exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="2084,2747,2343,2869">
+<area shape="rect" id="node50" href="tables/role_invites.html" target="_top" title="role_invites" alt="" coords="1109,921,1297,1127">
+<area shape="rect" id="node51" href="tables/transaction.html" target="_top" title="transaction" alt="" coords="404,4195,591,4341">
+<area shape="rect" id="node52" href="tables/badge_field_forms.html" target="_top" title="badge_field_forms" alt="" coords="1422,3709,1670,3856">
+<area shape="rect" id="node55" href="tables/speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="2101,1529,2325,1705">
+<area shape="rect" id="node58" href="tables/user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="1061,4911,1344,5087">
+<area shape="rect" id="node59" href="tables/notifications.html" target="_top" title="notifications" alt="" coords="399,4801,595,4977">
+<area shape="rect" id="node60" href="tables/custom_placeholders.html" target="_top" title="custom_placeholders" alt="" coords="721,5245,995,5392">
+<area shape="rect" id="node71" href="tables/video_channels.html" target="_top" title="video_channels" alt="" coords="747,1223,969,1340">
+<area shape="rect" id="node62" href="tables/user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="340,5,655,152">
+<area shape="rect" id="node64" href="tables/faq_types.html" target="_top" title="faq_types" alt="" coords="1117,3139,1288,3285">
+<area shape="rect" id="node65" href="tables/tracks.html" target="_top" title="tracks" alt="" coords="1456,1491,1636,1637">
+<area shape="rect" id="node66" href="tables/faq.html" target="_top" title="faq" alt="" coords="1471,3115,1621,3291">
+<area shape="rect" id="node68" href="tables/event_invoices.html" target="_top" title="event_invoices" alt="" coords="1095,5104,1311,5309">
+<area shape="rect" id="node69" href="tables/speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="1096,2388,1309,2535">
+<area shape="rect" id="node70" href="tables/translation_channels.html" target="_top" title="translation_channels" alt="" coords="1411,892,1681,1068">
+</map>
+                                        <a name='diagram'><img id="compactDegreeImg" src="diagrams/summary/relationships.real.compact.png" usemap="#compactRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeRelationshipsDiagram" name="largeRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="1107,68,1299,337">
+<area shape="rect" id="node4" href="tables/services.html" target="_top" title="services" alt="" coords="779,127,937,249">
+<area shape="rect" id="node28" href="tables/roles.html" target="_top" title="roles" alt="" coords="786,629,930,781">
+<area shape="rect" id="node2" href="tables/events.html" target="_top" title="events" alt="" coords="699,5489,1017,8047">
+<area shape="rect" id="node3" href="tables/groups.html" target="_top" title="groups" alt="" coords="379,4317,615,4763">
+<area shape="rect" id="node7" href="tables/event_topics.html" target="_top" title="event_topics" alt="" coords="46,9691,255,9901">
+<area shape="rect" id="node17" href="tables/event_types.html" target="_top" title="event_types" alt="" coords="401,5713,593,5895">
+<area shape="rect" id="node29" href="tables/event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="379,9685,616,9867">
+<area shape="rect" id="node39" href="tables/discount_codes.html" target="_top" title="discount_codes" alt="" coords="387,5912,608,6445">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="5,4652,296,6036">
+<area shape="rect" id="node5" href="tables/notification_content.html" target="_top" title="notification_content" alt="" coords="19,9257,283,9527">
+<area shape="rect" id="node6" href="tables/user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="730,4155,986,4365">
+<area shape="rect" id="node8" href="tables/tax.html" target="_top" title="tax" alt="" coords="1071,7397,1335,8019">
+<area shape="rect" id="node9" href="tables/session_types.html" target="_top" title="session_types" alt="" coords="1442,4425,1650,4665">
+<area shape="rect" id="node10" href="tables/custom_sys_roles.html" target="_top" title="custom_sys_roles" alt="" coords="739,9959,977,10081">
+<area shape="rect" id="node11" href="tables/user_emails.html" target="_top" title="user_emails" alt="" coords="403,4780,592,4991">
+<area shape="rect" id="node12" href="tables/import_jobs.html" target="_top" title="import_jobs" alt="" coords="403,5008,592,5248">
+<area shape="rect" id="node13" href="tables/ticket_tagging.html" target="_top" title="ticket_tagging" alt="" coords="1439,6876,1653,6999">
+<area shape="rect" id="node33" href="tables/tickets.html" target="_top" title="tickets" alt="" coords="1079,6384,1326,7093">
+<area shape="rect" id="node56" href="tables/ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="1116,8639,1289,8820">
+<area shape="rect" id="node14" href="tables/speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="2089,3939,2338,4061">
+<area shape="rect" id="node54" href="tables/speaker.html" target="_top" title="speaker" alt="" coords="1081,840,1325,1960">
+<area shape="rect" id="node67" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="1765,4103,2003,5369">
+<area shape="rect" id="node15" href="tables/custom_form_translates.html" target="_top" title="custom_form_translates" alt="" coords="1397,3712,1695,3923">
+<area shape="rect" id="node53" href="tables/custom_forms.html" target="_top" title="custom_forms" alt="" coords="1098,4047,1307,4639">
+<area shape="rect" id="node16" href="tables/orders.html" target="_top" title="orders" alt="" coords="1065,8909,1341,9912">
+<area shape="rect" id="node18" href="tables/social_links.html" target="_top" title="social_links" alt="" coords="1110,8036,1295,8276">
+<area shape="rect" id="node19" href="tables/orders_tickets.html" target="_top" title="orders_tickets" alt="" coords="1441,8740,1651,8921">
+<area shape="rect" id="node20" href="tables/microlocations.html" target="_top" title="microlocations" alt="" coords="1425,4719,1667,5193">
+<area shape="rect" id="node61" href="tables/video_streams.html" target="_top" title="video_streams" alt="" coords="1076,2365,1329,2781">
+<area shape="rect" id="node21" href="tables/station.html" target="_top" title="station" alt="" coords="1786,5996,1982,6207">
+<area shape="rect" id="node22" href="tables/discount_codes_tickets.html" target="_top" title="discount_codes_tickets" alt="" coords="1401,5211,1691,5333">
+<area shape="rect" id="node23" href="tables/users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="1076,641,1329,823">
+<area shape="rect" id="node24" href="tables/sponsors.html" target="_top" title="sponsors" alt="" coords="1121,8293,1285,8621">
+<area shape="rect" id="node25" href="tables/exhibitors.html" target="_top" title="exhibitors" alt="" coords="1766,5387,2002,5979">
+<area shape="rect" id="node26" href="tables/station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="2087,5299,2339,5539">
+<area shape="rect" id="node27" href="tables/badge_forms.html" target="_top" title="badge_forms" alt="" coords="1096,5439,1309,5708">
+<area shape="rect" id="node30" href="tables/roles_panels.html" target="_top" title="roles_panels" alt="" coords="1087,10128,1318,10251">
+<area shape="rect" id="node63" href="tables/panel_permissions.html" target="_top" title="panel_permissions" alt="" coords="733,10099,983,10251">
+<area shape="rect" id="node31" href="tables/custom_form_options.html" target="_top" title="custom_form_options" alt="" coords="1409,3940,1683,4121">
+<area shape="rect" id="node32" href="tables/export_jobs.html" target="_top" title="export_jobs" alt="" coords="1109,4800,1297,5040">
+<area shape="rect" id="node34" href="tables/user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="2064,1595,2363,1805">
+<area shape="rect" id="node35" href="tables/user_check_in.html" target="_top" title="user_check_in" alt="" coords="2109,5908,2317,6295">
+<area shape="rect" id="node36" href="tables/ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1395,7016,1697,8723">
+<area shape="rect" id="node37" href="tables/video_recordings.html" target="_top" title="video_recordings" alt="" coords="1427,2567,1665,2836">
+<area shape="rect" id="node40" href="tables/notification_actors.html" target="_top" title="notification_actors" alt="" coords="371,9421,623,9632">
+<area shape="rect" id="node41" href="tables/users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="1075,355,1331,624">
+<area shape="rect" id="node42" href="tables/feedback.html" target="_top" title="feedback" alt="" coords="2131,3519,2296,3788">
+<area shape="rect" id="node43" href="tables/user_system_role.html" target="_top" title="user_system_role" alt="" coords="1083,9929,1322,10111">
+<area shape="rect" id="node44" href="tables/event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="1083,5057,1322,5385">
+<area shape="rect" id="node45" href="tables/stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="1065,7111,1340,7380">
+<area shape="rect" id="node46" href="tables/video_stream_moderators.html" target="_top" title="video_stream_moderators" alt="" coords="1388,2397,1704,2549">
+<area shape="rect" id="node47" href="tables/email_notifications.html" target="_top" title="email_notifications" alt="" coords="1076,2799,1329,3127">
+<area shape="rect" id="node48" href="tables/access_codes_tickets.html" target="_top" title="access_codes_tickets" alt="" coords="1748,6489,2020,6612">
+<area shape="rect" id="node57" href="tables/access_codes.html" target="_top" title="access_codes" alt="" coords="1445,6348,1647,6823">
+<area shape="rect" id="node49" href="tables/exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="2084,4455,2343,4577">
+<area shape="rect" id="node50" href="tables/role_invites.html" target="_top" title="role_invites" alt="" coords="1109,2013,1297,2312">
+<area shape="rect" id="node51" href="tables/transaction.html" target="_top" title="transaction" alt="" coords="404,7865,591,8047">
+<area shape="rect" id="node52" href="tables/badge_field_forms.html" target="_top" title="badge_field_forms" alt="" coords="1422,5351,1670,6001">
+<area shape="rect" id="node55" href="tables/speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="2101,7517,2325,7787">
+<area shape="rect" id="node58" href="tables/user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="1061,3144,1344,3325">
+<area shape="rect" id="node59" href="tables/notifications.html" target="_top" title="notifications" alt="" coords="399,9164,595,9404">
+<area shape="rect" id="node60" href="tables/custom_placeholders.html" target="_top" title="custom_placeholders" alt="" coords="721,10304,995,10632">
+<area shape="rect" id="node71" href="tables/video_channels.html" target="_top" title="video_channels" alt="" coords="747,2415,969,2743">
+<area shape="rect" id="node62" href="tables/user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="340,8100,655,8281">
+<area shape="rect" id="node64" href="tables/faq_types.html" target="_top" title="faq_types" alt="" coords="1117,6143,1288,6295">
+<area shape="rect" id="node65" href="tables/tracks.html" target="_top" title="tracks" alt="" coords="1456,4139,1636,4408">
+<area shape="rect" id="node66" href="tables/faq.html" target="_top" title="faq" alt="" coords="1471,6055,1621,6295">
+<area shape="rect" id="node68" href="tables/event_invoices.html" target="_top" title="event_invoices" alt="" coords="1095,3343,1311,3993">
+<area shape="rect" id="node69" href="tables/speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="1096,5797,1309,6125">
+<area shape="rect" id="node70" href="tables/translation_channels.html" target="_top" title="translation_channels" alt="" coords="1411,2169,1681,2380">
+</map>
+                                        <a name='diagram'><img id="largeDegreeImg" src="diagrams/summary/relationships.real.large.png" usemap="#largeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="compactimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactImpliedRelationshipsDiagram" name="compactImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="1347,415,1539,591">
+<area shape="rect" id="node4" href="tables/services.html" target="_top" title="services" alt="" coords="1020,473,1177,596">
+<area shape="rect" id="node28" href="tables/roles.html" target="_top" title="roles" alt="" coords="1026,868,1170,1015">
+<area shape="rect" id="node2" href="tables/events.html" target="_top" title="events" alt="" coords="939,2948,1258,3241">
+<area shape="rect" id="node3" href="tables/groups.html" target="_top" title="groups" alt="" coords="620,1113,856,1260">
+<area shape="rect" id="node7" href="tables/event_topics.html" target="_top" title="event_topics" alt="" coords="286,5532,496,5679">
+<area shape="rect" id="node17" href="tables/event_types.html" target="_top" title="event_types" alt="" coords="642,3007,834,3153">
+<area shape="rect" id="node29" href="tables/event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="619,5541,856,5717">
+<area shape="rect" id="node39" href="tables/discount_codes.html" target="_top" title="discount_codes" alt="" coords="627,1743,848,1977">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="246,1631,536,1807">
+<area shape="rect" id="node5" href="tables/notification_content.html" target="_top" title="notification_content" alt="" coords="259,5273,523,5391">
+<area shape="rect" id="node6" href="tables/user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="970,1032,1226,1208">
+<area shape="rect" id="node8" href="tables/tax.html" target="_top" title="tax" alt="" coords="1311,2725,1575,2872">
+<area shape="rect" id="node9" href="tables/session_types.html" target="_top" title="session_types" alt="" coords="1682,2349,1890,2496">
+<area shape="rect" id="node10" href="tables/custom_sys_roles.html" target="_top" title="custom_sys_roles" alt="" coords="979,5013,1218,5136">
+<area shape="rect" id="node11" href="tables/user_emails.html" target="_top" title="user_emails" alt="" coords="643,1277,832,1453">
+<area shape="rect" id="node12" href="tables/import_jobs.html" target="_top" title="import_jobs" alt="" coords="643,1471,832,1617">
+<area shape="rect" id="node13" href="tables/ticket_tagging.html" target="_top" title="ticket_tagging" alt="" coords="1680,2889,1893,3012">
+<area shape="rect" id="node33" href="tables/tickets.html" target="_top" title="tickets" alt="" coords="1320,2889,1566,3095">
+<area shape="rect" id="node57" href="tables/ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="1356,2368,1530,2544">
+<area shape="rect" id="node14" href="tables/speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="2329,3328,2578,3451">
+<area shape="rect" id="node55" href="tables/speaker.html" target="_top" title="speaker" alt="" coords="1321,4404,1565,4639">
+<area shape="rect" id="node68" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="2005,1824,2244,2117">
+<area shape="rect" id="node15" href="tables/custom_form_translates.html" target="_top" title="custom_form_translates" alt="" coords="1637,2021,1936,2168">
+<area shape="rect" id="node54" href="tables/custom_forms.html" target="_top" title="custom_forms" alt="" coords="1338,2008,1548,2243">
+<area shape="rect" id="node16" href="tables/orders.html" target="_top" title="orders" alt="" coords="1305,1583,1581,1847">
+<area shape="rect" id="node18" href="tables/social_links.html" target="_top" title="social_links" alt="" coords="1350,3112,1536,3259">
+<area shape="rect" id="node19" href="tables/orders_tickets.html" target="_top" title="orders_tickets" alt="" coords="1681,2725,1892,2872">
+<area shape="rect" id="node20" href="tables/microlocations.html" target="_top" title="microlocations" alt="" coords="1666,1828,1907,2004">
+<area shape="rect" id="node62" href="tables/video_streams.html" target="_top" title="video_streams" alt="" coords="1316,1353,1570,1529">
+<area shape="rect" id="node21" href="tables/station.html" target="_top" title="station" alt="" coords="2026,2149,2222,2325">
+<area shape="rect" id="node22" href="tables/discount_codes_tickets.html" target="_top" title="discount_codes_tickets" alt="" coords="1641,2585,1932,2708">
+<area shape="rect" id="node23" href="tables/users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="1316,860,1570,1041">
+<area shape="rect" id="node24" href="tables/sponsors.html" target="_top" title="sponsors" alt="" coords="1361,3476,1525,3623">
+<area shape="rect" id="node25" href="tables/exhibitors.html" target="_top" title="exhibitors" alt="" coords="2006,3635,2242,3781">
+<area shape="rect" id="node26" href="tables/station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="2328,1896,2580,2072">
+<area shape="rect" id="node27" href="tables/badge_forms.html" target="_top" title="badge_forms" alt="" coords="1336,3912,1550,4059">
+<area shape="rect" id="node30" href="tables/roles_panels.html" target="_top" title="roles_panels" alt="" coords="1328,5500,1558,5623">
+<area shape="rect" id="node64" href="tables/panel_permissions.html" target="_top" title="panel_permissions" alt="" coords="973,5453,1224,5571">
+<area shape="rect" id="node31" href="tables/custom_form_options.html" target="_top" title="custom_form_options" alt="" coords="1649,2185,1924,2332">
+<area shape="rect" id="node32" href="tables/export_jobs.html" target="_top" title="export_jobs" alt="" coords="1349,3748,1537,3895">
+<area shape="rect" id="node34" href="tables/user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="2304,812,2603,988">
+<area shape="rect" id="node35" href="tables/user_check_in.html" target="_top" title="user_check_in" alt="" coords="2350,2089,2558,2295">
+<area shape="rect" id="node36" href="tables/ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1635,3029,1938,3235">
+<area shape="rect" id="node37" href="tables/video_recordings.html" target="_top" title="video_recordings" alt="" coords="1668,1428,1905,1575">
+<area shape="rect" id="node52" href="tables/transaction.html" target="_top" title="transaction" alt="" coords="15,1645,202,1792">
+<area shape="rect" id="node40" href="tables/notification_actors.html" target="_top" title="notification_actors" alt="" coords="612,5312,864,5488">
+<area shape="rect" id="node41" href="tables/users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="1315,608,1571,843">
+<area shape="rect" id="node42" href="tables/feedback.html" target="_top" title="feedback" alt="" coords="2371,1480,2536,1685">
+<area shape="rect" id="node43" href="tables/user_system_role.html" target="_top" title="user_system_role" alt="" coords="1324,4849,1562,5031">
+<area shape="rect" id="node44" href="tables/event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="1324,4076,1562,4223">
+<area shape="rect" id="node45" href="tables/spatial_ref_sys.html" target="_top" title="spatial_ref_sys" alt="" coords="2016,116,2232,233">
+<area shape="rect" id="node46" href="tables/stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="1306,4240,1580,4387">
+<area shape="rect" id="node47" href="tables/video_stream_moderators.html" target="_top" title="video_stream_moderators" alt="" coords="1628,1259,1944,1411">
+<area shape="rect" id="node48" href="tables/email_notifications.html" target="_top" title="email_notifications" alt="" coords="1316,4656,1570,4832">
+<area shape="rect" id="node49" href="tables/access_codes_tickets.html" target="_top" title="access_codes_tickets" alt="" coords="1988,3335,2260,3457">
+<area shape="rect" id="node58" href="tables/access_codes.html" target="_top" title="access_codes" alt="" coords="1685,3485,1888,3691">
+<area shape="rect" id="node50" href="tables/exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="2324,2959,2583,3081">
+<area shape="rect" id="node51" href="tables/role_invites.html" target="_top" title="role_invites" alt="" coords="1349,1095,1537,1300">
+<area shape="rect" id="node53" href="tables/badge_field_forms.html" target="_top" title="badge_field_forms" alt="" coords="1662,3883,1910,4029">
+<area shape="rect" id="node56" href="tables/speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="2342,1703,2566,1879">
+<area shape="rect" id="node59" href="tables/user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="1302,5084,1584,5260">
+<area shape="rect" id="node60" href="tables/notifications.html" target="_top" title="notifications" alt="" coords="640,5119,836,5295">
+<area shape="rect" id="node61" href="tables/custom_placeholders.html" target="_top" title="custom_placeholders" alt="" coords="962,5588,1235,5735">
+<area shape="rect" id="node72" href="tables/video_channels.html" target="_top" title="video_channels" alt="" coords="988,1365,1209,1483">
+<area shape="rect" id="node63" href="tables/user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="580,179,895,325">
+<area shape="rect" id="node65" href="tables/faq_types.html" target="_top" title="faq_types" alt="" coords="1358,3312,1528,3459">
+<area shape="rect" id="node66" href="tables/tracks.html" target="_top" title="tracks" alt="" coords="1696,1664,1876,1811">
+<area shape="rect" id="node67" href="tables/faq.html" target="_top" title="faq" alt="" coords="1711,3288,1862,3464">
+<area shape="rect" id="node69" href="tables/event_invoices.html" target="_top" title="event_invoices" alt="" coords="1335,5277,1551,5483">
+<area shape="rect" id="node70" href="tables/speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="1336,2561,1550,2708">
+<area shape="rect" id="node71" href="tables/translation_channels.html" target="_top" title="translation_channels" alt="" coords="1651,1065,1922,1241">
+<area shape="rect" id="node73" href="tables/geography_columns.html" target="_top" title="geography_columns" alt="" coords="2324,5,2584,99">
+<area shape="rect" id="node74" href="tables/geometry_columns.html" target="_top" title="geometry_columns" alt="" coords="2328,116,2579,209">
+<area shape="rect" id="node75" href="tables/raster_columns.html" target="_top" title="raster_columns" alt="" coords="2344,227,2563,320">
+</map>
+                                        <a name='diagram'><img id="compactimpliedDegreeImg" src="diagrams/summary/relationships.implied.compact.png" usemap="#compactImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeImpliedRelationshipsDiagram" name="largeImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/permissions.html" target="_top" title="permissions" alt="" coords="1340,1431,1532,1700">
+<area shape="rect" id="node4" href="tables/services.html" target="_top" title="services" alt="" coords="1013,1489,1170,1612">
+<area shape="rect" id="node28" href="tables/roles.html" target="_top" title="roles" alt="" coords="1019,2032,1163,2184">
+<area shape="rect" id="node2" href="tables/events.html" target="_top" title="events" alt="" coords="932,6445,1251,9003">
+<area shape="rect" id="node3" href="tables/groups.html" target="_top" title="groups" alt="" coords="613,2989,849,3435">
+<area shape="rect" id="node7" href="tables/event_topics.html" target="_top" title="event_topics" alt="" coords="279,9925,489,10136">
+<area shape="rect" id="node17" href="tables/event_types.html" target="_top" title="event_types" alt="" coords="635,7120,827,7301">
+<area shape="rect" id="node29" href="tables/event_sub_topics.html" target="_top" title="event_sub_topics" alt="" coords="612,9920,849,10101">
+<area shape="rect" id="node39" href="tables/discount_codes.html" target="_top" title="discount_codes" alt="" coords="620,5533,841,6067">
+<area shape="rect" id="node38" href="tables/users.html" target="_top" title="users" alt="" coords="239,3933,529,5317">
+<area shape="rect" id="node5" href="tables/notification_content.html" target="_top" title="notification_content" alt="" coords="252,9507,516,9776">
+<area shape="rect" id="node6" href="tables/user_follow_groups.html" target="_top" title="user_follow_groups" alt="" coords="963,2827,1219,3037">
+<area shape="rect" id="node8" href="tables/tax.html" target="_top" title="tax" alt="" coords="1304,5955,1568,6576">
+<area shape="rect" id="node9" href="tables/session_types.html" target="_top" title="session_types" alt="" coords="1675,5244,1883,5484">
+<area shape="rect" id="node10" href="tables/custom_sys_roles.html" target="_top" title="custom_sys_roles" alt="" coords="972,11367,1211,11489">
+<area shape="rect" id="node11" href="tables/user_emails.html" target="_top" title="user_emails" alt="" coords="636,3452,825,3663">
+<area shape="rect" id="node12" href="tables/import_jobs.html" target="_top" title="import_jobs" alt="" coords="636,3680,825,3920">
+<area shape="rect" id="node13" href="tables/ticket_tagging.html" target="_top" title="ticket_tagging" alt="" coords="1673,7929,1886,8052">
+<area shape="rect" id="node33" href="tables/tickets.html" target="_top" title="tickets" alt="" coords="1313,7437,1559,8147">
+<area shape="rect" id="node57" href="tables/ticket_tag.html" target="_top" title="ticket_tag" alt="" coords="1349,9412,1523,9593">
+<area shape="rect" id="node14" href="tables/speakers_sessions.html" target="_top" title="speakers_sessions" alt="" coords="2322,8571,2571,8693">
+<area shape="rect" id="node55" href="tables/speaker.html" target="_top" title="speaker" alt="" coords="1314,9611,1558,10731">
+<area shape="rect" id="node68" href="tables/sessions.html" target="_top" title="sessions" alt="" coords="1998,4295,2237,5561">
+<area shape="rect" id="node15" href="tables/custom_form_translates.html" target="_top" title="custom_form_translates" alt="" coords="1630,4729,1929,4940">
+<area shape="rect" id="node54" href="tables/custom_forms.html" target="_top" title="custom_forms" alt="" coords="1331,4820,1541,5412">
+<area shape="rect" id="node16" href="tables/orders.html" target="_top" title="orders" alt="" coords="1298,3692,1574,4695">
+<area shape="rect" id="node18" href="tables/social_links.html" target="_top" title="social_links" alt="" coords="1343,6629,1529,6869">
+<area shape="rect" id="node19" href="tables/orders_tickets.html" target="_top" title="orders_tickets" alt="" coords="1674,5537,1885,5719">
+<area shape="rect" id="node20" href="tables/microlocations.html" target="_top" title="microlocations" alt="" coords="1659,4039,1900,4513">
+<area shape="rect" id="node62" href="tables/video_streams.html" target="_top" title="video_streams" alt="" coords="1309,3259,1563,3675">
+<area shape="rect" id="node21" href="tables/station.html" target="_top" title="station" alt="" coords="2019,5579,2215,5789">
+<area shape="rect" id="node22" href="tables/discount_codes_tickets.html" target="_top" title="discount_codes_tickets" alt="" coords="1634,7753,1925,7876">
+<area shape="rect" id="node23" href="tables/users_events_roles.html" target="_top" title="users_events_roles" alt="" coords="1309,2004,1563,2185">
+<area shape="rect" id="node24" href="tables/sponsors.html" target="_top" title="sponsors" alt="" coords="1354,7092,1518,7420">
+<area shape="rect" id="node25" href="tables/exhibitors.html" target="_top" title="exhibitors" alt="" coords="1999,8140,2235,8732">
+<area shape="rect" id="node26" href="tables/station_store_paxs.html" target="_top" title="station_store_paxs" alt="" coords="2321,4808,2573,5048">
+<area shape="rect" id="node27" href="tables/badge_forms.html" target="_top" title="badge_forms" alt="" coords="1329,8493,1543,8763">
+<area shape="rect" id="node30" href="tables/roles_panels.html" target="_top" title="roles_panels" alt="" coords="1321,11527,1551,11649">
+<area shape="rect" id="node64" href="tables/panel_permissions.html" target="_top" title="panel_permissions" alt="" coords="966,11539,1217,11691">
+<area shape="rect" id="node31" href="tables/custom_form_options.html" target="_top" title="custom_form_options" alt="" coords="1642,4531,1917,4712">
+<area shape="rect" id="node32" href="tables/export_jobs.html" target="_top" title="export_jobs" alt="" coords="1342,8236,1530,8476">
+<area shape="rect" id="node34" href="tables/user_favourite_sessions.html" target="_top" title="user_favourite_sessions" alt="" coords="2297,1976,2596,2187">
+<area shape="rect" id="node35" href="tables/user_check_in.html" target="_top" title="user_check_in" alt="" coords="2343,5491,2551,5877">
+<area shape="rect" id="node36" href="tables/ticket_holders.html" target="_top" title="ticket_holders" alt="" coords="1628,6029,1931,7736">
+<area shape="rect" id="node37" href="tables/video_recordings.html" target="_top" title="video_recordings" alt="" coords="1661,3241,1898,3511">
+<area shape="rect" id="node52" href="tables/transaction.html" target="_top" title="transaction" alt="" coords="8,4241,195,4423">
+<area shape="rect" id="node40" href="tables/notification_actors.html" target="_top" title="notification_actors" alt="" coords="605,9399,857,9609">
+<area shape="rect" id="node41" href="tables/users_groups_roles.html" target="_top" title="users_groups_roles" alt="" coords="1308,1717,1564,1987">
+<area shape="rect" id="node42" href="tables/feedback.html" target="_top" title="feedback" alt="" coords="2364,3809,2529,4079">
+<area shape="rect" id="node43" href="tables/user_system_role.html" target="_top" title="user_system_role" alt="" coords="1317,11292,1555,11473">
+<area shape="rect" id="node44" href="tables/event_copyrights.html" target="_top" title="event_copyrights" alt="" coords="1317,8780,1555,9108">
+<area shape="rect" id="node45" href="tables/spatial_ref_sys.html" target="_top" title="spatial_ref_sys" alt="" coords="2009,415,2225,625">
+<area shape="rect" id="node46" href="tables/stripe_authorizations.html" target="_top" title="stripe_authorizations" alt="" coords="1299,9125,1573,9395">
+<area shape="rect" id="node47" href="tables/video_stream_moderators.html" target="_top" title="video_stream_moderators" alt="" coords="1621,3072,1937,3224">
+<area shape="rect" id="node48" href="tables/email_notifications.html" target="_top" title="email_notifications" alt="" coords="1309,10748,1563,11076">
+<area shape="rect" id="node49" href="tables/access_codes_tickets.html" target="_top" title="access_codes_tickets" alt="" coords="1981,7883,2253,8005">
+<area shape="rect" id="node58" href="tables/access_codes.html" target="_top" title="access_codes" alt="" coords="1678,8069,1881,8544">
+<area shape="rect" id="node50" href="tables/exhibitors_sessions.html" target="_top" title="exhibitors_sessions" alt="" coords="2317,6740,2576,6863">
+<area shape="rect" id="node51" href="tables/role_invites.html" target="_top" title="role_invites" alt="" coords="1342,2275,1530,2573">
+<area shape="rect" id="node53" href="tables/badge_field_forms.html" target="_top" title="badge_field_forms" alt="" coords="1655,8597,1903,9248">
+<area shape="rect" id="node56" href="tables/speaker_invites.html" target="_top" title="speaker_invites" alt="" coords="2335,4123,2559,4392">
+<area shape="rect" id="node59" href="tables/user_favourite_events.html" target="_top" title="user_favourite_events" alt="" coords="1295,11093,1577,11275">
+<area shape="rect" id="node60" href="tables/notifications.html" target="_top" title="notifications" alt="" coords="633,9627,829,9867">
+<area shape="rect" id="node61" href="tables/custom_placeholders.html" target="_top" title="custom_placeholders" alt="" coords="955,11708,1228,12036">
+<area shape="rect" id="node72" href="tables/video_channels.html" target="_top" title="video_channels" alt="" coords="981,3353,1202,3681">
+<area shape="rect" id="node63" href="tables/user_token_blacklist_time.html" target="_top" title="user_token_blacklist_time" alt="" coords="573,9128,888,9309">
+<area shape="rect" id="node65" href="tables/faq_types.html" target="_top" title="faq_types" alt="" coords="1351,6887,1521,7039">
+<area shape="rect" id="node66" href="tables/tracks.html" target="_top" title="tracks" alt="" coords="1689,4957,1869,5227">
+<area shape="rect" id="node67" href="tables/faq.html" target="_top" title="faq" alt="" coords="1704,5772,1855,6012">
+<area shape="rect" id="node69" href="tables/event_invoices.html" target="_top" title="event_invoices" alt="" coords="1328,2591,1544,3241">
+<area shape="rect" id="node70" href="tables/speakers_calls.html" target="_top" title="speakers_calls" alt="" coords="1329,5609,1543,5937">
+<area shape="rect" id="node71" href="tables/translation_channels.html" target="_top" title="translation_channels" alt="" coords="1644,2620,1915,2831">
+<area shape="rect" id="node73" href="tables/geography_columns.html" target="_top" title="geography_columns" alt="" coords="2317,5,2577,251">
+<area shape="rect" id="node74" href="tables/geometry_columns.html" target="_top" title="geometry_columns" alt="" coords="2321,268,2572,513">
+<area shape="rect" id="node75" href="tables/raster_columns.html" target="_top" title="raster_columns" alt="" coords="2337,531,2556,1069">
+</map>
+                                        <a name='diagram'><img id="largeimpliedDegreeImg" src="diagrams/summary/relationships.implied.large.png" usemap="#largeImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="relationships.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
+</html>

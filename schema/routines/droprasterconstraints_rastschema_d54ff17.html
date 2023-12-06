@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>open_event.public</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>open_event</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>droprasterconstraints(rastschema name, rasttable name, rastcolumn name, VARIADIC constraints text[])</h1><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p><p>args: rastschema, rasttable, rastcolumn, constraints - Drops PostGIS raster constraints that refer to a raster table column. Useful if you need to reload data or update your raster column data.</p></p>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Parameters</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Mode</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>rastschema</td>
+                                    <td>name</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>rasttable</td>
+                                    <td>name</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>rastcolumn</td>
+                                    <td>name</td>
+                                    <td>IN</td>
+                                </tr>
+                                <tr>
+                                    <td>constraints</td>
+                                    <td>text[]</td>
+                                    <td>VARIADIC</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-code-o"></i>
+                            <h3 id="RoutineDefinition" class="box-title">Definition</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">DECLARE&#10;&#9;&#9;max int;&#10;&#9;&#9;x int;&#10;&#9;&#9;schema name;&#10;&#9;&#9;sql text;&#10;&#9;&#9;kw text;&#10;&#9;&#9;rtn boolean;&#10;&#9;&#9;cnt int;&#10;&#9;BEGIN&#10;&#9;&#9;cnt :&#61; 0;&#10;&#9;&#9;max :&#61; array_length(constraints, 1);&#10;&#9;&#9;IF max &lt; 1 THEN&#10;&#9;&#9;&#9;RAISE NOTICE &#39;No constraints indicated to be dropped.  Doing nothing&#39;;&#10;&#9;&#9;&#9;RETURN TRUE;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;-- validate schema&#10;&#9;&#9;schema :&#61; NULL;&#10;&#9;&#9;IF length($1) &gt; 0 THEN&#10;&#9;&#9;&#9;sql :&#61; &#39;SELECT nspname FROM pg_namespace &#39;&#10;&#9;&#9;&#9;&#9;|| &#39;WHERE nspname &#61; &#39; || quote_literal($1)&#10;&#9;&#9;&#9;&#9;|| &#39;LIMIT 1&#39;;&#10;&#9;&#9;&#9;EXECUTE sql INTO schema;&#10;&#10;&#9;&#9;&#9;IF schema IS NULL THEN&#10;&#9;&#9;&#9;&#9;RAISE EXCEPTION &#39;The value provided for schema is invalid&#39;;&#10;&#9;&#9;&#9;&#9;RETURN FALSE;&#10;&#9;&#9;&#9;END IF;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;IF schema IS NULL THEN&#10;&#9;&#9;&#9;sql :&#61; &#39;SELECT n.nspname AS schemaname &#39;&#10;&#9;&#9;&#9;&#9;|| &#39;FROM pg_catalog.pg_class c &#39;&#10;&#9;&#9;&#9;&#9;|| &#39;JOIN pg_catalog.pg_namespace n ON n.oid &#61; c.relnamespace &#39;&#10;&#9;&#9;&#9;&#9;|| &#39;WHERE c.relkind &#61; &#39; || quote_literal(&#39;r&#39;)&#10;&#9;&#9;&#9;&#9;|| &#39; AND n.nspname NOT IN (&#39; || quote_literal(&#39;pg_catalog&#39;)&#10;&#9;&#9;&#9;&#9;|| &#39;, &#39; || quote_literal(&#39;pg_toast&#39;)&#10;&#9;&#9;&#9;&#9;|| &#39;) AND pg_catalog.pg_table_is_visible(c.oid)&#39;&#10;&#9;&#9;&#9;&#9;|| &#39; AND c.relname &#61; &#39; || quote_literal($2);&#10;&#9;&#9;&#9;EXECUTE sql INTO schema;&#10;&#10;&#9;&#9;&#9;IF schema IS NULL THEN&#10;&#9;&#9;&#9;&#9;RAISE EXCEPTION &#39;The table % does not occur in the search_path&#39;, quote_literal($2);&#10;&#9;&#9;&#9;&#9;RETURN FALSE;&#10;&#9;&#9;&#9;END IF;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;&lt;&lt;kwloop&gt;&gt;&#10;&#9;&#9;FOR x in 1..max LOOP&#10;&#9;&#9;&#9;kw :&#61; trim(both from lower(constraints[x]));&#10;&#10;&#9;&#9;&#9;BEGIN&#10;&#9;&#9;&#9;&#9;CASE&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw &#61; &#39;srid&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping SRID constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_srid(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;scale_x&#39;, &#39;scalex&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping scale-X constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_scale(schema, $2, $3, &#39;x&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;scale_y&#39;, &#39;scaley&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping scale-Y constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_scale(schema, $2, $3, &#39;y&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw &#61; &#39;scale&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping scale-X constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_scale(schema, $2, $3, &#39;x&#39;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping scale-Y constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_scale(schema, $2, $3, &#39;y&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;blocksize_x&#39;, &#39;blocksizex&#39;, &#39;width&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping blocksize-X constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_blocksize(schema, $2, $3, &#39;width&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;blocksize_y&#39;, &#39;blocksizey&#39;, &#39;height&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping blocksize-Y constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_blocksize(schema, $2, $3, &#39;height&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw &#61; &#39;blocksize&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping blocksize-X constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_blocksize(schema, $2, $3, &#39;width&#39;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping blocksize-Y constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_blocksize(schema, $2, $3, &#39;height&#39;);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;same_alignment&#39;, &#39;samealignment&#39;, &#39;alignment&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping alignment constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_alignment(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;regular_blocking&#39;, &#39;regularblocking&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_regular_blocking(schema, $2, $3);&#10;&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping coverage tile constraint required for regular blocking&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_coverage_tile(schema, $2, $3);&#10;&#10;&#9;&#9;&#9;&#9;&#9;&#9;IF rtn IS NOT FALSE THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping spatially unique constraint required for regular blocking&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_spatially_unique(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;&#9;END IF;&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;num_bands&#39;, &#39;numbands&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping number of bands constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_num_bands(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;pixel_types&#39;, &#39;pixeltypes&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping pixel type constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_pixel_types(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;nodata_values&#39;, &#39;nodatavalues&#39;, &#39;nodata&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping nodata value constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_nodata_values(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw IN (&#39;out_db&#39;, &#39;outdb&#39;) THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping out-of-database constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_out_db(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;WHEN kw &#61; &#39;extent&#39; THEN&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Dropping maximum extent constraint&#39;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;rtn :&#61;  public._drop_raster_constraint_extent(schema, $2, $3);&#10;&#9;&#9;&#9;&#9;&#9;ELSE&#10;&#9;&#9;&#9;&#9;&#9;&#9;RAISE NOTICE &#39;Unknown constraint: %.  Skipping&#39;, quote_literal(constraints[x]);&#10;&#9;&#9;&#9;&#9;&#9;&#9;CONTINUE kwloop;&#10;&#9;&#9;&#9;&#9;END CASE;&#10;&#9;&#9;&#9;END;&#10;&#10;&#9;&#9;&#9;IF rtn IS FALSE THEN&#10;&#9;&#9;&#9;&#9;cnt :&#61; cnt + 1;&#10;&#9;&#9;&#9;&#9;RAISE WARNING &#39;Unable to drop constraint: %.  Skipping&#39;, quote_literal(constraints[x]);&#10;&#9;&#9;&#9;END IF;&#10;&#10;&#9;&#9;END LOOP kwloop;&#10;&#10;&#9;&#9;IF cnt &#61; max THEN&#10;&#9;&#9;&#9;RAISE EXCEPTION &#39;None of the constraints specified could be dropped.  Is the schema name, table name or column name incorrect?&#39;;&#10;&#9;&#9;&#9;RETURN FALSE;&#10;&#9;&#9;END IF;&#10;&#10;&#9;&#9;RETURN TRUE;&#10;&#9;END;</textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.2.4</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="routine.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>
