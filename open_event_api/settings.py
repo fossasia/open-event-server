@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # local
     "users.apps.UsersConfig",
+    "roles.apps.RolesConfig",
 ]
 
 MIDDLEWARE = [
