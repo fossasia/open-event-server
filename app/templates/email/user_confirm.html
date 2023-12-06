@@ -1,4 +1,0 @@
-{{ _('Hello %(email)s,', email=email) }}
-{% autoescape false %}
-<br/> {{ _('Please visit this link to confirm your email: %(url)s.', url = '<a href="%s" target="_blank">%s</a>' % (link, link)) | safe }}
-{% endautoescape %}

@@ -1,7 +1,0 @@
-{{ _('Hello %(email)s,', email=email) }}
-<br><br>
-{{ _('You have been invited to be a %(role)s at %(event)s.', role=role, event=event) }}
-<br>
-{% autoescape false %}
-{{ _('To accept the role please sign up using the following link: %(open_link)sLink%(close_link)s.', open_link = '<a href="%s" target="_blank">' % (link), close_link = '</a>') | safe }}
-{% endautoescape %}

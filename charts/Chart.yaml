@@ -1,4 +1,0 @@
-name: open-event
-description: A generated Helm Chart for open-event
-version: 0.0.1
-apiVersion: v1

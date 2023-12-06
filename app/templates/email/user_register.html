@@ -1,9 +1,0 @@
-{{ _('Hello') }},
-<br/><br/>{{ _('Your account has been created on %(app_name)s.', app_name=settings.app_name) }} {{ _('Congratulations!') }}
-<br/><br/>{{ _('Your login is: %(email)s', email=email) }}
-{% autoescape false %}
-<br/><br/>{{ _('Please visit the following link to verify your email: %(url)s', url = '<a href="%s">"%s"</a>' % (link, link)) | safe }}
-{% endautoescape %}
-<br/><br/>{{ _('Thank You') }},
-<br/><br/>{{ settings.app_name }} {{ _('Team') }}
-<br/><a href={{ settings.frontend_url }}>{{ settings.frontend_url }}</a>
