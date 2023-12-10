@@ -1,0 +1,4 @@
+* use django-rest-auth
+	https://django-rest-auth.readthedocs.io/en/latest/introduction.html
+  with JWT for all the auth stuff
+
