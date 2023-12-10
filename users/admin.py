@@ -13,10 +13,26 @@ class CustomUserAdmin(UserAdmin):
         "email",
         "username",
         "name",
-        "is_staff",
+        "is_admin",
+        "is_super_admin",
+        "is_verified",
     ]
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("name",)}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("name",)}),)
+    fieldsets = UserAdmin.fieldsets + (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "is_admin",
+                    "is_super_admin",
+                    "is_verified",
+                )
+            },
+        ),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        (None, {"fields": ("name", "is_admin", "is_super_admin", "is_verified")}),
+    )
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
