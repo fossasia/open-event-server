@@ -1,3 +1,27 @@
+[project]
+name = "open-event-server"
+
+dependencies = [
+    "Django",
+    "djangorestframework",
+    "djangorestframework-simplejwt",
+    "dj-database-url",
+    "django-cors-headers",
+    "environs",
+    "psycopg[binary]",
+    "whitenoise",
+    "drf-spectacular", # for API documentation
+]
+
+dev-dependencies = [
+    "black",
+    "pre-commit",
+    "ruff",
+]
+
+
+
+
 [tool.ruff]
 line-length = 120
 
