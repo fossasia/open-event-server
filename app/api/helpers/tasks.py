@@ -917,6 +917,7 @@ def create_print_badge_pdf(self, attendee_id, list_field_show):
             ),
             UPLOAD_PATHS['pdf']['badge_forms_pdf'].format(identifier=badge_form.badge_id),
             identifier=badge_form.badge_id,
+            new_renderer=True,
         )
         result = {'download_url': badge_url}
         ticket_holder.is_badge_printed = True

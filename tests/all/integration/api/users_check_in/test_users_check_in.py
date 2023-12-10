@@ -21,9 +21,9 @@ def test_get_registration_stats(db, client, jwt):
                 "check_out": 0,
                 "manual_count": {},
                 "session_id": "1",
-                "session_name": "example",
+                "session_name": "",
                 "speakers": [],
-                "track_name": "example",
+                "track_name": "",
             }
         ],
         "total_attendee": 0,
