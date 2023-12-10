@@ -28,9 +28,11 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    # standard api endpoints
     path("v2/roles/", include("roles.urls")),
+    path("v2/custom-system-roles/", include("custom_sys_roles.urls")),
+    # api docs via spectacular
     path("v2/schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Optional UI:
     path("v2/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("v2/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]

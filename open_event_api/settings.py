@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # local
     "users.apps.UsersConfig",
     "roles.apps.RolesConfig",
+    "custom_sys_roles.apps.CustomSysRolesConfig",
 ]
 
 MIDDLEWARE = [
