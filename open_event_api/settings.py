@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 3rd party
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
     # local
     "users.apps.UsersConfig",
     "roles.apps.RolesConfig",
@@ -144,6 +145,7 @@ CORS_ORIGIN_WHITELIST = (
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
@@ -152,4 +154,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ],
+}
+
+SPECTACULAR_SETTINGS = {
+    "SCHEMA_PATH_PREFIX": "/v2",
 }
