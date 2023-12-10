@@ -1,7 +1,7 @@
 import datetime
 
 from flask import Blueprint, request
-from sqlalchemy import desc
+from sqlalchemy import asc, desc, func
 
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.static import STATION_TYPE
@@ -30,11 +30,10 @@ def get_registration_stats(event_id):
     """
     # check if event is existed
     event = Event.query.filter(Event.id == event_id).first()
-    current_time = datetime.datetime.utcnow().date()
+    total_attendee = TicketHolder.query.filter(TicketHolder.event_id == event_id).count()
     if event is None:
         return {"message": "Event can not be found."}, 404
     stations = Station.query.filter(Station.event_id == event_id).all()
-    total_attendee = TicketHolder.query.filter(TicketHolder.event_id == event_id).count()
     registration_stations = [
         station.id
         for station in stations
@@ -50,24 +49,96 @@ def get_registration_stats(event_id):
         for station in stations
         if station.station_type == STATION_TYPE.get('check out')
     ]
+    data = {
+        "total_attendee": total_attendee,
+        "registration_stations": registration_stations,
+        "check_in_stations": check_in_stations,
+        "check_out_stations": check_out_stations,
+    }
+
+    if request.args.get('today_only'):
+        results = {}
+        date = datetime.date.today().strftime("%Y-%m-%d")
+        data["date"] = date
+        results[date] = get_data_by_date(data)
+    else:
+        stationIds = []
+        for station in stations:
+            stationIds.append(station.id)
+        date_list = list(
+            zip(
+                *db.session.query(func.date(UserCheckIn.created_at))
+                .distinct()
+                .filter(
+                    UserCheckIn.station_id.in_(stationIds),
+                )
+                .order_by(asc(func.date(UserCheckIn.created_at)))
+                .all()
+            )
+        )
+        dates = list(
+            map(
+                str,
+                date_list[0] if date_list else [],
+            )
+        )
+
+        if len(dates) == 0:
+            return {
+                "2023-10-17": {
+                    "total_attendee": total_attendee,
+                    "total_registered": 0,
+                    "total_not_checked_in": total_attendee - 0,
+                    "total_track_checked_in": 0,
+                    "total_track_checked_out": 0,
+                    "total_session_checked_in": 0,
+                    "total_session_checked_out": 0,
+                    "track_stats": [],
+                    "session_stats": [
+                        {
+                            "check_in": 0,
+                            "check_out": 0,
+                            "manual_count": {},
+                            "session_id": request.args.get('session_ids'),
+                            "session_name": "",
+                            "speakers": [],
+                            "track_name": "",
+                        }
+                    ],
+                }
+            }, 200
+
+        results = {}
+        for date in dates:
+            data["date"] = date
+            results[date] = get_data_by_date(data)
+    return results, 200
+
+
+def get_data_by_date(data):
+    """
+    Get data by date
+    @param data
+    @return: result
+    """
     registered_attendee = (
         UserCheckIn.query.with_entities(UserCheckIn.ticket_holder_id)
         .filter(
-            UserCheckIn.station_id.in_(registration_stations),
-            UserCheckIn.created_at >= current_time,
+            UserCheckIn.station_id.in_(data['registration_stations']),
+            func.date(UserCheckIn.created_at) == data['date'],
         )
         .group_by(UserCheckIn.ticket_holder_id)
         .count()
     )
 
     check_in_attendee = UserCheckIn.query.filter(
-        UserCheckIn.station_id.in_(check_in_stations),
-        UserCheckIn.created_at >= current_time,
+        UserCheckIn.station_id.in_(data['check_in_stations']),
+        func.date(UserCheckIn.created_at) == data['date'],
     )
 
     check_out_attendee = UserCheckIn.query.filter(
-        UserCheckIn.station_id.in_(check_out_stations),
-        UserCheckIn.created_at >= current_time,
+        UserCheckIn.station_id.in_(data['check_out_stations']),
+        func.date(UserCheckIn.created_at) == data['date'],
     )
 
     session_checked_in = check_in_attendee.with_entities(
@@ -86,9 +157,9 @@ def get_registration_stats(event_id):
         Session.id.in_(
             [user_check_in.session_id for user_check_in in session_checked_in]
         ),
-        UserCheckIn.station_id.in_(check_in_stations),
+        UserCheckIn.station_id.in_(data['check_in_stations']),
         Session.id == UserCheckIn.session_id,
-        UserCheckIn.created_at >= current_time,
+        func.date(UserCheckIn.created_at) == data['date'],
     )
 
     track_checked_in_count = (
@@ -101,9 +172,9 @@ def get_registration_stats(event_id):
         Session.id.in_(
             [user_check_in.session_id for user_check_in in session_checked_out]
         ),
-        UserCheckIn.station_id.in_(check_out_stations),
+        UserCheckIn.station_id.in_(data['check_out_stations']),
         UserCheckIn.session_id == Session.id,
-        UserCheckIn.created_at >= current_time,
+        func.date(UserCheckIn.created_at) == data['date'],
     )
 
     track_checked_out_count = (
@@ -115,30 +186,32 @@ def get_registration_stats(event_id):
     track_stat = []
     if request.args.get('session_ids'):
         session_stat = get_session_stats(
-            request.args.get('session_ids'), session_checked_in, session_checked_out
+            request.args.get('session_ids'),
+            session_checked_in,
+            session_checked_out,
+            data['date'],
         )
     if request.args.get('track_ids'):
         track_stat = get_track_stats(
             request.args.get('track_ids'),
             check_in_attendee,
             check_out_attendee,
-            current_time,
+            data['date'],
         )
-
     return {
-        "total_attendee": total_attendee,
+        "total_attendee": data['total_attendee'],
         "total_registered": registered_attendee,
-        "total_not_checked_in": total_attendee - registered_attendee,
+        "total_not_checked_in": data['total_attendee'] - registered_attendee,
         "total_track_checked_in": track_checked_in_count,
         "total_track_checked_out": track_checked_out_count,
         "total_session_checked_in": session_checked_in_count,
         "total_session_checked_out": session_checked_out_count,
         "session_stats": session_stat,
         "track_stats": track_stat,
-    }, 200
+    }
 
 
-def get_session_stats(session_ids, session_checked_in, session_checked_out):
+def get_session_stats(session_ids, session_checked_in, session_checked_out, date):
     """
     Get session stats
     @param session_ids: session id to get
@@ -181,7 +254,10 @@ def get_session_stats(session_ids, session_checked_in, session_checked_out):
 
         stationStorePaxs = (
             db.session.query(StationStorePax)
-            .filter(StationStorePax.session_id == session_id)
+            .filter(
+                StationStorePax.session_id == session_id,
+                func.date(StationStorePax.created_at) == date,
+            )
             .order_by(desc("created_at"))
             .all()
         )
@@ -231,7 +307,7 @@ def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_ti
             ),
             UserCheckIn.id.in_([user_check_in.id for user_check_in in check_in_attendee]),
             Session.id == UserCheckIn.session_id,
-            UserCheckIn.created_at >= current_time,
+            func.date(UserCheckIn.created_at) == current_time,
             Session.track_id == track_id,
         )
 
@@ -249,7 +325,7 @@ def get_track_stats(track_ids, check_in_attendee, check_out_attendee, current_ti
                 [user_check_in.id for user_check_in in check_out_attendee]
             ),
             UserCheckIn.session_id == Session.id,
-            UserCheckIn.created_at >= current_time,
+            func.date(UserCheckIn.created_at) == current_time,
             Session.track_id == track_id,
         )
 
