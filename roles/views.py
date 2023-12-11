@@ -1,5 +1,7 @@
 from rest_framework import generics
 
+from open_event_api.permissions import IsSuperAdminForUpdate
+
 from .models import Role
 from .serializer import RoleSerializer
 
@@ -10,6 +12,7 @@ class RoleView(generics.ListAPIView):
 
 
 class RoleDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsSuperAdminForUpdate,)
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
 
