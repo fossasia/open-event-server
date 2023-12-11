@@ -28,6 +28,7 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path("api-auth/", include("rest_framework.urls")),
     # standard api endpoints
     path("v2/", include("roles.urls")),
     path("v2/custom-system-roles/", include("custom_sys_roles.urls")),
