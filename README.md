@@ -21,13 +21,19 @@ We're going to install and configure the latest develop build of this API.
 First of all, you need to clone the project on your computer with :
 
 ```
-git clone https://github.com/cecethea/open-event-server.git
+git clone https://github.com/fossasia/open-event-server.git
 ```
 
 You can now move in the newly created folder:
 
 ```
 cd open_event_server
+```
+
+### Check out the development branch
+
+```
+git checkout dev-v3
 ```
 
 ### Create a virtual environment
@@ -45,6 +51,8 @@ virtualenv env
 ```
 
 You need to ensure the virtual environment is active each time you want to launch the project.
+
+Similar setup can be achieved using pyenv and pyenv/virtualenv.
 
 ### Install all requirements
 
@@ -65,8 +73,9 @@ You first need to apply all existing "migrations" to update your local database.
 python manage.py migrate
 ```
 
-**Note:** The project uses a squlite3 file as database to simplify developement.
-Once in production, feel free to switch to whatever suits you.
+**Note:** The project uses a sqlite3 file as database in development mode,
+to simplify developement. In production, the environment variable `DATABASE_URL`
+can be set to any supported format, eg., a Postgres database.
 
 ### Launch the API
 
