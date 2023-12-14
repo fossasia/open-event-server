@@ -1,19 +1,14 @@
 # global .pre-commit-config.yaml
 #
 
+default_language_version:
+  python: python3.11
+
 repos:
-  # feature-flag-eval dashboard and supporting lib dirs
-  # python part
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.291
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.8
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
-        language_version: python3.11
-  - repo: https://github.com/psf/black
-    rev: 23.9.1
-    hooks:
-      - id: black
-        args: [--config, pyproject.toml]
-        language_version: python3.11
+      - id: ruff-format
 
