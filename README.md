@@ -3,18 +3,17 @@ The Open Event Server enables organizers to manage events from concerts to confe
 
 ## Intro
 
-This branch is a `v3` rewrite of the backend REST API and a work in progress. 
+This branch is a `v3` rewrite of the backend REST API and a work in progress.
 This new version of the API uses [Python]([https://www.python.org)](https://docs.python.org/3/index.html),
-[Django 5](https://docs.djangoproject.com/en/dev/releases/5.0/)
-and the [Django REST Framework](https://www.django-rest-framework.org).
-Curently data is stored in sqlite althouhg this might change in the future.
+[Django 5](https://docs.djangoproject.com/en/dev/releases/5.0/), and the [Django](https://www.django-rest-framework.org) REST Framework](https://www.django-rest-framework.org).
+Currently, data is stored in SQLite although this might change in the future.
 
 If you want to collaborate feel free to have a look at our
 [first issues](https://github.com/fossasia/open-event-server/issues?q=is%3Aissue+is%3Aopen+label%3Aopen-for-all+label%3Av3+).
 
 ## Quickstart
 
-We're going to install and configure the latest develop build of this API.
+We're going to install and configure the latest development build of this API.
 
 ### Clone the project
 
@@ -24,7 +23,7 @@ First of all, you need to clone the project on your computer with :
 git clone https://github.com/fossasia/open-event-server.git
 ```
 
-You can now move in the newly created folder:
+You can now move to the newly created folder:
 
 ```
 cd open_event_server
@@ -38,7 +37,7 @@ git checkout dev-v3
 
 ### Create a virtual environment
 
-[Virtualenv](https://virtualenv.pypa.io/) provides an isolated Python environment, which are more practical than installing packages system-wide. They also allow packages to be installed without administrator privileges.
+[Virtualenv](https://virtualenv.pypa.io/) provides an isolated Python environment, which is more practical than installing packages system-wide. They also allow packages to be installed without administrator privileges.
 
 1. Create a new virtual environment
 ```
@@ -52,20 +51,20 @@ virtualenv env
 
 You need to ensure the virtual environment is active each time you want to launch the project.
 
-Similar setup can be achieved using pyenv and pyenv/virtualenv.
+A similar setup can be achieved using pyenv and pyenv/virtualenv.
 
 ### Install all requirements
 
 Requirements of the project are stored in the `requirements.txt` file.
 You can install them with:
 
-**WARNING** : Make sure your virtual environment is active or you will install the packages system-wide.
+**WARNING**: Make sure your virtual environment is active or you will install the packages system-wide.
 ```
 pip install -r requirements.txt
 ```
 ### Configure the database
 
-Django has a versioning system to genreate the database called
+Django has a versioning system to generate the database called
 [migrations](https://docs.djangoproject.com/en/4.2/topics/migrations/).
 You first need to apply all existing "migrations" to update your local database.
 
@@ -73,15 +72,15 @@ You first need to apply all existing "migrations" to update your local database.
 python manage.py migrate
 ```
 
-**Note:** The project uses a sqlite3 file as database in development mode,
-to simplify developement. In production, the environment variable `DATABASE_URL`
+**Note:** The project uses a sqlite3 file as a database in development mode,
+to simplify development. In production, the environment variable `DATABASE_URL`
 can be set to any supported format, eg., a Postgres database.
 
 ### Launch the API
 
 You can now launch an instance of the API and visit the built-in admin website.
+To log into the admin page, you'll need to create a superuser first:
 
-To login into the admin page, you'll need to create a superuser first:
 ```
 python manage.py createsuperuser
 ```
