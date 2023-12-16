@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "roles.apps.RolesConfig",
     "custom_sys_roles.apps.CustomSysRolesConfig",
+    "event_topics.apps.EventTopicsConfig",
 ]
 
 MIDDLEWARE = [

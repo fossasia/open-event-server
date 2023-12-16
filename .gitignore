@@ -4,3 +4,4 @@ __pycache__/
 /staticfiles/
 .tool-versions
 Pipfile*
+.env
