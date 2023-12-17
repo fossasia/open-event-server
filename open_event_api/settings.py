@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "event_topics.apps.EventTopicsConfig",
     "event_types.apps.EventTypesConfig",
     "panel_permissions.apps.PanelPermissionsConfig",
+    "notification_contents.apps.NotificationContentsConfig",
+    "video_channels.apps.VideoChannelsConfig",
 ]
 
 MIDDLEWARE = [
