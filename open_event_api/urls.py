@@ -32,6 +32,7 @@ urlpatterns = [
     # standard api endpoints
     path("v2/", include("roles.urls")),
     path("v2/", include("event_topics.urls")),
+    path("v2/", include("event_types.urls")),
     path("v2/custom-system-roles/", include("custom_sys_roles.urls")),
     # api docs via spectacular
     path("v2/schema/", SpectacularAPIView.as_view(), name="schema"),

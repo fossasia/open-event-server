@@ -24,7 +24,7 @@ class EventTopicRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EventTopicRetrieveRelation(generics.RetrieveAPIView):
-    """Allows viewing of a topic related to an event or event sub topic."""
+    """Allows viewing of the related EventTopic."""
 
     permission_classes = (IsSuperAdminForUpdate,)
     queryset = EventTopic.objects.all()
