@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "custom_sys_roles.apps.CustomSysRolesConfig",
     "event_topics.apps.EventTopicsConfig",
     "event_types.apps.EventTypesConfig",
+    "panel_permissions.apps.PanelPermissionsConfig",
 ]
 
 MIDDLEWARE = [
