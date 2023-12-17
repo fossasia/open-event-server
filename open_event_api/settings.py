@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "panel_permissions.apps.PanelPermissionsConfig",
     "notification_contents.apps.NotificationContentsConfig",
     "video_channels.apps.VideoChannelsConfig",
+    "services.apps.ServicesConfig",
 ]
 
 MIDDLEWARE = [
