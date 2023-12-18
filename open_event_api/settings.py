@@ -52,8 +52,13 @@ INSTALLED_APPS = [
     "roles.apps.RolesConfig",
     "custom_sys_roles.apps.CustomSysRolesConfig",
     "event_topics.apps.EventTopicsConfig",
+    "event_types.apps.EventTypesConfig",
+    "panel_permissions.apps.PanelPermissionsConfig",
     "notification_contents.apps.NotificationContentsConfig",
     "video_channels.apps.VideoChannelsConfig",
+    "services.apps.ServicesConfig",
+    "event_sub_topics.apps.EventSubTopicsConfig",
+    "groups.apps.GroupsConfig",
 ]
 
 MIDDLEWARE = [
