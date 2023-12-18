@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "video_channels.apps.VideoChannelsConfig",
     "services.apps.ServicesConfig",
     "event_sub_topics.apps.EventSubTopicsConfig",
+    "groups.apps.GroupsConfig",
 ]
 
 MIDDLEWARE = [
