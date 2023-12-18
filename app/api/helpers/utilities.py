@@ -68,7 +68,7 @@ def require_exclusive_relationship(resource_list, data, optional=False):
 
     if multiple or not (optional or present):
         raise UnprocessableEntityError(
-            {'pointer': f'/data/relationships'},
+            {'pointer': '/data/relationships'},
             f"A valid relationship with either of resources is required: {resource_list}",
         )
 

@@ -5,7 +5,6 @@ from app.models import db
 
 
 def db_migrate_speaker_doc(db):
-
     # migrating slides url from url type to JSON type
 
     conn = db.engine.connect()

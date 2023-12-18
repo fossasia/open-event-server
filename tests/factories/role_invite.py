@@ -18,7 +18,6 @@ class RoleInviteFactoryBase(BaseFactory):
 
 
 class RoleInviteFactory(RoleInviteFactoryBase):
-
     event = factory.RelatedFactory(EventFactoryBasic)
     role = factory.RelatedFactory(RoleFactory)
     event_id = 1
@@ -26,6 +25,5 @@ class RoleInviteFactory(RoleInviteFactoryBase):
 
 
 class RoleInviteSubFactory(RoleInviteFactoryBase):
-
     event = factory.SubFactory(EventFactoryBasic)
     role = factory.SubFactory(RoleFactory)

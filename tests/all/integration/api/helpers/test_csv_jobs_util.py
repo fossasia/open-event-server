@@ -34,7 +34,8 @@ class TestExportCSV(OpenEventTestCase):
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
             field_data = export_attendees_csv(
-                [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
+                [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM
+            )
             # new export_attendees_csv will return list of dictionary for csv_writer
             assert field_data[0].get("Tax ID") == "tax id"
 

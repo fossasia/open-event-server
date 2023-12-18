@@ -17,7 +17,6 @@ class ExhibitorSocialLinkSchema(Schema):
 
 class ExhibitorSchema(JSONAPISchema):
     class Meta:
-
         type_ = 'exhibitor'
         self_view = 'v1.exhibitor_detail'
         self_view_kwargs = {'id': '<id>'}

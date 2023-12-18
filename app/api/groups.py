@@ -109,7 +109,6 @@ class GroupDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
-
         if view_kwargs.get('event_identifier'):
             event = safe_query_kwargs(
                 Event, view_kwargs, 'event_identifier', 'identifier'

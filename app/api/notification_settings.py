@@ -7,7 +7,6 @@ from app.models.notification_setting import NotificationSettings
 
 
 class NotificationSettingsList(ResourceList):
-
     decorators = (api.has_permission('is_admin', methods="GET"),)
     methods = ['GET']
     schema = NotificationSettingSchema
@@ -15,7 +14,6 @@ class NotificationSettingsList(ResourceList):
 
 
 class NotificationSettingsDetail(ResourceDetail):
-
     schema = NotificationSettingSchema
     decorators = (api.has_permission('is_admin', methods="PATCH"),)
     methods = ['GET', 'PATCH']

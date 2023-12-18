@@ -67,6 +67,4 @@ class RoleInvite(db.Model):
             notify_event_role_invitation(self, user, current_user)
 
     def __repr__(self):
-        return '<RoleInvite {!r}:{!r}:{!r}>'.format(
-            self.email, self.event_id, self.role_id
-        )
+        return f'<RoleInvite {self.email!r}:{self.event_id!r}:{self.role_id!r}>'

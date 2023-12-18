@@ -79,7 +79,6 @@ class ExhibitorDetail(ResourceDetail):
 
 
 class ExhibitorRelationship(ResourceRelationship):
-
     decorators = (
         api.has_permission(
             'is_coorganizer',

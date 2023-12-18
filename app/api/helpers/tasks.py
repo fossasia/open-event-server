@@ -302,9 +302,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
     speaker = Speaker.query.get(speaker_id)
     try:
         logging.info(
-            'Speaker image resizing tasks started for speaker with id {}'.format(
-                speaker_id
-            )
+            f'Speaker image resizing tasks started for speaker with id {speaker_id}'
         )
         uploaded_images = create_save_image_sizes(photo_url, 'speaker-image', speaker_id)
         speaker.small_image_url = uploaded_images['small_image_url']

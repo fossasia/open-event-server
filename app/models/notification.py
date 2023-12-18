@@ -32,7 +32,6 @@ class NotificationType:
 
 @generic_repr
 class NotificationActor(db.Model, Timestamp):
-
     __tablename__ = 'notification_actors'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -56,7 +55,6 @@ class NotificationActor(db.Model, Timestamp):
 
 @generic_repr
 class NotificationContent(db.Model, Timestamp):
-
     __tablename__ = 'notification_content'
 
     id = db.Column(db.Integer, primary_key=True)

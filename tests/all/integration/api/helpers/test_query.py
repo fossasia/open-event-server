@@ -108,7 +108,6 @@ def test_query_restricted_event_organizer(event, user, user_login):
 
 
 def test_query_restricted_event_admin(event, admin_login):
-
     assert str(event_query(Order.query, {'event_id': event.id}, restrict=True)) == str(
         Order.query.join(Event).filter(Event.id == event.id)
     )

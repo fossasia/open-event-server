@@ -200,12 +200,9 @@ def create_url(request_url, file_relative_path):
     if port and url.scheme == SCHEMES.get(url.port, None):
         port = None
 
-    return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
-        scheme=url.scheme,
-        hostname=url.hostname,
-        port=port,
-        file_relative_path=file_relative_path,
-    ).replace(':None', '')
+    return f'{url.scheme}://{url.hostname}:{port}{file_relative_path}'.replace(
+        ':None', ''
+    )
 
 
 def upload_to_aws(

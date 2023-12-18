@@ -38,9 +38,7 @@ class XCalExporter:
         )
 
         for session in sessions:
-
             if session and session.starts_at and session.ends_at:
-
                 v_event_node = SubElement(v_calendar_node, 'vevent')
 
                 method_node = SubElement(v_event_node, 'method')
