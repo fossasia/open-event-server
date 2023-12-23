@@ -14,7 +14,7 @@ class Ticket(models.Model):
     is_hidden = models.BooleanField(null=True, blank=True)
     min_order = models.IntegerField(null=True, blank=True)
     max_order = models.IntegerField(null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)  # Assuming 'Event' model exists
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
     is_fee_absorbed = models.BooleanField(null=True, blank=True)
     position = models.IntegerField(null=True, blank=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
