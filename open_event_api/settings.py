@@ -54,6 +54,17 @@ INSTALLED_APPS = [
     "event_topics.apps.EventTopicsConfig",
     "notification_contents.apps.NotificationContentsConfig",
     "video_channels.apps.VideoChannelsConfig",
+    "discount_codes.apps.DiscountCodesConfig",
+    "event_sub_topics.apps.EventSubTopicsConfig",
+    "event_types.apps.EventTypesConfig",
+    "events.apps.EventsConfig",
+    "groups.apps.GroupsConfig",
+    "microlocation.apps.MicrolocationConfig",
+    "session_types.apps.SessionTypesConfig",
+    "sessions.apps.SessionsConfig",
+    "tickets.apps.TicketsConfig",
+    "tracks.apps.TracksConfig",
+    "video_streams.apps.VideoStreamsConfig",
 ]
 
 MIDDLEWARE = [
