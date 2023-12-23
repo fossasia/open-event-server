@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     "groups.apps.GroupsConfig",
     "microlocation.apps.MicrolocationConfig",
     "session_types.apps.SessionTypesConfig",
-    "sessions.apps.SessionsConfig",
+    "custom_sessions.apps.CustomSessionsConfig",
     "tickets.apps.TicketsConfig",
     "tracks.apps.TracksConfig",
     "video_streams.apps.VideoStreamsConfig",

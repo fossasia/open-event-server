@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 from users.models import CustomUser
 
 class Group(models.Model):
@@ -7,7 +6,7 @@ class Group(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(null=True, blank=True)
     modified_at = models.DateTimeField(null=True, blank=True)
-    social_links = JSONField(null=True, blank=True)
+    social_links = models.JSONField(blank=True, null=True)
     about = models.TextField(null=True, blank=True)
     banner_url = models.CharField(max_length=2147483647, null=True, blank=True)
     logo_url = models.CharField(max_length=2147483647, null=True, blank=True)

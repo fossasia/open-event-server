@@ -1,5 +1,4 @@
 from django.db import models
-from discount_codes.models import DiscountCode
 from event_sub_topics.models import EventSubTopic
 from event_topics.models import EventTopic
 
@@ -55,7 +54,7 @@ class Event(models.Model):
     pentabarf_url = models.CharField(max_length=2147483647, null=True)
     xcal_url = models.CharField(max_length=2147483647, null=True)
     has_owner_info = models.BooleanField(default=True)
-    discount_code = models.ForeignKey(DiscountCode, on_delete=models.CASCADE, null=True)
+    discount_code = models.ForeignKey('discount_codes.DiscountCode', on_delete=models.CASCADE, null=True, related_name='events')
     refund_policy = models.CharField(max_length=2147483647, null=True)
     is_stripe_linked = models.BooleanField(default=True)
     online = models.BooleanField(default=False)

@@ -5,7 +5,7 @@ from session_types.models import SessionType
 from tracks.models import Track
 from users.models import CustomUser
 
-class Session(models.Model):
+class CustomSession(models.Model):
     title = models.CharField(max_length=2147483647)
     subtitle = models.CharField(max_length=2147483647, null=True, blank=True)
     short_abstract = models.TextField(null=True, blank=True)

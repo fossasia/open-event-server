@@ -7,7 +7,7 @@ class VideoStream(models.Model):
     url = models.CharField(max_length=2147483647)
     password = models.CharField(max_length=2147483647, null=True, blank=True)
     additional_information = models.CharField(max_length=2147483647, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True, unique=True)
+    event = models.OneToOneField('events.Event', on_delete=models.CASCADE)
     channel = models.ForeignKey(VideoChannel, on_delete=models.SET_NULL, null=True, blank=True)
     extra = models.JSONField(null=True, blank=True)
     bg_img_url = models.CharField(max_length=2147483647, null=True, blank=True)
