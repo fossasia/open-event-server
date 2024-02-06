@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-27 08:39+0000\n"
-"Last-Translator: Mario Behling <mb@mariobehling.de>\n"
+"PO-Revision-Date: 2024-02-07 01:02+0000\n"
+"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/open-event/server/"
 "ar/>\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -486,7 +486,7 @@ msgstr ""
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "يرجى عدم الرد على هذه الرسالة."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
@@ -578,7 +578,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "This is your confirmation."
-msgstr ""
+msgstr "هذا تأكيدك."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -603,7 +603,7 @@ msgstr "اسم"
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
 msgid "Ticket"
-msgstr ""
+msgstr "تذكرة"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
@@ -615,12 +615,12 @@ msgstr "كمية"
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
 msgid "Order Number"
-msgstr ""
+msgstr "رقم الطلب"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
 msgid "About this event"
-msgstr ""
+msgstr "عن هذه الفعالية"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
@@ -638,7 +638,7 @@ msgstr "URL"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "إضافة إلى التقويم"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
@@ -650,7 +650,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "ياهو"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
@@ -680,12 +680,12 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
-msgstr ""
+msgstr "موجز التذكرة"
 
 #: app/templates/email/ticket_purchased_organizer.html:1
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "تهانينا!"
 
 #: app/templates/email/ticket_purchased_organizer.html:4
 #, python-format
@@ -706,7 +706,7 @@ msgstr ""
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "وفيما يلي تفاصيل الطلب:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -718,7 +718,7 @@ msgstr "بريد إلكتروني"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
-msgstr ""
+msgstr "تاريخ وتوقيت الشراء"
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
@@ -728,7 +728,7 @@ msgstr "طريقة الدفع"
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
 msgid "None"
-msgstr ""
+msgstr "لا شيء"
 
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
@@ -778,7 +778,7 @@ msgstr ""
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
 msgid "Payment Status"
-msgstr ""
+msgstr "حالة السداد"
 
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
@@ -807,7 +807,7 @@ msgstr "منتهي الصلاحية"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
-msgstr ""
+msgstr "التذاكر/التسجيل"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
@@ -839,7 +839,7 @@ msgstr "ولاية"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
-msgstr ""
+msgstr "الرمز البريدي"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
@@ -857,7 +857,7 @@ msgstr "الرقم الضريبي"
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
 msgid "Hello,"
-msgstr ""
+msgstr "مرحباً،"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
@@ -881,7 +881,7 @@ msgstr ""
 
 #: app/templates/email/ticket_sales_end.html:7
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "انتهت مبيعات تذاكر"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
@@ -893,7 +893,7 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
 msgid "Login to your account."
-msgstr ""
+msgstr "لِج إلى حسابك."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
@@ -1013,7 +1013,7 @@ msgstr ""
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
 msgid "Thank You"
-msgstr ""
+msgstr "شكرًا لك."
 
 #: app/templates/email/video_stream_moderator.html:2
 #, python-format
@@ -1028,7 +1028,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:177
 msgid "INVOICE"
-msgstr ""
+msgstr "فاتورة"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
@@ -1037,7 +1037,7 @@ msgstr "اسم جهة الاتصال"
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
-msgstr ""
+msgstr "الرمز البريدي"
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
@@ -1049,7 +1049,7 @@ msgstr ""
 
 #: app/templates/pdf/order_invoice.html:220
 msgid "Information unavailable"
-msgstr ""
+msgstr "المعلومات غير المتاحة"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
@@ -1057,7 +1057,7 @@ msgstr "تاريخ الاستحقاق"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
-msgstr ""
+msgstr "بعد تلقي الفاتورة"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
@@ -1069,11 +1069,11 @@ msgstr "سعر"
 
 #: app/templates/pdf/order_invoice.html:320
 msgid "Sub-Total"
-msgstr ""
+msgstr "المجموع الفرعي"
 
 #: app/templates/pdf/order_invoice.html:326
 msgid "for"
-msgstr ""
+msgstr "لـ"
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
@@ -1109,6 +1109,8 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"الطلب\n"
+"                    #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
@@ -1147,7 +1149,7 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "معلومات الطلب"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
