@@ -1,16 +1,15 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField
 from app.models import Role, db, Mail
 
-class EventMailingForm(FlaskForm):
-    role = SelectField('Role', choices=[(role.name, role.title_name) for role in Role.query.all()])
-    subject = StringField('Subject')
-    message = TextAreaField('Message')
+class EventMailing:
+    def __init__(self, role, subject, message):
+        self.role = role
+        self.subject = subject
+        self.message = message
 
     def save_emails(self):
-        role_name = self.role.data
-        subject = self.subject.data
-        message = self.message.data
+        role_name = self.role
+        subject = self.subject
+        message = self.message
         role = Role.query.filter_by(name=role_name).first()
         recipients = [attendee.email for attendee in role.attendees]
 
