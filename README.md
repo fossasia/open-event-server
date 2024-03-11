@@ -4,8 +4,8 @@ The Open Event Server enables organizers to manage events from concerts to confe
 ## Intro
 
 This branch is a `v3` rewrite of the backend REST API and a work in progress.
-This new version of the API uses [Python]([https://www.python.org)](https://docs.python.org/3/index.html),
-[Django 5](https://docs.djangoproject.com/en/dev/releases/5.0/), and the [Django](https://www.django-rest-framework.org) REST Framework](https://www.django-rest-framework.org).
+This new version of the API uses [Python]([https://www.python.org),
+[Django 5](https://docs.djangoproject.com/en/dev/releases/5.0/), and the [Django REST Framework](https://www.django-rest-framework.org).
 Currently, data is stored in SQLite although this might change in the future.
 
 If you want to collaborate feel free to have a look at our
