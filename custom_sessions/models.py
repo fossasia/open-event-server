@@ -1,0 +1,48 @@
+from django.db import models
+from events.models import Event
+from microlocation.models import Microlocation
+from session_types.models import SessionType
+from tracks.models import Track
+from users.models import CustomUser
+
+class CustomSession(models.Model):
+    title = models.CharField(max_length=2147483647)
+    subtitle = models.CharField(max_length=2147483647, null=True, blank=True)
+    short_abstract = models.TextField(null=True, blank=True)
+    long_abstract = models.TextField(null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
+    starts_at = models.DateTimeField(null=True, blank=True)
+    ends_at = models.DateTimeField(null=True, blank=True)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, null=True, blank=True)
+    language = models.CharField(max_length=2147483647, null=True, blank=True)
+    microlocation = models.ForeignKey(Microlocation, on_delete=models.CASCADE, null=True, blank=True)
+    session_type = models.ForeignKey(SessionType, on_delete=models.CASCADE, null=True, blank=True)
+    slides_url = models.CharField(max_length=2147483647, null=True, blank=True)
+    video_url = models.CharField(max_length=2147483647, null=True, blank=True)
+    audio_url = models.CharField(max_length=2147483647, null=True, blank=True)
+    signup_url = models.CharField(max_length=2147483647, null=True, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
+    state = models.CharField(max_length=2147483647, null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(null=True, blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    submitted_at = models.DateTimeField(null=True, blank=True)
+    submission_modifier = models.CharField(max_length=2147483647, null=True, blank=True)
+    is_mail_sent = models.BooleanField(null=True, blank=True)
+    level = models.CharField(max_length=2147483647, null=True, blank=True)
+    creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    last_modified_at = models.DateTimeField(null=True, blank=True)
+    send_email = models.BooleanField(null=True, blank=True)
+    is_locked = models.BooleanField(default=False)
+    complex_field_values = models.JSONField(null=True, blank=True)
+    average_rating = models.FloatField(default=0)
+    rating_count = models.IntegerField(default=0)
+    facebook = models.CharField(max_length=2147483647, null=True, blank=True)
+    github = models.CharField(max_length=2147483647, null=True, blank=True)
+    gitlab = models.CharField(max_length=2147483647, null=True, blank=True)
+    instagram = models.CharField(max_length=2147483647, null=True, blank=True)
+    linkedin = models.CharField(max_length=2147483647, null=True, blank=True)
+    twitter = models.CharField(max_length=2147483647, null=True, blank=True)
+    website = models.CharField(max_length=2147483647, null=True, blank=True)
+    favourite_count = models.IntegerField(default=0)
+    mastodon = models.CharField(max_length=2147483647, null=True, blank=True)
+    slides = models.JSONField(null=True, blank=True)
