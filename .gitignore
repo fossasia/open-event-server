@@ -5,3 +5,5 @@ __pycache__/
 .tool-versions
 Pipfile*
 .env
+.vscode/
+**/.DS_Store
