@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import CITextField
 from users.models import CustomUser
 from event_topics.models import EventTopic, EventSubTopic
 
@@ -28,7 +27,7 @@ class Group(models.Model):
         return self.name
 
 class DiscountCode(models.Model):
-    code = CITextField(max_length=200, null=True)
+    code = models.TextField(max_length=200, null=True)
     value = models.FloatField(null=True)
     type = models.CharField(max_length=200, null=True)
     is_active = models.BooleanField(null=True)
