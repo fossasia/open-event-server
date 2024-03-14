@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import CustomUser
 from event_topics.models import EventTopic, EventSubTopic
+from video_channels.models import VideoStreams
 
 class EventType(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -134,3 +135,89 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+class Tracks(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    description = models.TextField(null=True)
+    color = models.CharField(max_length=200, null=True)
+    event_id = models.IntegerField(null=True)
+    deleted_at = models.DateTimeField(null=True)
+    position = models.IntegerField(null=True)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+    
+class Microlocations(models.Model):
+    name = models.CharField(max_length=2147483647, null=True)
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
+    floor = models.IntegerField(null=True)
+    room = models.CharField(max_length=2147483647, null=True)
+    deleted_at = models.DateTimeField(null=True)
+    position = models.IntegerField(null=True)
+    hidden_in_scheduler = models.BooleanField(default=False)
+    is_chat_enabled = models.BooleanField(null=True, blank=True)
+    is_global_event_room = models.BooleanField(null=True, blank=True)
+    chat_room_id = models.CharField(max_length=2147483647, null=True, blank=True)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, null=True)
+    video_stream_id = models.ForeignKey(VideoStreams, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name
+
+class SessionTypes(models.Model):
+    name = models.CharField(max_length=2147483647, null=True, blank=True)
+    length = models.CharField(max_length=2147483647, null=True, blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    position = models.IntegerField(null=True, blank=True)
+    event_id = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Sessions(models.Model):
+    title = models.CharField(max_length=2147483647)
+    subtitle = models.CharField(max_length=2147483647, null=True)
+    short_abstract = models.TextField(null=True)
+    long_abstract = models.TextField(null=True)
+    comments = models.TextField(null=True)
+    starts_at = models.DateTimeField(null=True)
+    ends_at = models.DateTimeField(null=True)
+    track_id = models.ForeignKey(Tracks, on_delete=models.CASCADE)
+    language = models.CharField(max_length=2147483647, null=True)
+    microlocation_id = models.ForeignKey(Microlocations, on_delete=models.CASCADE, null=True)
+    session_type_id = models.ForeignKey(SessionTypes, on_delete=models.CASCADE, null=True)
+    slides_url = models.CharField(max_length=2147483647, null=True)
+    video_url = models.CharField(max_length=2147483647, null=True)
+    audio_url = models.CharField(max_length=2147483647, null=True)
+    signup_url = models.CharField(max_length=2147483647, null=True)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, null=True)
+    state = models.CharField(max_length=2147483647, null=True)
+    created_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True)
+    submitted_at = models.DateTimeField(null=True)
+    submission_modifier = models.CharField(max_length=2147483647, null=True)
+    is_mail_sent = models.BooleanField(null=True)
+    level = models.CharField(max_length=2147483647, null=True)
+    creator_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    last_modified_at = models.DateTimeField(null=True)
+    send_email = models.BooleanField(null=True)
+    is_locked = models.BooleanField(default=False)
+    complex_field_values = models.JSONField(null=True)
+    average_rating = models.FloatField(null=True, default=0.0)
+    rating_count = models.IntegerField(default=0)
+    facebook = models.CharField(max_length=2147483647, null=True)
+    github = models.CharField(max_length=2147483647, null=True)
+    gitlab = models.CharField(max_length=2147483647, null=True)
+    instagram = models.CharField(max_length=2147483647, null=True)
+    linkedin = models.CharField(max_length=2147483647, null=True)
+    twitter = models.CharField(max_length=2147483647, null=True)
+    website = models.CharField(max_length=2147483647, null=True)
+    favourite_count = models.IntegerField(default=0)
+    mastodon = models.CharField(max_length=2147483647, null=True)
+    slides = models.JSONField(max_length=2147483647, null=True)
+
+    def __str__(self):
+        return self.name
+
