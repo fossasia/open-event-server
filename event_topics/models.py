@@ -11,3 +11,11 @@ class EventTopic(models.Model):
 
     def __str__(self):
         return self.name
+    
+class EventSubTopic(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    slug = models.CharField(max_length=200, null=True)
+    event_topic_id = models.ForeignKey(EventTopic, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name
