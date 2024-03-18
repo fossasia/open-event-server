@@ -134,3 +134,25 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+class Exhibitors(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    url = models.CharField(max_length=200, blank=True, null=True)
+    position = models.IntegerField(default=0)
+    logo_url = models.CharField(max_length=200, blank=True, null=True)
+    banner_url = models.CharField(max_length=200, blank=True, null=True)
+    video_url = models.CharField(max_length=200, blank=True, null=True)
+    slides_url = models.URLField(null=True, blank=True)
+    social_links = models.JSONField(null=True, blank=True)
+    status = models.CharField(max_length=2147483647, null=True, blank=True, default='pending')
+    contact_email = models.EmailField(null=True, blank=True)
+    contact_link = models.URLField(null=True, blank=True)
+    enable_video_room = models.BooleanField(default=False)
+    thumbnail_image_url = models.URLField(null=True, blank=True)
+    event = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
