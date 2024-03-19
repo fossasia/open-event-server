@@ -138,7 +138,7 @@ def get_order_data(order):
         }
 
     return {
-        'Tax ID': str(order) if order.tax_business_info else '',
+        'Tax ID': str(order.tax_business_info) if order.tax_business_info else '',
         'Address': str(order.address) if order.address else '',
         'Company': str(order.company) if order.company else '',
         'Country': str(order.country) if order.country else '',
