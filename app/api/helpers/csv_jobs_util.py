@@ -82,16 +82,33 @@ def export_orders_csv(orders):
     return rows
 
 
+def get_order_ticket_data(order, ticket):
+    """Get order ticket data"""
+    data = {}
+    if order:
+        data = {
+            'Order#': str(order.get_invoice_number()),
+            'Order Date': str(order.created_at.strftime('%B %-d, %Y %H:%M %z'))
+            if order.created_at
+            else '-',
+            'Status': str(order.status) if order.status else '-',
+            'Payment Type': str(order.paid_via) if order.paid_via else '',
+            'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
+            'Ticket ID': str(order.identifier) if order.identifier else '',
+        }
+
+        if ticket:
+            data.update(get_ticket_data(ticket))
+
+        data.update(get_order_data(order))
+
+    return data
+
+
 def get_order_data(order):
     """Get order data from order object"""
     if not order:
         return {
-            'Order#': '-',
-            'Order Date': '-',
-            'Status': '-',
-            'Payment Type': '',
-            'Payment Mode': '',
-            'Ticket ID': '',
             'Tax ID': '',
             'Address': '',
             'Company': '',
@@ -102,15 +119,7 @@ def get_order_data(order):
         }
 
     return {
-        'Order#': str(order.get_invoice_number()),
-        'Order Date': str(order.created_at.strftime('%B %-d, %Y %H:%M %z'))
-        if order.created_at
-        else '-',
-        'Status': str(order.status) if order.status else '-',
-        'Payment Type': str(order.paid_via) if order.paid_via else '',
-        'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
-        'Ticket ID': str(order.identifier) if order.identifier else '',
-        'Tax ID': str(order.tax_business_info) if order.tax_business_info else '',
+        'Tax ID': str(order) if order.tax_business_info else '',
         'Address': str(order.address) if order.address else '',
         'Company': str(order.company) if order.company else '',
         'Country': str(order.country) if order.country else '',
@@ -134,12 +143,12 @@ def get_ticket_data(ticket):
 
 def get_attendee_data(attendee, custom_forms, attendee_form_dict):
     """Get attendee data from attendee object"""
-    order_data = get_order_data(attendee.order)
-    ticket_data = get_ticket_data(attendee.ticket)
+    order_ticket_data = get_order_ticket_data(attendee.order, attendee.ticket)
+    if not order_ticket_data:
+        return {}
 
     data = {
-        **order_data,
-        **ticket_data,
+        **order_ticket_data,
         'Email': '',
     }
 
@@ -176,7 +185,8 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
     return_dict_list = []
     for attendee in attendees:
         attendee_data = get_attendee_data(attendee, custom_forms, attendee_form_dict)
-        return_dict_list.append(attendee_data)
+        if attendee_data:
+            return_dict_list.append(attendee_data)
 
     return return_dict_list
 
