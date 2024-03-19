@@ -85,22 +85,41 @@ def export_orders_csv(orders):
 def get_order_ticket_data(order, ticket):
     """Get order ticket data"""
     data = {}
-    if order:
-        data = {
-            'Order#': str(order.get_invoice_number()),
-            'Order Date': str(order.created_at.strftime('%B %-d, %Y %H:%M %z'))
-            if order.created_at
-            else '-',
-            'Status': str(order.status) if order.status else '-',
-            'Payment Type': str(order.paid_via) if order.paid_via else '',
-            'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
-            'Ticket ID': str(order.identifier) if order.identifier else '',
+    if not order:
+        return {
+            'Order#': '',
+            'Order Date': '',
+            'Status': '',
+            'Payment Type': '',
+            'Payment Mode': '',
+            'Ticket ID': '',
+            'Ticket Name': '',
+            'Ticket Price': '0',
+            'Ticket Type': '',
+            'Tax ID': '',
+            'Address': '',
+            'Company': '',
+            'Country': '',
+            'State': '',
+            'City': '',
+            'Zipcode': '',
         }
 
-        if ticket:
-            data.update(get_ticket_data(ticket))
+    data = {
+        'Order#': str(order.get_invoice_number()),
+        'Order Date': str(order.created_at.strftime('%B %-d, %Y %H:%M %z'))
+        if order.created_at
+        else '-',
+        'Status': str(order.status) if order.status else '-',
+        'Payment Type': str(order.paid_via) if order.paid_via else '',
+        'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
+        'Ticket ID': str(order.identifier) if order.identifier else '',
+    }
 
-        data.update(get_order_data(order))
+    if ticket:
+        data.update(get_ticket_data(ticket))
+
+    data.update(get_order_data(order))
 
     return data
 
@@ -144,9 +163,6 @@ def get_ticket_data(ticket):
 def get_attendee_data(attendee, custom_forms, attendee_form_dict):
     """Get attendee data from attendee object"""
     order_ticket_data = get_order_ticket_data(attendee.order, attendee.ticket)
-    if not order_ticket_data:
-        return {}
-
     data = {
         **order_ticket_data,
         'Email': '',
