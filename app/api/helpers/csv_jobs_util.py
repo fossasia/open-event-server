@@ -100,6 +100,9 @@ def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
             'Payment Mode': str(attendee.order.payment_mode)
             if attendee.order and attendee.order.payment_mode
             else '',
+            'Ticket ID': str(attendee.order.identifier)
+            if attendee.order and attendee.order.identifier
+            else '',
             'Ticket Name': str(attendee.ticket.name)
             if attendee.ticket and attendee.ticket.name
             else '',
