@@ -16,6 +16,7 @@ from tests.all.integration.utils import OpenEventTestCase
 from tests.factories import common
 from tests.factories.attendee import AttendeeFactory
 from tests.factories.custom_form import CustomFormFactory
+from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory
 from tests.factories.session import SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
@@ -26,7 +27,9 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check the orders data export"""
 
         with self.app.test_request_context():
+            test_event = EventFactoryBasic()
             test_order = OrderFactory(created_at=datetime.now())
+            test_order.event = test_event
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
             assert field_data[1][2] == 'initializing'
