@@ -82,56 +82,73 @@ def export_orders_csv(orders):
     return rows
 
 
+def get_order_data(order):
+    """Get order data from order object"""
+    if not order:
+        return {
+            'Order#': '-',
+            'Order Date': '-',
+            'Status': '-',
+            'Payment Type': '',
+            'Payment Mode': '',
+            'Ticket ID': '',
+            'Tax ID': '',
+            'Address': '',
+            'Company': '',
+            'Country': '',
+            'State': '',
+            'City': '',
+            'Zipcode': '',
+        }
+
+    return {
+        'Order#': str(order.get_invoice_number()),
+        'Order Date': str(order.created_at.strftime('%B %-d, %Y %H:%M %z'))
+        if order.created_at
+        else '-',
+        'Status': str(order.status) if order.status else '-',
+        'Payment Type': str(order.paid_via) if order.paid_via else '',
+        'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
+        'Ticket ID': str(order.identifier) if order.identifier else '',
+        'Tax ID': str(order.tax_business_info) if order.tax_business_info else '',
+        'Address': str(order.address) if order.address else '',
+        'Company': str(order.company) if order.company else '',
+        'Country': str(order.country) if order.country else '',
+        'State': str(order.state) if order.state else '',
+        'City': str(order.city) if order.city else '',
+        'Zipcode': str(order.zipcode) if order.zipcode else '',
+    }
+
+
+def get_ticket_data(ticket):
+    """Get ticket data from ticket object"""
+    if not ticket:
+        return {'Ticket Name': '', 'Ticket Price': '0', 'Ticket Type': ''}
+
+    return {
+        'Ticket Name': str(ticket.name) if ticket.name else '',
+        'Ticket Price': str(ticket.price) if ticket.price else '0',
+        'Ticket Type': str(ticket.type) if ticket.type else '',
+    }
+
+
 def get_attendee_data(attendee, custom_forms, attendee_form_dict):
+    """Get attendee data from attendee object"""
+    order_data = get_order_data(attendee.order)
+    ticket_data = get_ticket_data(attendee.ticket)
+
     data = {
-        'Order#': str(attendee.order.get_invoice_number()) if attendee.order else '-',
-        'Order Date': str(attendee.order.created_at.strftime('%B %-d, %Y %H:%M %z'))
-        if attendee.order and attendee.order.created_at
-        else '-',
-        'Status': str(attendee.order.status)
-        if attendee.order and attendee.order.status
-        else '-',
-        'Payment Type': str(attendee.order.paid_via)
-        if attendee.order and attendee.order.paid_via
-        else '',
-        'Payment Mode': str(attendee.order.payment_mode)
-        if attendee.order and attendee.order.payment_mode
-        else '',
-        'Ticket ID': str(attendee.order.identifier)
-        if attendee.order and attendee.order.identifier
-        else '',
-        'Ticket Name': str(attendee.ticket.name)
-        if attendee.ticket and attendee.ticket.name
-        else '',
-        'Ticket Price': str(attendee.ticket.price)
-        if attendee.ticket and attendee.ticket.price
-        else '0',
-        'Ticket Type': str(attendee.ticket.type)
-        if attendee.ticket and attendee.ticket.type
-        else '',
-        'Tax ID': str(attendee.order.tax_business_info)
-        if attendee.order.tax_business_info
-        else '',
-        'Address': str(attendee.order.address) if attendee.order.address else '',
-        'Company': str(attendee.order.company) if attendee.order.company else '',
-        'Country': str(attendee.order.country) if attendee.order.country else '',
-        'State': str(attendee.order.state) if attendee.order.state else '',
-        'City': str(attendee.order.city) if attendee.order.city else '',
-        'Zipcode': str(attendee.order.zipcode) if attendee.order.zipcode else '',
+        **order_data,
+        **ticket_data,
         'Email': '',
     }
 
     for field in custom_forms:
-        # keys don't match up, for keys like
-        # acceptVideoRecording vs accept_video_recording ..
-        key_mapping = {}
-
-        for k in attendee_form_dict.keys():
-            key_mapping[k.replace("_", "").lower()] = k
-
+        key_mapping = {k.replace("_", "").lower(): k for k in attendee_form_dict.keys()}
         field_raw = field.identifier.replace("_", "").lower()
         key = key_mapping.get(field_raw)
         converted_header = attendee_form_dict.get(key)
+
         if field.is_complex:
             fields_dict = attendee.complex_field_values
             converted_header = field.name
@@ -149,11 +166,13 @@ def get_attendee_data(attendee, custom_forms, attendee_form_dict):
             )
             converted_header = field.name
             data[converted_header] = dict_value
+
     data['virtual_event_checkin_times'] = get_virtual_checkin_times(attendee.id)
     return data
 
 
 def export_attendees_csv(attendees, custom_forms, attendee_form_dict):
+    """Export attendees csv"""
     return_dict_list = []
     for attendee in attendees:
         attendee_data = get_attendee_data(attendee, custom_forms, attendee_form_dict)
