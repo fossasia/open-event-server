@@ -1,8 +1,10 @@
 """empty message
 
 Revision ID: 414c776ae509
-Revises: 24271525a263
+Revises: bce7acfe5a4f
 Create Date: 2023-08-10 00:00:08.837497
+
+Moved to 2024-03-21 to fix missing application due to split head
 
 """
 
@@ -12,7 +14,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '414c776ae509'
-down_revision = '24271525a263'
+down_revision = 'bce7acfe5a4f'
 
 
 def upgrade():
