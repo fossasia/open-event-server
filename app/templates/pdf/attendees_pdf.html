@@ -111,6 +111,7 @@
                         {{ field.name }} <br>
                      {% endfor %}
                     Amount:<br>
+                    Ticket ID:<br>
                     Ticket Name:<br>
                     Status:<br>
                  </td>
@@ -127,6 +128,7 @@
                     {% else %}
                         {{ "Free Ticket" }} <br>
                     {% endif %}
+                    {{ holder.order.identifier }}<br>
                     {{ holder.ticket.name }}<br>
                     {% if holder.is_checked_in %}
                         {{ ("Checked In") }}<br>

@@ -1,17 +1,25 @@
 import unittest
 from datetime import datetime
 
-from app.api.helpers.csv_jobs_util import *
+import pytz
+
+from app.api.helpers.csv_jobs_util import (
+    export_attendees_csv,
+    export_orders_csv,
+    export_sessions_csv,
+    export_speakers_csv,
+)
 from app.models import db
+from app.models.custom_form import ATTENDEE_CUSTOM_FORM
 from tests.all.integration.auth_helper import create_user
 from tests.all.integration.utils import OpenEventTestCase
 from tests.factories import common
 from tests.factories.attendee import AttendeeFactory
 from tests.factories.custom_form import CustomFormFactory
+from tests.factories.event import EventFactoryBasic
 from tests.factories.order import OrderFactory
 from tests.factories.session import SessionSubFactory
 from tests.factories.speaker import SpeakerFactory
-from app.models.custom_form import ATTENDEE_CUSTOM_FORM
 
 
 class TestExportCSV(OpenEventTestCase):
@@ -19,7 +27,9 @@ class TestExportCSV(OpenEventTestCase):
         """Method to check the orders data export"""
 
         with self.app.test_request_context():
+            test_event = EventFactoryBasic()
             test_order = OrderFactory(created_at=datetime.now())
+            test_order.event = test_event
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
             assert field_data[1][2] == 'initializing'
@@ -34,7 +44,8 @@ class TestExportCSV(OpenEventTestCase):
             test_attendee.order = test_order
             custom_forms = CustomFormFactory()
             field_data = export_attendees_csv(
-                [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM)
+                [test_attendee], [custom_forms], ATTENDEE_CUSTOM_FORM
+            )
             # new export_attendees_csv will return list of dictionary for csv_writer
             assert field_data[0].get("Tax ID") == "tax id"
 
