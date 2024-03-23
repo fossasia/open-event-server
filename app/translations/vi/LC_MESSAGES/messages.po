@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2023-06-30 07:52+0000\n"
-"Last-Translator: Hong Phuc Dang <hp@fossasia.org>\n"
+"PO-Revision-Date: 2024-03-24 17:02+0000\n"
+"Last-Translator: Quyên Trần Lê Thục <quyentlt256@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
 "Language: vi\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.5-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
@@ -1068,7 +1068,7 @@ msgstr "Vui lòng truy cập liên kết sau để xác minh email của bạn: 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
 msgid "Thank You"
-msgstr "Cám ơn."
+msgstr "Cám ơn"
 
 #: app/templates/email/video_stream_moderator.html:2
 #, python-format
@@ -1189,7 +1189,7 @@ msgstr "Sự kiện diễn ra tại %(event_location)s."
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
-msgstr "Địa điểm hoặc chi tiết sự kiện trực tuyến sẽ được thông báo"
+msgstr "Địa điểm hoặc chi tiết sự kiện trực tuyến sẽ được thông báo."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
