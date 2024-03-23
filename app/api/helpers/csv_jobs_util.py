@@ -82,7 +82,7 @@ def export_orders_csv(orders):
     return rows
 
 
-def get_order_ticket_data(order, ticket):
+def get_order_ticket_data(attendee, order, ticket):
     """Get order ticket data"""
     data = {}
     if not order:
@@ -104,6 +104,12 @@ def get_order_ticket_data(order, ticket):
             'City': '',
             'Zipcode': '',
         }
+    ticketId = ''
+    if order.identifier:
+        if not attendee.identifier:
+            ticketId = order.identifier + '-' + attendee.get_new_identifier()
+        else:
+            ticketId = order.identifier + '-' + attendee.identifier
 
     data = {
         'Order#': str(order.get_invoice_number()),
@@ -113,7 +119,7 @@ def get_order_ticket_data(order, ticket):
         'Status': str(order.status) if order.status else '-',
         'Payment Type': str(order.paid_via) if order.paid_via else '',
         'Payment Mode': str(order.payment_mode) if order.payment_mode else '',
-        'Ticket ID': str(order.identifier) if order.identifier else '',
+        'Ticket ID': ticketId,
     }
 
     if ticket:
@@ -162,7 +168,7 @@ def get_ticket_data(ticket):
 
 def get_attendee_data(attendee, custom_forms, attendee_form_dict):
     """Get attendee data from attendee object"""
-    order_ticket_data = get_order_ticket_data(attendee.order, attendee.ticket)
+    order_ticket_data = get_order_ticket_data(attendee, attendee.order, attendee.ticket)
     data = {
         **order_ticket_data,
         'Email': '',
