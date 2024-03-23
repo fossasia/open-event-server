@@ -14,6 +14,7 @@ from app.models.base import SoftDeletionModel
 
 
 def get_new_id():
+    """Generate a new id for a ticket holder."""
     return str(binascii.b2a_hex(os.urandom(3)), 'utf-8')
 
 
@@ -155,5 +156,7 @@ class TicketHolder(SoftDeletionModel):
             + '.pdf'
         )
 
-    def get_new_identifier(self):
+    @staticmethod
+    def get_new_identifier():
+        """Generate a new identifier for the ticket holder."""
         return str(binascii.b2a_hex(os.urandom(3)), 'utf-8')
