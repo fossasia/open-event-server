@@ -120,7 +120,9 @@ class TicketHolder(SoftDeletionModel):
         if not self.identifier:
             identifier = get_new_id()
 
-        qr.add_data(self.order.identifier + "-" + identifier)
+        # original code from TMA, but this generates an incorrect affix
+        # qr.add_data(self.order.identifier + "-" + identifier)
+        qr.add_data(self.order.identifier)
         qr.make(fit=True)
         img = qr.make_image()
 
