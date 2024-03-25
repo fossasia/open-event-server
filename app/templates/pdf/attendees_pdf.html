@@ -129,9 +129,9 @@
                         {{ "Free Ticket" }} <br>
                     {% endif %}
                     {% if holder.identifier %}
-                        {{ holder.order.identifier }} - {{ holder.identifier }} <br>
+                        {{ holder.order.identifier }}-{{ holder.identifier }} <br>
                     {% else %}
-                        {{ holder.order.identifier }} - {{ holder.get_new_identifier()}}<br>
+                        {{ holder.order.identifier }}-{{ holder.id }} <br>
                     {% endif %}
                     {{ holder.ticket.name }}<br>
                     {% if holder.is_checked_in %}

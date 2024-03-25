@@ -118,7 +118,7 @@ class TicketHolder(SoftDeletionModel):
         )
         identifier = self.identifier
         if not self.identifier:
-            identifier = get_new_id()
+            identifier = str(self.id)
 
         qr.add_data(self.order.identifier + "-" + identifier)
         qr.make(fit=True)
@@ -155,8 +155,3 @@ class TicketHolder(SoftDeletionModel):
             + self.order.identifier
             + '.pdf'
         )
-
-    @staticmethod
-    def get_new_identifier():
-        """Generate a new identifier for the ticket holder."""
-        return str(binascii.b2a_hex(os.urandom(3)), 'utf-8')

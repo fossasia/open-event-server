@@ -107,7 +107,7 @@ def get_order_ticket_data(attendee, order, ticket):
     ticketId = ''
     if order.identifier:
         if not attendee.identifier:
-            ticketId = order.identifier + '-' + attendee.get_new_identifier()
+            ticketId = order.identifier + '-' + str(attendee.id)
         else:
             ticketId = order.identifier + '-' + attendee.identifier
 
