@@ -1,4 +1,6 @@
 import base64
+import binascii
+import os
 from dataclasses import dataclass
 from datetime import datetime
 from io import BytesIO
@@ -9,6 +11,11 @@ from citext import CIText
 from app.api.helpers.storage import UPLOAD_PATHS, generate_hash
 from app.models import db
 from app.models.base import SoftDeletionModel
+
+
+def get_new_id():
+    """Generate a new id for a ticket holder."""
+    return str(binascii.b2a_hex(os.urandom(3)), 'utf-8')
 
 
 @dataclass(init=False, unsafe_hash=True)
@@ -90,6 +97,7 @@ class TicketHolder(SoftDeletionModel):
     is_access_code_applied: bool = db.Column(db.Boolean, default=False)
     tag_id: int = db.Column(db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
     tag = db.relationship('Tag', backref='ticket_holders')
+    identifier = db.Column(db.String, default=get_new_id)
 
     @property
     def name(self):
@@ -108,7 +116,11 @@ class TicketHolder(SoftDeletionModel):
             box_size=10,
             border=0,
         )
-        qr.add_data(self.order.identifier)
+        identifier = self.identifier
+        if not self.identifier:
+            identifier = get_new_id()
+
+        qr.add_data(self.order.identifier + "-" + identifier)
         qr.make(fit=True)
         img = qr.make_image()
 
@@ -143,3 +155,8 @@ class TicketHolder(SoftDeletionModel):
             + self.order.identifier
             + '.pdf'
         )
+
+    @staticmethod
+    def get_new_identifier():
+        """Generate a new identifier for the ticket holder."""
+        return str(binascii.b2a_hex(os.urandom(3)), 'utf-8')
