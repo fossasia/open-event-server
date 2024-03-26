@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2024-03-24 17:02+0000\n"
+"PO-Revision-Date: 2024-03-27 04:01+0000\n"
 "Last-Translator: Quyên Trần Lê Thục <quyentlt256@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
@@ -669,7 +669,7 @@ msgstr "Về sự kiện này"
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
 msgid "Date"
-msgstr "Ngày tháng năm"
+msgstr "Ngày"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
@@ -868,13 +868,13 @@ msgstr "Cơ quan"
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
-msgstr "Địa Chỉ"
+msgstr "Địa chỉ"
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
-msgstr "Thành Phố"
+msgstr "Thành phố"
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
@@ -890,13 +890,13 @@ msgstr "Zip"
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
-msgstr "Quốc Gia"
+msgstr "Quốc gia"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr "Mã số thuế"
+msgstr "ID thuế"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
@@ -1118,7 +1118,7 @@ msgstr "theo hóa đơn"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr "Sự miêu tả"
+msgstr "Mô tả"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
