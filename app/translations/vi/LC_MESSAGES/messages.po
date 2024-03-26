@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: 2024-03-27 04:01+0000\n"
-"Last-Translator: Quyên Trần Lê Thục <quyentlt256@gmail.com>\n"
+"PO-Revision-Date: 2024-03-27 04:02+0000\n"
+"Last-Translator: Quyên Trần <quyenjimin256@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event/"
 "server/vi/>\n"
 "Language: vi\n"
@@ -848,7 +848,7 @@ msgstr "Đã hủy"
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr "Đã hết hạn"
+msgstr "Hết hạn"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
@@ -856,7 +856,7 @@ msgstr "Vé/Đăng ký"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
-msgstr "Số tiền"
+msgstr "Số lượng"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
