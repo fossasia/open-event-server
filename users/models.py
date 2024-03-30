@@ -46,3 +46,21 @@ class CustomUser(AbstractUser):
 
     company = models.CharField(null=True, blank=True, max_length=200)
     rocket_chat_token = models.CharField(null=True, blank=True, max_length=200)
+
+class Exhibitor(models.Model):
+    username = models.OneToOneField(CustomUser, on_delete =models.CASCADE, related_name = 'exhibitors', null=False, blank = False)
+    description = models.TextField(null = True, blank = True)
+    website = models.URLField(null=False, blank = False)
+
+    def verify(self):
+        return self.username.is_verified 
+    
+    def update_exhibtor(self,description=None, website = None):
+        if description is not None:
+            self.description = description
+        if website is not None:
+            self.website = website
+        self.save()
+    
+    def __str__(self) -> str:
+        return self.username.username or "Exhibtors"
