@@ -1,7 +1,4 @@
 from django.db import models
-# imported fields from #9123 where event tickets & discount codes are created.
-from events.models import Event
-from tickets.models import Ticket
 
 class MailingList(models.Model):
     email = models.EmailField(unique=True, blank=False, null=False)
@@ -12,3 +9,4 @@ class MailingList(models.Model):
             return self.email
         else:
             return "No email specified"
+
