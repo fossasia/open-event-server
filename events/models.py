@@ -2,12 +2,15 @@ from django.db import models
 from users.models import CustomUser
 from event_topics.models import EventTopic, EventSubTopic
 
+
 class EventType(models.Model):
     name = models.CharField(max_length=200, null=True)
     slug = models.CharField(max_length=200, null=True)
     deleted_at = models.DateTimeField(null=True)
+
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
 
 class Group(models.Model):
     name = models.CharField(max_length=200, null=True)
@@ -24,7 +27,8 @@ class Group(models.Model):
     is_promoted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
 
 class DiscountCode(models.Model):
     code = models.TextField(max_length=200, null=True)
@@ -36,16 +40,15 @@ class DiscountCode(models.Model):
     max_quantity = models.IntegerField(null=True)
     valid_from = models.DateTimeField(null=True)
     valid_till = models.DateTimeField(null=True)
-    event_id = models.ForeignKey('Event', on_delete=models.CASCADE, null=True)
+    event_id = models.ForeignKey("Event", on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(null=True)
     marketer_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     used_for = models.CharField(max_length=200, null=True)
     discount_url = models.CharField(max_length=200, null=True)
     deleted_at = models.DateTimeField(null=True)
 
-
     def __str__(self):
-        return self.code
+        return f"{self.code}"
 
 class Event(models.Model):
     identifier = models.CharField(max_length=8)
@@ -133,7 +136,8 @@ class Event(models.Model):
     group_id = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
 
 class Exhibitors(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -147,7 +151,7 @@ class Exhibitors(models.Model):
     video_url = models.CharField(max_length=200, blank=True, null=True)
     slides_url = models.URLField(null=True, blank=True)
     social_links = models.JSONField(null=True, blank=True)
-    status = models.CharField(max_length=2147483647, null=True, blank=True, default='pending')
+    status = models.CharField(max_length=2147483647, null=True, blank=True, default="pending")
     contact_email = models.EmailField(null=True, blank=True)
     contact_link = models.URLField(null=True, blank=True)
     enable_video_room = models.BooleanField(default=False)
@@ -155,4 +159,4 @@ class Exhibitors(models.Model):
     event = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
