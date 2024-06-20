@@ -81,7 +81,6 @@ class PentabarfExporter:
 
                     room = Room(name=microlocation.name)
                     for session in sessions:
-
                         if session.ends_at is None or session.starts_at is None:
                             duration = ""
                         else:

@@ -73,7 +73,6 @@ def export_download(event_id, path):
 @to_event_id
 @is_coorganizer
 def export_event_xcal(event_id):
-
     from .helpers.tasks import export_xcal_task
 
     # queue task

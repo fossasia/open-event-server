@@ -26,15 +26,18 @@ def add_engine_pidguard(engine):
         if connection_record.info['pid'] != pid:
             # substitute log.debug() or similar here as desired
             warnings.warn(
-                "Parent process %(orig)s forked (%(newproc)s) with an open "
+                "Parent process {orig} forked ({newproc}) with an open "
                 "database connection, "
-                "which is being discarded and recreated."
-                % {"newproc": pid, "orig": connection_record.info['pid']}
+                "which is being discarded and recreated.".format(
+                    newproc=pid, orig=connection_record.info['pid']
+                )
             )
             connection_record.connection = connection_proxy.connection = None
             raise exc.DisconnectionError(
-                "Connection record belongs to pid %s, "
-                "attempting to check out in pid %s" % (connection_record.info['pid'], pid)
+                "Connection record belongs to pid {}, "
+                "attempting to check out in pid {}".format(
+                    connection_record.info['pid'], pid
+                )
             )
 
 

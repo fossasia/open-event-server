@@ -91,7 +91,6 @@ class UserFavouriteEventDetail(ResourceDetail):
 
     @jwt_required
     def before_get_object(self, view_kwargs):
-
         if view_kwargs.get('id') is not None:
             try:
                 user_favourite_event = find_user_favourite_event_by_id(

@@ -12,7 +12,4 @@ class SessionsSpeakersLink(SoftDeletionModel):
     speaker_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return '<SSLink {!r}:{!r}>'.format(
-            self.session_id,
-            self.speaker_id,
-        )
+        return f'<SSLink {self.session_id!r}:{self.speaker_id!r}>'

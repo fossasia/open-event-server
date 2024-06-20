@@ -43,9 +43,7 @@ def validate_ticket_holders(ticket_holder_ids):
             )
             raise ConflictError(
                 {'pointer': '/data/relationships/attendees'},
-                "Order already exists for attendee with id {}".format(
-                    str(ticket_holder.id)
-                ),
+                f"Order already exists for attendee with id {str(ticket_holder.id)}",
             )
     return ticket_holders
 

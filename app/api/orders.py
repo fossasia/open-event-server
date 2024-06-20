@@ -658,9 +658,7 @@ def omise_checkout(order_identifier):
         logging.exception('Error while charging omise')
     if charge.failure_code is not None:
         logging.warning(
-            "Omise Failure Message: {} ({})".format(
-                charge.failure_message, charge.failure_code
-            )
+            f"Omise Failure Message: {charge.failure_message} ({charge.failure_code})"
         )
         return jsonify(
             status=False,

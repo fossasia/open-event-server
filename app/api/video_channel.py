@@ -10,7 +10,6 @@ from app.models.video_stream import VideoStream
 
 
 class VideoChannelListPost(ResourceList):
-
     methods = ['POST']
     decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = VideoChannelSchema

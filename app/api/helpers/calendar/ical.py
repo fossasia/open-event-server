@@ -57,7 +57,6 @@ def to_ical(event, include_sessions=False, my_schedule=False, user_id=None):
         sessions = sessions_query.all()
 
         for session in sessions:
-
             if not (session and session.starts_at and session.ends_at):
                 continue
 

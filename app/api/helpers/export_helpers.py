@@ -285,7 +285,6 @@ def create_export_job(task_id, event_id):
     current_logged_user = get_current_user()
 
     if export_job:
-
         export_job.task = task_url
         export_job.user_email = current_logged_user.email
         export_job.event = Event.query.get(event_id)

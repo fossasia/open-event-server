@@ -64,11 +64,7 @@ class EventInvoice(SoftDeletionModel):
             self.identifier = self.get_new_id()
 
     def __repr__(self):
-        return '<EventInvoice {!r} {!r} {!r}>'.format(
-            self.id,
-            self.identifier,
-            self.invoice_pdf_url,
-        )
+        return f'<EventInvoice {self.id!r} {self.identifier!r} {self.invoice_pdf_url!r}>'
 
     def get_new_id(self) -> str:
         with db.session.no_autoflush:
