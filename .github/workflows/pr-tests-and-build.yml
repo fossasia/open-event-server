@@ -1,0 +1,39 @@
+name: PR Tests and Build
+
+on:
+  pull_request:
+    branches:
+      - development  # Uses development branch
+
+jobs:
+  test-and-build:
+    name: Run Tests and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Python
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8  # Use version 3.8
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      # Run tests
+      - name: Run Tests
+        run: |
+          poetry run pytest tests
+
+      # Build the project
+      - name: Build Project
+        run: |
+          poetry build
