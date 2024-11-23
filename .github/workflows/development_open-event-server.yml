@@ -34,27 +34,16 @@ jobs:
         run: |
           cp master-branch/pyproject.toml .  # Copy the pyproject.toml file
 
-      - name: Set up Python version
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.8'
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
 
       - name: Install dependencies using Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           source ~/.profile  # Ensure Poetry is in PATH
           poetry install  # Install dependencies based on pyproject.toml
-
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-      
-      - name: Install dependencies using Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          source ~/.profile  # Ensure Poetry is in PATH
-          poetry install
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
