@@ -30,9 +30,9 @@ jobs:
       - name: Install dependencies using Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
+          cd $GITHUB_WORKSPACE  # Ensures we are in the repository root
           poetry install
 
-        
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
