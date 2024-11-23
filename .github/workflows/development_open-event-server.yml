@@ -24,6 +24,27 @@ jobs:
         with:
           python-version: '3.8'
 
+      - name: Checkout master branch for pyproject.toml
+        uses: actions/checkout@v4
+        with:
+          ref: master  # Checkout the 'master' branch to get the pyproject.toml
+          path: master-branch
+
+      - name: Copy pyproject.toml from master branch to development branch
+        run: |
+          cp master-branch/pyproject.toml .  # Copy the pyproject.toml file
+
+      - name: Set up Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies using Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          source ~/.profile  # Ensure Poetry is in PATH
+          poetry install  # Install dependencies based on pyproject.toml
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
