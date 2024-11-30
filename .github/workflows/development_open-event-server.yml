@@ -34,6 +34,14 @@ jobs:
         run: |
           cp master-branch/pyproject.toml .  # Copy the pyproject.toml file
           cp -r master-branch/scripts .
+          cp -r master-branch/utils .
+          cp -r master-branch/static .
+          cp master-branch/package.json
+          cp master-branch/poetry.lock
+          cp master-branch/populate_db.py
+          cp master-branch/session_slides_type_to_json.py
+          cp master-branch/setup.cfg
+          cp master-branch/yarn.lock
 
       - name: Create and start virtual environment
         run: |
