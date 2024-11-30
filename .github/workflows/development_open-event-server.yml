@@ -33,6 +33,7 @@ jobs:
       - name: Copy pyproject.toml from master branch to development branch
         run: |
           cp master-branch/pyproject.toml .  # Copy the pyproject.toml file
+          cp -r master-branch/scripts .
 
       - name: Create and start virtual environment
         run: |
