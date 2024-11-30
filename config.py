@@ -71,7 +71,21 @@ class Config:
     CSRF_ENABLED = True
     SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
-    SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
+    
+     # Fetch the Azure PostgreSQL connection string from the environment
+    conn_str = os.getenv('AZURE_POSTGRESQL_CONNECTIONSTRING')
+    if conn_str:
+        conn_str_params = {pair.split('=')[0]: pair.split('=')[1] for pair in conn_str.split(' ')}
+        
+        SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}?sslmode=require'.format(
+            dbuser=conn_str_params['user'],
+            dbpass=conn_str_params['password'],
+            dbhost=conn_str_params['host'],
+            dbname=conn_str_params['dbname']
+        )
+    else:
+        SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
+    
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
