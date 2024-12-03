@@ -56,8 +56,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install libmagic1 libmagic-dev
           sudo apt-get install libpq-dev
-          sudo apt-get install libffi6 libffi-dev
-          sudo apt-get update
           sudo apt-get install libcairo2 libcairo2-dev
           sudo apt-get update
           sudo apt-get install libpango-1.0-0 libpango1.0-dev
