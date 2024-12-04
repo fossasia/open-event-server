@@ -61,7 +61,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install libpango-1.0-0 libpango1.0-dev
           sudo apt-get update
-          pip install python-magic
+          
           
           
 
