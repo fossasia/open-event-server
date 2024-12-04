@@ -54,7 +54,7 @@ jobs:
           source ~/.profile  # Ensure Poetry is in PATH
           poetry install  # Install dependencies based on pyproject.toml
           sudo apt-get update
-          sudo apt-get install libmagic1 libmagic-dev
+          sudo apt-get install libmagic-dev
           sudo apt-get update
           sudo apt-get install libpq-dev
           sudo apt-get install libcairo2 libcairo2-dev
