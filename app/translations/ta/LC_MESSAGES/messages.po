@@ -8,233 +8,263 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2021-12-28 21:33+0530\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-01-24 01:05+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/open-event/server/"
+"ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #: app/api/helpers/system_mails.py:64
 msgid "Your speaker submission for {event_name} titled {session_name}"
-msgstr ""
+msgstr "{event_name} க்கான உங்கள் பேச்சாளர் சமர்ப்பிப்பு {session_name}"
 
 #: app/api/helpers/system_mails.py:75
 msgid ""
 "Accepted! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Accepted"
 msgstr ""
+"ஏற்றுக்கொள்ளப்பட்டது! {event_name} என்ற தலைப்பில் {session_name க்கு க்கான உங்கள் "
+"சமர்ப்பிப்பு ஏற்றுக்கொள்ளப்பட்டது வாழ்த்துக்கள்"
 
 #: app/api/helpers/system_mails.py:86
 msgid ""
 "Confirmed! Congratulations Your submission for {event_name} titled "
 "{session_name} has been Confirmed"
 msgstr ""
+"உறுதிப்படுத்தப்பட்டது! {event_name} என்ற தலைப்பில் உங்கள் சமர்ப்பிப்பு {session_name} "
+"என்பதற்கு வாழ்த்துக்கள் உறுதிப்படுத்தப்பட்டுள்ளன"
 
 #: app/api/helpers/system_mails.py:97
 msgid ""
 "Not Accepted. Your submission for {event_name} titled {session_name} was "
 "not accepted"
 msgstr ""
+"ஏற்றுக்கொள்ளப்படவில்லை. {event_name} க்கான உங்கள் சமர்ப்பிப்பு {session_name the என்ற "
+"தலைப்பில் ஏற்றுக்கொள்ளப்படவில்லை"
 
 #: app/api/helpers/system_mails.py:108
 msgid ""
 "Canceled! Your submission for {event_name} titled {session_name} has been"
 " Canceled"
 msgstr ""
+"ரத்து செய்யப்பட்டது! {event_name} க்கான உங்கள் சமர்ப்பிப்பு {session_name the என்ற "
+"தலைப்பில் ரத்து செய்யப்பட்டுள்ளது"
 
 #: app/api/helpers/system_mails.py:119
 msgid ""
 "Withdrawn! Your submission for {event_name} titled {session_name} has "
 "been Withdrawn"
 msgstr ""
+"திரும்பப் பெறப்பட்டது! {event_name} என்ற தலைப்பில் {session_name க்கு க்கான உங்கள் "
+"சமர்ப்பிப்பு திரும்பப் பெறப்பட்டுள்ளது"
 
 #: app/api/helpers/system_mails.py:132
 msgid "Ticket Sales Period for One or Several Tickets for {event_name} Ended"
 msgstr ""
+"{Event_name க்கு க்கான ஒன்று அல்லது பல டிக்கெட்டுகளுக்கான டிக்கெட் விற்பனை காலம் "
+"முடிந்தது"
 
 #: app/api/helpers/system_mails.py:137
 msgid ""
 "Ticket Sales Period for One or Several Tickets for {event_name} Ending in"
 " 24 Hours"
 msgstr ""
+"{Event_name க்கு க்கு ஒன்று அல்லது பல டிக்கெட்டுகளுக்கு டிக்கெட் விற்பனை காலம் 24 மணி "
+"நேரத்தில் முடிவடைகிறது"
 
 #: app/api/helpers/system_mails.py:142
 msgid ""
 "Ticket Sales Period fors One or Several Tickets for {event_name} Ending "
 "in 7 Days"
 msgstr ""
+"{Event_name க்கு க்கு ஒன்று அல்லது பல டிக்கெட்டுகளுக்கு டிக்கெட் விற்பனை காலம் 7 நாட்களில்"
+" முடிவடைகிறது"
 
 #: app/api/helpers/system_mails.py:147
 msgid "New session proposal for {session.event.name} titled {session.title}"
-msgstr ""
+msgstr "{session.event.name} க்கான புதிய அமர்வு முன்மொழிவு {session.title}"
 
 #: app/api/helpers/system_mails.py:152
 msgid "Welcome to {app_name}. Please verify your account"
-msgstr ""
+msgstr "{App_name க்கு க்கு வருக. உங்கள் கணக்கை சரிபார்க்கவும்"
 
 #: app/api/helpers/system_mails.py:157
 msgid "Email Confirmation to Create Account for {app_name}"
-msgstr ""
+msgstr "{App_name க்கு க்கான கணக்கை உருவாக்க மின்னஞ்சல் உறுதிப்படுத்தல்"
 
 #: app/api/helpers/system_mails.py:162
 msgid "Your email has been already changed"
-msgstr ""
+msgstr "உங்கள் மின்னஞ்சல் ஏற்கனவே மாற்றப்பட்டுள்ளது"
 
 #: app/api/helpers/system_mails.py:167
 msgid "{app_name}: Password Reset"
-msgstr ""
+msgstr "{app_name}: கடவுச்சொல் மீட்டமைப்பு"
 
 #: app/api/helpers/system_mails.py:172
 msgid "{app_name}: Reset your password and verify your account"
 msgstr ""
+"{app_name}: உங்கள் கடவுச்சொல்லை மீட்டமைத்து உங்கள் கணக்கை சரிபார்க்கவும்"
 
 #: app/api/helpers/system_mails.py:177
 msgid "{app_name}: Password Change"
-msgstr ""
+msgstr "{app_name}: கடவுச்சொல் மாற்றம்"
 
 #: app/api/helpers/system_mails.py:182
 msgid "Invitation to be {role} at Event: {event}"
-msgstr ""
+msgstr "நிகழ்வில் {பாத்திரமாக இருக்க அழைப்பு: {role}"
 
 #: app/api/helpers/system_mails.py:187
 msgid "Invitation to be speaker at Session: {session}"
-msgstr ""
+msgstr "அமர்வில் பேச்சாளராக இருக்க அழைப்பு: {session}"
 
 #: app/api/helpers/system_mails.py:192
 msgid "Invitation to be {role} at Group: {group}"
-msgstr ""
+msgstr "குழுவில் {பாத்திரமாக இருக்க அழைப்பு: {role}"
 
 #: app/api/helpers/system_mails.py:197
 msgid "See you at {event_name} on {event_date} at {event_time} ({invoice_id}) "
-msgstr ""
+msgstr "{event_name} இல் {event_date} இல் {event_time} ({invoice_id}) "
 
 #: app/api/helpers/system_mails.py:202
 msgid ""
 "Your tickets for {event_name} on {event_date} at {event_time} "
 "({invoice_id}) "
 msgstr ""
+"{event_name} இல் {event_date க்கு {event_date} ({event_time}) க்கான உங்கள் "
+"டிக்கெட்டுகள் "
 
 #: app/api/helpers/system_mails.py:207
 msgid ""
 "New order for {event_name} on {event_date} by {buyer_name}, {buyer_email}"
 " ({invoice_id}) "
 msgstr ""
+"{invoice_id}, {event_date}, {buyer_name} ({buyer_email}) {event_name} இல் புதி"
+"ய ஆர்டர் "
 
 #: app/api/helpers/system_mails.py:212
 msgid "Your order for {event_name} has been cancelled ({invoice_id})"
 msgstr ""
+"{Event_name க்கு க்கான உங்கள் ஆர்டர் ரத்து செய்யப்பட்டுள்ளது ({event_name})"
 
 #: app/api/helpers/system_mails.py:217
 msgid "Event {event_name} has been exported"
-msgstr ""
+msgstr "நிகழ்வு {event_name} ஏற்றுமதி செய்யப்பட்டுள்ளது"
 
 #: app/api/helpers/system_mails.py:222
 msgid "Export of event {event_name} failed"
-msgstr ""
+msgstr "நிகழ்வின் ஏற்றுமதி {event_name} தோல்வியுற்றது"
 
 #: app/api/helpers/system_mails.py:227
 msgid "Your invoice for {event_name} for {date} is available on {app_name}"
 msgstr ""
+"{தேதி க்கு க்கான {event_name க்கு க்கான உங்கள் விலைப்பட்டியல் {event_name}"
 
 #: app/api/helpers/system_mails.py:233 app/api/helpers/system_mails.py:239
 msgid ""
 "Reminder: Your invoice for {event_name} for {date} is available on "
 "{app_name}"
 msgstr ""
+"நினைவூட்டல்: {date க்கு க்கான {event_name க்கு க்கான உங்கள் விலைப்பட்டியல் {event_name} "
+"இல் கிடைக்கிறது"
 
 #: app/api/helpers/system_mails.py:245
 msgid "Please pay your overdue invoice for {event_name} for {date} on {app_name}"
 msgstr ""
+"{event_name} இல் {event_name க்கு {date} க்கு உங்கள் தாமதமான விலைப்பட்டியலை "
+"செலுத்துங்கள்"
 
 #: app/api/helpers/system_mails.py:251
 msgid "Event {event_name} has been imported"
-msgstr ""
+msgstr "நிகழ்வு {event_name} இறக்குமதி செய்யப்பட்டுள்ளது"
 
 #: app/api/helpers/system_mails.py:256
 msgid "Import of event failed"
-msgstr ""
+msgstr "நிகழ்வின் இறக்குமதி தோல்வியடைந்தது"
 
 #: app/api/helpers/system_mails.py:269
 msgid "Test Mail Subject"
-msgstr ""
+msgstr "சோதனை அஞ்சல் பொருள்"
 
 #: app/api/helpers/system_mails.py:274
 msgid "Video Moderator of video {video_name} at event {event_name}"
-msgstr ""
+msgstr "நிகழ்வில் {video_name of இன் வீடியோ மதிப்பீட்டாளர் {video_name}"
 
 #: app/api/helpers/system_mails.py:279
 msgid "Join {event_name} from {group_name} on {event_date}"
-msgstr ""
+msgstr "{group_name} இல் {event_name} இல் சேரவும் {event_date}"
 
 #: app/api/helpers/system_mails.py:284
 msgid "{event_name} is over. Thank you for using {app_name}!"
-msgstr ""
+msgstr "{event_name} முடிந்துவிட்டது. {App_name ஐப் பயன்படுத்தியதற்கு நன்றி!"
 
 #: app/api/helpers/system_mails.py:289
 msgid "{event_name} is over. Thank you for participating!"
-msgstr ""
+msgstr "{event_name} முடிந்துவிட்டது. பங்கேற்றதற்கு நன்றி!"
 
 #: app/models/event.py:468 app/models/event.py:477
 msgid "Location Not Announced"
-msgstr ""
+msgstr "இடம் அறிவிக்கப்படவில்லை"
 
 #: app/models/event.py:473
 msgid ""
 "Online (Please login to the platform to access the video room on the "
 "event page)"
-msgstr ""
+msgstr "ஆன்லைனில் (நிகழ்வு பக்கத்தில் வீடியோ அறையை அணுக மேடையில் உள்நுழைக)"
 
 #: app/templates/email/after_event.html:1
 #, python-format
 msgid "Hello %(email)s, your %(eventname)s is over."
-msgstr ""
+msgstr "அலோ %(மின்னஞ்சல்கள், உங்கள் %(நிகழ்வு பெயர்) கள் முடிந்துவிட்டன."
 
 #: app/templates/email/after_event.html:3
 #, python-format
 msgid "Thank you for using the %(app_name)s platform for your event."
-msgstr ""
+msgstr "உங்கள் நிகழ்வுக்கு %(App_Name) தளத்தைப் பயன்படுத்தியதற்கு நன்றி."
 
 #: app/templates/email/after_event.html:4
 msgid "We hope you enjoyed it."
-msgstr ""
+msgstr "நீங்கள் அதை அனுபவித்தீர்கள் என்று நம்புகிறோம்."
 
 #: app/templates/email/after_event_speaker.html:1
 #, python-format
 msgid "Hello %(email)s, thank you for participating in our %(eventname)s."
-msgstr ""
+msgstr "அலோ %(email)s, எங்கள் %(நிகழ்வு பெயர்) பங்கேற்றதற்கு நன்றி."
 
 #: app/templates/email/after_event_speaker.html:3
 msgid "We hope you enjoyed it and keep in touch."
-msgstr ""
+msgstr "நீங்கள் அதை அனுபவித்து தொடர்பில் இருப்பீர்கள் என்று நம்புகிறோம்."
 
 #: app/templates/email/event_export_fail.html:1
 #: app/templates/email/event_import_fail.html:1
 msgid "The error was as follows"
-msgstr ""
+msgstr "பிழை பின்வருமாறு இருந்தது"
 
 #: app/templates/email/event_exported.html:1
 msgid "Click on the following link to download the event:"
-msgstr ""
+msgstr "நிகழ்வைப் பதிவிறக்க பின்வரும் இணைப்பைக் சொடுக்கு செய்க:"
 
 #: app/templates/email/event_imported.html:1
 msgid "Click on the following link to manage your event"
-msgstr ""
+msgstr "உங்கள் நிகழ்வை நிர்வகிக்க பின்வரும் இணைப்பைக் சொடுக்கு செய்க"
 
 #: app/templates/email/event_role.html:1 app/templates/email/group_role.html:1
 #: app/templates/email/user_confirm.html:1
 #: app/templates/email/user_event_role.html:1
 #, python-format
 msgid "Hello %(email)s,"
-msgstr ""
+msgstr "அலோ %(email)s,"
 
 #: app/templates/email/event_role.html:3
 #: app/templates/email/user_event_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(event)s."
-msgstr ""
+msgstr "%(role)s ஒரு %(event)s என்று அழைக்கப்படுகிறீர்கள்."
 
 #: app/templates/email/event_role.html:6 app/templates/email/group_role.html:6
 #: app/templates/email/user_event_role.html:6
@@ -243,6 +273,8 @@ msgid ""
 "To accept the role please sign up using the following link: "
 "%(open_link)sLink%(close_link)s."
 msgstr ""
+"பாத்திரத்தை ஏற்றுக்கொள்ள தயவுசெய்து பின்வரும் இணைப்பைப் பயன்படுத்தி பதிவுபெறவும்: "
+"%(open_link)sங்க் %(close_link)s."
 
 #: app/templates/email/group_contact_user.html:1
 #: app/templates/email/new_session.html:1
@@ -254,31 +286,32 @@ msgstr ""
 #: app/templates/email/user_register.html:1
 #: app/templates/email/video_stream_moderator.html:1
 msgid "Hello"
-msgstr ""
+msgstr "வணக்கம்"
 
 #: app/templates/email/group_contact_user.html:2
 #, python-format
 msgid "You have contacted the organizers of the group %(group_name)s."
-msgstr ""
+msgstr "குழுவின் அமைப்பாளர்களை (குழு_பெயர்) கள் தொடர்பு கொண்டீர்கள்."
 
 #: app/templates/email/group_contact_user.html:3
 #: app/templates/email/organizer_contact_attendee.html:3
 msgid "Below you find a copy of your email."
-msgstr ""
+msgstr "உங்கள் மின்னஞ்சலின் நகலைக் கீழே காணலாம்."
 
 #: app/templates/email/group_contact_user.html:7
 #: app/templates/email/organizer_contact_attendee.html:7
 msgid "Organizers have received your message and will follow up with you."
 msgstr ""
+"அமைப்பாளர்கள் உங்கள் செய்தியைப் பெற்றுள்ளனர், மேலும் உங்களைப் பின்தொடர்வார்கள்."
 
 #: app/templates/email/group_contact_user.html:8
 msgid "This is a system message. Please do not reply to this message."
-msgstr ""
+msgstr "இது ஒரு கணினி செய்தி. தயவுசெய்து இந்த செய்திக்கு பதிலளிக்க வேண்டாம்."
 
 #: app/templates/email/group_contact_user.html:8
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Replies are not monitored."
-msgstr ""
+msgstr "பதில்கள் கண்காணிக்கப்படவில்லை."
 
 #: app/templates/email/group_contact_user.html:9
 #: app/templates/email/new_session.html:17
@@ -287,12 +320,12 @@ msgstr ""
 #: app/templates/email/ticket_sales_end_next_week.html:23
 #: app/templates/email/ticket_sales_end_tomorrow.html:23
 msgid "Thank you."
-msgstr ""
+msgstr "நன்றி."
 
 #: app/templates/email/group_role.html:3
 #, python-format
 msgid "You have been invited to be a %(role)s at %(group)s group."
-msgstr ""
+msgstr "%(role)sுழுவில் ஒரு %(group)s என்று அழைக்கப்படுகிறீர்கள்."
 
 #: app/templates/email/monthly_payment_email.html:1
 #: app/templates/email/monthly_payment_followup_email.html:1
@@ -300,7 +333,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:1
 #, python-format
 msgid "Hello %(name)s,"
-msgstr ""
+msgstr "அலோ %(name)s,"
 
 #: app/templates/email/monthly_payment_email.html:3
 #, python-format
@@ -308,21 +341,23 @@ msgid ""
 "The invoice for your event %(event_name)s on %(app_name)s for %(date)s is"
 " now available."
 msgstr ""
+"%(event_name)sுக்கான %(app_name)s இல் உங்கள் நிகழ்விற்கான விலைப்பட்டியல் %(date)s "
+"இப்போது கிடைக்கிறது."
 
 #: app/templates/email/monthly_payment_email.html:4
 msgid "Your invoice payment is due within 30 days."
-msgstr ""
+msgstr "உங்கள் விலைப்பட்டியல் கட்டணம் 30 நாட்களுக்குள் வரவிருக்கிறது."
 
 #: app/templates/email/monthly_payment_email.html:6
 #: app/templates/email/monthly_payment_followup_email.html:5
 #: app/templates/email/monthly_payment_post_due_email.html:5
 #: app/templates/email/monthly_payment_pre_due_email.html:5
 msgid "Amount Due"
-msgstr ""
+msgstr "செலுத்த வேண்டிய தொகை"
 
 #: app/templates/email/monthly_payment_email.html:8
 msgid "Please pay within 30 days."
-msgstr ""
+msgstr "தயவுசெய்து 30 நாட்களுக்குள் செலுத்துங்கள்."
 
 #: app/templates/email/monthly_payment_email.html:11
 #: app/templates/email/monthly_payment_followup_email.html:10
@@ -330,7 +365,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:10
 #, python-format
 msgid "Pay Now at: %(payment_url)s"
-msgstr ""
+msgstr "இப்போது செலுத்துங்கள்: %(payment_url)s"
 
 #: app/templates/email/monthly_payment_email.html:13
 #: app/templates/email/monthly_payment_followup_email.html:12
@@ -341,6 +376,8 @@ msgid ""
 "A detailed invoice is available in %(open_link)sthe billing "
 "area%(close_link)s of your account."
 msgstr ""
+"ஒரு விரிவான விலைப்பட்டியல் %இல் கிடைக்கிறது (ஓபன்_எம் பட்டியலிடல் பகுதி %(உங்கள் கணக்கின் "
+"இணைப்பை மூடு."
 
 #: app/templates/email/monthly_payment_email.html:14
 #: app/templates/email/monthly_payment_followup_email.html:13
@@ -351,6 +388,8 @@ msgid ""
 "If you have any questions about invoices, please find more information on"
 " our FAQ at %(faq_url)s."
 msgstr ""
+"விலைப்பட்டியல் பற்றி ஏதேனும் கேள்விகள் இருந்தால், தயவுசெய்து எங்கள் கேள்விகள் குறித்த கூடுதல்"
+" தகவல்களை %(faq_url)s காணலாம்."
 
 #: app/templates/email/monthly_payment_email.html:17
 #: app/templates/email/monthly_payment_followup_email.html:16
@@ -358,7 +397,7 @@ msgstr ""
 #: app/templates/email/monthly_payment_pre_due_email.html:20
 #, python-format
 msgid "Thank you for using %(app_name)s!"
-msgstr ""
+msgstr "%(app_name)s பயன்படுத்தியதற்கு நன்றி!"
 
 #: app/templates/email/monthly_payment_email.html:19
 #: app/templates/email/monthly_payment_followup_email.html:18
@@ -370,7 +409,7 @@ msgstr ""
 #: app/templates/email/user_register.html:8
 #: app/templates/email/video_stream_moderator.html:9
 msgid "Team"
-msgstr ""
+msgstr "அணி"
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #, python-format
@@ -378,35 +417,42 @@ msgid ""
 "Just a friendly reminder that we haven't received your payment for your "
 "invoice for %(event_name)s for %(date)s."
 msgstr ""
+"%(event_name)sுக்கு %(date)s உங்கள் விலைப்பட்டியலுக்கான உங்கள் கட்டணத்தை நாங்கள் பெறவில்லை"
+" என்பதற்கான நட்புரீதியான நினைவூட்டல்."
 
 #: app/templates/email/monthly_payment_followup_email.html:3
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 msgid "Payment is fast and simple using your credit card or PayPal account."
 msgstr ""
+"உங்கள் கடன் அட்டை அல்லது பேபால் கணக்கைப் பயன்படுத்தி கட்டணம் வேகமாகவும் எளிமையாகவும் உள்ளது."
 
 #: app/templates/email/monthly_payment_followup_email.html:7
 msgid "Please pay within 15 days."
-msgstr ""
+msgstr "தயவுசெய்து 15 நாட்களுக்குள் செலுத்துங்கள்."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Your payment is now past due."
-msgstr ""
+msgstr "உங்கள் கட்டணம் இப்போது காரணமாக உள்ளது."
 
 #: app/templates/email/monthly_payment_post_due_email.html:3
 msgid "Please pay this invoice immediately to avoid your account being suspended."
 msgstr ""
+"உங்கள் கணக்கு இடைநிறுத்தப்படுவதைத் தவிர்க்க தயவுசெய்து இந்த விலைப்பட்டியல் உடனடியாக "
+"செலுத்துங்கள்."
 
 #: app/templates/email/monthly_payment_post_due_email.html:11
 #: app/templates/email/monthly_payment_pre_due_email.html:13
 #, python-format
 msgid "Late payments can be subject to a %(percentage)s finance fee."
-msgstr ""
+msgstr "தாமதமாக கொடுப்பனவுகள் ஒரு %(சதவீதம்) நிதிக் கட்டணத்திற்கு உட்பட்டவை."
 
 #: app/templates/email/monthly_payment_post_due_email.html:18
 msgid ""
 "If you feel this invoice is incorrect or have any questions, you can "
 "contact our support team for assistance."
 msgstr ""
+"இந்த விலைப்பட்டியல் தவறானது அல்லது ஏதேனும் கேள்விகள் இருந்தால் நீங்கள் உணர்ந்தால், உதவிக்காக "
+"எங்கள் உதவி குழுவை தொடர்பு கொள்ளலாம்."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:3
 #, python-format
@@ -414,10 +460,12 @@ msgid ""
 "This is a reminder that we haven't received your payment for your invoice"
 " for %(event_name)s for %(date)s."
 msgstr ""
+"%(event_name)sுக்கு %(date)s உங்கள் விலைப்பட்டியத்திற்கான உங்கள் கட்டணத்தை நாங்கள் "
+"பெறவில்லை என்பதற்கான நினைவூட்டலாகும்."
 
 #: app/templates/email/monthly_payment_pre_due_email.html:7
 msgid "Please pay within 2 days."
-msgstr ""
+msgstr "தயவுசெய்து 2 நாட்களுக்குள் செலுத்துங்கள்."
 
 #: app/templates/email/new_session.html:3
 #, python-format
@@ -425,6 +473,7 @@ msgid ""
 "This is an automatic email from %(app_name)s for organizers of the "
 "%(session_name)s."
 msgstr ""
+"%(அமர்வு_பெயர்) அமைப்பாளர்களுக்கான %(app_name)s இன் தானியங்கி மின்னஞ்சல் இது."
 
 #: app/templates/email/new_session.html:5
 #, python-format
@@ -432,14 +481,16 @@ msgid ""
 "Your %(open_link)sCall For Speakers%(close_link)s has received a new "
 "session proposal with the following details:"
 msgstr ""
+"உங்கள் %(open_link)sபீக்கர்களுக்கான ச்கால் %(close_link)s பின்வரும் விவரங்களுடன் ஒரு புதி"
+"ய அமர்வு திட்டத்தைப் பெற்றுள்ளன:"
 
 #: app/templates/email/new_session.html:7
 msgid "Session"
-msgstr ""
+msgstr "அமர்வு"
 
 #: app/templates/email/new_session.html:9
 msgid "Abstract"
-msgstr ""
+msgstr "சுருக்கம்"
 
 #: app/templates/email/new_session.html:13
 #, python-format
@@ -447,6 +498,8 @@ msgid ""
 "You can view all speaker details on the speaker profile page and the "
 "session proposal on the %(open_link)ssession page%(close_link)s."
 msgstr ""
+"ச்பீக்கர் சுயவிவரப் பக்கத்தில் உள்ள அனைத்து ச்பீக்கர் விவரங்களையும், %(open_link)session பக்கம்"
+" %(close_link)s அமர்வு முன்மொழிவையும் நீங்கள் காணலாம்."
 
 #: app/templates/email/new_session.html:14
 #, python-format
@@ -454,46 +507,49 @@ msgid ""
 "To change the status of sessions please go to the %(open_link)ssessions "
 "overview page%(close_link)s and click on the status badge of the session."
 msgstr ""
+"அமர்வுகளின் நிலையை மாற்ற தயவுசெய்து %(open_link)sessions கண்ணோட்டம் பக்கம் "
+"%(close_link)s க்குச் சென்று அமர்வின் நிலை பேட்சைக் சொடுக்கு செய்க."
 
 #: app/templates/email/organizer_contact_attendee.html:2
 #, python-format
 msgid "You have contacted the organizers of the event %(event_name)s."
-msgstr ""
+msgstr "நிகழ்வு %(event_name)s அமைப்பாளர்களை நீங்கள் தொடர்பு கொண்டீர்கள்."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "This is a system message."
-msgstr ""
+msgstr "இது ஒரு கணினி செய்தி."
 
 #: app/templates/email/organizer_contact_attendee.html:8
 msgid "Please do not reply to this message."
-msgstr ""
+msgstr "தயவுசெய்து இந்த செய்திக்கு பதிலளிக்க வேண்டாம்."
 
 #: app/templates/email/password_change.html:1
 msgid "Your password has been successfully changed."
-msgstr ""
+msgstr "உங்கள் கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டுள்ளது."
 
 #: app/templates/email/password_change.html:2
 msgid "Please login with your new password."
-msgstr ""
+msgstr "உங்கள் புதிய கடவுச்சொல்லுடன் உள்நுழைக."
 
 #: app/templates/email/password_reset.html:1
 msgid "Please use the following link to reset your password."
-msgstr ""
+msgstr "உங்கள் கடவுச்சொல்லை மீட்டமைக்க பின்வரும் இணைப்பைப் பயன்படுத்தவும்."
 
 #: app/templates/email/password_reset.html:3
 #, python-format
 msgid "Or paste this token in your %(app_name)s"
-msgstr ""
+msgstr "அல்லது இந்த கிள்ளாக்கை உங்கள் %(app_name)s ஒட்டவும்"
 
 #: app/templates/email/password_reset.html:4
 msgid "App:"
-msgstr ""
+msgstr "பயன்பாடு:"
 
 #: app/templates/email/password_reset_and_verify.html:1
 msgid ""
 "Please use the following link to reset your password and verify your "
 "account."
 msgstr ""
+"உங்கள் கடவுச்சொல்லை மீட்டமைக்க பின்வரும் இணைப்பைப் பயன்படுத்தவும், உங்கள் கணக்கை சரிபார்க்கவும்."
 
 #: app/templates/email/speaker_invite.html:4
 #, python-format
@@ -502,6 +558,8 @@ msgid ""
 "\"%(session_title)s\" for the event %(event_name)s on %(app_name)s by "
 "%(inviter_name)s %(inviter_email)s."
 msgstr ""
+"அமர்வு சமர்ப்பிப்புக்கு நீங்கள் ஒரு பேச்சாளராக அழைக்கப்பட்டுள்ளீர்கள் \" %(session_title)s\" "
+"நிகழ்வு %(event_name)s இல் %(app_name)s %(inviter_name)s %(inviter_email)s."
 
 #: app/templates/email/speaker_invite.html:6
 #, python-format
@@ -509,29 +567,33 @@ msgid ""
 "You can accept or reject this invitation from %(open_link)sCall for "
 "Speakers%(close_link)s page."
 msgstr ""
+"ச்பீக்கர்கள் %(Close_link) பக்கத்திற்கான %(open_link)sாலிலிருந்து இந்த அழைப்பை நீங்கள் "
+"ஏற்றுக்கொள்ளலாம் அல்லது நிராகரிக்கலாம்."
 
 #: app/templates/email/speaker_invite.html:9
 msgid ""
 "If you do not have an account yet you need to register before you can "
 "accept the invite."
 msgstr ""
+"உங்களிடம் இன்னும் கணக்கு இல்லையென்றால், நீங்கள் அழைப்பை ஏற்றுக்கொள்வதற்கு முன்பு பதிவு செய்ய "
+"வேண்டும்."
 
 #: app/templates/email/speaker_invite.html:10
 #: app/templates/email/ticket_cancelled.html:9
 #: app/templates/email/ticket_purchased.html:33
 #: app/templates/email/ticket_purchased_attendee.html:16
 msgid "Best regards"
-msgstr ""
+msgstr "வாழ்த்துக்கள்"
 
 #: app/templates/email/ticket_cancelled.html:2
 #, python-format
 msgid "Your order %(order_id)s for %(event_name)s has been cancelled."
-msgstr ""
+msgstr "%(order_id)sான உங்கள் ஆர்டர் %(event_name)s ரத்து செய்யப்பட்டுள்ளன."
 
 #: app/templates/email/ticket_cancelled.html:4
 #, python-format
 msgid "The information about your cancelled order is here: %(order_url)s."
-msgstr ""
+msgstr "உங்கள் ரத்து செய்யப்பட்ட ஆர்டர் பற்றிய தகவல்கள் இங்கே: %(order_url)s."
 
 #: app/templates/email/ticket_cancelled.html:5
 msgid ""
@@ -539,6 +601,8 @@ msgid ""
 " owner of the order or the organizer of the event for more information "
 "about the cancellation."
 msgstr ""
+"இந்த ரத்துசெய்தலை நீங்களே செய்யவில்லை என்றால், ரத்துசெய்யப்படுவது குறித்த கூடுதல் தகவலுக்கு "
+"ஆர்டரின் உரிமையாளர் அல்லது நிகழ்வின் அமைப்பாளருடன் சரிபார்க்கவும்."
 
 #: app/templates/email/ticket_cancelled.html:6
 #, python-format
@@ -546,19 +610,21 @@ msgid ""
 "To contact event organizers please use the contact form on the event page"
 " here: %(event_url)s."
 msgstr ""
+"நிகழ்வு அமைப்பாளர்களைத் தொடர்பு கொள்ள நிகழ்வு பக்கத்தில் உள்ள தொடர்பு படிவத்தை இங்கே "
+"பயன்படுத்தவும்: %(event_url)s."
 
 #: app/templates/email/ticket_cancelled.html:8
 msgid "You need to login to access the form."
-msgstr ""
+msgstr "படிவத்தை அணுக நீங்கள் உள்நுழைய வேண்டும்."
 
 #: app/templates/email/ticket_purchased.html:3
 #, python-format
 msgid "Thank you for signing up for %(event_name)s."
-msgstr ""
+msgstr "%(event_name)s பதிவுபெற்றதற்கு நன்றி."
 
 #: app/templates/email/ticket_purchased.html:4
 msgid "This is your confirmation."
-msgstr ""
+msgstr "இது உங்கள் உறுதிப்படுத்தல்."
 
 #: app/templates/email/ticket_purchased.html:4
 #, python-format
@@ -566,10 +632,12 @@ msgid ""
 "You can download your %(open_link)stickets or registration information "
 "here%(close_link)s."
 msgstr ""
+"உங்கள் %(open_link)sடிக்கெட்டுகள் அல்லது பதிவு தகவல்களை இங்கே பதிவிறக்கம் செய்யலாம் "
+"%(close_link)s."
 
 #: app/templates/email/ticket_purchased.html:6
 msgid "Order Summary"
-msgstr ""
+msgstr "ஒழுங்கு சுருக்கம்"
 
 #: app/templates/email/ticket_purchased.html:7
 #: app/templates/email/ticket_purchased_attendee.html:6
@@ -577,95 +645,96 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:183
 #: app/templates/pdf/ticket_purchaser.html:179
 msgid "Name"
-msgstr ""
+msgstr "பெயர்"
 
 #: app/templates/email/ticket_purchased.html:9
 #: app/templates/email/ticket_purchased_attendee.html:9
 #: app/templates/pdf/order_invoice.html:326
 msgid "Ticket"
-msgstr ""
+msgstr "டிக்கெட்"
 
 #: app/templates/email/ticket_purchased.html:10
 #: app/templates/email/ticket_purchased_attendee.html:10
 #: app/templates/pdf/order_invoice.html:319
 msgid "Quantity"
-msgstr ""
+msgstr "அளவு"
 
 #: app/templates/email/ticket_purchased.html:12
 #: app/templates/email/ticket_purchased_organizer.html:14
 #: app/templates/pdf/order_invoice.html:213
 msgid "Order Number"
-msgstr ""
+msgstr "ஆர்டர் எண்"
 
 #: app/templates/email/ticket_purchased.html:14
 #: app/templates/email/ticket_purchased_attendee.html:13
 msgid "About this event"
-msgstr ""
+msgstr "இந்த நிகழ்வு பற்றி"
 
 #: app/templates/email/ticket_purchased.html:15
 #: app/templates/email/ticket_purchased_attendee.html:14
 #: app/templates/pdf/order_invoice.html:278
 msgid "Date"
-msgstr ""
+msgstr "திகதி"
 
 #: app/templates/email/ticket_purchased.html:16
 msgid "Location"
-msgstr ""
+msgstr "இடம்"
 
 #: app/templates/email/ticket_purchased.html:17
 msgid "URL"
-msgstr ""
+msgstr "முகவரி"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Add to calendar"
-msgstr ""
+msgstr "காலெண்டரில் சேர்க்கவும்"
 
 #: app/templates/email/ticket_purchased.html:19
 msgid "Google Calendar"
-msgstr ""
+msgstr "கூகிள் காலண்டர்"
 
 #: app/templates/email/ticket_purchased.html:20
 msgid "iCal"
-msgstr ""
+msgstr "ical"
 
 #: app/templates/email/ticket_purchased.html:21
 msgid "Yahoo"
-msgstr ""
+msgstr "யாகூ"
 
 #: app/templates/email/ticket_purchased.html:22
 msgid "Outlook"
-msgstr ""
+msgstr "அவுட்லுக்"
 
 #: app/templates/email/ticket_purchased.html:25
 #: app/templates/email/ticket_purchased_attendee.html:19
 msgid "Below you find a message from the organizer"
-msgstr ""
+msgstr "கீழே நீங்கள் அமைப்பாளரிடமிருந்து ஒரு செய்தியைக் காணலாம்"
 
 #: app/templates/email/ticket_purchased.html:37
 #: app/templates/email/ticket_purchased_attendee.html:29
 #: app/templates/email/ticket_purchased_organizer.html:102
 #, python-format
 msgid "Login to manage your orders at %(url)s."
-msgstr ""
+msgstr "உங்கள் ஆர்டர்களை %(url)s நிர்வகிக்க உள்நுழைக."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "This is a confirmation mail of your tickets for the event %(eventname)s."
 msgstr ""
+"நிகழ்வு %(நிகழ்வு பெயர்) கள் உங்கள் டிக்கெட்டுகளின் உறுதிப்படுத்தல் அஞ்சல் இது."
 
 #: app/templates/email/ticket_purchased_attendee.html:3
 #, python-format
 msgid "You can download your tickets at: %(order_view_url)s."
-msgstr ""
+msgstr "உங்கள் டிக்கெட்டுகளை நீங்கள் பதிவிறக்கம் செய்யலாம்: %(order_view_url)s."
 
 #: app/templates/email/ticket_purchased_attendee.html:5
 msgid "Ticket Summary"
-msgstr ""
+msgstr "டிக்கெட் சுருக்கம்"
 
 #: app/templates/email/ticket_purchased_organizer.html:1
 #: app/templates/email/user_register.html:2
 msgid "Congratulations!"
-msgstr ""
+msgstr "வாழ்த்துக்கள்!"
 
 #: app/templates/email/ticket_purchased_organizer.html:4
 #, python-format
@@ -673,20 +742,23 @@ msgid ""
 "You have a new order for your event %(event_name)s starting at "
 "%(event_time)s on %(event_date)s."
 msgstr ""
+"உங்கள் நிகழ்வு %(event_name)s %(event_time)s இல் %(event_date)s இல் தொடங்கி புதிய "
+"ஆர்டர் உள்ளது."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "The order has been processed successfully on %(app_name)s."
-msgstr ""
+msgstr "ஆர்டர் %(app_name)s வெற்றிகரமாக செயலாக்கப்பட்டுள்ளது."
 
 #: app/templates/email/ticket_purchased_organizer.html:7
 #, python-format
 msgid "%(open_link)sClick here%(close_link)s to view/download the invoice."
 msgstr ""
+"%(ஓபன்_லிங்க்) விலைப்பட்டியலைக் காண/பதிவிறக்கம் செய்ய இங்கே%(open_link)s."
 
 #: app/templates/email/ticket_purchased_organizer.html:11
 msgid "The details of the order are:"
-msgstr ""
+msgstr "ஆர்டரின் விவரங்கள்:"
 
 #: app/templates/email/ticket_purchased_organizer.html:16
 #: app/templates/pdf/order_invoice.html:206
@@ -694,157 +766,157 @@ msgstr ""
 #: app/templates/pdf/ticket_attendee.html:187
 #: app/templates/pdf/ticket_purchaser.html:183
 msgid "Email"
-msgstr ""
+msgstr "மின்னஞ்சல்"
 
 #: app/templates/email/ticket_purchased_organizer.html:18
 msgid "Purchase Date and Time"
-msgstr ""
+msgstr "கொள்முதல் தேதி மற்றும் நேரம்"
 
 #: app/templates/email/ticket_purchased_organizer.html:20
 #: app/templates/pdf/order_invoice.html:281
 msgid "Payment Mode"
-msgstr ""
+msgstr "கட்டண முறை"
 
 #: app/templates/email/ticket_purchased_organizer.html:22
 #: app/templates/pdf/order_invoice.html:283
 msgid "None"
-msgstr ""
+msgstr "எதுவுமில்லை"
 
 #: app/templates/email/ticket_purchased_organizer.html:24
 #: app/templates/pdf/order_invoice.html:285
 msgid "Stripe"
-msgstr ""
+msgstr "பட்டை"
 
 #: app/templates/email/ticket_purchased_organizer.html:26
 #: app/templates/pdf/order_invoice.html:287
 msgid "Paypal"
-msgstr ""
+msgstr "பேபால்"
 
 #: app/templates/email/ticket_purchased_organizer.html:28
 #: app/templates/pdf/order_invoice.html:289
 msgid "Bank"
-msgstr ""
+msgstr "வைப்பகம்"
 
 #: app/templates/email/ticket_purchased_organizer.html:30
 #: app/templates/pdf/order_invoice.html:291
 msgid "Cheque"
-msgstr ""
+msgstr "சரிபார்க்கவும்"
 
 #: app/templates/email/ticket_purchased_organizer.html:32
 #: app/templates/pdf/order_invoice.html:293
 msgid "Onsite"
-msgstr ""
+msgstr "ஆன்சைட்"
 
 #: app/templates/email/ticket_purchased_organizer.html:34
 #: app/templates/pdf/order_invoice.html:295
 msgid "Omise"
-msgstr ""
+msgstr "விடுபட்டது"
 
 #: app/templates/email/ticket_purchased_organizer.html:36
 #: app/templates/pdf/order_invoice.html:297
 msgid "Alipay"
-msgstr ""
+msgstr "அலிபே"
 
 #: app/templates/email/ticket_purchased_organizer.html:38
 #: app/templates/pdf/order_invoice.html:299
 msgid "Paytm"
-msgstr ""
+msgstr "Paytm"
 
 #: app/templates/email/ticket_purchased_organizer.html:40
 #: app/templates/pdf/order_invoice.html:301
 msgid "Purchase on Invoice"
-msgstr ""
+msgstr "விலைப்பட்டியலில் வாங்கவும்"
 
 #: app/templates/email/ticket_purchased_organizer.html:46
 #: app/templates/pdf/order_invoice.html:228
 msgid "Payment Status"
-msgstr ""
+msgstr "கட்டண நிலை"
 
 #: app/templates/email/ticket_purchased_organizer.html:48
 #: app/templates/pdf/order_invoice.html:230
 msgid "Completed"
-msgstr ""
+msgstr "முடிந்தது"
 
 #: app/templates/email/ticket_purchased_organizer.html:50
 #: app/templates/pdf/order_invoice.html:232
 msgid "Pending"
-msgstr ""
+msgstr "நிலுவையில் உள்ளது"
 
 #: app/templates/email/ticket_purchased_organizer.html:52
 #: app/templates/pdf/order_invoice.html:234
 msgid "Placed"
-msgstr ""
+msgstr "வைக்கப்பட்டது"
 
 #: app/templates/email/ticket_purchased_organizer.html:54
 #: app/templates/pdf/order_invoice.html:236
 msgid "Cancelled"
-msgstr ""
+msgstr "ரத்து செய்யப்பட்டது"
 
 #: app/templates/email/ticket_purchased_organizer.html:56
 #: app/templates/pdf/order_invoice.html:238
 msgid "Expired"
-msgstr ""
+msgstr "காலாவதியான"
 
 #: app/templates/email/ticket_purchased_organizer.html:62
 msgid "Tickets/Registration"
-msgstr ""
+msgstr "டிக்கெட்/பதிவு"
 
 #: app/templates/email/ticket_purchased_organizer.html:68
 msgid "Amount"
-msgstr ""
+msgstr "தொகை"
 
 #: app/templates/email/ticket_purchased_organizer.html:72
 #: app/templates/pdf/order_invoice.html:182
 #: app/templates/pdf/order_invoice.html:244
 msgid "Organisation"
-msgstr ""
+msgstr "அமைப்பு"
 
 #: app/templates/email/ticket_purchased_organizer.html:76
 #: app/templates/pdf/order_invoice.html:188
 #: app/templates/pdf/order_invoice.html:249
 msgid "Address"
-msgstr ""
+msgstr "முகவரி"
 
 #: app/templates/email/ticket_purchased_organizer.html:80
 #: app/templates/pdf/order_invoice.html:191
 #: app/templates/pdf/order_invoice.html:254
 msgid "City"
-msgstr ""
+msgstr "நகரம்"
 
 #: app/templates/email/ticket_purchased_organizer.html:84
 #: app/templates/pdf/order_invoice.html:194
 #: app/templates/pdf/order_invoice.html:259
 msgid "State"
-msgstr ""
+msgstr "மாநிலம்"
 
 #: app/templates/email/ticket_purchased_organizer.html:88
 msgid "Zip"
-msgstr ""
+msgstr "சிப்"
 
 #: app/templates/email/ticket_purchased_organizer.html:92
 #: app/templates/pdf/order_invoice.html:200
 #: app/templates/pdf/order_invoice.html:269
 msgid "Country"
-msgstr ""
+msgstr "நாடு"
 
 #: app/templates/email/ticket_purchased_organizer.html:96
 #: app/templates/pdf/order_invoice.html:209
 #: app/templates/pdf/order_invoice.html:274
 msgid "Tax ID"
-msgstr ""
+msgstr "வரி ஐடி"
 
 #: app/templates/email/ticket_sales_end.html:1
 #: app/templates/email/ticket_sales_end_next_week.html:1
 #: app/templates/email/ticket_sales_end_tomorrow.html:1
 msgid "Hello,"
-msgstr ""
+msgstr "வணக்கம்,"
 
 #: app/templates/email/ticket_sales_end.html:3
 #: app/templates/email/ticket_sales_end_next_week.html:3
 #: app/templates/email/ticket_sales_end_tomorrow.html:3
 #, python-format
 msgid "This is an automatic message from %(url)s."
-msgstr ""
+msgstr "இது %(url)s இருந்து ஒரு தானியங்கி செய்தி."
 
 #: app/templates/email/ticket_sales_end.html:5
 #, python-format
@@ -852,34 +924,39 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s has ended."
 msgstr ""
+"%(event_name)sான உங்கள் டிக்கெட்டுகளில் ஒன்று அல்லது பலவற்றிற்கான டிக்கெட் விற்பனை காலம் "
+"முடிந்தது."
 
 #: app/templates/email/ticket_sales_end.html:5
 msgid ""
 "If you would like to reactivate ticket sales for these tickets, please "
 "login to your account and edit the sales period for your tickets."
 msgstr ""
+"இந்த டிக்கெட்டுகளுக்கான டிக்கெட் விற்பனையை நீங்கள் மீண்டும் செயல்படுத்த விரும்பினால், "
+"தயவுசெய்து உங்கள் கணக்கில் உள்நுழைந்து உங்கள் டிக்கெட்டுகளுக்கான விற்பனை காலத்தைத் "
+"திருத்தவும்."
 
 #: app/templates/email/ticket_sales_end.html:7
 msgid "Ticket Sales have ended for"
-msgstr ""
+msgstr "டிக்கெட் விற்பனை முடிந்தது"
 
 #: app/templates/email/ticket_sales_end.html:10
 #: app/templates/email/ticket_sales_end_next_week.html:10
 #: app/templates/email/ticket_sales_end_tomorrow.html:10
 msgid "Steps to change the ticket sales period"
-msgstr ""
+msgstr "டிக்கெட் விற்பனை காலத்தை மாற்றுவதற்கான படிகள்"
 
 #: app/templates/email/ticket_sales_end.html:12
 #: app/templates/email/ticket_sales_end_next_week.html:12
 #: app/templates/email/ticket_sales_end_tomorrow.html:12
 msgid "Login to your account."
-msgstr ""
+msgstr "உங்கள் கணக்கில் உள்நுழைக."
 
 #: app/templates/email/ticket_sales_end.html:13
 #: app/templates/email/ticket_sales_end_next_week.html:13
 #: app/templates/email/ticket_sales_end_tomorrow.html:13
 msgid "On the top right click “Manage Events”."
-msgstr ""
+msgstr "மேல் வலது சொடுக்கு “நிகழ்வுகளை நிர்வகிக்கவும்”."
 
 #: app/templates/email/ticket_sales_end.html:14
 #: app/templates/email/ticket_sales_end_next_week.html:14
@@ -888,12 +965,15 @@ msgid ""
 "On the Events Dashboard choose the event you want to edit and click the "
 "“Edit Symbol” of the event."
 msgstr ""
+"நிகழ்வுகளில் டாச்போர்டு நீங்கள் திருத்த விரும்பும் நிகழ்வைத் தேர்ந்தெடுத்து நிகழ்வின் "
+"“சின்னத்தைத் திருத்து” என்பதைக் சொடுக்கு செய்க."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
 #: app/templates/email/ticket_sales_end_tomorrow.html:15
 msgid "You are now editing the “Basic Details” of your event."
 msgstr ""
+"நீங்கள் இப்போது உங்கள் நிகழ்வின் “அடிப்படை விவரங்களை” திருத்துகிறீர்கள்."
 
 #: app/templates/email/ticket_sales_end.html:15
 #: app/templates/email/ticket_sales_end_next_week.html:15
@@ -902,18 +982,20 @@ msgid ""
 "Scroll down to the tickets section, choose the ticket you want to edit "
 "and click on the “Settings Symbol” of the ticket."
 msgstr ""
+"டிக்கெட் பிரிவுக்கு கீழே உருட்டவும், நீங்கள் திருத்த விரும்பும் டிக்கெட்டைத் தேர்ந்தெடுத்து "
+"டிக்கெட்டின் “அமைப்புகள் சின்னம்” என்பதைக் சொடுக்கு செய்க."
 
 #: app/templates/email/ticket_sales_end.html:16
 #: app/templates/email/ticket_sales_end_next_week.html:16
 #: app/templates/email/ticket_sales_end_tomorrow.html:16
 msgid "In the ticket settings adjust the sales period for the ticket."
-msgstr ""
+msgstr "டிக்கெட் அமைப்புகளில் டிக்கெட்டுக்கான விற்பனை காலத்தை சரிசெய்யவும்."
 
 #: app/templates/email/ticket_sales_end.html:17
 #: app/templates/email/ticket_sales_end_next_week.html:17
 #: app/templates/email/ticket_sales_end_tomorrow.html:17
 msgid "Repeat the steps for other tickets, if any."
-msgstr ""
+msgstr "ஏதேனும் இருந்தால் மற்ற டிக்கெட்டுகளுக்கான படிகளை மீண்டும் செய்யவும்."
 
 #: app/templates/email/ticket_sales_end.html:18
 #: app/templates/email/ticket_sales_end_next_week.html:18
@@ -922,13 +1004,15 @@ msgid ""
 "Scroll to the bottom of the page and save the changes by clicking "
 "“Publish”."
 msgstr ""
+"பக்கத்தின் அடிப்பகுதியில் உருட்டி, “வெளியிடு” என்பதைக் சொடுக்கு செய்வதன் மூலம் மாற்றங்களைச் "
+"சேமிக்கவும்."
 
 #: app/templates/email/ticket_sales_end.html:20
 #: app/templates/email/ticket_sales_end_next_week.html:20
 #: app/templates/email/ticket_sales_end_tomorrow.html:20
 #, python-format
 msgid "You can access the dashboard of the event here %(dashboard_link)s."
-msgstr ""
+msgstr "நிகழ்வின் டாச்போர்டை இங்கே %(dashboard_link)s அணுகலாம்."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #, python-format
@@ -936,6 +1020,8 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 7 days."
 msgstr ""
+"%(event_name)sுக்கான உங்கள் டிக்கெட்டுகளில் ஒன்று அல்லது பலவற்றிற்கான டிக்கெட் விற்பனை "
+"காலம் 7 நாட்களில் முடிவடையும்."
 
 #: app/templates/email/ticket_sales_end_next_week.html:5
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
@@ -943,11 +1029,13 @@ msgid ""
 "If you would like to extend the period of your ticket sales, please login"
 " to your account and edit the sales period for your tickets."
 msgstr ""
+"உங்கள் டிக்கெட் விற்பனையின் காலத்தை நீட்டிக்க விரும்பினால், தயவுசெய்து உங்கள் கணக்கில் "
+"உள்நுழைந்து உங்கள் டிக்கெட்டுகளுக்கான விற்பனை காலத்தைத் திருத்தவும்."
 
 #: app/templates/email/ticket_sales_end_next_week.html:7
 #: app/templates/email/ticket_sales_end_tomorrow.html:7
 msgid "Ticket Sales ending for"
-msgstr ""
+msgstr "டிக்கெட் விற்பனை முடிவடைகிறது"
 
 #: app/templates/email/ticket_sales_end_tomorrow.html:5
 #, python-format
@@ -955,45 +1043,48 @@ msgid ""
 "The ticket sales period for one or several of your tickets for "
 "%(event_name)s will end in 24 hours."
 msgstr ""
+"%(event_name)sுக்கான உங்கள் டிக்கெட்டுகளில் ஒன்று அல்லது பலவற்றிற்கான டிக்கெட் விற்பனை "
+"காலம் 24 மணி நேரத்தில் முடிவடையும்."
 
 #: app/templates/email/user_change_email.html:1
 #, python-format
 msgid "Hi %(email)s,"
-msgstr ""
+msgstr "ஆய் %(email)s,"
 
 #: app/templates/email/user_change_email.html:3
 #, python-format
 msgid "Your email has been already changed from %(email)s to %(new_email)s."
 msgstr ""
+"உங்கள் மின்னஞ்சல் ஏற்கனவே %இலிருந்து மாற்றப்பட்டுள்ளது (மின்னஞ்சல்கள் %(புதிய மின்னஞ்சல்கள்."
 
 #: app/templates/email/user_change_email.html:3
 msgid "You should verify your new email."
-msgstr ""
+msgstr "உங்கள் புதிய மின்னஞ்சலை நீங்கள் சரிபார்க்க வேண்டும்."
 
 #: app/templates/email/user_confirm.html:3
 #, python-format
 msgid "Please visit this link to confirm your email: %(url)s."
-msgstr ""
+msgstr "உங்கள் மின்னஞ்சலை உறுதிப்படுத்த இந்த இணைப்பைப் பார்வையிடவும்: %(url)s."
 
 #: app/templates/email/user_register.html:2
 #, python-format
 msgid "Your account has been created on %(app_name)s."
-msgstr ""
+msgstr "உங்கள் கணக்கு %(app_name)s உருவாக்கப்பட்டுள்ளது."
 
 #: app/templates/email/user_register.html:3
 #, python-format
 msgid "Your login is: %(email)s"
-msgstr ""
+msgstr "உங்கள் உள்நுழைவு: %(email)s"
 
 #: app/templates/email/user_register.html:5
 #, python-format
 msgid "Please visit the following link to verify your email: %(url)s"
-msgstr ""
+msgstr "உங்கள் மின்னஞ்சலை சரிபார்க்க பின்வரும் இணைப்பைப் பார்வையிடவும்: %(url)s"
 
 #: app/templates/email/user_register.html:7
 #: app/templates/email/video_stream_moderator.html:8
 msgid "Thank You"
-msgstr ""
+msgstr "நன்றி"
 
 #: app/templates/email/video_stream_moderator.html:2
 #, python-format
@@ -1001,86 +1092,87 @@ msgid ""
 "You have been added as a video moderator of video %(video)s at event "
 "%(event)s."
 msgstr ""
+"நிகழ்வு %(video)s வீடியோ %(event)s வீடியோ மதிப்பீட்டாளராக நீங்கள் சேர்க்கப்பட்டுள்ளீர்கள்."
 
 #: app/templates/email/video_stream_moderator.html:5
 msgid "You need to register on the platform to access the video stream."
-msgstr ""
+msgstr "வீடியோ ச்ட்ரீமை அணுக நீங்கள் மேடையில் பதிவு செய்ய வேண்டும்."
 
 #: app/templates/pdf/order_invoice.html:177
 msgid "INVOICE"
-msgstr ""
+msgstr "விலைப்பட்டியல்"
 
 #: app/templates/pdf/order_invoice.html:185
 msgid "Contact Name"
-msgstr ""
+msgstr "தொடர்பு பெயர்"
 
 #: app/templates/pdf/order_invoice.html:197
 #: app/templates/pdf/order_invoice.html:264
 msgid "ZIP"
-msgstr ""
+msgstr "சிப்"
 
 #: app/templates/pdf/order_invoice.html:203
 msgid "Phone"
-msgstr ""
+msgstr "தொலைபேசி"
 
 #: app/templates/pdf/order_invoice.html:214
 msgid "Order By"
-msgstr ""
+msgstr "வழங்கியவர்"
 
 #: app/templates/pdf/order_invoice.html:220
 msgid "Information unavailable"
-msgstr ""
+msgstr "செய்தி கிடைக்கவில்லை"
 
 #: app/templates/pdf/order_invoice.html:307
 msgid "Due Date"
-msgstr ""
+msgstr "இரண்டு தேதிகள்"
 
 #: app/templates/pdf/order_invoice.html:308
 msgid "Upon Invoice"
-msgstr ""
+msgstr "விலைப்பட்டியல் மீது"
 
 #: app/templates/pdf/order_invoice.html:317
 msgid "Description"
-msgstr ""
+msgstr "விவரம்"
 
 #: app/templates/pdf/order_invoice.html:318
 msgid "Price"
-msgstr ""
+msgstr "விலை"
 
 #: app/templates/pdf/order_invoice.html:320
 msgid "Sub-Total"
-msgstr ""
+msgstr "துணை-டோட்டல்"
 
 #: app/templates/pdf/order_invoice.html:326
 msgid "for"
-msgstr ""
+msgstr "க்கு"
 
 #: app/templates/pdf/order_invoice.html:330
 msgid "Discount Code"
-msgstr ""
+msgstr "தள்ளுபடி குறியீடு"
 
 #: app/templates/pdf/order_invoice.html:352
 #: app/templates/pdf/order_invoice.html:372
 #: app/templates/pdf/order_invoice.html:395
 #: app/templates/pdf/order_invoice.html:401
 msgid "incl."
-msgstr ""
+msgstr "உள்ளிட்டவை."
 
 #: app/templates/pdf/order_invoice.html:417
 msgid "Total"
-msgstr ""
+msgstr "மொத்தம்"
 
 #: app/templates/pdf/order_invoice.html:426
 msgid "Tax"
-msgstr ""
+msgstr "வரி"
 
 #: app/templates/pdf/order_invoice.html:436
 msgid "Included in Total"
-msgstr ""
+msgstr "மொத்தத்தில் சேர்க்கப்பட்டுள்ளது"
 
 #: app/templates/pdf/order_invoice.html:448
 msgid "Grand Total"
-msgstr ""
+msgstr "மொத்த மொத்தம்"
 
 #: app/templates/pdf/ticket_attendee.html:141
 #: app/templates/pdf/ticket_purchaser.html:137
@@ -1089,45 +1181,47 @@ msgid ""
 "Order\n"
 "                    #%(invoice_number)s"
 msgstr ""
+"ஒழுங்கு\n"
+" #%(invoice_number)s"
 
 #: app/templates/pdf/ticket_attendee.html:154
 #: app/templates/pdf/ticket_purchaser.html:150
 #, python-format
 msgid "Event taking place online and at %(event_location)s."
-msgstr ""
+msgstr "நிகழ்வு ஆன்லைனில் நடைபெறுகிறது மற்றும் %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:156
 #: app/templates/pdf/ticket_purchaser.html:152
 msgid "Event taking place online."
-msgstr ""
+msgstr "நிகழ்வு ஆன்லைனில் நடைபெறுகிறது."
 
 #: app/templates/pdf/ticket_attendee.html:159
 #: app/templates/pdf/ticket_purchaser.html:155
 #, python-format
 msgid "Event taking place at %(event_location)s."
-msgstr ""
+msgstr "நிகழ்வு %(event_location)s."
 
 #: app/templates/pdf/ticket_attendee.html:161
 #: app/templates/pdf/ticket_purchaser.html:157
 msgid "Location or online event details to be announced."
-msgstr ""
+msgstr "இடம் அல்லது நிகழ்நிலை நிகழ்வு விவரங்கள் அறிவிக்கப்பட வேண்டும்."
 
 #: app/templates/pdf/ticket_attendee.html:167
 #: app/templates/pdf/ticket_purchaser.html:163
 #, python-format
 msgid "From: %(start_time)s"
-msgstr ""
+msgstr "இருந்து: %(start_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:171
 #: app/templates/pdf/ticket_purchaser.html:167
 #, python-format
 msgid "To: %(end_time)s"
-msgstr ""
+msgstr "இதற்கு: %(end_time)s"
 
 #: app/templates/pdf/ticket_attendee.html:178
 #: app/templates/pdf/ticket_purchaser.html:174
 msgid "Order Information"
-msgstr ""
+msgstr "செய்தி ஆர்டர்"
 
 #: app/templates/pdf/ticket_attendee.html:179
 #: app/templates/pdf/ticket_purchaser.html:175
@@ -1136,3 +1230,5 @@ msgid ""
 "Order\n"
 "                                        #%(invoice_number)s"
 msgstr ""
+"ஒழுங்கு\n"
+" #%(invoice_number)s"
