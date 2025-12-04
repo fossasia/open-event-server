@@ -2,7 +2,6 @@
 Test for log injection vulnerability in auth.py (Issue #9120)
 Tests that user-provided email addresses cannot inject malicious content into logs
 """
-import logging
 import re
 
 
