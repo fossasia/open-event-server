@@ -31,20 +31,20 @@ def test_log_sanitization_for_email():
     for malicious_email in malicious_inputs:
         # This represents the VULNERABLE code pattern:
         # logging.info('User with email: ' + email + ' not found.')
-        
+
         # Vulnerability demonstration: raw concatenation allows injection
         vulnerable_log_message = 'User with email: ' + malicious_email + ' not found.'
-        
+
         # Check 1: Vulnerable pattern contains control characters (SECURITY ISSUE)
         has_injection = any(char in vulnerable_log_message for char in ['\n', '\r', '\t\t\t'])
         assert has_injection, \
             f"Test setup error: Expected injection characters in: {repr(vulnerable_log_message)}"
-        
+
         # Check 2: After sanitization, these characters should be removed/escaped
         # This test will PASS after the fix is implemented in auth.py
         sanitized_email = re.sub(r'[\n\r\t]', '', malicious_email)
         safe_log_message = 'User with email: ' + sanitized_email + ' not found.'
-        
+
         # This assertion documents the expected fix:
         # After fix, sanitized logs should not contain injection attempts
         assert '\nFAKE:' not in safe_log_message, \
@@ -60,7 +60,7 @@ def test_normal_email_unchanged_after_sanitization():
         "test.user+tag@domain.co.uk",
         "admin@localhost",
     ]
-    
+
     for email in normal_emails:
         # Sanitization should not affect legitimate emails
         sanitized = re.sub(r'[\n\r\t]', '', email)
