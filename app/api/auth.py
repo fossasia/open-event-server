@@ -53,20 +53,20 @@ auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
 def sanitize_for_logging(text):
-    """
+    r"""
     Remove control characters from user input before logging to prevent log injection.
 
     Security Issue #9120: User-provided data like emails can contain newlines, carriage
     returns, or tabs that allow attackers to inject false log entries, corrupt log files,
     bypass log analysis tools, or hide malicious activity.
 
-    Example Attack: email="user@test.com\\nFAKE: Admin login successful from 1.2.3.4"
+    Example Attack: email="user@test.com\nFAKE: Admin login successful from 1.2.3.4"
 
     Args:
         text (str): User-provided input to sanitize
 
     Returns:
-        str: Text with control characters (\\n, \\r, \\t) removed
+        str: Text with control characters (\n, \r, \t) removed
     """
     if not text:
         return text
