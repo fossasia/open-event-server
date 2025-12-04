@@ -27,7 +27,7 @@ def test_log_sanitization_for_email():
         "test@example.com\t\t\tFAKE_COLUMN",
         "test@example.com\n\rMultiline\nInjection\rAttempt",
     ]
-    
+
     for malicious_email in malicious_inputs:
         # This represents the VULNERABLE code pattern:
         # logging.info('User with email: ' + email + ' not found.')

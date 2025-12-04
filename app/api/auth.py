@@ -344,7 +344,7 @@ def resend_verification_email():
     except NoResultFound:
         # Sanitize email to prevent log injection (Issue #9120)
         safe_email = sanitize_for_logging(email)
-        logging.info(f'User with email: {safe_email} not found.')
+        logging.info('User with email: %s not found.', safe_email)
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
