@@ -324,11 +324,11 @@ def verify_email():
     except Exception:
         logging.error('Invalid Token')
         raise BadRequestError({'source': ''}, 'Invalid Token')
-    else:
-        user.is_verified = True
-        save_to_db(user)
-        logging.info('Email Verified')
-        return make_response(jsonify(message="Email Verified"), 200)
+
+    user.is_verified = True
+    save_to_db(user)
+    logging.info('Email Verified')
+    return make_response(jsonify(message="Email Verified"), 200)
 
 
 @auth_routes.route('/resend-verification-email', methods=['POST'])
@@ -348,18 +348,18 @@ def resend_verification_email():
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
-    else:
-        serializer = get_serializer()
-        hash_ = str(
-            base64.b64encode(
-                str(serializer.dumps([user.email, str_generator()])).encode()
-            ),
-            'utf-8',
-        )
-        link = make_frontend_url('/verify', {'token': hash_})
-        send_email_confirmation(user.email, link)
-        logging.info('Verification email resent')
-        return make_response(jsonify(message="Verification email resent"), 200)
+
+    serializer = get_serializer()
+    hash_ = str(
+        base64.b64encode(
+            str(serializer.dumps([user.email, str_generator()])).encode()
+        ),
+        'utf-8',
+    )
+    link = make_frontend_url('/verify', {'token': hash_})
+    send_email_confirmation(user.email, link)
+    logging.info('Verification email resent')
+    return make_response(jsonify(message="Verification email resent"), 200)
 
 
 @auth_routes.route('/reset-password', methods=['POST'])
@@ -402,11 +402,11 @@ def reset_password_patch():
     except NoResultFound:
         logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
-    else:
-        user.password = password
-        if not user.is_verified:
-            user.is_verified = True
-        save_to_db(user)
+
+    user.password = password
+    if not user.is_verified:
+        user.is_verified = True
+    save_to_db(user)
 
     return jsonify(
         {
@@ -428,26 +428,26 @@ def change_password():
     except NoResultFound:
         logging.info('User Not Found')
         raise NotFoundError({'source': ''}, 'User Not Found')
-    else:
-        if user.is_correct_password(old_password):
-            if user.is_correct_password(new_password):
-                logging.error('Old and New passwords must be different')
-                raise BadRequestError(
-                    {'source': ''}, 'Old and New passwords must be different'
-                )
-            if len(new_password) < 8:
-                logging.error('Password should have minimum 8 characters')
-                raise BadRequestError(
-                    {'source': ''}, 'Password should have minimum 8 characters'
-                )
-            user.password = new_password
-            save_to_db(user)
-            send_password_change_email(user)
-        else:
-            logging.error('Wrong Password. Please enter correct current password.')
+
+    if user.is_correct_password(old_password):
+        if user.is_correct_password(new_password):
+            logging.error('Old and New passwords must be different')
             raise BadRequestError(
-                {'source': ''}, 'Wrong Password. Please enter correct current password.'
+                {'source': ''}, 'Old and New passwords must be different'
             )
+        if len(new_password) < 8:
+            logging.error('Password should have minimum 8 characters')
+            raise BadRequestError(
+                {'source': ''}, 'Password should have minimum 8 characters'
+            )
+        user.password = new_password
+        save_to_db(user)
+        send_password_change_email(user)
+    else:
+        logging.error('Wrong Password. Please enter correct current password.')
+        raise BadRequestError(
+            {'source': ''}, 'Wrong Password. Please enter correct current password.'
+        )
 
     return jsonify(
         {
