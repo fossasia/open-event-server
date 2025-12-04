@@ -1,6 +1,7 @@
 import base64
 import logging
 import random
+import re
 import string
 from datetime import timedelta
 from functools import wraps
@@ -49,6 +50,27 @@ from app.models.user import User
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+
+
+def sanitize_for_logging(text):
+    """
+    Remove control characters from user input before logging to prevent log injection.
+    
+    Security Issue #9120: User-provided data like emails can contain newlines, carriage
+    returns, or tabs that allow attackers to inject false log entries, corrupt log files,
+    bypass log analysis tools, or hide malicious activity.
+    
+    Example Attack: email="user@test.com\\nFAKE: Admin login successful from 1.2.3.4"
+    
+    Args:
+        text (str): User-provided input to sanitize
+        
+    Returns:
+        str: Text with control characters (\\n, \\r, \\t) removed
+    """
+    if not text:
+        return text
+    return re.sub(r'[\n\r\t]', '', text)
 
 
 def authenticate(allow_refresh_token=False, existing_identity=None):
@@ -320,7 +342,9 @@ def resend_verification_email():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        logging.info('User with email: ' + email + ' not found.')
+        # Sanitize email to prevent log injection (Issue #9120)
+        safe_email = sanitize_for_logging(email)
+        logging.info(f'User with email: {safe_email} not found.')
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
