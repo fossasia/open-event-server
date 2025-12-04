@@ -103,14 +103,14 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
     response_data = {'access_token': access_token}
 
     if add_refresh_token:
-        refresh_token = create_refresh_token(identity.id)
+        refresh_token_value = create_refresh_token(identity.id)
         if include_in_response:
-            response_data['refresh_token'] = refresh_token
+            response_data['refresh_token'] = refresh_token_value
 
     response = jsonify(response_data)
 
     if add_refresh_token and not include_in_response:
-        set_refresh_cookies(response, refresh_token)
+        set_refresh_cookies(response, refresh_token_value)
 
     return response
 
@@ -130,10 +130,10 @@ def fresh_login():
 @auth_routes.route('/token/refresh', methods=['POST'])
 @jwt_refresh_token_required
 def refresh_token():
-    current_user = get_jwt_identity()
+    user_identity = get_jwt_identity()
     expiry_time = timedelta(minutes=90)
     new_token = create_access_token(
-        identity=current_user, fresh=False, expires_delta=expiry_time
+        identity=user_identity, fresh=False, expires_delta=expiry_time
     )
     return jsonify({'access_token': new_token})
 
