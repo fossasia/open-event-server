@@ -320,7 +320,7 @@ def resend_verification_email():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        logging.info('User with email: ' + email + ' not found.')
+        logging.info('User with email: %s not found.',email)
         raise UnprocessableEntityError(
             {'source': ''}, 'User with email: ' + email + ' not found.'
         )
