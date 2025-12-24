@@ -312,9 +312,10 @@ def verify_email():
 @auth_routes.route('/resend-verification-email', methods=['POST'])
 def resend_verification_email():
     def sanitize(value):
-        if not isinstance(value, str):
-             return ''
-        return value.replace('\n', '\\n').replace('\r', '\\r')
+    if not isinstance(value, str):
+        return ''
+    return value.replace('\n', '\\n').replace('\r', '\\r')
+
 
     try:
         email = request.json['data']['email']
