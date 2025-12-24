@@ -50,7 +50,11 @@ logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
-
+def sanitize(value):
+    if not isinstance(value, str):
+        return ''
+    return value.replace('\n', '\\n').replace('\r', '\\r')
+    
 def authenticate(allow_refresh_token=False, existing_identity=None):
     data = request.get_json()
     username = data.get('email', data.get('username'))
@@ -311,11 +315,7 @@ def verify_email():
 
 @auth_routes.route('/resend-verification-email', methods=['POST'])
 def resend_verification_email():
-    def sanitize(value):
-    if not isinstance(value, str):
-        return ''
-    return value.replace('\n', '\\n').replace('\r', '\\r')
-
+    
 
     try:
         email = request.json['data']['email']
