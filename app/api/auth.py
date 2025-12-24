@@ -311,6 +311,11 @@ def verify_email():
 
 @auth_routes.route('/resend-verification-email', methods=['POST'])
 def resend_verification_email():
+    def sanitize(value):
+        if not isinstance(value, str):
+             return ''
+        return value.replace('\n', '\\n').replace('\r', '\\r')
+
     try:
         email = request.json['data']['email']
     except TypeError:
@@ -320,13 +325,12 @@ def resend_verification_email():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        def sanitize(value):
-              return value.replace('\n', '\\n').replace('\r', '\\r')
+        
         safe_mail = sanitize(email)
-        logger.error("User with email: %s not found", safe_mail)
+        logging.error("User with email: %s not found", safe_mail)
 
         raise UnprocessableEntityError(
-            {'source': ''}, 'User with email: %s not found.'%safe_mail
+           {'source': ''}, f'User with email: {safe_mail} not found.'
         )
     else:
         serializer = get_serializer()
