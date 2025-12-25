@@ -346,7 +346,7 @@ def resend_verification_email():
         logging.info("User with email: %s not found", safe_mail)
 
         raise UnprocessableEntityError(
-           {'source': ''}, f'User with email: {safe_mail} not found.'
+           {'source': ''}, f'User with email: {email} not found.'
         )
     else:
         serializer = get_serializer()
