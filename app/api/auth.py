@@ -53,7 +53,7 @@ auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 def sanitize(value):
     if not isinstance(value, str):
         return ''
-    return value.replace('\n', '\\n').replace('\r', '\\r')
+    return value.replace('\n', '\\n').replace('\r', '\\r').replace('\t','\\t).replace('\u2028','\\u2028).replace('\u2029','\\u2028)
     
 def authenticate(allow_refresh_token=False, existing_identity=None):
     data = request.get_json()
