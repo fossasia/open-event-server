@@ -4,6 +4,8 @@ import random
 import string
 from datetime import timedelta
 from functools import wraps
+import re
+import unicodedata
 
 import requests
 from flask import Blueprint, jsonify, make_response, request, send_file
@@ -49,12 +51,28 @@ from app.models.user import User
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
-
-def sanitize(value):
-    if not isinstance(value, str):
+ANSI_ESCAPE = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+CONTROL_CHARS = re.compile(r'[\x00-\x1F\x7F]')
+def sanitize(value:str,max_length:int=512)->str:
+    #Sanitizes input to prevent log injection
+    if value is None:
         return ''
-    return value.replace('\n', '\\n').replace('\r', '\\r').replace('\t','\\t').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
-    
+    # ensure entered value is string type
+    value=str(value)
+    # unicode normalization of value (prevention against homoglyph tricks)
+    value = unicodedata.normalize("NFKC", value)
+     # Remove Unicode line/paragraph separators
+    value = value.replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
+    # Remove CR/LF (classic log forging)
+    value = value.replace("\r", "\\r").replace("\n", "\\n")
+    # Remove ANSI escape sequences (terminal injection)
+    value = ANSI_ESCAPE.sub("", value)
+    # Remove remaining ASCII control characters
+    value = CONTROL_CHARS.sub("", value)
+    # Enforce max length (log flooding protection)
+    if len(value) > max_length:
+        value = value[:max_length] + "...[truncated]"
+    return value 
 def authenticate(allow_refresh_token=False, existing_identity=None):
     data = request.get_json()
     username = data.get('email', data.get('username'))
@@ -315,8 +333,6 @@ def verify_email():
 
 @auth_routes.route('/resend-verification-email', methods=['POST'])
 def resend_verification_email():
-    
-
     try:
         email = request.json['data']['email']
     except TypeError:
@@ -325,8 +341,7 @@ def resend_verification_email():
 
     try:
         user = User.query.filter_by(email=email).one()
-    except NoResultFound:
-        
+    except NoResultFound: 
         safe_mail = sanitize(email)
         logging.info("User with email: %s not found", safe_mail)
 
