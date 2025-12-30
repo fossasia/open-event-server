@@ -3,6 +3,20 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
+    """
+    Custom user model extending the default Django AbstractUser.
+
+    This model stores all user-related information including profile details,
+    administrative privileges, social media links, and billing information.
+
+    Attributes:
+        name (str): Full name of the user.
+        public_name (str): Name displayed to the public.
+        is_admin (bool): Designates whether the user has admin privileges.
+        is_super_admin (bool): Designates whether the user has super admin privileges.
+        avatar_url (str): URL to the user's avatar image.
+        billing_address (str): The user's billing address for invoices.
+    """
     name = models.CharField(null=True, blank=True, max_length=100)
     first_name = models.CharField(null=True, blank=True, max_length=100)
     last_name = models.CharField(null=True, blank=True, max_length=100)
