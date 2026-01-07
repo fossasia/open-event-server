@@ -5,3 +5,8 @@ __pycache__/
 .tool-versions
 Pipfile*
 .env
+venv/
+node_modules/
+test.db
+__pycache__/
+*.pyc

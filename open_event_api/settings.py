@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "event_topics.apps.EventTopicsConfig",
     "notification_contents.apps.NotificationContentsConfig",
     "video_channels.apps.VideoChannelsConfig",
+    "event_mails.apps.EventMailsConfig",
 ]
 
 MIDDLEWARE = [
