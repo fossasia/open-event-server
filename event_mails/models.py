@@ -31,5 +31,9 @@ class EventMail(models.Model):
     created_by = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    sent_at = models.DateTimeField(null=True, blank=True)
+    error = models.TextField(null=True, blank=True)
+
+
     def __str__(self):
         return f"Mail for event {self.event_id}: {self.subject}"
