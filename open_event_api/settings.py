@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "event_topics.apps.EventTopicsConfig",
     "notification_contents.apps.NotificationContentsConfig",
     "video_channels.apps.VideoChannelsConfig",
+# new ticket module  
+    'tickets'
 ]
 
 MIDDLEWARE = [
