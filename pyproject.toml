@@ -152,7 +152,7 @@ isort = "5.12.0"
 black = "23.7.0"
 pre-commit = "3.3.2"
 pytype = "2022.2.8"
-pycln = "2.1.5"
+pycln = "2.5.0"
 pyupgrade = "3.8.0"
 # For testing
 coverage = "7.2.7"
