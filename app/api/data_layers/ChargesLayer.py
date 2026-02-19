@@ -41,12 +41,12 @@ class ChargesLayer(BaseDataLayer):
                 {'parameter': 'id'},
                 "You cannot charge payments on a cancelled, expired or completed order",
             )
-		# BLOCK PAYMENT BEFORE ORGANISER APPROVAL
-	if order.require_approval and order.status == 'pending':
-    		raise ConflictError(
-       		 {'parameter': 'id'},
-        	"This order requires organiser approval before payment",
-   		 )
+        # BLOCK PAYMENT BEFORE ORGANISER APPROVAL
+    if order.require_approval and order.status == 'pending':
+            raise ConflictError(
+                {'parameter': 'id'},
+            "This order requires organiser approval before payment",
+            )
 
         if (not order.amount) or order.amount == 0:
             raise ConflictError(
