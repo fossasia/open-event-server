@@ -1,3 +1,4 @@
+
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
@@ -42,10 +43,10 @@ class ChargesLayer(BaseDataLayer):
                 "You cannot charge payments on a cancelled, expired or completed order",
             )
         # BLOCK PAYMENT BEFORE ORGANISER APPROVAL
-    if order.require_approval and not order.is_approved:
-            raise ConflictError(
-                {'parameter': 'id'},
-            "This order requires organiser approval before payment",
+   	 if order.require_approval and order.status == Order.STATUS_PENDING:
+           	 raise ConflictError(
+                	{'parameter': 'id'},
+            		"This order requires organiser approval before payment",
             )
 
         if (not order.amount) or order.amount == 0:
