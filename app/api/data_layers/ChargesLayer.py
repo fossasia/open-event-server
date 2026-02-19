@@ -7,13 +7,15 @@ from app.models.order import Order
 
 
 class ChargesLayer(BaseDataLayer):
-    def _ensure_order_is_approvable(self, order):
+    @staticmethod
+    def _ensure_order_is_approvable(order):
         """Prevent payment only when order is waiting for organiser approval"""
         if order.require_approval and order.status == Order.STATUS_PENDING:
             raise ConflictError(
                 {'parameter': 'id'},
                 "This order requires organiser approval before payment",
             )
+
 
     def create_object(self, data, view_kwargs):
         """
@@ -54,12 +56,6 @@ class ChargesLayer(BaseDataLayer):
             )
         # prevent payment before organiser approval
         self._ensure_order_is_approvable(order)
-        # # BLOCK PAYMENT BEFORE ORGANISER APPROVAL
-        # if order.require_approval and order.status == Order.STATUS_PENDING:
-        #     raise ConflictError(
-        #         {'parameter': 'id'},
-        #         "This order requires organiser approval before payment",
-        #     )
 
         if (not order.amount) or order.amount == 0:
             raise ConflictError(
