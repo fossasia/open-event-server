@@ -10,9 +10,8 @@ def validate_complex_fields_json(self, data, original_data):
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/complex_field_values'},
-                "Only flattened JSON of form {key: value} where value is a string, "
-                "integer, float, bool or null is permitted for this field",
-            )
+                "Only flattened JSON in the format {key: value} is allowed. Values must be string, integer, float, boolean, or null."
+                )
 
         if (
             len(data['complex_field_values'])
@@ -20,7 +19,7 @@ def validate_complex_fields_json(self, data, original_data):
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/complex_field_values'},
-                "A maximum of {} complex custom form fields are currently supported".format(
+                "A maximum of {} custom form fields are allowed.".format(
                     get_settings()['max_complex_custom_fields']
                 ),
             )
