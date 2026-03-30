@@ -10,7 +10,7 @@ def validate_complex_fields_json(self, data, original_data):
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/complex_field_values'},
-                "Only flattened JSON in the format {key: value} is allowed. Values must be string, integer, float, boolean, or null."
+                "Only flattened JSON in the format {key: value} is allowed. Values must be strings, integers, floats, booleans, or null."
                 )
 
         if (
