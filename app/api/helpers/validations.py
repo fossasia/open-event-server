@@ -19,7 +19,7 @@ def validate_complex_fields_json(self, data, original_data):
         ):
             raise UnprocessableEntityError(
                 {'pointer': '/data/attributes/complex_field_values'},
-                "A maximum of {} custom form fields are allowed.".format(
+                "A maximum of {} complex custom fields are allowed.".format(
                     get_settings()['max_complex_custom_fields']
                 ),
             )
