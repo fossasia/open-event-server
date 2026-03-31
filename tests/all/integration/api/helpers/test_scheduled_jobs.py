@@ -19,6 +19,7 @@ from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
 from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.user import UserFactory
+from app.models import Order
 
 
 def test_delete_ticket_holder_created_currently(db):
@@ -118,3 +119,9 @@ def test_expire_pending_tickets(db):
     assert len(order_old.ticket_holders) == 3
     assert order_new.status == 'pending'
     assert len(order_new.ticket_holders) == 2
+def test_expire_pending_tickets_no_orders(db):
+    """Ensure no error when no pending orders exist"""
+
+    expire_pending_tickets()
+
+    assert Order.query.count() == 0
