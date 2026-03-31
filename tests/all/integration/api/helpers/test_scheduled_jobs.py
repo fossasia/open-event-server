@@ -19,7 +19,7 @@ from tests.factories.attendee import AttendeeOrderSubFactory, AttendeeSubFactory
 from tests.factories.order import OrderSubFactory
 from tests.factories.ticket_fee import TicketFeesFactory
 from tests.factories.user import UserFactory
-from app.models import Order
+from app.models.order import Order
 
 
 def test_delete_ticket_holder_created_currently(db):
