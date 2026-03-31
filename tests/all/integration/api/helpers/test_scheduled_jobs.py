@@ -122,6 +122,9 @@ def test_expire_pending_tickets(db):
 def test_expire_pending_tickets_no_orders(db):
     """Ensure no error when no pending orders exist"""
 
+    initial_count = Order.query.count()
+    assert initial_count == 0
+
     expire_pending_tickets()
 
-    assert Order.query.count() == 0
+    assert Order.query.count() == initial_count
