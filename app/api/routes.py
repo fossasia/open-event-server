@@ -5,6 +5,7 @@ from app.api.access_codes import (
     AccessCodeRelationshipOptional,
     AccessCodeRelationshipRequired,
 )
+from app.api.api_keys import ApiKeyDetail, ApiKeyList, ApiKeyListPost, ApiKeyRelationship
 from app.api.activities import ActivityDetail, ActivityList
 from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.events import AdminSalesByEventsList
@@ -349,6 +350,7 @@ api.route(
     '/access-codes/<int:access_code_id>/marketer',
     '/email-notifications/<int:email_notification_id>/user',
     '/discount-codes/<int:discount_code_id>/marketer',
+    '/api-keys/<int:api_key_id>/user',
     '/sessions/<int:session_id>/creator',
     '/attendees/<int:attendee_id>/user',
     '/feedbacks/<int:feedback_id>/user',
@@ -381,6 +383,9 @@ api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speak
 api.route(UserRelationship, 'user_session', '/users/<int:id>/relationships/sessions')
 api.route(
     UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes'
+)
+api.route(
+    UserRelationship, 'user_api_keys', '/users/<int:id>/relationships/api-keys'
 )
 api.route(
     UserRelationship,
@@ -451,6 +456,12 @@ api.route(
     'user_group',
     '/users/<int:id>/relationships/groups',
 )
+
+# api_keys
+api.route(ApiKeyListPost, 'api_key_post', '/api-keys')
+api.route(ApiKeyList, 'api_key_list', '/users/<int:user_id>/api-keys', '/api-keys')
+api.route(ApiKeyDetail, 'api_key_detail', '/api-keys/<int:id>')
+api.route(ApiKeyRelationship, 'api_key_user', '/api-keys/<int:id>/relationships/user')
 
 # users_emails
 api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')

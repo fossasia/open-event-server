@@ -159,6 +159,15 @@ class UserSchema(UserSchemaPublic):
         schema='DiscountCodeSchemaPublic',
         type_='discount-codes',
     )
+    api_keys = Relationship(
+        self_view='v1.user_api_keys',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.api_key_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='ApiKeySchema',
+        many=True,
+        type_='api-key',
+    )
     email_notifications = Relationship(
         self_view='v1.user_email_notifications',
         self_view_kwargs={'id': '<id>'},
