@@ -85,6 +85,11 @@ class Config:
     REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
     CELERY_BACKKEND = env('CELERY_BACKEND', default='redis')
 
+    _rate_limits = env('RATE_LIMIT_DEFAULTS', default='').strip()
+    RATE_LIMIT_DEFAULTS = [
+        limit.strip() for limit in _rate_limits.split(',') if limit.strip()
+    ]
+
     # API configs
     SOFT_DELETE = True
     PROPOGATE_ERROR = env.bool('PROPOGATE_ERROR', default=False)

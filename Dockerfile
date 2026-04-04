@@ -5,7 +5,7 @@ FROM python:3.8.17-alpine as base
 FROM base as builder
 
 RUN apk update && \
-  apk add --virtual build-deps make git g++ python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl && \
+    apk add --virtual build-deps make git g++ python3-dev musl-dev jpeg-dev zlib-dev libevent-dev file-dev libffi-dev openssl wget && \
   apk add postgresql-dev libxml2-dev libxslt-dev
 # PDF Generation: weasyprint (libffi-dev jpeg-dev already included above)
 RUN apk add --virtual gdk-pixbuf-dev
@@ -22,7 +22,7 @@ ENV POETRY_HOME=/opt/poetry \
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-RUN set -eo pipefail; wget -O - https://install.python-poetry.org | python -
+RUN python -m pip install --no-cache-dir "poetry==1.7.1"
 
 WORKDIR /opt/pysetup
 

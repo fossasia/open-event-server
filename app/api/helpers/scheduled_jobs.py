@@ -2,6 +2,7 @@ import datetime
 import logging
 
 import pytz
+from flask import current_app
 from flask_celeryext import RequestContextTask
 from redis.exceptions import LockError
 from sqlalchemy import and_, distinct, func, or_
@@ -258,8 +259,14 @@ def send_monthly_event_invoice(send_notification: bool = True):
         .all()
     )
 
+    run_inline = current_app.config.get('TESTING') or current_app.config.get(
+        'CELERY_TASK_ALWAYS_EAGER'
+    )
     for event in events:
-        send_event_invoice.delay(event.id, send_notification=send_notification)
+        if run_inline:
+            send_event_invoice.run(event.id, send_notification=send_notification)
+        else:
+            send_event_invoice.delay(event.id, send_notification=send_notification)
 
 
 @celery.task(base=RequestContextTask, bind=True, max_retries=5)
