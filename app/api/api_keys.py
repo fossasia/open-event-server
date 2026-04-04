@@ -20,7 +20,25 @@ class ApiKeyListPost(ResourceList):
 
     def before_post(self, args, kwargs, data):
         require_relationship(['user'], data)
-        if not has_access('is_user_itself', user_id=data['user']):
+        user_payload = data.get('user')
+        user_id = None
+        if isinstance(user_payload, dict):
+            user_data = user_payload.get('data')
+            if isinstance(user_data, dict):
+                user_id = user_data.get('id')
+        else:
+            user_id = user_payload
+
+        try:
+            user_id = int(user_id)
+        except (TypeError, ValueError):
+            raise UnprocessableEntityError(
+                {'pointer': '/data/relationships/user'},
+                'User relationship is invalid',
+            )
+
+        data['user'] = user_id
+        if not has_access('is_user_itself', user_id=user_id):
             raise ForbiddenError({'source': ''}, 'Access Forbidden')
 
     def before_create_object(self, data, view_kwargs):
@@ -106,13 +124,20 @@ class ApiKeyDetail(ResourceDetail):
                 {'source': ''}, 'API key is already revoked'
             )
 
+    def before_delete_object(self, api_key, view_kwargs):
+        if not has_access('is_user_itself', user_id=api_key.user_id):
+            raise ForbiddenError({'source': ''}, 'Access Forbidden')
+
     methods = ['GET', 'PATCH', 'DELETE']
     decorators = (jwt_required,)
     schema = ApiKeySchema
     data_layer = {
         'session': db.session,
         'model': ApiKey,
-        'methods': {'before_update_object': before_update_object},
+        'methods': {
+            'before_update_object': before_update_object,
+            'before_delete_object': before_delete_object,
+        },
     }
 
 

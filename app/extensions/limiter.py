@@ -1,3 +1,4 @@
+from flask_jwt_extended.exceptions import JWTExtendedException
 from flask_limiter import Limiter
 from flask_limiter.util import get_ipaddr
 
@@ -8,7 +9,7 @@ def rate_limit_key():
     user = None
     try:
         user = get_identity()
-    except Exception:
+    except JWTExtendedException:
         user = None
 
     if user and getattr(user, 'id', None):
