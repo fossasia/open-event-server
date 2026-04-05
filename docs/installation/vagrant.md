@@ -44,7 +44,7 @@
 
 ![VirtualBox-Intro](https://cloud.githubusercontent.com/assets/9834624/11853323/5e5ea2dc-a40b-11e5-9a50-ffda4e08297a.png)
 
-* If the program has successfully determined that you can install the software the installer will remain open, press continue. Then select “Macintosh HD” has your installation destination.   Click “Continue”.
+* If the program has successfully determined that you can install the software the installer will remain open, press continue. Then select “Macintosh HD” as your installation destination.   Click “Continue”.
 
 ![VirtualBox-Intaltype](https://cloud.githubusercontent.com/assets/9834624/11853324/5e621d86-a40b-11e5-9587-298ea5b26a31.png)
 
